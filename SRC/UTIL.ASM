@@ -245,10 +245,10 @@ SSSL	.macro	a
 	movi	plyrobj_t,a3
 	movi	P1CTRL,a4
 	movk	4,b0
-#lp	move	*a2+,*a1+,L
+#lp1	move	*a2+,*a1+,L
 	move	*a3+,*a1+,L
 	move	*a4+,*a1+
-	dsj	b0,#lp
+	dsj	b0,#lp1
 
 
 	movi	ACTIVE,a2
@@ -322,7 +322,7 @@ SRSL	.macro	a
 	movi	PALRAM,a4
 	clr	a5
 	movi	NMFPAL,a7
-#plp
+#plp1
 	move	*a3+,a0,L		;Get * pal
 	move	a0,*a4+,L
 	jrz	#nxtp
@@ -339,7 +339,7 @@ SRSL	.macro	a
 	PUSH	a8
 	PULLP	a3,a4,a5,a7
 #skipslp
-	dsj	a7,#plp
+	dsj	a7,#plp1
 
 
 	movi	sysstate_t,a1
@@ -361,17 +361,17 @@ SRSL	.macro	a
 	movi	plyrobj_t,a3
 	movi	P1CTRL,a4
 	movk	4,b0
-#lp	move	*a1+,*a2+,L
+#lp2	move	*a1+,*a2+,L
 	move	*a1+,*a3+,L
 	move	*a1+,*a4+
-	dsj	b0,#lp
+	dsj	b0,#lp2
 
 
 	movi	ACTIVE,a2		;>Find end of list
-#prlp
+#prlp1
 	move	a2,a3
 	move	*a2,a2,L
-	jrnz	#prlp
+	jrnz	#prlp1
 
 	move	@svproc_p,*a3+,L	;Link
 
@@ -1069,8 +1069,8 @@ of50	move	a0,a0		;A0=*Obj or 0
 	movi	ERASECOL,a0		;Color pair
 	movi	510*512*8,a1		;Store to last 2 lines of bitmap
 	movi	512*8*2/16,b0
-#lp	move	a0,*a1+
-	dsj	b0,#lp
+#lp3	move	a0,*a1+
+	dsj	b0,#lp3
 
 	popst
 
@@ -1117,7 +1117,7 @@ of50	move	a0,a0		;A0=*Obj or 0
 
 FLASHME
 	move	*a8(OCONST),a10
-	jrnz	#x			;Flashing?
+	jrnz	#x1			;Flashing?
 	srl	16,a9
 	move	a9,*a8(OCONST)		;Set color
 	move	*a8(OCTRL),a0
@@ -1131,7 +1131,7 @@ FLASHME
 	andi	>fff5,a0		;Clr constant & nonzero
 	addk	2,a0			;Set nonzero
 	move	a0,*a8(OCTRL)
-#x	DIE
+#x1	DIE
  .endif
 
 ********************************
@@ -1855,9 +1855,9 @@ dqw20	callr	dma_wait
 
  SUBRP	display_blank
 	dint
-#lp	move	@VCOUNT,a0
+#lp4	move	@VCOUNT,a0
 	cmpi	EOSINT,a0
-	jrlt	#lp
+	jrlt	#lp4
 	move	@HSBLNK,a0	;Blank screen
 	move	a0,@HEBLNK
 	eint
@@ -1871,9 +1871,9 @@ dqw20	callr	dma_wait
  SUBRP	display_unblank
 
 	dint
-#lp	move	@VCOUNT,a0
+#lp5	move	@VCOUNT,a0
 	cmpi	EOSINT,a0
-	jrlt	#lp
+	jrlt	#lp5
 	movi	HEBLNKINIT,a0
 	move	a0,@HEBLNK
 	eint
@@ -2112,10 +2112,10 @@ FRANIMQ
 	.else
 	CALLERR	8,0			;Bad franim list
 	.endif
-	jruc	#x
+	jruc	#x2
 
 
-#lp	move	*a8(OCTRL),a4		;Current flags
+#lp6	move	*a8(OCTRL),a4		;Current flags
 	move	*a9+,a0			;Sleep time
 	cmpi	>100,a0
 	jrlo	frq70			;No special bits?
@@ -2152,9 +2152,9 @@ frq70	calla	ANI
 	calla	PRCSLP			;Sleep
 
 frq80	move	*a9+,a1,L		;Get frame
-	jrnz	#lp
+	jrnz	#lp6
 
-#x	RETP
+#x2	RETP
 
 
 
@@ -2179,11 +2179,11 @@ FAKEO	.equ	->b00030+OFF
 	PUSH	a2,a3,a4
 	clr	a0
 	movi	63,a3
-#lp	move	a3,a14
+#lp7	move	a3,a14
 	callr	#sc
 	or	a2,a0
 	subk	1,a3
-	jrge	#lp
+	jrge	#lp7
 	PULL	a2,a3,a4
 	rets
 
@@ -2200,7 +2200,7 @@ FAKEO	.equ	->b00030+OFF
 	sll	9,a2		;Move to bits 9-14
 	xor	a14,a2
 	sll	32-15,a2	;Remove top bits
-	jrnz	#x		;Bad value?
+	jrnz	#x3		;Bad value?
 
 	add	a14,a1
 	srl	2+3,a14
@@ -2230,7 +2230,7 @@ FAKEO	.equ	->b00030+OFF
 	andi	>3f3f3f3f,a1
 	xor	a1,a2		;A2=0 if OK
 
-#x	rets
+#x3	rets
 
 #sec_t	.long	>21283b3b	;0
 	.long	>2439383b
