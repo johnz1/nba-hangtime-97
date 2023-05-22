@@ -28,7 +28,7 @@ assembling unzip.asm
 - They have labels starting with # that are duplicates
 - They have routines like jrnz #label. 
 - But sometimes they don't use the #label in the jrnz or djsj.. mweh
-- The GSPA assembler does not like jrnz #label thing.
+- The GSPA assembler does not like jrnz #label things.
 - The GSPA assembler does not like #label as a start of a routine.
 - SUBR macro = .def name\n  + .even\n + name (defs the routine name and aligns on even byte) (for basic subroutine)
 - SUBRP macro = .even\n +name (just aligns the routine on even byte) (for process with mproc / CREATE macro.)

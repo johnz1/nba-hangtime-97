@@ -71,10 +71,10 @@ FREE	.long	0
 	move	a1,@FREE,L	;Full free list
 
 	movi	NPROC,b0	;# of processes
-#lp	move	a1,a14
+lp1	move	a1,a14
 	addi	PRCSIZ,a1
 	move	a1,*a14,L	;Set link
-	dsj	b0,lp
+	dsj	b0,lp1
 
 	move	a0,*a14,L	;Null last link
 
@@ -93,15 +93,15 @@ FREE	.long	0
 	movi	31*32,a0		;Proc usage
 	move	a0,@ERASELOC
 
-#dmawt	move	b13,b13
-	jrge	#dmawt
+dmawt	move	b13,b13
+	jrge	dmawt
 	movk	6,a0			;DMA usage
 	move	a0,@ERASELOC
-#noline
+noline
 	move	@slowmotion,a0
-#smlp	move	@dirqtimer,a1
+smlp	move	@dirqtimer,a1
 	cmp	a1,a0
-	jrge	#smlp
+	jrge	smlp
 
 	.endif
 
@@ -109,9 +109,9 @@ FREE	.long	0
 	clr	a0
 	move	a0,@dirqtimer		;Tell DIRQ to flip and draw
 
-#lp	calla	obj_yzsort		;Sort display list
+lp2	calla	obj_yzsort		;Sort display list
 	move	@dirqtimer,a0
-	jrz	lp			;Wait?
+	jrz	lp2			;Wait?
 
 
 	calla	L_TIMER			;Linky timer
@@ -208,10 +208,10 @@ suclp	move	a1,a2		;save previous
 
 	jruc	nocaught
 
-#caught
+caught
 	LOCKUP
 
-#nocaught
+nocaught
 
 	PULL	a5
 
@@ -248,15 +248,15 @@ sucerr
 
 KILL
 	cmp	a0,a13
-	jreq	x		;Killing self?
+	jreq	xerr		;Killing self?
 
 	movi	ACTIVE,a1
 
-#lp	move	a1,a14		;Save previous
+lp3	move	a1,a14		;Save previous
 	move	*a1,a1,L
 	jrz	killerr		;Can't find?
 	cmp	a1,a0
-	jrne	lp		;Not the one?
+	jrne	lp3		;Not the one?
 
 
 	.if	DEBUG
@@ -264,9 +264,9 @@ KILL
 	PUSH	a2
 	move	*a1(PROCID),a2,L
 	cmpi	takepid,a2
-	jrnz	ok
+	jrnz	killok
 	LOCKUP
-#ok	PULL	a2
+killok	PULL	a2
 
 	.endif
 
@@ -293,7 +293,7 @@ KILL
 	subk	32,a0
 	move	a0,@FREE,L
 
-#x	rets
+xerr	rets
 
 killerr
 	.if	DEBUG
@@ -302,7 +302,7 @@ killerr
 	.else
 	CALLERR	6,0
 	.endif
-	jruc	x
+	jruc	xerr
 
 
 ********************************
@@ -356,16 +356,16 @@ xferprc0
       
 	LOCKUP
 	jruc	cont
-#found
+found
 	PULL	a1
-#cont
+cont
 
 	move	*a0(PROCID),a14
 	cmpi	takepid,a14
 	jrnz	tag2
 
 	LOCKUP
-#tag2
+tag2
 	.endif
 
 
@@ -426,19 +426,19 @@ KILALLN
 	andn	a1,a0		;Form match
 	movi	ACTIVE,a2
 
-#lp	move	a2,a3		;Save previous
+alllp	move	a2,a3		;Save previous
 	move	*a2,a2,L
-	jrz	x		;Done?
+	jrz	allx		;Done?
 	move	*a2(PROCID),a14
 ;	jrnn	ok
 ;	LOCKUP
 ;#ok
 	andn	a1,a14		;Apply mask
 	cmp	a0,a14
-	jrne	lp		;No match?
+	jrne	alllp		;No match?
 
 	cmp	a2,a13
-	jreq	lp		;Current proecess?
+	jreq	alllp		;Current proecess?
 
 
 	.if	DEBUG
@@ -446,9 +446,9 @@ KILALLN
 	PUSH	a4
 	move	*a2(PROCID),a4,L
 	cmpi	takepid,a4
-	jrnz	ok
+	jrnz	allok
 	LOCKUP
-#ok	PULL	a4
+allok	PULL	a4
 
 	.endif
 
@@ -477,9 +477,9 @@ KILALLN
 	move	a14,*a2,L
 	move	a2,@FREE,L
 	move	a3,a2
-	jruc	lp
+	jruc	alllp
 
-#x	move	b0,a2
+allx	move	b0,a2
 	move	b1,a3
 	rets
 
@@ -502,19 +502,19 @@ KOP_ALL
 	andn	a1,a0		;Form match
 	movi	ACTIVE,a3,L
 
-#lp	move	*a3,a3,L	;Get next
-	jrz	x		;End?
+koplp	move	*a3,a3,L	;Get next
+	jrz	kopx		;End?
 	move	*a3(PROCID),a14
 	andn	a1,a14		;Mask
 	cmp	a0,a14
-	jrnz	lp		;No match?
+	jrnz	koplp		;No match?
 
 	move	*a3(PTIME),a14	;Add sleep
 	add	a2,a14
 	move	a14,*a3(PTIME)
-	jruc	lp
+	jruc	koplp
 
-#x	move	b0,a3
+kopx	move	b0,a3
 	rets
 
 
@@ -527,13 +527,13 @@ KOP_ALL
 process_exist
 	movi	ACTIVE,a1
 
-#lp	move	*a1,a1,L
-	jrz	x		;End?
+pelp	move	*a1,a1,L
+	jrz	pex		;End?
 	cmp	a0,a1
-	jrne	lp		;!Match?
+	jrne	pelp		;!Match?
 	move	a0,a0		;Clr Z
 
-#x	rets
+pex	rets
 
 
 ********************************
@@ -549,17 +549,17 @@ EXISTP
 	and	a1,a0		;form match
 	movi	ACTIVE,a2
 
-#lp	move	*a2,a2,L
-	jrz	x		;End?
+eplp	move	*a2,a2,L
+	jrz	epx		;End?
 	move	*a2(PROCID),a4
 	and	a1,a4
 	cmp	a0,a4
-	jrne	lp		;!Match?
+	jrne	eplp		;!Match?
 
 	cmp	a2,a13
-	jreq	lp		;Self?
+	jreq	eplp		;Self?
 
-#x	move	a2,a0
+epx	move	a2,a0
 
 	PULL	a1,a2,a4
 	rets
