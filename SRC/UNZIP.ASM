@@ -153,7 +153,7 @@ PIXPERFRM	.equ	frmpalptr+32			;32b
 
 	srl	16,a9
 	move	@dpage,a14
-	jrnz	#p2
+	jrnz	p2
 	addi	PAGE1YO,a9		;Start in page 1 if page 0 is being displayed
 
 p2
@@ -195,17 +195,17 @@ p2
 
 	JSRP	movie_unzip
 
-#x	setf	16,1,0
+x1	setf	16,1,0
 	setf	32,0,1
 
 	RETP
 
-#error
+error
 	clr	a14
 	move	a14,@DEBUGPORT
 
 	LOCKUP
-	jruc	x
+	jruc	x1
 
 
 ********************************
@@ -214,9 +214,9 @@ p2
 
  SUBRP	movie_waitdma
 
-#wtlp
+wtlp
 	move	b13,b13			;Wait for DMAQ empty
-	jrge	#wtlp
+	jrge	wtlp
 	move	@DMACTRL,a14
 	jrn	wtlp
 
@@ -224,16 +224,16 @@ p2
 	movk	1,a14
 	move	a14,@DEBUGPORT
 
-#dly	movi	200,a14			;Wait 400 cycles
+dly	movi	200,a14			;Wait 400 cycles
 	dsj	a14,$
 
 	move	@DMACTRL,a14
-	jrnn	x
+	jrnn	x2
 	LOCKUP
 	jruc	dly
 	.endif
 
-#x	rets
+x2	rets
 
 
 ********************************
@@ -274,7 +274,7 @@ p2
 	subk	16,a0		;Point to # colors
 	move	a0,@frmpalptr,1
 	calla	pal_getf
-	jrz	x
+	jrz	x3
 
 	move	a0,@frmpalnum,0
 
@@ -284,7 +284,7 @@ p2
 
 	addk	1,a1		;Clr Z
 
-#x	rets
+x3	rets
 
 
 ********************************
@@ -362,7 +362,7 @@ utr1
 	clr	a2
 	move	*a8+,a0		;# compressed bytes to describe tree - 1
 	addk	1,a0
-#chklp	move	*a8+,a1
+chklp	move	*a8+,a1
 	add	a1,a2
 	dsj	a0,chklp
 
@@ -370,12 +370,12 @@ utr1
 	cmp	a2,a4		;Do chksums match?
 	jreq	utr		; br=yes
 	move	a5,a8		;No. Restore original A8 & error out
-#error
+error2
 	movk	1001b,a14
 	move	a14,@DEBUGPORT
 	LOCKUP
 	movk	1,a0		;Error!
-	jruc	x
+	jruc	x4
 
 * Sort Tree by increasing Bit Length.
 *   The translation index is placed in the upper byte
@@ -442,7 +442,7 @@ rvrsbts
 	dsjs	a6,utr4
 
 	clr	a0
-#x
+x4
 	move	a0,a0
 	rets
 
@@ -464,7 +464,7 @@ rvrsbts
 
 	movk	10,b3
 	movi	lengthtree,b0
-#ltlp	callr	UncompressTree
+ltlp	callr	UncompressTree
 	jrz	ltok			; br=OK
 	dsj	b3,ltlp
 	.if	DEBUG
@@ -472,12 +472,12 @@ rvrsbts
 	.endif
 	RETP
 
-#ltok
+ltok
 	move	b0,b1
 
 	movk	10,b3
 	movi	disttree,b0
-#dtlp	callr	UncompressTree
+dtlp	callr	UncompressTree
 	jrz	dtok			; br=OK
 	dsj	b3,dtlp
 	.if	DEBUG
@@ -485,20 +485,20 @@ rvrsbts
 	.endif
 	RETP
 
-#dtok
+dtok
 	.if	CARYTEST
 	clr	a14
 	move	a14,@DEBUGPORT
 	.endif
 
-#debugstrt
+debugstrt
 
 ;Clear top 4K of buffer to take care of initial wraparound
 
 	movi	RamBuffer+RAMBUFSIZ,a1	;End of buffer
 	movi	RAMBUFSIZ/IMGBPP/4,a2
 	clr	a3
-#clrbuf
+clrbuf
 	move	a3,*-a1,L
 	dsj	a2,clrbuf
 
@@ -634,26 +634,26 @@ ReadTree:
 	rl	31,a7		; rotate right one more bit
 	clr	b6		; result
 	jruc	strt
-#lp
+lp6
 	addk	1,b6
-#strt	move	*a5+,a3,1	; Code in a3
+strt	move	*a5+,a3,1	; Code in a3
 	move	*a5+,a4,1	; Blngth in a4
 	movk	32,a14
 	sub	a2,a14
 	rl	a14,a3		; rotate right as many bits have been read
-#lp2
+lp2
 	cmpxy	a3,a7
-	jrynz	#lp
+	jrynz	lp6
 
 	cmp	a2,a4
-	jreq	x
+	jreq	x6
 	move	*a8+,a14	; read a bit
 	or	a14,a7		; accumulate with other bits
 	inc	a2		; inc bits_read
 	rl	31,a7		; rotate right one more bit
 	rl	31,a3		; shift code for check of next bit
 	jruc	lp2
-#x
+x6
 	move	b6,a7
 	rets			;Result returned in a7
 
@@ -672,15 +672,15 @@ ReadTree:
 
 	move	b2,a5		;X size
 	srl	2,a5		;X/4 = loop counter
-	jrnc	lp
+	jrnc	lp7
 	move	*a6+,*a2+,1	;Copy 2 pixels
 	and	a0,a6
-#lp
+lp7
 	move	*a6+,*a2+,1	;Copy 2 pixels
 	and	a0,a6
 	move	*a6+,*a2+,1	;Copy 2 pixels
 	and	a0,a6
-	dsj	a5,lp
+	dsj	a5,lp7
 
 	subi	SCRN_PTCH,a9
 	sub	b2,b5		;readjust pixels for next line
