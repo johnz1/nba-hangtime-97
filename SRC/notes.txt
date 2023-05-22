@@ -12,7 +12,9 @@ arc/D3.asm seems to hold battlezone game?
 robo.asm is robotron. Seems they wanted to include this at some point. Same with WWF, it never got included?
 SRC seems to be Max Hangtime l1/m1 1.0, not sure yet.
 util.asm seems to hold both JAM and TE security tables (#sec_t). (usefull if we want to hack TE to run on Jam boards and vice versa.)
+there is a octopus bypass 'dip' btst 5,a0 'ck_octopus2' in attract.asm
 
+Assemblings:
 assembling diag.asm: Seems to be OK, after fixer python :)
 assembling unzip.asm
 
@@ -28,19 +30,36 @@ assembling unzip.asm
 - But sometimes they don't use the #label in the jrnz or djsj.. mweh
 - The GSPA assembler does not like jrnz #label thing.
 - The GSPA assembler does not like #label as a start of a routine.
+- SUBR macro = .def name\n  + .even\n + name (defs the routine name and aligns on even byte) (for basic subroutine)
+- SUBRP macro = .even\n +name (just aligns the routine on even byte) (for process with mproc / CREATE macro.)
+- I think we can scan inside blocks of 'SUBR' and 'SUBRP' e.g. from start of subrp to the next subrp or subr, and fix up labels.
+- There are some random stray #labels outside of subrp / subr blocks.
 
-looking at mk3's unzip.asm 'blowline' routine
-- routines with SUBR
-- routine name has SUBRP in front of it (.even)
-- #lp got changed to lp7
+From attract.asm:
 
-Examples of stupid misuse of labels and no-labels.
+stray #slp label
+SUBR amode_start
+SUBRP ubrp amode
+non-subrp/subr 'amode_design' (using #lp and others)
+non-subrp/subr 'show_title' (using #lp and others)
+non-subrp/subr title_scr_mod (using #lp and others)
+non-subrp/subr ttl_setscl (using #lp and others)
+SUBR	show_operatormsg (using #cmlp
+several other routines with no SUBR or SUBRP..
+a random #* label!
+movi	#title_str_setup,a2,L  (how do we handle this?)
+#title_str_setup
+	PRINT_STR	brush20_ascii,11,0,200,7,BRSHGYGP,0
+movi #tables all seem unique.
 
- SUBRP  movie_waitdma
 
-jrge	#wtlp
-jrn	wtlp
-
-#chklp	move	*a8+,a1
-	add	a1,a2
-	dsj	a0,chklp  <- no leading #
+Seems to be some logic in labels. The following are observed to be used without leading # to a label, but with a # routine near it.
+attract.asm inside SUBR amode_start
+jruc
+jrn
+jrz
+jrne
+jrnz
+jrnc
+jsrp
+dsj

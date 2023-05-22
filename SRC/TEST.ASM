@@ -368,7 +368,7 @@ DE2
 	jruc	out
 DE3
 	JAUC	WARMSET		
-#out
+out
 	MOVI	NOTCLOSEDWAIT,A8
 	JSRP	L_MESS
 
@@ -1195,7 +1195,7 @@ MENU_LOOP
 ;	move	@COINS,a5
 ;	btst	4,a5
 ;	jrnz	DIAG_EX			;Test switch off?
-#dipon
+dipon
 	MOVI	MENU_TYPO,A5
 	JSRP	GETSTICK		;ASK THE STICK HANDLER.......
 	MOVE	A0,A0			;SEE WHAT GET_STICK RETURNED.
