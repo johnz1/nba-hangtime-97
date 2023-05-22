@@ -74,7 +74,7 @@
 
 ;equates for this file
 
-M_YF	.equ	>8000	;Y free (OFLAGS)
+M_YF	.equ	08000H	;Y free (OFLAGS)
 
 
 	.text
@@ -1119,7 +1119,7 @@ spinmove_t
 ;	move	*a13(plyr_num),a14
 ;	move	@plyr_onfire,a1
 ;	btst	a14,a1
-;	jrz	#no
+;	jrz	no
 ;
 ;;If guy is on fire, don't allow consecutive spins without
 ;;a great chance of losing the ball!
@@ -1138,7 +1138,7 @@ spinmove_t
 
 	move	*a13(plyr_ptsdown),a1	;Is plyr losing?
 	addk	1,a1
-	jrnn	#ex
+	jrnn	ex
 
 
 	PUSH	a8
@@ -1154,20 +1154,20 @@ spinmove_t
 	.ref	steal_snd
 	SOUND1	steal_snd
 
-	movi	>10000,a2		;>Give rnd velocity
-	movi	>8000,a3
+	movi	010000H,a2		;>Give rnd velocity
+	movi	08000H,a3
 	move	a2,a0
 	callr	rnd
 	add	a3,a0
 	btst	0,a0
-	jrz	#xpos
+	jrz	xpos
 	neg	a0
 #xpos	move	a0,*a8(OXVEL),L
 	move	a2,a0
 	callr	rnd
 	add	a3,a0
 	btst	0,a0
-	jrz	#ypos
+	jrz	ypos
 	neg	a0
 #ypos	move	a0,*a8(OZVEL),L
 
@@ -1181,7 +1181,7 @@ spinmove_t
 ********************************
 * Get random # with mask
 * A0=Mask
-* >A0=Rnd # (Pass CC)
+* 0A0H=Rnd # (Pass CC)
 * Trashes scratch
 
  SUBRP	rnd
@@ -1458,18 +1458,18 @@ spinmove_t
 	movi	spins_out_sp,a0
 	move	@HCOUNT,a14
 ;	btst	3,a14
-;	jrnz	#x
+;	jrnz	x
 	btst	1,a14
-	jrnz	#x1
+	jrnz	x1
 
 	movi	spin_mv1_sp,a0
 	move	*a13(plyr_ohpdist),a1
-	cmpi	>174*DIST_ADDITION,a1
+	cmpi	0174H*DIST_ADDITION,a1
 	jrgt	#x
 	movi	spin_mv3_sp,a0
 	move	@HCOUNT,a14
 	btst	0,a14
-	jrnz	#x
+	jrnz	x
 	movi	spin_mv2_sp,a0
 #x	calla	snd_play1
 #x1	rets
@@ -1485,20 +1485,20 @@ spinmove_t
 ;DJT End
 #set_xzvels_d1
 	callr	check_x_bounds
-	jrnc	#sd1
+	jrnc	sd1
 ;DJT Start
 	movi	 XVEL_15,a14
 ;DJT End
 	move	*a8(OXPOS),a0
 	cmpi	WRLDMID,a0
-	jrlt	#sd11
+	jrlt	sd11
 ;DJT Start
 	movi	-XVEL_15,a14
 ;DJT End
 #sd11	move	a14,*a8(OXVEL),L
 
 #sd1	callr	check_z_bounds
-	jrnc	#sd1a
+	jrnc	sd1a
 ;DJT Start
 	movi	-ZVEL_15,a14
 ;DJT End
@@ -1508,20 +1508,20 @@ spinmove_t
 
 #set_xzvels_d1a
 	callr	check_x_bounds
-	jrnc	#sd1b
+	jrnc	sd1b
 ;DJT Start
 	movi	-XVEL_15,a14
 ;DJT End
 	move	*a8(OXPOS),a0
 	cmpi	WRLDMID,a0
-	jrlt	#sb12
+	jrlt	sb12
 ;DJT Start
 	movi	 XVEL_15,a14
 ;DJT End
 #sb12	move	a14,*a8(OXVEL),L
 
 #sd1b	callr	check_z_bounds
-	jrnc	#sd1c
+	jrnc	sd1c
 ;DJT Start
 	movi	-ZVEL_15,a14
 ;DJT End
@@ -1531,14 +1531,14 @@ spinmove_t
 
 #set_xzvels_d2
 	callr	check_x_bounds
-	jrnc	#sd2a
+	jrnc	sd2a
 ;DJT Start
 	movi	 XVEL_2468,a14
 ;DJT End
 	move	a14,*a8(OXVEL),L
 
 #sd2a	callr	check_z_bounds
-	jrnc	#sd2b
+	jrnc	sd2b
 ;DJT Start
 	movi	-ZVEL_2468,a14
 ;DJT End
@@ -1548,14 +1548,14 @@ spinmove_t
 
 #set_xzvels_d3
 	callr	check_x_bounds
-	jrnc	#sd3a
+	jrnc	sd3a
 ;DJT Start
 	movi	 XVEL_37,a14
 ;DJT End
 	move	a14,*a8(OXVEL),L
 
 #sd3a	callr	check_z_bounds
-	jrnc	#sd3b
+	jrnc	sd3b
 ;DJT Start
 	movi	 ZVEL_37,a14
 ;DJT End
@@ -1565,14 +1565,14 @@ spinmove_t
 
 #set_xzvels_d3a
 	callr	check_x_bounds
-	jrnc	#sd3c
+	jrnc	sd3c
 ;DJT Start
 	movi	 XVEL_37,a14
 ;DJT End
 	move	a14,*a8(OXVEL),L
 
 #sd3c	callr	check_z_bounds
-	jrnc	#sd3d
+	jrnc	sd3d
 ;DJT Start
 	movi	-ZVEL_37,a14
 ;DJT End
@@ -1582,14 +1582,14 @@ spinmove_t
 
 #set_xzvels_d4
 	callr	check_x_bounds
-	jrnc	#sd4a
+	jrnc	sd4a
 ;DJT Start
 	movi	 XVEL_2468,a14
 ;DJT End
 	move	a14,*a8(OXVEL),L
 
 #sd4a	callr	check_z_bounds
-	jrnc	#sd4b
+	jrnc	sd4b
 ;DJT Start
 	movi	 ZVEL_2468,a14
 ;DJT End
@@ -1599,20 +1599,20 @@ spinmove_t
 
 #set_xzvels_d5
 	callr	check_x_bounds
-	jrnc	#sd5a
+	jrnc	sd5a
 ;DJT Start
 	movi	 XVEL_15,a14
 ;DJT End
 	move	*a8(OXPOS),a0
 	cmpi	WRLDMID,a0
-	jrlt	#sd51
+	jrlt	sd51
 ;DJT Start
 	movi	-XVEL_15,a14
 ;DJT End
 #sd51	move	a14,*a8(OXVEL),L
 
 #sd5a	callr	check_z_bounds
-	jrnc	#sd5b
+	jrnc	sd5b
 ;DJT Start
 	movi	 ZVEL_15,a14
 ;DJT End
@@ -1622,20 +1622,20 @@ spinmove_t
 
 #set_xzvels_d5a
 	callr	check_x_bounds
-	jrnc	#sd5c
+	jrnc	sd5c
 ;DJT Start
 	movi	-XVEL_15,a14
 ;DJT End
 	move	*a8(OXPOS),a0
 	cmpi	WRLDMID,a0
-	jrlt	#sb52
+	jrlt	sb52
 ;DJT Start
 	movi	 XVEL_15,a14
 ;DJT End
 #sb52	move	a14,*a8(OXVEL),L
 
 #sd5c	callr	check_z_bounds
-	jrnc	#sd5d
+	jrnc	sd5d
 ;DJT Start
 	movi	 ZVEL_15,a14
 ;DJT End
@@ -1645,14 +1645,14 @@ spinmove_t
 
 #set_xzvels_d6
 	callr	check_x_bounds
-	jrnc	#sd6a
+	jrnc	sd6a
 ;DJT Start
 	movi	-XVEL_2468,a14
 ;DJT End
 	move	a14,*a8(OXVEL),L
 
 #sd6a	callr	check_z_bounds
-	jrnc	#sd6b
+	jrnc	sd6b
 ;DJT Start
 	movi	 ZVEL_2468,a14
 ;DJT End
@@ -1662,14 +1662,14 @@ spinmove_t
 
 #set_xzvels_d7
 	callr	check_x_bounds
-	jrnc	#sd7a
+	jrnc	sd7a
 ;DJT Start
 	movi	-XVEL_37,a14
 ;DJT End
 	move	a14,*a8(OXVEL),L
 
 #sd7a	callr	check_z_bounds
-	jrnc	#sd7b
+	jrnc	sd7b
 ;DJT Start
 	movi	 ZVEL_37,a14
 ;DJT End
@@ -1679,14 +1679,14 @@ spinmove_t
 
 #set_xzvels_d7a
 	callr	check_x_bounds
-	jrnc	#sd7c
+	jrnc	sd7c
 ;DJT Start
 	movi	-XVEL_37,a14
 ;DJT End
 	move	a14,*a8(OXVEL),L
 
 #sd7c	callr	check_z_bounds
-	jrnc	#sd7d
+	jrnc	sd7d
 ;DJT Start
 	movi	-ZVEL_37,a14
 ;DJT End
@@ -1696,14 +1696,14 @@ spinmove_t
 
 #set_xzvels_d8
 	callr	check_x_bounds
-	jrnc	#sd8a
+	jrnc	sd8a
 ;DJT Start
 	movi	-XVEL_2468,a14
 ;DJT End
 	move	a14,*a8(OXVEL),L
 
 #sd8a	callr	check_z_bounds
-	jrnc	#sd8b
+	jrnc	sd8b
 ;DJT Start
 	movi	-ZVEL_2468,a14
 ;DJT End

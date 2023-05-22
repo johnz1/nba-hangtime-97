@@ -169,7 +169,7 @@ QMSIZE	.set	NOBJ*BQCELL
 	reti
 
 dmaint1
-	setf	1,0,0			;>Disable dma interrupt
+	setf	1,0,0			;0DHisable dma interrupt
 	move	b12,@INTENB+1		;Clr X1E
 	clr	b13			;For safety!
 	subk	1,b13			;-1
@@ -201,7 +201,7 @@ dmaint1
 	move	*a0(OYVAL),a10,L	;Get Y INT:FRAC
 
 	btst	B_3DQ,a1
-	jrz	#chk3d
+	jrz	chk3d
 
 	move	b4,a6			;World TL Y:X
 	subxy	a6,a10			;-world coord to get screen coord
@@ -210,15 +210,15 @@ dmaint1
 	move	*a3,a3			;Get X shift
 	sub	a3,a2
 	movx	a2,a10			;A10=Obj Y:X
-	jruc	#noscl
+	jruc	noscl
 
 #chk3d	btst	B_3D,a1
-	jrnz	#3d
+	jrnz	3d
 
 	move	*a0(OXPOS),a2		;X
 	movx	a2,a10			;A10=Obj Y:X
 	btst	B_SCRNREL,a1
-	jrnz	#noscl			;Screen relative XY?
+	jrnz	noscl			;Screen relative XY?
 	move	b4,a6			;World TL Y:X
 	subxy	a6,a10			;-world coord to get screen coord
 
@@ -231,7 +231,7 @@ dmaint1
 
 ;Check for flipping, clipping, adjust offset, sag
 
-				;>Calc top,bot,lft,rgt clips
+				;0CaHlc top,bot,lft,rgt clips
 	clr	a3		;A3=TL clip size
 	move	a10,a2
 	addxy	a9,a2		;BR Y:X
@@ -242,7 +242,7 @@ dmaint1
 	movx	a3,a2		;Clr rclip if x neg
 
 #20	btst	7,a12			;dont clip bit if ZERO compressed
-	jrz	#25
+	jrz	25
 
 	move	a14,a6
 	subxy	a10,a6		;tc : lc
@@ -253,11 +253,11 @@ dmaint1
 	movx	a6,a3		;Left clip size
 
 #22	add	a3,a2		;TL clip+BR clip
-	jrz	#chkvflip
+	jrz	chkvflip
 	cmpxy	a2,a9		;Chk clipped size
 	JRXLE	#nxt		;Totally clipped?
 	JRYLE	#nxt
-	jruc	#chkvflip
+	jruc	chkvflip
 
 #25	move	a14,a6
 	subxy	a10,a6		;tc : lc
@@ -271,7 +271,7 @@ dmaint1
 
 #35	move	a2,b0		;Save
 	add	a3,a2		;TL clip+BR clip
-	jrz	#chkvflip
+	jrz	chkvflip
 
 ;do obj clipping
 
@@ -293,7 +293,7 @@ dmaint1
 	movx	a3,a1		;Yes. A1=Left clip
 
 	btst	B_FLIPH,a12
-	jrz	#nofh
+	jrz	nofh
 
 	subxy	a1,a10		;X-LClip
 
@@ -302,11 +302,11 @@ dmaint1
 	subxy	a1,a10		;X-RClip
 
 #nofh	btst	B_FLIPV,a12
-	jrz	#nofv
+	jrz	nofv
 	move	b0,a3		;Bot clip
 
 #nofv	srl	16,a3		;A3=Top or bot clip
-	jrz	#t0
+	jrz	t0
 	zext	a6
 	mpyu	a6,a3		;T or B clip * total hsize
 
@@ -315,7 +315,7 @@ dmaint1
 	move	a12,a1
 	sll	32-15,a1	;Get bits/pix in CRTL bits 12-14
 	srl	32-15+12,a1
-	jrnz	#not8
+	jrnz	not8
 	movk	8,a1
 
 #not8	mpys	a1,a3		;# of bits to skip
@@ -325,7 +325,7 @@ dmaint1
 
 #chkvflip
 	btst	B_FLIPV,a12
-	jrz	#chkhflip
+	jrz	chkhflip
 
 	movy	a9,a1			;VSize
 	srl	16,a1
@@ -335,7 +335,7 @@ dmaint1
 
 #chkhflip
 	btst	B_FLIPH,a12
-	jrz	#nofh2
+	jrz	nofh2
 
 	movx	a9,a1			;HSize
 	subk	1,a1
@@ -358,14 +358,14 @@ dmaint1
 	setf	16,1,0
 
 	move	*b11,b0			;DMA busy (will irq)? Yes if -
-	jrn	#dmaok
+	jrn	dmaok
 	trap	1			;Cause DMA irq
 #dmaok	eint
 
 dma_objlst				;Entry point
 #nxt
 	move	*a0,a0,L		;Get next link
-	jrnz	#lp			;More?
+	jrnz	lp			;More?
 	rets
 
 ;A0 = *OBJ
@@ -406,12 +406,12 @@ dma_objlst				;Entry point
 ;	BSSX	dlt_xval,16
 ;	move	*a0(OID),a3
 ;	cmpi	TYPBALL-CLSENMY,a3
-;	jrnz	#tmpx_1
+;	jrnz	tmpx_1
 ;	move	a7,@pre_xval,L
 ;#tmpx_1
 ;	PRJX2Z	a7,a2,0
 ;	cmpi	TYPBALL-CLSENMY,a3
-;	jrnz	#tmpx_2
+;	jrnz	tmpx_2
 ;	move	a7,@pst_xval
 ;	move	@pre_xval+16,a3
 ;	sub	a7,a3
@@ -443,15 +443,15 @@ dma_objlst				;Entry point
 	addxy	a6,a10
 
 	btst	B_NOSCALE,a1		;does obj want Z-based scaling?
-	jrnz	#noscl			; yes if !0
+	jrnz	noscl			; yes if !0
 
 	btst	B_SHAD,a1		;no. Is it a shadow-type obj?
-	jrz	#notshad		; no if 0
+	jrz	notshad		; no if 0
 	srl	1,a10			;yes. Lose X lsb
 	move	@PCNT,a5		;make X even or odd to "shimmer"
 	srl	1,a5			; the img
 	addc	a10,a10
-	jruc	#noscl
+	jruc	noscl
 ;
 ;check screen side clips & get Z-based scale if visible
 ;
@@ -474,7 +474,7 @@ dma_objlst				;Entry point
 	move	*a5,a5,L		;A5=SCALEY:X
 
 	btst	B_FLIPH,a12
-	jrz	#nofh2
+	jrz	nofh2
 
 	movx	a9,a1			;HSize
 	subk	1,a1
@@ -488,10 +488,10 @@ dma_objlst				;Entry point
 	mmtm	a4,a5,a8,a9,a10,a11,a12	;Save the DMA regs
 	addk	1,b13			;Inc DMA queue cnt
 	jrp	#nxt			;DMA irq active? Yes if +
-	jruc	#dodma
+	jruc	dodma
 
 
-#********************
+*********************
 * Character generator for dma_objlst
 *
 * Enters with:
@@ -541,7 +541,7 @@ dma_objlst				;Entry point
 ;DJT Start
 	movk	NAME_LETTERS,b2		;Assume fixed 6 char 
 	btst	B_PIXSCAN,a1		;Is it null-terminated or fixed 6?
-	jrz	#fixed6			; br=fixed 6 char
+	jrz	fixed6			; br=fixed 6 char
 	movk	NULL_MAXLEN,b2		;Max allowed just in case!!
 #fixed6
 	move	a11,a1
@@ -549,7 +549,7 @@ dma_objlst				;Entry point
 ;DJT End
 #lp
 	move	*a1+,a11		;Get next char *img
-	jrz	#done			;Done if not a char (if 0)
+	jrz	done			;Done if not a char (if 0)
 	sll	5,a11
 	add	a6,a11
 	move	*a11,a11,L
@@ -572,7 +572,7 @@ dma_objlst				;Entry point
 ;DJT End
 
 	move	a3,a3			;Was OMISC 0? First time here if so
-	jrnz	#strtdma
+	jrnz	strtdma
 	subxy	a2,a10			;Remove the page Y offset : XPad
 	zext	a10			;0->YPOS so XPOS is name pix width
 	sra	1,a10
@@ -592,7 +592,7 @@ dma_objlst				;Entry point
 	add	a2,a3
 	move	a3,*a1
 	addi	DMAWINDOW-DMAOFFST,a1
-	dsj	a5,#fixx
+	dsj	a5,fixx
 
 #strtdma
 	add	b0,b13			;Inc DMA queue cnt
@@ -606,7 +606,7 @@ dma_objlst				;Entry point
 	setf	16,1,0
 
 	move	*b11,b0			;DMA busy (will irq)? Yes if -
-	jrn	#dmaok
+	jrn	dmaok
 	trap	1			;Cause DMA irq
 #dmaok	eint
 
@@ -619,7 +619,7 @@ dma_objlst				;Entry point
  SUBR	char_gen_2d
 
 	move	*a0(ODATA_p),a11,L	;Get *plyrname
-	movi	>1000100,a7		;SCALEY:SCALEX
+	movi	01000100H,a7		;SCALEY:SCALEX
 	move	*a0(OPAL),a8,L		;OCNST:OPAL
 	move	*a0(OYPOS),a10		;OYPOS
 	move	*a0(OMISC),a3		;OXPOS
@@ -632,14 +632,14 @@ dma_objlst				;Entry point
 	movi	init_convert_img,a6,L
 	movk	NAME_LETTERS,b2		;Assume fixed 6 char 
 	btst	B_PIXSCAN,a1		;Is it null-terminated or fixed 6?
-	jrz	#fixed6			; br=fixed 6 char
+	jrz	fixed6			; br=fixed 6 char
 	movk	NULL_MAXLEN,b2		;Max allowed just in case!!
 #fixed6
 	move	a11,a1
 	clr	b0			;Init char cnt
 #lp
 	move	*a1+,a11		;Get next char *img
-	jrz	#done			;Done if not a char (if 0)
+	jrz	done			;Done if not a char (if 0)
 	sll	5,a11
 	add	a6,a11
 	move	*a11,a11,L
@@ -660,7 +660,7 @@ dma_objlst				;Entry point
 	jrz	nxt_2dobj		;Done if there weren't any
 
 	move	a3,a3			;Was OMISC 0? First time here if so
-	jrnz	#strtdma
+	jrnz	strtdma
 	subxy	a2,a10			;Remove the page Y offset : XPad
 	zext	a10			;0->YPOS so XPOS is name pix width
 	sra	1,a10
@@ -680,7 +680,7 @@ dma_objlst				;Entry point
 	add	a2,a3
 	move	a3,*a1
 	addi	DMAWINDOW-DMAOFFST,a1
-	dsj	a5,#fixx
+	dsj	a5,fixx
 
 #strtdma
 	add	b0,b13			;Inc DMA queue cnt
@@ -694,7 +694,7 @@ dma_objlst				;Entry point
 	setf	16,1,0
 
 	move	*b11,b0			;DMA busy (will irq)? Yes if -
-	jrn	#dmaok
+	jrn	dmaok
 	trap	1			;Cause DMA irq
 #dmaok	eint
 
@@ -702,7 +702,7 @@ dma_objlst				;Entry point
 
 ;DJT End
 
-#*******************************
+********************************
 * Load DMA Q from obj list (2D type)
 * A0=*Obj list
 * A4=*DMAQ next free spot
@@ -714,8 +714,8 @@ dma_objlst				;Entry point
 * B11=*DMACTRL
 
 dma_objlst2d
-;	movi	>1000100,a5		;A5=Y:X scale
-	jruc	#nxt
+;	movi	01000100H,a5		;A5=Y:X scale
+	jruc	nxt
 
 	.align
 
@@ -737,7 +737,7 @@ dma_objlst2d
 	move	*a0(OXPOS),a2		;X
 	movx	a2,a10			;A10=Obj Y:X
 	btst	B_SCRNREL,a1
-	jrnz	#noscl			;Screen relative XY?
+	jrnz	noscl			;Screen relative XY?
 	move	b4,a6			;A6=World TL Y:X
 	subxy	a6,a10			;-world coord to get screen coord
 #noscl
@@ -749,7 +749,7 @@ dma_objlst2d
 
 ;Check for flipping, clipping, adjust offset, sag
 
-				;>Calc top,bot,lft,rgt clips
+				;0CaHlc top,bot,lft,rgt clips
 	clr	a3		;A3=TL clip size
 	move	a10,a2
 	addxy	a9,a2		;BR Y:X
@@ -764,18 +764,18 @@ dma_objlst2d
 	JRYLT	#30
 	movy	a7,a3		;Top clip size
 	btst	7,a12
-	jrnz	#30		;Zero compression on?
+	jrnz	30		;Zero compression on?
 	movy	a14,a10		;Adjust start position to window edge
 
 #30	JRXLT	#35
 	movx	a7,a3		;Left clip size
 	btst	7,a12
-	jrnz	#35		;Zero compression on?
+	jrnz	35		;Zero compression on?
 	movx	a14,a10		;Adjust start position to window edge
 
 #35	move	a2,b0		;Save
 	add	a3,a2		;TL clip+BR clip
-	jrz	#noclip		;Zero clip?
+	jrz	noclip		;Zero clip?
 
 
 	move	a9,a6		;Save VSize:HSize
@@ -785,15 +785,15 @@ dma_objlst2d
 	JRYLE	#nxt
 
 	btst	7,a12
-	jrz	#nozc		;Zero compression off?
+	jrz	nozc		;Zero compression off?
 	move	a6,a9		;Restore v:h size
-	jruc	#noclip
+	jruc	noclip
 
 #nozc
 	clr	a1
 	movx	a2,a1
 	move	a1,a1
-	jrz	#xclipzero
+	jrz	xclipzero
 	movx	a9,a1
 	subk	8,a1
 	jrle	#nxt		;<=8 wide? Skip so DMA doesn't lockup
@@ -805,7 +805,7 @@ dma_objlst2d
 
 
 	btst	B_FLIPH,a12
-	jrz	#nofh
+	jrz	nofh
 
 	subxy	a1,a10		;Original X
 
@@ -815,12 +815,12 @@ dma_objlst2d
 
 
 #nofh	btst	B_FLIPV,a12
-	jrz	#nofv
+	jrz	nofv
 
 	move	b0,a3		;Bot clip
 
 #nofv	srl	16,a3		;A3=Top or bot clip
-	jrz	#t0
+	jrz	t0
 	zext	a6
 	mpyu	a6,a3		;T or B clip * total hsize
 
@@ -830,7 +830,7 @@ dma_objlst2d
 	move	a12,a1
 	sll	32-15,a1	;Get bits 12-14
 	srl	32-15+12,a1
-	jrnz	#not8
+	jrnz	not8
 	movk	8,a1
 #not8	mpys	a1,a3		;# of bits to skip
 	add	a3,a11		;Add to SAG
@@ -840,7 +840,7 @@ dma_objlst2d
 
 #noclip
 	btst	B_FLIPH,a12
-	jrz	#300
+	jrz	300
 
 	movx	a9,a1			;HSize
 	subk	1,a1
@@ -848,7 +848,7 @@ dma_objlst2d
 	addxy	a1,a10
 
 #300	btst	B_FLIPV,a12
-	jrz	#400
+	jrz	400
 
 	movy	a9,a1			;VSize
 	srl	16,a1
@@ -866,16 +866,16 @@ dma_objlst2d
 
 	dint
 
-	setf	1,0,0			;>Enable DMA int
+	setf	1,0,0			;0EHnable DMA int
 	movk	1,a1
 	move	a1,@INTENB+1		;X1E
 	setf	16,1,0
 
 	move	*b11,b0
-	jrn	#dmaok			;DMA busy?
+	jrn	dmaok			;DMA busy?
 
 	move	b13,b13
-	jrn	#dmaok			;DMA int done?
+	jrn	dmaok			;DMA int done?
 
 	trap	1			;Cause DMA int
 
@@ -886,14 +886,14 @@ nxt_2dobj
 ;DJT End
 #nxt
 	move	*a0,a0,L		;Get next link
-	jrnz	#lp			;More?
+	jrnz	lp			;More?
 	rets
 
 
 ;DJT Start
  .if 0
 ;DJT End
-#*******************************
+********************************
 * Load DMA Q from obj list (2D type)
 * A0=*Obj list
 * A4=*DMAQ next free spot
@@ -906,8 +906,8 @@ nxt_2dobj
 
 dma_objlst2dscl
 
-;	movi	>1000100,a5		;A5=Y:X scale
-	jruc	#nxt
+;	movi	01000100H,a5		;A5=Y:X scale
+	jruc	nxt
 
 	.align
 
@@ -924,7 +924,7 @@ dma_objlst2dscl
 	move	*a0(OXPOS),a2		;X
 	movx	a2,a10			;A10=Obj Y:X
 	btst	B_SCRNREL,a1
-	jrnz	#noscl			;Screen relative XY?
+	jrnz	noscl			;Screen relative XY?
 	move	b4,a6			;A6=World TL Y:X
 	subxy	a6,a10			;-world coord to get screen coord
 #noscl
@@ -936,7 +936,7 @@ dma_objlst2dscl
 
 ;Check for flipping, clipping, adjust offset, sag
 
-				;>Calc top,bot,lft,rgt clips
+				;0CaHlc top,bot,lft,rgt clips
 	clr	a3		;A3=TL clip size
 	move	a10,a2
 	addxy	a9,a2		;BR Y:X
@@ -958,7 +958,7 @@ dma_objlst2dscl
 
 #35	move	a2,b0		;Save
 	add	a3,a2		;TL clip+BR clip
-	jrz	#noclip		;Zero clip?
+	jrz	noclip		;Zero clip?
 
 
 	movx	a9,a6		;HSize
@@ -970,7 +970,7 @@ dma_objlst2dscl
 	clr	a1
 	movx	a2,a1
 	move	a1,a1
-	jrz	#xclipzero
+	jrz	xclipzero
 	movx	a9,a1
 	subk	8,a1
 	jrle	#nxt		;<=8 wide? Skip so DMA doesn't lockup
@@ -982,7 +982,7 @@ dma_objlst2dscl
 
 
 	btst	B_FLIPH,a12
-	jrz	#nofh
+	jrz	nofh
 
 	subxy	a1,a10		;Original X
 
@@ -992,12 +992,12 @@ dma_objlst2dscl
 
 
 #nofh	btst	B_FLIPV,a12
-	jrz	#nofv
+	jrz	nofv
 
 	move	b0,a3		;Bot clip
 
 #nofv	srl	16,a3		;A3=Top or bot clip
-	jrz	#t0
+	jrz	t0
 	zext	a6
 	mpyu	a6,a3		;T or B clip * total hsize
 
@@ -1007,7 +1007,7 @@ dma_objlst2dscl
 	move	a12,a1
 	sll	32-15,a1	;Get bits 12-14
 	srl	32-15+12,a1
-	jrnz	#not8
+	jrnz	not8
 	movk	8,a1
 #not8	mpys	a1,a3		;# of bits to skip
 	add	a3,a11		;Add to SAG
@@ -1017,7 +1017,7 @@ dma_objlst2dscl
 
 #noclip
 	btst	B_FLIPH,a12
-	jrz	#300
+	jrz	300
 
 	movx	a9,a1			;HSize
 	subk	1,a1
@@ -1025,7 +1025,7 @@ dma_objlst2dscl
 	addxy	a1,a10
 
 #300	btst	B_FLIPV,a12
-	jrz	#400
+	jrz	400
 
 	movy	a9,a1			;VSize
 	srl	16,a1
@@ -1043,30 +1043,30 @@ dma_objlst2dscl
 
 	dint
 
-	setf	1,0,0			;>Enable DMA int
+	setf	1,0,0			;0EHnable DMA int
 	movk	1,a1
 	move	a1,@INTENB+1		;X1E
 	setf	16,1,0
 
 	move	*b11,b0
-	jrn	#dmaok			;DMA busy?
+	jrn	dmaok			;DMA busy?
 
 	move	b13,b13
-	jrn	#dmaok			;DMA int done?
+	jrn	dmaok			;DMA int done?
 
 	trap	1			;Cause DMA int
 
 #dmaok	eint
 #nxt
 	move	*a0,a0,L		;Get next link
-	jrnz	#lp			;More?
+	jrnz	lp			;More?
 	rets
 ;DJT Start
  .endif
 ;DJT End
 
 
-#*******************************
+********************************
 * Display object lists, called by DIRQ
 
 DISPLAY
@@ -1075,7 +1075,7 @@ DISPLAY
 	movi	SCRNXP,b2		;B2=Page y offset : XPad offset
 	movi	[253,0],b3
 	move	@dpage,a1
-	jrnz	#p1
+	jrnz	p1
 	movi	[PAGE1YO,SCRNXP],b2
 	movi	[509,256],b3
 #p1
@@ -1083,18 +1083,18 @@ DISPLAY
 	clr	b13			;Kill DMA
 	move	b13,*b11
 	move	b13,*b11
-	movi	>80000,b8		;B8=*DMAREGS offset for 20Mb IROM mod
+	movi	080000H,b8		;B8=*DMAREGS offset for 20Mb IROM mod
 	movi	DMAREGS,b9		;B9=*DMAREGS to restore B12 with
 	move	b9,b12			;B12=*DMAREGS
 	subk	1,b13			;B13=Q count (-1)
 	move	a4,b14			;B14=*DMAQ for next fetch (Top)
 
-	movi	>30,b0
+	movi	030H,b0
 	move	b0,*b12(30h)		;DMACONF (Top/Bottom)
 	move	b3,*b12,L		;DMAWINDOW
 
 	move	@DISPLAYON,a0
-	jrz	#doff			;Stop DMA of objects except for score?
+	jrz	doff			;Stop DMA of objects except for score?
 
 	movi	WORLDTLX,b0		;>Scroll world
 ;	move	@SCROLLX,b6,L
@@ -1125,23 +1125,23 @@ DISPLAY
 	.endif
 
 	move	@gndstat,a0
-	jrz	#70			;Off?
+	jrz	70			;Off?
 	callr	gnd_dodma
 #70
 ;	move	@_3dstat,a0
-;	jrz	#80			;Off?
+;	jrz	80			;Off?
 ;	calla	_3d_build
 ;	callr	_3d_draw
 ;#80
 	move	@dtype,a1
-	jrnz	#3dtype
+	jrnz	3dtype
 
 	movi	BAKLST,a0
 	callr	dma_objlst2d
 
 	.if	DEBUG
 	move	@SLDEBUG,a0
-	jrnn	#nol2d
+	jrnn	nol2d
 	movi	31<<10+10<<5,a0		;Proc usage
 	move	a0,@ERASELOC
 #nol2d
@@ -1149,33 +1149,33 @@ DISPLAY
 
 	movi	OBJLST,a0
 	callr	dma_objlst2d
-	jruc	#doff
+	jruc	doff
 #3dtype
 	jrgt	#3dgame
 
 	move	@dcode_p,a0,L
-	jrnn	#3dgame			;No special code?
+	jrnn	3dgame			;No special code?
 	call	a0
-	jruc	#x
+	jruc	x
 #3dgame
 ;	movi	BAKLST,a0
-;	movi	>1000100,b7		;Original scale
+;	movi	01000100H,b7		;Original scale
 ;	callr	dma_objlst
 
 	.if	DEBUG
 	move	@SLDEBUG,a0
-	jrnn	#nol3d
+	jrnn	nol3d
 	movi	31<<10+10<<5,a0		;Proc usage
 	move	a0,@ERASELOC
 #nol3d
 	.endif
 
 	movi	OBJLST,a0
-	movi	>1000100,b7		;Original scale
+	movi	01000100H,b7		;Original scale
 	callr	dma_objlst
 #doff
 ;	move	@QDMAFLG,a2
-;	jrnz	#noman			;Q being modified?
+;	jrnz	noman			;Q being modified?
 	move	@DMAQCUR,a2,L
 	movi	DMAQ+QMSIZE,a1
 	cmp	a1,a2
@@ -1184,7 +1184,7 @@ DISPLAY
 
 	move	b2,a5
 
-#lp	move	-*a1,-*a4,L		;>Copy manual DMAQ to end of Q
+#lp	move	-*a1,-*a4,L		;0CHopy manual DMAQ to end of Q
 	move	-*a1,-*a4,L
 	move	-*a1,-*a4,L
 	move	-*a1,a0,L
@@ -1197,12 +1197,12 @@ DISPLAY
 	jrhi	#lp
 
 	move	*b11,b0
-	jrn	#noman			;DMA busy?
+	jrn	noman			;DMA busy?
 
 	move	b13,b13
-	jrn	#noman			;DMA int done?
+	jrn	noman			;DMA int done?
 
-	setf	1,0,0			;>Enable DMA int
+	setf	1,0,0			;0EHnable DMA int
 	movk	1,a1
 	move	a1,@INTENB+1		;X1E
 	setf	16,1,0
@@ -1214,11 +1214,11 @@ DISPLAY
 ;	mmtm	a4,a7,a8,a9,a10,a11,a12
 
 	move	@HALT,a0
-	jrnz	#novel			;Skip vel update?
+	jrnz	novel			;Skip vel update?
 
 	movi	OBJLST,a0
 	move	*a0,a0,L
-	jrz	#novel
+	jrz	novel
 
 ; Velocity add loop
 
@@ -1235,13 +1235,13 @@ DISPLAY
 	move	a4,-*a1,L
 
 	move	*a0,a0,L
-	jrnz	#valp			;!End?
+	jrnz	valp			;!End?
 
 #novel
 #x
 ;	.if	DEBUG
 ;	move	@SLDEBUG,a0
-;	jrnn	#noline
+;	jrnn	noline
 ;
 ;	movi	31<<10+31<<5,a0		;Proc usage
 ;	move	a0,@ERASELOC
@@ -1259,10 +1259,10 @@ DISPLAY
 
 
 ;Null dma data
-;nulldma	.long	>80000000,IROM,0,>00010001,0,>1000100
+;nulldma	.long	080000000H,IROM,0,000010001H,0,01000100H
 
 
-#*******************************
+********************************
 * Fill DMAQ with ground data for each line
 *  A4  *DMAQ next free spot
 *  A13 SCRNLR
@@ -1283,13 +1283,13 @@ DMACRT	.equ	(((8|COURT_BC)<<12)|DMAWNZ)<<16
 	.if 	1		;1 for locked court, 0 for new court
 	.ref	COURT
 	.ref	OUTDOOR
-SAGCRT	.equ	  COURT-IROM+(GNDI_W/2-200)*COURT_BC+BNKCRT*>4000000
-SAGOTD	.equ	OUTDOOR-IROM+(GNDI_W/2-200)*COURT_BC+BNKOTD*>4000000
+SAGCRT	.equ	  COURT-IROM+(GNDI_W/2-200)*COURT_BC+BNKCRT*04000000H
+SAGOTD	.equ	OUTDOOR-IROM+(GNDI_W/2-200)*COURT_BC+BNKOTD*04000000H
 	.else
 	.ref	COURTNEW
 	.ref	OUTDOOR
-SAGCRT	.equ	COURTNEW-IROM+(GNDI_W/2-200)*COURT_BC+BNKCRT*>4000000
-SAGOTD	.equ	 OUTDOOR-IROM+(GNDI_W/2-200)*COURT_BC+BNKOTD*>4000000
+SAGCRT	.equ	COURTNEW-IROM+(GNDI_W/2-200)*COURT_BC+BNKCRT*04000000H
+SAGOTD	.equ	 OUTDOOR-IROM+(GNDI_W/2-200)*COURT_BC+BNKOTD*04000000H
 	.endif
 
 
@@ -1309,7 +1309,7 @@ SAGOTD	.equ	 OUTDOOR-IROM+(GNDI_W/2-200)*COURT_BC+BNKOTD*>4000000
 	sra	16,a3
 	move	a3,*a0+
 	add	a1,a2			;A2+=delta X
-	dsjs	a5,#do_x_t
+	dsjs	a5,do_x_t
 
 	cmpxy	a14,a13			;Screen closed?
 	jryle	#exit
@@ -1318,7 +1318,7 @@ SAGOTD	.equ	 OUTDOOR-IROM+(GNDI_W/2-200)*COURT_BC+BNKOTD*>4000000
 	movi	gndpos_t+40*16,a3	;A3=*1st court X
 	movi	SAGCRT,a6		;A6=*1st line centered of court img
 	move	@pup_court,a2		;Outdoor court?
-	jrz	#crt			; br=no
+	jrz	crt			; br=no
 	movi	SAGOTD,a6		;A6=*1st line centered of court img
 #crt
 	movi	GNDI_W*COURT_BC,a2	;K> A2=court img bit width
@@ -1358,7 +1358,7 @@ SAGOTD	.equ	 OUTDOOR-IROM+(GNDI_W/2-200)*COURT_BC+BNKOTD*>4000000
 	.ref	crt_pal
 	move	@crt_pal,a8		;K> A8=DMA CONSTANT:PALETTE
 
-	movi	>1000100,a7		;K> A7=DMA Y:X scale
+	movi	01000100H,a7		;K> A7=DMA Y:X scale
 	movi	[1,400],a9		;K> A9=DMA VSIZE:HSIZE
 	movi	DMACRT,a12		;K> A12=DMA CONTROL:OFFSET
 	movi	[1,0],a1		;K> A1=Y:X inc
@@ -1379,13 +1379,13 @@ SAGOTD	.equ	 OUTDOOR-IROM+(GNDI_W/2-200)*COURT_BC+BNKOTD*>4000000
 	setf	16,1,0
 
 	move	*b11,b0			;DMA busy (will irq)? Yes if -
-	jrn	#dmaok
+	jrn	dmaok
 	trap	1			;Cause DMA irq
 #dmaok	eint
 
 #next	add	a2,a6			;->next img line
 	add	a1,a10			;->next Y
-	dsjs	a5,#lp
+	dsjs	a5,lp
 
 #exit	rets
 
@@ -1393,7 +1393,7 @@ SAGOTD	.equ	 OUTDOOR-IROM+(GNDI_W/2-200)*COURT_BC+BNKOTD*>4000000
 ;DJT Start
  .if 0
 ;DJT End
-#*******************************
+********************************
 * Dump 3D data to DMA
 * B2=Y offset for top of page : XPad offset
 * B11=*DMACTRL
@@ -1404,7 +1404,7 @@ SAGOTD	.equ	 OUTDOOR-IROM+(GNDI_W/2-200)*COURT_BC+BNKOTD*>4000000
 	.bss	linelsxy	,32
 	.bss	linersxy	,32
 
-D3XPTS	.equ	>140		;UHL *Xformed points array (Cnt, XYZ,XYZ..)
+D3XPTS	.equ	0140H		;UHL *Xformed points array (Cnt, XYZ,XYZ..)
 
  SUBRP	_3d_draw	;B1 Free (B14)
 
@@ -1412,7 +1412,7 @@ D3XPTS	.equ	>140		;UHL *Xformed points array (Cnt, XYZ,XYZ..)
 	PUSH	b3,b4,b5,b6,b7,b8,b9,b10,b13,b14
 
 
-	setf	1,0,0			;>Disable DMA interrupt
+	setf	1,0,0			;0DHisable DMA interrupt
 	move	sp,@INTENB+1		;Clr X1E
 	setf	16,1,0
 
@@ -1420,22 +1420,22 @@ D3XPTS	.equ	>140		;UHL *Xformed points array (Cnt, XYZ,XYZ..)
 
 ;	clr	b14			;DEBUG
 
-	movi	>1000100,b5		;B5=1:1 scale
+	movi	01000100H,b5		;B5=1:1 scale
 	movi	IROM,b9			;B9=*IROM
-	movi	>800c<<16,b10		;B10=OFFSET:CONTROL
+	movi	0800cH<<16,b10		;B10=OFFSET:CONTROL
 
 	movi	d3vis_p,a12		;A12=*3D object
 
 
-;D3PTS	.equ	>120		;UHL *Points array (Cnt, XYZ,XYZ..)
+;D3PTS	.equ	0120H		;UHL *Points array (Cnt, XYZ,XYZ..)
 ;
 ;	PUSH	a0,a1			;DEBUG
 ;	movi	d3vis_p,a1
 ;	move	*a1,a0,L
-;	jrz	#dx
+;	jrz	dx
 ;#debug	move	a1,a0
 ;	move	*a0,a1,L
-;	jrnz	#debug
+;	jrnz	debug
 ;	move	*a0(D3PTS),a1,L
 ;	jrz	$			;ERROR!!!
 ;#dx	PULL	a0,a1
@@ -1445,14 +1445,14 @@ D3XPTS	.equ	>140		;UHL *Xformed points array (Cnt, XYZ,XYZ..)
 	.align
 
 #lpobj	move	*a12,a12,L
-	jrz	#x			;End?
+	jrz	x			;End?
 	move	a12,a14
 	addi	D3XPTS,a14
 	move	*a14+,a13,L		;A13=*Base of points_t
 	move	*a14+,a14,L		;A14=*1st entry of face line_t
 
 	move	*a13+,a0		;# pts
-	jrz	#lpobj			;Not visable?
+	jrz	lpobj			;Not visable?
 
 
 #facelp
@@ -1460,11 +1460,11 @@ D3XPTS	.equ	>140		;UHL *Xformed points array (Cnt, XYZ,XYZ..)
 	move	a0,b6			;B6=Const:Pal for face
 	sll	16,b6
 	move	a14,a4
-	movi	>7fff,a8		;>Find lowest/highest X Y
+	movi	07fffH,a8		;0FHind lowest/highest X Y
 
 ;DO BETTER
 	move	a8,a9
-	not	a9			;>8000
+	not	a9			;08000H
 	move	a8,a10
 	move 	a9,a11
 	jruc	dd150
@@ -1488,7 +1488,7 @@ D3XPTS	.equ	>140		;UHL *Xformed points array (Cnt, XYZ,XYZ..)
 	move	a1,a11			;New high
 
 dd150	move	*a4+,a1
-	jrnn	#lp2			;Good offset?
+	jrnn	lp2			;Good offset?
 
 
 	subk	16,a4			;A4=*Null end entry of line_t
@@ -1502,7 +1502,7 @@ dd150	move	*a4+,a1
 
 	move	a11,a0
 	sub	a10,a11
-	jreq	#nextf			;Height of 1?
+	jreq	nextf			;Height of 1?
 
 	cmpi	254,a10
 	jrge	#nextf			;Off screen bottom?
@@ -1559,7 +1559,7 @@ dd720
 	move	a1,@linelsxy,L
 	subxy	a2,a1
 	move	a1,a7
-	jrn	#nextf			;Neg Y?
+	jrn	nextf			;Neg Y?
 	srl	16,a1
 	jrz	dd700			;Same Y?
 
@@ -1583,7 +1583,7 @@ dd820
 	move	a1,@linersxy,L
 	subxy	a3,a1
 	move	a1,a9
-	jrn	#nextf			;Neg Y?
+	jrn	nextf			;Neg Y?
 	srl	16,a1
 	jrz	dd800			;Different Y?
 
@@ -1601,7 +1601,7 @@ dd850	add	a7,a2			;+Offset to left X
 	jrgt	#nextf			;X flipped?
 
 	move	a10,a10
-	jrn	#nextl			;Off screen top?
+	jrn	nextl			;Off screen top?
 
 	move	a2,a0
 	sra	16,a0			;Int (0=Screen center)
@@ -1612,10 +1612,10 @@ dd850	add	a7,a2			;+Offset to left X
 	clr	a0
 dd1000	movx	a0,a10			;X pos
 
-	move	a3,a1			;>Calc HSize
+	move	a3,a1			;0CaHlc HSize
 	sra	16,a1			;Int
 	addi	200,a1
-	jrlt	#nextl			;R line to left of screen?
+	jrlt	nextl			;R line to left of screen?
 	sub	a0,a1			;Width
 
 	add	a1,a0			;Rgt X
@@ -1637,28 +1637,28 @@ dd1500
 	addxy	b2,b8			;Add the page y offset
 
 ;	move	*b11,b0
-;	jrnn	#dfree
+;	jrnn	dfree
 ;	addk	1,b14			;DEBUG
 
 #dwait	move	*b11,b0
-	jrn	#dwait			;DMA busy?
+	jrn	dwait			;DMA busy?
 
 
 #dfree	mmtm	b12,b5,b6,b7,b8,b9,b10	;Set the dma regs
-	addi	>c0,b12			;Fix DMAREGS
+	addi	0c0H,b12			;Fix DMAREGS
 
 
 #nextl
 	add	a8,a10			;Next Y
-	dsj	a11,#linelp
+	dsj	a11,linelp
 
 
 #nextf	move	a4,a14
 	addk	16,a14
 	move	*a14,a0
-	jrnn	#facelp			;Another set of lines?
+	jrnn	facelp			;Another set of lines?
 
-	jruc	#lpobj
+	jruc	lpobj
 
 
 #x	PULL	b3,b4,b5,b6,b7,b8,b9,b10,b13,b14
@@ -1670,7 +1670,7 @@ dd1500
 ;DJT End
 
 
-#*******************************
+********************************
 * Manual DMA
 * A1=Constant color:Palette
 * A2=Vsize:Hsize
@@ -1687,7 +1687,7 @@ dd1500
 	cmpi	DMAQ,a14
 	jrls	#x			;Q full?
 
-	movi	>1000100,a0		;No scale
+	movi	01000100H,a0		;No scale
 	rl	16,a5			;Flip DMA & offset
 	mmtm	a14,a0,a1,a2,a3,a4,a5
 	rl	16,a5			;Flip DMA & offset
@@ -1702,7 +1702,7 @@ dd1500
 ;DJT Start
  .if 0
 ;DJT End
-#*******************************
+********************************
 * Turn on the 2d with scaling display mode
 * Trashes scratch
 
@@ -1723,7 +1723,7 @@ dd1500
 	jruc	dma_objlst2dscl
 
 
-#*******************************
+********************************
 * Turn on the 2d, with scaling and stars, display mode
 * Trashes scratch
 
@@ -1738,7 +1738,7 @@ STARSZ	.equ	32*6+16
 	movi	-1,a0
 #silp	move	a0,*a1,L		;X
 	addi	STARSZ,a1
-	dsj	b0,#silp
+	dsj	b0,silp
 
 	movi	#drawcode,a0
 	move	a0,@dcode_p,L
@@ -1769,36 +1769,36 @@ CFRAC	.equ	2
 	sll	5+CFRAC,a6
 
 
-	movi	NSTARS,a5		;>Find a free star
+	movi	NSTARS,a5		;0FHind a free star
 	movi	STARBUF,a2
 	movk	3,a3
 #flp	move	*a2,a0,L		;X
-	jrn	#found
+	jrn	found
 	addi	STARSZ,a2
-#fnxt	dsj	a5,#flp
-	jruc	#nofree
+fnxt	dsj	a5,flp
+	jruc	nofree
 
-#found	movi	[200,0],a0		;>Create star
+#found	movi	[200,0],a0		;0CHreate star
 	move	a0,*a2+,L		;X
 	movi	[252,0],a0
 	move	a0,*a2+,L		;Y
 
 	clr	a0
 	move	a0,*a2+,L		;XV
-	movi	->3e000,a0
+	movi	-03e000H,a0
 	move	a0,*a2+,L		;YV
 
-	movi	>7ff,a0
+	movi	07ffH,a0
 	callr	rnd
-	subi	>3ff,a0
+	subi	03ffH,a0
 	move	a0,*a2+,L		;XA
-	movi	>3ff,a0
+	movi	03ffH,a0
 	callr	rnd
-	addi	>7ff,a0
+	addi	07ffH,a0
 	move	a0,*a2+,L		;YA
 
 	move	a6,*a2+			;Color type
-	dsj	a3,#fnxt
+	dsj	a3,fnxt
 #nofree
 
 	movi	#star_p,a0		;>Update stars
@@ -1826,7 +1826,7 @@ CFRAC	.equ	2
 	mmfm	a8,a2,a3,a5,a6,a9,a10	;YA,XA,YV,XV,Y,X
 	move	*a8+,a1			;Color
 	move	a10,a10
-	jrn	#nxt
+	jrn	nxt
 
 	add	a2,a5
 	add	a3,a6
@@ -1839,7 +1839,7 @@ CFRAC	.equ	2
 #offscr
 	movi	-1,a0
 	move	a0,*a8(-STARSZ),L
-	jruc	#nxt
+	jruc	nxt
 #plot
 	move	a10,*a8(-STARSZ),L
 	move	a9,*a8(-STARSZ+32),L
@@ -1860,7 +1860,7 @@ CFRAC	.equ	2
 	addxy	a12,a9
 	pixt	a1,*a9.XY
 #nxt
-	dsj	b0,#lp
+	dsj	b0,lp
 
 	PULL	b4
 	PULL	a13,a14
@@ -1945,7 +1945,7 @@ CFRAC	.equ	2
 ********************************
 * Get random # with mask
 * A0=Mask
-* >A0=Rnd # (Pass CC)
+* 0A0H=Rnd # (Pass CC)
 * Trashes scratch
 
  SUBRP	rnd
@@ -1988,7 +1988,7 @@ so20	move	*a1,a1,L
 
 	movi	OBJLST,a0
 	movk	1,a1			;Lowest Z
-	sll	31,a1			;Make >80000000
+	sll	31,a1			;Make 080000000H
 	jruc	yzlp
 
 yz0	move	*a2(OZPOS),a6		;Get Z
@@ -2072,7 +2072,7 @@ scrtf_d	movi	4,a0
 	rets
 
 
-#*******************************
+********************************
 * Initialize display system
 * Trashes scratch
 
@@ -2091,26 +2091,26 @@ scrtf_d	movi	4,a0
 	move	a0,@DMACONF
 	movi	[511,0],a1		;L/R (full width to fix glitch)
 	move	a1,@DMAWINDOW,L
-	movi	>30,a1
+	movi	030H,a1
 	move	a1,@DMACONF		;Top/Bottom
 	movi	[509,0],a1
 	move	a1,@DMAWINDOW,L
-	movi	>1000100,a1
+	movi	01000100H,a1
 	move	a1,@DMASCALEX,L
 
 	movi	-1,b13			;DMAQ cnt
 
-	clr	a1			;>Clr video mem
+	clr	a1			;0CHlr video mem
 	movi	(SCRNE-512*8*2)/64,b0
 #clp	move	a0,*a1+,L
 	move	a0,*a1+,L
-	dsj	b0,#clp
+	dsj	b0,clp
 					;>Set autoerase lines
 	movi	510*512*8,a1		;Store to last 2 lines of bitmap
 	movi	ERASECOL,a14		;Color pair
 	movi	512*8*2/16,b0
 #lp	move	a14,*a1+
-	dsj	b0,#lp
+	dsj	b0,lp
 
 
 	movi	SCRNST,a1		;Screen top left [Y,X]
@@ -2139,7 +2139,7 @@ scrtf_d	movi	4,a0
 #olp	move	a1,a14
 	addi	OBSIZ,a1
 	move	a1,*a14,L		;link em up
-	dsj	b0,#olp
+	dsj	b0,olp
 
 	move	a0,*a14,L		;Null end
 
@@ -2151,7 +2151,7 @@ scrtf_d	movi	4,a0
 ********************************
 * Get a free object block
 * Trashes scratch
-* >A0=*Object or 0 (Z)
+* 0A0H=*Object or 0 (Z)
 
 GETOBJ
 	move	@OFREE,a0,L
@@ -2187,7 +2187,7 @@ FREEOBJ
 	rets
 
 
-#*******************************
+********************************
 * Unlink an object from object list
 * A0=*Obj
 * Trashes scratch
@@ -2198,9 +2198,9 @@ FREEOBJ
 ;
 ;#lp	move	a14,a1		;A1=*Prev
 ;	move	*a14,a14,L	;A14=*Next
-;	jrz	#err
+;	jrz	err
 ;	cmp	a14,a0
-;	jrne	#lp
+;	jrne	lp
 ;
 ;	move	*a0,*a1,L	;Unlink from obj list
 ;	rets
@@ -2218,14 +2218,14 @@ FREEOBJ
 * List is sorted by increasing z and increasing y within constant z
 
 
-#*******************************
+********************************
 * Insert background object
 * A0=*Obj
 * Trashes scratch
 
 INSBOBJ
 	movi	BAKLST,a14
-	jruc	#strt
+	jruc	strt
 
 ********************************
 * Insert foreground object
@@ -2243,11 +2243,11 @@ INSOBJ
 #lp
 	move	a14,a2			;A2=*prev
 	move	*a14,a14,L		;A14=*next
-	jrz	#x
+	jrz	x
 	move	*a14(OZPOS),a3
 	cmp	a3,a1
 	jrgt	#lp
-	jrlt	#x
+	jrlt	x
 
 	move	*a14(OYPOS),a3		;Test y position
 	cmp	a3,a4
@@ -2261,14 +2261,14 @@ INSOBJ
 	rets
 
 
-#*******************************
+********************************
 * Delete background object
 * A0=*Obj
 
 DELBOBJ
 
 	movi	BAKLST,a14
-	jruc	#lp
+	jruc	lp
 
 
 ********************************
@@ -2291,7 +2291,7 @@ DELOBJ
 	move	*a14,a14,L	;A14=*Next
 	jrz	delerr
 	cmp	a14,a0
-	jrne	#lp
+	jrne	lp
 
 	move	*a0,*a1,L	;Unlink from obj list
 
@@ -2311,7 +2311,7 @@ delerr
 	.else
 	CALLERR	1,0
 	.endif
-	jruc	#x
+	jruc	x
 
 
 
@@ -2324,7 +2324,7 @@ FRQDELDIE
 
 	JSRP	FRANIMQ
 
-#*******************************
+********************************
 * Delete foreground object and DIE
 * A8=*Obj
 
@@ -2336,7 +2336,7 @@ DELOBJDIE
 	move	*a14,a14,L	;A14=*Next
 	jrz	doderr
 	cmp	a14,a8
-	jrne	#lp
+	jrne	lp
 
 	move	*a8,*a1,L	;Unlink from obj list
 
@@ -2356,11 +2356,11 @@ doderr
 	.else
 	CALLERR	1,0
 	.endif
-	jruc	#x
+	jruc	x
 
 
 
-#*******************************
+********************************
 * Delete one class from the obj list
 * A0=OID
 * Trashes scratch
@@ -2385,16 +2385,16 @@ obj_delc
 
 #lp	move	a14,a3		;A3=*Prev
 	move	*a14,a14,L	;A14=*Next
-	jrz	#x
+	jrz	x
 
 #cmp	move	*a14(OID),a2
 
 	cmpi	TRANS_OBJ_ID,a2	;transition effect obj. ?
-	jreq	#lp		;br=yes
+	jreq	lp		;br=yes
 
 	andn	a1,a2		;Mask
 	cmp	a0,a2
-	jrne	#lp
+	jrne	lp
 
 	move	*a14,*a3,L	;Unlink from obj list
 
@@ -2402,7 +2402,7 @@ obj_delc
 	subk	32,a14
 	move	a14,@OFREE,L
 	move	*a3,a14,L
-	jrnz	#cmp
+	jrnz	cmp
 
 #x
 	move	b1,a3
@@ -2423,27 +2423,27 @@ del_transition_objs
 ;	sext	a0
 #dto_1	move	a14,a3		;A3=*Prev
 	move	*a14,a14,L	;A14=*Next
-	jrz	#x1
+	jrz	x1
 #cmp1	move	*a14(OID),a2
 	cmp	a0,a2
-	jrne	#dto_1
+	jrne	dto_1
 	move	*a14,*a3,L	;Unlink from obj list
 	move	@OFREE,*a14+,L	;Add to free list
 	subk	32,a14
 	move	a14,@OFREE,L
 	move	*a3,a14,L
-	jrnz	#cmp1
+	jrnz	cmp1
 #x1	move	b1,a3
 	move	b0,a2
 	rets
 
 
 
-#*******************************
+********************************
 * Check objlst for an object with a certain OID
 * A0=OID
 * A1=!Mask (Bits to remove)
-* >A0=*Obj or 0 (Z)
+* 0A0H=*Obj or 0 (Z)
 * Trashes scratch
 
 EXISTOBJ
@@ -2454,41 +2454,41 @@ EXISTOBJ
 	andn	a1,a0		;Form match
 #lp
 	move	*a14,a14,L
-	jrz	#x
+	jrz	x
 	move	*a14(OID),a2
 	andn	a1,a2		;Mask
 	cmp	a0,a2
-	jrne	#lp
+	jrne	lp
 
 #x	move	b0,a2
 	move	a14,a0
 	rets
 
 
-#*******************************
+********************************
 * Check if object on free list
 * A0=*Obj
-* >A0=*Obj or 0 (Z)
+* 0A0H=*Obj or 0 (Z)
 * Trashes scratch
 
 ;ISFREE
 ;	movi	OFREE,a1
-;	jruc	#lp
+;	jruc	lp
 
 
 ********************************
 * Check if object on OBJLST
 * A0=*Obj
-* >A0=*Obj or 0 (Z)
+* 0A0H=*Obj or 0 (Z)
 * Trashes scratch
 
 ISOBJ
 	movi	OBJLST,a1
 
 #lp	move	*a1,a1,L
-	jrz	#x		;End?
+	jrz	x		;End?
 	cmp	a0,a1
-	jrne	#lp		;No match?
+	jrne	lp		;No match?
 
 	move	a0,a0		;Clr Z
 	rets
@@ -2595,8 +2595,8 @@ SCRNRELV
 * A3=New XVAL
 * A4=New FLAGS (Only DMA bits)
 * Trashes A1,A14,B0-B1
-* >A2=Adjusted YVAL
-* >A3=Adjusted XVAL
+* 0A2H=Adjusted YVAL
+* 0A3H=Adjusted XVAL
 
 GANISAG
 	PUSH	a4,a6,a7
@@ -2614,7 +2614,7 @@ GANISAG
 	move	a2,*a0(OYVAL),L
 
 	move	*a1(ICTRL),a1		;Get DMA flags
-	andi	>803f,a4		;Kill mode bits
+	andi	0803fH,a4		;Kill mode bits
 	or	a1,a4
 	move	a4,*a0(OCTRL),L		;&OFFSET
 
@@ -2625,7 +2625,7 @@ GANISAG
 ********************************
 * Begin an object
 * A0=XVAL, A1=YVAL, A2=*IMG, A3=ZPOS, A4=FLAGS, A5=OID, A6=XVEL, A7=YVEL
-* >A8=*Obj
+* 0A8H=*Obj
 * Trashes scratch
 
 BEGINOBJ
@@ -2683,7 +2683,7 @@ bo20	move	@OFREE,a8,L		;Pointer to next available obj block
 	move	a3,*a8(OSAG),L
 	move	a4,*a8(OFLAGS)
 	move	*a1(ICTRL),a0		;Get DMA flags
-	andi	>803f,a4		;Kill mode bits
+	andi	0803fH,a4		;Kill mode bits
 	or	a0,a4
 	move	a4,*a8(OCTRL),L		;&OFSET
 
@@ -2715,11 +2715,11 @@ begobjerr
 
 
 
-#*******************************
+********************************
 * Begin an object with specified palette
 * A0=XVAL, A1=YVAL, A2=*IMG, A3=ZPOS, A4=FLAGS, A5=OID, A6=XVEL, A7=YVEL
 * B0=*Palette
-* >A8=*Obj
+* 0A8H=*Obj
 * Trashes scratch
 
 BEGINOBJP
@@ -2737,7 +2737,7 @@ BEGINOBJP2
 
 	move	b0,a0			;Get *palette
 	.if	DEBUG
-	jrnn	#bopalerr		;No pallette?
+	jrnn	bopalerr		;No pallette?
 	.endif
 	calla	pal_getf
 
@@ -2777,7 +2777,7 @@ BEGINOBJP2
 	move	a3,*a8(OSAG),L
 	move	a4,*a8(OFLAGS)
 	move	*a1(ICTRL),a0		;Get DMA flags
-	andi	>803f,a4		;Kill mode bits
+	andi	0803fH,a4		;Kill mode bits
 	or	a0,a4
 	move	a4,*a8(OCTRL),L		;&OFSET
 
@@ -2793,11 +2793,11 @@ BEGINOBJP2
 	LOCKUP				;Object doesn't have pallette!
 	eint
 	clr	a0
-	jruc	#bo20
+	jruc	bo20
 	.endif
 
 
-#*******************************
+********************************
 * Set new image for an object
 * A1=*Image hdr
 * A4=New FLAGS
@@ -2816,11 +2816,11 @@ BEGINOBJP2
 	move	*a8(OIMG),a1,L
 	move	*a8(OCTRL),a4
 	cmp	a1,a3
-	jrne	#1			;Different img?
+	jrne	1			;Different img?
 
 	sext	a5
 	cmp	a4,a5
-	jreq	#x			;All the same?
+	jreq	x			;All the same?
 
 #1	move	*a8(OSIZE),a2,L
 	callr	GANIOF			;Get old animation offset
@@ -2839,7 +2839,7 @@ BEGINOBJP2
 	zext	a4			;Zero offset in A4
 
 	move	a8,a6			;Get push address of octrl,osag,osize
-	addi	OCTRL+>60,a6
+	addi	OCTRL+060H,a6
 	mmtm	a6,a2,a3,a4		;Save new data
 
 	subi	OCTRL-OXVAL,a6
@@ -2860,10 +2860,10 @@ anierr
 	.else
 	CALLERR	2,7
 	.endif
-	jruc	#x
+	jruc	x
 
 
-#*******************************
+********************************
 * Change an objects image (Doesn't check VFLIP)
 * A0=*New image
 * A1=New flip flags & const
@@ -2919,14 +2919,14 @@ anierr
 	.else
 	CALLERR	2,2
 	.endif
-	jruc	#x
+	jruc	x
 
 
-#*******************************
+********************************
 * Get an objects anipt XY (Doesn't check VFLIP)
 * A8=*Obj
-* >A0=Scaled Ani X (16:16)
-* >A1=Scaled Ani Y
+* 0A0H=Scaled Ani X (16:16)
+* 0A1H=Scaled Ani Y
 * Trashes scratch
 
  SUBRP	anipt_getxy
@@ -2942,7 +2942,7 @@ anierr
 
 	move	*a8(OCTRL),a14
 	btst	B_FLIPH,a14
-	jrz	#x			;No flip?
+	jrz	x			;No flip?
 
 	move	*a2,a2			;ISIZEX
 	subk	1,a2
@@ -2956,7 +2956,7 @@ anierr
 
 
 
-#*******************************
+********************************
 * Change an objects image (doesn't check flip flags)
 * A0=*New image
 * A1=New OCTRL
@@ -2999,7 +2999,7 @@ anierr
 
 
 
-#*******************************
+********************************
 * Change an scaled objects image (Doesn't check VFLIP)
 * A0=*New image
 * A1=New OCTRL (low 8 bits)
@@ -3053,7 +3053,7 @@ anierr
 	.else
 	CALLERR	2,0
 	.endif
-	jruc	#x
+	jruc	x
 
 
 
@@ -3061,8 +3061,8 @@ anierr
 * Get the x and y positions of an objects animation point
 * A8=*Object
 * Trashes scratch
-* >A2=Ani pt Y 16:16
-* >A3=Ani pt X 16:16
+* 0A2H=Ani pt Y 16:16
+* 0A3H=Ani pt X 16:16
 
 GETANIXY
 	PUSH	a4,a6,a7
@@ -3078,7 +3078,7 @@ GETANIXY
 	rets
 
 
-#********************************
+*********************************
 * Get animation offset (Fast!)
 * A1=*Image header, A2=H:W, A4=OCTRL
 * Trashes A14
@@ -3096,7 +3096,7 @@ GANIOF
 	sll	16,a6		;Move to upper word
 
 	btst	B_FLIPH,a4
-	jrz	#v
+	jrz	v
 	move	a2,a14
 	subk	1,a14
 	sll	16,a14		;Move W to upper word
@@ -3104,7 +3104,7 @@ GANIOF
 	add	a14,a6		;Sub Width-1
 
 #v	btst	B_FLIPV,a4
-	jrz	#x
+	jrz	x
 	move	a2,a14
 	neg	a7
 	srl	16,a14
@@ -3115,13 +3115,13 @@ GANIOF
 #x	rets
 
 #err	clr	a6
-	jruc	#h
+	jruc	h
 
 
 ;DJT Start
  .if 0
 ;DJT End
-#*******************************
+********************************
 * Scale screen out (JSRP)
 
 	.asg	MEGBIT0,SCRNBUF
@@ -3139,7 +3139,7 @@ GANIOF
 	move	@gndstat,a0
 	PUSHP	a0
 
-	movi	>160,a0
+	movi	0160H,a0
 	move	a0,@scrnscl
 
 	movi	#initcode,a0
@@ -3159,8 +3159,8 @@ GANIOF
 	srl	3,a0
 	add	a0,a5
 	move	a5,*a14
-	cmpi	>7000,a5
-	jrlt	#lp
+	cmpi	07000H,a5
+	jrlt	lp
 
 	clr	a0
 	move	a0,@dcode_p,L
@@ -3183,7 +3183,7 @@ GANIOF
 ;DJT End
 
 
-#*******************************
+********************************
 * Initialization for scrn_scalein (JSRP)
 
  SUBR	scrn_scaleininit
@@ -3191,7 +3191,7 @@ GANIOF
 	dint
 #lp	move	@VCOUNT,a0
 	cmpi	EOSINT,a0
-	jrlt	#lp
+	jrlt	lp
 	move	@HSBLNK,a0	;Blank screen
 	move	a0,@HEBLNK
 	eint
@@ -3202,7 +3202,7 @@ GANIOF
 ;DJT Start
  .if 0
 ;DJT End
-#*******************************
+********************************
 * Scale screen in (JSRP)
 
  SUBR	scrn_scalein
@@ -3221,7 +3221,7 @@ GANIOF
 	move	@dcode_p,a0,L
 	PUSHP	a0
 
-	movi	>7000,a0
+	movi	07000H,a0
 	move	a0,@scrnscl
 
 	movi	#initcode,a0
@@ -3233,7 +3233,7 @@ GANIOF
 
 
 	.if	DEBUG
-;	movi	>1a0,a0
+;	movi	01a0H,a0
 ;	move	a0,@scrnscl
 ;	SLEEP	TSEC*2
 	.endif
@@ -3247,7 +3247,7 @@ GANIOF
 	srl	2,a0
 	sub	a0,a5
 	move	a5,*a14
-	cmpi	>100,a5
+	cmpi	0100H,a5
 	jrgt	#lp
 
 
@@ -3273,7 +3273,7 @@ GANIOF
 	jruc	scrn_scale
 
 
-#*******************************
+********************************
 * B2=Y offset for top of page : XPad offset
 * Trashes A0-A3,A7
 
@@ -3284,7 +3284,7 @@ GANIOF
 ;
 	move	b2,a0
 	srl	16,a0
-	xori	>100,a0			;Flip to the page being shown
+	xori	0100H,a0			;Flip to the page being shown
 	sll	12,a0			;*512*8
 	addi	SCRNXP*8,a0		;A0=*Scrn mem
 	PUSH	a0
@@ -3299,11 +3299,11 @@ GANIOF
 	move	*a0+,*a1+,L
 	move	*a0+,*a1+,L
 	move	*a0+,*a1+,L
-	dsj	a2,#cslp2
+	dsj	a2,cslp2
 
 	add	a7,a0
 	add	a7,a1
-	dsj	a3,#cslp
+	dsj	a3,cslp
 
 	move	@SYSCOPY,a0
 
@@ -3334,11 +3334,11 @@ GANIOF
 	move	*a0+,*a1+,L
 	move	*a0+,*a1+,L
 	move	*a0+,*a1+,L
-	dsj	a2,#cplp2
+	dsj	a2,cplp2
 
 	add	a7,a0
 	add	a7,a1
-	dsj	a3,#cplp
+	dsj	a3,cplp
 
 	move	@SYSCOPY,a0
 
@@ -3362,7 +3362,7 @@ GANIOF
 	rets
 
 
-#*******************************
+********************************
 * Copy screen data (throw out 1 in 5 pixels)
 * B2=Y offset for top of page : XPad offset
 
@@ -3370,7 +3370,7 @@ GANIOF
 
 	PUSH	a4,a14
 
-	movi	>140,a5
+	movi	0140H,a5
 
 	move	b2,a1
 	srl	16,a1
@@ -3409,13 +3409,13 @@ GANIOF
 	addk	16,a3
 	addk	16,a2
 
-	dsj	b0,#cslp
+	dsj	b0,cslp
 
 	addi	(512-320)*8,a1
 
 	add	a5,a7
 	cmpi	254<<8,a7
-	jrlt	#lp
+	jrlt	lp
 
 
 #x	PULL	a4,a14
@@ -3423,7 +3423,7 @@ GANIOF
 
 
 
-#*******************************
+********************************
 * Copy screen data (throw out 1 in 3 pixels)
 * B2=Y offset for top of page : XPad offset
 
@@ -3431,7 +3431,7 @@ GANIOF
 
 	PUSH	a4,a14
 
-	movi	>180,a5
+	movi	0180H,a5
 
 	move	b2,a1
 	srl	16,a1
@@ -3462,13 +3462,13 @@ GANIOF
 	addk	16,a3
 	addk	16,a2
 
-	dsj	b0,#cslp
+	dsj	b0,cslp
 
 	addi	(512-264)*8,a1
 
 	add	a5,a7
 	cmpi	254<<8,a7
-	jrlt	#lp
+	jrlt	lp
 
 
 #x	PULL	a4,a14
@@ -3485,16 +3485,16 @@ GANIOF
 	move	a0,@dcode_p,L
 
 
-#*******************************
+********************************
 * Copy screen data with variable down scaling
 * B2=Y offset for top of page : XPad offset
 
  SUBRP	scrn_scale
 
 	move	@scrnscl,a5
-	cmpi	>168,a5
+	cmpi	0168H,a5
 	jrlt	scrn_scale140
-	cmpi	>190,a5
+	cmpi	0190H,a5
 	jrlt	scrn_scale180
 
 	PUSH	a4,a14
@@ -3545,14 +3545,14 @@ GANIOF
 	jrgt	#nxtp
 
 	cmp	a10,a8
-	jrlt	#cslp
+	jrlt	cslp
 
 
 	addi	512*8,a9		;Next line
 
 	add	a5,a7
 	cmpi	254<<8,a7
-	jrlt	#lp
+	jrlt	lp
 
 
 #x	PULL	a4,a14
@@ -3561,23 +3561,23 @@ GANIOF
  .endif
 ;DJT End
 
-#*******************************
+********************************
 * Object Z scaling math values
 *
 *  Scale base constants to derive everything else from
 *
 ;Original set
-;	.asg	>180,S_XBEG			;Begining scale values for
-;	.asg	>180,S_YBEG			; ref plyr (6'8") @ crt tp
+;	.asg	0180H,S_XBEG			;Begining scale values for
+;	.asg	0180H,S_YBEG			; ref plyr (6'8") @ crt tp
 ;
-;	.asg	>100,S_XEND			;Ending scale values for
-;	.asg	>100,S_YEND			; ref plyr (6'8") @ crt bt
+;	.asg	0100H,S_XEND			;Ending scale values for
+;	.asg	0100H,S_YEND			; ref plyr (6'8") @ crt bt
 
-	.asg	>188,S_XBEG			;Begining scale values for
-	.asg	>180,S_YBEG			; ref plyr (6'8") @ crt tp
+	.asg	0188H,S_XBEG			;Begining scale values for
+	.asg	0180H,S_YBEG			; ref plyr (6'8") @ crt tp
 
-	.asg	>100,S_XEND			;Ending scale values for
-	.asg	>f8,S_YEND			; ref plyr (6'8") @ crt bt
+	.asg	0100H,S_XEND			;Ending scale values for
+	.asg	0f8H,S_YEND			; ref plyr (6'8") @ crt bt
 
 	.asg	1024,Sp_XRES			;Scale parameter resolutions
 	.asg	1024,Sp_YRES			; (># = bigger image)

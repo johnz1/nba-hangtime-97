@@ -58,8 +58,8 @@
 ********************************
 
 *BACKGROUND UPDATER EQUATES
-BLSTSTRT	.EQU	>8000
-BLSTEND 	.EQU	>8001
+BLSTSTRT	.EQU	08000H
+BLSTEND 	.EQU	08001H
 
 ************* LOCAL CONSTANTS FOR UPD **************
 DISP_PAD	.SET	[20h,20h]	;Y:X
@@ -75,7 +75,7 @@ MAP_X		.SET	16	;SIZE 16
 MAP_Y		.SET	32	;SIZE 16
 MAP_HDR		.SET	48	;SIZE 16 - OFFSET IN LONG WORDS FROM BLOCK_HDR_TBL
 				; BITS 12-15 ARE BITS 4-7 OF PAL
-				; MAP_HDR SET TO >FFFF IF BLOCK IS NOT ALLOCATED
+				; MAP_HDR SET TO 0FFFFH IF BLOCK IS NOT ALLOCATED
 BLOCK_SIZE	.SET	64	;Uses shifts!
 
 * Offsets for a BLOCK HDR structure
@@ -164,7 +164,7 @@ GOTHGHT	MMFM	SP,A1,A2,A3,A4,A7,A8,A9,A10,A11
 * A0=XPos of block
 * A1=*Start of bkgnd block table
 * A2=*End of block table
-* >A0=ADDRESS OF FIRST BLOCK WITH X COORDINATE >= PARM
+* 0A0H=ADDRESS OF FIRST BLOCK WITH X COORDINATE >= PARM
 *	IF NEW X IS HIGHEST RETURNS NEXT EMPTY BLOCK
 *	IF NO BLOCKS WITH >= X, RETURN 0
 
@@ -200,9 +200,9 @@ GOTHGHT	MMFM	SP,A1,A2,A3,A4,A7,A8,A9,A10,A11
 	jrlt	blow
 
 	move	a10,a2		;high = mid
-	jruc	#lp
+	jruc	lp
 blow	move	a10,a9		;low = mid
-	jruc	#lp
+	jruc	lp
 
 lsrch
 	;* FINISH WITH A LINEAR SEARCH OF BLOCK TABLE FROM LOW TO HIGH
@@ -224,7 +224,7 @@ lsrch
 	CMP	A2,A9
 	jrle	#linlp
 	clr	a0		;block not found, return 0
-	jruc	#x
+	jruc	x
 
 GOTB
 	move	a9,a0		;return a ptr to the block
@@ -379,7 +379,7 @@ GOTB
 	rets
 
 
-#*******************************
+********************************
 * Scan a module list to find out which modules contain blocks
 * which need to be checked for addition to the display list.
 * A0=*Module list
@@ -392,7 +392,7 @@ GOTB
  SUBRP	bgnd_scanmod
 
 	move	a7,a6		;a6 will point to bakbits after mod
-	jruc	#next
+	jruc	next
 
 #lp
 	move	*a0+,a9,L	;Y:X start
@@ -425,13 +425,13 @@ GOTB
 
 #next	move	a6,a7
 	move	*a0+,a8,L	;* module
-	jrnz	#lp		;!End?
+	jrnz	lp		;!End?
 
 
 #x	rets
 
 
-#*******************************
+********************************
 * This function adds all module blocks in the given range of module
 * relative coors to the display list.
 * The boundries are included in the group to add.
@@ -456,7 +456,7 @@ GOTB
 	sext	a0
 	subi	WIDEST_BLOCK,a0	;1st x coordinate of a block
 	callr	bgnd_get1stx
-	jrz	#x		;no blocks with > X ?
+	jrz	x		;no blocks with > X ?
 
 	movi	BLOCK_SIZE,a6
 
@@ -475,7 +475,7 @@ GOTB
 	jrge	#x		;End?
 
 	movb	*a8,a0		;Check bakbit
-	jrn	#sclp1		;Already displayed?
+	jrn	sclp1		;Already displayed?
 
 	move	*a7(MAP_X),a1
 	cmpxy	a3,a1
@@ -506,9 +506,9 @@ GOTB
 	JRYLT	#sclp1		;Block Y+H < TL Y ?
 
 	callr	bgnd_addblk
-	jrnc	#sclp1
+	jrnc	sclp1
 
-	jruc	#x		;No more blocks!
+	jruc	x		;No more blocks!
 
 
 * Since blocks are sorted from left to right, we can do a quicker scan
@@ -521,7 +521,7 @@ GOTB
 	jrge	#x		;End?
 
 	movb	*a8,a0		;Check bakbit
-	jrn	#sclp2		;Already displayed?
+	jrn	sclp2		;Already displayed?
 
 #qscanstrt
 	move	*a7(MAP_Y),a1
@@ -548,14 +548,14 @@ GOTB
 	JRXGE	#x		;BLOCK X > BR X ?
 
 	callr	bgnd_addblk
-	jrnc	#sclp2
+	jrnc	sclp2
 
 
 #x	PULL	a0,a6,a7
 	rets
 
 
-#*******************************
+********************************
 * Add a block (object) to a list
 * A5=*Base of background block hdr
 * A7=*Background block
@@ -572,10 +572,10 @@ GOTB
 
 
 	calla	GETOBJ
-	jrz	#x
+	jrz	x
 
 	movb	*a8,a14		;set bit in bitmap for block on list
-	ori	>80,a14
+	ori	080H,a14
 	movb	a14,*a8
 
 	move	a8,*a0(OPLINK),L ;OPLINK = *Bakbit for obj
@@ -636,7 +636,7 @@ bsetpal
 	move	a1,*a0(OIMG),L		;A1=Data block pointer
 
 	move	*a1(MAP_CTRL),a4	;Get DMA ctrl
-	ori	>8002,a4		;A4=flags (>8000 dma go, 2)
+	ori	08002H,a4		;A4=flags (08000H dma go, 2)
 	srl	4,a3			;remove palette bits
 	sll	32-2,a3
 	jrc	#trans			;Transparent?
@@ -654,7 +654,7 @@ bsetpal
 
 	move	*a0(OZPOS),a4
 	subi	80,a4			;> 80?
-	jrlt	#normz			;Normal?
+	jrlt	normz			;Normal?
 
 ;	sll	5,a4			;*32
 ;	addi	z_t,a4
@@ -717,7 +717,7 @@ bak_null
 
 
 
-#*******************************
+********************************
 * This function deletes all objs outside the given range
 * of coors from the display list.
 * The boundries are not included in the group to delete.
@@ -730,7 +730,7 @@ bak_null
 
 #lp	move	a8,a9			;ptr to prev in a9
 	move	*a8,a8,L		;ptr to next in a8
-	jrz	#x			;End?
+	jrz	x			;End?
 
 #lp2	MOVE	*A8(OXPOS),A7
 	CMPXY	A7,A4
@@ -754,7 +754,7 @@ bak_null
 	JRYGE	#lp			;JUMP IF TL Y <= BLOCK Y+H
 
 DEL_IT
-	move	*a8(OPLINK),a0,L	;>Clr the on display list bit
+	move	*a8(OPLINK),a0,L	;0CHlr the on display list bit
 	movb	*a0,a7
 	sll	32-7,a7
 	srl	32-7,a7
@@ -765,7 +765,7 @@ DEL_IT
 	move	a0,*a8,L
 	move	a8,@OFREE,L		;Put on free list
 	move	*a9,a8,L		;A8=*Next obj
-	jrnz	#lp2			;More?
+	jrnz	lp2			;More?
 
 #x	rets
 

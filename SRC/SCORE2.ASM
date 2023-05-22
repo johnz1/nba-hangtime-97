@@ -49,7 +49,7 @@
 	.ref	WIPEOUT
 	.ref	WNDWON
 	.ref	WFLG
- 	.ref	get_but_val_cur,PSTATUS,cntrs_delay,HALT,GET_ADJ
+ 	.ref	get_but_val_cur,PSTATUS2,cntrs_delay,HALT,GET_ADJ
 	.ref	names,pal_getf,team1,team2
 	.ref	AUD,AUD1,scores,PSTATUS2
 	.ref	UNIT_CLR,get_all_buttons_down
@@ -98,7 +98,7 @@ CONT_MAX	equ	10
 
 	.text
 
-#*****************************************************************************
+******************************************************************************
 *
 * Increment dropout count & add in score differential
 
@@ -116,10 +116,10 @@ CONT_MAX	equ	10
 
 	move	@PSTATUS2,a0
 	andi	011b,a0
-	jrz	#t1_cpu
+	jrz	t1_cpu
 	move	@PSTATUS2,a0
 	andi	01100b,a0
-	jrz	#t2_cpu
+	jrz	t2_cpu
 
 	movi	AUD_DROPVSHUM,a0
 	calla	AUD1
@@ -131,41 +131,41 @@ CONT_MAX	equ	10
 	calla	AUD1
 	rets
 
-#************************************
+*************************************
 * Instructions
 * 
 
  SUBR	instructions
 	clr	a11
-	move	@PSTATUS,a0
+	move	@PSTATUS2,a0
 	btst	0,a0
-	jrz	#nx1
+	jrz	nx1
 	CREATE	1123,print_inst
 #nx1
 	movk	1,a11
   
-	move	@PSTATUS,a0
+	move	@PSTATUS2,a0
 	btst	1,a0
-	jrz	#nx2
+	jrz	nx2
 	CREATE	1123,print_inst
 #nx2
 	movk	2,a11
-	move	@PSTATUS,a0
+	move	@PSTATUS2,a0
 	btst	2,a0
-	jrz	#nx3
+	jrz	nx3
 	CREATE	1123,print_inst
 #nx3
 	movk	3,a11
-	move	@PSTATUS,a0
+	move	@PSTATUS2,a0
 	btst	3,a0
-	jrz	#nx4
+	jrz	nx4
 	CREATE	1123,print_inst
 #nx4	SLEEPK	1
 	movi	1123,a0
 	clr	a1
 	not	a1
 	calla	EXISTP
-	jrnz	#nx4
+	jrnz	nx4
 	RETP
 
 
@@ -182,7 +182,7 @@ CONT_MAX	equ	10
 	addi	player_data,a14
 	move	*a14,a14,L
 	move	*a14(PR_COUNT),a7
-	jrn	#no_inits
+	jrn	no_inits
 	subk	5,a7
 	jage	SUCIDE
 
@@ -215,7 +215,7 @@ CONT_MAX	equ	10
 	movi	pal_t,a0
 
 	move	@TWOPLAYERS,a14		;0 = NO, 1 = YES 2 players
-	jrz	#not2x
+	jrz	not2x
 	addi	4*32,a0
 #not2x
 	add	a11,a0
@@ -236,7 +236,7 @@ CONT_MAX	equ	10
 	movi	ply_t,a2
 
 	move	@TWOPLAYERS,a14		;0 = NO, 1 = YES 2 players
-	jrz	#not2
+	jrz	not2
 	movi	ply2_t,a2
 #not2
 	add	a11,a2
@@ -288,7 +288,7 @@ CONT_MAX	equ	10
 	movi	colors_t,a2
 
 	move	@TWOPLAYERS,a14		;0 = NO, 1 = YES 2 players
-	jrz	#not2x2
+	jrz	not2x2
 	addi	4*32,a2
 #not2x2
 	add	a11,a2
@@ -310,7 +310,7 @@ CONT_MAX	equ	10
 	movi	arws_t,a2
 
 	move	@TWOPLAYERS,a14		;0 = NO, 1 = YES 2 players
-	jrz	#not2c
+	jrz	not2c
 	movi	arws2_t,a2
 #not2c
 	add	a11,a2
@@ -325,7 +325,7 @@ CONT_MAX	equ	10
 
 ;	movi	team1,a1
 	cmpi	64,a11
-	jrlt	#tag0
+	jrlt	tag0
 	movk	2,a8
 	calla	getwindowhead
 	PUSHP	a0
@@ -334,7 +334,7 @@ CONT_MAX	equ	10
 	calla	getwindowhead
 	move	a0,a1
 	PULLP	a0
-	jruc	#tagout
+	jruc	tagout
 #tag0
 ; 	calla	getwindowhead
 	clr	a8
@@ -351,9 +351,9 @@ CONT_MAX	equ	10
 
 	move	a0,a2
 	cmpi	0,a11
-	jrz	#tag1
+	jrz	tag1
 	cmpi	64,a11
-	jrz	#tag1
+	jrz	tag1
 	move	a1,a2
 
 #tag1
@@ -377,7 +377,7 @@ CONT_MAX	equ	10
 	add	a11,a0
 	move	*a0,a2,L
 ;DJT Start
-	jrn	#notcol1
+	jrn	notcol1
 	.ref	AUGMON
 	movi	AUGMON,a2,L		;Default college img
 #notcol1
@@ -399,7 +399,7 @@ CONT_MAX	equ	10
 	movi	names,a0		;Was it a college player?
 	add	a11,a0
 	move	*a0,a0,L
-	jrn	#notcol2		; br=no
+	jrn	notcol2		; br=no
 	.ref	original_names
 	movi	original_names,a0	;Get college *name
 	add	a11,a0
@@ -426,8 +426,8 @@ CONT_MAX	equ	10
 	calla	get_but_val_cur
 
 	move	a0,a0
-	jrnz	#exit
-	dsj	a8,#whopper_with_cheese
+	jrnz	exit
+	dsj	a8,whopper_with_cheese
 
 #exit	move	*a13(PDATA+192),a0,L
 	calla	KILL
@@ -451,11 +451,11 @@ CONT_MAX	equ	10
 
 ;Show second page of instructions
 
-	move	@PSTATUS,a0
+	move	@PSTATUS2,a0
 	move	*a13(PDATA+288),a1
 	XORK	1,a1
 	btst	a1,a0
-	jrnz	#no_drone
+	jrnz	no_drone
 
 
 	movi	#boxy_t,a0
@@ -488,7 +488,7 @@ CONT_MAX	equ	10
 
 
 	move	@TWOPLAYERS,a14		;0 = NO, 1 = YES 2 players
-	jrz	#not2a
+	jrz	not2a
 	movi	ply2_t,a2
 #not2a
 
@@ -515,8 +515,8 @@ CONT_MAX	equ	10
 	move	*a13(PDATA+288),a0
 	calla	get_but_val_cur
 	move	a0,a0
-	jrnz	#exit1
-	dsj	a9,#whopper_with_cheese1
+	jrnz	exit1
+	dsj	a9,whopper_with_cheese1
 
 #exit1
 	move	*a13(PDATA+192),a0,L
@@ -572,8 +572,8 @@ CONT_MAX	equ	10
 	move	*a13(PDATA+288),a0
 	calla	get_but_val_cur
 	move	a0,a0
-	jrnz	#exit2
-	dsj	a9,#whopper_with_cheese2
+	jrnz	exit2
+	dsj	a9,whopper_with_cheese2
 #exit2
 
 	SOUND1	infoex_snd
@@ -625,8 +625,8 @@ CONT_MAX	equ	10
 	move	*a13(PDATA+288),a0
 	calla	get_but_val_cur
 	move	a0,a0
-	jrnz	#exit3
-	dsj	a9,#whopper_with_cheese3
+	jrnz	exit3
+	dsj	a9,whopper_with_cheese3
 
 #exit3
 
@@ -650,7 +650,7 @@ CONT_MAX	equ	10
 	add	a10,a1
 	move	a1,*a0(OYPOS)
 
-	dsj	a9,#lft
+	dsj	a9,lft
 
 
 	move	*a13(PDATA),a0,L
@@ -690,7 +690,7 @@ pal_t
 
 
 
-#***************************************************************
+****************************************************************
 * Shake screen as if an earthquake is in effect
 * A10 = # ticks to shake and power of shake
 * Note: time to shake must be more than 6 ticks
@@ -705,11 +705,11 @@ pal_t
 
 	;check for a valid a10
 	move	a10,a10
-	jrn	#done
-	jrz	#done
+	jrn	done
+	jrz	done
 
 	move	@#SHK_ON,a0
-	jrz	#no_shake
+	jrz	no_shake
 
 	;abort shake currently in progress
 	movi	SHAKE_PID,a0
@@ -777,8 +777,8 @@ pal_t
 
 	;update the table pointer
 	dec	a9
-	jrnn	#table_ok
-;;;;	dsj	a9,#table_ok
+	jrnn	table_ok
+;;;;	dsj	a9,table_ok
 ;;;;	movi	#last_entry,a9
 #table_ok
 
@@ -797,7 +797,7 @@ pal_t
 	move	a1,@WORLDTLY,L
 
 	;loop
-	dsj	a10,#loop
+	dsj	a10,loop
 
 	;all done
 	clr	a14
@@ -854,7 +854,7 @@ pal_t
 
 
 
-#***************************************************************
+****************************************************************
 * Shake screen as as if an earthquake is in effect
 * A10 = # ticks to shake and power of shake
 * Note: time to shake must be more than 6 ticks
@@ -870,7 +870,7 @@ pal_t
  SUBR	SHAKER
 
 	move	@SHK_ON,a0
-	jrnz	#x
+	jrnz	x
 	move	a10,a11
 	movk	8,a0
 	move	a0,@SHK_ON
@@ -890,7 +890,7 @@ shakelp
 	move	a0,@YSET
 	move	@HCOUNT,a14
 	btst	0,a14
-	jrz	#shakey
+	jrz	shakey
 
 	move	@XSET,a1
 	move	@WORLDTLX,a0,L
@@ -920,11 +920,11 @@ shakelp
 	move	@AMPCNT,a2
 	dec	a2
 	move	a2,@AMPCNT
-	jrnz	#ampok
+	jrnz	ampok
 	move	a11,@AMPCNT
 	move	@AMP,a0
 	cmpi	1,a0
-	jrz	#ampok
+	jrz	ampok
 	dec	a0
 	move	a0,@AMP
 #ampok
@@ -951,7 +951,7 @@ shakelp
 ;;	SOUND1	warn2_snd
 ;;	DIE
 
-#************************************
+*************************************
 * Create idiot box process to give the player a message
 * A0=Message #
 * A1=Plyr # (0-3)
@@ -966,27 +966,27 @@ shakelp
 
 	.ref	game_time
 	move	@game_time,a14,L
-	cmpi	>900,a14
-	jrlt	#x
+	cmpi	0900H,a14
+	jrlt	x
 
 	move	a1,a14
 	sll	5,a14
 	addi	player_data,a14
 	move	*a14,a14,L
 	move	*a14(PR_COUNT),a7
-	jrn	#no_inits
+	jrn	no_inits
 	move	a0,a0
-	jrz	#no_inits
+	jrz	no_inits
 	subk	5,a7
 	jrge	#x
 
 #no_inits
-	move	@PSTATUS,a14
+	move	@PSTATUS2,a14
 	btst	a1,a14
 
-	jrnz	#notdrn			;Drone?
+	jrnz	notdrn			;Drone?
 	move	a0,a0
-	jrnz	#x			;Out of credit message?
+	jrnz	x			;Out of credit message?
 
 #notdrn
 	move	a0,a10
@@ -1003,7 +1003,7 @@ player_data
 	.long	player5_data,player6_data
 	.endif
 
-#************************************
+*************************************
 * Idiot box (process)
 * A10=Message #
 * A11=Plyr # (0-3)
@@ -1016,7 +1016,7 @@ player_data
 
 	move	@idiot_bits,a0
 	btst	a11,a0
-	jrnz	#slp
+	jrnz	slp
 	move	@inbound,a0
 	jann	SUCIDE			;#slp
 
@@ -1051,7 +1051,7 @@ player_data
 	movi	pal_t,a0
 
 	move	@TWOPLAYERS,a14		;0 = NO, 1 = YES 2 players
-	jrz	#not2xx
+	jrz	not2xx
 	addi	4*32,a0
 #not2xx
 
@@ -1078,7 +1078,7 @@ player_data
 
 
 	move	@TWOPLAYERS,a14		;0 = NO, 1 = YES 2 players
-	jrz	#not2b
+	jrz	not2b
 	movi	ply2_t,a2
 #not2b
 
@@ -1119,8 +1119,8 @@ player_data
 	SLEEPK	1
 	calla	get_all_buttons_down
 	move	a0,a0
-	jrnz	#exit
-	dsj	a8,#whopper_with_cheese
+	jrnz	exit
+	dsj	a8,whopper_with_cheese
 
 #exit	move	a10,a0
 	calla	KILL
@@ -1130,7 +1130,7 @@ player_data
 	movi	30,a9
 	movi	-8,a10
 	cmpi	64,a11
-	jrlt	#lft
+	jrlt	lft
 ;Send box off to right	
 	movk	8,a10
 #lft	SLEEPK	1
@@ -1147,7 +1147,7 @@ player_data
 	move	*a0(OXPOS),a1
 	add	a10,a1
 	move	a1,*a0(OXPOS)
-	dsj	a9,#lft
+	dsj	a9,lft
 
 	move	*a13(PDATA),a0,L
 	calla	DELOBJ
@@ -1166,7 +1166,7 @@ player_data
 	move	a1,a1
 	janz	SUCIDE
 
-	move	@PSTATUS,a0
+	move	@PSTATUS2,a0
 	jaz	SUCIDE
 
 	clr	a0
@@ -1198,7 +1198,7 @@ blink_plyr1
 	SLEEPK	2
 
 ;White color in instruction plate pal
-	movi	>0101,a2
+	movi	00101H,a2
 	move	a2,*a8(OCONST)
 
 	movk	3,a10
@@ -1211,12 +1211,12 @@ blink_plyr1
 
 	SLEEPK	3
 
-	dsj	a10,#again
+	dsj	a10,again
 	DIE
 
 
 bit_t	.word	1,2,4,8
-bit_and	.long	>e,>d,>b,>7
+bit_and	.long	0eH,0dH,0bH,07H
 boxy_t	.long	[48,0],[48+70,0],[48,0],[48+70,0]
 boxx_t	.long	[7,0],[47h+6,0],[0dah+6,0],[127h-23,0]
 msg_t	.long	message1,message2,message3,message4,message5,message6
@@ -1236,7 +1236,7 @@ const_off
 	setf	16,1,0
 	rets
 
-#*****************************************************************************
+******************************************************************************
  SUBR	flash_bigtxt
  SUBR	flash_bigtxt2
   
@@ -1247,13 +1247,13 @@ const_off
 	
 #lp
 	move	*a14,a14,L
-	jrz	#x
+	jrz	x
 	move	*a14(OID),a2
 	cmpi	CLSDEAD|123,a2
-	jrne	#lp
+	jrne	lp
 	move	a14,*a3+,L
 	move	a4,*a3,L
-	jruc	#lp
+	jruc	lp
 	
 #x	
 	movi	HANGF_W_P,a0
@@ -1262,9 +1262,9 @@ const_off
 	
 #lp2
 	move	*a3+,a1,L
-	jrz	#xx
+	jrz	xx
 	move	a0,*a1(OPAL)
-	jruc	#lp2
+	jruc	lp2
 
 #xx	SLEEPK	3
 
@@ -1274,12 +1274,12 @@ const_off
 	
 #lp3
 	move	*a3+,a1,L
-	jrz	#xxx
+	jrz	xxx
 	move	a0,*a1(OPAL)
-	jruc	#lp3
+	jruc	lp3
 
 #xxx	SLEEPK	5
-	jruc	#x
+	jruc	x
   
 
 #*
@@ -1292,13 +1292,13 @@ const_off
 	
 #lp
 	move	*a14,a14,L
-	jrz	#x
+	jrz	x
 	move	*a14(OID),a2
 	cmpi	CLSDEAD|123,a2
-	jrne	#lp
+	jrne	lp
 	move	a14,*a3+,L
 	move	a4,*a3,L
-	jruc	#lp
+	jruc	lp
 	
 #x	
 	movi	BRSHGWKP,a0
@@ -1307,9 +1307,9 @@ const_off
 	
 #lp2
 	move	*a3+,a1,L
-	jrz	#xx
+	jrz	xx
 	move	a0,*a1(OPAL)
-	jruc	#lp2
+	jruc	lp2
 
 #xx	SLEEPK	3
 
@@ -1319,15 +1319,15 @@ const_off
 	
 #lp3
 	move	*a3+,a1,L
-	jrz	#xxx
+	jrz	xxx
 	move	a0,*a1(OPAL)
-	jruc	#lp3
+	jruc	lp3
 
 #xxx	SLEEPK	5
-	jruc	#x
+	jruc	x
 
 
-#*************************************************************************
+**************************************************************************
 * Game over process
 
  SUBR	game_over
@@ -1440,17 +1440,17 @@ const_off
 	calla	print_string_C2
 
 	movi	OBJLST,a10
-	jruc	#start
+	jruc	start
 #next_obj
 	move	*a10(OID),a0
 	cmpi	CLSNEUT|TYPTEXT|SUBMES1,a0
-	jrne	#not_gover
+	jrne	not_gover
 	movi	30002,a0
 	move	a0,*a10(OZPOS)		;higher priority than black window
 #not_gover
 #start
 	move	*a10,a10,L
-	jrnz	#next_obj
+	jrnz	next_obj
 
 	movk	1,a0
 	move	a0,@HALT
@@ -1515,7 +1515,7 @@ game_ovr_mod
 	
 
 
-#*************************************************************************
+**************************************************************************
 * Game over processing - called at end of 'CREATE-A-PLAYER'
 *
  SUBR	game_over_processing
@@ -1554,7 +1554,7 @@ game_ovr_mod
 	rets
 
 
-#******************************************************************
+*******************************************************************
 * Note: Scratch = A0-A2,A14,B0-B1
 * A9=plyr *obj
 * A10=plyr *proc
@@ -1574,35 +1574,35 @@ game_ovr_mod
 	move	*a0(PR_PRIVILEGES),a0
 	jrle	#ushs				;br=not a created player
 	btst	1,a0				;STEALTH TURBO privilege ?
-	jrnz	#x				;br=yes
+	jrnz	x				;br=yes
 #ushs
 	move	@pup_trbstealth,a14		
 	btst	a11,a14				;Plyr have stealth turbo?
-	jrnz	#x				;br=yes
+	jrnz	x				;br=yes
 
 ;	move	*a10(plyr_keeppal),a14
-;	jrnz	#x				;Br=flames on body mode
+;	jrnz	x				;Br=flames on body mode
 
 	movi	wht_shoes,a0			;*pal data
 ;	btst	0,a11
-;	jrz	#noblk
+;	jrz	noblk
 ;	movi	blk_shoes,a0			;*pal data
 ;#noblk
 	move	*a10(PA11),a14,L
 	move	*a14,a14			;A14=Ctrl bits
 	btst	6,a14				;Turbo but down?
-	jrz	#noturb				;br=no
+	jrz	noturb				;br=no
 	move	*a10(plyr_PDATA_p),a14,L	;Deref plyr *proc for *data
 	move	*a14(ply_turbo),a14		;No turbo left?
-	jrz	#noturb				;br=none left
+	jrz	noturb				;br=none left
 
-	move	@PSTATUS,a14
+	move	@PSTATUS2,a14
 	btst	a11,a14				;Plyr human or drone?
-	jrz	#noturb				;br=drone
+	jrz	noturb				;br=drone
 
 	movi	shoec_t,a0
 	move	@TWOPLAYERS,a14			;0 = NO, 1 = YES 2 players
-	jrz	#not_2p
+	jrz	not_2p
 	movi	shoec_t_kit,a0
 #not_2p
 	move	a11,a14
@@ -1610,17 +1610,17 @@ game_ovr_mod
 	add	a14,a0
 	move	*a0,a0,L			;*pal data
 ;	btst	0,a11
-;	jrz	#nogrn
+;	jrz	nogrn
 ;	movi	grn_shoes,a0			;*pal data
 ;#nogrn
 
 #noturb
 	move	@GAMSTATE,a14			;No pal change in attract
 	cmpi	INAMODE,a14
-	jrz	#x
+	jrz	x
 	move	*a13(PDATA),a14,L		;Nothing to do if already set
 	cmp	a0,a14
-	jrz	#x
+	jrz	x
   	move	a0,*a13(PDATA),L		;Save *pal data
 	
 	move	*a9(OPAL),a1
@@ -1743,14 +1743,14 @@ wht_shoes
 	SLEEP	14*60
 	movi	[-3,0],a10
 	movi	[520,0],a11
-	jruc	#drw
+	jruc	drw
 
 
 logo_drift
 
 	move	a11,a0
 	movi	[40,0],a1
-	movi	>7591,a3				;Z
+	movi	07591H,a3				;Z
 	movi	DMAWNZ|M_NOCOLL|M_SCRNREL,a4
 	move	a9,a2
 	movi	CLSDEAD,a5
@@ -1767,7 +1767,7 @@ logo_drift
 	movi	[200,0],a0
 	movi	[20,0],a1
 	movi	bkbd1,a2
-	movi	>7591,a3				;Z
+	movi	07591H,a3				;Z
 	movi	DMAWNZ|M_NOCOLL|M_SCRNREL,a4
 	movi	CLSDEAD,a5
 	clr	a6
@@ -1777,7 +1777,7 @@ logo_drift
 	movi	[200,0],a0
 	movi	[20,0],a1
 	movi	bkbd2,a2
-	movi	>7591,a3				;Z
+	movi	07591H,a3				;Z
 	movi	DMAWNZ|M_NOCOLL|M_SCRNREL,a4
 	movi	CLSDEAD,a5
 	clr	a6
@@ -1787,7 +1787,7 @@ logo_drift
 	movi	[200,0],a0
 	movi	[20,0],a1
 	movi	bkbd3,a2
-	movi	>7591,a3				;Z
+	movi	07591H,a3				;Z
 	movi	DMAWNZ|M_NOCOLL|M_SCRNREL,a4
 	movi	CLSDEAD,a5
 	clr	a6
@@ -1801,7 +1801,7 @@ logo_drift
 	movi	[-100,0],a0
 	movi	[20,0],a1
 	movi	card_g,a2
-	movi	>7591,a3				;Z
+	movi	07591H,a3				;Z
 	movi	DMAWNZ|M_NOCOLL,a4
 	movi	CLSDEAD,a5
 	movi	[1,0],a6
@@ -1842,7 +1842,7 @@ player_t
 ;---> seik_90,skiles_90,webb_90,wilkins_90,worthy_90
 
 
-#********************************
+*********************************
 * Print starring NBA players list
 
  SUBR	starring
@@ -1914,16 +1914,16 @@ player_t
 #lplp	SLEEPK	1
 
 	calla	get_all_buttons_cur2
-	jrz	#nob
+	jrz	nob
 
       	clr	a0
 	move	a0,@SOUNDSUP		;turn all sounds on
 	SOUND1	bounce_snd
 	movk	1,a0
 	move	a0,@SOUNDSUP		;turn all sounds off
-	jruc	#x
-#nob 	dsj	a11,#lplp
-	dsj	a10,#lp
+	jruc	x
+nob 	dsj	a11,lplp
+	dsj	a10,lp
 
 	SLEEP	2ah
 	
@@ -1936,7 +1936,7 @@ del_me	SLEEP	74h
 	DIE
 
 
-#********************************
+*********************************
 * Print starring NBA players list
 
  SUBRP	starring_nms
@@ -1968,7 +1968,7 @@ del_me	SLEEP	74h
 ;	clr	a9
 
 #lp	move	*a10+,a4,L
-	jrz	#x
+	jrz	x
 	calla	print_string_C2
 
 	SLEEPK	11
@@ -1976,7 +1976,7 @@ del_me	SLEEP	74h
 	movi	219,a0
 
 ;	XORK	1,a9
-;	jrz	#tag1
+;	jrz	tag1
 ;	movi	224,a0
 ;#tag1
 	move	a0,@mess_cursy
@@ -1984,7 +1984,7 @@ del_me	SLEEP	74h
 	movi	CLSDEAD|123,a0
 	calla	obj_del1c		;delete text
 
-	jruc	#lp
+	jruc	lp
 #x
 	movi	CLSDEAD|124,a0
 	calla	obj_del1c		;delete text

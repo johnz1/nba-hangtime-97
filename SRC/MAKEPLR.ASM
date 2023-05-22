@@ -98,7 +98,7 @@
 	.ref	create_dithering_patterns
 	.ref	create_stats_area
 	.ref	timedown_clock
-	.ref	PSTATUS,IRQSKYE
+	.ref	PSTATUS2,IRQSKYE
 	.ref	create_credit_plate,print_title
 	.ref	del_select_arrow,clr_select_arrow_ram
 	.ref	DEFAULT_t
@@ -360,7 +360,7 @@ dp_1	SLEEPK	1
 ;DJT End
  SUBR	design_player_proc
 
-	move	@PSTATUS,a1
+	move	@PSTATUS2,a1
 	cmpi	1,a1			;player 1 ?
 	jreq	gpn_1			;br=yep
 	inc	a0			;assume player 2
@@ -1399,9 +1399,9 @@ upph_1	move	*a9+,a8,L			;ptr. old image
 
 ;update bits per pixel
 	move	*a8(OCTRL),a1
-	andi	>80ff,a1		;DMA flags
+	andi	080ffH,a1		;DMA flags
 	move	*a2(ICTRL),a14
-	andni	>80ff,a14		;DMA flags
+	andni	080ffH,a14		;DMA flags
 	or	a14,a1
 	move	a1,*a8(OCTRL)
 
@@ -2378,56 +2378,56 @@ ppcc_6
 
 	move	*a1+,a0
 #plflp	move	*a1+,*a2+
-	dsjs	a0,#plflp
+	dsjs	a0,plflp
 
 	move	*a7(PAT_PALT_p),a1,L	;Copy trim
 	btst	0,a3
-	jrz	#awytm1
+	jrz	awytm1
 	move	*a7(PAT_PALT2_p),a1,L	;Copy trim
 #awytm1
 	move	*a1+,a0
 	addk	16,a1
 	subk	1,a0 
 #pltlp	move	*a1+,*a2+
-	dsjs	a0,#pltlp
+	dsjs	a0,pltlp
 
 	move	*a7(PAT_PALU_p),a1,L	;Copy uniform
 	btst	0,a3
-	jrz	#awytm2
+	jrz	awytm2
 	move	*a7(PAT_PALU2_p),a1,L	;Copy uniform
 #awytm2
 	move	*a1+,a0
 	addk	16,a1
 #plulp	move	*a1+,*a2+
-	dsjs	a0,#plulp
+	dsjs	a0,plulp
 	subk	16,a2
 
 	movi	ltshoepal_t,a1		;Copy shoes
 	movk	13,a0			;# In shoe pal
 #plslp	move	*a1+,*a2+
-	dsjs	a0,#plslp
+	dsjs	a0,plslp
 
 	move	*a7(PAT_PALSW_p),a1,L	;Copy trim
 	btst	0,a3
-	jrz	#awytm3
+	jrz	awytm3
 	move	*a7(PAT_PALSW2_p),a1,L	;Copy trim
 #awytm3
 	move	*a1+,a0
 	addk	16,a1
 	subk	1,a0
 #pltlpa	move	*a1+,*a2+
-	dsjs	a0,#pltlpa
+	dsjs	a0,pltlpa
 
 	move	*a7(PAT_PALVP_p),a1,L	;Copy trim
 	btst	0,a3
-	jrz	#awytm4
+	jrz	awytm4
 	move	*a7(PAT_PALVP2_p),a1,L	;Copy trim
 #awytm4
 	move	*a1+,a0
 	addk	16,a1
 	subk	1,a0
 #pltlpb	move	*a1+,*a2+
-	dsjs	a0,#pltlpb
+	dsjs	a0,pltlpb
 
 	movi	plyrpals_t,a0,L
 	calla	pal_getf
@@ -2948,10 +2948,10 @@ done3	clr	a0
 	clr	a10
 	move	@GAMSTATE,a0
 	subk	INAMODE,a0
-	jrnz	#chkrecs
+	jrnz	chkrecs
 	.ref	gpr_no_match
 	calla	gpr_no_match
-	jruc	#nonewrec
+	jruc	nonewrec
 #chkrecs
 	calla	get_player_record
 #nonewrec
@@ -2959,7 +2959,7 @@ done3	clr	a0
 	calla	del_butn_box_stuff
 
 	move	a10,a10				;a10=0 (rec. not found) else ptr. to rec.
-	jrz	#rnf_1				;br=record NOT FOUND
+	jrz	rnf_1				;br=record NOT FOUND
 
 ;record found logic
 
@@ -2968,7 +2968,7 @@ done3	clr	a0
 
 	clr	a0
 	calla	print_record_availablity_msg
-	jruc	#wait_1
+	jruc	wait_1
 
 
 ;record not found logic

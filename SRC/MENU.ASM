@@ -446,7 +446,7 @@ CK_2_CRED
 	MOVI	ADJCCONT,A0
 	CALLA	GET_ADJ 	;GET CONTINUE NUMBER
 	cmpi	2,a0		;1 or 2 is what we return
-	jrhi	c2c20		;>2?
+	jrhi	c2c20		;02H?
 	move	a0,a0		;Return NZ (unless its 2/0)
 	rets
 
@@ -640,7 +640,7 @@ GO_AUD
 	MOVK	1,A9		;CURSOR ON 1ST ENTRY
 	JSRP	B_MENU		;SEE IF THEY WANT PAGE 2.
 	cmpi	2,A8		;DID WE GET 2nd ENTRY (RETURN TO PAGE 1)
-	jrz	#page2		;YEP...PUT IT UP!
+	jrz	page2		;YEP...PUT IT UP!
 	
 #page4
 	CALLA	CLR_SCRN
@@ -2025,8 +2025,8 @@ _sm_done
 ;	movi	ROBO_BLUE,a2
 ;	fcall	RECTANGLE,b6
 ;
-;	movi	bxy+>00030003,a0	;make frame by filling blue with black
-;	movi	bw|bh->00060006,a1
+;	movi	bxy+000030003H,a0	;make frame by filling blue with black
+;	movi	bw|bh-000060006H,a1
 ;	movi	ROBO_BLACK,a2
 ;	fcall	RECTANGLE,b6
 ;
@@ -2167,8 +2167,8 @@ GO_VOL
 	movi	ROBO_BLUE,a2
 	fcall	RECTANGLE,b6
 
-	movi	bxy+>00030003,a0	;make frame by filling blue with black
-	movi	bw|bh->00060006,a1
+	movi	bxy+000030003H,a0	;make frame by filling blue with black
+	movi	bw|bh-000060006H,a1
 	movi	ROBO_BLACK,a2
 	fcall	RECTANGLE,b6
 
@@ -2306,9 +2306,9 @@ vol_loop_done
 
 	RETP
 
-#***************************************
+****************************************
 * Adjusts the bar height
-* >a0=new height (1-170)
+* 0a0H=new height (1-170)
 
  SUBRP	adjust_bar_height2
 
@@ -2316,28 +2316,28 @@ vol_loop_done
 	move	@bar_height2,a0
 #adjust_loop
 	cmp	a1,a0
-	jreq	#done
-	jrlt	#grow_bar
+	jreq	done
+	jrlt	grow_bar
 
 	movi	ROBO_BLACK,a2
 	callr	vol_bar_line
 	dec	a0
-	jruc	#adjust_loop
+	jruc	adjust_loop
 
 #grow_bar	
 	inc	a0
 	movi	ROBO_RED,a2
 	callr	vol_bar_line
-	jruc	#adjust_loop
+	jruc	adjust_loop
 
 #done
 	move	a0,@bar_height2
 	rets
 
 
-#***************************************
+****************************************
 * Adjusts the bar height
-* >a0=new height (1-170)
+* 0a0H=new height (1-170)
 
  SUBRP	adjust_bar_height
 
@@ -2345,19 +2345,19 @@ vol_loop_done
 	move	@bar_height,a0
 #adjust_loop
 	cmp	a1,a0
-	jreq	#done
-	jrlt	#grow_bar
+	jreq	done
+	jrlt	grow_bar
 
 	movi	ROBO_BLACK,a2
 	callr	vol_bar_line
 	dec	a0
-	jruc	#adjust_loop
+	jruc	adjust_loop
 
 #grow_bar	
 	inc	a0
 	movi	ROBO_RED,a2
 	callr	vol_bar_line
-	jruc	#adjust_loop
+	jruc	adjust_loop
 
 #done
 	move	a0,@bar_height
@@ -2366,7 +2366,7 @@ vol_loop_done
 
 ****************************************
 * Draws a line on the volume bar, but won't overwrite green pixels (text)
-* >a0=line index (not Ypos) >a2=color
+* 0a0H=line index (not Ypos) 0a2H=color
 
  SUBRP	vol_bar_line
 
@@ -2374,7 +2374,7 @@ vol_loop_done
 	;convert the line index to a linear address
 	sla	16,a0
 	neg	a0
-	addi	bxy+bh->00030000+59,a0	;various fudges here
+	addi	bxy+bh-000030000H+59,a0	;various fudges here
 	cvxyl	a0,a0
 
 	;now write the color value to all non-green pixels
@@ -2394,7 +2394,7 @@ vbl_skip_pixel
 	
 ****************************************
 * Converts a 0-255 volume value to a 1-170 bar height value
-* >a0=volume
+* 0a0H=volume
 * <a0=height
 
  SUBRP	vol_to_ht
@@ -2420,27 +2420,27 @@ vbl_skip_pixel
 	calla	SNDSND
 	movi	1000,a3
 	calla	SNDSND
-	SLEEP	>40
+	SLEEP	040H
 
 bgsnd3	movi	sound_fx_table,a10
 bgsnd6	move	*a10+,a3,W
 	jrz	bgsnd3
 	calla	SNDSND
-	SLEEP	>20
+	SLEEP	020H
 	jruc	bgsnd6
 
 sound_fx_table
-	.word	>7
-	.word	>36f			;!!!LOOK!!!
-	.word	>33b
-	.word	>92f
-	.word	>36b
-	.word	>900
-	.word	>222
-	.word	>f8
-	.word	>f4
-	.word	>4ba
-	.word	>ca
+	.word	07H
+	.word	036fH			;!!!LOOK!!!
+	.word	033bH
+	.word	092fH
+	.word	036bH
+	.word	0900H
+	.word	0222H
+	.word	0f8H
+	.word	0f4H
+	.word	04baH
+	.word	0caH
 	.word	0
 
 pf_volume_2
@@ -2454,24 +2454,24 @@ pf_volume_3
 	.even
 
 pf_volume_4
-	MESS_MAC RD7FONT,SPACING20,201,vb_y+>05,ROBO_BLUE,STRCNRM,0
+	MESS_MAC RD7FONT,SPACING20,201,vb_y+005H,ROBO_BLUE,STRCNRM,0
 	.string	"MAX",0,0
 	.even
 
 pf_volume_5
-	MESS_MAC RD7FONT,SPACING20,201,vb_y+>a0,ROBO_BLUE,STRCNRM,0
+	MESS_MAC RD7FONT,SPACING20,201,vb_y+0a0H,ROBO_BLUE,STRCNRM,0
 	.string	"MIN",0,0
 	.even
 
-vb_y		.set	>2f
+vb_y		.set	02fH
 vb_height	.set	171
-bxy	.set	>002e0000+200->18
+bxy	.set	0002e0000H+200-018H
 
-bh	.set	>b0*>10000
-bw	.set	>30
+bh	.set	0b0H*010000H
+bw	.set	030H
 
 bthickx	.set	3
-bthicky	.set	3*>10000
+bthicky	.set	3*010000H
 
 volume_table
 	.long	bh+3,bxy		; height:width  /  y:x coordinates
@@ -2838,11 +2838,11 @@ SNDTST
 SNDTLP
 	CALLA	SCRCLR
 	MOVI	M_STEST,A0	;SOUND TEST MESSAGE
-	MOVI	>6080,A1
+	MOVI	06080H,A1
 	CLR	A2
 	MOVI	ROBO_WHITE,A3
 	CALLA	STRNEW1
-	MOVI	>B080,A1	;SCREEN ADDRESS
+	MOVI	0B080H,A1	;SCREEN ADDRESS
 	MOVE	A8,A0
 	CALLA	STRNEW1
 	ADDK	8,A0
@@ -2878,13 +2878,13 @@ SNDMES
 	.byte	"TUNE 1 (1)",0
 	.byte	MUSICHAN,1
 	.byte	"NO WAY (E6)",0
-	.byte	1,>e6
+	.byte	1,0e6H
 	.byte	"EXPL1 (30)",0
-	.byte	4,>30
+	.byte	4,030H
 	.byte	"TUNE 2 (9)",0
 	.byte	MUSICHAN,9
 	.byte	"SPIDER BOUNCE (83)",0
-	.byte	4,>83
+	.byte	4,083H
 	.byte	"MUSIC OFF (0)",0
 	.byte	MUSICHAN,0
 	.byte	0		;THE END OF TABLE
@@ -2962,7 +2962,7 @@ diag_message_table
 
 ****************************************
 * Wait for sound board Data AVailable to go active, with timeout.
-* >a0=timeout
+* 0a0H=timeout
 * <a0=time remaining
 
  SUBR	poll_sdav
@@ -3155,29 +3155,29 @@ DO_PLAYSOUNDS
 	calla	fudge_switches2
 	move	@fswitches_down,a0,L
 	andi	START_BITS,a0
-	jrnz	#exit
+	jrnz	exit
 
 	move	@fswitches_down,a0,L
 	andi	ACTION_BITS,a0
-	jrz	#no_play_sound
+	jrz	no_play_sound
 	move	a10,a3
 	CALLR	MAKE_SOUND
-	jruc	#loop
+	jruc	loop
 #no_play_sound
 
 	move	a10,a2
 	move	@fswitches_cur,a0,L
 	andi	UP_BITS,a0
-	jrz	#no_down
+	jrz	no_down
 	inc	a2
 #no_down
 	move	@fswitches_cur,a0,L
 	andi	DOWN_BITS,a0
-	jrz	#no_up
+	jrz	no_up
 	dec	a2
 #no_up
 	cmp	a2,a10
-	jreq	#loop		;no change
+	jreq	loop		;no change
 
 	push	a2
 	movi	ROBO_BLACK,a0
@@ -3197,10 +3197,10 @@ DO_PLAYSOUNDS
 	calla	fudge_switches2
 	move	@fswitches_cur,a0,L
 	andi	UP_BITS|DOWN_BITS,a0
-	jrz	#loop
+	jrz	loop
 	SLEEPK	1
-	dsj	a11,#wait_release
-	jruc	#loop
+	dsj	a11,wait_release
+	jruc	loop
 
 #exit
 	JSRP	QSNDRST
@@ -3292,7 +3292,7 @@ COIN_OCTO_AUDS
 ;;	AMAC	amst_s,0,AUDBEGIN,ROBO_GREEN	;On parachute
 ;;	AMAC	M_START,STARTS,0,ROBO_GREEN
 ;;	AMAC	M_PAIDC,0,AUDPAIDC,ROBO_WHITE
-;;	AMAC	M_SERV,0,AUDSERV,>1212
+;;	AMAC	M_SERV,0,AUDSERV,01212H
 ;;	AMAC	M_PLAYS,DOPLAYS,0,ROBO_YELLOW
 	.long	0
 
@@ -3325,7 +3325,7 @@ COIN1_AUDS
 COIN2_AUDS
 	.word	AUD_Y_STRT+85,11		;Y start, Y spacing
 	.word	AUD_LM+13,AUD_RM-13		;LFT/RGT margin X
-	AMAC	M_SERV,0,AUDSERV,>1212
+	AMAC	M_SERV,0,AUDSERV,01212H
 	AMAC	M_PLAYS,DOPLAYS,0,ROBO_YELLOW
 	.long	0
 
@@ -3605,7 +3605,7 @@ str_was	TXTLINE	"WASHINGTON"
 ;str_los	TXTLINE	"LOS ANGELES"
 	.even
 
-#*****************************************************************************
+******************************************************************************
 * total uptime
 prn_uptime
 	movi	AUD_UPTIME,a0
@@ -3616,7 +3616,7 @@ prn_uptime
 	jruc	P_TIME
 
 
-#*****************************************************************************
+******************************************************************************
 * actual play time
 prn_pltime
 	movi	AUD_PLTIME,a0
@@ -3627,7 +3627,7 @@ prn_pltime
 	jruc	P_TIME
 
 
-#*****************************************************************************
+******************************************************************************
 * percentage of players entering initials
 prn_initpct
 	movi	AUD_TOTPLYS,a0
@@ -3644,7 +3644,7 @@ prn_initpct
 	move	a2,a3
 	jruc	PERCENT_WORK
 
-#*****************************************************************************
+******************************************************************************
 * percentage of players purchasing full game
 prn_fullgmpct
 	movi	AUD_PRESTARTS,a0
@@ -3661,7 +3661,7 @@ prn_fullgmpct
 	move	a2,a3
 	jruc	PERCENT_WORK
 
-#*****************************************************************************
+******************************************************************************
 * percentage of 1 player play
 prn_1plpct
 	movi	AUD_PLTIME,a0
@@ -3678,7 +3678,7 @@ prn_1plpct
 	move	a2,a3
 	jruc	PERCENT_WORK
 
-#*****************************************************************************
+******************************************************************************
 * percentage of 2 player play
 prn_2plpct
 	movi	AUD_PLTIME,a0
@@ -3696,7 +3696,7 @@ prn_2plpct
 	jruc	PERCENT_WORK
 
 
-#*****************************************************************************
+******************************************************************************
 * percentage of 3 player play
 prn_3plpct
 	movi	AUD_PLTIME,a0
@@ -3714,7 +3714,7 @@ prn_3plpct
 	jruc	PERCENT_WORK
 
 
-#*****************************************************************************
+******************************************************************************
 * percentage of 4 player play
 prn_4plpct
 	movi	AUD_PLTIME,a0
@@ -3732,7 +3732,7 @@ prn_4plpct
 	jruc	PERCENT_WORK
 
 
-#*****************************************************************************
+******************************************************************************
 * percentage of games finished 1st quarter
 prn_1stqtrpct
 	movi	AUD_TOTPLYS,a0
@@ -3750,7 +3750,7 @@ prn_1stqtrpct
 	jruc	PERCENT_WORK
 
 
-#*****************************************************************************
+******************************************************************************
 * percentage of games finished 1st half
 prn_1sthlfpct
 	movi	AUD_TOTPLYS,a0
@@ -3768,7 +3768,7 @@ prn_1sthlfpct
 	jruc	PERCENT_WORK
 
 
-#*****************************************************************************
+******************************************************************************
 * percentage of games finished 3rd quarter
 prn_3rdqtrpct
 	movi	AUD_TOTPLYS,a0
@@ -3786,7 +3786,7 @@ prn_3rdqtrpct
 	jruc	PERCENT_WORK
 
 
-#*****************************************************************************
+******************************************************************************
 * percentage of games finished 4th quarter
 prn_comppct
 	movi	AUD_TOTPLYS,a0
@@ -3804,7 +3804,7 @@ prn_comppct
 	jruc	PERCENT_WORK
 
 
-#*****************************************************************************
+******************************************************************************
 * percentage of games gone to overtime
 prn_ovtmpct
 	movi	AUD_TOTPLYS,a0
@@ -3822,7 +3822,7 @@ prn_ovtmpct
 	jruc	PERCENT_WORK
 
 
-#*****************************************************************************
+******************************************************************************
 *
 prn_avgscr
 	movi	AUD_COMPLETED,a0
@@ -3845,7 +3845,7 @@ prn_avgscr
 	jruc	NUMBER_WORK
 
 
-#*****************************************************************************
+******************************************************************************
 *
 prn_avgwin
 	movi	AUD_COMPLETED,a0
@@ -3861,7 +3861,7 @@ prn_avgwin
 	jruc	NUMBER_WORK
 
 
-#*****************************************************************************
+******************************************************************************
 *
 prn_avglos
 	movi	AUD_COMPLETED,a0
@@ -3877,7 +3877,7 @@ prn_avglos
 	jruc	NUMBER_WORK
 
 
-#*****************************************************************************
+******************************************************************************
 *
 prn_cpuwins
 	movi	AUD_COMPLETED,a0
@@ -3895,7 +3895,7 @@ prn_cpuwins
 	jruc	PERCENT_WORK
 
 
-#*****************************************************************************
+******************************************************************************
 *
 prn_leftwins
 	movi	AUD_HUMANVSHUMAN,a0
@@ -3912,7 +3912,7 @@ prn_leftwins
 	move	a2,a3
 	jruc	PERCENT_WORK
 
-#*****************************************************************************
+******************************************************************************
 *
 prn_humans
 	movi	AUD_HUMANVSHUMAN,a0
@@ -3920,7 +3920,7 @@ prn_humans
 	move	a1,a3
 	jruc	NUMBER_WORK
 
-;#*****************************************************************************
+;******************************************************************************
 ;*
 ;prn_dropcpu
 ;	movi	AUD_NUMDROPOUT,a0
@@ -3938,7 +3938,7 @@ prn_humans
 ;	jruc	PERCENT_WORK
 ;
 ;
-;#*****************************************************************************
+;******************************************************************************
 ;*
 ;prn_drophum
 ;	movi	AUD_NUMDROPOUT,a0
@@ -3956,7 +3956,7 @@ prn_humans
 ;	jruc	PERCENT_WORK
 
 
-#*****************************************************************************
+******************************************************************************
 *
 prn_avgcpuscr
 
@@ -3973,7 +3973,7 @@ prn_avgcpuscr
 	jruc	NUMBER_WORK
 
 
-#*****************************************************************************
+******************************************************************************
 *
 prn_avghumscr
 
@@ -3990,7 +3990,7 @@ prn_avghumscr
 	jruc	NUMBER_WORK
 
 
-#*****************************************************************************
+******************************************************************************
 *	average score differential at dropout
 prn_avgdropdif
 
@@ -4006,7 +4006,7 @@ prn_avgdropdif
 	move	a2,a3
 	jruc	NUMBER_WORK
 
-#*****************************************************************************
+******************************************************************************
 prn_numhot
 
 	movi	AUD_NUMHOTSTRK,a0
@@ -4014,7 +4014,7 @@ prn_numhot
 	move	a1,a3
 	jruc	NUMBER_WORK
 
-#*****************************************************************************
+******************************************************************************
 *	average # points scored per hot streak
 prn_hotpts
 
@@ -4030,7 +4030,7 @@ prn_hotpts
 	move	a2,a3
 	jruc	NUMBER_WORK
 
-#*****************************************************************************
+******************************************************************************
 *	average # points scored per hot streak
 prn_avg_tm_pts
 
@@ -4046,7 +4046,7 @@ prn_avg_tm_pts
 	move	a2,a3
 	jruc	NUMBER_WORK
 
-#*****************************************************************************
+******************************************************************************
 *
 prn_cp_starts
 	movi	AUD_TOTSTARTS,a0
@@ -4097,7 +4097,7 @@ PERCENT_WORK
 	move	a0,*a13(AT_RX)		;restore right margin
 	RETP
 
-#*****************************************************************************
+******************************************************************************
 
 ;DJT Start
 ;;MISC_AUD
@@ -4109,7 +4109,7 @@ PERCENT_WORK
 ;;	AMAC	M_P2MIN,DO_P2MIN,0,ROBO_YELLOW
 ;;	AMAC	M_AVGT,DO_AVGT,0,ROBO_YELLOW
 ;;	AMAC	M_ELAPSE,DO_ELAPSE,0,ROBO_YELLOW
-;;	AMAC	adiff_s,diff_prt,0,>1212
+;;	AMAC	adiff_s,diff_prt,0,01212H
 ;;	.LONG	0
 ;;
 ;;adiff_s	TXTLINE	"GAME DIFFICULTY LEVEL"

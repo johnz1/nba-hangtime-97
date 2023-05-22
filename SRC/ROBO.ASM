@@ -31,7 +31,7 @@
 	;kludge
 	.ref	robo_p
 
-#*****************************************************************************
+******************************************************************************
 
 	;from ADJUST.ASM
 	.ref	BINBCD
@@ -70,7 +70,7 @@
 
 	.ref	_switch_addr,_switch2_addr,ADD_VOICE
 
-#*****************************************************************************
+******************************************************************************
 
 	BSSX	robo_end,	16	;reason for wave end
 	BSSX	robotron_score,	32	;UHL score
@@ -83,7 +83,7 @@
 	.bss	forward,	16	;skip wave
 	.bss	backward,	16	;drop back a wave
 
-#*****************************************************************************
+******************************************************************************
 
 ROBO_DEBUG	equ	0
 WAVE_CONTROL	equ	0
@@ -102,7 +102,7 @@ RE_ABORT	equ	3
 RE_BACKUP	equ	4
 
 
-#*****************************************************************************
+******************************************************************************
 ******************************************************************************
 ******************************************************************************
 	.ref	robo_icon_trigger
@@ -113,9 +113,9 @@ RE_BACKUP	equ	4
  SUBR	robo_check
 
 	.if DEBUG
-	jruc	#robo_ok
+	jruc	robo_ok
 	.endif
-	jruc	#robo_end
+	jruc	robo_end
 
 	move	@p1icon_total,a0,L
 	move	@robo_icon_trigger,a14
@@ -138,38 +138,38 @@ RE_BACKUP	equ	4
 	JSRP	robo_game
 	move	@robo_end,a14
 	cmpi	RE_DEADPLAYER,a14
-	jreq	#player_died
+	jreq	player_died
 	cmpi	RE_WAVEDONE,a14
-	jreq	#wave_successful
+	jreq	wave_successful
 	cmpi	RE_ABORT,a14
-	jreq	#wave_aborted
+	jreq	wave_aborted
 	cmpi	RE_BACKUP,a14
-	jreq	#back_up
-	jruc	#robo_end
+	jreq	back_up
+	jruc	robo_end
 
 #player_died
-	jruc	#robo_loop
+	jruc	robo_loop
 
 #wave_successful
 	inc	a0
 	cmpi	16,a0
-	jrne	#robo_loop
-	jruc	#robo_end
+	jrne	robo_loop
+	jruc	robo_end
 
 #wave_aborted
-	jruc	#robo_end
+	jruc	robo_end
 
 #back_up
 	dec	a0
-	jrnn	#robo_loop
+	jrnn	robo_loop
 	clr	a0
-	jruc	#robo_loop
+	jruc	robo_loop
 
 #robo_end
 	RETP
 
 
-#*****************************************************************************
+******************************************************************************
 ******************************************************************************
 ******************************************************************************
 
@@ -180,7 +180,7 @@ RE_BACKUP	equ	4
 	rets
 
 
-#*****************************************************************************
+******************************************************************************
 ******************************************************************************
 ******************************************************************************
 
@@ -325,35 +325,35 @@ RE_BACKUP	equ	4
 #not_done
 	SLEEPK	1
 	move	@live_badguys,a14
-	jrz	#wave_done
+	jrz	wave_done
 
 	move	@player_dead,a14
-	jrnz	#dead_hero
+	jrnz	dead_hero
 
 	move	@starts_down,a14
-	jrnz	#wave_abort
+	jrnz	wave_abort
 
 	move	@forward,a14
-	jrnz	#wave_done
+	jrnz	wave_done
 
 	move	@backward,a14
-	jrnz	#back_up
-	jruc	#not_done
+	jrnz	back_up
+	jruc	not_done
 
 
 #wave_done
 	movi	RE_WAVEDONE,a14
-	jruc	#quit
+	jruc	quit
 #dead_hero
 	movi	RE_DEADPLAYER,a14
-	jruc	#quit
+	jruc	quit
 #wave_abort
 	movi	RE_ABORT,a14
-	jruc	#quit
+	jruc	quit
 
 #back_up
 	movi	RE_BACKUP,a14
-	jruc	#quit
+	jruc	quit
 
 #quit
 	move	a14,@robo_end,W
@@ -452,7 +452,7 @@ RE_BACKUP	equ	4
 	.word	03,00,03,03,03,05,22,03
 
 
-#*****************************************************************************
+******************************************************************************
 ******************************************************************************
 ******************************************************************************
 *
@@ -497,7 +497,7 @@ RE_BACKUP	equ	4
 	; change his animation frame, if neccesary
 	callr	#change_frame
 
-	jruc	#not_done
+	jruc	not_done
 
 #player_dead
 	;kill the gun process
@@ -560,52 +560,52 @@ RE_BACKUP	equ	4
 	clr	a0
 	calla	get_stick_val_cur
 	btst	JOYDN,a0
-	jrnz	#move_down
+	jrnz	move_down
 	btst	JOYUP,a0
-	jrnz	#move_up
+	jrnz	move_up
 	btst	JOYRGT,a0
-	jrnz	#move_right
+	jrnz	move_right
 	btst	JOYLFT,a0
-	jrnz	#move_left
-	jruc	#no_move
+	jrnz	move_left
+	jruc	no_move
 
 #move_down
 	btst	JOYRGT,a0
-	jrnz	#move_downright
+	jrnz	move_downright
 	btst	JOYLFT,a0
-	jrnz	#move_downleft
+	jrnz	move_downleft
 
 	;increment Y
 	move	*a8(OYPOS),a14,W
 	inc	a14
 	move	a14,*a8(OYPOS),W
-	jruc	#move_done
+	jruc	move_done
 
 #move_up
 	btst	JOYRGT,a0
-	jrnz	#move_upright
+	jrnz	move_upright
 	btst	JOYLFT,a0
-	jrnz	#move_upleft
+	jrnz	move_upleft
 
 	;decrement Y
 	move	*a8(OYPOS),a14,W
 	dec	a14
 	move	a14,*a8(OYPOS),W
-	jruc	#move_done
+	jruc	move_done
 
 #move_right
 	;increment X
 	move	*a8(OXPOS),a14,W
 	inc	a14
 	move	a14,*a8(OXPOS),W
-	jruc	#move_done
+	jruc	move_done
 
 #move_left
 	;decrement X
 	move	*a8(OXPOS),a14,W
 	dec	a14
 	move	a14,*a8(OXPOS),W
-	jruc	#move_done
+	jruc	move_done
 
 #move_upright
 	; decrement Y and increment X
@@ -615,7 +615,7 @@ RE_BACKUP	equ	4
 	move	*a8(OXPOS),a14,W
 	inc	a14
 	move	a14,*a8(OXPOS),W
-	jruc	#move_done
+	jruc	move_done
 
 #move_upleft
 	; decrement Y and decrement X
@@ -625,7 +625,7 @@ RE_BACKUP	equ	4
 	move	*a8(OXPOS),a14,W
 	dec	a14
 	move	a14,*a8(OXPOS),W
-	jruc	#move_done
+	jruc	move_done
 
 #move_downright
 	; increment Y and increment X
@@ -635,7 +635,7 @@ RE_BACKUP	equ	4
 	move	*a8(OXPOS),a14,W
 	inc	a14
 	move	a14,*a8(OXPOS),W
-	jruc	#move_done
+	jruc	move_done
 
 #move_downleft
 	; increment Y and decrement X
@@ -645,7 +645,7 @@ RE_BACKUP	equ	4
 	move	*a8(OXPOS),a14,W
 	dec	a14
 	move	a14,*a8(OXPOS),W
-	jruc	#move_done
+	jruc	move_done
 
 #move_done
 	; check bounds
@@ -704,8 +704,8 @@ RE_BACKUP	equ	4
 	move	a0,a3
 
 	cmp	a0,a10
-	jreq	#same_direction
-	jruc	#new_direction
+	jreq	same_direction
+	jruc	new_direction
 
 #new_direction
 	; start a new script.  first use the joystick bits to compute an
@@ -728,12 +728,12 @@ RE_BACKUP	equ	4
 
 	;set the motion count
 	movi	#motion_count,a9
-	jruc	#done_changing
+	jruc	done_changing
 
 #same_direction
 	;check the motion count
 	dec	a9
-	jrnz	#done_changing
+	jrnz	done_changing
 
 	;reset the motion count
 	movi	#motion_count,a9
@@ -741,7 +741,7 @@ RE_BACKUP	equ	4
 	;increment the pointer, wrap if neccesary
 	addi	20h,a4
 	cmp	a4,a6
-	jrne	#no_wrap
+	jrne	no_wrap
 	move	a5,a4
 
 #no_wrap
@@ -749,7 +749,7 @@ RE_BACKUP	equ	4
 	move	*a4,a0,L
 	calla	civanic
 
-	jruc	#done_changing
+	jruc	done_changing
 
 #done_changing
 	rets
@@ -857,7 +857,7 @@ RE_BACKUP	equ	4
 #script_mapx
 
 
-#*****************************************************************************
+******************************************************************************
 *
 *	player gun process
 *
@@ -868,12 +868,12 @@ RE_BACKUP	equ	4
  SUBRP	player_gun
 
 	clr	a9
-	jruc	#sleep
+	jruc	sleep
 
 #check_shot
 	movk	1,a0
 	calla	get_stick_val_cur
-	jrz	#sleep			;no shot
+	jrz	sleep			;no shot
 
 	;fire in the indicated direction
 	move	a0,a10
@@ -884,17 +884,17 @@ RE_BACKUP	equ	4
 	movi	RS_SHOOT,a0
 	callr	robo_sound
 
-	jruc	#sleep
+	jruc	sleep
 	
 #too_soon
 	dec	a9
-	jruc	#sleep
+	jruc	sleep
 
 #sleep
 	SLEEPK	1
 	move	a9,a9
-	jrnz	#too_soon
-	jruc	#check_shot
+	jrnz	too_soon
+	jruc	check_shot
 
 #done
 	DIE
@@ -902,7 +902,7 @@ RE_BACKUP	equ	4
 #rate_of_fire	equ	6	;min ticks between shots
 
 
-#*****************************************************************************
+******************************************************************************
 *
 *	player bullet process
 *
@@ -938,7 +938,7 @@ RE_BACKUP	equ	4
 	move	a0,*a8(OYPOS),W
 
 	btst	JOYRGT,a10
-	jrz	#not_right
+	jrz	not_right
 	move	*a8(OXPOS),a14,W	;pos
 	addi	#bstart_radj,a14
 	move	a14,*a8(OXPOS),W
@@ -949,7 +949,7 @@ RE_BACKUP	equ	4
 #not_right
 
 	btst	JOYLFT,a10
-	jrz	#not_left
+	jrz	not_left
 	move	*a8(OXPOS),a14,W	;pos
 	addi	#bstart_ladj,a14
 	move	a14,*a8(OXPOS),W
@@ -960,7 +960,7 @@ RE_BACKUP	equ	4
 #not_left
 
 	btst	JOYUP,a10
-	jrz	#not_up
+	jrz	not_up
 	move	*a8(OYPOS),a14,W	;pos
 	addi	#bstart_uadj,a14
 	move	a14,*a8(OYPOS),W
@@ -972,7 +972,7 @@ RE_BACKUP	equ	4
 #not_up
 
 	btst	JOYDN,a10
-	jrz	#not_down
+	jrz	not_down
 	move	*a8(OYPOS),a14,W	;pos
 	addi	#bstart_dadj,a14
 	move	a14,*a8(OYPOS),W
@@ -986,21 +986,21 @@ RE_BACKUP	equ	4
 	;set the image
 	movi	bullet_hrz,a0
 	move	a5,a5
-	jrz	#horiz
+	jrz	horiz
 	movi	bullet_vrt,a0
 #horiz
 
 	;vert/horz is set.  check for diagonal instead
 	cmpi	1,a4
-	jreq	#image_set
+	jreq	image_set
 	cmpi	-1,a4
-	jreq	#image_set
+	jreq	image_set
 
 	;it's a diagonal.  if a4 is 0, use frontslash
 	move	a4,a4
-	jrz	#front_slash
+	jrz	front_slash
 	movi	bullet_bck,a0
-	jruc	#image_set
+	jruc	image_set
 
 #front_slash
 	movi	bullet_fnt,a0
@@ -1011,9 +1011,9 @@ RE_BACKUP	equ	4
 #loop
 	callr	bounds_check
 	move	a0,a0
-	jrnz	#hit_wall
+	jrnz	hit_wall
 	SLEEPK	1
-	jruc	#loop
+	jruc	loop
 
 #hit_wall
 	;zoinks!  We've hit a wall. back up to be flush against it.
@@ -1023,12 +1023,12 @@ RE_BACKUP	equ	4
 	subk	2,a2
 
 	move	*a8(OXVEL),a0,L
-	jrz	#y_adjust
-	jrn	#neg_xvel
+	jrz	y_adjust
+	jrn	neg_xvel
 	move	*a8(OXPOS),a0,W
 	sub	a2,a0
 	move	a0,*a8(OXPOS),W
-	jruc	#y_adjust
+	jruc	y_adjust
 #neg_xvel
 	move	*a8(OXPOS),a0,W
 	add	a2,a0
@@ -1036,12 +1036,12 @@ RE_BACKUP	equ	4
 
 #y_adjust
 	move	*a8(OYVEL),a0,L
-	jrz	#kill_bullet
-	jrn	#neg_yvel
+	jrz	kill_bullet
+	jrn	neg_yvel
 	move	*a8(OYPOS),a0,W
 	sub	a2,a0
 	move	a0,*a8(OYPOS),W
-	jruc	#kill_bullet
+	jruc	kill_bullet
 #neg_yvel
 	move	*a8(OYPOS),a0,W
 	add	a2,a0
@@ -1092,7 +1092,7 @@ RE_BACKUP	equ	4
 #bstart_dadj	equ	8
 
 
-#*****************************************************************************
+******************************************************************************
 ******************************************************************************
 ******************************************************************************
 *
@@ -1107,7 +1107,7 @@ RE_BACKUP	equ	4
  SUBRP	make_grunts
 
 	move	a0,a0
-	jrz	#done
+	jrz	done
 
 #another_grunt
 	PUSHP	a0
@@ -1131,14 +1131,14 @@ RE_BACKUP	equ	4
 	jrle	#place_grunt
 	cmpi	#mid_y2,a10
 	jrge	#place_grunt
-	jruc	#get_pos
+	jruc	get_pos
 
 #place_grunt
 	;assign a random starting position
 	move	a2,a11
 	CREATE	GRUNT_PID,grunt
 	PULLP	a0
-	dsj	a0,#another_grunt
+	dsj	a0,another_grunt
 
 #done
 	rets
@@ -1155,7 +1155,7 @@ RE_BACKUP	equ	4
 #mid_y2	equ	138+60
 
 
-#*****************************************************************************
+******************************************************************************
 *
 *	grunt process
 *
@@ -1213,21 +1213,21 @@ RE_BACKUP	equ	4
 #loop
 	move	*a13(#ACCEL_TIMER),a14,W
 	dec	a14
-	jrnz	#no_accel
+	jrnz	no_accel
 
 	movi	#acceleration,a14
 	cmpi	#top_speed,a9
-	jreq	#no_accel
+	jreq	no_accel
 	dec	a9
 
 #no_accel
 	move	a14,*a13(#ACCEL_TIMER),W
 	SLEEPK	1
 
-	dsj	a10,#loop
+	dsj	a10,loop
 	callr	#move_grunt
 	move	a9,a10
-	jruc	#loop
+	jruc	loop
 
 #die
 	;we've croaked
@@ -1242,10 +1242,10 @@ RE_BACKUP	equ	4
 
 #dieloop
 	move	*a9+,a0,L
-	jrz	#dead_n_buried
+	jrz	dead_n_buried
 	calla	civanic
 	sleepk	#death_speed
-	jruc	#dieloop
+	jruc	dieloop
 
 #dead_n_buried
 	calla	DELOBJA8
@@ -1264,49 +1264,49 @@ RE_BACKUP	equ	4
 	move	*a14(OXPOS),a0,W
 	move	*a8(OXPOS),a1,W
 	sub	a1,a0
-	jrz	#done_movex
-	jrn	#move_left
-	jruc	#move_right
+	jrz	done_movex
+	jrn	move_left
+	jruc	move_right
 
 #move_left
 	move	*a8(OXPOS),a1,W
 	addi	-#xmotion_inc,a1
 	move	a1,*a8(OXPOS),W
-	jruc	#done_movex
+	jruc	done_movex
 
 #move_right
 	move	*a8(OXPOS),a1,W
 	addi	#xmotion_inc,a1
 	move	a1,*a8(OXPOS),W
-	jruc	#done_movex
+	jruc	done_movex
 
 #done_movex
 
 	move	*a14(OYPOS),a0,W
 	move	*a8(OYPOS),a1,W
 	sub	a1,a0
-	jrz	#done_movey
-	jrn	#move_up
-	jruc	#move_down
+	jrz	done_movey
+	jrn	move_up
+	jruc	move_down
 
 #move_up
 	move	*a8(OYPOS),a1,W
 	addi	-#ymotion_inc,a1
 	move	a1,*a8(OYPOS),W
-	jruc	#done_movey
+	jruc	done_movey
 
 #move_down
 	move	*a8(OYPOS),a1,W
 	addi	#ymotion_inc,a1
 	move	a1,*a8(OYPOS),W
-	jruc	#done_movey
+	jruc	done_movey
 
 #done_movey
 
 	;step through the animation
 	inc	a11
 	cmpi	4,a11
-	jrne	#no_wrap
+	jrne	no_wrap
 	clr	a11
 
 #no_wrap
@@ -1336,26 +1336,26 @@ RE_BACKUP	equ	4
 	move	a14,*a8(OID),W
 
 	move	*a0(OXVEL),a14,L
-	jrz	#vert_bullet
+	jrz	vert_bullet
 	move	*a0(OYVEL),a1,L
-	jrz	#horz_bullet
+	jrz	horz_bullet
 
 	add	a1,a14
-	jrz	#diag_13
-	jruc	#diag_24
+	jrz	diag_13
+	jruc	diag_24
 
 #horz_bullet
 	movi	#die_vert,a14
-	jruc	#death_set
+	jruc	death_set
 #vert_bullet
 	movi	#die_horz,a14
-	jruc	#death_set
+	jruc	death_set
 #diag_13
 	movi	#die_diag24,a14
-	jruc	#death_set
+	jruc	death_set
 #diag_24
 	movi	#die_diag13,a14
-	jruc	#death_set
+	jruc	death_set
 
 #death_set
 
@@ -1453,7 +1453,7 @@ RE_BACKUP	equ	4
 
 #grunt_points	equ	100		;points for killing a grunt
 
-#*****************************************************************************
+******************************************************************************
 ******************************************************************************
 ******************************************************************************
 *
@@ -1467,7 +1467,7 @@ RE_BACKUP	equ	4
  SUBRP	make_posts
 
 	move	a0,a9		;move the inputs to safer spots
-	jrz	#done
+	jrz	done
 
 	move	a1,a10		;type
 
@@ -1495,7 +1495,7 @@ RE_BACKUP	equ	4
 	jrle	#place_post
 	cmpi	#mid_y2,a1
 	jrge	#place_post
-	jruc	#get_pos
+	jruc	get_pos
 
 #place_post
 	sla	16,a0			;X pos
@@ -1523,7 +1523,7 @@ RE_BACKUP	equ	4
 	calla	pal_getf
 	move	a0,*a8(OPAL),W
 
-	dsj	a9,#another_post
+	dsj	a9,another_post
 
 #done
 	rets
@@ -1570,10 +1570,10 @@ RE_BACKUP	equ	4
 	move	a14,*a8(OCTRL),W
 #kploop
 	move	*a9+,a0,L
-	jrz	#kpdone
+	jrz	kpdone
 	calla	civanic
 	SLEEPK	#die_speed
-	jruc	#kploop
+	jruc	kploop
 
 #kpdone
 	calla	DELOBJA8
@@ -1623,7 +1623,7 @@ RE_BACKUP	equ	4
 	.long	triangle_1,triangle_2,triangle_3,0
 
 
-#*****************************************************************************
+******************************************************************************
 ******************************************************************************
 ******************************************************************************
 *
@@ -1645,40 +1645,40 @@ RE_BACKUP	equ	4
 
 	;first make the moms
 	move	a0,a0
-	jrz	#skip_moms
+	jrz	skip_moms
 #mom_loop
 	PUSHP	a0,a1,a2
 	callr	#rand_position
 	movi	ROBJ_MOM,a9
 	CREATE	HUMAN_PID,human
 	PULLP	a0,a1,a2
-	dsj	a0,#mom_loop
+	dsj	a0,mom_loop
 
 #skip_moms
 
 	;dads
 	move	a1,a1
-	jrz	#skip_dads
+	jrz	skip_dads
 #dad_loop
 	PUSHP	a1,a2
 	callr	#rand_position
 	movi	ROBJ_DAD,a9
 	CREATE	HUMAN_PID,human
 	PULLP	a1,a2
-	dsj	a1,#dad_loop
+	dsj	a1,dad_loop
 
 #skip_dads
 
 	;kids
 	move	a2,a2
-	jrz	#skip_kids
+	jrz	skip_kids
 #kid_loop
 	PUSHP	a2
 	callr	#rand_position
 	movi	ROBJ_KID,a9
 	CREATE	HUMAN_PID,human
 	PULLP	a2
-	dsj	a2,#kid_loop
+	dsj	a2,kid_loop
 
 #skip_kids
 	rets
@@ -1723,25 +1723,25 @@ RE_BACKUP	equ	4
  SUBRP	human
 
 	cmpi	ROBJ_MOM,a9
-	jreq	#init_mom
+	jreq	init_mom
 	cmpi	ROBJ_DAD,a9
-	jreq	#init_dad
+	jreq	init_dad
 	cmpi	ROBJ_KID,a9
-	jreq	#init_kid
+	jreq	init_kid
 
 	LOCKUP	;bad objid
 
 #init_mom
 	movi	#mom_table,a9
-	jruc	#make_obj
+	jruc	make_obj
 
 #init_dad
 	movi	#dad_table,a9
-	jruc	#make_obj
+	jruc	make_obj
 
 #init_kid
 	movi	#kid_table,a9
-	jruc	#make_obj
+	jruc	make_obj
 
 #make_obj
 	;cweate a widdle people object
@@ -1772,9 +1772,9 @@ RE_BACKUP	equ	4
 	callr	#rand_dirchange
 	callr	#move_onestep
 	move	a0,a0
-	jrnz	#hit_wall
+	jrnz	hit_wall
 	callr	#advance_frame
-	jruc	#move_loop
+	jruc	move_loop
 
 #hit_wall
 	;sleep first because: If you move and bump into both a wall and a
@@ -1786,12 +1786,12 @@ RE_BACKUP	equ	4
 	SLEEPK	1
 	callr	#reverse_direction
 	callr	#advance_frame
-	jruc	#move_loop
+	jruc	move_loop
 
 #hit_post
 	callr	post_adjust
 	callr	#advance_frame
-	jruc	#move_loop
+	jruc	move_loop
 
 #saved
 	;sound
@@ -1823,7 +1823,7 @@ RE_BACKUP	equ	4
 
 	SLEEP	120
 	calla	DELOBJA8
-	jruc	#done
+	jruc	done
 
 #killed
 	movi	skull,a0
@@ -1831,7 +1831,7 @@ RE_BACKUP	equ	4
 
 	SLEEP	120
 	calla	DELOBJA8
-;	jruc	#done		;fall through
+;	jruc	done		;fall through
 
 #done
 	DIE
@@ -1859,8 +1859,8 @@ RE_BACKUP	equ	4
 	X32	a2
 	addi	#walk_increments,a2
 	move	*a2+,a3,W	;y vel
-	jrn	#yvel_neg
-	jrz	#yvel_zero
+	jrn	yvel_neg
+	jrz	yvel_zero
 
 #yvel_pos
 	move	*a7(OYPOS),a1
@@ -1868,22 +1868,22 @@ RE_BACKUP	equ	4
 	add	a14,a1
 	move	*a8(OYPOS),a14
 	sub	a14,a1
-	jruc	#do_xvel
+	jruc	do_xvel
 #yvel_zero
 	movi	100h,a1
-	jruc	#do_xvel
+	jruc	do_xvel
 #yvel_neg
 	move	*a8(OYPOS),a1
 	move	*a8(OSIZEY),a14
 	add	a14,a1
 	move	*a7(OYPOS),a14
 	sub	a14,a1
-;	jruc	#do_xvel
+;	jruc	do_xvel
 
 #do_xvel
 	move	*a2,a3,W	;x vel
-	jrn	#xvel_neg
-	jrz	#xvel_zero
+	jrn	xvel_neg
+	jrz	xvel_zero
 
 #xvel_pos
 	move	*a7(OXPOS),a0
@@ -1891,17 +1891,17 @@ RE_BACKUP	equ	4
 	add	a14,a0
 	move	*a8(OXPOS),a14
 	sub	a14,a0
-	jruc	#ovlap_done
+	jruc	ovlap_done
 #xvel_zero
 	movi	100h,a0
-	jruc	#ovlap_done
+	jruc	ovlap_done
 #xvel_neg
 	move	*a8(OXPOS),a0
 	move	*a8(OSIZEX),a14
 	add	a14,a0
 	move	*a7(OXPOS),a14
 	sub	a14,a0
-;	jruc	#ovlap_done
+;	jruc	ovlap_done
 
 #ovlap_done
 	;a0 and a1 are the X and Y overlaps, respectively.  We need only
@@ -2021,7 +2021,7 @@ RE_BACKUP	equ	4
 	movi	#dirchange_chance,a0
 	calla	RNDRNG0
 	move	a0,a0
-	jrnz	#dirchange_done
+	jrnz	dirchange_done
 	movi	7,a0
 	calla	RNDRNG0
 	inc	a0
@@ -2053,7 +2053,7 @@ RE_BACKUP	equ	4
 	;advance the frame and set the new image
 	inc	a11
 	cmpi	4,a11
-	jrne	#no_wrap
+	jrne	no_wrap
 	;wraparound.  reset to start
 	clr	a11
 
@@ -2256,7 +2256,7 @@ RE_BACKUP	equ	4
 #saved_tablex
 
 
-#*****************************************************************************
+******************************************************************************
 ******************************************************************************
 ******************************************************************************
 *
@@ -2269,7 +2269,7 @@ RE_BACKUP	equ	4
  SUBRP	make_hulks
 
 	move	a0,a0
-	jrz	#done
+	jrz	done
 
 #another_hulk
 	PUSHP	a0
@@ -2293,13 +2293,13 @@ RE_BACKUP	equ	4
 	jrle	#place_hulk
 	cmpi	#mid_y2,a10
 	jrge	#place_hulk
-	jruc	#get_pos
+	jruc	get_pos
 
 #place_hulk
 	;assign a random starting position
 	CREATE	HULK_PID,hulk
 	PULLP	a0
-	dsj	a0,#another_hulk
+	dsj	a0,another_hulk
 
 #done
 	rets
@@ -2316,7 +2316,7 @@ RE_BACKUP	equ	4
 #mid_y2	equ	138+50
 
 
-#*****************************************************************************
+******************************************************************************
 *
 *	hulk process
 *
@@ -2372,16 +2372,16 @@ RE_BACKUP	equ	4
 
 #loop
 	SLEEPK	1
-	dsj	a9,#loop
+	dsj	a9,loop
 	callr	#move_hulk
 	movi	#move_freq,a9
-	jruc	#loop
+	jruc	loop
 
 
 #been_shot	;we immediately wake up here if we've been hit and moved
 		; by a player bullet.
 	callr	#do_bounds_check
-	jruc	#loop
+	jruc	loop
 
 	DIE
 
@@ -2422,47 +2422,47 @@ RE_BACKUP	equ	4
 	clr	a0
 	move	*a8(OXPOS),a0,W
 	cmpi	#low_x,a0
-	jrlt	#too_left
+	jrlt	too_left
 	cmpi	#high_x,a0
 	jrgt	#too_right
-	jruc	#vert_check
+	jruc	vert_check
 
 #too_left
 	movi	#low_x,a14
 	move	a14,*A8(OXPOS),W
 	ori	M_HIT_LEFT,a1
-	jruc	#vert_check
+	jruc	vert_check
 
 #too_right
 	movi	#high_x,a14
 	move	a14,*A8(OXPOS),W
 	ori	M_HIT_RIGHT,a1
-;	jruc	#vert_check
+;	jruc	vert_check
 
 #vert_check
 	clr	a0
 	move	*a8(OYPOS),a0,W
 	cmpi	#low_y,a0
-	jrlt	#too_high
+	jrlt	too_high
 	cmpi	#high_y,a0
 	jrgt	#too_low
-	jruc	#done_boundcheck
+	jruc	done_boundcheck
 
 #too_high
 	movi	#low_y,a14
 	move	a14,*A8(OYPOS),W
 	ori	M_HIT_TOP,a1
-	jruc	#done_boundcheck
+	jruc	done_boundcheck
 
 #too_low
 	movi	#high_y,a14
 	move	a14,*A8(OYPOS),W
 	ori	M_HIT_BOTTOM,a1
-	jruc	#done_boundcheck
+	jruc	done_boundcheck
 
 #done_boundcheck
 	move	a1,a1
-	jrnz	#change_direction
+	jrnz	change_direction
 
 #no_wallhit
 	movi	#turn_prob,a0
@@ -2470,10 +2470,10 @@ RE_BACKUP	equ	4
 	calla	RNDRNG0
 	PULL	a1
 	move	a0,a0
-	jrnz	#done_moving
+	jrnz	done_moving
 
 	;spontaneous direction change.  random for now
-;	jruc	#change_direction	;fall through
+;	jruc	change_direction	;fall through
 
 #change_direction
 	;turn 90 degrees by randomly incrementing or decrementing direction
@@ -2482,51 +2482,51 @@ RE_BACKUP	equ	4
 	calla	RNDRNG0
 	PULL	a1
 	move	a0,a0
-	jrz	#inc_direction
+	jrz	inc_direction
 	dec	a11
-	jruc	#dir_rangecheck
+	jruc	dir_rangecheck
 	
 #inc_direction
 	inc	a11
 
 #dir_rangecheck
 	cmpi	-1,a11
-	jrne	#dir_notlow
+	jrne	dir_notlow
 	movi	3,a11
 
 #dir_notlow
 	cmpi	4,a11
-	jrne	#dir_changed
+	jrne	dir_changed
 	clr	a11
 
 #dir_changed
 
 	;verify that this is a good direction
 	cmpi	0,a11
-	jreq	#validate_up
+	jreq	validate_up
 	cmpi	1,a11
-	jreq	#validate_right
+	jreq	validate_right
 	cmpi	2,a11
-	jreq	#validate_down
+	jreq	validate_down
 	cmpi	3,a11
-	jreq	#validate_left
+	jreq	validate_left
 
 #validate_up
 	andi	M_HIT_TOP,a1
-	jrnz	#change_direction
-	jruc	#valid_dir
+	jrnz	change_direction
+	jruc	valid_dir
 #validate_right
 	andi	M_HIT_RIGHT,a1
-	jrnz	#change_direction
-	jruc	#valid_dir
+	jrnz	change_direction
+	jruc	valid_dir
 #validate_down
 	andi	M_HIT_BOTTOM,a1
-	jrnz	#change_direction
-	jruc	#valid_dir
+	jrnz	change_direction
+	jruc	valid_dir
 #validate_left
 	andi	M_HIT_LEFT,a1
-	jrnz	#change_direction
-	jruc	#valid_dir
+	jrnz	change_direction
+	jruc	valid_dir
 
 #valid_dir
 
@@ -2543,7 +2543,7 @@ RE_BACKUP	equ	4
 	move	*a13(#PD_SCRIPT),a6,L
 	inc	a14
 	cmpi	4,a14
-	jrne	#no_wrap
+	jrne	no_wrap
 	clr	a14
 #no_wrap
 	move	a14,*a13(#PD_FRAME_NDX),W
@@ -2642,7 +2642,7 @@ RE_BACKUP	equ	4
 #anim_rightx
 
 
-#*****************************************************************************
+******************************************************************************
 ******************************************************************************
 ******************************************************************************
 *
@@ -2655,7 +2655,7 @@ RE_BACKUP	equ	4
  SUBRP	make_sphereoids
 
 	move	a0,a0
-	jrz	#done
+	jrz	done
 
 #another_sphereoid
 	PUSHP	a0
@@ -2679,13 +2679,13 @@ RE_BACKUP	equ	4
 	jrle	#place_sphereoid
 	cmpi	#mid_y2,a10
 	jrge	#place_sphereoid
-	jruc	#get_pos
+	jruc	get_pos
 
 #place_sphereoid
 	;assign a random starting position
 	CREATE	SPHEREOID_PID,sphereoid
 	PULLP	a0
-	dsj	a0,#another_sphereoid
+	dsj	a0,another_sphereoid
 
 #done
 	rets
@@ -2757,18 +2757,18 @@ RE_BACKUP	equ	4
 	SLEEPK	1
 	PULLP	a7
 	dec	a9
-	jrnz	#no_anim
+	jrnz	no_anim
 
 	;advance the frame
 	move	*a10+,a0,L
-	jrnz	#newframe
+	jrnz	newframe
 
 	;reset script.  depends on the stage
 	move	*a13(#OSTAGE),a14,W
 	cmpi	#STAGE_PARENT,a14
-	jreq	#set_parent_script
+	jreq	set_parent_script
 	movi	#standard_script,a10
-	jruc	#script_set
+	jruc	script_set
 #set_parent_script
 	movi	#parent_script,a10
 
@@ -2790,23 +2790,23 @@ RE_BACKUP	equ	4
 
 	;adjust vel and acc if it's time
 	dec	a11
-	jrnz	#no_va_change
+	jrnz	no_va_change
 	callr	#set_va
 
 #no_va_change
 
 	;do event?
 	dec	a7
-	jrnz	#no_event
+	jrnz	no_event
 
 	;event.  depends on the stage in the life cycle
 	move	*a13(#OSTAGE),a14,W
 	cmpi	#STAGE_YOUTH,a14
-	jreq	#youth_event
+	jreq	youth_event
 	cmpi	#STAGE_PARENT,a14
-	jreq	#parent_event
+	jreq	parent_event
 	;default
-	jruc	#dotage_event
+	jruc	dotage_event
 
 #youth_event
 	;switch to middle age
@@ -2824,7 +2824,7 @@ RE_BACKUP	equ	4
 	calla	RNDRNG0
 	addi	#spawn_time*3/4,a0
 	move	a0,a7
-	jruc	#no_event
+	jruc	no_event
 
 #parent_event
 	;spawn a brat
@@ -2837,27 +2837,27 @@ RE_BACKUP	equ	4
 	;decrement the kid count
 	move	*a13(#OCHILDREN),a14,W
 	dec	a14
-	jrz	#barren
+	jrz	barren
 	move	a14,*a13(#OCHILDREN),W
 	movi	#spawn_time/2,a0
 	calla	RNDRNG0
 	addi	#spawn_time*3/4,a0
 	move	a0,a7
-	jruc	#no_event
+	jruc	no_event
 
 #barren
 	;that was the last kid.  age
 	movi	#STAGE_DOTAGE,a14
 	move	a14,*a13(#OSTAGE),W
 	movi	#old_age_time,a7
-	jruc	#no_event
+	jruc	no_event
 
 #dotage_event
 	;nothing fancy.  just die.
-	jruc	#die_peacefully
+	jruc	die_peacefully
 	
 #no_event
-	jruc	#loop
+	jruc	loop
 
 #been_shot
 	;crud.  we've been shot.  score the points
@@ -2889,9 +2889,9 @@ RE_BACKUP	equ	4
 #die_loop
 	SLEEPK	#anim_speed
 	move	*a10+,a0,L
-	jrz	#score_msg
+	jrz	score_msg
 	calla	civanic
-	jruc	#die_loop
+	jruc	die_loop
 
 #score_msg
 	movi	#score_image,a0
@@ -2904,7 +2904,7 @@ RE_BACKUP	equ	4
 	movi	#score_yoff,a14	
 	move	a14,*a8(ODYOFF),W
 	SLEEP	#score_time
-	jruc	#expire
+	jruc	expire
 
 #die_peacefully
 	;decrement the badguy count
@@ -2967,12 +2967,12 @@ RE_BACKUP	equ	4
 	move	*a8(OXPOS),a14,W
 	movi	#min_x,a0
 	cmp	a0,a14
-	jrlt	#x_adjust
+	jrlt	x_adjust
 
 	movi	#max_x,a0
 	cmp	a0,a14
 	jrgt	#x_adjust
-	jruc	#y_check
+	jruc	y_check
 
 #x_adjust
 	move	a0,*a8(OXPOS),W
@@ -2984,12 +2984,12 @@ RE_BACKUP	equ	4
 	move	*a8(OYPOS),a14,W
 	movi	#min_y,a0
 	cmp	a0,a14
-	jrlt	#y_adjust
+	jrlt	y_adjust
 
 	movi	#max_y,a0
 	cmp	a0,a14
 	jrgt	#y_adjust
-	jruc	#done_check
+	jruc	done_check
 
 #y_adjust
 	move	a0,*a8(OYPOS),W
@@ -3077,7 +3077,7 @@ RE_BACKUP	equ	4
 	.long	0
 
 
-#*****************************************************************************
+******************************************************************************
 ******************************************************************************
 ******************************************************************************
 *
@@ -3123,9 +3123,9 @@ RE_BACKUP	equ	4
 #grow_loop
 	SLEEPK	#grow_speed
 	move	*a10+,a0,L
-	jrz	#mf_phase
+	jrz	mf_phase
 	calla	civanic
-	jruc	#grow_loop
+	jruc	grow_loop
 
 #mf_phase
 	;begin move/fire phase.  set initial course
@@ -3139,65 +3139,65 @@ RE_BACKUP	equ	4
 #main_loop
 	SLEEPK	1
 	dec	a9
-	jrnz	#no_turn
+	jrnz	no_turn
 
 
 	;picket phase
 	;two cases: we're on picket duty, or we're not.
 	move	@picket_duty,a14,L
 	cmp	a14,a8
-	jreq	#on_picket
+	jreq	on_picket
 
 	;we're not on picket duty
 	;if we're the only enforcer, quit now.
 	move	@num_enforcers,a14,W
 	cmpi	1,a14
-	jreq	#picket_done
+	jreq	picket_done
 
 	;there are multiple enforcers.   If there is no picket, see if we
 	; take the job.  If there is, quit.
 	move	@picket_duty,a14,L
-	jrnz	#picket_done
+	jrnz	picket_done
 
 	;there is no picket.
 	movi	#picket_prob,a0
 	calla	RNDRNG0
 	move	a0,a0
-	jrnz	#picket_done
+	jrnz	picket_done
 
 	;we're going to take picket duty
 	move	a8,@picket_duty,L
-	jruc	#picket_done
+	jruc	picket_done
 
 #on_picket
 	;we are on picket duty
 	;if we're the only enforcer, see if we leave picket mode.
 	move	@num_enforcers,a14,W
 	cmpi	1,a14
-	jrne	#multiple_enforcers
+	jrne	multiple_enforcers
 
 	;we're the only enforcer
 	movi	#stand_down_prob,a0
 	calla	RNDRNG0
 	move	a0,a0
-	jrnz	#picket_done
+	jrnz	picket_done
 
 	;and we've decided to stand down.
 ;	clr	a0	;unneccesary.  it's already 0 from above.
 	move	a0,@picket_duty,L
-	jruc	#picket_done
+	jruc	picket_done
 
 #multiple_enforcers
 	;we may abandon our post
 	movi	#abandon_post_prob,a0
 	calla	RNDRNG0
 	move	a0,a0
-	jrnz	#picket_done
+	jrnz	picket_done
 
 	;yep.  we quit.
 ;	clr	a0	;unneccesary.  it's already 0 from above.
 	move	a0,@picket_duty,L
-;	jruc	#picket_done
+;	jruc	picket_done
 
 #picket_done
 
@@ -3208,7 +3208,7 @@ RE_BACKUP	equ	4
 #no_turn
 
 	dec	a11
-	jrnz	#no_shot
+	jrnz	no_shot
 
 	;fire a spark
 	PUSHP	a10
@@ -3226,7 +3226,7 @@ RE_BACKUP	equ	4
 	;bounds check
 	callr	#in_bounds
 
-	jruc	#main_loop
+	jruc	main_loop
 
 #die
 	;decrement the badguy count
@@ -3245,10 +3245,10 @@ RE_BACKUP	equ	4
 	;set up the animation
 #dieloop
 	move	*a9+,a0,L
-	jrz	#dead_n_buried
+	jrz	dead_n_buried
 	calla	civanic
 	sleepk	#death_speed
-	jruc	#dieloop
+	jruc	dieloop
 
 #dead_n_buried
 	calla	DELOBJA8
@@ -3261,13 +3261,13 @@ RE_BACKUP	equ	4
 	;two cases.  picket or !picket
 	move	@picket_duty,a14,L
 	cmp	a8,a14
-	jrne	#nc_notpicket
+	jrne	nc_notpicket
 
 #nc_picket
 	;we're on picket duty.  if we're not against a wall, move toward the
 	; nearest one.  if we are against a wall but not in a corner, move
 	; toward the nearest corner.  if we're in a corner, sit tight.
-;	jruc	#nc_done
+;	jruc	nc_done
 
 #nc_notpicket
 	;velocity is the distance between enforcer and player / 64 / 2
@@ -3293,12 +3293,12 @@ RE_BACKUP	equ	4
 	move	*a8(OXPOS),a14,W
 	movi	#min_x,a0
 	cmp	a0,a14
-	jrlt	#x_adjust
+	jrlt	x_adjust
 
 	movi	#max_x,a0
 	cmp	a0,a14
 	jrgt	#x_adjust
-	jruc	#y_check
+	jruc	y_check
 
 #x_adjust
 	move	a0,*a8(OXPOS),W
@@ -3309,12 +3309,12 @@ RE_BACKUP	equ	4
 	move	*a8(OYPOS),a14,W
 	movi	#min_y,a0
 	cmp	a0,a14
-	jrlt	#y_adjust
+	jrlt	y_adjust
 
 	movi	#max_y,a0
 	cmp	a0,a14
 	jrgt	#y_adjust
-	jruc	#done_check
+	jruc	done_check
 
 #y_adjust
 	move	a0,*a8(OYPOS),W
@@ -3339,26 +3339,26 @@ RE_BACKUP	equ	4
 	move	a14,*a8(OID),W
 
 	move	*a0(OXVEL),a14,L
-	jrz	#vert_bullet
+	jrz	vert_bullet
 	move	*a0(OYVEL),a1,L
-	jrz	#horz_bullet
+	jrz	horz_bullet
 
 	add	a1,a14
-	jrz	#diag_13
-	jruc	#diag_24
+	jrz	diag_13
+	jruc	diag_24
 
 #horz_bullet
 	movi	#die_vert,a9
-	jruc	#death_set
+	jruc	death_set
 #vert_bullet
 	movi	#die_horz,a9
-	jruc	#death_set
+	jruc	death_set
 #diag_13
 	movi	#die_diag24,a9
-	jruc	#death_set
+	jruc	death_set
 #diag_24
 	movi	#die_diag13,a9
-	jruc	#death_set
+	jruc	death_set
 
 #death_set
 	move	*a8(OPLINK),a0,L
@@ -3447,7 +3447,7 @@ RE_BACKUP	equ	4
 #death_speed	equ	3		;death seq anim speed
 
 
-#*****************************************************************************
+******************************************************************************
 ******************************************************************************
 ******************************************************************************
 *
@@ -3524,10 +3524,10 @@ RE_BACKUP	equ	4
 	move	a14,*a8(OYVEL),L
 
 	dec	a9
-	jrnz	#no_anim
+	jrnz	no_anim
 
 	move	*a10+,a0,L
-	jrnz	#no_wrap
+	jrnz	no_wrap
 	movi	#script,a10
 	move	*a10+,a0,L
 #no_wrap
@@ -3536,8 +3536,8 @@ RE_BACKUP	equ	4
 
 #no_anim
 	dec	a11
-	jrz	#expire
-	jruc	#loop
+	jrz	expire
+	jruc	loop
 
 #expire
 	calla	DELOBJA8
@@ -3550,12 +3550,12 @@ RE_BACKUP	equ	4
 	move	*a8(OXPOS),a14,W
 	movi	#min_x,a0
 	cmp	a0,a14
-	jrlt	#x_adjust
+	jrlt	x_adjust
 
 	movi	#max_x,a0
 	cmp	a0,a14
 	jrgt	#x_adjust
-	jruc	#y_check
+	jruc	y_check
 
 #x_adjust
 	move	a0,*a8(OXPOS),W
@@ -3566,12 +3566,12 @@ RE_BACKUP	equ	4
 	move	*a8(OYPOS),a14,W
 	movi	#min_y,a0
 	cmp	a0,a14
-	jrlt	#y_adjust
+	jrlt	y_adjust
 
 	movi	#max_y,a0
 	cmp	a0,a14
 	jrgt	#y_adjust
-	jruc	#done_check
+	jruc	done_check
 
 #y_adjust
 	move	a0,*a8(OYPOS),W
@@ -3624,7 +3624,7 @@ RE_BACKUP	equ	4
 	.long	0
 
 
-#*****************************************************************************
+******************************************************************************
 ******************************************************************************
 ******************************************************************************
 *
@@ -3637,7 +3637,7 @@ RE_BACKUP	equ	4
  SUBRP	make_quarks
 
 	move	a0,a0
-	jrz	#done
+	jrz	done
 
 #another_quark
 	PUSHP	a0
@@ -3662,12 +3662,12 @@ RE_BACKUP	equ	4
 	jrle	#place_quark
 	cmpi	#mid_y2,a10
 	jrge	#place_quark
-	jruc	#get_pos
+	jruc	get_pos
 
 #place_quark
 	CREATE	QUARK_PID,quark
 	PULLP	a0
-	dsj	a0,#another_quark
+	dsj	a0,another_quark
 
 #done
 	rets
@@ -3734,18 +3734,18 @@ RE_BACKUP	equ	4
 	SLEEPK	1
 	PULLP	a7
 	dec	a9
-	jrnz	#no_anim
+	jrnz	no_anim
 
 	;advance the frame
 	move	*a10+,a0,L
-	jrnz	#newframe
+	jrnz	newframe
 
 	;reset script.  depends on the stage
 	move	*a13(#OSTAGE),a14,W
 	cmpi	#STAGE_PARENT,a14
-	jreq	#set_parent_script
+	jreq	set_parent_script
 	movi	#standard_script,a10
-	jruc	#script_set
+	jruc	script_set
 #set_parent_script
 	movi	#parent_script,a10
 
@@ -3764,23 +3764,23 @@ RE_BACKUP	equ	4
 
 	;adjust vel if it's time
 	dec	a11
-	jrnz	#no_v_change
+	jrnz	no_v_change
 	callr	#set_v
 
 #no_v_change
 
 	;do event?
 	dec	a7
-	jrnz	#no_event
+	jrnz	no_event
 
 	;event.  depends on the stage in the life cycle
 	move	*a13(#OSTAGE),a14
 	cmpi	#STAGE_YOUTH,a14
-	jreq	#youth_event
+	jreq	youth_event
 	cmpi	#STAGE_PARENT,a14
-	jreq	#parent_event
+	jreq	parent_event
 	;default
-	jruc	#dotage_event
+	jruc	dotage_event
 
 #youth_event
 	;switch to middle age
@@ -3795,7 +3795,7 @@ RE_BACKUP	equ	4
 
 	;set the spawn timer
 	movi	#spawn_time,a7
-	jruc	#no_event
+	jruc	no_event
 
 #parent_event
 	;spawn a brat
@@ -3808,24 +3808,24 @@ RE_BACKUP	equ	4
 	;decrement the kid count
 	move	*a13(#OCHILDREN),a14,W
 	dec	a14
-	jrz	#barren
+	jrz	barren
 	move	a14,*a13(#OCHILDREN),W
 	movi	#spawn_time,a7
-	jruc	#no_event
+	jruc	no_event
 
 #barren
 	;that was the last kid.  age
 	movi	#STAGE_DOTAGE,a14
 	move	a14,*a13(#OSTAGE),W
 	movi	#old_age_time,a7
-	jruc	#no_event
+	jruc	no_event
 
 #dotage_event
 	;nothing fancy.  just die.
-	jruc	#die_peacefully
+	jruc	die_peacefully
 	
 #no_event
-	jruc	#loop
+	jruc	loop
 
 
 #been_shot
@@ -3880,7 +3880,7 @@ RE_BACKUP	equ	4
 	move	*a8(ODXOFF),a14,W
 	add	a14,a0
 	cmp	a0,a1
-	jrlt	#x_adjust
+	jrlt	x_adjust
 
 	move	*a8(OSIZEX),a0,W
 	neg	a0
@@ -3889,7 +3889,7 @@ RE_BACKUP	equ	4
 	addi	#max_x,a0
 	cmp	a0,a1
 	jrgt	#x_adjust
-	jruc	#y_check
+	jruc	y_check
 
 #x_adjust
 	move	a0,*a8(OXPOS),W
@@ -3903,7 +3903,7 @@ RE_BACKUP	equ	4
 	move	*a8(ODYOFF),a14,W
 	add	a14,a0
 	cmp	a0,a1
-	jrlt	#y_adjust
+	jrlt	y_adjust
 
 	move	*a8(OSIZEY),a0,W
 	neg	a0
@@ -3912,7 +3912,7 @@ RE_BACKUP	equ	4
 	addi	#max_y,a0
 	cmp	a0,a1
 	jrgt	#y_adjust
-	jruc	#done_check
+	jruc	done_check
 
 #y_adjust
 	move	a0,*a8(OYPOS),W
@@ -3991,7 +3991,7 @@ RE_BACKUP	equ	4
 	.long	0
 
 
-#*****************************************************************************
+******************************************************************************
 ******************************************************************************
 ******************************************************************************
 *
@@ -4035,9 +4035,9 @@ RE_BACKUP	equ	4
 #grow_loop
 	SLEEPK	#grow_speed
 	move	*a10+,a0,L
-	jrz	#mf_phase
+	jrz	mf_phase
 	calla	civanic
-	jruc	#grow_loop
+	jruc	grow_loop
 
 #mf_phase
 	;begin move/fire phase.  set initial course
@@ -4056,7 +4056,7 @@ RE_BACKUP	equ	4
 	SLEEPK	1
 	PULLP	a7
 	dec	a9
-	jrnz	#no_turn
+	jrnz	no_turn
 
 	;change course
 	callr	#set_v
@@ -4064,10 +4064,10 @@ RE_BACKUP	equ	4
 #no_turn
 
 	dec	a11
-	jrnz	#no_shot
+	jrnz	no_shot
 
 	move	*a13(#OSHOTS),a14,W
-	jrz	#no_shot
+	jrz	no_shot
 
 	;fire a shell
 	PUSHP	a7,a10,a11
@@ -4087,9 +4087,9 @@ RE_BACKUP	equ	4
 
 	;animate?
 	dec	a7
-	jrnz	#no_anim
+	jrnz	no_anim
 	move	*a10+,a0,L
-	jrnz	#no_wrap
+	jrnz	no_wrap
 	movi	#right_script,a10
 	move	*a10+,a0,L
 
@@ -4098,7 +4098,7 @@ RE_BACKUP	equ	4
 	movi	#anim_time,a7
 
 #no_anim
-	jruc	#main_loop
+	jruc	main_loop
 
 #die
 	;decrement the badguy count
@@ -4114,10 +4114,10 @@ RE_BACKUP	equ	4
 	;set up the animation
 #dieloop
 	move	*a9+,a0,L
-	jrz	#dead_n_buried
+	jrz	dead_n_buried
 	calla	civanic
 	sleepk	#death_speed
-	jruc	#dieloop
+	jruc	dieloop
 
 #dead_n_buried
 	calla	DELOBJA8
@@ -4160,12 +4160,12 @@ RE_BACKUP	equ	4
 	move	*a8(OXPOS),a14,W
 	movi	#min_x,a0
 	cmp	a0,a14
-	jrlt	#x_adjust
+	jrlt	x_adjust
 
 	movi	#max_x,a0
 	cmp	a0,a14
 	jrgt	#x_adjust
-	jruc	#y_check
+	jruc	y_check
 
 #x_adjust
 	move	a0,*a8(OXPOS),W
@@ -4177,12 +4177,12 @@ RE_BACKUP	equ	4
 	move	*a8(OYPOS),a14,W
 	movi	#min_y,a0
 	cmp	a0,a14
-	jrlt	#y_adjust
+	jrlt	y_adjust
 
 	movi	#max_y,a0
 	cmp	a0,a14
 	jrgt	#y_adjust
-	jruc	#done_check
+	jruc	done_check
 
 #y_adjust
 	move	a0,*a8(OYPOS),W
@@ -4208,26 +4208,26 @@ RE_BACKUP	equ	4
 	move	a14,*a8(OID),W
 
 	move	*a0(OXVEL),a14,L
-	jrz	#vert_bullet
+	jrz	vert_bullet
 	move	*a0(OYVEL),a1,L
-	jrz	#horz_bullet
+	jrz	horz_bullet
 
 	add	a1,a14
-	jrz	#diag_13
-	jruc	#diag_24
+	jrz	diag_13
+	jruc	diag_24
 
 #horz_bullet
 	movi	#die_vert,a9
-	jruc	#death_set
+	jruc	death_set
 #vert_bullet
 	movi	#die_horz,a9
-	jruc	#death_set
+	jruc	death_set
 #diag_13
 	movi	#die_diag24,a9
-	jruc	#death_set
+	jruc	death_set
 #diag_24
 	movi	#die_diag13,a9
-	jruc	#death_set
+	jruc	death_set
 
 #death_set
 	move	*a8(OPLINK),a0,L
@@ -4312,7 +4312,7 @@ RE_BACKUP	equ	4
 #death_speed	equ	3		;death seq anim speed
 
 
-#*****************************************************************************
+******************************************************************************
 ******************************************************************************
 ******************************************************************************
 *
@@ -4362,7 +4362,7 @@ RE_BACKUP	equ	4
 	;bounds check
 	callr	#in_bounds
 
-	dsj	a11,#loop
+	dsj	a11,loop
 
 #expire
 	calla	DELOBJA8
@@ -4375,12 +4375,12 @@ RE_BACKUP	equ	4
 	move	*a8(OXPOS),a14,W
 	movi	#min_x,a0
 	cmp	a0,a14
-	jrlt	#x_adjust
+	jrlt	x_adjust
 
 	movi	#max_x,a0
 	cmp	a0,a14
 	jrgt	#x_adjust
-	jruc	#y_check
+	jruc	y_check
 
 #x_adjust
 	move	a0,*a8(OXPOS),W
@@ -4392,12 +4392,12 @@ RE_BACKUP	equ	4
 	move	*a8(OYPOS),a14
 	movi	#min_y,a0
 	cmp	a0,a14
-	jrlt	#y_adjust
+	jrlt	y_adjust
 
 	movi	#max_y,a0
 	cmp	a0,a14
 	jrgt	#y_adjust
-	jruc	#done_check
+	jruc	done_check
 
 #y_adjust
 	move	a0,*a8(OYPOS),W
@@ -4441,7 +4441,7 @@ RE_BACKUP	equ	4
 #max_y	equ	231-7
 
 
-#*****************************************************************************
+******************************************************************************
 ******************************************************************************
 ******************************************************************************
 *
@@ -4534,7 +4534,7 @@ COLTAB_REDGOLD
 	.word	-1
 
 
-#*****************************************************************************
+******************************************************************************
 ******************************************************************************
 ******************************************************************************
 *
@@ -4554,14 +4554,14 @@ COLTAB_REDGOLD
 	SLEEPK	1
 	move	@robotron_score,a14,L
 	cmp	a11,a14
-	jrne	#score_change
-	jruc	#loop
+	jrne	score_change
+	jruc	loop
 
 #score_change
 	move	a14,a11
 	callr	#zorch_score
 	callr	#print_score
-	jruc	#loop
+	jruc	loop
 
 	DIE
 
@@ -4596,7 +4596,7 @@ COLTAB_REDGOLD
 
 ******************************************************************************
 * adds to score
-* >a0 amount to add
+* 0a0H amount to add
 
  SUBRP	score_points
 
@@ -4609,7 +4609,7 @@ COLTAB_REDGOLD
 #score_ypos	.equ	36
 #score_xpos	.equ	130
 
-#*****************************************************************************
+******************************************************************************
 ******************************************************************************
 ******************************************************************************
 *
@@ -4618,7 +4618,7 @@ COLTAB_REDGOLD
 
 ******************************************************************************
 * Draws the frame
-* >a0=color value
+* 0a0H=color value
 *
 
  SUBRP	draw_frame
@@ -4636,7 +4636,7 @@ COLTAB_REDGOLD
 
 #loop
 	move	*a11+,a0,L
-	jrz	#done
+	jrz	done
 	move	*a11+,a1,L
 	movi	#frame_image,a2
 	movi	100,a3				;z pos
@@ -4657,7 +4657,7 @@ COLTAB_REDGOLD
 	move	a9,*a8(OCONST),W
 	move	a10,*a8(OPAL),W
 
-	jruc	#loop
+	jruc	loop
 #done
 	rets
 
@@ -4682,7 +4682,7 @@ COLTAB_REDGOLD
 #frame_datax
 
 
-#*****************************************************************************
+******************************************************************************
 * Draws the wave indicator
 *
 
@@ -4731,7 +4731,7 @@ COLTAB_REDGOLD
 	move	a0,a2
 	srl	4,a2
 	andi	0Fh,a2
-	jrz	#done
+	jrz	done
 	X32	a2
 	addi	#wave_font,a2
 	movi	[#wave_tensx,0],a0		;x pos
@@ -4765,11 +4765,11 @@ COLTAB_REDGOLD
 	.long	rsmall_9
 #wave_fontx
 
-#*****************************************************************************
+******************************************************************************
 * Check to see if an object is completely on the playfield
 * a8=OBJ
-* >a0=walls hit (bit 0=top, 1=right, 2=bottom, 3=left)
-* >a2=degree of overlap (in pixels)
+* 0a0H=walls hit (bit 0=top, 1=right, 2=bottom, 3=left)
+* 0a2H=degree of overlap (in pixels)
 * Trashes scratch
 
  SUBRP	bounds_check
@@ -4787,7 +4787,7 @@ COLTAB_REDGOLD
 	movi	#low_y,a2
 	sub	a1,a2
 	ori	M_HIT_TOP,a0
-	jruc	#not_low		;assume won't be both high and low
+	jruc	not_low		;assume won't be both high and low
 
 #not_high
 	;check for hit bottom
@@ -4796,7 +4796,7 @@ COLTAB_REDGOLD
 	move	*a8(OSIZEY),a14		; to center the object.
 	add	a14,a1
 	cmpi	#high_y,a1
-	jrlt	#not_low
+	jrlt	not_low
 	move	a1,a2
 	subi	#high_y,a2
 	ori	M_HIT_BOTTOM,a0
@@ -4811,7 +4811,7 @@ COLTAB_REDGOLD
 	movi	#low_x,a3
 	sub	a1,a3
 	ori	M_HIT_LEFT,a0
-	jruc	#done			;assume won't be both right and left
+	jruc	done			;assume won't be both right and left
 
 #not_left
 	move	*a8(ODXOFF),a14
@@ -4819,7 +4819,7 @@ COLTAB_REDGOLD
 	move	*a8(OSIZEX),a14
 	add	a14,a1
 	cmpi	#high_x,a1
-	jrlt	#done
+	jrlt	done
 	move	a1,a3
 	subi	#high_x,a3
 	ori	M_HIT_RIGHT,a0
@@ -4827,7 +4827,7 @@ COLTAB_REDGOLD
 #done
 	;a2 is y overlap, a3 is x overlap.  a2 should be greatest of the two.
 	cmp	a2,a3
-	jrn	#retval_set
+	jrn	retval_set
 	move	a3,a2
 #retval_set
 	PULL	a1,a3
@@ -4852,7 +4852,7 @@ M_HIT_LEFT	equ	0008h
 M_HIT_RIGHT	equ	0002h
 
 
-#*****************************************************************************
+******************************************************************************
 * If ever both start buttons are down, this proc sets the robo_done flag
 * and dies.
 *
@@ -4863,10 +4863,10 @@ M_HIT_RIGHT	equ	0002h
 	SLEEPK	4		;no need to check EVERY frame
 	clr	a0
 	calla	get_start_cur
-	jrz	#loop
+	jrz	loop
 	movk	1,a0
 	calla	get_start_cur
-	jrz	#loop
+	jrz	loop
 
 	;both starts are down.
 	movk	1,a0
@@ -4874,7 +4874,7 @@ M_HIT_RIGHT	equ	0002h
 
 	DIE
 
-#*****************************************************************************
+******************************************************************************
 * Watches for wave advance/back up key combo.
 *
 
@@ -4883,17 +4883,17 @@ M_HIT_RIGHT	equ	0002h
 #loop
 	SLEEPK	4
 	calla	get_all_buttons_cur
-	jrz	#loop
+	jrz	loop
 
 	cmpi	1,a0
-	jreq	#back
+	jreq	back
 	cmpi	2,a0
-	jreq	#fwd
-	jruc	#loop
+	jreq	fwd
+	jruc	loop
 
 #back
 	move	a0,@backward
-	jruc	#done
+	jruc	done
 #fwd
 	move	a0,@forward
 
@@ -4903,7 +4903,7 @@ M_HIT_RIGHT	equ	0002h
 
 	.if DEBUG
 
-#*****************************************************************************
+******************************************************************************
 * Makes bog meters
 *
 
@@ -4957,7 +4957,7 @@ M_HIT_RIGHT	equ	0002h
 #loop
 	SLEEPK	2
 	move	@CPULEFT,a1
-	jrnz	#nobog
+	jrnz	nobog
 
 	;BOG!!
 	nop
@@ -4970,11 +4970,11 @@ M_HIT_RIGHT	equ	0002h
 
 	movi	0707h,a0
 	move	a0,*a10(OCONST)
-	jruc	#loop
+	jruc	loop
 #red
 	movi	0101h,a0
 	move	a0,*a10(OCONST)
-	jruc	#loop
+	jruc	loop
 
 	DIE
 
@@ -4982,7 +4982,7 @@ M_HIT_RIGHT	equ	0002h
 
 	.endif
 
-#*****************************************************************************
+******************************************************************************
 
 robotron_ascii
  .long 0,0,0,0,0,0,0,0								;$00
@@ -5002,10 +5002,10 @@ robotron_ascii
  .long rfont_p,rfont_q,rfont_r,rfont_s,rfont_t,rfont_u,rfont_v,rfont_w		;$70	p q r s t u v w
  .long rfont_x,rfont_y,rfont_z,0,0,0,0,0					;$78	x y z { | } ~
 
-#*****************************************************************************
+******************************************************************************
 *
 * Sound section
-* >a0 = snd call
+* 0a0H = snd call
 
 RS_GRUNT	.equ	0
 RS_DIE		.equ	1
@@ -5071,14 +5071,14 @@ robosnd_end
 
 	;old sound still going.  check for an override
 	TEST	a0
-	jrnz	#ng
+	jrnz	ng
 	move	@rs_snd,a14
-	jrz	#grxgr		;special grunt-overriding-grunt case
+	jrz	grxgr		;special grunt-overriding-grunt case
 
 #ng	move	@rs_pri,a14
 	cmp	a14,a1
 	jrge	#dosnd
-	jruc	#done
+	jruc	done
 
 #grxgr	;do new call if old one has 3 or fewer ticks to live
 	move	@rs_time,a14,L
@@ -5086,7 +5086,7 @@ robosnd_end
 	sub	a4,a14
 	cmpi	3,a4
 	jrle	#dosnd
-	jruc	#done
+	jruc	done
 
 #dosnd	calla	SNDSND
 	move	a0,@rs_snd

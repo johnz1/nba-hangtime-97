@@ -62,7 +62,7 @@
 	.def	W5ST1
 	.endif
 
-M_YF	.equ	>8000	;Y free (OFLAGS)
+M_YF	.equ	08000H	;Y free (OFLAGS)
 
 	.text
 

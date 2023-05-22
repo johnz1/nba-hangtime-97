@@ -224,17 +224,17 @@
 	andni	40h,a7				;clr HOME team bit
 
 	cmpi	5,a7				;default team pal. ?
-	jrne	#nrm				;yes
+	jrne	nrm				;yes
 	move	@team1,a7			;assume team 1
 	move	a8,a14
 	srl	1,a14
-	jrz	#tm1
+	jrz	tm1
 	move	@team2,a7
 #tm1
 	sll	5,a7
 	addi	team_city_tbl,a7
 	move	*a7,a7,L
-	jruc	#deflt
+	jruc	deflt
 #nrm
 	sll	5,a7
 	addi	ply_city_tbl,a7,L
@@ -324,17 +324,17 @@ mpat_9	setc
 mpat_9a	PULL	a7
 	rets
 
-#*******************************
+********************************
 * Set * to player attribute table
 * A8=Plyr #
 * A13=*Plyr process
-* >A10=*Attribute for uniform (ignores spechds)
+* 0A10H=*Attribute for uniform (ignores spechds)
 * Trashes scratch
 
  SUBR	plyr_getattributes
 
 	callr	setup_created_plyr_attrib_tbl
-	jrnc	#norm3			;br=create plyr. (built ram table)
+	jrnc	norm3			;br=create plyr. (built ram table)
 
 	move	a8,a0
 	sll	5,a0
@@ -351,11 +351,11 @@ mpat_9a	PULL	a7
 	movi	player_names,a10
 	move	*a2,a0			;get team nbr.
 ;DJT Start
-	jrz	#out3
+	jrz	out3
 #lp3
 	addi	NEXT_TEAM_NAMES,a10
 	dec	a0
-	jrnz	#lp3
+	jrnz	lp3
 ;DJT End
 #out3
 	move	*a2,a0			;get team nbr. again
@@ -374,7 +374,7 @@ mpat_9a	PULL	a7
 	inc	a10
 	move	*a14+,a1,L
 	cmp	a1,a0
-	jrnz	#lp4
+	jrnz	lp4
 
 	.if	HEADCK
 	.ref	debug_plyr_num
@@ -392,10 +392,10 @@ mpat_9a	PULL	a7
 ;addi 320 for each name
 	movi	ATL_t,a1
 #lp5	cmpi	0,a10
-	jrz	#out
+	jrz	out
 	addi	PLYRAT_TBL_SIZE,a1
 	dec	a10
-	jruc	#lp5
+	jruc	lp5
 
 #out
 	move	a1,a10
@@ -405,7 +405,7 @@ mpat_9a	PULL	a7
 	sll	4,a0				;*16
 	addi	special_heads,a0
 	move	*a0,a0				;a0=head nbr of special head
-	jrn	#norm2
+	jrn	norm2
 
 #ncrtd	
 	movi	PAT_SIZE,a1
@@ -432,9 +432,9 @@ a3_tbl	.long	0,32
 	.long	0,32
 
 
-#********************************
+*********************************
 * A8=plyr # 0-3
-* >A0=*plyr head img
+* 0A0H=*plyr head img
 
  SUBR	getwindowhead
 
@@ -449,7 +449,7 @@ a3_tbl	.long	0,32
 	addi	plr_heads_small,a0,L
 	move	*a0,a0,L			;Created player HEAD
 	move	*a0(5*32),a0,L			;get 5th head
-	jruc	#exit
+	jruc	exit
 #nocrt
 	move	a8,a0
 	sll	5,a0
@@ -466,11 +466,11 @@ a3_tbl	.long	0,32
 	movi	player_names,a10
 	move	*a2,a0
 ;DJT Start
-	jrz	#out3
+	jrz	out3
 #lp3
 	addi	NEXT_TEAM_NAMES,a10
 	dec	a0
-	jrnz	#lp3
+	jrnz	lp3
 ;DJT End
 #out3
 	move	*a2,a0
@@ -489,15 +489,15 @@ a3_tbl	.long	0,32
 	inc	a10
 	move	*a14+,a1,L
 	cmp	a1,a0
-	jrnz	#lp4
+	jrnz	lp4
 
 ;addi 320 for each name
 	movi	ATL_t,a1
 #lp5	cmpi	0,a10
-	jrz	#out
+	jrz	out
 	addi	PLYRAT_TBL_SIZE,a1
 	dec	a10
-	jruc	#lp5
+	jruc	lp5
 
 #out
 
@@ -505,7 +505,7 @@ a3_tbl	.long	0,32
 	sll	4,a0			;*16
 	addi	special_heads,a0
 	move	*a0,a0
-	jrn	#norm2
+	jrn	norm2
 	movi	PAT_SIZE,a1
 	mpyu	a0,a1
 	addi	spechds_t,a1

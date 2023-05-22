@@ -205,7 +205,7 @@ _ac_done
 	move	@_io_map,a0,L		;Get Current I/O map
 	addk	1,a0			;Increment it
 	cmpi	5,a0			;>= 5?
-	jrlt	#map_ok			;Nope - then use it
+	jrlt	map_ok			;Nope - then use it
 	clr	a0			;else reset it back to 0
 #map_ok
 	move	a0,@_io_map,L		;a0 = I/O map number
@@ -548,7 +548,7 @@ dip_init
 	rets
 
 
-#*******************************
+********************************
 * Initialize GSP I/O registers
 * B6=*Return address
 * Trashes B0-B2
@@ -559,14 +559,14 @@ dip_init
 	movi	gspioinit_t,b0
 	movi	(giiend-gspioinit_t)/16,b1
 #lp	move	*b0+,*b2+
-	dsj	b1,#lp
+	dsj	b1,lp
 
 	movi	VMUX_INITMODE,a0
 	move	a0,@VMUX_CONTROL,W
 	exgpc	b6
 
 
-#*******************************
+********************************
 * Watch dog disable
 * Note: Call while interrupts are turned off
 
@@ -590,7 +590,7 @@ dip_init
 	xor	a3,a0
 	move	a0,*a4
 	move	*a1+,a0
-	jrnn	#lp
+	jrnn	lp
 
 	move	a2,*a4
 
@@ -632,9 +632,9 @@ DIRQ
 	movi	DPYCTL,a8
 
 	move	*a8,a7			;>Shift register read to restart DMA
-	movi	NIL|DXV|SRT|>10,a0
+	movi	NIL|DXV|SRT|010H,a0
 	move	a0,*a8
-	movi	510*>1000,a2		;*Autoerase lines
+	movi	510*01000H,a2		;*Autoerase lines
 	pixt	*a2,a2			;Mem to shift reg xfer
 
 
@@ -642,16 +642,16 @@ DIRQ
 	jrnz	di50			;In draw code?
 
 	move	b13,b0
-	jrn	#chkmp			;DMA done?
+	jrn	chkmp			;DMA done?
 
 
 	move	@GAMSTATE,a0
-	jrn	#chkmp			;In diagnostics? (B13 invalid)
+	jrn	chkmp			;In diagnostics? (B13 invalid)
 
 	movi	26000/4,a1		;>Make sure DMA is OK
 #dqwait	cmp	b13,b0
 	jrne	di50			;DMAQ changed?
-	dsj	a1,#dqwait
+	dsj	a1,dqwait
 
 	.if	DEBUG
 	trap	29
@@ -664,7 +664,7 @@ DIRQ
 	move	a1,b13
 
 di50	move	a7,*a8			;Restore
-	jruc	#60hzcode		;Skip flip
+	jruc	60hzcode		;Skip flip
 
 
 #chkmp	move	@dirqtimer,a1
@@ -675,10 +675,10 @@ di50	move	a7,*a8			;Restore
 
 
 	movi	-4,a0			;Page0
-	movi	PAGE1YO*>1000,b2	;*Page1
+	movi	PAGE1YO*01000H,b2	;*Page1
 	move	@dpage,a1
-	jrnz	#onp1
-	movi	->1004,a0		;Page1
+	jrnz	onp1
+	movi	-01004H,a0		;Page1
 	clr	b2			;*Page0
 #onp1	move	a0,@DPYSTRT		;If we don't page flip next time
 	move	a0,@DPYADR		;Override DPYSTRT
@@ -689,8 +689,8 @@ di50	move	a7,*a8			;Restore
 	dint
 	movi	26000/8,a1		;>Wait on last DMA
 #dwait	move	@DMACTRL,a0
-	jrnn	#dmaoff			;DMA stopped?
-	dsj	a1,#dwait
+	jrnn	dmaoff			;DMA stopped?
+	dsj	a1,dwait
 	move	a1,@DMACTRL		;Timed out
 	.if	DEBUG
 	trap	29
@@ -698,9 +698,9 @@ di50	move	a7,*a8			;Restore
 #dmaoff
 
 	move	a2,a2
-	jrn	#noerase		;Erase off?
+	jrn	noerase		;Erase off?
 
-	movi	CONTROL,a9		;>Clear whole page
+	movi	CONTROL,a9		;0CHlear whole page
 	move	*a9,a6
 
 ;NEW - This is a bug - NEVER Turn OFF CAS before RAS Refreshes
@@ -740,7 +740,7 @@ di400	move	a7,*a8			;Restore
 
 	move	@IRQSKYE,@ERASELOC	;Copy bkgnd color
 ;	move	@COLRTEMP,a0,L
-;	jrz	#notindiag
+;	jrz	notindiag
 ;	movi	CYCOLORS,a1
 ;	move	a0,*a1+,L		;Copy diagnostics color cycler
 ;	move	@COLRTEMP+32,*a1,L
@@ -800,7 +800,7 @@ _no_gt
 	not	a1
 
 	move	@TWOPLAYERS,a14		;if 2-player kit then fudge
-	jrz	#not_2			;the switches
+	jrz	not_2			;the switches
 
 	clr	a2
 	movx	a0,a2
@@ -865,7 +865,7 @@ NO_WORRY_COUNTER
 	jrnz	dirqx			;Skip?
 
 
-					;>Do every 8 ticks
+					;0DHo every 8 ticks
 	.if	DEBUG
 	.else
 	move	@dirqtimer,a0
@@ -874,15 +874,15 @@ NO_WORRY_COUNTER
 	.endif
 
 
-	move	@C_FRAC,a0		;>Count down coin fraction timer
-	jrz	#nfrc			;No frac?
+	move	@C_FRAC,a0		;0CHount down coin fraction timer
+	jrz	nfrc			;No frac?
 	sll	32-8,a0
 	srl	32-8,a0
 	subk	1,a0
 	move	a0,@C_FRAC
 #nfrc
 
-					;>Coin counters
+					;0CHoin counters
 	move	@COINCNTR,a0,L
 	jrz	l_dog			;Counters, timers inactive?
 
@@ -902,7 +902,7 @@ c_cntr0
 	dsjs	a4,ccntr0l
 
 	clr	a2			;counter on mask
-;	movi	>100,a3
+;	movi	0100H,a3
 	movk	1,a3
 	movk	2,a4
 c_cntr1l
@@ -931,7 +931,7 @@ l_dog
 	move	a0,*a0
 	.else
 
-	movi	wdogbone_t,a1		;>Clock watchdog
+	movi	wdogbone_t,a1		;0CHlock watchdog
 	move	@SYSCOPY,a2
 	movk	1,a3
 	movi	SYSCTRL,a4
@@ -960,7 +960,7 @@ wdogbone_t
 
 
 
-#*******************************
+********************************
 * Scan switches
 
  SUBRP	switch_stack
@@ -969,7 +969,7 @@ wdogbone_t
 	move	*a0,a0,W
 
 	move	@GAMSTATE,a1,W		;In diagnostics?
-	jrn	#no_diptest
+	jrn	no_diptest
 	move	@_dipswitch_addr,a1,L	;No. Map TEST dipswitch to coin door
 	move	*a1,a1,W		; TEST switch
 	sll	4-0,a1			;Dip TEST bit0 -> coin TEST bit4
@@ -977,7 +977,7 @@ wdogbone_t
 	and	a1,a0
 
 #no_diptest
-	ori	>ffff0000,a0		;Pull unused bits UP
+	ori	0ffff0000H,a0		;Pull unused bits UP
 
 	move	@swtemp2,a2,W		;Get previous previous state
 	move	@swtemp1,a1,W		;Get previous state
@@ -985,20 +985,20 @@ wdogbone_t
 	move	a0,@swtemp1,W		;Save new previous
 	and	a1,a2			;Only stack if UP then UP & now DOWN
 	andn	a0,a2			; (new DOWNS now pos logic)
-	jrz	#x			;None to do if 0
+	jrz	x			;None to do if 0
 
 	move	@swstack_p,a3,L		;Current switch stack ptr
-	movk	>1f,a1			;XOR constant
+	movk	01fH,a1			;XOR constant
 
 #lp	cmpi	swstackbot,a3		;Switch stack overflow?
-	jreq	#x
+	jreq	x
 	lmo	a2,a0
 	sll	a0,a2			;Get rid of DOWN bit
 	sll	1,a2
 	xor	a1,a0			;Do 1's comp to get true bit #
 	move	a0,-*a3,W		;Push switch # (0-15)
 	rl	a0,a2			;Restore remaining DOWN bits
-	jrnz	#lp			;Continue if more are DOWN (!0)
+	jrnz	lp			;Continue if more are DOWN (!0)
 
 	move	a3,@swstack_p,L		;Save new stack ptr
 
@@ -1114,40 +1114,40 @@ badtrap29
 
 gspioinit_t
 ;NEW - Values change because dot clock is twice as fast.
-;	.word	015h		;>C0000000 -- HESYNC
-;	.word	HEBLNKINIT	;>C0000010 -- HEBLNK
-;	.word	0fah		;>C0000020 -- HSBLNK
-;	.word	0fch		;>C0000030 -- HTOTAL
+;	.word	015h		;0C0000000H -- HESYNC
+;	.word	HEBLNKINIT	;0C0000010H -- HEBLNK
+;	.word	0fah		;0C0000020H -- HSBLNK
+;	.word	0fch		;0C0000030H -- HTOTAL
 
-	.word	02bh		;>C0000000 -- HESYNC
-	.word	HEBLNKINIT	;>C0000010 -- HEBLNK
-	.word	01f5h		;>C0000020 -- HSBLNK
-	.word	01f9h		;>C0000030 -- HTOTAL
+	.word	02bh		;0C0000000H -- HESYNC
+	.word	HEBLNKINIT	;0C0000010H -- HEBLNK
+	.word	01f5h		;0C0000020H -- HSBLNK
+	.word	01f9h		;0C0000030H -- HTOTAL
 
-	.word	3		;>C0000040 -- VESYNC
-	.word	20		;>C0000050 -- VEBLNK
-	.word	274		;>C0000060 -- VSBLNK	;254 lines
-	.word	288		;>C0000070 -- VTOTAL
-	.word	>f010		;>C0000080 -- DPYCTL	ENV|NIL|DXV|SRE|>10
-	.word	0fffch		;>C0000090 -- DPYSTRT
-	.word	EOSINT		;>C00000A0 -- DPYINT 
-	.word	2ch		;>C00000B0 -- CONTROL
-	.word	0		;>C00000C0 -- HSTDATA
-	.word	0		;>C00000D0 -- HSTADRL
-	.word	0		;>C00000E0 -- HSTADRH
-	.word	0		;>C00000F0 -- HSTCTLL
-	.word	0		;>C0000100 -- HSTCTLH
-	.word	0		;>C0000110 -- INTENBL
-	.word	0		;>C0000120 -- INTPEND
-	.word	0		;>C0000130 -- CONVSP
-	.word	0		;>C0000140 -- CONVDP
-	.word	PXSIZE		;>C0000150 -- PSIZE
-	.word	0		;>C0000160 -- PMASK
-	.word	0		;>C0000170 -- RESERVED
-	.word	0		;>C0000180 -- RESERVED
-	.word	0		;>C0000190 -- RESERVED
-	.word	0		;>C00001A0 -- RESERVED
-	.word	28		;>C00001B0 -- DPYTAP
+	.word	3		;0C0000040H -- VESYNC
+	.word	20		;0C0000050H -- VEBLNK
+	.word	274		;0C0000060H -- VSBLNK	;254 lines
+	.word	288		;0C0000070H -- VTOTAL
+	.word	0f010H		;0C0000080H -- DPYCTL	ENV|NIL|DXV|SRE|010H
+	.word	0fffch		;0C0000090H -- DPYSTRT
+	.word	EOSINT		;0C00000A0H -- DPYINT 
+	.word	2ch		;0C00000B0H -- CONTROL
+	.word	0		;0C00000C0H -- HSTDATA
+	.word	0		;0C00000D0H -- HSTADRL
+	.word	0		;0C00000E0H -- HSTADRH
+	.word	0		;0C00000F0H -- HSTCTLL
+	.word	0		;0C0000100H -- HSTCTLH
+	.word	0		;0C0000110H -- INTENBL
+	.word	0		;0C0000120H -- INTPEND
+	.word	0		;0C0000130H -- CONVSP
+	.word	0		;0C0000140H -- CONVDP
+	.word	PXSIZE		;0C0000150H -- PSIZE
+	.word	0		;0C0000160H -- PMASK
+	.word	0		;0C0000170H -- RESERVED
+	.word	0		;0C0000180H -- RESERVED
+	.word	0		;0C0000190H -- RESERVED
+	.word	0		;0C00001A0H -- RESERVED
+	.word	28		;0C00001B0H -- DPYTAP
 giiend
 
 

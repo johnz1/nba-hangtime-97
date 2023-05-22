@@ -99,40 +99,40 @@ butn_plus
 #swtop	SLEEPK	1
 	move	*a8,*a9,L		;Writes to ROM
 	move	@SWITCH,a0,L
-	cmpi	>ffefffff,a0
-	jrnz	#sw1
+	cmpi	0ffefffffH,a0
+	jrnz	sw1
 	clr	a0
 	move	a0,*a13(PDATA)
-	jruc	#swtop
+	jruc	swtop
 #sw1	move	*a13(PDATA),a1
-	jrz	#sw2			;#swtop
+	jrz	sw2			;swtop
     	move	*a13(PDATA+16),a1
-	jrz	#sw2
+	jrz	sw2
 	dec	a1
 	move	a1,*a13(PDATA+16)
-	jruc	#swtop
+	jruc	swtop
 
 #sw2	btst	a11,a0			;14
 	jrz	advance
 	btst	a10,a0			;12
-	jrnz	#swtop
+	jrnz	swtop
 ;go backwards
 	cmpi	debug_img_list,a8
-	jrz	#swtop
+	jrz	swtop
 	subk	32,a8
 	movk	1,a0
 	move	a0,*a13(PDATA)
 	movk	3,a1
 	move	a1,*a13(PDATA+16)
-	jruc	#swtop
+	jruc	swtop
 advance	cmpi	debug_img_end,a8
-	jrz	#swtop
+	jrz	swtop
 	addk	32,a8
 	movk	1,a0
 	move	a0,*a13(PDATA)
 	movk	3,a1
 	move	a1,*a13(PDATA+16)
-	jruc	#swtop
+	jruc	swtop
 
 	.asg	M_WRNONZ,F
 

@@ -104,7 +104,7 @@ morfpal11	equ	FADERAM+10*16*64
 * Note: Scratch = A0-A1,A14,B0-B1
 
 
-#*******************************
+********************************
 * Clear out palette allocation and xfer ram
 * Trashes scratch
 
@@ -115,13 +115,13 @@ morfpal11	equ	FADERAM+10*16*64
 
 	clr	a1
 #l1	move	a1,*a0+
-	dsj	b0,#l1
+	dsj	b0,l1
 
 	movi	PALTRAM,a0		;*xfer ram
 	movi	PALTSIZ*NUMPALT/16,b0	;# of words
 
 #l2	move	a1,*a0+
-	dsj	b0,#l2
+	dsj	b0,l2
 
 ;always start with DIAGP as pal 0!
 	movi	DIAGP,a0
@@ -129,7 +129,7 @@ morfpal11	equ	FADERAM+10*16*64
 	rets
 
 
-#*******************************
+********************************
 * Cleanup unused palettes
 * Trashes A1,A14,B0-B1
 
@@ -139,7 +139,7 @@ morfpal11	equ	FADERAM+10*16*64
 	movi	PALRAM+PALRSIZ,a2	;Skip 1st pal
 
 	movi	NUMPAL-1,a3		;Chk all pals
-	movi	>0101,a4		;2nd PAL #
+	movi	00101H,a4		;2nd PAL #
 
 #lp	move	@OBJLST,a0,L
 	jrz	cp30			;No objs, chk backgnd
@@ -173,25 +173,25 @@ cp60
 cp70	clr	a0			;Palette not used, free it
 	move	a0,*a2,L
 
-cp80	addi	>0101,a4		;Next pal
+cp80	addi	00101H,a4		;Next pal
 	.if	PAL64
 	btst	4,a4
 	jrz	cp90
-	addi	>3030,a4
+	addi	03030H,a4
 	sext	a4			;For compare
 	.endif
 
 cp90	addk	PALRSIZ,a2
-	dsj	a3,#lp
+	dsj	a3,lp
 
 	PULL	a0,a2,a3,a4
 	rets
 
 
-#*******************************
+********************************
 * Find the color map # to which the given palette is assigned
 * A0=*Pallette
-* >A0=PAL # (DMA format) or 0 (Z)
+* 0A0H=PAL # (DMA format) or 0 (Z)
 * Trashes scratch
 
  SUBR	pal_find
@@ -201,8 +201,8 @@ cp90	addk	PALRSIZ,a2
 
 #lp	move	*a1+,a14,L	;Get * palette
 	cmp	a0,a14
-	jreq	#ok		;Found?
-	dsj	b0,#lp
+	jreq	ok		;Found?
+	dsj	b0,lp
 	clr	a0		;Set Z
 	rets
 
@@ -211,7 +211,7 @@ cp90	addk	PALRSIZ,a2
 	move	b0,a1
 
 	.if	PAL64
-	movk	>f,a14
+	movk	0fH,a14
 	and	a1,a14		;A14=4 low bits
 	srl	4,a1		;Move B4/B5 to B6/B7
 	sll	6,a1
@@ -226,7 +226,7 @@ cp90	addk	PALRSIZ,a2
 
 
 
-#*******************************
+********************************
 * Get a foreground palette
 * A0=*Palette
 *Rets:
@@ -238,14 +238,14 @@ cp90	addk	PALRSIZ,a2
 
 	PUSH	a2,a3
 
-	movi	PALRAM,a1	;>Check if palette already exists
+	movi	PALRAM,a1	;0CHheck if palette already exists
 	movi	NUMPAL,a3
 gfp4	move	*a1+,a2,L	;Get *palette
 	cmp	a0,a2
 	jreq	getpn		;Already in color ram?
 	dsj	a3,gfp4
 
-	movi	PALFRAM,a1	;>Check for a spare palette
+	movi	PALFRAM,a1	;0CHheck for a spare palette
 	movi	NMFPAL,a3
 gfp8	move	*a1+,a2,L
 	jrz	getfp		;Palette empty? Grab it
@@ -257,7 +257,7 @@ gfp8	move	*a1+,a2,L
 	.endif
 	callr	pal_clean
 
-	movi	PALFRAM,a1	;>Check for a spare palette
+	movi	PALFRAM,a1	;0CHheck for a spare palette
 	movi	NMFPAL,a3
 gfp20	move	*a1+,a2,L
 	jrz	getfp		;Palette empty? Grab it
@@ -282,14 +282,14 @@ gfp20	move	*a1+,a2,L
 
 	PUSH	a2,a3
 
-	movi	PALRAM,a1	;>Check if palette already exists
+	movi	PALRAM,a1	;0CHheck if palette already exists
 	movi	NUMPAL,a3
 gbp4	move	*a1+,a2,L	;Get *palette
 	cmp	a0,a2
 	jreq	getpn		;Already in color ram?
 	dsj	a3,gbp4
 
-	movi	PALBRAM,a1	;>Check for a spare palette
+	movi	PALBRAM,a1	;0CHheck for a spare palette
 	movk	NMBPAL,a3
 gbp8	move	*a1+,a2,L
 	jrz	gbp30		;Palette empty? Grab it
@@ -301,12 +301,12 @@ gbp8	move	*a1+,a2,L
 	.endif
 	callr	pal_clean
 
-	movi	PALBRAM,a1	;>Check for a spare palette
+	movi	PALBRAM,a1	;0CHheck for a spare palette
 	movk	NMBPAL,a3
 gbp10	move	*a1+,a2,L
 	jrz	gbp30		;Palette empty? Grab it
 	dsj	a3,gbp10
-	jruc	#err
+	jruc	err
 
 
 getfp	addk	NMBPAL,a3	;>Setup your new palette
@@ -323,7 +323,7 @@ gbp30	PUSH	a0,a1
 	neg	a1
 
 	.if	PAL64
-	movk	>f,a2
+	movk	0fH,a2
 	and	a1,a2		;A2=4 low bits
 	srl	4,a1		;Move B4/B5 to B6/B7
 	sll	6,a1
@@ -334,14 +334,14 @@ gbp30	PUSH	a0,a1
 	move	*a0+,a2		;Get # colors in pal
 	callr	pal_set		;Setup pal transfer
 	mmfm	sp,a0,a1
-	jrz	#err		;Failed to get transfer?
+	jrz	err		;Failed to get transfer?
 	move	a0,-*a1,L	;Stuff palette *
 
 getpn	subi	NUMPAL,a3	;Compute palette #
 	neg	a3
 
 	.if	PAL64
-	movk	>f,a1
+	movk	0fH,a1
 	and	a3,a1		;A2=4 low bits
 	srl	4,a3		;Move B4/B5 to B6/B7
 	sll	6,a3
@@ -357,7 +357,7 @@ getpn	subi	NUMPAL,a3	;Compute palette #
 	rets
 
 
-#*******************************
+********************************
 * Setup palette transfer
 * A0=* to palette color data
 * A1=Bit 8-15 destination palette | Bit 0-7 start color
@@ -373,14 +373,14 @@ getpn	subi	NUMPAL,a3	;Compute palette #
 	movi	NUMPALT,b0	;# of palette transfers allowed
 
 #lp	move	*a3+,a14
-	jrz	#set		;Cell free?
+	jrz	set		;Cell free?
 	addi	PALTSIZ-16,a3
-	dsj	b0,#lp
+	dsj	b0,lp
 	.if	DEBUG
 	LOCKUP
 	eint
 	.endif
-	jruc	#x
+	jruc	x
 
 #set	move	a0,*a3+,L	;Set PALSRC
 	move	a1,*a3		;Set PALDEST
@@ -392,7 +392,7 @@ getpn	subi	NUMPAL,a3	;Compute palette #
 
 
 
-#*******************************
+********************************
 * Transfer palette data
 * Called during vblank
 * Looks through PALTRAM for transfers
@@ -407,7 +407,7 @@ getpn	subi	NUMPAL,a3	;Compute palette #
 	movi	COLRAM,a7
 
 #lp	move	*a0,a4		;Get count
-	jrz	#x		;End?
+	jrz	x		;End?
 
 	move	a6,*a0+		;Clear out tranfer count
 	move	*a0+,a1,L	;Source address
@@ -429,32 +429,32 @@ getpn	subi	NUMPAL,a3	;Compute palette #
 
 	sll	32-9,a4		;Make 0-511
 	srl	32-9+1,a4
-	jrnc	#1		;Even data count?
+	jrnc	1		;Even data count?
 	move	*a1+,*a2+
 
 #1	srl	1,a4		;/2 data count
-	jrnc	#2		;Even?
+	jrnc	2		;Even?
 	move	*a1+,*a2+,L
 
 #2	srl	1,a4		;/2 data count
-	jrnc	#3		;Even?
+	jrnc	3		;Even?
 	move	*a1+,*a2+,L
 	move	*a1+,*a2+,L
-#3	jrz	#5		;Cnt=0?
+3	jrz	5		;Cnt=0?
 
 #4	move	*a1+,*a2+,L
 	move	*a1+,*a2+,L
 	move	*a1+,*a2+,L
 	move	*a1+,*a2+,L
-	dsj	a4,#4
+	dsj	a4,4
 
-#5	dsj	a3,#lp
+5	dsj	a3,lp
 
 #x	rets
 
 
 
-#*******************************
+********************************
 * Black out selected palette
 * A0=* palette to black out
 * Trashes scratch
@@ -464,14 +464,14 @@ getpn	subi	NUMPAL,a3	;Compute palette #
 	PUSH	a2
 
 	callr	pal_find
-	jrz	#err
+	jrz	err
 	sll	8,a0
 	move	a0,a1
 	movi	FADERAM,a0
 	movk	32,b0
 	clr	a2
 #lp	move	a2,*a0+,L
-	dsj	b0,#lp
+	dsj	b0,lp
 	movi	FADERAM,a0
 	movi	64,a2
 	callr	pal_set
@@ -523,9 +523,9 @@ getpn	subi	NUMPAL,a3	;Compute palette #
 ;	move	a14,*a0+
 ;	SLL	23,A14		;TOP BITS OF FIELD ARE FLAGS
 ;	SRL	23,A14		;ONLY 9 BITS NEEDED FOR # COLORS
-;	MOVI	>7C00,A4	;A4 - PRE MULT MASK FOR 5 BITS OF RED
-;;	MOVI	>03E0,A6	;A6 - PRE MULT MASK FOR 5 BITS OF GREEN
-;;	MOVI	>001F,A8	;A8 - PRE MULT MASK FOR 5 BITS OF BLUE
+;	MOVI	07C00H,A4	;A4 - PRE MULT MASK FOR 5 BITS OF RED
+;;	MOVI	003E0H,A6	;A6 - PRE MULT MASK FOR 5 BITS OF GREEN
+;;	MOVI	0001FH,A8	;A8 - PRE MULT MASK FOR 5 BITS OF BLUE
 ;	MOVE	A4,A9
 ;;	MOVE	A6,A10
 ;;	MOVE	A8,A11
@@ -759,13 +759,13 @@ fo800	DIE
 	sll	32-9,a14	;Remove any flags
 	srl	32-9,a14	;9 bits needed for # colors
 
-pf1c	movk	>1f,a8		;A8=5 bit color mask
+pf1c	movk	01fH,a8		;A8=5 bit color mask
 
 pf100	move	*a1+,a3
-	movk	>1f,a7
+	movk	01fH,a7
 	and	a3,a7		;A7=Blue
 	srl	5,a3
-	movk	>1f,a5
+	movk	01fH,a5
 	and	a3,a5		;A5=Green
 	srl	5,a3		;A3=Red
 
@@ -858,7 +858,7 @@ fbfx	PULL	a2,a6,a7,a8,a9,a10
 fadeonep
 
 	.if	PAL64
-	movk	>f,a2
+	movk	0fH,a2
 	and	a9,a2		;A2=4 low bits
 	srl	4,a9		;Move B4/B5 to B6/B7
 	sll	6,a9
@@ -957,7 +957,7 @@ ptwx	PULL	a2,a6,a7,a8,a9,a10
 
 brightenonep
 	.if	PAL64
-	movk	>f,a2
+	movk	0fH,a2
 	and	a9,a2		;A2=4 low bits
 	srl	4,a9		;Move B4/B5 to B6/B7
 	sll	6,a9
@@ -1047,13 +1047,13 @@ abaex	DIE
 	sll	23,a14		;Remove any flags
 	srl	23,a14		;9 bits needed for # colors
 
-pb1c	movk	>1f,a8		;A8=Mask for 5 bits of color
+pb1c	movk	01fH,a8		;A8=Mask for 5 bits of color
 
 pb100	move	*a1+,a3
-	movk	>1f,a7
+	movk	01fH,a7
 	and	a3,a7		;A7=Blue
 	srl	5,a3
-	movk	>1f,a5
+	movk	01fH,a5
 	and	a3,a5		;A5=Green
 	srl	5,a3		;A3=Red
 
@@ -1084,7 +1084,7 @@ pbbok	sll	10,a3
 	rets
 
 
-#*****************************************************************************
+******************************************************************************
 *
 * INPUT:	a10 = * list palettes not to fade (0 terminated)
 * A11=Fade increment (1-256)
@@ -1105,7 +1105,7 @@ pbbok	sll	10,a3
 
 	jruc	do_fade
 
-#*****************************************************************************
+******************************************************************************
 * Fade palettes down (process)
 * A10=* list palettes not to fade (0 terminated)
 * A11=Fade increment (1-256)
@@ -1125,7 +1125,7 @@ pbbok	sll	10,a3
 
 	jruc	do_fade
 
-#*****************************************************************************
+******************************************************************************
 *
 * INPUT:	a10 = * list palettes not to fade (0 terminated)
 *
@@ -1146,7 +1146,7 @@ pbbok	sll	10,a3
 
 	jruc	do_fade
 
-#*****************************************************************************
+******************************************************************************
 *
 * INPUT:	a10 = * list palettes not to fade (0 terminated)
 *
@@ -1167,7 +1167,7 @@ pbbok	sll	10,a3
 
 	jruc	do_fade
 
-#*****************************************************************************
+******************************************************************************
 
  SUBRP	do_fade
 
@@ -1178,10 +1178,10 @@ pbbok	sll	10,a3
 #fade_loop
 
 	move	@irqskyeo,a11
-	movk	>1f,a7
+	movk	01fH,a7
 	and	a11,a7		;A7  = Blue
 	srl	5,a11
-	movk	>1f,a9
+	movk	01fH,a9
 	and	a11,a9		;A9  = Green
 	srl	5,a11		;A11 = Red
 
@@ -1205,18 +1205,18 @@ pbbok	sll	10,a3
 	movi	NUMPAL,a3
 #next_pal
 	move	*a1+,a2,L	;Get *palette
-	jrz	#empty_pal
+	jrz	empty_pal
 
 	move	@fade_list,a7,L
-	jrz	#skip_check
-	jruc	#start
+	jrz	skip_check
+	jruc	start
 
 #next_check
 	cmp	a9,a2
-	jreq	#done		;skip this palette
+	jreq	done		;skip this palette
 #start
 	move	*a7+,a9,L
-	jrnz	#next_check
+	jrnz	next_check
 
 #skip_check
 
@@ -1226,10 +1226,10 @@ pbbok	sll	10,a3
 
 #copy_loop
 	move	*a2+,a11
-	movk	>1f,a7
+	movk	01fH,a7
 	and	a11,a7		;A7  = Blue
 	srl	5,a11
-	movk	>1f,a9
+	movk	01fH,a9
 	and	a11,a9		;A9  = Green
 	srl	5,a11		;A11 = Red
 
@@ -1247,7 +1247,7 @@ pbbok	sll	10,a3
 
 	move	a7,*a6+		;1 word
 
-	dsj	a8,#copy_loop
+	dsj	a8,copy_loop
 
 
 	PUSH	a1,a2
@@ -1261,7 +1261,7 @@ pbbok	sll	10,a3
 #done
 #empty_pal
 	addi	FPALSZ,a4
-	dsj	a3,#next_pal
+	dsj	a3,next_pal
 
 	SLEEPK	1
 
@@ -1286,6 +1286,6 @@ pbbok	sll	10,a3
 	DIE
 
 
-#*****************************************************************************
+******************************************************************************
 	.end
 

@@ -175,8 +175,8 @@
 
 ;sounds
 
-;beep1_snd	.word	>f3f7,>8,>8080,0	;MENU BAR MOVE SOUND
-;SELECT_SND	.word	>f3f7,>8,>8084,0	;MENU OPTION SELECT SOUND
+;beep1_snd	.word	0f3f7H,08H,08080H,0	;MENU BAR MOVE SOUND
+;SELECT_SND	.word	0f3f7H,08H,08084H,0	;MENU OPTION SELECT SOUND
 ;UHOH		.WORD	0F3DFH,010H,08092H,0	;FAILURE OF ANY KIND
 
 
@@ -350,7 +350,7 @@ DIAG_EX
 	JRZ	DE2
 	MOVI	NOTCLOSEDDIP,A8
 	JSRP	L_MESS
-	jruc	#out
+	jruc	out
 DE2
 ;	MOVE	@SWITCH,A0,L
 	move	@_coin_addr,a0,L
@@ -365,7 +365,7 @@ DE2
 	JRZ	DE3
 	MOVI	NOTCLOSEDJAMMA,A8
 	JSRP	L_MESS
-	jruc	#out
+	jruc	out
 DE3
 	JAUC	WARMSET		
 #out
@@ -805,7 +805,7 @@ DIAG_COLORS
 RGB	CALLR	TABDRIVE
 	.LONG	RGBTAB,DIAG_CRAM+30H
 	.WORD	8
-RGBTAB	.WORD	07C00H,001FH,>77A0,>741A,0FFFFH
+RGBTAB	.WORD	07C00H,001FH,077A0H,0741AH,0FFFFH
 
 *
 DECAY	CALLR	TABDRIVE
@@ -1190,7 +1190,7 @@ MENU_LOOP
 	SLEEPK	1
 	calla	READ_DIP		;Get the current dip switch bits
 	btst	DPTEST_B,a0
-	jrnz	#dipon
+	jrnz	dipon
 
 ;	move	@COINS,a5
 ;	btst	4,a5
@@ -1932,7 +1932,7 @@ fudge_switches_diag
 ;	not	a0			;COMPLEMENT
 ;
 ;	move	@TWOPLAYERS,a1		;0 = NO, 1 = YES 2 players
-;	jrnz	#2_plyrs2
+;	jrnz	2_plyrs2
 ;
 ;	move	@SWITCH+20h,a1		;move P3UP & P3DOWN into low 32 bits
 ;	not	a1
@@ -3062,8 +3062,8 @@ DOCCLR
 
 	jruc	DOCCLEAR
 	
-;cursor_snd4	.word	>f3f7,>8,>8083,0	;
-;select_snd1	.word	>f3f7,>8,>8084,0	;select option sound
+;cursor_snd4	.word	0f3f7H,08H,08083H,0	;
+;select_snd1	.word	0f3f7H,08H,08084H,0	;select option sound
 ;
 ;	CHECK A8 ( BLINE ) AND A10 ( BCHAR ) FOR BOUNDARY STUFF
 ;
@@ -3110,7 +3110,7 @@ DOCCLEAR
 	CALLA	CLR_SCRN
 	CALLR	SURE_BOX
 	MOVI	MESS_CLEARED,A8
-	jruc	#sm
+	jruc	sm
 
 
 MESS_SUCCESS
@@ -3132,7 +3132,7 @@ BLASTMESS:				;GUY ENTERED A WHOLE MESSAGE
 	rets
 
 
-#*******************************
+********************************
 * Clear operator message
 * Trashes scratch, A2
 
@@ -3145,7 +3145,7 @@ BLASTMESS:				;GUY ENTERED A WHOLE MESSAGE
 #lp	clr	a0
 	calla	WC_BYTEI		;Write a null
 	addi	CMESS_LINE_SIZE,a7
-	dsj	a2,#lp
+	dsj	a2,lp
 
 	calla   F_ADC_S			;Refresh checksum
 	jruc	BLASTMESS
@@ -3154,7 +3154,7 @@ BLASTMESS:				;GUY ENTERED A WHOLE MESSAGE
 
 ********************************
 * Get joystick and buttons status
-* >A0=Status (0-6)
+* 0A0H=Status (0-6)
 
 om_getstick
 
@@ -3176,39 +3176,39 @@ om_getstick
 	move	@_switch2_addr,a1,L
 	move	*a1,a1,W
 	not	a1
-	andi	>7f,a1			;P3 draw/stick
+	andi	07fH,a1			;P3 draw/stick
 	or	a1,a0
 
 	btst	0,a0			;U
 	jrz	og2
 	movk	1,a0
-	jruc	#x
+	jruc	x
 og2
 	btst	1,a0			;D
 	jrz	og3
 	movk	2,a0
-	jruc	#x
+	jruc	x
 og3
 	btst	2,a0			;L
 	jrz	og4
 	movk	3,a0
-	jruc	#x
+	jruc	x
 og4
 	btst	3,a0			;R
 	jrz	og5
 	movk	4,a0
-	jruc	#x
+	jruc	x
 og5
-	movi	>70,a1
+	movi	070H,a1
 	and	a0,a1
 	jrz	og6
 	movk	5,a0
-	jruc	#x
+	jruc	x
 og6
 	andi	0ffffff80h,a0		;Any other bits are start buttons
 	jrz	og7
 	movk	6,a0
-	jruc	#x
+	jruc	x
 og7
 	clr	a0
 #x
@@ -3227,39 +3227,39 @@ og7
 ;	or	a1,a0
 ;	move	@SWITCH+32,a1
 ;	not	a1
-;	andi	>7f,a1			;P3 draw/stick
+;	andi	07fH,a1			;P3 draw/stick
 ;	or	a1,a0
 ;
 ;	btst	0,a0			;U
 ;	jrz	og2
 ;	movk	1,a0
-;	jruc	#x
+;	jruc	x
 ;og2
 ;	btst	1,a0			;D
 ;	jrz	og3
 ;	movk	2,a0
-;	jruc	#x
+;	jruc	x
 ;og3
 ;	btst	2,a0			;L
 ;	jrz	og4
 ;	movk	3,a0
-;	jruc	#x
+;	jruc	x
 ;og4
 ;	btst	3,a0			;R
 ;	jrz	og5
 ;	movk	4,a0
-;	jruc	#x
+;	jruc	x
 ;og5
-;	movi	>70,a1
+;	movi	070H,a1
 ;	and	a0,a1
 ;	jrz	og6
 ;	movk	5,a0
-;	jruc	#x
+;	jruc	x
 ;og6
 ;	andi	0ffffff80h,a0		;Any other bits are start buttons
 ;	jrz	og7
 ;	movk	6,a0
-;	jruc	#x
+;	jruc	x
 ;og7
 ;	clr	a0
 ;#x
@@ -3319,7 +3319,7 @@ NOUNDER
 	RETS
 
 
-#*******************************
+********************************
 * Add the character pointed to by a8/a10
 * A8 =Line
 * A10=Char on line
@@ -3334,10 +3334,10 @@ OMADDCHAR
 	add	a10,a8			;char offset
 	movb	*a8,a0			;snag the char
 	cmpi	'_',a0
-	jrne	#20
+	jrne	20
 
-	move	*a13(OP_LINE_CHAR),a1	;>Backspace
-	jrz	#x
+	move	*a13(OP_LINE_CHAR),a1	;0BacHkspace
+	jrz	x
 	dec	a1
 	move	a1,*a13(OP_LINE_CHAR)
 	move	a1,a2
@@ -3346,7 +3346,7 @@ OMADDCHAR
 
 #20
 	cmpi	'^',a0
-	jrne	#addchar
+	jrne	addchar
 
 	clr	a11
 	callr	OMPLOTTEXT		; GET RID OF THE FLASHING UNDERSCORE
@@ -3362,7 +3362,7 @@ OMADDCHAR
 	CALLR	OM_STARTLINE		; INITIALIZE ALL THE FLAGS FOR IT
 	MOVK	1,A11
 	CALLR	OMPLOTTEXT
-	jruc	#x
+	jruc	x
 
 ;	HERE IS JUST ENTER A NORMAL CHARACTER --
 ;
@@ -3488,7 +3488,7 @@ BC2
 	RETS
 
 
-#*******************************
+********************************
 * Plot out a line of characters
 * A8 =Table #
 * A10=Which character to highlight
@@ -3512,7 +3512,7 @@ OPPLOTLINE
 #lp
 	movb	*a8,a0			;GRAB CHAR NUMBER
 	move	a0,a0	
-	jrz	#x
+	jrz	x
 	movb	a0,@char_s
 	PUSH	a8
 	PUSH	a9
@@ -3538,7 +3538,7 @@ opl1	calla	pal_getf
 	PULL	a8
 	addk	8,a8
 	addi	LET_DIST_X,a9
-	jruc	#lp
+	jruc	lp
 
 #x	PULL	a8,a9,a10,a11
 	rets
@@ -3582,7 +3582,7 @@ underscore_s	.byte	"-",0
 	.even
 
 
-#*******************************
+********************************
 * A8=*MESS_MAC
 
  SUBRP	print_multi
@@ -3606,7 +3606,7 @@ underscore_s	.byte	"-",0
 	movb	*a8,a0
 	addk	8,a8
 	move	a0,a0
-	jrnz	#lp
+	jrnz	lp
 
 	PULL	a2
 	RETP

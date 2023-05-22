@@ -130,7 +130,7 @@ COINCNT2	.EQU	COINCNTR+8
 	.REF	IRQSKYE
 	.ref	dpageflip_off
 	.ref 	WFLG,BTIME
-	.REF	PSTATUS,WRLD
+	.REF	PSTATUS2,WRLD
 
 ;sounds
 	.ref	coin_snd,beep2_snd
@@ -238,15 +238,15 @@ L_TIMER
 	move	a0,@playtimer
 	jrgt	#not5			;Under 5 seconds?
 
-	move	@PSTATUS,a2
+	move	@PSTATUS2,a2
 	jrz	audup
 
 	movi	AUD_1PLAYTIME-1,a0
 	movk	4,b0
 #plp	srl	1,a2
-	jrnc	#nop
+	jrnc	nop
 	addk	1,a0			;+1 plyr
-#nop	dsj	b0,#plp
+nop	dsj	b0,plp
 
 	callr	AUD1
 
@@ -272,25 +272,25 @@ douptime
 	move	a0,@playtimer
 	rets
 
-#*******************************
+********************************
 * ITS A-MODE...CHECK OCTOPUS!
 
 CK_OCTO
 	move	@SWITCH,a0
 	not	a0
-	andi	>7f7f,a0		;Get sticks 'n starts
+	andi	07f7fH,a0		;Get sticks 'n starts
 	move	@OCT_FLG,a1
 	jrgt	#p2			;Got part one?
 
-	cmpi	>7171,a0		;P1&P2 all buts down & both sticks up
-	jrne	#x			;Wrong?
+	cmpi	07171H,a0		;P1&P2 all buts down & both sticks up
+	jrne	x			;Wrong?
 	movi	TSEC,a1			;One sec to get part two
 #p2
 	subk	1,a1
 	move	a1,@OCT_FLG
 	jrgt	#x			;Still counting?
-	cmpi	>202,a0
-	jrne	#x			;Wrong?
+	cmpi	0202H,a0
+	jrne	x			;Wrong?
 
 	movi	ACTIVE,a13
 	movi	HID_P,a7		;Start the process!
@@ -301,22 +301,22 @@ CK_OCTO
 ;	movi	MAW,A0
 ;	calla	snd_play1
 
-#x	jruc	douptime
+x	jruc	douptime
 
 
-;MAW	.WORD	>F9F7,>50,>814A,0		;OH MAW
+;MAW	.WORD	0F9F7H,050H,0814AH,0		;OH MAW
 
 
-#*******************************
+********************************
 * Give him a service credit
 
 SERVICE
 	move	@GAMSTATE,a0
-	jrn	#x 			;In diagnostics?
+	jrn	x 			;In diagnostics?
 	move	@_coin_addr,a0,L	;Get COIN inputs
 	move	*a0,a0
 	btst	CDI_BIT,a0		;Coin Door Closed ?
-	jrz	#x			;Yes - Then NO Service Credits Allowed
+	jrz	x			;Yes - Then NO Service Credits Allowed
 
 	callr	CCCC			;MAKE SURE THINGS ARE IN TACT
 
@@ -407,7 +407,7 @@ VALID_COIN
 	MOVE	A0,*A13(PROCID)		;SET OUR ID (IN CASE TABLE IS WRONG)
 
 ;	movb	*a10,a0 		;get flag byte
-;	jrz	#fok
+;	jrz	fok
 ;	LOCKUP
 ;#fok
 	MOVB	*A10,A0 		;GET FLAG BYTE
@@ -534,7 +534,7 @@ CREDSP
 ;	CMPI	INAMODE,A0
 ;	JRNZ	NOZERO
 ;NOZERO
-	MOVE	@PSTATUS,A0
+	MOVE	@PSTATUS2,A0
 	JRNZ	CRX
 	move	@GAMSTATE,a0
 	subk	INAMODE,a0		;A DISPLAY IN AMODE ONLY!
@@ -646,9 +646,9 @@ P_START
 
 	move	@GAMSTATE,a0
 	subk	INAMODE,a0
-	jreq	#doit
+	jreq	doit
 	subk	ININTRO-INAMODE,a0
-	jrne	#nope
+	jrne	nope
 #doit
 	movi	AUD_PRESTARTS,a0
 	calla	AUD1
@@ -1005,7 +1005,7 @@ CRD_SCRN
 	MOVE	A0,*A13(PROCID)
 	MOVI	0FFFFH,A1		;CHECK TO SEE IF CREDIT PAGE IS UP
 	CALLA	EXISTP
-	jrnz	#exists			;credit page up, so reprint text only
+	jrnz	exists			;credit page up, so reprint text only
 
 ;	JSRP	scrn_scaleininit	;Hide display
 
@@ -1043,18 +1043,18 @@ CRD_SCRN
 	SLEEPK	2
 	calla	display_unblank
 
-	jruc	#cont
+	jruc	cont
 
 
 #exists
 	move	@HEBLNK,a0
 	cmpi	HEBLNKINIT,a0
-	jrne	#inscl
+	jrne	inscl
 	move	@dtype,a0
 	jrge	#notinscl
 #inscl	move	a10,a10
 	jrnz	KILL_CRD2
-	jruc	#die
+	jruc	die
 #notinscl
 	SLEEPK	3
 #cont
@@ -1071,7 +1071,7 @@ CRD_SCRN
 #lp	SLEEPK	1
 	.ref	get_all_buttons_cur2
 	calla	get_all_buttons_cur2
-	jrz	#nob
+	jrz	nob
 
 
       	clr	a0
@@ -1087,7 +1087,7 @@ CRD_SCRN
 	jrnz	KILL_CRD2
 	jruc	KILL_CRD
 #nob
-	dsj	a11,#lp
+	dsj	a11,lp
 
 #ck2
 	move	a10,a10
@@ -1096,7 +1096,7 @@ CRD_SCRN
 	movi	10*TSEC,a11
 #lp1	SLEEPK	1
 	calla	get_all_buttons_cur2
-	jrz	#nob1
+	jrz	nob1
 
       	clr	a0
 	move	a0,@SOUNDSUP		;turn all sounds on
@@ -1107,7 +1107,7 @@ CRD_SCRN
 
 	jruc	KILL_CRD
 #nob1
-	dsj	a11,#lp1
+	dsj	a11,lp1
 
 KILL_CRD
 	calla	display_blank
@@ -1119,7 +1119,7 @@ KILL_CRD
 
 
 	.ref	bounce_snd
-;bounce_snd	.word	>fc80,10,>8129,0	;Ball bounce
+;bounce_snd	.word	0fc80H,10,08129H,0	;Ball bounce
 
 KILL_CRD2
 	RETP
@@ -1150,7 +1150,7 @@ coinin_mod
 	PULL	A10
 	rets
 
-#*****************************************************************************
+******************************************************************************
 
 	.asg	25,YSPACE
 	.asg	17,YSPACE0
@@ -1198,7 +1198,7 @@ credits_string
 	move	@_dipswitch_addr,a0,L
 	move	*a0,a0
 	btst	6,a0			;SW1 switch 7
-	jrnz	#notfair		;OFF?
+	jrnz	notfair		;OFF?
 
 ;Yes, a dollar bill acceptor is hooked up!
 
@@ -1248,14 +1248,14 @@ credits_string
 	calla	GET_CSPT		;a6 = * current pricing table
 	movk	2,a10			;min number strings to print
 	move	*a6(CS_LIST),a11,L	;a11 = * string list
-	jrz	#no_strings
+	jrz	no_strings
 
 	move	a11,a2
 #next_string
 	move	*a2+,a0,L		;count up number of strings
-	jrz	#last
+	jrz	last
 	inc	a10
-	jruc	#next_string
+	jruc	next_string
 #last
 #no_strings
 	callr	CRED_P			;get number credits
@@ -1264,7 +1264,7 @@ credits_string
 	callr	GET_ADJ 		;# credits to start
 	divu	a0,a3			;credits / credits to start
 	move	a3,a3
-	jrz	#not_enough1
+	jrz	not_enough1
 	inc	a10			;+1 string	(READY FOR...)
 #not_enough1
 
@@ -1314,7 +1314,7 @@ credits_string
 
 #next_string2
 	move	*a11+,a4,L            	;* next string
-	jrz	#done
+	jrz	done
 
 	move	@mess_cursy,a0
 	addi	YSPACE0,a0
@@ -1322,7 +1322,7 @@ credits_string
 
 	calla	print_string_C2
 
-	jruc	#next_string2
+	jruc	next_string2
 #done
 
 
@@ -1342,7 +1342,7 @@ credits_string
 	movi	#crd_2start,a4
 	PULL	a0
 	dec	a0
-	jrz	#1credit
+	jrz	1credit
 	movi	#crd_2starts,a4
 #1credit
 	calla	concat_rom_string
@@ -1364,7 +1364,7 @@ credits_string
 	movi	#crd_2cont,a4
 	PULL	a0
 	dec	a0
-	jrz	#1_creditb
+	jrz	1_creditb
 	movi	#crd_2conts,a4
 #1_creditb
 	calla	concat_rom_string
@@ -1383,11 +1383,11 @@ credits_string
 
 	divu	a0,a3			;credits / credits to start
 	move	a3,a3
-	jrz	#not_ready
+	jrz	not_ready
 	dec	a3
 
 	move	@TWOPLAYERS,a0		;0 = NO, 1 = YES 2 players
-	jrz	#4_plyrs
+	jrz	4_plyrs
 
 	cmpi	2,a3
 	jrlo	#not_max
@@ -1407,7 +1407,7 @@ credits_string
 	calla	print_string_C2
 
 	movi	#str_start,a4
-	jruc	#ready
+	jruc	ready
 
 #not_ready
 ;Turmell
@@ -1519,7 +1519,7 @@ GO_FOR_2
 GO_FOR_1
 	movi	CM_LINE1,A10		;CHECK LINE 1
 	callr	CK_LINE 		;1 VALID LINES?
-	jrz	#zippo
+	jrz	zippo
 	movi	LN4_setup,a2
 	calla	setup_message
 	movi	STRNGRAM,a4
@@ -1527,7 +1527,7 @@ GO_FOR_1
 #zippo
  .endif
 
-#*****************************************************************************
+******************************************************************************
 
 ;open up window stating winners of a 4 player game get next game free
 
@@ -1548,16 +1548,16 @@ GO_FOR_1
 
 	movk	ADJFREPL,a0			;ARE WE IN FREE PLAY?
 	calla	GET_ADJ
-	jrnz	#exit
+	jrnz	exit
 
 	movi	ADJWINMODE,a0
 	calla	GET_ADJ
-	jrz	#exit				;disabled?
+	jrz	exit				;disabled?
 
 	sll	5,a0
 	addi	winer_sty_img_tbl,a0
 	move	*a0,a2,L
-	jrz	#exit
+	jrz	exit
 
 	PUSH	b0
 	movi	BAST_W_P,b0
@@ -1604,7 +1604,7 @@ winer_sty_img_tbl
 ;	.long	WIN4FREE	;msg for '4 players' option
 
 
-#*****************************************************************************
+******************************************************************************
 
 
 	.if 0
@@ -1876,7 +1876,7 @@ SLAM_P
 	jauc	EXISTP
 
 SLAM_SW
-	movi	SLAM_PID|>ffff0000,a0	;So we can kill other indestructables
+	movi	SLAM_PID|0ffff0000H,a0	;So we can kill other indestructables
 	move	a0,*a13(PROCID)		;Set our ID
 	calla	KIL1C			;Kill others
 
@@ -1983,7 +1983,7 @@ COIN_PAG
  SUBR	aud_addnumplyrs
 
 	movk	1,a1		;1 plyr
-	move	@PSTATUS,b0
+	move	@PSTATUS2,b0
 	subk	3,b0
 	jrne	aanp50		;Only 1?
 	movk	2,a1		;2 plyrs
@@ -2500,7 +2500,7 @@ FACS1
 	DSJS	A2,FACS1		;WRITE 1 LONG WORD PER ADJUST
 fs20
 ;	.if	YUNIT
-;	move	@SWITCH+>30,a1
+;	move	@SWITCH+030H,a1
 ;	btst	6,a1
 ;	jrnz	fs80
 ;	not	a1
@@ -2765,7 +2765,7 @@ lct8	move	*a6+,a1			;Get word
 **************************************************************************
 L_MESS_LOOP
 	addk	BYTE_SIZE,a8		;PUSH BEYOND THIS BYTE
-L_MESS	addk	>f,a8			;Round up word
+L_MESS	addk	0fH,a8			;Round up word
 	srl	4,a8
 	sll	4,a8
 
@@ -2961,7 +2961,7 @@ PROMPT_PROC
 
 
 *
-*	>1 = READY FOR 2 PLAYERS.  PRESS START.
+*	01H = READY FOR 2 PLAYERS.  PRESS START.
 *
 rf4
 	MOVI	MESS_READY_4,A1
@@ -3176,7 +3176,7 @@ DUMP_FS
 *
 **************************************************************************
 DUMP_SIZE	 .equ	 10*C_LONG_SIZE		;9 LONG WORDS.
-DUMP_LAST	 .equ	 CMOS+>8000-DUMP_SIZE	;Let em use the whole page!
+DUMP_LAST	 .equ	 CMOS+08000H-DUMP_SIZE	;Let em use the whole page!
 MAX_DUMP	 .equ	 8			;DON'T HOLD MORE THAN 12/PAGE
 
 ADD_DUMP

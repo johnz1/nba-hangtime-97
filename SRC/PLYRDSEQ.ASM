@@ -74,12 +74,12 @@ JAM_GREAT	equ	4
 JAM_ALLEYOOP	equ	5
 
 
-M_YF	.equ	>8000	;Y free (OFLAGS)
+M_YF	.equ	08000H	;Y free (OFLAGS)
 
 
 	.text
 
-#*****************************************
+******************************************
 * Sequence - goto new line
 *
 * A13=*PxCTRL
@@ -97,10 +97,10 @@ M_YF	.equ	>8000	;Y free (OFLAGS)
 	.asg	M_WRNONZ|M_FLIPH,FF
 	.asg	DUNK_M|NOJUMP_M|NOJOY_M|NOCOLLP_M,DFLGS
 
-#********************************
+*********************************
 
 
-#********************************
+*********************************
 alley_oop1_t
 ;(direction 3 only)
 	.word	DFLGS				;Flags for sequence
@@ -140,7 +140,7 @@ alley_oop1_t
 	WLW	-1,seq_newdir,0*16
 	W0
 
-#********************************
+*********************************
 alley_oop2_t
 ;(direction 3 only)
 	.word	DFLGS				;Flags for sequence
@@ -176,7 +176,7 @@ alley_oop2_t
 	W0
 
 
-#********************************
+*********************************
 alley_oop3_t
 ;(direction 3 only)
 	.word	DFLGS				;Flags for sequence
@@ -217,7 +217,7 @@ alley_oop3_t
 	W0
 
 
-#********************************
+*********************************
 alley_oop4_t
 ;(direction 3 only)
 	.word	DFLGS				;Flags for sequence
@@ -256,7 +256,7 @@ alley_oop4_t
 	W0
 
 
-#********************************
+*********************************
 alley_oop5_t
 ;(direction 4,8 only)
 	.word	DFLGS				;Flags for sequence
@@ -310,7 +310,7 @@ alley_oop5_t
 ;	W0
 
 
-#********************************
+*********************************
 alley_oop6_t
 ;(direction 3 only)
 	.word	DFLGS				;Flags for sequence
@@ -354,7 +354,7 @@ alley_oop6_t
 	WLW	-1,seq_newdir,2*16
 	W0
 
-#********************************
+*********************************
 alley_oop7_t
 ;(direction 2,6 only)
 	.word	DFLGS				;Flags for sequence
@@ -389,7 +389,7 @@ alley_oop7_t
 	W0
 
 
-#********************************
+*********************************
 alley_oop8_t
 ;(direction 1 only)
 	.word	DFLGS				;Flags for sequence
@@ -428,7 +428,7 @@ alley_oop8_t
 	W0
 	W0
 
-#********************************
+*********************************
 alley_oop9_t
 ;(direction 5 only)
 	.word	DFLGS				;Flags for sequence
@@ -464,7 +464,7 @@ alley_oop9_t
 	WLW	-1,seq_newdir,6*16
 	W0
 
-#********************************
+*********************************
 alley_oop10_t
 ;(direction 1 only)
 	.word	DFLGS|LAYUP_M
@@ -500,7 +500,7 @@ alley_oop10_t
 	WLW	-1,seq_newdir,0*16
 	W0
 
-#********************************
+*********************************
 alley_oop11_t
 ;(direction 2 only)
 	.word	DFLGS|LAYUP_M
@@ -536,7 +536,7 @@ alley_oop11_t
 	WLW	-1,seq_newdir,1*16
 	W0
 
-#********************************
+*********************************
 alley_oop12_t
 ;(direction 3 only)
 	.word	DFLGS|LAYUP_M
@@ -573,7 +573,7 @@ alley_oop12_t
 	WLW	-1,seq_newdir,1*16
 	W0
 
-#********************************
+*********************************
 alley_oop13_t
 ;(direction 4 only)
 	.word	DFLGS|LAYUP_M
@@ -609,7 +609,7 @@ alley_oop13_t
 	WLW	-1,seq_newdir,3*16
 	W0
 
-#********************************
+*********************************
 alley_oop14_t
 ;(direction 5 only)
 	.word	DFLGS|LAYUP_M
@@ -671,7 +671,7 @@ hfp_1	rets
 	
 	
 
-#********************************
+*********************************
 dunka_t 
 ;(medium range)
 	.word	DFLGS				;Flags for sequence
@@ -715,7 +715,7 @@ dunka_t
 #5
 	W0
 
-#********************************
+*********************************
 dunka2_t
 ;(medium range)
 	.word	DFLGS				;Flags for sequence
@@ -762,7 +762,7 @@ dunka2_t
 #5
 	W0
 
-#********************************
+*********************************
 dunka3_t
 ;(short range)
 	.word	DFLGS				;Flags for sequence
@@ -809,7 +809,7 @@ dunka3_t
 	W0
 
 
-#********************************
+*********************************
 dunkb_t
 ;(medium,far range)
 	.word	DFLGS
@@ -847,7 +847,7 @@ dunkb_t
 #5
 	W0
 
-#********************************
+*********************************
 dunkb2_t
 ;(medium,far range)
 	.word	DFLGS
@@ -885,7 +885,7 @@ dunkb2_t
 #5
 	W0
 	
-#********************************
+*********************************
 dunkb3_t
 ;(medium,far range)
 	.word	DFLGS
@@ -945,7 +945,7 @@ dunkb3_t
 #5
 	W0
 
-#********************************
+*********************************
 dunkc_t
 ;(medium range)
 	.word	DFLGS
@@ -1008,7 +1008,7 @@ dunkc_t
 
 
 
-#********************************
+*********************************
 dunkd_t
 ;(medium,far range)
 	.word	DFLGS
@@ -1040,7 +1040,7 @@ dunkd_t
 	W0
 
 
-#********************************
+*********************************
 dunkd2_t
 ;(short range)
 	.word	DFLGS
@@ -1072,7 +1072,7 @@ dunkd2_t
 	W0
 
 
-#********************************
+*********************************
 dunke_t
 ;(short range)
 	.word	DFLGS
@@ -1108,7 +1108,7 @@ dunke_t
 #3
 	W0
 
-#********************************
+*********************************
 dunke2_t
 ;(short,medium range)
 	.word	DFLGS
@@ -1145,7 +1145,7 @@ dunke2_t
 	W0
 
 
-#********************************
+*********************************
 dunkf_t
 ;(short,medium range)
 	.word	DFLGS
@@ -1181,7 +1181,7 @@ dunkf_t
 	W0
 
 
-#********************************
+*********************************
 dunkg_t
 ;(medium,far range)
 	.word	DFLGS
@@ -1219,7 +1219,7 @@ dunkg_t
 #5
 	W0
 
-#********************************
+*********************************
 dunkg2_t
 ;(medium,far range)
 	.word	DFLGS
@@ -1257,7 +1257,7 @@ dunkg2_t
 #5
 	W0
 
-#********************************
+*********************************
 dunkj_t
 ;(medium,far range, 8-10 skill)
 	.word	DFLGS
@@ -1293,7 +1293,7 @@ dunkj_t
 #5
 	W0
 
-#********************************
+*********************************
 dunkj2_t
 ;(medium range, 5-7 skill)
 	.word	DFLGS
@@ -1330,7 +1330,7 @@ dunkj2_t
 	W0
 
 
-#********************************
+*********************************
 dunkk_t
 ;(medium,far range, skill 6-10)
 	.word	DFLGS
@@ -1380,7 +1380,7 @@ dunkk_t
 	W0
 
 
-#********************************
+*********************************
 dunkk2_t
 ;(medium,far range, skill 6-10)
 	.word	DFLGS
@@ -1431,7 +1431,7 @@ dunkk2_t
 	W0
 
 
-#********************************
+*********************************
 dunkl_t
 ;(medium,far range)
 	.word	DFLGS
@@ -1463,7 +1463,7 @@ dunkl_t
 #5
 	W0
 
-#********************************
+*********************************
 dunkl2_t
 ;(far range)
 	.word	DFLGS
@@ -1547,7 +1547,7 @@ dunkl2_t
 	W0
 	
 
-#********************************
+*********************************
 dunkl3_t
 ;(short range)
 	.word	DFLGS
@@ -1582,7 +1582,7 @@ dunkl3_t
 	W0
 
 
-#********************************
+*********************************
 dunkn_t
 ;(medium,far range)
 	.word	DFLGS
@@ -1639,7 +1639,7 @@ dunkn_t
 	W0
 
 
-#********************************
+*********************************
 dunkn2_t
 ;(medium,far range)
 	.word	DFLGS
@@ -1691,7 +1691,7 @@ dunkn2_t
 #5
 	W0
 
-#********************************
+*********************************
 dunkn3_t
 ;(medium,far range)
 	.word	DFLGS
@@ -1744,7 +1744,7 @@ dunkn3_t
 	W0
 
 
-#********************************
+*********************************
 dunko_t
 ;(medium,far range, skill 6-10)
 	.word	DFLGS
@@ -1809,7 +1809,7 @@ dunko_t
 	W0
 
 
-#********************************
+*********************************
 dunko2_t
 ;(far range, skill 6-10)
 
@@ -1884,7 +1884,7 @@ dunko2_t
 	W0
 
 
-#********************************
+*********************************
 dunkp_t
 ;(medium, far range)
 	.word	DFLGS
@@ -1941,7 +1941,7 @@ dunkp_t
 	WLW	-1,seq_newdir,3*16
 	W0
 
-#********************************
+*********************************
 dunkp2_t
 ;(short range)
 	.word	DFLGS
@@ -1998,7 +1998,7 @@ dunkp2_t
 	WLW	-1,seq_newdir,3*16
 	W0
 
-#********************************
+*********************************
 dunkp3_t
 ;(medium, far range)
 	.word	DFLGS
@@ -2071,7 +2071,7 @@ dunkp3_t
 #5
 	W0
 
-#********************************
+*********************************
 dunkq_t
 ;(medium,far range)
 	.word	DFLGS
@@ -2106,7 +2106,7 @@ dunkq_t
 #5
 	W0
 
-#********************************
+*********************************
 dunkq2_t
 ;(medium,far range)
 	.word	DFLGS
@@ -2145,7 +2145,7 @@ dunkq2_t
 	W0
 
 
-#********************************
+*********************************
 dunkr_t
 ;(short,medium range)
 	.word	DFLGS
@@ -2188,7 +2188,7 @@ dunkr_t
 	W0
 
 
-#********************************
+*********************************
 dunkr2_t
 ;(short,medium range)
 	.word	DFLGS
@@ -2227,7 +2227,7 @@ dunkr2_t
 	.bss	KP_TMPZ	,32		;Keep zvel for hook shot
 
 
-#********************************
+*********************************
 
 hook_t
 hook2_t
@@ -2362,7 +2362,7 @@ hook2_t
 
 
 
-#********************************
+*********************************
 dunklay_t
 ;(medium,far range, 7-10)
 	.word	DFLGS|LAYUP_M
@@ -2412,7 +2412,7 @@ dunklay_t
 
 
 
-#********************************
+*********************************
 dunklay2_t
 ;(medium,far range, 7-10 skill)
 	.word	DFLGS|LAYUP_M
@@ -2462,7 +2462,7 @@ dunklay2_t
 	rets
 
 
-#********************************
+*********************************
 dunklay3_t
 ;(medium,far range, 7-10 skill)
 	.word	DFLGS|LAYUP_M
@@ -2501,7 +2501,7 @@ dunklay3_t
 	move	a0,*a8(OZVEL),L
 	rets
 
-#********************************
+*********************************
 dunklay3a_t
 ;(medium,far range)
 	.word	DFLGS|LAYUP_M
@@ -2578,7 +2578,7 @@ dunklay3a_t
 	W0
 
 
-#********************************
+*********************************
 dunklay3b_t
 ;(medium,far range)
 	.word	DFLGS|LAYUP_M
@@ -2642,7 +2642,7 @@ dunklay3b_t
 	W0
 
 
-#********************************
+*********************************
 dunklay3c_t
 ;(short medium range)
 	.word	DFLGS|LAYUP_M
@@ -2705,7 +2705,7 @@ dunklay3c_t
 	W0
 
 
-#********************************
+*********************************
 dunklay4_t
 ;(short,medium range)
 	.word	DFLGS|LAYUP_M
@@ -2725,7 +2725,7 @@ dunklay4_t
 	move	a0,*a8(OZVEL),L
 	rets
 
-#********************************
+*********************************
 dunklay5_t
 ;(medium range)
 	.word	DFLGS|LAYUP_M
@@ -2774,7 +2774,7 @@ dunklay5_t
 	rets
 
 
-#********************************
+*********************************
 dunklay6_t
 ;(short,medium range)
 	.word	DFLGS|LAYUP_M
@@ -2844,7 +2844,7 @@ dunklay6_t
 	W0
 
 
-#********************************
+*********************************
 dunklay7_t
 ;(medium range, 7-10 skill)
 	.word	DFLGS|LAYUP_M
@@ -2886,7 +2886,7 @@ dunklay7_t
 #5
 	W0
 
-#********************************
+*********************************
 dunklay7a_t
 ;(medium range, 1-6 skill)
 	.word	DFLGS|LAYUP_M
@@ -2914,7 +2914,7 @@ dunklay7a_t
 #5
 	W0
 
-#********************************
+*********************************
 dunklay8_t
 ;(med,far range, 1-5 skill)
 	.word	DFLGS|LAYUP_M

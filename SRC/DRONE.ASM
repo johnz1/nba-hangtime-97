@@ -71,7 +71,7 @@
 ;equates for this file
 
 
-BV5	equ	>1040->80+>42*6
+BV5	equ	01040H-080H+042H*6
 
 NOPUSHSTEAL	equ	0	;!0=No push or stealing
 ONLY3		equ	0	;!0=Only shoot 3's
@@ -80,7 +80,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 
 
 
-#***************************************************************
+****************************************************************
 * Main drone logic
 * A8 = *Obj
 * A9 = *Plyr secondary data
@@ -114,7 +114,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 ;	move	*a13(plyr_ohoopx),a0
 ;	movi	200,a1
 ;	cmpi	WRLDMID,a0
-;	jrlt	#_1
+;	jrlt	_1
 ;	neg	a1
 ;#_1
 ;	add	a1,a0
@@ -130,22 +130,22 @@ ONLY3		equ	0	;!0=Only shoot 3's
 
 ;ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ			>Offense
 
-	move	@PSTATUS,a0		;Plyr start bits 0-3
+	move	@PSTATUS2,a0		;Plyr start bits 0-3
 	move	*a13(plyr_num),a1
 	XORK	1,a1
 	btst	a1,a0
-	jrz	#tmdrone		;Teammate is a drone?
+	jrz	tmdrone		;Teammate is a drone?
 
 	move	*a13(plyr_d_cflgs),a2
 	btst	DRN_PASS_B,a2
-	jrz	#nopass
+	jrz	nopass
 
 	movi	BUT2_M<<8+BUT2_M,a14	;>Make him pass
-	jruc	#docmd
+	jruc	docmd
 
 #nopass
 	btst	DRN_SHOOT_B,a2
-	jrz	#noshoot
+	jrz	noshoot
 	movi	BUT1_M<<8|BUT1_M|BUT3_M,a14	;>Make him shoot
 ;	movk	3,a0
 ;	move	a0,*a13(plyr_d_seekcnt)
@@ -154,14 +154,14 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	sll	32-4,a0
 	srl	32-4,a0
 ;	move	a2,a2
-;	jrnn	#noturb
+;	jrnn	noturb
 	ori	BUT3_M,a0		;+turbo
 #noturb
 	or	a14,a0
 	move	a0,*a11
 	clr	a0
 	move	a0,*a13(plyr_d_cflgs)
-	jruc	#x
+	jruc	x
 
 #noshoot
 #tmdrone
@@ -173,7 +173,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	movk	2,a1			;Offense with ball
 	move	a1,*a13(plyr_d_mode)
 	movk	1,a1
-	jruc	#setskc
+	jruc	setskc
 #inmd
 ;ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ			>Update tob mode
 
@@ -195,31 +195,31 @@ ONLY3		equ	0	;!0=Only shoot 3's
 
 	move	*a13(plyr_seqflgs),a2
 	btst	PASS_B,a2
-	jrnz	#kilbuts
+	jrnz	kilbuts
 
 	move	*a13(plyr_jmpcnt),a14
-	jrnz	#injmp
+	jrnz	injmp
 
 	move	*a11,a0
 	btst	BUT1_B,a0
-	jrnz	#fake			;Shoot button down?
+	jrnz	fake			;Shoot button down?
 
 
 	btst	SHOOT_B,a2
-	jrnz	#injmp
+	jrnz	injmp
 
 	btst	DUNK_B,a2
-	jrnz	#injmp
+	jrnz	injmp
 
-;ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ			>Breakaway
+;ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ			0BHreakaway
 
 	move	*a13(plyr_ohpdist),a4	;A4=Hoop distance
 
 	move	*a13(plyr_dribmode),a14
-	jrn	#nodrib
+	jrn	nodrib
 #inspin
 
-	move	*a13(plyr_num),a14	;>Chk for breakaway
+	move	*a13(plyr_num),a14	;0CHhk for breakaway
 	srl	1,a14
 	movk	1,a0
 	xor	a0,a14
@@ -232,9 +232,9 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	move	*a3(plyr_hpdist),a3
 
 	cmp	a4,a2
-	jrlt	#shootrnd		;He's closer?
+	jrlt	shootrnd		;He's closer?
 	cmp	a4,a3
-	jrlt	#shootrnd		;He's closer?
+	jrlt	shootrnd		;He's closer?
 
 	callr	drone_seek
 
@@ -242,9 +242,9 @@ ONLY3		equ	0	;!0=Only shoot 3's
 ;Tell drone to always turbo on breakaways...
 	move	*a13(plyr_num),a1
 	XORK	1,a1
-	move	@PSTATUS,a14		;Plyr start bits 0-3
+	move	@PSTATUS2,a14		;Plyr start bits 0-3
 	btst	a1,a14
-	jrnz	#ori			;Teammate is a human?
+	jrnz	ori			;Teammate is a human?
 	move	*a13(plyr_d_skill),a14
 	addk	8,a14
 	jrle	#noturb2
@@ -258,24 +258,24 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	move	@game_time,a1,L
 	srl	8,a1			;Remove tenths
 	subk	2,a1
-	jrlt	#shoot3			;Less than 2 secs?
+	jrlt	shoot3			;Less than 2 secs?
 	move	@shotimer+16,a1		;Tens
-	jrnz	#scok
+	jrnz	scok
 	move	@shotimer,a1		;Ones
 	subk	2,a1
-	jrlt	#shoot3			;Less than 2 secs?
+	jrlt	shoot3			;Less than 2 secs?
 #scok
 	callr	drone_chk3ptr
-	jrnz	#shoot3			;Need a 3?
+	jrnz	shoot3			;Need a 3?
 
 	cmpi	50,a4
-	jrlt	#shoot2			;Close?
+	jrlt	shoot2			;Close?
 
-	move	@PSTATUS,a0		;Plyr start bits 0-3
+	move	@PSTATUS2,a0		;Plyr start bits 0-3
 	move	*a13(plyr_num),a1
 	XORK	1,a1
 	btst	a1,a0
-	jrnz	#x			;Teammate is a human?
+	jrnz	x			;Teammate is a human?
 
 	cmpi	170,a4
 	jrge	#x			;Too far?
@@ -283,33 +283,33 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	movk	9,a0
 	callr	rndrng0
 	TEST	a0
-	jrnz	#x
+	jrnz	x
 
-	jruc	#shoot2
+	jruc	shoot2
 
-;ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ			>Can't dribble
+;ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ			0CaHn't dribble
 
 #nodrib
 	move	*a13(plyr_seq),a0
 	cmpi	SPIN_MOVE_SEQ,a0
-	jreq	#inspin			;Spinning?
+	jreq	inspin			;Spinning?
 
 	subi	ELBO_SEQ,a0
-	jreq	#x			;Elbows?
+	jreq	x			;Elbows?
 
 	subk	ELBO2_SEQ-ELBO_SEQ,a0
-	jreq	#x			;Elbows?
+	jreq	x			;Elbows?
 
 	cmpi	240,a4
-	jrlt	#shoot2
+	jrlt	shoot2
 
 	callr	drone_pass
-	jrnz	#x			;Pass OK?
+	jrnz	x			;Pass OK?
 
-	movk	>1f,a0
+	movk	01fH,a0
 	callr	rnd
-	jrnz	#x			;97%?
-	jruc	#shoot2
+	jrnz	x			;97%?
+	jruc	shoot2
 
 ;ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
 
@@ -317,12 +317,12 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	move	@game_time,a1,L
 	srl	8,a1			;Remove tenths
 	subk	2,a1
-	jrlt	#shoot3			;Less than 2 secs?
+	jrlt	shoot3			;Less than 2 secs?
 	move	@shotimer+16,a1
-	jrnz	#scok2
+	jrnz	scok2
 	move	@shotimer,a1
 	subk	2,a1
-	jrlt	#shoot3			;Less than 2 secs?
+	jrlt	shoot3			;Less than 2 secs?
 #scok2
 	PUSH	a6,a7
 	move	*a13(plyr_ohoopx),a6
@@ -334,41 +334,41 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	cmpi	80,a14
 	jrgt	#o1dok			;He's too far?
 	cmp	a14,a1
-	jrlt	#o1dok			;I'm closer?
+	jrlt	o1dok			;I'm closer?
 	move	*a13(plyr_o1dir),a2
 	sub	a0,a2
 	abs	a2
-	cmpi	>40,a2
+	cmpi	040H,a2
 	jrle	#o1dsml
-	subi	>80,a2
+	subi	080H,a2
 	abs	a2
 #o1dsml	subk	32,a2
-	jrlt	#goaround		;In front of me?
+	jrlt	goaround		;In front of me?
 #o1dok
 	move	*a13(plyr_o2dist),a14
 	cmpi	80,a14
 	jrgt	#o2dok			;He's too far?
 	cmp	a14,a1
-	jrlt	#o2dok			;I'm closer?
+	jrlt	o2dok			;I'm closer?
 	move	*a13(plyr_o2dir),a2
 	sub	a0,a2
 	abs	a2
-	cmpi	>40,a2
+	cmpi	040H,a2
 	jrle	#o2dsml
-	subi	>80,a2
+	subi	080H,a2
 	abs	a2
 #o2dsml	subk	32,a2
-	jrlt	#goaround		;In front of me?
+	jrlt	goaround		;In front of me?
 #o2dok
-	jruc	#runath
+	jruc	runath
 
 #goaround				;>Opponent in my way
 	move	*a13(plyr_tmdist),a0
 	cmpi	80,a0
-	jrlt	#goa			;Teammate too close?
+	jrlt	goa			;Teammate too close?
 
 	callr	drone_pass
-	jrnz	#x			;Pass OK?
+	jrnz	x			;Pass OK?
 
 #goa
 	movi	drnzzcnt,a2
@@ -387,7 +387,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 
 ;	movk	1,a0			;50% spin move
 ;	callr	rnd
-;	jrnz	#zz
+;	jrnz	zz
 
 	movk	2,a0
 	move	a0,*a13(plyr_tbutn)
@@ -396,7 +396,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	ori	BUT3_M<<8|BUT3_M,a0	;Turbo
 	move	a0,*a11
 
-	jruc	#tryshot
+	jruc	tryshot
 
 #zz
 	movk	5,a0			;New mode
@@ -411,7 +411,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	move	a0,*a2
 
 	callr	drone_seek
-;	jrz	#shoot2			;In position?
+;	jrz	shoot2			;In position?
 	sll	3,a0			;*8
 	addi	#jbits_t,a0
 
@@ -424,14 +424,14 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	move	*a8(OZPOS),a1
 
 	btst	JOYU_B,a0
-	jrz	#nju
+	jrz	nju
 	cmpi	CZMIN+40,a1
 	jrle	#xzmd			;Flip to other circle mode?
 #nju
 	btst	JOYD_B,a0
-	jrz	#njd
+	jrz	njd
 	cmpi	CZMAX-40,a1
-	jrlt	#njd
+	jrlt	njd
 #xzmd
 	move	*a2(drnzzmode-drnzzcnt),a3
 	movk	1,a14
@@ -441,19 +441,19 @@ ONLY3		equ	0	;!0=Only shoot 3's
 #njd
 
 	cmpi	80,a4
-	jrlt	#shoot2			;Close enough for jam?
+	jrlt	shoot2			;Close enough for jam?
 
-	jruc	#tryshot
+	jruc	tryshot
 
 ;ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
 
 #runath					;>I have a clr path to hoop!
 ;	move	*a13(plyr_o1dist),a14
 ;	cmpi	65,a14
-;	jrlt	#goa			;He's too close?
+;	jrlt	goa			;He's too close?
 ;	move	*a13(plyr_o2dist),a14
 ;	cmpi	65,a14
-;	jrlt	#goa			;He's too close?
+;	jrlt	goa			;He's too close?
 
 	callr	drone_seek
 	move	*a13(plyr_d_skill),a14
@@ -465,16 +465,16 @@ ONLY3		equ	0	;!0=Only shoot 3's
 
 #tryshot
 	cmpi	50,a4
-	jrlt	#shoot2			;Close enough for jam?
+	jrlt	shoot2			;Close enough for jam?
 
-	move	@PSTATUS,a0		;Plyr start bits 0-3
+	move	@PSTATUS2,a0		;Plyr start bits 0-3
 	move	*a13(plyr_num),a1
 	XORK	1,a1
 	btst	a1,a0
-	jrnz	#x			;Teammate is a human?
+	jrnz	x			;Teammate is a human?
 
 	callr	drone_chk3ptr
-	jrnz	#shoot2			;Need a 3?
+	jrnz	shoot2			;Need a 3?
 
 	cmpi	255,a4
 	jrge	#x			;Too far?
@@ -482,22 +482,22 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	move	*a13(plyr_tmproc_p),a0,L
 	move	*a0(plyr_seqflgs),a0
 	btst	DUNK_B,a0
-	jrnz	#pass			;Alleyoop?
+	jrnz	pass			;Alleyoop?
 
 
 	move	@balltmshotcnt,b0
 	subk	TMFIRE_MINCNT-1,b0
-	jrne	#notmheat		;None heating up?
+	jrne	notmheat		;None heating up?
 
 	move	@balltmscored,a1
 	srl	5,a1			;0=Tm2, 1=Tm1
 	move	*a13(plyr_num),a0
 	srl	1,a0
 	cmp	a0,a1
-	jreq	#notmheat		;!My tm?
+	jreq	notmheat		;!My tm?
 
 	movi	200,a0
-	jruc	#rndsht
+	jruc	rndsht
 #notmheat
 
 	movi	50,a0
@@ -508,20 +508,20 @@ ONLY3		equ	0	;!0=Only shoot 3's
 #rndsht
 	callr	rndrng0
 	move	a0,a0
-	jrnz	#x
+	jrnz	x
 
 
 #shoot2
 	move	*a13(plyr_tmproc_p),a0,L
 	move	*a0(plyr_seqflgs),a0
 	btst	DUNK_B,a0
-	jrz	#shoot3			;No alleyoop?
+	jrz	shoot3			;No alleyoop?
 #pass
 	move	*a11,a0			;>Pass
 	ori	BUT2_M<<8|BUT2_M|BUT3_M,a0
 	move	a0,*a11
 
-	jruc	#x
+	jruc	x
 
 #shoot3
 	move	*a11,a0			;>Shoot
@@ -530,7 +530,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 ;	movk	1,a0			;Max fakes
 ;	move	a0,*a13(plyr_d_seekcnt)
 
-	jruc	#x
+	jruc	x
 
 
 ;ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ			>Jumping but still on gnd
@@ -539,80 +539,80 @@ ONLY3		equ	0	;!0=Only shoot 3's
 ;	move	*a13(plyr_d_seekcnt),a2
 ;	jrle	#x			;No fakes?
 
-	move	@PSTATUS,a0		;Plyr start bits 0-3
+	move	@PSTATUS2,a0		;Plyr start bits 0-3
 	move	*a13(plyr_num),a1
 	XORK	1,a1
 	btst	a1,a0
-	jrnz	#x			;Teammate is a human?
+	jrnz	x			;Teammate is a human?
 
 	move	*a13(plyr_o1dist),a14
 	cmpi	80,a14
-	jrlt	#fkc			;He's close?
+	jrlt	fkc			;He's close?
 
 	move	*a13(plyr_o2dist),a14
 	cmpi	80,a14
 	jrge	#x			;He's far?
 #fkc
-	movk	>1f,a0
+	movk	01fH,a0
 	callr	rnd
-	jrnz	#x
+	jrnz	x
 
 	move	*a9(pld_d_lowsecagr),a14
 	move	@game_time,a1,L
 	srl	8,a1			;Remove tenths
 	cmp	a14,a1
-	jrlt	#x			;Less than x secs?
+	jrlt	x			;Less than x secs?
 	move	@shotimer+16,a1		;Tens
-	jrnz	#fk
+	jrnz	fk
 	move	@shotimer,a1		;Ones
 	cmp	a14,a1
-	jrlt	#x			;Less than x secs?
+	jrlt	x			;Less than x secs?
 #fk
 ;	subk	1,a2
 ;	move	a2,*a13(plyr_d_seekcnt)
-	jruc	#kilbuts
+	jruc	kilbuts
 
 ;ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
 
 #injmp
-	move	@PSTATUS,a0		;Plyr start bits 0-3
+	move	@PSTATUS2,a0		;Plyr start bits 0-3
 	move	*a13(plyr_num),a1
 	XORK	1,a1
 	btst	a1,a0
-	jrz	#tmdrn			;Teammate is a drone?
+	jrz	tmdrn			;Teammate is a drone?
 
 	move	*a13(plyr_tmproc_p),a0,L
 	move	*a0(PA11),a0,L
 	move	*a0,a0			;Get teammates ctrl bits
 	btst	BUT1_B,a0
-	jrnz	#x			;Holding shoot button?
-	jruc	#kilbuts
+	jrnz	x			;Holding shoot button?
+	jruc	kilbuts
 #tmdrn
 	move	*a13(plyr_seqflgs),a0
 	btst	BLOCKREB_B,a0
-	jrnz	#kilbuts		;Got a rebound?
+	jrnz	kilbuts		;Got a rebound?
 
 	btst	DUNK_B,a0
-	jrz	#nodnk			;Try alleyoop?
+	jrz	nodnk			;Try alleyoop?
 
 	move	@game_time,a1,L
 	srl	8,a1			;Remove tenths
 	subk	2,a1
-	jrlt	#shoot3			;Less than 2 secs?
+	jrlt	shoot3			;Less than 2 secs?
 	move	@shotimer+16,a1		;Tens
-	jrnz	#nodnk
+	jrnz	nodnk
 	move	@shotimer,a1		;Ones
 	subk	2,a1
-	jrlt	#shoot3			;Less than 2 secs?
+	jrlt	shoot3			;Less than 2 secs?
 #nodnk
 
 	move	*a13(plyr_tmproc_p),a0,L
 	move	*a0(plyr_seqflgs),a0
 	btst	DUNK_B,a0
-	jrnz	#pss			;Try alleyoop?
+	jrnz	pss			;Try alleyoop?
 
 
-	move	*a13(plyr_num),a2	;>Chk for close blockers
+	move	*a13(plyr_num),a2	;0CHhk for close blockers
 	srl	1,a2
 	XORK	1,a2
 	sll	6,a2			;*64
@@ -646,25 +646,25 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	movk	30,a0
 	callr	rndrng0
 	move	a0,a0
-	jrz	#kilbuts		;Cause shoot?
+	jrz	kilbuts		;Cause shoot?
 
 	movk	7,a0
 	callr	rnd
-	jrnz	#x			;88%?
+	jrnz	x			;88%?
 
 	move	*a13(plyr_ptsdown),a14
 	addk	5,a14
-	jrlt	#pss			;Winning by >5?
+	jrlt	pss			;Winning by >5?
 	move	*a13(plyr_seqflgs),a14
 	btst	DUNK_B,a14
-	jrnz	#x			;In a dunk?
+	jrnz	x			;In a dunk?
 	move	@game_time,a1,L
-	cmpi	>200,a1
-	jrlt	#x			;Less than 2 secs?
+	cmpi	0200H,a1
+	jrlt	x			;Less than 2 secs?
 #pss
 	callr	drone_pass
 
-	jruc	#x
+	jruc	x
 
 ;ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
 
@@ -699,10 +699,10 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	.byte	0,0,0,0
 
 
-#*******************************
+********************************
 * Check if this drone needs a 3 ptr
 * A4 = Distance from opponents hoop
-*>A0 = !0 if needed (CC)
+*0A0H = !0 if needed (CC)
 * Trashes scratch
 
  SUBRP	drone_chk3ptr
@@ -711,44 +711,44 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	jrgt	#x0			;Too far?
 
 	move	*a13(plyr_num),a1
-	move	@PSTATUS,a0		;Plyr start bits 0-3
+	move	@PSTATUS2,a0		;Plyr start bits 0-3
 	movk	1,a14
 	xor	a14,a1
 	btst	a1,a0
-	jrnz	#x0			;Teammate is a human?
+	jrnz	x0			;Teammate is a human?
 
 	xor	a14,a1
 	move	@plyr_onfire,a0
 	btst	a1,a0
-	jrnz	#x1			;I'm on fire?
+	jrnz	x1			;I'm on fire?
 
 	cmpi	230,a4
-	jrlt	#x0			;Too close?
+	jrlt	x0			;Too close?
 
 	XORK	2,a1
 	btst	a1,a0
-	jrnz	#x0			;Opp 1 on fire?
+	jrnz	x0			;Opp 1 on fire?
 	XORK	1,a1
 	btst	a1,a0
-	jrnz	#x0			;Opp 2 on fire?
+	jrnz	x0			;Opp 2 on fire?
 
 
 	movk	6,a1
 	move	@game_time,a0,L
-	cmpi	>1010000,a0
+	cmpi	01010000H,a0
 	jrgt	#hvtime			;Enough time?
 	movk	3,a1
 #hvtime
 	move	*a13(plyr_ptsdown),a14
 	cmp	a1,a14
-	jrlt	#x0
+	jrlt	x0
 
-	cmpi	>40000,a0
-	jrlt	#x1			;Less than 40 secs?
+	cmpi	040000H,a0
+	jrlt	x1			;Less than 40 secs?
 
 	move	*a13(plyr_o1dist),a14
 	cmpi	70,a14
-	jrlt	#rndsht			;He's close?
+	jrlt	rndsht			;He's close?
 	move	*a13(plyr_o2dist),a14
 	cmpi	70,a14
 	jrge	#x1			;He's far?
@@ -756,7 +756,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	movk	8,a0
 	callr	rndrng0
 	move	a0,a0
-	jrnz	#x0
+	jrnz	x0
 
 #x1
 	addk	1,a0
@@ -766,7 +766,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	rets
 
 
-#*******************************
+********************************
 * Drone in offense with out ball
 * A8 = *Obj
 * A9 = *Plyr secondary data
@@ -787,13 +787,13 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	move	*a13(plyr_num),a0
 	move	@plyr_onfire,a1
 	btst	a0,a1
-	jrnz	#mefr				;I'm on fire?
+	jrnz	mefr				;I'm on fire?
 
 	subk	2,a4				;=-1
 
 	XORK	1,a0
 	btst	a0,a1
-	jrnz	#mefr				;Tm on fire?
+	jrnz	mefr				;Tm on fire?
 	clr	a4
 #mefr
 
@@ -802,7 +802,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 
 	move	*a13(plyr_d_mode),a14
 	subk	1,a14
-	jreq	#inmd				;Already in mode?
+	jreq	inmd				;Already in mode?
 
 	movk	1,a0				;Offense wo ball
 	move	a0,*a13(plyr_d_mode)
@@ -825,12 +825,12 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	move	*a13(plyr_o1dir),a2
 	sub	a3,a2
 	abs	a2
-	cmpi	>40,a2
+	cmpi	040H,a2
 	jrle	#o1dsml
-	subi	>80,a2
+	subi	080H,a2
 	abs	a2
 #o1dsml	subk	16,a2
-	jrlt	#pusho				;In front of me?
+	jrlt	pusho				;In front of me?
 #o1far
 	move	*a13(plyr_o2dist),a14
 	subi	50,a14
@@ -838,9 +838,9 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	move	*a13(plyr_o2dir),a2
 	sub	a3,a2
 	abs	a2
-	cmpi	>40,a2
+	cmpi	040H,a2
 	jrle	#o2dsml
-	subi	>80,a2
+	subi	080H,a2
 	abs	a2
 #o2dsml	subk	16,a2
 	jrge	#nopush				;!In front?
@@ -858,21 +858,21 @@ ONLY3		equ	0	;!0=Only shoot 3's
 #pshnf
 	move	@balltmshotcnt,b0
 	subk	TMFIRE_MINCNT-1,b0
-	jrlt	#noth				;None heating up?
+	jrlt	noth				;None heating up?
 	addk	20,a1				;Push more!
 #noth
 	cmp	a1,a0
 	jrge	#newseek			;Skip push?
 
 	.if	NOPUSHSTEAL
-	jruc	#x
+	jruc	x
 	.endif
 
 	move	*a11,a0				;Push
 	ori	BUT2_M<<8|BUT2_M|BUT3_M,a0
 	move	a0,*a11
 
-	jruc	#x
+	jruc	x
 
 #nopush
 ;ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ				>Try dunk wo ball
@@ -884,7 +884,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	jrgt	#noalyo				;Too far?
 
 	TEST	a4
-	jrnz	#noalyo				;We on fire?
+	jrnz	noalyo				;We on fire?
 
 	move	a5,a14
 	addi	#aly_t,a14
@@ -893,7 +893,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	move	*a13(plyr_tmproc_p),a1,L
 	move	*a1(plyr_seqflgs),a14
 	btst	DUNK_B,a14
-	jrz	#norm				;Tm not dunking?
+	jrz	norm				;Tm not dunking?
 
 	move	*a1(plyr_slam_ticks),a14
 	move	*a1(plyr_jmpcnt),a1
@@ -905,7 +905,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 #norm
 	move	*a13(plyr_d_seeky),a0
 	cmpi	CZMID+1,a0
-	jrne	#rndaly				;!in allyo seek?
+	jrne	rndaly				;!in allyo seek?
 
 	callr	drone_seek
 	ori	BUT1_M<<8|BUT1_M|BUT3_M,a0	;Turbo shoot
@@ -915,19 +915,19 @@ ONLY3		equ	0	;!0=Only shoot 3's
 ;	subk	30,a0
 ;	jrle	#x
 
-	jruc	#x
+	jruc	x
 
 #rndaly
 	move	@balltmshotcnt,b0
 	subk	TMFIRE_MINCNT-1,b0
-	jrlt	#notmheat			;None heating up?
+	jrlt	notmheat			;None heating up?
 
 ;	move	@balltmscored,a1
 ;	srl	5,a1				;0=Tm2, 1=Tm1
 ;	move	*a13(plyr_num),a0
 ;	srl	1,a0
 ;	cmp	a0,a1
-;	jreq	#notmheat			;!My tm?
+;	jreq	notmheat			;!My tm?
 
 	sll	2,a2				;% * 2
 #notmheat
@@ -952,19 +952,19 @@ ONLY3		equ	0	;!0=Only shoot 3's
 
 	callr	drone_seekxy
 
-	jruc	#x
+	jruc	x
 
 #noalyo
 
 ;ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ				>Seek
 
-;	movi	>7f,a0
+;	movi	07fH,a0
 ;	callr	rnd
-;	jrz	#newseek
+;	jrz	newseek
 
 	move	*a13(plyr_d_seeky),a0
 	cmpi	CZMID+1,a0
-	jreq	#newseek			;Failed allyo?
+	jreq	newseek			;Failed allyo?
 
 	move	*a13(plyr_d_seekcnt),a0
 	subk	1,a0
@@ -972,7 +972,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 
 #newseek
 ;	move	*a13(plyr_newdir),a0
-;	jrnn	#contsk				;Turning?
+;	jrnn	contsk				;Turning?
 
 	movk	16-1,a0
 
@@ -992,7 +992,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 
 	move	*a13(plyr_ohoopx),a14
 	cmpi	WRLDMID,a14
-	jrlt	#lft
+	jrlt	lft
 	neg	a1
 #lft
 	add	a1,a14
@@ -1009,11 +1009,11 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	move	a0,*a13(plyr_d_seekcnt)
 #contsk
 	callr	drone_seek
-	jrnz	#notthere
+	jrnz	notthere
 
-	movk	>1f,a0				;3%
+	movk	01fH,a0				;3%
 	callr	rnd
-	jrnz	#x
+	jrnz	x
 
 	clr	a0
 	move	a0,*a13(plyr_d_seekcnt)
@@ -1075,30 +1075,30 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	.word	30,Z-40, 30,Z+40
 
 
-#*******************************
+********************************
 * Drone code - pass if clear
 * A8  = *Obj
 * A11 = *Ctrl bits
 * A13 = *Plyr process
-*>A0 = !0 if pass OK (CC)
+*0A0H = !0 if pass OK (CC)
 * Trashes scratch
 
  SUBRP	drone_pass
 
-	move	@PSTATUS,a0			;Plyr start bits 0-3
+	move	@PSTATUS2,a0			;Plyr start bits 0-3
 	move	*a13(plyr_num),a1
 	XORK	1,a1
 	btst	a1,a0
-	jrnz	#x				;Teammate is a human?
+	jrnz	x				;Teammate is a human?
 
 ;ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
 
 	move	*a13(plyr_tmdist),a0
 	addk	30,a0
 
-	move	*a13(plyr_o1dist),a1		;>Chk if o1 in my way
+	move	*a13(plyr_o1dist),a1		;0CHhk if o1 in my way
 	cmp	a1,a0
-	jrlt	#o1ok
+	jrlt	o1ok
 
 	move	*a13(plyr_tmdir),a14
 	move	*a13(plyr_o1dir),a1
@@ -1110,12 +1110,12 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	abs	a1
 #dsml
 	subk	16,a1
-	jrlt	#inway
+	jrlt	inway
 #o1ok
 
-	move	*a13(plyr_o2dist),a1		;>Chk if o2 in my way
+	move	*a13(plyr_o2dist),a1		;0CHhk if o2 in my way
 	cmp	a1,a0
-	jrlt	#o2ok
+	jrlt	o2ok
 
 	move	*a13(plyr_tmdir),a14
 	move	*a13(plyr_o2dir),a1
@@ -1127,21 +1127,21 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	abs	a1
 #dsml2
 	subk	16,a1
-	jrlt	#inway
+	jrlt	inway
 #o2ok
 
 	move	@ballnumscored,b0
 	subk	ONFIRE_MINCNT-1,b0
-	jrlt	#noheat				;None heating up?
+	jrlt	noheat				;None heating up?
 
 	move	@ballpnumscored,a1
 	move	*a13(plyr_num),a0
 	cmp	a0,a1
-	jrne	#noheat				;!Me?
+	jrne	noheat				;!Me?
 
 	move	*a13(plyr_ohpdist),a0
 	cmpi	350,a0
-	jrlt	#x				;Too close? Don't pass
+	jrlt	x				;Too close? Don't pass
 #noheat
 
 ;ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
@@ -1150,7 +1150,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 #tmclos
 	move	*a1(plyr_seqflgs),a0
 	btst	DUNK_B,a0
-	jrnz	#pass				;Tm dunking?
+	jrnz	pass				;Tm dunking?
 
 	move	*a1(plyr_seq),a0
 	subk	RUNDRIBTURB_SEQ,a0
@@ -1167,28 +1167,28 @@ ONLY3		equ	0	;!0=Only shoot 3's
 #inway
 	move	@ballnumscored,b0
 	subk	ONFIRE_MINCNT-1,b0
-	jrlt	#noheatiw			;None heating up?
+	jrlt	noheatiw			;None heating up?
 
 	move	@ballpnumscored,a1
 	move	*a13(plyr_num),a0
 	XORK	1,a0
 	cmp	a0,a1
-	jrne	#noheatiw			;!Tm?
+	jrne	noheatiw			;!Tm?
 
 	move	*a13(plyr_tmproc_p),a1,L
 	move	*a1(plyr_ohpdist),a0
 	cmpi	300,a0
-	jrlt	#iwpass				;He's Close? Risk pass
+	jrlt	iwpass				;He's Close? Risk pass
 
 #noheatiw
 	move	*a13(plyr_ohpdist),a1
 	cmpi	250,a1
-	jrlt	#x				;I'm close to hoop?
+	jrlt	x				;I'm close to hoop?
 
 	move	*a13(plyr_tmproc_p),a1,L
 	move	*a1(plyr_ohpdist),a0
 	cmpi	240,a0
-	jrlt	#tmclos				;Teammate is close to hoop?
+	jrlt	tmclos				;Teammate is close to hoop?
 
 #x
 	clr	a0
@@ -1196,7 +1196,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 
 
 
-#*******************************
+********************************
 * Drone code - defense
 * A8 = *Obj
 * A9 = *Plyr secondary data
@@ -1225,13 +1225,13 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	move	*a13(plyr_num),a0
 	move	@plyr_onfire,a1
 	btst	a0,a1
-	jrnz	#mefr			;I'm on fire?
+	jrnz	mefr			;I'm on fire?
 
 	subk	2,a6			;=-1
 
 	XORK	1,a0
 	btst	a0,a1
-	jrnz	#mefr			;Tm on fire?
+	jrnz	mefr			;Tm on fire?
 	clr	a6
 #mefr
 
@@ -1239,7 +1239,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 ;ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ			>Mode
 
 	move	*a13(plyr_d_mode),a14
-	jrn	#inmd			;Already in mode?
+	jrn	inmd			;Already in mode?
 
 	not	a14
 	move	a14,*a13(plyr_d_mode)	;Neg
@@ -1273,25 +1273,25 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	move	@game_time,a14,L
 	srl	8,a14			;Remove tenths
 	cmp	a0,a14
-	jrlt	#nasty			;Less than x secs?
+	jrlt	nasty			;Less than x secs?
 
 	move	@gmqrtr,a2
 	subk	3,a2
-	jrlt	#chkst
+	jrlt	chkst
 	move	*a13(plyr_ptsdown),a1
 	addk	3,a1
 	jrle	#chkst			;Winning by 3 or more?
 	srl	8,a14			;Remove ones
 	sll	1,a14			;*2
 	cmp	a0,a14
-	jrlt	#nasty			;Less than x0 secs?
+	jrlt	nasty			;Less than x0 secs?
 #chkst
 	move	@shotimer+16,a14	;Tens
-	jrnz	#scok
+	jrnz	scok
 	move	@shotimer,a14		;Ones
 	srl	1,a0			;/2
 	cmp	a0,a14
-	jrlt	#nasty			;Less than x secs?
+	jrlt	nasty			;Less than x secs?
 #scok
 	move	*a9(pld_d_nastycnt),a10
 	jrgt	#naston
@@ -1299,7 +1299,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	movk	10,a10
 	movi	0ffh,a0
 	callr	rnd
-	jrz	#nasty
+	jrz	nasty
 
 	clr	a10
 
@@ -1322,7 +1322,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	move	a10,*a9(pld_d_nastycnt)
 
 	cmpi	10,a10
-	jreq	#newsk
+	jreq	newsk
 #nonast
 
 ;ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
@@ -1338,7 +1338,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	addi	plyrproc_t,a4
 	move	*a4,a4,L
 	cmp	a5,a4
-	jreq	#guard			;I'm on guy with ball?
+	jreq	guard			;I'm on guy with ball?
 
 	move	*a5(plyr_ohpdist),a0
 	cmpi	300,a0
@@ -1346,7 +1346,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 
 ;	move	*a5(plyr_seqflgs),a0
 ;	btst	DUNK_B,a0
-;	jrnz	#gbc			;He's dunking?
+;	jrnz	gbc			;He's dunking?
 
 	move	*a13(plyr_tmproc_p),a3,L
 	move	*a3(plyr_seq),a0
@@ -1358,16 +1358,16 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	move	*a3(plyr_o1dist),a14
 	move	*a3(plyr_o1dir),a1
 	btst	0,a2
-	jrnz	#p1
+	jrnz	p1
 	move	*a3(plyr_o2dist),a14
 	move	*a3(plyr_o2dir),a1
 #p1
 	move	*a3(plyr_hpdir),a0	;Find dir difference
 	sub	a1,a0
 	abs	a0
-	cmpi	>40,a0
+	cmpi	040H,a0
 	jrle	#dsml
-	subi	>80,a0
+	subi	080H,a0
 	abs	a0
 #dsml	subk	28,a0
 	jrle	#gbc			;TM not between op and hoop?
@@ -1402,7 +1402,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 
 	move	*a5(plyr_seqflgs),a14
 	btst	SHOOT_B,a14
-	jrz	#nosh			;!Starting a shot?
+	jrz	nosh			;!Starting a shot?
 
 	TEST	a6
 	jrgt	#nosh			;I'm on fire?
@@ -1483,10 +1483,10 @@ ONLY3		equ	0	;!0=Only shoot 3's
 #onclose
 	move	*a13(plyr_hpdist),a1
 	cmp	a0,a1
-	jrlt	#icloser
+	jrlt	icloser
 
 	TEST	a2
-	jrz	#icloser		;I'm not moving?
+	jrz	icloser		;I'm not moving?
 	addi	BUT3_M,a2		;Turbo
 #icloser
 
@@ -1498,7 +1498,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 
 	move	@PCNT,a0
 	sll	32-1,a0
-	jrnz	#skipsp			;Skip 50%?
+	jrnz	skipsp			;Skip 50%?
 
 	move	a10,a10
 	jrgt	#ps			;Nasty on?
@@ -1521,16 +1521,16 @@ ONLY3		equ	0	;!0=Only shoot 3's
 #ps
 	movk	1,a0
 	callr	rnd
-	jrnz	#push			;50%?
+	jrnz	push			;50%?
 
 
 	move	*a5(plyr_jmpcnt),a1
-	jrnz	#push			;Plyr with ball is in air?
+	jrnz	push			;Plyr with ball is in air?
 
 	sll	32-4,a2
 	srl	32-4,a2
 	addk	BUT2_M,a2		;Steal
-	jruc	#x
+	jruc	x
 
 #push
 	move	*a5(PA8),a0,L
@@ -1543,11 +1543,11 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	jrgt	#skipsp			;Feet above my shoulders?
 
 	ori	BUT2_M<<8|BUT2_M|BUT3_M,a2
-	jruc	#x
+	jruc	x
 
 #skipsp
 
-;ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ			>Chk if I can block ball
+;ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ			0CHhk if I can block ball
 
 	move	*a13(plyr_balldist),a14
 	cmpi	65,a14
@@ -1557,7 +1557,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 
 
 	btst	DUNK_B,a4
-	jrz	#nodnk
+	jrz	nodnk
 
 	cmpi	35,a14
 	jrgt	#noblk
@@ -1569,26 +1569,26 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	jrgt	#tryblk			;Teammate far?
 
 	move	*a3(plyr_jmpcnt),a1
-	jrz	#tryblk			;Tm on gnd?
+	jrz	tryblk			;Tm on gnd?
 
 	move	@PCNT,a0
 	sll	32-3,a0
-	jrnz	#noblk			;Skip 88%?
+	jrnz	noblk			;Skip 88%?
 
-	jruc	#tryblk
+	jruc	tryblk
 
 #nodnk
 	btst	SHOOT_B,a4
-	jrz	#noblk			;!Starting a shot?
+	jrz	noblk			;!Starting a shot?
 
 	move	*a5(plyr_jmpcnt),a1
-	jrnz	#tryblk			;Plyr with ball is in air?
+	jrnz	tryblk			;Plyr with ball is in air?
 
 	movk	11,a0
 	callr	rndrng0
 	TEST	a0
-	jrnz	#noblk			;92% ignore?
-	jruc	#blk
+	jrnz	noblk			;92% ignore?
+	jruc	blk
 
 #tryblk
 	movi	99,a0
@@ -1598,7 +1598,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	move	*a14,a1
 
 	btst	DUNK_B,a4
-	jrz	#nd
+	jrz	nd
 	sra	1,a1			;Dunk % /2
 #nd
 	TEST	a10
@@ -1681,7 +1681,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	.word	50,50,50,50,50
 
 
-#*******************************
+********************************
 * Setup drones for ball takeout
 * Trashes scratch
 
@@ -1702,9 +1702,9 @@ ONLY3		equ	0	;!0=Only shoot 3's
 
 	movk	1,a0
 	move	*a13(plyr_ownball),a14
-	jrz	#def			;Defense?
+	jrz	def			;Defense?
 					;>Setup offense
-	jrn	#wob
+	jrn	wob
 	movk	2,a0
 #wob
 	move	a0,*a13(plyr_d_mode)
@@ -1722,7 +1722,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	move	*a0+,a1
 	move	*a13(plyr_num),a14
 	subk	2,a14
-	jrlt	#lft
+	jrlt	lft
 	neg	a1
 #lft
 	addi	WRLDMID,a1
@@ -1731,20 +1731,20 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	move	*a0+,a1
 	move	a1,*a13(plyr_d_seeky)
 
-	jruc	#nxt
+	jruc	nxt
 
 
 #def					;>Setup defense
 ;DJT Start
 ; .if 0
-	move	@PSTATUS,a0
+	move	@PSTATUS2,a0
 	move	*a13(plyr_num),a8
 	btst	a8,a0
-	jrnz	#df
+	jrnz	df
 	movk	1,a14
 	xor	a8,a14
 	btst	a14,a0
-	jrnz	#df
+	jrnz	df
 	srl	1,a14
 	sll	4,a14
 	neg	a14
@@ -1752,7 +1752,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	addi	t1ispro+16,a14,L
 	movi	8,a8		;TSEC*2	;!!!
 	move	*a14,a14
-	jrn	#df
+	jrn	df
 	jrp	#dd
 	movi	12,a8		;TSEC*4	;!!!
 #dd
@@ -1792,7 +1792,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	move	a0,*a13(plyr_d_seekcnt)
 
 #nxt
-	dsj	a4,#lp
+	dsj	a4,lp
 
 ;DJT Start
 	PULL	a3,a4,a7,a8,a9,a13
@@ -1827,7 +1827,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	.word	2,1,1,1,1		;11-15
 
 
-#*******************************
+********************************
 * Drone code - nobody has ball
 * A8 = *Obj
 * A11= *Ctrl bits
@@ -1849,7 +1849,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	move	a0,*a13(plyr_d_cflgs)
 
 	move	*a13(plyr_d_mode),a14
-	jrz	#inmd			;Already in mode?
+	jrz	inmd			;Already in mode?
 
 	move	a0,*a13(plyr_d_mode)
 
@@ -1871,7 +1871,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	move	@ballobj_p,a5,L
 
 
-	move	*a13(plyr_num),a14	;>Chk for pass
+	move	*a13(plyr_num),a14	;0CHhk for pass
 	srl	1,a14
 	movk	1,a0
 	xor	a0,a14
@@ -1894,7 +1894,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	jrls	#chaseb			;Teammate staggered?
 #tmok
 	move	*a4(plyr_jmpcnt),a14
-	jrnz	#chaseb			;Tm in air?
+	jrnz	chaseb			;Tm in air?
 
 	movi	CZMID,a1
 
@@ -1902,11 +1902,11 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	move	*a13(plyr_num),a0
 	move	@plyr_onfire,a2
 	btst	a0,a2
-	jrz	#nof			;I'm not on fire?
+	jrz	nof			;I'm not on fire?
 
 	XORK	1,a0
 	btst	a0,a2
-	jrz	#skf			;Tm not on fire?
+	jrz	skf			;Tm not on fire?
 
 	move	*a13(plyr_balldist),a0
 	move	*a4(plyr_balldist),a14
@@ -1918,12 +1918,12 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	subi	WRLDMID,a14
 	sra	4,a14			;/16
 	sub	a14,a0
-	jruc	#setxz
+	jruc	setxz
 
 #nof
 	XORK	1,a0
 	btst	a0,a2
-	jrnz	#chaseb			;Tm on fire? I get ball
+	jrnz	chaseb			;Tm on fire? I get ball
 
 	move	*a13(plyr_balldist),a0
 	move	*a4(plyr_balldist),a14
@@ -1931,13 +1931,13 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	jrle	#chaseb			;I'm closer?
 
 	move	*a5(OYVEL+16),a0
-	jrlt	#chaseb			;Going up?
+	jrlt	chaseb			;Going up?
 
 	move	*a13(plyr_ohoopx),a0	;Go for opponents top of 3 pt line
 	subi	WRLDMID,a0
 	sra	2,a0			;/4
 	addi	WRLDMID,a0
-	jruc	#setxz
+	jruc	setxz
 
 #chaseb
 	move	*a5(OXPOS),a0
@@ -1967,12 +1967,12 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	move	a0,*a13(plyr_d_seekcnt)
 
 	callr	drone_seek
-	jrz	#sk0
+	jrz	sk0
 	ori	BUT3_M,a0		;Turbo
 	move	a0,*a11
 #sk0
 
-;ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ			>Chk if I can jump at ball or steal
+;ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ			0CHhk if I can jump at ball or steal
 
 
 	move	*a13(plyr_balldist),a0
@@ -1982,7 +1982,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	move	@ballobj_p,a5,L
 
 
-	move	*a5(OXPOS),a0		;>Calc distance (long+short/2.667)
+	move	*a5(OXPOS),a0		;0CaHlc distance (long+short/2.667)
 	move	*a5(OXANI+16),a14
 	add	a14,a0
 	move	*a5(OXVEL),a14,L
@@ -2020,33 +2020,33 @@ ONLY3		equ	0	;!0=Only shoot 3's
 
 	move	@balltmshotcnt,b0
 	subk	TMFIRE_MINCNT-1,b0
-	jrne	#notmheat		;None heating up?
+	jrne	notmheat		;None heating up?
 
 	move	@gmqrtr,b0
 	subk	3,b0
-	jrlt	#tmhqok			;Q123?
+	jrlt	tmhqok			;Q123?
 
 	move	@game_time,a14,L
 	srl	8+8,a14			;Remove one & tenths
 	subk	6,a14
-	jrlt	#notmheat		;Less than 60 secs?
+	jrlt	notmheat		;Less than 60 secs?
 #tmhqok
 	move	@balltmscored,a1
 	srl	5,a1			;0=Tm2, 1=Tm1
 	move	*a13(plyr_num),a0
 	srl	1,a0
 	cmp	a0,a1
-	jrne	#ifire			;My tm?
+	jrne	ifire			;My tm?
 #notmheat
 
 	move	*a13(plyr_num),a1
 	move	@plyr_onfire,a0
 	btst	a1,a0
-	jrnz	#ifire			;I'm on fire?
+	jrnz	ifire			;I'm on fire?
 
 	XORK	1,a1
 	btst	a1,a0
-	jrz	#nofire			;Tm not on fire?
+	jrz	nofire			;Tm not on fire?
 #ifire
 	move	*a13(plyr_hpdist),a14
 	cmpi	150,a14
@@ -2063,7 +2063,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 
 	move	*a5(OYVEL+16),a0
 	jrgt	#j			;Going down? Goaltend!
-	jruc	#nojmp
+	jruc	nojmp
 
 #nofire
 	move	*a8(OYPOS),a0
@@ -2077,14 +2077,14 @@ ONLY3		equ	0	;!0=Only shoot 3's
 
 	movk	7,a0
 	callr	rnd
-	jrnz	#nojmp			;87%?
+	jrnz	nojmp			;87%?
 
 	move	*a11,a2
 	sll	32-4,a2
 	srl	32-4,a2
 	addk	BUT2_M,a2		;Steal
 	move	a2,*a11
-	jruc	#nojmp
+	jruc	nojmp
 
 #j
 	move	*a11,a0			;Jmp
@@ -2115,7 +2115,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	.word	11,11,11,10,10
 
 
-#*******************************
+********************************
 * Push stick to move drone towards his seek position
 
  SUBRP	drone_seek
@@ -2123,13 +2123,13 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	move	*a13(plyr_d_seekx),a0
 	move	*a13(plyr_d_seeky),a1
 
-#*******************************
+********************************
 * Push stick to move drone towards an XZ location
 * A0 = X to seek
 * A1 = Z
 * A8 = *Obj
 * A11= *Ctrl bits
-*>A0 = Joy bits set or 0 (Pass CC)
+*0A0H = Joy bits set or 0 (Pass CC)
 * Trashes scratch
 
  SUBRP	drone_seekxy
@@ -2148,7 +2148,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	subk	10,a2
 	jrle	#onx
 	move	a14,a14
-	jrlt	#nolft
+	jrlt	nolft
 	subk	4,a0			;Left
 
 #nolft	addk	8,a0			;Rgt
@@ -2161,7 +2161,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	subk	10,a2
 	jrle	#onz
 	move	a14,a14
-	jrlt	#noup
+	jrlt	noup
 	subk	1,a0			;Up
 
 #noup	addk	2,a0			;Dn
@@ -2173,9 +2173,9 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	rets
 
 
-#*******************************
+********************************
 * Get the current skill offset
-*>A0 = Offset (0-30) *16
+*0A0H = Offset (0-30) *16
 * Trashes scratch
 
  SUBRP	drone_getcurskillo
@@ -2188,21 +2188,21 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	move	*a13(plyr_num),a1
 	move	@dronesmrt,a14
 	btst	a1,a14
-	jrz	#nosmrt			;Normal?
+	jrz	nosmrt			;Normal?
 	addk	5,a0
 #nosmrt
 
 
 	move	@ballnumscored,a1
 	subk	ONFIRE_MINCNT-1,a1
-	jrlt	#noheat			;None heating up?
+	jrlt	noheat			;None heating up?
 
 	addk	2,a0			;Get tougher
 
 	move	@ballpnumscored,a1
 	move	*a13(plyr_num),a14
 	cmp	a1,a14
-	jrne	#noheat			;Not me?
+	jrne	noheat			;Not me?
 
 	addk	6,a0			;Get tougher
 #noheat
@@ -2221,7 +2221,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 
 
 
-#*******************************
+********************************
 * Adjust all drone abilities (at every minute dec of game clock)
 * A0 = Game clock minute count before dec (0-2)
 * Trashes scratch
@@ -2272,7 +2272,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	move	*a14,a14
 	add	a14,a2			;Modify skill
 
-	move	a5,a14			;>Chk minute minimum
+	move	a5,a14			;0CHhk minute minimum
 	sll	3,a14
 	addi	#min_t,a14
 	movb	*a14,a14
@@ -2284,12 +2284,12 @@ ONLY3		equ	0	;!0=Only shoot 3's
 
 	move	*a3(plyr_num),a1
 	XORK	1,a1
-	move	@PSTATUS,a14
+	move	@PSTATUS2,a14
 	btst	a1,a14
-	jrnz	#done			;Teammate is human?
+	jrnz	done			;Teammate is human?
 
 
-	move	@team1,a1		;>Chk team minimum
+	move	@team1,a1		;0CHhk team minimum
 	cmpi	3,b0
 	jrge	#t1
 	move	@team2,a1
@@ -2318,7 +2318,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 #done
 	move	a2,*a3(plyr_d_skill)
 
-	dsj	b0,#lp
+	dsj	b0,lp
 
 
 	PULL	a2,a3,a4,a5,a6
@@ -2411,7 +2411,7 @@ TMDIFF	.macro
 ********************************
 * Get random # with mask
 * A0 = Mask
-*>A0 = Rnd # (Pass CC)
+*0A0H = Rnd # (Pass CC)
 * Trashes scratch
 
  SUBRP	rnd
@@ -2430,7 +2430,7 @@ TMDIFF	.macro
 ********************************
 * Quickly produce a random # in range 0-X
 * A0 = X
-*>A0 = Random # (0 to A0) (No CC)
+*0A0H = Random # (0 to A0) (No CC)
 * Trashes scratch
 
  SUBRP	rndrng0

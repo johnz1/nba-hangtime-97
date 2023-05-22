@@ -236,16 +236,16 @@ IDIOTS_P:
 ********************************
 #*
 
-MAX_CRTIME	equ	>7fff		;30*60
+MAX_CRTIME	equ	07fffH		;30*60
 ;TEAMSEL_PAGE	equ	0*256
 ;NAMENT_PAGE	equ	1*256
 
-	.asg	>5e+5,x1
-	.asg	>a1+5,x1a
-	.asg	>e4+5,x2a
-	.asg	>ad+5,x1b
-	.asg	>12f5+2,y1
-	.asg	>131f,y1a
+	.asg	05eH+5,x1
+	.asg	0a1H+5,x1a
+	.asg	0e4H+5,x2a
+	.asg	0adH+5,x1b
+	.asg	012f5H+2,y1
+	.asg	0131fH,y1a
 
 
 	.def	ladder_imgs0
@@ -268,168 +268,168 @@ ladder_imgs6
 ;	.long	MAS_DAL,x2a,y1
 ;	.long	T_MAVS,x1b,y1a
 ;
-;	.long	THM_DET,x1,y1->b3
-;	.long	DUM_DET,x1a,y1->b3
+;	.long	THM_DET,x1,y1-0b3H
+;	.long	DUM_DET,x1a,y1-0b3H
 ;
-;	.long	ELL_DET,x2a,y1->b3
-;;	.long	HOR_HOU,x2a,y1->b3
-;	.long	T_PISS,x1b,y1a->b3
+;	.long	ELL_DET,x2a,y1-0b3H
+;;	.long	HOR_HOU,x2a,y1-0b3H
+;	.long	T_PISS,x1b,y1a-0b3H
 ;
 ;	.long	0
 ;
 ;ladder_imgs1
 ;;4
-;	.long	BAK_MLW,x1,y1->b3*2-2
-;	.long	EDW_MLW,x1a,y1->b3*2-2
-;	.long	DAY_MLW,x2a,y1->b3*2-2
-;	.long	T_BUCKS,x1b,y1a->b3*2-2
+;	.long	BAK_MLW,x1,y1-0b3H*2-2
+;	.long	EDW_MLW,x1a,y1-0b3H*2-2
+;	.long	DAY_MLW,x2a,y1-0b3H*2-2
+;	.long	T_BUCKS,x1b,y1a-0b3H*2-2
 ;
-;	.long	GUG_WAS,x1,y1->b3*3-2
-;	.long	ELL_WAS,x1a,y1->b3*3-2
-;	.long	CHE_WAS,x2a,y1->b3*3-2
-;	.long	T_BULTS,x1b,y1a->b3*3-2
+;	.long	GUG_WAS,x1,y1-0b3H*3-2
+;	.long	ELL_WAS,x1a,y1-0b3H*3-2
+;	.long	CHE_WAS,x2a,y1-0b3H*3-2
+;	.long	T_BULTS,x1b,y1a-0b3H*3-2
 ;
-;	.long	SIM_SAC,x1,y1->b3*4-4
-;	.long	HUR_SAC,x1a,y1->b3*4-4
-;	.long	RIC_SAC,x2a,y1->b3*4-4
-;	.long	T_KINGS,x1b,y1a->b3*4-4
+;	.long	SIM_SAC,x1,y1-0b3H*4-4
+;	.long	HUR_SAC,x1a,y1-0b3H*4-4
+;	.long	RIC_SAC,x2a,y1-0b3H*4-4
+;	.long	T_KINGS,x1b,y1a-0b3H*4-4
 ;
-;	.long	LTN_MIN,x1,y1->b3*5-4
-;	.long	PRS_MIN,x1a,y1->b3*5-4
-;	.long	RID_MIN,x2a,y1->b3*5-4
-;	.long	T_TWOLV,x1b,y1a->b3*5-4
+;	.long	LTN_MIN,x1,y1-0b3H*5-4
+;	.long	PRS_MIN,x1a,y1-0b3H*5-4
+;	.long	RID_MIN,x2a,y1-0b3H*5-4
+;	.long	T_TWOLV,x1b,y1a-0b3H*5-4
 ;
 ;	.long	0
 ;
 ;ladder_imgs2
 ;;4
-;	.long	PEE_LAK,x1,y1->b3*6-6
-;	.long	DIV_LAK,x1a,y1->b3*6-6
-;	.long	CAM_LAK,x2a,y1->b3*6-6
-;	.long	T_LAKS,x1b,y1a->b3*6-6
+;	.long	PEE_LAK,x1,y1-0b3H*6-6
+;	.long	DIV_LAK,x1a,y1-0b3H*6-6
+;	.long	CAM_LAK,x2a,y1-0b3H*6-6
+;	.long	T_LAKS,x1b,y1a-0b3H*6-6
 ;
-;	.long	WLK_ATL,x1,y1->b3*7-6
-;;	.long	MAN_CLP,x1,y1->b3*7-6
-;	.long	HRP_CLP,x1a,y1->b3*7-6
-;	.long	ROB_CLP,x2a,y1->b3*7-6
-;	.long	T_CLIPS,x1b,y1a->b3*7-6
+;	.long	WLK_ATL,x1,y1-0b3H*7-6
+;;	.long	MAN_CLP,x1,y1-0b3H*7-6
+;	.long	HRP_CLP,x1a,y1-0b3H*7-6
+;	.long	ROB_CLP,x2a,y1-0b3H*7-6
+;	.long	T_CLIPS,x1b,y1a-0b3H*7-6
 ;
-;	.long	MCD_BOS,x1,y1->b3*8-8
-;	.long	BRO_BOS,x1a,y1->b3*8-8
-;	.long	GAM_BOS,x2a,y1->b3*8-8
-;	.long	T_CELTS,x1b,y1a->b3*8-8
+;	.long	MCD_BOS,x1,y1-0b3H*8-8
+;	.long	BRO_BOS,x1a,y1-0b3H*8-8
+;	.long	GAM_BOS,x2a,y1-0b3H*8-8
+;	.long	T_CELTS,x1b,y1a-0b3H*8-8
 ;
-;	.long	WEA_PHL,x1,y1->b3*9-8
-;;	.long	BRA_PHL,x1a,y1->b3*9-8
-;	.long	BRA_PHL,x2a,y1->b3*9-8
-;	.long	HRN_PHL,x2a+400,y1->b3*9-8
-;	.long	T_76RS,x1b,y1a->b3*9-8
+;	.long	WEA_PHL,x1,y1-0b3H*9-8
+;;	.long	BRA_PHL,x1a,y1-0b3H*9-8
+;	.long	BRA_PHL,x2a,y1-0b3H*9-8
+;	.long	HRN_PHL,x2a+400,y1-0b3H*9-8
+;	.long	T_76RS,x1b,y1a-0b3H*9-8
 ;
 ;	.long	0
 ;
 ;ladder_imgs3
 ;;4
-;	.long	MIL_IND,x1,y1->b3*10-10
-;	.long	SMI_IND,x1a,y1->b3*10-10
-;	.long	SEL_IND,x2a,y1->b3*10-10
-;	.long	T_PACER,x1b,y1a->b3*10-10
+;	.long	MIL_IND,x1,y1-0b3H*10-10
+;	.long	SMI_IND,x1a,y1-0b3H*10-10
+;	.long	SEL_IND,x2a,y1-0b3H*10-10
+;	.long	T_PACER,x1b,y1a-0b3H*10-10
 ;
-;	.long	COL_NEJ,x1,y1->b3*11-10
-;	.long	AND_NEJ,x1a,y1->b3*11-10
-;	.long	MOR_NEJ,x2a,y1->b3*11-10
-;	.long	T_NETS,x1b,y1a->b3*11-10
+;	.long	COL_NEJ,x1,y1-0b3H*11-10
+;	.long	AND_NEJ,x1a,y1-0b3H*11-10
+;	.long	MOR_NEJ,x2a,y1-0b3H*11-10
+;	.long	T_NETS,x1b,y1a-0b3H*11-10
 ;
-;	.long	PRC_CLE,x1,y1->b3*12-12
-;	.long	DAU_CLE,x1a,y1->b3*12-12
-;	.long	NAN_CLE,x2a,y1->b3*12-12
-;	.long	T_CAVS,x1b,y1a->b3*12-12
+;	.long	PRC_CLE,x1,y1-0b3H*12-12
+;	.long	DAU_CLE,x1a,y1-0b3H*12-12
+;	.long	NAN_CLE,x2a,y1-0b3H*12-12
+;	.long	T_CAVS,x1b,y1a-0b3H*12-12
 ;
-;	.long	MUT_DEN,x1,y1->b3*13-12
-;	.long	ELL_DEN,x1a,y1->b3*13-12
-;	.long	ROG_DEN,x2a,y1->b3*13-12
-;	.long	T_NUGS,x1b,y1a->b3*13-12
+;	.long	MUT_DEN,x1,y1-0b3H*13-12
+;	.long	ELL_DEN,x1a,y1-0b3H*13-12
+;	.long	ROG_DEN,x2a,y1-0b3H*13-12
+;	.long	T_NUGS,x1b,y1a-0b3H*13-12
 ;
 ;	.long	0
 ;
 ;ladder_imgs4
 ;;4
-;	.long	HRD_GLD,x1,y1->b3*14-14
-;	.long	MUL_GLD,x1a,y1->b3*14-14
-;	.long	WEB_GLD,x2a,y1->b3*14-14
-;	.long	T_WARS,x1b,y1a->b3*14-14
+;	.long	HRD_GLD,x1,y1-0b3H*14-14
+;	.long	MUL_GLD,x1a,y1-0b3H*14-14
+;	.long	WEB_GLD,x2a,y1-0b3H*14-14
+;	.long	T_WARS,x1b,y1a-0b3H*14-14
 ;
-;	.long	DRX_PRT,x1,y1->b3*15-14
-;	.long	POR_PRT,x1a,y1->b3*15-14
-;	.long	ROB_PRT,x2a,y1->b3*15-14
-;	.long	T_BLAZ,x1b,y1a->b3*15-14
+;	.long	DRX_PRT,x1,y1-0b3H*15-14
+;	.long	POR_PRT,x1a,y1-0b3H*15-14
+;	.long	ROB_PRT,x2a,y1-0b3H*15-14
+;	.long	T_BLAZ,x1b,y1a-0b3H*15-14
 ;
-;	.long	RCE_MIA,x1,y1->b3*16-16
-;	.long	SKL_MIA,x1a,y1->b3*16-16
-;	.long	MIN_MIA,x2a,y1->b3*16-16
-;	.long	T_HEAT,x1b,y1a->b3*16-16
+;	.long	RCE_MIA,x1,y1-0b3H*16-16
+;	.long	SKL_MIA,x1a,y1-0b3H*16-16
+;	.long	MIN_MIA,x2a,y1-0b3H*16-16
+;	.long	T_HEAT,x1b,y1a-0b3H*16-16
 ;
-;	.long	JON_CHA,x1,y1->b3*17-16
-;	.long	HWK_CHA,x1a,y1->b3*17-16
-;	.long	MOU_CHA,x2a,y1->b3*17-16
-;	.long	T_HORS,x1b,y1a->b3*17-16
+;	.long	JON_CHA,x1,y1-0b3H*17-16
+;	.long	HWK_CHA,x1a,y1-0b3H*17-16
+;	.long	MOU_CHA,x2a,y1-0b3H*17-16
+;	.long	T_HORS,x1b,y1a-0b3H*17-16
 ;
 ;	.long	0
 ;
 ;ladder_imgs5
 ;;4
-;	.long	SKL_ORL,x1,y1->b3*18-18
-;	.long	HAR_ORL,x1a,y1->b3*18-18
-;	.long	AND_ORL,x2a,y1->b3*18-18
-;	.long	T_MAGIC,x1b,y1a->b3*18-18
+;	.long	SKL_ORL,x1,y1-0b3H*18-18
+;	.long	HAR_ORL,x1a,y1-0b3H*18-18
+;	.long	AND_ORL,x2a,y1-0b3H*18-18
+;	.long	T_MAGIC,x1b,y1a-0b3H*18-18
 ;
-;	.long	ROB_SAN,x1,y1->b3*19-18
-;	.long	ROD_SAN,x1a,y1->b3*19-18
-;	.long	ELS_SAN,x2a,y1->b3*19-18
-;	.long	T_SPURS,x1b,y1a->b3*19-18
+;	.long	ROB_SAN,x1,y1-0b3H*19-18
+;	.long	ROD_SAN,x1a,y1-0b3H*19-18
+;	.long	ELS_SAN,x2a,y1-0b3H*19-18
+;	.long	T_SPURS,x1b,y1a-0b3H*19-18
 ;
-;	.long	MLN_UTA,x1,y1->b3*20-20
-;	.long	STK_UTA,x1a,y1->b3*20-20
-;	.long	BEN_UTA,x2a,y1->b3*20-20
-;	.long	T_JAZZ,x1b,y1a->b3*20-20
+;	.long	MLN_UTA,x1,y1-0b3H*20-20
+;	.long	STK_UTA,x1a,y1-0b3H*20-20
+;	.long	BEN_UTA,x2a,y1-0b3H*20-20
+;	.long	T_JAZZ,x1b,y1a-0b3H*20-20
 ;
-;	.long	EWG_NEY,x1,y1->b3*21-20
-;	.long	MAS_NEY,x1a,y1->b3*21-20
-;	.long	STA_NEY,x2a,y1->b3*21-20
-;	.long	T_KNIKS,x1b,y1a->b3*21-20
+;	.long	EWG_NEY,x1,y1-0b3H*21-20
+;	.long	MAS_NEY,x1a,y1-0b3H*21-20
+;	.long	STA_NEY,x2a,y1-0b3H*21-20
+;	.long	T_KNIKS,x1b,y1a-0b3H*21-20
 ;
 ;	.long	0
 ;
 ;ladder_imgs6
 ;;4
-;	.long	MAN_CLP,x1,y1->b3*22-22
-;;	.long	WLK_ATL,x1,y1->b3*22-22
-;	.long	AUG_ATL,x1a,y1->b3*22-22
-;	.long	WLS_ATL,x2a,y1->b3*22-22
-;	.long	T_HAWKS,x1b,y1a->b3*22-22
+;	.long	MAN_CLP,x1,y1-0b3H*22-22
+;;	.long	WLK_ATL,x1,y1-0b3H*22-22
+;	.long	AUG_ATL,x1a,y1-0b3H*22-22
+;	.long	WLS_ATL,x2a,y1-0b3H*22-22
+;	.long	T_HAWKS,x1b,y1a-0b3H*22-22
 ;
-;;	.long	BRK_PHX,x1,y1->b3*23-22
-;;	.long	MAJ_PHX,x1,y1->b3*23-22
-;	.long	MAJ_PHX,x1a,y1->b3*23-22
-;	.long	JOH_PHX,x2a,y1->b3*23-22
-;	.long	T_SUNS,x1b,y1a->b3*23-22
+;;	.long	BRK_PHX,x1,y1-0b3H*23-22
+;;	.long	MAJ_PHX,x1,y1-0b3H*23-22
+;	.long	MAJ_PHX,x1a,y1-0b3H*23-22
+;	.long	JOH_PHX,x2a,y1-0b3H*23-22
+;	.long	T_SUNS,x1b,y1a-0b3H*23-22
 ;
-;	.long	OLA_HOU,x1,y1->b3*24-24
-;	.long	MAX_HOU,x1a,y1->b3*24-24
-;;	.long	ELL_DET,x2a,y1->b3
-;;	.long	ELL_DET,x2a,y1->b3*24-24
-;	.long	HOR_HOU,x2a,y1->b3*24-24
-;	.long	T_ROCKS,x1b,y1a->b3*24-24
+;	.long	OLA_HOU,x1,y1-0b3H*24-24
+;	.long	MAX_HOU,x1a,y1-0b3H*24-24
+;;	.long	ELL_DET,x2a,y1-0b3H
+;;	.long	ELL_DET,x2a,y1-0b3H*24-24
+;	.long	HOR_HOU,x2a,y1-0b3H*24-24
+;	.long	T_ROCKS,x1b,y1a-0b3H*24-24
 ;
-;	.long	KMP_SEA,x1,y1->b3*25-24
-;	.long	PAY_SEA,x1a,y1->b3*25-24
-;	.long	GIL_SEA,x2a,y1->b3*25-24
-;	.long	T_SONICS,x1b,y1a->b3*25-24
+;	.long	KMP_SEA,x1,y1-0b3H*25-24
+;	.long	PAY_SEA,x1a,y1-0b3H*25-24
+;	.long	GIL_SEA,x2a,y1-0b3H*25-24
+;	.long	T_SONICS,x1b,y1a-0b3H*25-24
 ;
 ;
 ;	.long	0
 
 
-#*****************************************************************************
+******************************************************************************
 * a8  = sleep time
 * a9  = palette to change
 * a10 = * palette list
@@ -455,7 +455,7 @@ SLEEP_TIME	equ	PDATA+80h
 
 	move	a9,a0
 	calla	pal_find
-	jrz	#wait
+	jrz	wait
 	srl	8,a0
 	sll	8,a0
 	move	a0,*a13(PAL_ADDR),L
@@ -465,24 +465,24 @@ SLEEP_TIME	equ	PDATA+80h
 	move	*a2+,a3		;num colours
 #loop
 	move	*a2+,*a1+
-	dsj	a3,#loop
+	dsj	a3,loop
 
 ;	SLEEP	4
 	move	*a13(SLEEP_TIME),a10
 #dly1
 	SLEEPK	1
-	dsj	a10,#dly1
+	dsj	a10,dly1
 #next_pal
 
 	move	*a13(CUR_PAL),a10,L
 	addi	20h,a10
 	move	*a10,a0,L
-	jrn	#ok
-	jrz	#not_sleep
+	jrn	ok
+	jrz	not_sleep
 
 	move	a10,*a13(CUR_PAL),L
 	move	a0,a10
-	jruc	#dly1
+	jruc	dly1
 
 #not_sleep
 	move	*a13(START_PAL),a10,L
@@ -493,11 +493,11 @@ SLEEP_TIME	equ	PDATA+80h
 ;	SLEEP	2
 	move	*a13(SLEEP_TIME),a10
 	srl	1,a10
-	jrnz	#dly2
+	jrnz	dly2
 	movk	1,a10
 #dly2
 	SLEEPK	1
-	dsj	a10,#dly2
+	dsj	a10,dly2
 
 
 	move	*a13(MORF_PAL),a1,L
@@ -525,11 +525,11 @@ SLEEP_TIME	equ	PDATA+80h
 	srl	10,a4
 	srl	10,a8
 	cmp	a4,a8			;a8-a4
-	jreq	#redok
-	jrlt	#decr
+	jreq	redok
+	jrlt	decr
 	inc	a11
 	inc	a4
-	jruc	#redok
+	jruc	redok
 #decr
 	inc	a11
 	dec	a4
@@ -539,11 +539,11 @@ SLEEP_TIME	equ	PDATA+80h
 	srl	5,a5
 	srl	5,a9
 	cmp	a5,a9
-	jreq	#greenok
-	jrlt	#decg
+	jreq	greenok
+	jrlt	decg
 	inc	a11
 	inc	a5
-	jruc	#greenok
+	jruc	greenok
 #decg
 	inc	a11
 	dec	a5
@@ -551,11 +551,11 @@ SLEEP_TIME	equ	PDATA+80h
 	sll	5,a5
 
 	cmp	a6,a10
-	jreq	#blueok
-	jrlt	#decb
+	jreq	blueok
+	jrlt	decb
 	inc	a11
 	inc	a6
-	jruc	#blueok
+	jruc	blueok
 #decb
 	inc	a11
 	dec	a6
@@ -565,7 +565,7 @@ SLEEP_TIME	equ	PDATA+80h
 	or	a6,a4
 	move	a4,*a1+
 
-	dsj	a0,#morfit
+	dsj	a0,morfit
 
 	move	*a13(CUR_PAL),a0,L	;* palette list
 	move	*a0,a0,L		;* palette
@@ -575,9 +575,9 @@ SLEEP_TIME	equ	PDATA+80h
 	calla	pal_set
 
 	move	a11,a11
-	jrnz	#again
+	jrnz	again
 
-	jruc	#next_pal
+	jruc	next_pal
 
 	DIE
 
@@ -587,7 +587,7 @@ SLEEP_TIME	equ	PDATA+80h
 ;	move	a10,a1		;dest palette
 ;	calla	pal_set
 
-#*****************************************************************************
+******************************************************************************
 *
 * RETURN:	a0 = start button bits
 *-----------------------------------------------------------------------------
@@ -596,31 +596,31 @@ SLEEP_TIME	equ	PDATA+80h
 
 	clr	a1
 
-	move	@PSTATUS,a2
+	move	@PSTATUS2,a2
 
 	btst	0,a2
-	jrz	#no_player1
+	jrz	no_player1
 	clr	a0			;player 1
 	calla	get_start_down
 	or	a0,a1
 #no_player1
 
 	btst	1,a2
-	jrz	#no_player2
+	jrz	no_player2
 	movk	1,a0			;player 2
 	calla	get_start_down
 	or	a0,a1
 #no_player2
 
 	btst	2,a2
-	jrz	#no_player3
+	jrz	no_player3
 	movk	2,a0			;player 3
 	calla	get_start_down
 	or	a0,a1
 #no_player3
 
 	btst	3,a2
-	jrz	#no_player4
+	jrz	no_player4
 	movk	3,a0			;player 4
 	calla	get_start_down
 	or	a0,a1
@@ -629,7 +629,7 @@ SLEEP_TIME	equ	PDATA+80h
 	move	a1,a0
 	rets
 
-#*****************************************************************************
+******************************************************************************
 *
 * RETURN:	a0 = start bit
 *-----------------------------------------------------------------------------
@@ -651,7 +651,7 @@ start_offs	.word	12h,15h,19h,1ah
 start_offs	.word	12h,15h,17h,27h
 	.endif
 
-#*****************************************************************************
+******************************************************************************
 * RETURN:	a0 = start bit
 *-----------------------------------------------------------------------------
  SUBR	get_start_cur
@@ -664,23 +664,23 @@ start_offs	.word	12h,15h,17h,27h
 	andi	1,a0
 	rets
 
-#*****************************************************************************
+******************************************************************************
 
  SUBR	get_team1_turbo
 
 	clr	a1
 
-	move	@PSTATUS,a2
+	move	@PSTATUS2,a2
 
 	btst	0,a2
-	jrz	#no_player1
+	jrz	no_player1
 	clr	a0			;player 1
 	calla	get_turbo_down
 	or	a0,a1
 #no_player1
 
 	btst	1,a2
-	jrz	#no_player2
+	jrz	no_player2
 	movk	1,a0			;player 2
 	calla	get_turbo_down
 	or	a0,a1
@@ -689,22 +689,22 @@ start_offs	.word	12h,15h,17h,27h
 
 	rets
 
-#*****************************************************************************
+******************************************************************************
  SUBR	get_team2_turbo
 
 	clr	a1
 
-	move	@PSTATUS,a2
+	move	@PSTATUS2,a2
 
 	btst	2,a2
-	jrz	#no_player1
+	jrz	no_player1
 	movk	2,a0			;player 3
 	calla	get_turbo_down
 	or	a0,a1
 #no_player1
 
 	btst	3,a2
-	jrz	#no_player2
+	jrz	no_player2
 	movk	3,a0			;player 4
 	calla	get_turbo_down
 	or	a0,a1
@@ -713,7 +713,7 @@ start_offs	.word	12h,15h,17h,27h
 
 	rets
 
-#*****************************************************************************
+******************************************************************************
 * RETURN:	a0 = start bit
 *-----------------------------------------------------------------------------
  SUBR	get_turbo_down
@@ -733,38 +733,38 @@ turbo_offs	.word	06h,0eh,26h,2eh
 turbo_offs	.word	12h,15h,17h,27h
 	.endif
 
-#*****************************************************************************
+******************************************************************************
 * RETURN:	a0 = joy switch bits
 *-----------------------------------------------------------------------------
   SUBR	get_all_sticks_cur
 
 	clr	a1
 
-	move	@PSTATUS,a2
+	move	@PSTATUS2,a2
 
 	btst	0,a2
-	jrz	#no_player1
+	jrz	no_player1
 	clr	a0			;player 1
 	calla	get_stick_val_cur
 	or	a0,a1
 #no_player1
 
 	btst	1,a2
-	jrz	#no_player2
+	jrz	no_player2
 	movk	1,a0			;player 2
 	calla	get_stick_val_cur
 	or	a0,a1
 #no_player2
 
 	btst	2,a2
-	jrz	#no_player3
+	jrz	no_player3
 	movk	2,a0			;player 3
 	calla	get_stick_val_cur
 	or	a0,a1
 #no_player3
 
 	btst	3,a2
-	jrz	#no_player4
+	jrz	no_player4
 	movk	3,a0			;player 4
 	calla	get_stick_val_cur
 	or	a0,a1
@@ -774,7 +774,7 @@ turbo_offs	.word	12h,15h,17h,27h
 	rets
 
 
-#*****************************************************************************
+******************************************************************************
 * RETURN:	a0 = joy switch bits
 *-----------------------------------------------------------------------------
   SUBR	get_all_sticks_cur2
@@ -801,7 +801,7 @@ turbo_offs	.word	12h,15h,17h,27h
 	rets
 
 
-#*****************************************************************************
+******************************************************************************
 * INPUT:	a0 = player number (0-3)
 *-----------------------------------------------------------------------------
 * RETURN:	a0 = joy switch bits
@@ -832,38 +832,38 @@ turbo_offs	.word	12h,15h,17h,27h
 	rets
 
 
-#*****************************************************************************
+******************************************************************************
 * RETURN:	a0 = joy switch bits
 *-----------------------------------------------------------------------------
   SUBR	get_all_sticks_down
 
 	clr	a1
 
-	move	@PSTATUS,a2
+	move	@PSTATUS2,a2
 
 	btst	0,a2
-	jrz	#no_player1
+	jrz	no_player1
 	clr	a0			;player 1
 	calla	get_stick_val_down
 	or	a0,a1
 #no_player1
 
 	btst	1,a2
-	jrz	#no_player2
+	jrz	no_player2
 	movk	1,a0			;player 2
 	calla	get_stick_val_down
 	or	a0,a1
 #no_player2
 
 	btst	2,a2
-	jrz	#no_player3
+	jrz	no_player3
 	movk	2,a0			;player 3
 	calla	get_stick_val_down
 	or	a0,a1
 #no_player3
 
 	btst	3,a2
-	jrz	#no_player4
+	jrz	no_player4
 	movk	3,a0			;player 4
 	calla	get_stick_val_down
 	or	a0,a1
@@ -873,7 +873,7 @@ turbo_offs	.word	12h,15h,17h,27h
 	rets
 
 
-#*****************************************************************************
+******************************************************************************
 * RETURN:	a0 = joy switch bits
 *-----------------------------------------------------------------------------
   SUBR	get_all_sticks_down2
@@ -930,38 +930,38 @@ turbo_offs	.word	12h,15h,17h,27h
 
 joy_offs	.word	00h,08h,20h,28h
 
-#*****************************************************************************
+******************************************************************************
 * RETURN:	a0 = joy switch bits
 *-----------------------------------------------------------------------------
   SUBR	get_all_buttons_cur
 
 	clr	a1
 
-	move	@PSTATUS,a2
+	move	@PSTATUS2,a2
 
 	btst	0,a2
-	jrz	#no_player1
+	jrz	no_player1
 	clr	a0			;player 1
 	calla	get_but_val_cur
 	or	a0,a1
 #no_player1
 
 	btst	1,a2
-	jrz	#no_player2
+	jrz	no_player2
 	movk	1,a0			;player 2
 	calla	get_but_val_cur
 	or	a0,a1
 #no_player2
 
 	btst	2,a2
-	jrz	#no_player3
+	jrz	no_player3
 	movk	2,a0			;player 3
 	calla	get_but_val_cur
 	or	a0,a1
 #no_player3
 
 	btst	3,a2
-	jrz	#no_player4
+	jrz	no_player4
 	movk	3,a0			;player 4
 	calla	get_but_val_cur
 	or	a0,a1
@@ -971,7 +971,7 @@ joy_offs	.word	00h,08h,20h,28h
 	rets
 
 
-#*****************************************************************************
+******************************************************************************
 * RETURN:	a0 = joy switch bits
 *-----------------------------------------------------------------------------
   SUBR	get_all_buttons_cur2
@@ -993,7 +993,7 @@ joy_offs	.word	00h,08h,20h,28h
 	rets
 
 
-#*****************************************************************************
+******************************************************************************
 * INPUT:	a0 = player number (0-3)
 *-----------------------------------------------------------------------------
 * RETURN:	a0 = button bits
@@ -1022,38 +1022,38 @@ joy_offs	.word	00h,08h,20h,28h
 	andi	0111b,a0
 	rets
 
-#*****************************************************************************
+******************************************************************************
 * RETURN:	a0 = joy switch bits
 *-----------------------------------------------------------------------------
  SUBR	get_all_buttons_down
 
 	clr	a1
 
-	move	@PSTATUS,a2
+	move	@PSTATUS2,a2
 
 	btst	0,a2
-	jrz	#no_player1
+	jrz	no_player1
 	clr	a0			;player 1
 	calla	get_but_val_down
 	or	a0,a1
 #no_player1
 
 	btst	1,a2
-	jrz	#no_player2
+	jrz	no_player2
 	movk	1,a0			;player 2
 	calla	get_but_val_down
 	or	a0,a1
 #no_player2
 
 	btst	2,a2
-	jrz	#no_player3
+	jrz	no_player3
 	movk	2,a0			;player 3
 	calla	get_but_val_down
 	or	a0,a1
 #no_player3
 
 	btst	3,a2
-	jrz	#no_player4
+	jrz	no_player4
 	movk	3,a0			;player 4
 	calla	get_but_val_down
 	or	a0,a1
@@ -1063,7 +1063,7 @@ joy_offs	.word	00h,08h,20h,28h
 	rets
 
 
-#*****************************************************************************
+******************************************************************************
 * RETURN:	a0 = joy switch bits
 *-----------------------------------------------------------------------------
  SUBR	get_all_buttons_down2
@@ -1166,7 +1166,7 @@ but_offs	.word	04h,0ch,1ch,24h
 	andi	01b,a0			;mask out turbo and pass
 	rets
 
-#*****************************************************************************
+******************************************************************************
 
 	.asg	330,X1		;89,X1
 	.asg	330,X2		;307,X2
@@ -1181,7 +1181,7 @@ but_offs	.word	04h,0ch,1ch,24h
 	move	@scores+16,a14
 	add	a0,a14
 	cmpi	20,a14
-	jrlt	#x
+	jrlt	x
 
 	move	@kp_team1,a0
 	move	a0,@team1
@@ -1358,11 +1358,11 @@ but_offs	.word	04h,0ch,1ch,24h
 	movi	12*TSEC,a10
 #lp	SLEEPK	1
 	calla	get_all_buttons_cur2
-	jrz	#nob
+	jrz	nob
 	SOUND1	bounce_snd
-	jruc	#xb
+	jruc	xb
 #nob	
-	dsj	a10,#lp
+	dsj	a10,lp
 #xb
 	clr	a10
 	movk	16,a11
@@ -1398,7 +1398,7 @@ result_mod
 	.long	0
 
 
-#*****************************************************************************
+******************************************************************************
 * 	This routine creates the player number graphic (nub)
 *
 * INPUT: 
@@ -1419,7 +1419,7 @@ result_mod
 
 	movi	nub_img_tbl,a9,L
 	move	@TWOPLAYERS,a14		;0 = NO, 1 = YES 2 players
-	jrz	#nkit
+	jrz	nkit
 	movi	nub_img_kit_tbl,a9,L
 #nkit
 	move	*a10+,a0,W		;get X pos.
@@ -1485,7 +1485,7 @@ result_x_tbl
 	.word	374,168
 
 
-#*****************************************************************************
+******************************************************************************
 
 	.if	0
 
@@ -1535,7 +1535,7 @@ result_x_tbl
 	move	*a13(#SHAD2),a8,L
 	calla	#change_shad
 
-	jruc	#big_mac
+	jruc	big_mac
 
 #change_shad
 	move	a11,a0
@@ -1550,7 +1550,7 @@ result_x_tbl
 
 	.endif
 
-#*****************************************************************************
+******************************************************************************
 *   Print the final scores
 ******************************************************************************
  SUBRP	final_scores
@@ -1814,7 +1814,7 @@ ovr_dn
 	PRINT_STR	bast10_ascii,8,0,XF,Y1-1,BAST_W_P,0
 
 
-#*****************************************************************************
+******************************************************************************
 
  SUBR	matchup_screen
 
@@ -1861,14 +1861,14 @@ ovr_dn
 #vsk
 	move	*a0(OSIZEX),a14
 	cmpi	44,a14
-	jrne	#vsk1
+	jrne	vsk1
 	move	*a0(OCTRL),a14
 	srl	2,a14
 	sll	2,a14
 	move	a14,*a0(OCTRL)
 #vsk1
 	move	*a0,a0,L
-	jrnz	#vsk
+	jrnz	vsk
  .endif ;ANIM_VS
 ;DJT End
 
@@ -2002,7 +2002,7 @@ ovr_dn
 ;DJT End
 #delay
 	SLEEPK	1
-	dsj	a10,#delay
+	dsj	a10,delay
 #exit
 	calla	set_plyrs_powerup_ram
 	movi	SMOVE_PID,a0
@@ -2011,7 +2011,7 @@ ovr_dn
 	RETP
 
 
-#******************************************************************************
+*******************************************************************************
 ; a10 = sleep count
 
 	.asg	200-2,X
@@ -2028,7 +2028,7 @@ ovr_dn
 	move	a10,a11
 #wait
 	SLEEPK	1
-	dsj	a11,#wait
+	dsj	a11,wait
 
 	movi	BRSH50R_P,b0
 	movi	[X,0],a0			;x val
@@ -2042,7 +2042,7 @@ ovr_dn
 	calla	BEGINOBJP2
 	calla	#center_image
 
-	move	@PSTATUS,a9
+	move	@PSTATUS2,a9
 
 	movi	9,a11
 #loop
@@ -2050,9 +2050,9 @@ ovr_dn
 
 	SLEEP	TSEC+25
 
-	move	@PSTATUS,a0		;if player buys in
+	move	@PSTATUS2,a0		;if player buys in
 	cmp	a9,a0			;then restart timer
-	jrne	#restart
+	jrne	restart
 
 	calla	obj_off
 
@@ -2060,9 +2060,9 @@ ovr_dn
 
 	SLEEP	(1*TSEC)/2
 
-	move	@PSTATUS,a0
+	move	@PSTATUS2,a0
 	cmp	a9,a0
-	jrne	#restart
+	jrne	restart
 
 	calla	obj_on
 	move	a11,a0
@@ -2073,7 +2073,7 @@ ovr_dn
 	calla	obj_aniq		;change object image
 	calla	#center_image
 
-	dsj	a11,#loop
+	dsj	a11,loop
 
 	SOUND1	cntdown_snd
 
@@ -2101,7 +2101,7 @@ ovr_dn
 ;DJT Start
 	.if	TRIVCON
 ;DJT End
-#******************************************************************************
+*******************************************************************************
 ; a10 = sleep count
 
 	.asg	198,X
@@ -2116,7 +2116,7 @@ ovr_dn
 	move	a10,a11
 #wait
 	SLEEPK	1
-	dsj	a11,#wait			;wait before count down
+	dsj	a11,wait			;wait before count down
 
 	movi	BRSH50R_P,b0
 	movi	[X,0],a0			;x val
@@ -2151,7 +2151,7 @@ ovr_dn
 	calla	obj_aniq		;change object image
 	calla	#center_image
 
-	dsj	a11,#loop
+	dsj	a11,loop
 
 	SOUND1	cntdown_snd
 
@@ -2182,7 +2182,7 @@ ovr_dn
 ;DJT End
 
 
-#******************************************************************************
+*******************************************************************************
 ; a10 = sleep count
 
 	.asg	200-2,X
@@ -2200,7 +2200,7 @@ ovr_dn
 	move	a10,a11
 #wait
 	SLEEPK	1
-	dsj	a11,#wait
+	dsj	a11,wait
 
 	movi	BRSH50R_P,b0
 	movi	[X,0],a0			;x val
@@ -2214,7 +2214,7 @@ ovr_dn
 	calla	BEGINOBJP2
 	calla	#center_image
 
-	move	@PSTATUS,a9
+	move	@PSTATUS2,a9
 	movi	9,a0
 #loop
 	PUSHP	a0
@@ -2225,25 +2225,25 @@ ovr_dn
 #loop2
 	SLEEPK	1
 	calla	get_all_starts_down
-	jrnz	#xit1
-	dsj	a11,#loop2
+	jrnz	xit1
+	dsj	a11,loop2
 #xit1
 	SOUND1	cntdown_snd
 
-	move	@PSTATUS,a0		;if player buys in
+	move	@PSTATUS2,a0		;if player buys in
 	cmp	a9,a0			;then restart timer
-	jrne	#restart
+	jrne	restart
 	calla	obj_off
 	movi	(1*TSEC)/2,a11
 #loop3
 	SLEEPK	1
 	calla	get_all_starts_down
-	jrnz	#xit2
-	dsj	a11,#loop3
+	jrnz	xit2
+	dsj	a11,loop3
 #xit2
-	move	@PSTATUS,a0
+	move	@PSTATUS2,a0
 	cmp	a9,a0
-	jrne	#restart
+	jrne	restart
 
 	calla	obj_on
 	PULLP	a0
@@ -2256,7 +2256,7 @@ ovr_dn
 	calla	#center_image
 
 	PULLP	a0
-	dsj	a0,#loop
+	dsj	a0,loop
 
 	SOUND1	cntdown_snd
 
@@ -2264,8 +2264,8 @@ ovr_dn
 #loop4
 	SLEEPK	1
 	calla	get_all_starts_down
-	jrnz	#xit3
-	dsj	a11,#loop4
+	jrnz	xit3
+	dsj	a11,loop4
 #xit3
 	SOUND1	cntdown_snd
 
@@ -2292,7 +2292,7 @@ ovr_dn
 ;;	.long	lgmd_3,lgmd_4,lgmd_5
 ;;	.long	lgmd_6,lgmd_7,lgmd_8,lgmd_9
 
-#******************************************************************************
+*******************************************************************************
 ; a10 = sleep count
 
 	.asg	200-2,X
@@ -2318,7 +2318,7 @@ ovr_dn
 	calla	BEGINOBJP2
 	calla	#center_image
 
-	move	@PSTATUS,a9
+	move	@PSTATUS2,a9
 
 	movi	9,a0
 #loop
@@ -2332,19 +2332,19 @@ ovr_dn
 	SLEEPK	1
 
 	move	@BTIME,a0
-	jrnz	#reset
+	jrnz	reset
 
 ;DJT Start
 	calla	get_all_buttons_cur2		;get_all_buttons_down2
-	jrz	#nobut1
+	jrz	nobut1
 	move	@gmqrtr,a0
 	subk	4,a0
-	jrn	#xit1
-	move	@PSTATUS,a0
-	jrnz	#xit1
+	jrn	xit1
+	move	@PSTATUS2,a0
+	jrnz	xit1
 #nobut1
 ;DJT End
-	dsj	a11,#loop2
+	dsj	a11,loop2
 #xit1
 
 	SOUND1	cntdown_snd
@@ -2357,19 +2357,19 @@ ovr_dn
 	SLEEPK	1
 
 	move	@BTIME,a0
-	jrnz	#reset
+	jrnz	reset
 
 ;DJT Start
 	calla	get_all_buttons_cur2		;get_all_buttons_down2
-	jrz	#nobut2
+	jrz	nobut2
 	move	@gmqrtr,a0
 	subk	4,a0
-	jrn	#xit2
-	move	@PSTATUS,a0
-	jrnz	#xit2
+	jrn	xit2
+	move	@PSTATUS2,a0
+	jrnz	xit2
 #nobut2
 ;DJT End
-	dsj	a11,#loop3
+	dsj	a11,loop3
 #xit2
 
 	calla	obj_on
@@ -2383,7 +2383,7 @@ ovr_dn
 	calla	#center_image
 
 	PULLP	a0
-	dsj	a0,#loop
+	dsj	a0,loop
 
 	SOUND1	cntdown_snd
 
@@ -2393,19 +2393,19 @@ ovr_dn
 	SLEEPK	1
 
 	move	@BTIME,a0
-	jrnz	#reset
+	jrnz	reset
 
 ;DJT Start
 	calla	get_all_buttons_cur2		;get_all_buttons_down2
-	jrz	#nobut3
+	jrz	nobut3
 	move	@gmqrtr,a0
 	subk	4,a0
-	jrn	#xit3
-	move	@PSTATUS,a0
-	jrnz	#xit3
+	jrn	xit3
+	move	@PSTATUS2,a0
+	jrnz	xit3
 #nobut3
 ;DJT End
-	dsj	a11,#loop4
+	dsj	a11,loop4
 #xit3
 
 	SOUND1	cntdown_snd
@@ -2440,7 +2440,7 @@ ovr_dn
 	.long	BRSH50_6,BRSH50_7,BRSH50_8,BRSH50_9
 
 
-#******************************************************************************
+*******************************************************************************
 * a3  = * player data
 * a10 = player number (0-3)
 * sets special_heads based on initials entered
@@ -2467,56 +2467,56 @@ ovr_dn
 	jrle	#no_match
 	move	*a2,a1
 	cmp	a0,a1
-	jrne	#no_match
+	jrne	no_match
 
 	move	*a3(PR_NAME2),a0
 	move	*a2(10h),a1
 	cmp	a0,a1
-	jrne	#no_match
+	jrne	no_match
 
 	move	*a3(PR_NAME3),a0
 	move	*a2(20h),a1
 	cmp	a0,a1
-	jrne	#no_match
+	jrne	no_match
 
 	move	*a3(PR_NAME4),a0
 	move	*a2(30h),a1
 	cmp	a0,a1
-	jrne	#no_match
+	jrne	no_match
 
 	move	*a3(PR_NAME5),a0
 	move	*a2(40h),a1
 	cmp	a0,a1
-	jrne	#no_match
+	jrne	no_match
 
 	move	*a3(PR_NAME6),a0
 	move	*a2(50h),a1
 	cmp	a0,a1
-	jrne	#no_match
+	jrne	no_match
 
 	move	*a3(PR_PIN_NBR1),a0
 	move	*a2(60h),a1
 	cmp	a0,a1
-	jrne	#no_match
+	jrne	no_match
 
 	move	*a3(PR_PIN_NBR2),a0
 	move	*a2(70h),a1
 	cmp	a0,a1
-	jrne	#no_match
+	jrne	no_match
 
 	move	*a3(PR_PIN_NBR3),a0
 	move	*a2(80h),a1
 	cmp	a0,a1
-	jrne	#no_match
+	jrne	no_match
 
 	move	*a3(PR_PIN_NBR4),a0
 	move	*a2(90h),a1
 	cmp	a0,a1
-	jrne	#no_match
+	jrne	no_match
 
 	movk	ADJTOURNEY,a0		;Tournament mode?
 	calla	GET_ADJ			;0-1
-	jrz	#yes			;On? Br=yes
+	jrz	yes			;On? Br=yes
 
 	move	a5,*a10			;store special head number
 	move	a5,a0
@@ -2858,100 +2858,100 @@ NUM_MEMBRS	.equ	(#team_data1_end-#team_data)/NXT_TM_MEMBR
 
 	
 #team_snds
-	.word	>3505,32,2290		;0  JEFF JOHNSON
-	.word	>3505,31,2276		;1  SAL DIVITA
-	.word	>3505,32,2272		;2  TURMELL
-	.word	>3505,28,2286		;3  THOMPSON
-	.word	>3505,22,2278		;4  GEER 
-	.word	>3505,33,2288		;5  CARLTON
-	.word	>3505,28,2280		;6  HEDRICK
-	.word	>3505,23,2274		;7  JOHN HEY
-	.word	>3505,43,2266		;8  AIR MORRIS
-	.word	>3505,30,2268		;9  STEVE BARDO
-	.word	>3505,35,2270		;10 MINIFEE
-	.word	>3505,41,2282		;11 MARTINEZ
-	.word	>3505,36,2284		;12 PESINA
-	.word	>3505,36,2250		;13 LIPTAK
-	.word	>3505,46,1910		;14 EDDIE
-	.word	>3505,26,1920		;15 MIKE V
-	.word	>3505,37,2867		;16 JAMIE R.
-	.word	>3505,37,2867		;17 NICK E.
-	.word	>3505,37,2867		;18 J. ROOT
-	.word	>3505,37,2867		;19 MEDNICK
-	.word	>3505,37,2867		;20 DAN R.
-	.word	>3505,37,2867		;21 PAT F.
-	.word	>3505,37,2867		;22 ED BOON
-	.word	>3505,37,2867		;23 J. TOBIAS
-	.word	>3505,37,2867		;24 OURSLER
-	.word	>3505,37,2867		;25 JASON S.
-	.word	>3505,37,2867		;26 QUINN
-	.word	>3505,37,2867		;27 M. PERRY
-	.word	>3505,37,2867		;28 N. FUNK
-	.word	>3505,37,2867		;29 MDOC
-	.word	>3505,37,2867		;30 BUD
-	.word	>3505,54,1877		;31 MARIUS
-	.word	>3505,37,2867		;32 MUNDAY
-	.word	>3505,37,2867		;33 NORTH
-	.word	>3505,37,2867		;34 AMRICH 
-	.word	>3505,37,2867		;35 JIGGETS
-	.word	>3505,37,2867		;36 ZIRIN
-	.word	>3505,37,2867		;37 HEITH BETTLEMAN
-	.word	>3505,37,2867		;38 MATT BETTLEMAN
-	.word	>3505,43,2787		;39 KEVIN DAY
+	.word	03505H,32,2290		;0  JEFF JOHNSON
+	.word	03505H,31,2276		;1  SAL DIVITA
+	.word	03505H,32,2272		;2  TURMELL
+	.word	03505H,28,2286		;3  THOMPSON
+	.word	03505H,22,2278		;4  GEER 
+	.word	03505H,33,2288		;5  CARLTON
+	.word	03505H,28,2280		;6  HEDRICK
+	.word	03505H,23,2274		;7  JOHN HEY
+	.word	03505H,43,2266		;8  AIR MORRIS
+	.word	03505H,30,2268		;9  STEVE BARDO
+	.word	03505H,35,2270		;10 MINIFEE
+	.word	03505H,41,2282		;11 MARTINEZ
+	.word	03505H,36,2284		;12 PESINA
+	.word	03505H,36,2250		;13 LIPTAK
+	.word	03505H,46,1910		;14 EDDIE
+	.word	03505H,26,1920		;15 MIKE V
+	.word	03505H,37,2867		;16 JAMIE R.
+	.word	03505H,37,2867		;17 NICK E.
+	.word	03505H,37,2867		;18 J. ROOT
+	.word	03505H,37,2867		;19 MEDNICK
+	.word	03505H,37,2867		;20 DAN R.
+	.word	03505H,37,2867		;21 PAT F.
+	.word	03505H,37,2867		;22 ED BOON
+	.word	03505H,37,2867		;23 J. TOBIAS
+	.word	03505H,37,2867		;24 OURSLER
+	.word	03505H,37,2867		;25 JASON S.
+	.word	03505H,37,2867		;26 QUINN
+	.word	03505H,37,2867		;27 M. PERRY
+	.word	03505H,37,2867		;28 N. FUNK
+	.word	03505H,37,2867		;29 MDOC
+	.word	03505H,37,2867		;30 BUD
+	.word	03505H,54,1877		;31 MARIUS
+	.word	03505H,37,2867		;32 MUNDAY
+	.word	03505H,37,2867		;33 NORTH
+	.word	03505H,37,2867		;34 AMRICH 
+	.word	03505H,37,2867		;35 JIGGETS
+	.word	03505H,37,2867		;36 ZIRIN
+	.word	03505H,37,2867		;37 HEITH BETTLEMAN
+	.word	03505H,37,2867		;38 MATT BETTLEMAN
+	.word	03505H,43,2787		;39 KEVIN DAY
 
 ;Superstar special guests
- .word	>100D,72,1360	;PIPPEN,      scottie
- .word	>100D,60,1364	;RODMAN,      dennis
- .word	>100D,74,1344	;JOHNSON,     larry
- .word	>100D,65,1348	;RICE,        glen
- .word	>100D,68,1404	;KIDD,        jason
- .word	>100D,103,1424	;MUTUMBO,     dekembe
- .word	>100D,63,1444	;HILL,        grant
- .word	>100D,118,1480	;OLAJUWAN,    hakeem
- .word	>100D,85,1500	;MILLER,      reggie
- .word	>100D,71,1508	;SMITS,       rik
- .word	>100D,97,1560	;MOURNING,    alonzo
- .word	>100D,93,1584	;ROBINSON,    glen
- .word	>100D,82,1640	;EWING,       patrick
- .word	>100D,70,1656	;STARKS,      john
- .word	>100D,95,1660	;HARDAWAY,    anfernee
- .word	>100D,76,1664	;GRANT,       horace
- .word	>100D,96,1680	;STACKHOUSE,  jerry
- .word	>100D,94,1724	;ROBINSON,    cliff
- .word	>100D,92,1764	;ROBINSON,    david
- .word	>100D,69,1760	;ELLIOTT,     sean
- .word	>100D,64,1780	;KEMP,        shawn
- .word	>100D,68,1824	;MALONE,      karl
- .word	>100D,53,1864	;WEBBER,      chris
- .word	>100D,92,1876	;MURESAN,     gheorge
+ .word	0100DH,72,1360	;PIPPEN,      scottie
+ .word	0100DH,60,1364	;RODMAN,      dennis
+ .word	0100DH,74,1344	;JOHNSON,     larry
+ .word	0100DH,65,1348	;RICE,        glen
+ .word	0100DH,68,1404	;KIDD,        jason
+ .word	0100DH,103,1424	;MUTUMBO,     dekembe
+ .word	0100DH,63,1444	;HILL,        grant
+ .word	0100DH,118,1480	;OLAJUWAN,    hakeem
+ .word	0100DH,85,1500	;MILLER,      reggie
+ .word	0100DH,71,1508	;SMITS,       rik
+ .word	0100DH,97,1560	;MOURNING,    alonzo
+ .word	0100DH,93,1584	;ROBINSON,    glen
+ .word	0100DH,82,1640	;EWING,       patrick
+ .word	0100DH,70,1656	;STARKS,      john
+ .word	0100DH,95,1660	;HARDAWAY,    anfernee
+ .word	0100DH,76,1664	;GRANT,       horace
+ .word	0100DH,96,1680	;STACKHOUSE,  jerry
+ .word	0100DH,94,1724	;ROBINSON,    cliff
+ .word	0100DH,92,1764	;ROBINSON,    david
+ .word	0100DH,69,1760	;ELLIOTT,     sean
+ .word	0100DH,64,1780	;KEMP,        shawn
+ .word	0100DH,68,1824	;MALONE,      karl
+ .word	0100DH,53,1864	;WEBBER,      chris
+ .word	0100DH,92,1876	;MURESAN,     gheorge
 
 ;New Superstar special guests removed from teams
- .word	>100D,84,1416	;McCLOUD,     george
- .word	>100D,76,1448	;MILLS,       terry
- .word	>100D,64,1496	;SMITH,       kenny
- .word	>100D,77,1512	;McKEE,       derek
- .word	>100D,60,1961	;CHAPMAN,     rex
- .word	>100D,69,1592	;BENJAMIN,    benoit
- .word	>100D,69,1596	;DOUGLAS,     sherman
- .word	>100D,61,1964	;WEBB,        spud
- .word	>100D,54,1628	;GILLIAM,     armon
- .word	>100D,60,1636	;EDWARDS,     kevin
- .word	>100D,81,1652	;OAKLEY,      charles
- .word	>100D,64,1967	;RUFFIN,      trevor
- .word	>100D,77,1712	;PERSON,      wesley
- .word	>100D,95,1716	;FINLEY,      michael
- .word	>100D,73,1732	;WILLIAMS,    buck
- .word	>100D,71,1772	;PERSON,      chuck
- .word	>100D,61,1952	;ROBERTSON,   alvin
- .word	>100D,67,1812	;MILLER,      oliver
- .word	>100D,53,1816	;MURRAY,      tracy
- .word	>100D,69,1832	;BENOIT,      david
- .word	>100D,60,1958	;SCOTT,       byron
- .word	>100D,63,1856	;MURDOCK,     eric
+ .word	0100DH,84,1416	;McCLOUD,     george
+ .word	0100DH,76,1448	;MILLS,       terry
+ .word	0100DH,64,1496	;SMITH,       kenny
+ .word	0100DH,77,1512	;McKEE,       derek
+ .word	0100DH,60,1961	;CHAPMAN,     rex
+ .word	0100DH,69,1592	;BENJAMIN,    benoit
+ .word	0100DH,69,1596	;DOUGLAS,     sherman
+ .word	0100DH,61,1964	;WEBB,        spud
+ .word	0100DH,54,1628	;GILLIAM,     armon
+ .word	0100DH,60,1636	;EDWARDS,     kevin
+ .word	0100DH,81,1652	;OAKLEY,      charles
+ .word	0100DH,64,1967	;RUFFIN,      trevor
+ .word	0100DH,77,1712	;PERSON,      wesley
+ .word	0100DH,95,1716	;FINLEY,      michael
+ .word	0100DH,73,1732	;WILLIAMS,    buck
+ .word	0100DH,71,1772	;PERSON,      chuck
+ .word	0100DH,61,1952	;ROBERTSON,   alvin
+ .word	0100DH,67,1812	;MILLER,      oliver
+ .word	0100DH,53,1816	;MURRAY,      tracy
+ .word	0100DH,69,1832	;BENOIT,      david
+ .word	0100DH,60,1958	;SCOTT,       byron
+ .word	0100DH,63,1856	;MURDOCK,     eric
 
 
 ;DJT End
-#******************************************************************************
+*******************************************************************************
 
  SUBR	select_teams
 
@@ -2968,24 +2968,24 @@ NUM_MEMBRS	.equ	(#team_data1_end-#team_data)/NXT_TM_MEMBR
 	move	@team2,a1
 	or	a0,a1
 	move	a1,a1
-	jrnn	#teams_ok		;both teams selected?
+	jrnn	teams_ok		;both teams selected?
 
 	move	@team1,a0
-	jrnn	#select_team2
+	jrnn	select_team2
 
 #select_team1
 	movi	ALL_TMS_DEFEATD,a1
-	move	@PSTATUS,a0
+	move	@PSTATUS2,a0
 	btst	2,a0
-	jrz	#nop3
+	jrz	nop3
 	move	@player3_data+PR_NAME1,a0
 	jrle	#nop3
 	move	@player3_data+PR_TEAMSDEF,a0,L
 	and	a0,a1
 #nop3
-	move	@PSTATUS,a0
+	move	@PSTATUS2,a0
 	btst	3,a0
-	jrz	#nop4
+	jrz	nop4
 	move	@player4_data+PR_NAME1,a0
 	jrle	#nop4
 	move	@player4_data+PR_TEAMSDEF,a0,L
@@ -2999,7 +2999,7 @@ NUM_MEMBRS	.equ	(#team_data1_end-#team_data)/NXT_TM_MEMBR
 	cmpi	NUM_ISCHAMP,a0
 	addc	a3,a3
 	cmpi	NUM_TEAMS,a0
-	jreq	#choose_random1		; br=all teams beat/no initials entry
+	jreq	choose_random1		; br=all teams beat/no initials entry
 
 	calla	get_opponent_team	;Returns A2=team #
 	move	a2,@team1
@@ -3010,14 +3010,14 @@ NUM_MEMBRS	.equ	(#team_data1_end-#team_data)/NXT_TM_MEMBR
 	move	*a0,a0
 	subk	1,a0
 	move	a3,a3			;Human team @ champ level?
-	jrnz	#nc1			; br=no
+	jrnz	nc1			; br=no
 	movk	1,a0			;Select from first 2 squads only
 #nc1
 	calla	RNDRNG0
 	sll	4,a2
 	addi	tm1set,a2,L
 	move	a0,*a2
-	jruc	#ispro1
+	jruc	ispro1
 
 #choose_random1
 	movk	NUM_TEAMS-1,a0		;RNDPER for any team #
@@ -3043,7 +3043,7 @@ NUM_MEMBRS	.equ	(#team_data1_end-#team_data)/NXT_TM_MEMBR
 	move	a0,@special_heads+10h
 #ispro1
 	move	a3,@t2ispro
-	jruc	#teams_ok
+	jruc	teams_ok
 
 ;; NOT!! NUM_TEAMS elements
 ;; Table needs to be plyr initials (currently $1-$1D) # of elements
@@ -3053,17 +3053,17 @@ NUM_MEMBRS	.equ	(#team_data1_end-#team_data)/NXT_TM_MEMBR
 
 #select_team2
 	movi	ALL_TMS_DEFEATD,a1
-	move	@PSTATUS,a0
+	move	@PSTATUS2,a0
 	btst	0,a0
-	jrz	#nop1
+	jrz	nop1
 	move	@player1_data+PR_NAME1,a0
 	jrle	#nop1
 	move	@player1_data+PR_TEAMSDEF,a0,L
 	and	a0,a1
 #nop1
-	move	@PSTATUS,a0
+	move	@PSTATUS2,a0
 	btst	1,a0
-	jrz	#nop2
+	jrz	nop2
 	move	@player2_data+PR_NAME1,a0
 	jrle	#nop2
 	move	@player2_data+PR_TEAMSDEF,a0,L
@@ -3077,7 +3077,7 @@ NUM_MEMBRS	.equ	(#team_data1_end-#team_data)/NXT_TM_MEMBR
 	cmpi	NUM_ISCHAMP,a0
 	addc	a3,a3
 	cmpi	NUM_TEAMS,a0
-	jreq	#choose_random2		; br=all teams beat/no initials entry
+	jreq	choose_random2		; br=all teams beat/no initials entry
 
 	calla	get_opponent_team	;Returns A2=team #
 	move	a2,@team2
@@ -3088,14 +3088,14 @@ NUM_MEMBRS	.equ	(#team_data1_end-#team_data)/NXT_TM_MEMBR
 	move	*a0,a0
 	subk	1,a0
 	move	a3,a3			;Human team @ champ level?
-	jrnz	#nc2			; br=no
+	jrnz	nc2			; br=no
 	movk	1,a0			;Select from first 2 squads only
 #nc2
 	calla	RNDRNG0
 	sll	4,a2
 	addi	tm2set,a2,L
 	move	a0,*a2
-	jruc	#ispro2
+	jruc	ispro2
 
 #choose_random2
 	movk	NUM_TEAMS-1,a0		;RNDPER for any team #
@@ -3195,7 +3195,7 @@ team_orders
 ;DJT End
 
 
-#******************************************************************************
+*******************************************************************************
 *
 * INPUT:	a0 = Nth undefeated team
 *		a1 = teams defeated bits
@@ -3207,9 +3207,9 @@ team_orders
 	movi	team_orders,a0
 #next_team
 	move	*a0+,a2			;team number (0-28)
-	jrn	#err			;shouldn't happen
+	jrn	err			;shouldn't happen
 	btst	a2,a1			;defeated?
-	jrnz	#next_team
+	jrnz	next_team
 	rets
 #err
 	clr	a2
@@ -3225,7 +3225,7 @@ team_orders
 	srl	1,a1
 	jrc	#def
 ;	dec	a0			;teams defeated count ++
-;	jrn	#done
+;	jrn	done
 #def
 	inc	a2
 	cmpi	26,a2
@@ -3235,7 +3235,7 @@ team_orders
 	rets
  .endif
 
-#*****************************************************************************
+******************************************************************************
 
 
  SUBR	print_plr_name
@@ -3249,7 +3249,7 @@ team_orders
 
 	movi	init_x,a2
 	move	@TWOPLAYERS,a0		;0 = NO, 1 = YES 2 players
-	jrz	#not2a
+	jrz	not2a
 	movi	kit_x,a2			;kit x vals
 #not2a
 	add	a2,a1
@@ -3269,11 +3269,11 @@ team_orders
  SUBR	ingame_mess
 
 #wait
-	move	@PSTATUS,a0
+	move	@PSTATUS2,a0
 	btst	a10,a0
-	jrnz	#ingame
+	jrnz	ingame
 	SLEEPK	1
-	jruc	#wait
+	jruc	wait
 #ingame
 
 	movi	#name_setup,a2
@@ -3294,7 +3294,7 @@ team_orders
 
 	movi	#qtr_x,a3
 	move	@TWOPLAYERS,a0		;0 = NO, 1 = YES 2 players
-	jrz	#not2b
+	jrz	not2b
 	movi	kit_x,a3			;kit x vals
 #not2b
 	add	a3,a10
@@ -3351,27 +3351,27 @@ kit_x	.word	0,101,295,0	;kit x vals
 
 
 
-#*****************************************************************************
+******************************************************************************
 
  SUBR	winner_stays_on
 
 	movi	ADJWINMODE,a0
 	calla	GET_ADJ
 	move	a0,a14
-	jrz	#exit				;br=disabled
+	jrz	exit				;br=disabled
 
 ;	cmpi	1,a14				;'all games' ?
-;	jreq	#allow				;br=yes
+;	jreq	allow				;br=yes
 ;
 ;	cmpi	2,a14				;'player vs. player' ?
-;	jrne	#ckfor				;br=no
+;	jrne	ckfor				;br=no
 ;	move	@_2plyr_competitive,a0
-;	jrz	#allow				;br=A human on each team!
+;	jrz	allow				;br=A human on each team!
 ;#ckfor
 ;	cmpi	3,a14				;'4 players' ?
-;	jrne	#exit				;br=no, exit
+;	jrne	exit				;br=no, exit
 	move	@_4plyrsingame,a0
-	jrnz	#exit		 		;br=not a four player game
+	jrnz	exit		 		;br=not a four player game
 ;#allow
 	movk	INFREEPRICE,a0
 	move	a0,@GAMSTATE
@@ -3382,7 +3382,7 @@ kit_x	.word	0,101,295,0	;kit x vals
 	movi	P1DATA,a1
 	movi	PDSIZE*4/16,A2
 #zlp	move	a0,*a1+
-	dsj	a2,#zlp
+	dsj	a2,zlp
 
 	move	a0,@conttimers,L		;4 words
 	move	a0,@conttimers+20h,L
@@ -3473,7 +3473,7 @@ kit_x	.word	0,101,295,0	;kit x vals
 	calla	setup_message
 	movi	#str_pl12,a4
 	move	a10,a10
-	jrz	#tm1
+	jrz	tm1
 	movi	#str_pl34,a4		;tm2
 #tm1
 	move	a11,@mess_cursx
@@ -3502,8 +3502,8 @@ kit_x	.word	0,101,295,0	;kit x vals
 	calla	display_unblank
 
 #slp	SLEEP	20*TSEC				;15;13
-	move	@PSTATUS,a0
-	jrnz	#slp
+	move	@PSTATUS2,a0
+	jrnz	slp
 #exit
 	movi	-1,a0
 	move	a0,@winningteam		;-1 for no valid half price
@@ -3530,12 +3530,12 @@ kit_x	.word	0,101,295,0	;kit x vals
 	.word	0,178
 	.long	0
 
-#*****************************************************************************
+******************************************************************************
 
  SUBR	buyin_screen
 
 
-	move	@PSTATUS,a0
+	move	@PSTATUS2,a0
 	move	a0,@plyrsdropped
 
 	clr	a0
@@ -3544,26 +3544,26 @@ kit_x	.word	0,101,295,0	;kit x vals
 
 	move	@gmqrtr,a14
 	cmpi	4,a14
-	jrlt	#tag1
+	jrlt	tag1
 	move	@scores,a14
 	move	@scores+16,a1
 	cmp	a1,a14
-	jrz	#tag1
+	jrz	tag1
 #exit
 	RETP
 #tag1
-	move	@PSTATUS,a9
+	move	@PSTATUS2,a9
 	movi	qtr_purchased,a1	; - 1 quarter for each player
 	clr	a2
 #dec_loop
 	move	*a1,a0
-	jrz	#skip2
+	jrz	skip2
 	dec	a0
 	move	a0,*a1
-	jrnz	#skip2
+	jrnz	skip2
 	movk	1,a0
 	sla	a2,a0
-	move	@PSTATUS,a3
+	move	@PSTATUS2,a3
 	andn	a0,a3
 	move	a3,@PSTATUS
 #skip2
@@ -3571,15 +3571,15 @@ kit_x	.word	0,101,295,0	;kit x vals
 	inc	a2
 	cmpi	3,a2
 	jrls	#dec_loop
-	move	@PSTATUS,a0
+	move	@PSTATUS2,a0
 	cmp	a0,a9
-	jrnz	#cont
+	jrnz	cont
 ;But, if someone inserted coins, go to buyin_screen anyway!
 	calla	CR_CONTP		;Credits to continue
 	jrlo	#bx			;No?
    	move	@game_purchased,a0
-	cmpi	>f,a0
-	jrnz	#cont
+	cmpi	0fH,a0
+	jrnz	cont
 #bx
 	RETP
 
@@ -3627,7 +3627,7 @@ kit_x	.word	0,101,295,0	;kit x vals
 
 	movi	#buyin_mod,a0
 	move	@TWOPLAYERS,a1		;0 = NO, 1 = YES 2 players
-	jrz	#not2
+	jrz	not2
 	movi	#buyin_kit_mod,a0
 #not2
 	move	a0,@BAKMODS,L
@@ -3653,7 +3653,7 @@ kit_x	.word	0,101,295,0	;kit x vals
 	CREATE0	challenger
 
 	move	@TWOPLAYERS,a0		;0 = NO, 1 = YES 2 players
-	jrnz	#2_plyrs
+	jrnz	2_plyrs
 
 	clr	a10			;player 1
 	CREATE0	ingame_mess
@@ -3674,9 +3674,9 @@ kit_x	.word	0,101,295,0	;kit x vals
 #wait
 	SLEEPK	1
 	move	@force_selection,a0
-	jrz	#wait
-	move	@PSTATUS,a0
-	jrnz	#ok
+	jrz	wait
+	move	@PSTATUS2,a0
+	jrnz	ok
 
 ;2/9/93
 	calla	dropout_stats
@@ -3713,7 +3713,7 @@ kit_x	.word	0,101,295,0	;kit x vals
 	.word	0,178
 	.long	0
 
-#*****************************************************************************
+******************************************************************************
 
  SUBR	blink_tmslct
 
@@ -3758,10 +3758,10 @@ kit_x	.word	0,101,295,0	;kit x vals
 	movi	PRESSPASS,a0		;* image
 	movi	DMAWNZ,a1		;DMA flags
 	calla	obj_aniq		;change object image
-	jruc	#lp
+	jruc	lp
 
 
-#*****************************************************************************
+******************************************************************************
 
 	.asg	50,YSPACE
 
@@ -3776,7 +3776,7 @@ kit_x	.word	0,101,295,0	;kit x vals
 ;DJT End
 	inc	a10
 	cmpi	4,a10
-	jrlt	#chk_nxt
+	jrlt	chk_nxt
 
 	clr	a10
 	RETP
@@ -3835,7 +3835,7 @@ kit_x	.word	0,101,295,0	;kit x vals
 
 ;DJT End
 	movi	#champ_mess_tbl,a9,L
-	jruc	#ctnxt
+	jruc	ctnxt
 #ctxt
 	move	*a4+,a0,L
 	move	a0,@message_ascii,L	;
@@ -3854,7 +3854,7 @@ kit_x	.word	0,101,295,0	;kit x vals
 #ctnxt
 	move	*a9+,a4,L
 	cmpi	4000,a4			;at end ?
-	jrne	#ctxt			;br=no
+	jrne	ctxt			;br=no
 
 	movk	1,a0
 	move	a0,@DISPLAYON
@@ -3880,11 +3880,11 @@ kit_x	.word	0,101,295,0	;kit x vals
 ;	movi	5*TSEC,a10
 ;#lpzz	SLEEPK	1
 ;	calla	get_all_buttons_cur2
-;	jrz	#nob
+;	jrz	nob
 ;	SOUND1	bounce_snd
-;	jruc	#xb
+;	jruc	xb
 ;#nob	
-;	dsj	a10,#lpzz
+;	dsj	a10,lpzz
 ;#xb
 ;DJT Start
 #found_champ1
@@ -3910,7 +3910,7 @@ kit_x	.word	0,101,295,0	;kit x vals
 ;
 ;	move	a10,a0
 ;	move	@TWOPLAYERS,a1		;0 = NO, 1 = YES 2 players
-;	jrnz	#iskit
+;	jrnz	iskit
 ;	inc	a0			;1,2,3,4
 ;#iskit					;1,2
 ;	movi	4,a1			;max value
@@ -3939,12 +3939,12 @@ kit_x	.word	0,101,295,0	;kit x vals
 #txt1
 	move	*a9+,a4,L
 	cmpi	4001,a4			;spc case?
-	jrne	#txt2
+	jrne	txt2
 	addk	14,a0
-	jruc	#txt1
+	jruc	txt1
 #txt2
 	cmpi	4000,a4			;at end ?
-	jreq	#txtdn			;br=no
+	jreq	txtdn			;br=no
 
 	addi	YSPACE,a0
 	move	a0,@mess_cursy
@@ -3955,19 +3955,19 @@ kit_x	.word	0,101,295,0	;kit x vals
 	move	a0,@message_palette,L
 
 	calla	print_string2b
-	jruc	#txt
+	jruc	txt
 
 #txtdn
 	movi	-0c000h,a3		;scroll text up screen
 	movi	OBJLST,a14
 #lp
 	move	*a14,a14,L
-	jrz	#x
+	jrz	x
 	move	*a14(OID),a2
 	cmpi	CLSDEAD|123,a2
-	jrne	#lp
+	jrne	lp
 	move	a3,*a14(OYVEL),L
-	jruc	#lp
+	jruc	lp
 #x
 
 ;	movi	[18h,0],a0
@@ -4003,12 +4003,12 @@ kit_x	.word	0,101,295,0	;kit x vals
 	movi	OBJLST,a14
 #lp1
 	move	*a14,a14,L
-	jrz	#x1
+	jrz	x1
 	move	*a14(OID),a2
 	cmpi	CLSDEAD|123,a2
-	jrne	#lp1
+	jrne	lp1
 	move	a3,*a14(OYVEL),L
-	jruc	#lp1
+	jruc	lp1
 #x1
 	SLEEP	4*TSEC-8 -7
 
@@ -4030,9 +4030,9 @@ kit_x	.word	0,101,295,0	;kit x vals
 ;a10 = player number (0-3)
 #check_champ
 
-	move	@PSTATUS,a0
+	move	@PSTATUS2,a0
 	btst	a10,a0
-	jrz	#fail
+	jrz	fail
 
 	move	a10,a0
 	sll	5,a0
@@ -4043,7 +4043,7 @@ kit_x	.word	0,101,295,0	;kit x vals
 	jrle	#fail
 	move	*a0(PR_NUMDEF),a1
 	cmpi	NUM_TEAMS,a1
-	jrlt	#fail
+	jrlt	fail
 	move	*a0(PR_NUMDEFOLD),a1
 	cmpi	NUM_TEAMS,a1
 	jrge	#fail
@@ -4441,7 +4441,7 @@ kit_x	.word	0,101,295,0	;kit x vals
 
 
 ******************************************************************************
-#*****************************************************************************
+******************************************************************************
 ;check if all credits have been sucked up (that can be)
 ;
 ; 0  = not all credits sucked up
@@ -4451,11 +4451,11 @@ kit_x	.word	0,101,295,0	;kit x vals
 
 	move	@gmqrtr,a0
 	cmpi	2,a0
-	jrz	#not_enough
+	jrz	not_enough
 
 	movk	ADJFREPL,a0
 	calla	GET_ADJ 	;SEE IF FREEPLAY......(Z BIT CLEAR IF SO!)
-	jrnz	#free_play
+	jrnz	free_play
 
 	calla	CRED_P			;get number credits
 	move	a0,a3
@@ -4463,22 +4463,22 @@ kit_x	.word	0,101,295,0	;kit x vals
 	calla	GET_ADJ
 	divu	a0,a3			;credits / credits to continue
 	move	a3,a3
-	jrz	#not_enough
+	jrz	not_enough
 
 	clr	a4
 #next
-	move	@PSTATUS,a0
+	move	@PSTATUS2,a0
 	btst	a4,a0
-	jrz	#no_player
+	jrz	no_player
 
 	move	@game_purchased,a0
 	btst	a4,a0
-	jrz	#not_purchased
+	jrz	not_purchased
 
 #no_player
 	inc	a4
 	cmpi	4,a4
-	jrlt	#next
+	jrlt	next
 
 #not_enough			;to continue
 #free_play			;so no suckup required
@@ -4502,7 +4502,7 @@ attrib_off
 	PUSH	a0,a2
 	calla	obj_off
 	PULL	a0,a2
-	dsj	a0,#atlp1
+	dsj	a0,atlp1
 	PULL	a8
 	rets
 
@@ -4516,7 +4516,7 @@ attrib_on
 	PUSH	a0,a2
 	calla	obj_on
 	PULL	a0,a2
-	dsj	a0,#atlp2
+	dsj	a0,atlp2
 	PULL	a8
 	rets
 
@@ -4525,7 +4525,7 @@ attrib_on
 ;-----------------------------------------------------------------------------
 update_attribs
 	move	a6,a6			;special head ?
-	jrnn	#norm2			;br=yes, exit
+	jrnn	norm2			;br=yes, exit
 
 	movk	6,a0			;# attribs. to update
 #udlp
@@ -4544,7 +4544,7 @@ update_attribs
 
 ;;;Special head?
 ;;	move	a6,a6
-;;	jrn	#norm
+;;	jrn	norm
 ;;;Yes, hide stats!
 ;;	movk	11,a1
 #norm
@@ -4563,12 +4563,12 @@ update_attribs
 
 	move	*a0(ICTRL),a1		     ;get bits per pixel...(ctrl data)
 	move	*a8(OCTRL),a14			;get current ctrl data
-	andi	>8fff,a14			;clear bits (12-14)
+	andi	08fffH,a14			;clear bits (12-14)
 	or	a1,a14				;set bits (12-14)
 	move	a14,*a8(OCTRL)			;update 'ctrl' data
 
 	PULL	a0,a10,a11
-	dsj	a0,#udlp
+	dsj	a0,udlp
 #norm2	rets
 
 
@@ -4621,18 +4621,18 @@ attrib_imgs
 ;	calla	DELOBJ
 ;	move	*a7+,a0,L
 ;	calla	DELOBJ
-;	dsjs	a11,#lp
+;	dsjs	a11,lp
 ;
 ;	movi	BAKLST,a14
 ;
 ;#lp2	move	a14,a3		;A3=*Prev
 ;	move	*a14,a14,L	;A14=*Next
-;	jrz	#x
+;	jrz	x
 ;#cmp	move	*a14(OZPOS),a2
 ;	cmpi	60,a2
-;	jrz	#kil
+;	jrz	kil
 ;	cmpi	61,a2
-;	jrne	#lp2
+;	jrne	lp2
 ;#kil
 ;
 ;	move	*a14,*a3,L	;Unlink from obj list
@@ -4641,7 +4641,7 @@ attrib_imgs
 ;	subk	32,a14
 ;	move	a14,@OFREE,L
 ;	move	*a3,a14,L
-;	jrnz	#cmp
+;	jrnz	cmp
 ;#x
 ;	move	@credit1_obj,a0,L
 ;	calla	DELOBJ
@@ -4655,7 +4655,7 @@ attrib_imgs
 ;
 ;	rets
 
-#******************************************************************************
+*******************************************************************************
 
  SUBR	brown_shadow
  	rets
@@ -4689,28 +4689,28 @@ attrib_imgs
 ;
 ;#lp
 ;	move	*a14,a14,L	;A14=*Next
-;	jrz	#x
+;	jrz	x
 ;	move	*a14(OPAL),a1
 ;	cmp	a0,a1
-;	jrne	#lp
+;	jrne	lp
 ;
 ;	move	a14,*a2+,L
 ;	clr	a1
 ;	move	a1,*a2,L
-;	jruc	#lp
+;	jruc	lp
 ;
 ;#x
 ;	movi	kp_ram,a2
 ;#lp2
 ;	move	*a2+,a0,L
-;	jrz	#xx
+;	jrz	xx
 ;	calla	DELOBJ
-;	jruc	#lp2
+;	jruc	lp2
 ;#xx
 ;	rets
 
 
-#******************************************************************************
+*******************************************************************************
 
  SUBR	blue_shadow
 	rets
@@ -4745,7 +4745,7 @@ attrib_imgs
 ;	.word	0<<10+0<<5+0	;52
 
 
-#*****************************************************************************
+******************************************************************************
 ;challenger needed / teammate needed message
 ;on name entry screen
 ;a10 = player (0-3)
@@ -4759,7 +4759,7 @@ attrib_imgs
 	sll	4,a0
 	addi	#chall_x,a0
 	move	@TWOPLAYERS,a1		;0 = NO, 1 = YES 2 players
-	jrz	#not_2p
+	jrz	not_2p
 	addi	4*16,a0
 #not_2p
 	move	*a0,a0
@@ -4767,7 +4767,7 @@ attrib_imgs
 	movi	[CHALLY,0],a1		;y val
 ;	move	@gmqrtr,a2
 ;	cmpi	2,a2
-;	jrnz	#skp
+;	jrnz	skp
 ;	movi	[CHALLY+256,0],a1	;y val
 #skp
 	movi	CHALENG,a2		;* image
@@ -4781,18 +4781,18 @@ attrib_imgs
 #isoff
 	calla	obj_off
 	SLEEPK	1
-	move	@PSTATUS,a0
+	move	@PSTATUS2,a0
 	btst	a10,a0
-	jrz	#ison
+	jrz	ison
 
-	move	@PSTATUS,a0
+	move	@PSTATUS2,a0
 	btst	a10,a0
 
-	jrnz	#isoff
+	jrnz	isoff
 #ison
 	move	@PSTATUS2,a0
 	btst	a10,a0
-	jrz	#ison2
+	jrz	ison2
 
 	movi	continue,a0		;* image
 	movi	DMAWNZ,a1		;DMA flags
@@ -4801,42 +4801,42 @@ attrib_imgs
 
 #wait
 	move	@can_enter_inits,a0	;finished initials entry?
-	jrz	#done
+	jrz	done
 	SLEEPK	1
-	move	@PSTATUS,a0
+	move	@PSTATUS2,a0
 	btst	a10,a0
-	jrz	#wait
+	jrz	wait
 #ison2
 	calla	obj_on
 #loop
 	SLEEPK	1
 
 	move	@can_enter_inits,a0	;finished initials entry?
-	jrz	#done
+	jrz	done
 
-	move	@PSTATUS,a0
+	move	@PSTATUS2,a0
 	btst	a10,a0
-	jrnz	#isoff
+	jrnz	isoff
 
 	move	@PCNT,a0		;frame count
 	btst	6,a0
-	jrnz	#nojoin
+	jrnz	nojoin
 
 	movi	join3,a0		;* image
-	jruc	#join
+	jruc	join
 #nojoin
 	movi	CHALENG,a0		;* image
 	move	a10,a1
 	xori	1,a1			;teammate bit
-	move	@PSTATUS,a2
+	move	@PSTATUS2,a2
 	btst	a1,a2
-	jrz	#ischall
+	jrz	ischall
 	movi	TMATE,a0		;* image
 #ischall
 #join
 	movi	DMAWNZ,a1		;DMA flags
 	calla	obj_aniq		;change object image
-	jruc	#loop
+	jruc	loop
 #done
 	calla	DELOBJA8
 	DIE
@@ -4846,7 +4846,7 @@ attrib_imgs
 		.word	0,101,295,0	;x val  for KIT
 
 
-#*****************************************************************************
+******************************************************************************
 ;challenger needed message
 ;on team selection screen
 ;a10 = team (0-1)
@@ -4877,29 +4877,29 @@ attrib_imgs
 	calla	obj_off
 	SLEEPK	1
 	move	*a11,a0
-	jrnn	#isoff
+	jrnn	isoff
 
 	calla	obj_on
 #loop
 	SLEEPK	1
 	move	*a11,a0
-	jrnn	#isoff
+	jrnn	isoff
 
 	movi	CHALENG,a0		;* image
 	move	@PCNT,a1		;frame count
 	btst	6,a1
-	jrnz	#nojoin
+	jrnz	nojoin
 	movi	join3,a0		;* image
 #nojoin
 	movi	DMAWNZ,a1		;DMA flags
 	calla	obj_aniq		;change object image
 
-	jruc	#loop
+	jruc	loop
 
 #chall_x	.word	101,295		;x val
 
 
-#*****************************************************************************
+******************************************************************************
 
  SUBR	drw_chicks
  	RETP
@@ -5901,7 +5901,7 @@ name_sort
 	sll	5,a2
 	addi	name_sort,a2
 	move	*a2,a2,L
-	movi	>7ff0,a3			;z pos
+	movi	07ff0H,a3			;z pos
 	movi	DMAWNZ|M_SCRNREL,a4		;DMA flags
 	clr	a5				;object ID
 	clr	a6				;x vel

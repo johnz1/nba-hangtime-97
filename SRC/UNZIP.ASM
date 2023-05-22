@@ -42,7 +42,7 @@
 	.asg	0,CARYTEST		;1 for Cary's board testing
 	.asg	0,ERRORTEST		;1 for random pixel test
 
-	.asg	>1d01010,DEBUGPORT
+	.asg	01d01010H,DEBUGPORT
 
 
 	.asg	8,IMGBPP			;Zipped img bpp count
@@ -82,7 +82,7 @@ PIXPERFRM	.equ	frmpalptr+32			;32b
 	.text
 
 
-#*******************************
+********************************
 
 	.ref	display_blank,WIPEOUT,dpageflip,IRQSKYE
 	.ref	dtype,display_unblank,get_all_buttons_cur2
@@ -117,23 +117,23 @@ PIXPERFRM	.equ	frmpalptr+32			;32b
 ;	movi	6*TSEC,a10
 ;#lp	SLEEPK	1
 ;	calla	get_all_buttons_cur2
-;	jrz	#nob
+;	jrz	nob
 ;
 ;      	clr	a0
 ;	move	a0,@SOUNDSUP		;turn all sounds on
 ;	SOUND1	bounce_snd
 ;	movk	1,a0
 ;	move	a0,@SOUNDSUP		;turn all sounds off
-;	jruc	#xb
+;	jruc	xb
 ;#nob	
-;	dsj	a10,#lp
+;	dsj	a10,lp
 ;#xb
 ;	calla	WIPEOUT
 ;
 ;	RETP
 
 
-#*******************************
+********************************
 * Run movie footage (JSRP)
 * A8=* compressed picture data
 * A9=Screen X,Y for top left of picture
@@ -153,7 +153,7 @@ PIXPERFRM	.equ	frmpalptr+32			;32b
 
 	srl	16,a9
 	move	@dpage,a14
-	jrnz	#p2
+	jrnz	p2
 	addi	PAGE1YO,a9		;Start in page 1 if page 0 is being displayed
 #p2
 	sll	9,a9
@@ -168,7 +168,7 @@ PIXPERFRM	.equ	frmpalptr+32			;32b
 	.endif
 
 	callr	movie_parsehdr
-	jrnz	#error
+	jrnz	error
 
 	move	b4,a14			;Height
 	subk	1,a14
@@ -177,7 +177,7 @@ PIXPERFRM	.equ	frmpalptr+32			;32b
 	add	a1,a9			;* to bottom left
 
 	callr	movie_getpal
-	jrz	#error
+	jrz	error
 
 ;(A0=img pal #)
 ;(A7=# of colors)
@@ -188,7 +188,7 @@ PIXPERFRM	.equ	frmpalptr+32			;32b
 
 ;	movi	blowline,b10
 ;	move	a9,a9
-;	jrz	#mode0
+;	jrz	mode0
 ;	movi	blowlinex2,b10
 ;#mode0
 
@@ -204,10 +204,10 @@ PIXPERFRM	.equ	frmpalptr+32			;32b
 	move	a14,@DEBUGPORT
 
 	LOCKUP
-	jruc	#x
+	jruc	x
 
 
-#*******************************
+********************************
 * Wait for DMA activity to stop
 * Trashes A14
 
@@ -217,7 +217,7 @@ PIXPERFRM	.equ	frmpalptr+32			;32b
 	move	b13,b13			;Wait for DMAQ empty
 	jrge	#wtlp
 	move	@DMACTRL,a14
-	jrn	#wtlp
+	jrn	wtlp
 
 	.if	CARYTEST=0
 	movk	1,a14
@@ -227,23 +227,23 @@ PIXPERFRM	.equ	frmpalptr+32			;32b
 	dsj	a14,$
 
 	move	@DMACTRL,a14
-	jrnn	#x
+	jrnn	x
 	LOCKUP
-	jruc	#dly
+	jruc	dly
 	.endif
 
 #x	rets
 
 
-#*******************************
+********************************
 * Get movie info
 * A8=* to compressed data
 *Rets:
-* >A0=!0 if error (CC)
-* >A6=# frames
-* >A7=# colors in palette
-* >A10=X
-* >A11=Y
+* 0A0H=!0 if error (CC)
+* 0A6H=# frames
+* 0A7H=# colors in palette
+* 0A10H=X
+* 0A11H=Y
 * Trashes scratch
 
  SUBRP	movie_parsehdr
@@ -259,11 +259,11 @@ PIXPERFRM	.equ	frmpalptr+32			;32b
 	rets
 
 
-#*******************************
+********************************
 * Get a movie palette
 * A7=# of colors
 * A8=* to color data
-* >A0=Color map allocated (0000-cfcf)
+* 0A0H=Color map allocated (0000-cfcf)
 * Z set if no palette free
 * Trashes scratch
 
@@ -273,7 +273,7 @@ PIXPERFRM	.equ	frmpalptr+32			;32b
 	subk	16,a0		;Point to # colors
 	move	a0,@frmpalptr,1
 	calla	pal_getf
-	jrz	#x
+	jrz	x
 
 	move	a0,@frmpalnum,0
 
@@ -322,21 +322,21 @@ PIXPERFRM	.equ	frmpalptr+32			;32b
 *		B8 = DMAPAL
 *		B9 = Master X storage
 
-#*******************************
+********************************
 * Uncompress a tree
 * A8=* to compressed data
 * B0=* to tree table
-* >A0=!0 if error (CC)
+* 0A0H=!0 if error (CC)
 
 UncompressTree:
 
-	move	b0,a7		;>Determine how many codes of each bit length
+	move	b0,a7		;0DeHtermine how many codes of each bit length
 	move	a8,a5
 
 	setf	8,0,0
 	move	*a8+,a0		;# compressed bytes to describe tree - 1
 	addk	1,a0
-	movk	>f,a3		;Bit-mask constant
+	movk	0fH,a3		;Bit-mask constant
 	clr	a4		;Clr chksum
 	clr	a6		;Total # of codes in tree
 utr0
@@ -363,7 +363,7 @@ utr1
 	addk	1,a0
 #chklp	move	*a8+,a1
 	add	a1,a2
-	dsj	a0,#chklp
+	dsj	a0,chklp
 
 	setf	16,1,0
 	cmp	a2,a4		;Do chksums match?
@@ -374,7 +374,7 @@ utr1
 	move	a14,@DEBUGPORT
 	LOCKUP
 	movk	1,a0		;Error!
-	jruc	#x
+	jruc	x
 
 * Sort Tree by increasing Bit Length.
 *   The translation index is placed in the upper byte
@@ -412,7 +412,7 @@ nonewmin
 	move	a3,*a0+,L	; place translation ptr in MinPtrTbl.
 	dsjs	a5,utr2
 
-				;>Compute the codes
+				;0CHompute the codes
 	clr	a4		;Code
 	clr	a1		;CodeInc
 	clr	a2		;LastBitLength
@@ -446,7 +446,7 @@ rvrsbts
 	rets
 
 
-#*******************************
+********************************
 * Initialize and run unzip loop (JSRP)
 * A4=# of frames
 * A8=* compressed data table
@@ -458,14 +458,14 @@ rvrsbts
  SUBRP	movie_unzip
 
 ;	.if	TUNITDB
-;	jruc	#debugstrt
+;	jruc	debugstrt
 ;	.endif
 
 	movk	10,b3
 	movi	lengthtree,b0
 #ltlp	callr	UncompressTree
-	jrz	#ltok			; br=OK
-	dsj	b3,#ltlp
+	jrz	ltok			; br=OK
+	dsj	b3,ltlp
 	.if	DEBUG
 	LOCKUP
 	.endif
@@ -477,8 +477,8 @@ rvrsbts
 	movk	10,b3
 	movi	disttree,b0
 #dtlp	callr	UncompressTree
-	jrz	#dtok			; br=OK
-	dsj	b3,#dtlp
+	jrz	dtok			; br=OK
+	dsj	b3,dtlp
 	.if	DEBUG
 	LOCKUP
 	.endif
@@ -499,7 +499,7 @@ rvrsbts
 	clr	a3
 #clrbuf
 	move	a3,*-a1,L
-	dsj	a2,#clrbuf
+	dsj	a2,clrbuf
 
 	movi	blowline,b7		;B4=* data-to-screen call
 
@@ -607,7 +607,7 @@ notmaxs
 	add	b6,b5	    	;Adjust pixel counter for this line
 
 copys
-	move	*a2+,*a10+	;>Copy
+	move	*a2+,*a10+	;0CHopy
 	and	a0,a2
 	and	a0,a10
 	dsj	a7,copys
@@ -615,12 +615,12 @@ copys
 	jruc	us1
 
 
-#*******************************
+********************************
 * Read compression tree
 * A5=*Tree table
 * A8=*Compressed data
 * Field 1 = 16 bits
-* >A7=Data
+* 0A7H=Data
 *
 * Trashes: A2-A5,A14,B6
 *
@@ -632,7 +632,7 @@ ReadTree:
 	move	*a8+,a7		; read a bit
 	rl	31,a7		; rotate right one more bit
 	clr	b6		; result
-	jruc	#strt
+	jruc	strt
 #lp
 	addk	1,b6
 #strt	move	*a5+,a3,1	; Code in a3
@@ -645,19 +645,19 @@ ReadTree:
 	jrynz	#lp
 
 	cmp	a2,a4
-	jreq	#x
+	jreq	x
 	move	*a8+,a14	; read a bit
 	or	a14,a7		; accumulate with other bits
 	inc	a2		; inc bits_read
 	rl	31,a7		; rotate right one more bit
 	rl	31,a3		; shift code for check of next bit
-	jruc	#lp2
+	jruc	lp2
 #x
 	move	b6,a7
 	rets			;Result returned in a7
 
 
-#*******************************
+********************************
 * BlowLine is used during decompression of a Still Picture to blow out
 * a single line of data.  Since only a single line needs to be stored at
 * once, the RamBuffer can be as small as 4K.
@@ -671,7 +671,7 @@ ReadTree:
 
 	move	b2,a5		;X size
 	srl	2,a5		;X/4 = loop counter
-	jrnc	#lp
+	jrnc	lp
 	move	*a6+,*a2+,1	;Copy 2 pixels
 	and	a0,a6
 #lp
@@ -679,7 +679,7 @@ ReadTree:
 	and	a0,a6
 	move	*a6+,*a2+,1	;Copy 2 pixels
 	and	a0,a6
-	dsj	a5,#lp
+	dsj	a5,lp
 
 	subi	SCRN_PTCH,a9
 	sub	b2,b5		;readjust pixels for next line
@@ -689,7 +689,7 @@ ReadTree:
       	rets
 
 
-#*******************************
+********************************
 * BlowLine is used during decompression of a Still Picture to blow out
 * a single line of data.  Since only a single line needs to be stored at
 * once, the RamBuffer can be as small as 4K.
@@ -715,7 +715,7 @@ ReadTree:
 ;	move	a14,*a2+,1	;16 bits
 ;	move	a14,*a3+,1
 ;	and	a0,a1
-;	dsjs	a5,#lp
+;	dsjs	a5,lp
 ;
 ;
 ;	subi	SCRN_PTCH*2,a10
@@ -742,16 +742,16 @@ ReadTree:
 ;	move	a1,*a0(PTIME)
 ;	
 ;	movi	[9,0],a9
-;	movi	[>8c,0],a10
+;	movi	[08cH,0],a10
 ;	movi	(24+83*512)*8,a11	;XY
 ;
 ;	move	@last_score,a0,L
 ;	cmpi	scores,a0
-;	jrz	#tm1
+;	jrz	tm1
 ;
 ;	movi	[9+216,0],a9
-;	movi	[>8c,0],a10
-;	movi	>53780,a11		;XY
+;	movi	[08cH,0],a10
+;	movi	053780H,a11		;XY
 ;
 ;#tm1	callr	show_edging		;Turn on clip borders
 ;
@@ -763,7 +763,7 @@ ReadTree:
 ;	move	a11,a10
 ;	JSRP	movie_run
 ;
-;	movi	>2001,a0
+;	movi	02001H,a0
 ;	calla	obj_del1c
 ;
 ;	movk	10,a1			;Delay tv score panel
@@ -782,7 +782,7 @@ ReadTree:
 ;	movi	livet,a2
 ;	movi	19989,a3		;z pos - Below buyin box
 ;	movi	DMAWNZ|M_NOCOLL|M_SCRNREL,a4
-;	movi	>2001,a5
+;	movi	02001H,a5
 ;	clr	a6
 ;	clr	a7
 ;	calla	BEGINOBJ2
@@ -804,7 +804,7 @@ ReadTree:
 ;
 ;	rets
 
-#*******************************
+********************************
 * Show movies in attract mode
 
 ; SUBR	movie_demo
@@ -856,7 +856,7 @@ ReadTree:
 ;
 ;	jruc	endblowline
 
-;#*******************************
+;********************************
 ;* Stop for error (DEBUG)
 ;
 ;	.if	TUNITDB
@@ -875,12 +875,12 @@ ReadTree:
 ;#lp2	movi	20000,a1
 ;#lp	move	a0,@ERASELOC
 ;	addk	1,a0
-;	dsj	a1,#lp
+;	dsj	a1,lp
 ;
 ;	move	@SWITCH+16,a1
 ;	not	a1
-;	andi	>624,a1
-;	jrz	#lp2
+;	andi	0624H,a1
+;	jrz	lp2
 ;
 ;	move	@SYSCOPY,a0
 ;	xori	4,a0
@@ -893,7 +893,7 @@ ReadTree:
 ;
 ;	.endif
 
-;#*******************************
+;********************************
 ;* Initialize and run unzip loop (JSRP)
 ;* A4=# of frames
 ;* A8=* compressed data table
@@ -906,7 +906,7 @@ ReadTree:
 ;
 ;
 ;;	.if	TUNITDB
-;;	jruc	#debugstrt
+;;	jruc	debugstrt
 ;;	.endif
 ;
 ;
@@ -917,20 +917,20 @@ ReadTree:
 ;#ltlp	move	b0,a7			;Length Tree
 ;	move	a8,b2
 ;	callr	UncompressTree
-;	jrz	#ltok			;OK?
+;	jrz	ltok			;OK?
 ;	move	b2,a8
-;	dsj	a5,#ltlp
-;	jruc	#error
+;	dsj	a5,ltlp
+;	jruc	error
 ;#ltok
 ;
 ;	movk	10,a5
 ;#dtlp	move	b1,a7			;Distance Tree
 ;	move	a8,b2
 ;	callr	UncompressTree
-;	jrz	#dtok			;OK?
+;	jrz	dtok			;OK?
 ;	move	b2,a8
-;	dsj	a5,#dtlp
-;	jruc	#error
+;	dsj	a5,dtlp
+;	jruc	error
 ;#dtok
 ;
 ;	.if	CARYTEST
@@ -985,7 +985,7 @@ ReadTree:
 ;	move	a14,@SCRATCH+13
 ;	move	a1,@SCRATCH+16+15
 ;	cmp	a1,a14
-;	jreq	#cmpok
+;	jreq	cmpok
 ;#dberr	callr	movie_error
 ;	mmfm	a12,a4,a10
 ;	RETP
@@ -998,24 +998,24 @@ ReadTree:
 ;	move	@SWITCH,a1,L
 ;	movb	*a9,a1
 ;	cmp	a1,a14
-;	jrne	#dberr
+;	jrne	dberr
 ;	move	@SCRATCH+13,a1
 ;	cmp	a1,a14
-;	jrne	#dberr
+;	jrne	dberr
 ;	movb	*a8,a14
 ;	move	@SCRATCH+16+15,a1
 ;	cmp	a1,a14
-;	jrne	#dberr
+;	jrne	dberr
 ;
 ;	movb	a14,*a10
 ;	addk	8,a8
 ;	addk	8,a9
 ;	addk	8,a10
-;	dsj	a2,#dblp2
+;	dsj	a2,dblp2
 ;	addi	(512-80)*8,a10
-;	dsj	a0,#dblp
+;	dsj	a0,dblp
 ;
-;	jruc	#skipuncomp
+;	jruc	skipuncomp
 ;	.endif
 ;
 ;
@@ -1078,21 +1078,21 @@ ReadTree:
 ;	add	a14,a11			;adjust by extra pixels done last time
 ;
 ;;	cmpi	2,a4
-;;	jrne	#nxtf
+;;	jrne	nxtf
 ;;	movi	blowlinelastfrm,b10
 ;
 ;#nxtf
 ;	PUSH	a0,a1,a2
 ;	calla	get_all_buttons_cur
 ;	PULL	a0,a1,a2
-;	jrnz	#abort
+;	jrnz	abort
 ;
 ;
-;	dsj	a4,#lp			;Loop once for each frame
+;	dsj	a4,lp			;Loop once for each frame
 ;
 ;#abort
 ;	callr	movie_waitdma
-;					;>Copy visable frame to other page
+;					;0CHopy visable frame to other page
 ;	move	*a13(PIXPERFRM),a14,L	;# of pixels in a frame
 ;
 ;	move	b4,*b8			;Set pallette
@@ -1106,7 +1106,7 @@ ReadTree:
 ;	move	b9,a5			;X size
 ;	srl	1,a5			;X/2 = loop counter
 ;#cllp	move	*a0+,*a1+
-;	dsj	a5,#cllp
+;	dsj	a5,cllp
 ;
 ;	subi	SCRN_PTCH,a2
 ;	subi	SCRN_PTCH,a10
@@ -1120,7 +1120,7 @@ ReadTree:
 ;
 ;
 ;#error	LOCKUP
-;	jruc	#x
+;	jruc	x
 ;
 ;
 ;********************************
@@ -1147,15 +1147,15 @@ ReadTree:
 ;	putst	b2
 ;	exgpc	a14			;Return
 
-#*******************************
+********************************
 * Get movie info
 * A8=* to compressed data
 *Rets:
-* >A0=!0 if error (CC)
-* >A6=# frames
-* >A7=# colors in palette
-* >A10=X
-* >A11=Y
+* 0A0H=!0 if error (CC)
+* 0A6H=# frames
+* 0A7H=# colors in palette
+* 0A10H=X
+* 0A11H=Y
 * Trashes scratch
 
 ;movie_parsehdr
@@ -1172,15 +1172,15 @@ ReadTree:
 ;;	move	a6,b9
 ;
 ;;	cmpi	100,a6		;X
-;;	jrne	#error
+;;	jrne	error
 ;;	cmpi	68,b3		;Y
-;;	jrne	#error
+;;	jrne	error
 ;;	cmpi	5,a4		;#frms
-;;	jrlt	#error
+;;	jrlt	error
 ;;	cmpi	35,a4
 ;;	jrgt	#error
 ;;	cmpi	200,a7		;#colors
-;;	jrlt	#error
+;;	jrlt	error
 ;;	cmpi	255,a7
 ;;	jrhi	#error
 ;
@@ -1192,7 +1192,7 @@ ReadTree:
 ;;	move	a8,@DEBUGPORT
 ;;
 ;;	move	a14,a8
-;;	dsj	a0,#rd
+;;	dsj	a0,rd
 ;;
 ;;	addk	1,a0
 ;;	rets

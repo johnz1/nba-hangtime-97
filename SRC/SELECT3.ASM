@@ -50,7 +50,7 @@
 	.ref	dec_to_asc,concat_string
 	.ref	copy_string,RNDRNG0
 	.ref	obj_on,obj_off
-	.ref	PSTATUS,PSTATUS2
+	.ref	PSTATUS2,PSTATUS2
 	.ref	create_title_bar
 	.ref	pal_getf,GAMSTATE
 	.ref	brush10_ascii,brush12_ascii,brush20_ascii
@@ -337,7 +337,7 @@ best_plq_pals
 	sll	5,a10
 	add	a10,a14
 	move	@TWOPLAYERS,a1			;0 = NO, 1 = YES 2 players
-	jrz	#ccp1
+	jrz	ccp1
 	addi	4*32,a14			;get KIT image ptr.
 #ccp1
 	move	*a14,a9,L			;get img. from table
@@ -354,13 +354,13 @@ best_plq_pals
 
 #ccp2
 	move	*a0(PR_COUNT),a1
-	jrz	#nornk
+	jrz	nornk
 
 	movi	top1_imgs,a14
 	move	*a0(PR_RANK),a1
-	jrz	#nornk
+	jrz	nornk
 	cmpi	1,a1
-	jreq	#cpr0
+	jreq	cpr0
 	movi	top5_imgs,a14
 	cmpi	5,a1
 	jrls	#cpr0
@@ -373,7 +373,7 @@ best_plq_pals
 	add	a10,a14
 
 	move	@TWOPLAYERS,a1			;0 = NO, 1 = YES 2 players
-	jrz	#cpr1
+	jrz	cpr1
 	addi	4*32,a14			;get KIT image ptr.
 #cpr1
 	move	*a14,a9,L			;get img. from table
@@ -386,13 +386,13 @@ best_plq_pals
 	move	*a11(PC_DATADDR),a0,L
 	move	*a0(PR_WINSTREAK),a1
 	subk	5,a1
-	jrlt	#nowin
+	jrlt	nowin
 	movi	grt_win_strk_imgs,a14
 	move	*a11(PC_PLAYNUM),a10
 	sll	5,a10
 	add	a10,a14
 	move	@TWOPLAYERS,a1			;0 = NO, 1 = YES 2 players
-	jrz	#cpw1
+	jrz	cpw1
 	addi	4*32,a14			;get KIT image ptr.
 #cpw1
 	move	*a14,a9,L			;get img. from table
@@ -411,7 +411,7 @@ best_plq_pals
 	sll	5,a10
 	add	a10,a14
 	move	@TWOPLAYERS,a1			;0 = NO, 1 = YES 2 players
-	jrz	#cptd1
+	jrz	cptd1
 	addi	4*32,a14			;get KIT image ptr.
 #cptd1
 	move	*a14,a9,L			;get img. from table
@@ -424,18 +424,18 @@ best_plq_pals
 	move	*a11(PC_DATADDR),a6,L		;start of player data
 	move	*a6(PR_COUNT),a14
 	subk	5,a14
-	jrlt	#nodef	
-;	jrz	#nodef
+	jrlt	nodef	
+;	jrz	nodef
 	PUSH	a11
 	calla	find_record			;ret a11 - rec. number
 	move	a11,a4
 	PULL	a11
 	move	a10,a10
-	jrz	#ccp2				;br=rec not found...not DEFENSE or OFFENSE check
+	jrz	ccp2				;br=rec not found...not DEFENSE or OFFENSE check
 	calla	get_plr_rank
 	move	*a9,a8,L
 	move	*a8(RS_DEF_RANK),a0
-	jrz	#nodef
+	jrz	nodef
 	calla	compute_plyr_def_rank
 
 	movi	bst_def_imgs,a14
@@ -452,7 +452,7 @@ best_plq_pals
 	sll	5,a10
 	add	a10,a14
 	move	@TWOPLAYERS,a1			;0 = NO, 1 = YES 2 players
-	jrz	#cdr1
+	jrz	cdr1
 	addi	4*32,a14			;get KIT image ptr.
 #cdr1
 	move	*a14,a9,L			;get img. from table
@@ -466,9 +466,9 @@ best_plq_pals
 	move	*a0(PR_COUNT),a1
 	subk	5,a1
 	jrle	#nooff
-;	jrz	#nooff
+;	jrz	nooff
 	move	*a8(RS_OFF_RANK),a0
-	jrz	#nooff
+	jrz	nooff
 	calla	compute_plyr_off_rank
 
 	movi	bst_off_imgs,a14
@@ -485,7 +485,7 @@ best_plq_pals
 	sll	5,a10
 	add	a10,a14
 	move	@TWOPLAYERS,a1			;0 = NO, 1 = YES 2 players
-	jrz	#cor1
+	jrz	cor1
 	addi	4*32,a14			;get KIT image ptr.
 #cor1
 	move	*a14,a9,L			;get img. from table
@@ -498,14 +498,14 @@ best_plq_pals
 	move	*a11(PC_DATADDR),a2,L		;start of player data
 	calla	check_world_records		;ret. 14
 	move	a14,a14
-	jrz	#nowrld
+	jrz	nowrld
 
 	movi	wrldrec_imgs,a14
 	move	*a11(PC_PLAYNUM),a10
 	sll	5,a10
 	add	a10,a14
 	move	@TWOPLAYERS,a1			;0 = NO, 1 = YES 2 players
-	jrz	#cwr1
+	jrz	cwr1
 	addi	4*32,a14			;get KIT image ptr.
 #cwr1
 	move	*a14,a9,L			;get img. from table
@@ -518,7 +518,7 @@ best_plq_pals
 
 	.asg	183,PLAQUE_Y
 
-#*****************************************************************************
+******************************************************************************
 ;a9 = ptr to image
 
 
@@ -528,10 +528,10 @@ best_plq_pals
 #app0
 	SLEEPK	1
 	move	@HALT,a0
-	jrnz	#app0
+	jrnz	app0
 
 	move	*a13(PDATA),a14
-	jrz	#app00
+	jrz	app00
 
 	SLEEPK	10
 #app00
@@ -544,7 +544,7 @@ best_plq_pals
 
 	move	*a11(PC_PLAYNUM),a0
 	move	@TWOPLAYERS,a1			;0 = NO, 1 = YES 2 players
-	jrz	#app1
+	jrz	app1
 	addk	4,a0				;add in offset for 2 PLYR KIT
 #app1
 	sll	4,a0				;x 16
@@ -563,16 +563,16 @@ best_plq_pals
 	movi	[16,0],a7			;y vel
 
 	move	*a13(PDATA+16),a14
-	jrlt	#nrm				;br=player nbr passed in
+	jrlt	nrm				;br=player nbr passed in
 	move	a14,b0
 	sll	5,b0
 	addi	best_plq_pals,b0,L
 	move	@TWOPLAYERS,a14			;0 = NO, 1 = YES 2 players
-	jrz	#n2p
+	jrz	n2p
 	addi	4*32,b0				;get KIT image ptr.
 #n2p	move	*b0,b0,L
 	calla	BEGINOBJP2
-	jruc	#nrm2
+	jruc	nrm2
 #nrm
 	calla	BEGINOBJ2
 
@@ -589,7 +589,7 @@ best_plq_pals
 	SLEEPK	1
 	move	*a8(OYPOS),a0
 	cmpi	PLAQUE_Y,a0
-	jrlt	#waitf
+	jrlt	waitf
 	clr	a0
 	move	a0,*a8(OYVEL),L
 
@@ -610,18 +610,18 @@ best_plq_pals
 	move	*a11(PC_PLAYNUM),a9
 #plx3
 	move	@TWOPLAYERS,a1			;0 = NO, 1 = YES 2 players
-	jrz	#app2
+	jrz	app2
 	addk	4,a9				;add in offset for 2 PLYR KIT
 #app2	sll	5,a9
 	addi	plaque_flsh_pals,a9
 	move	*a9,a9,L			;get pal flash tbl ptr.
 #flsh
 	move	*a9+,a0,L				;at end of table ?
-	jrnn	#flsh1				;br=yes
+	jrnn	flsh1				;br=yes
 	calla	pal_getf
 	move	a0,*a8(OPAL),L
 	SLEEPK	3
-	jruc	#flsh
+	jruc	flsh
 #flsh1
 	CREATE0	show_n_del_plate
 
@@ -692,7 +692,7 @@ nosecret_imgs
 	.long	TurnNSyel
 
 
-#*****************************************************************************
+******************************************************************************
 ;
 ; INPUT: reg a10 - X pos
 ;        reg a11 - player number
@@ -723,7 +723,7 @@ nosecret_imgs
 	SLEEP	1
 	move	*a8(OYPOS),a0
 	cmpi	PLAQUE_Y,a0
-	jrlt	#waitf
+	jrlt	waitf
 	movi	PLAQUE_Y,a0
 	move	a0,*a8(OYPOS)
 	clr	a0
@@ -741,18 +741,18 @@ nosecret_imgs
 
 	movk	3,a10
 	move	@TWOPLAYERS,a1			;0 = NO, 1 = YES 2 players
-	jrz	#fgp1
+	jrz	fgp1
 	addk	4,a11				;add in offset for 2 PLYR KIT
 #fgp1	sll	5,a11
 	addi	plaque_flsh_pals,a11
 	move	*a11,a11,L			;get pal flash tbl ptr.
 #fgp2
 	move	*a11+,a0,L			;at end of table ?
-	jrnn	#fgp3				;br=yes
+	jrnn	fgp3				;br=yes
 	calla	pal_getf
 	move	a0,*a8(OPAL),L
 	SLEEPK	3
-	jruc	#fgp2
+	jruc	fgp2
 #fgp3
 	SLEEP	20
 	calla	DELOBJA8
@@ -1164,7 +1164,7 @@ pts_0b	movi	message_buffer,a3		;* string dest
 ;If Rodman is on this team, change his hair color...
 
 	move	a1,a1
-	jrnz	#tm2
+	jrnz	tm2
 
 	movi	rodman_colors,a1
 
@@ -1172,12 +1172,12 @@ pts_0b	movi	message_buffer,a3		;* string dest
 	move	*a14(OIMG),a0,L
 	.ref	ROD_CHI
 	cmpi	ROD_CHI,a0
-	jrz	#yes
+	jrz	yes
 
 	move	@head2_obj,a14,L
 	move	*a14(OIMG),a0,L
 	cmpi	ROD_CHI,a0
-	jrz	#yes
+	jrz	yes
 	jruc	pts_1
 
 #tm2	
@@ -1187,7 +1187,7 @@ pts_0b	movi	message_buffer,a3		;* string dest
 	move	@head3_obj,a14,L
 	move	*a14(OIMG),a0,L
 	cmpi	ROD_CHI,a0
-	jrz	#yes
+	jrz	yes
 
 	.ref	head1_obj
 	.ref	head2_obj
@@ -1204,7 +1204,7 @@ pts_0b	movi	message_buffer,a3		;* string dest
 	inc	a0
 	move	a0,*a1
 	cmpi	8,a0
-	jrnz	#restuff
+	jrnz	restuff
 	clr	a0
 	move	a0,*a1
 #restuff
@@ -1222,12 +1222,12 @@ pts_1	rets
 ;Mugshot
 
 	cmpi	ROD_CHI,a2
-	jrnz	#ex
+	jrnz	ex
 
 	movi	rodman_colors,a1
 
 	move	a14,a14
-	jrz	#tm1
+	jrz	tm1
 
 	movi	rodman_colors+16,a1
 #tm1
@@ -1263,12 +1263,12 @@ pts_1	rets
 
 	.ref	RODMAN1
 	cmpi	RODMAN1+240h,a2
-	jrnz	#ex
+	jrnz	ex
 
 	movi	rodman_colors,a1
 
 	move	a14,a14
-	jrz	#tm1
+	jrz	tm1
 
 	movi	rodman_colors+16,a1
 #tm1
@@ -1319,7 +1319,7 @@ str_100		.string	"100%",0
 #keep_looking
 	move	*a5+,a0,L
 	cmp	a0,a9
-	jreq	#no_change
+	jreq	no_change
 	move	a0,a9			;new count
 	move	a8,a10			;new rank
 #no_change
@@ -1328,7 +1328,7 @@ str_100		.string	"100%",0
 	jrhs	#last
 	move	*a4+,a3
 	cmp	a3,a2
-	jrne	#keep_looking
+	jrne	keep_looking
 #last
 	movi	POPULAR_Y,a0
 	move	a0,@mess_cursy		;message cursor pos Y
@@ -1661,7 +1661,7 @@ pgc_0
 	SLEEPK	2
 	move	@inmatchup,a0
 	jrz	pgc_5				;not in MATCH_UP screen, exit
-	move	@PSTATUS,a0
+	move	@PSTATUS2,a0
 	btst	a10,a0
 	jrz	pgc_0				;br=plyr hasn't joined in 
 
@@ -1738,9 +1738,9 @@ pgc_flash
 	movk	3,a9
 #tg0
 	move	@inmatchup,a0
-	jrz	#tg1
+	jrz	tg1
 	SLEEPK	1
-	dsj	a9,#tg0
+	dsj	a9,tg0
 #tg1
 	setf	4,0,0
 	movk	M_WRNONZ,a0
@@ -1752,9 +1752,9 @@ pgc_flash
 	move	@inmatchup,a0
 	jrz	pgc_5
 	SLEEPK	1
-	dsj	a9,#tg2
+	dsj	a9,tg2
 
-	dsj	a11,#again
+	dsj	a11,again
 	jruc	pgc_5
 
 
@@ -2027,61 +2027,61 @@ combo_symbol_xys
 
 
 ;POWER-UP stuff
-	.asg	>00000001,TOURN	;tournament mode
-	.asg	>00000002,BABYS	;baby mode
-	.asg	>00000004,NOMUS	;no music mode
-	.asg	>00000008,GOALT	;goal tending
-	.asg	>00000010,MXBLK	;block power
-	.asg	>00000020,MXSTL	;steal power; quick hands
-	.asg	>00000040,MXPWR	;max power
-	.asg	>00000080,MXSPD	;max speed
-	.asg	>00000100,HYPER	;hyper speed
-	.asg	>00000200,TBSTL	;stealth turbo
-	.asg	>00000400,TBINF	;unlimited turbo
-	.asg	>00000800,NOPSH	;no pushing
-	.asg	>00001000,FPASS	;fast passing
+	.asg	000000001H,TOURN	;tournament mode
+	.asg	000000002H,BABYS	;baby mode
+	.asg	000000004H,NOMUS	;no music mode
+	.asg	000000008H,GOALT	;goal tending
+	.asg	000000010H,MXBLK	;block power
+	.asg	000000020H,MXSTL	;steal power; quick hands
+	.asg	000000040H,MXPWR	;max power
+	.asg	000000080H,MXSPD	;max speed
+	.asg	000000100H,HYPER	;hyper speed
+	.asg	000000200H,TBSTL	;stealth turbo
+	.asg	000000400H,TBINF	;unlimited turbo
+	.asg	000000800H,NOPSH	;no pushing
+	.asg	000001000H,FPASS	;fast passing
 
 
-;	.asg	>00000000,BIGHD	;big heads
-;	.asg	>00000000,HUGHD	;huge heads
-;	.asg	>00000000,NOTAG	;no tag arrows
-;	.asg	>00000000,SHTPR	;show shot percent
-;	.asg	>00000000,ABALL	;ABA ball in use
-;	.asg	>00000000,COURT	;outside court
-;	.asg	>00000000,NOASS	;no cpu assistance
-;	.asg	>00000000,HOTSP	;show hot spots
+;	.asg	000000000H,BIGHD	;big heads
+;	.asg	000000000H,HUGHD	;huge heads
+;	.asg	000000000H,NOTAG	;no tag arrows
+;	.asg	000000000H,SHTPR	;show shot percent
+;	.asg	000000000H,ABALL	;ABA ball in use
+;	.asg	000000000H,COURT	;outside court
+;	.asg	000000000H,NOASS	;no cpu assistance
+;	.asg	000000000H,HOTSP	;show hot spots
 ;
-;	.asg	>00000000,STRNG	;strong men
+;	.asg	000000000H,STRNG	;strong men
 
 
 combination_tbl
-	WL  >111,TOURN
-	WL  >025,BABYS
-	WL  >048,NOMUS
-	WL  >937,GOALT
-	WL  >616,MXBLK
-	WL  >709,MXSTL
-	WL  >802,MXPWR
-	WL  >284,MXSPD
-	WL  >552,HYPER
-	WL  >273,TBSTL
-	WL  >461,TBINF
-	WL  >390,NOPSH
-	WL  >120,FPASS
+	WL  0111H,TOURN
+	WL  0025H,BABYS
+	WL  0048H,NOMUS
+	WL  0937H,GOALT
+	WL  0616H,MXBLK
+	WL  0709H,MXSTL
+	WL  0802H,MXPWR
+	WL  0284H,MXSPD
+	WL  0552H,HYPER
+	WL  0273H,TBSTL
+	WL  0461H,TBINF
+	WL  0390H,NOPSH
+	WL  0120H,FPASS
 
 ;Joystick/butn powerups:
 
-;	WL  >001,BIGHD
-;	WL  >011,HUGHD
-;	WL  >040,NOTAG
-;	WL  >100,SHTPR
-;	WL  >999,COURT
-;	WL  >030,HOTSP
-;	WL  >222,NOASS
+;	WL  0001H,BIGHD
+;	WL  0011H,HUGHD
+;	WL  0040H,NOTAG
+;	WL  0100H,SHTPR
+;	WL  0999H,COURT
+;	WL  0030H,HOTSP
+;	WL  0222H,NOASS
 
-;	WL  >121,GOALT|STLPW
-;	WL  >191,HUGHD|BABYS
-;	WL  >666,NOTAG|GOALT|NOPSH
+;	WL  0121H,GOALT|STLPW
+;	WL  0191H,HUGHD|BABYS
+;	WL  0666H,NOTAG|GOALT|NOPSH
 
 combination_tbl_end
 
@@ -2109,17 +2109,17 @@ NBR_CODE_COMBOS	equ	(combination_tbl_end-combination_tbl)/(16+32)
 
 	movi	pup_baby,a0		;!!!
 
-	move	@PSTATUS,a1		;Is it a plyr-v-plyr game?
-	movi	>eee0,a14
+	move	@PSTATUS2,a1		;Is it a plyr-v-plyr game?
+	movi	0eee0H,a14
 	btst	a1,a14			;Do team agreement test if so
 	jrnz	sppr0			; br=yes
-	movi	>fffe,a14		;Share any powerups that are set
+	movi	0fffeH,a14		;Share any powerups that are set
 sppr0
 	move	*a0,a1
 	clr	a2
 	btst	a1,a14
 	jrz	sppr1
-	movk	>f,a2
+	movk	0fH,a2
 sppr1
 	move	a2,*a0+
 	cmpi	pup_fastpass,a0		;!!!
@@ -2142,7 +2142,7 @@ sppr1
 ;-----------------------------------------------------------------------------
  SUBR	set_plyr_powerup_ram
 
-	move	@PSTATUS,a14
+	move	@PSTATUS2,a14
 	and	a0,a14				;is this player in game ?
 	jrz	cvc_x				;br=nope
 ;
@@ -2155,7 +2155,7 @@ sppr1
 	cmp	a14,a1				;plyrs and tbl count the same?
 	jreq	cvc_00				;br=yes !!!
 	addi	16+32,a2		;next line in combination table
-	dsj	a3,#lp
+	dsj	a3,lp
 	jruc	cvc_x				;br=no match found
 
 ;found match
@@ -2163,8 +2163,8 @@ cvc_00
 	move	*a2(POWERUPS),a14,L
 	srl	1,a14
 	jrnc	cvc_01				;br=not this power up
-	move	@PSTATUS,a2
-	movi	>116,a3
+	move	@PSTATUS2,a2
+	movi	0116H,a3
 	btst	a2,a3				;No tmode if only 1 plyr
 	jrz	dotmd
 	PUSH	a0,a14
@@ -2509,7 +2509,7 @@ TUBE_LR_P:
 
 
 
-;#*****************************************************************************
+;******************************************************************************
 ;*  Create player heads on the STATs PAGE
 ;******************************************************************************
 ;;;;;	.asg	65,HEAD_WIDTH
@@ -2520,11 +2520,11 @@ TUBE_LR_P:
 ;	movi	player_heads,a10
 ;	move	@team1,a2
 ;#lp	cmpi	0,a2
-;	jrz	#out
+;	jrz	out
 ;	addi	NEXT_TEAM,a10			;compute offset into HEAD tbl
 ;;;	addi	20*64,a10
 ;	dec	a2
-;	jruc	#lp	
+;	jruc	lp	
 ;#out
 ;	move	@team1,a0
 ;	sll	4,a0
@@ -2543,10 +2543,10 @@ TUBE_LR_P:
 ;	sll	5,a2
 ;	addi	create_plr_mugshots_tbl,a2
 ;	move	*a2,a2,L			;get mugshot img
-;	jruc	#no_spec1
+;	jruc	no_spec1
 ;#ncr1
 ;	move	@special_heads,a0
-;	jrn	#no_spec1
+;	jrn	no_spec1
 ;	sll	5,a0				;x 32 bits
 ;	addi	our_heads,a0
 ;	move	*a0,a2,L
@@ -2571,10 +2571,10 @@ TUBE_LR_P:
 ;	sll	5,a2
 ;	addi	create_plr_mugshots_tbl,a2
 ;	move	*a2,a2,L			;get mugshot img
-;	jruc	#no_spec2
+;	jruc	no_spec2
 ;#ncr2
 ;	move	@special_heads+10h,a0
-;	jrn	#no_spec2
+;	jrn	no_spec2
 ;	sll	5,a0				;x 32 bits
 ;	addi	our_heads,a0
 ;	move	*a0,a2,L
@@ -2592,10 +2592,10 @@ TUBE_LR_P:
 ;	movi	player_heads,a10
 ;	move	@team2,a2
 ;#lp1	cmpi	0,a2
-;	jrz	#out1
+;	jrz	out1
 ;	addi	NEXT_TEAM,a10			;compute offset into HEAD tbl
 ;	dec	a2
-;	jruc	#lp1
+;	jruc	lp1
 ;#out1
 ;	move	@team2,a0
 ;	sll	4,a0
@@ -2615,10 +2615,10 @@ TUBE_LR_P:
 ;	sll	5,a2
 ;	addi	create_plr_mugshots_tbl,a2
 ;	move	*a2,a2,L			;get mugshot img
-;	jruc	#no_spec3
+;	jruc	no_spec3
 ;#ncr3
 ;	move	@special_heads+20h,a0
-;	jrn	#no_spec3
+;	jrn	no_spec3
 ;	sll	5,a0				;x 32 bits
 ;	addi	our_heads,a0
 ;	move	*a0,a2,L
@@ -2644,10 +2644,10 @@ TUBE_LR_P:
 ;	sll	5,a2
 ;	addi	create_plr_mugshots_tbl,a2
 ;	move	*a2,a2,L			;get mugshot img
-;	jruc	#no_spec4
+;	jruc	no_spec4
 ;#ncr4
 ;	move	@special_heads+30h,a0
-;	jrn	#no_spec4
+;	jrn	no_spec4
 ;	sll	5,a0				;x 32 bits
 ;	addi	our_heads,a0
 ;	move	*a0,a2,L
@@ -2665,7 +2665,7 @@ TUBE_LR_P:
 ;	rets
 
 
-#*****************************************************************************
+******************************************************************************
 * Create stats title images (on the STAT page)
 ******************************************************************************
  SUBR	create_stat_titles
@@ -2692,7 +2692,7 @@ stat_title_tbl
 stat_title_tbl_end
 
 
-#*****************************************************************************
+******************************************************************************
 * Show players name (on the STAT page)
 ******************************************************************************
  SUBR	create_plyrs_name
@@ -2704,12 +2704,12 @@ stat_title_tbl_end
 	move	a0,@mess_cursy
 	movi	STBOX_X1+48,a0
 	move	a0,@mess_cursx
-	move	@PSTATUS,a0
+	move	@PSTATUS2,a0
 	btst	0,a0
-	jrnz	#ok1
+	jrnz	ok1
 	movi	#str_cpu,a4
 	calla	print_string_C2
-	jruc	#skip1
+	jruc	skip1
 #ok1
 	movi	message_buffer,a3
 	movi	player1_data+PR_NAME1,a4
@@ -2729,12 +2729,12 @@ stat_title_tbl_end
 	move	a0,@mess_cursy
 	movi	STBOX_X2+41,a0
 	move	a0,@mess_cursx
-	move	@PSTATUS,a0
+	move	@PSTATUS2,a0
 	btst	1,a0
-	jrnz	#ok2
+	jrnz	ok2
 	movi	#str_cpu,a4
 	calla	print_string_C2
-	jruc	#skip2
+	jruc	skip2
 #ok2
 	movi	message_buffer,a3
 	movi	player2_data+PR_NAME1,a4
@@ -2754,12 +2754,12 @@ stat_title_tbl_end
 	move	a0,@mess_cursy
 	movi	STBOX_X3+47,a0
 	move	a0,@mess_cursx
-	move	@PSTATUS,a0
+	move	@PSTATUS2,a0
 	btst	2,a0
-	jrnz	#ok3
+	jrnz	ok3
 	movi	#str_cpu,a4
 	calla	print_string_C2
-	jruc	#skip3
+	jruc	skip3
 #ok3
 	movi	message_buffer,a3
 	movi	player3_data+PR_NAME1,a4
@@ -2779,12 +2779,12 @@ stat_title_tbl_end
 	move	a0,@mess_cursy
 	movi	STBOX_X4+40,a0
 	move	a0,@mess_cursx
-	move	@PSTATUS,a0
+	move	@PSTATUS2,a0
 	btst	3,a0
-	jrnz	#ok4
+	jrnz	ok4
 	movi	#str_cpu,a4
 	calla	print_string_C2
-	jruc	#skip4
+	jruc	skip4
 #ok4
 	movi	message_buffer,a3
 	movi	player4_data+PR_NAME1,a4
@@ -2810,7 +2810,7 @@ stat_title_tbl_end
 
 	.ref	tm1set,tm2set
 
-#*****************************************************************************
+******************************************************************************
 *		This routine prints the players' nickname under mugshot
 *
 *   INPUT: reg a0 - Y pos
@@ -2846,7 +2846,7 @@ stat_title_tbl_end
 	.ref	col_name_ptrs
 ;DJT End
 
-#*****************************************************************************
+******************************************************************************
 * Show name of HEAD (basketball players name)
 *
 * INPUT: reg a1 - Y position
@@ -2860,10 +2860,10 @@ stat_title_tbl_end
 	movi	player_names,a10
 	move	@team1,a2
 #lp	cmpi	0,a2
-	jrz	#out
+	jrz	out
 	addi	NEXT_TEAM_NAMES,a10		;compute offset into table
 	dec	a2
-	jruc	#lp	
+	jruc	lp	
 #out
 	move	@team1,a0
 	sll	4,a0
@@ -2891,10 +2891,10 @@ stat_title_tbl_end
 	clr	a7				;y vel
 
 	move	@special_heads,a4		;Special head?
-	jrnn	#spec1				; br=yes
+	jrnn	spec1				; br=yes
 
 	move	a2,a2				;College player?
-	jrn	#not_spec1			; br=no
+	jrn	not_spec1			; br=no
 
 	movi	AUGMON,a2			;Default *img
 	movi	DMAWNZ+M_CHARGEN+M_PIXSCAN,a4	;DMA flags
@@ -2904,7 +2904,7 @@ stat_title_tbl_end
 	addi	col_name_ptrs,a2,L
 	move	*a2,a2,L
 	move	a2,*a8(ODATA_p),L
-	jruc	#hd2				;BEGINOBJ2 clears OMISC!
+	jruc	hd2				;BEGINOBJ2 clears OMISC!
 #spec1
 	sll	5,a4				;x 32 bits
 	addi	our_names,a4
@@ -2935,10 +2935,10 @@ stat_title_tbl_end
 	clr	a7				;y vel
 
 	move	@special_heads+16,a4		;Special head?
-	jrnn	#spec2				; br=yes
+	jrnn	spec2				; br=yes
 
 	move	a2,a2				;College player?
-	jrn	#not_spec2			; br=no
+	jrn	not_spec2			; br=no
 
 	movi	AUGMON,a2			;Default *img
 	movi	DMAWNZ+M_CHARGEN+M_PIXSCAN,a4	;DMA flags
@@ -2948,7 +2948,7 @@ stat_title_tbl_end
 	addi	col_name_ptrs,a2,L
 	move	*a2,a2,L
 	move	a2,*a8(ODATA_p),L
-	jruc	#hd3				;BEGINOBJ2 clears OMISC!
+	jruc	hd3				;BEGINOBJ2 clears OMISC!
 #spec2
 	sll	5,a4				;x 32 bits
 	addi	our_names,a4
@@ -2961,10 +2961,10 @@ stat_title_tbl_end
 	movi	player_names,a10
 	move	@team2,a2
 #lp1	cmpi	0,a2
-	jrz	#out1
+	jrz	out1
 	addi	NEXT_TEAM_NAMES,a10		;compute offset into table
 	dec	a2
-	jruc	#lp1
+	jruc	lp1
 #out1
 	move	@team2,a0
 	sll	4,a0
@@ -2990,10 +2990,10 @@ stat_title_tbl_end
 	clr	a7				;y vel
 
 	move	@special_heads+32,a4		;Special head?
-	jrnn	#spec3				; br=yes
+	jrnn	spec3				; br=yes
 
 	move	a2,a2				;College player?
-	jrn	#not_spec3			; br=no
+	jrn	not_spec3			; br=no
 
 	movi	AUGMON,a2			;Default *img
 	movi	DMAWNZ+M_CHARGEN+M_PIXSCAN,a4	;DMA flags
@@ -3003,7 +3003,7 @@ stat_title_tbl_end
 	addi	col_name_ptrs,a2,L
 	move	*a2,a2,L
 	move	a2,*a8(ODATA_p),L
-	jruc	#hd4				;BEGINOBJ2 clears OMISC!
+	jruc	hd4				;BEGINOBJ2 clears OMISC!
 #spec3
 	sll	5,a4				;x 32 bits
 	addi	our_names,a4
@@ -3034,10 +3034,10 @@ stat_title_tbl_end
 	clr	a7				;y vel
 
 	move	@special_heads+48,a4		;Special head?
-	jrnn	#spec4				; br=yes
+	jrnn	spec4				; br=yes
 
 	move	a2,a2				;College player?
-	jrn	#not_spec4			; br=no
+	jrn	not_spec4			; br=no
 
 	movi	AUGMON,a2			;Default *img
 	movi	DMAWNZ+M_CHARGEN+M_PIXSCAN,a4	;DMA flags
@@ -3047,7 +3047,7 @@ stat_title_tbl_end
 	addi	col_name_ptrs,a2,L
 	move	*a2,a2,L
 	move	a2,*a8(ODATA_p),L
-	jruc	#hd5				;BEGINOBJ2 clears OMISC!
+	jruc	hd5				;BEGINOBJ2 clears OMISC!
 #spec4
 	sll	5,a4				;x 32 bits
 	addi	our_names,a4
@@ -3349,38 +3349,38 @@ dnb_1
 ;
 #nxtchk
 	move	@create_plyr,a0
-	jrn	#curok			;did DISALLOWING create plyr logic
+	jrn	curok			;did DISALLOWING create plyr logic
 	callr	check_for_buyins
 	move	a0,a0
-	jrnn	#curok			;br=only 1 player in game
+	jrnn	curok			;br=only 1 player in game
 	move	a0,@create_plyr
 	callr	create_not_allowed_symbol
 	move	@cur_pos,a0
-	jrnz	#curok			;br= cursor isn't on 'create player'
-	jruc	#j_right
+	jrnz	curok			;br= cursor isn't on 'create player'
+	jruc	j_right
 #curok
 	calla	get_all_sticks_cur
 	cmp	a10,a0			;same as last joystick pos. ?
-	jreq	#no_change		;yep...ignore
+	jreq	no_change		;yep...ignore
 	move	a0,a10			;save NEW joystick position
 	cmpi	JOY_RIGHT,a0
-	jreq	#j_right
+	jreq	j_right
 	cmpi	JOY_LEFT,a0
-	jrne	#no_change
+	jrne	no_change
 ;
 ; Move cursor left (maybe)
 ;
 	move	@cur_pos,a0		;get current option (0,1 or 2)
 	jrle	#updateX		;br=cant move left
 	cmpi	1,a0			;on 'Enter Name" ?
-	jrne	#jlft1
+	jrne	jlft1
 	move	@create_plyr,a14
-	jrn	#no_change		;br='create player' isn't allowed
+	jrn	no_change		;br='create player' isn't allowed
 #jlft1
 	dec	a0			;move cursor 1 left
 	move	a0,@cur_pos
 	SOUND1	opt_scr_cur
-	jruc	#updateX
+	jruc	updateX
 ;
 ; Move cursor right (maybe)
 ;
@@ -3389,7 +3389,7 @@ dnb_1
 	cmpi	2,a0
 	jrge	#updateX	        ;br=cant move right
 ;	move	@create_plyr,a1
-;	jrn	#no_change		;br='create player' isn't allowed
+;	jrn	no_change		;br='create player' isn't allowed
 	inc	a0			;move cursor 1 right
 	move	a0,@cur_pos
 	SOUND1	opt_scr_cur
@@ -3402,18 +3402,18 @@ dnb_1
 	SLEEPK	1
 
 	move	@force_selection,a0
-	jrz	#no_timeout			;timeout yet ?
+	jrz	no_timeout			;timeout yet ?
 
 	movk	2,a0				;default to 'team select'
 	move	a0,@cur_pos
 
 	calla	del_create_spotlight
 	calla	update_bball_palettes
-	jruc	#timeout
+	jruc	timeout
 
 #no_timeout
 	calla	get_all_buttons_down
-	jrz	#input_loop
+	jrz	input_loop
 ;
 ; Player hit a button...or timer expired
 ;
@@ -3421,7 +3421,7 @@ dnb_1
 	SOUND1	opt_scr_sel
 
 	move	@cur_pos,a0
-	jrnz	#tmeout2			;br=cursor NOT on CREATE PLYR
+	jrnz	tmeout2			;br=cursor NOT on CREATE PLYR
 
 ;plyr selected CREATE PLAYER, make sure its what player wants
 
@@ -3447,7 +3447,7 @@ dnb_1
 	calla	obj_on				;un-hide ball 1 text
 
 	move	a11,a11				;did player select 'YES' ?
-	jrnz	#input_loop			;br=no
+	jrnz	input_loop			;br=no
 
 #tmeout2
 ;	SOUND1	opt_scr_sel
@@ -3792,7 +3792,7 @@ frep1	move	@qtr_purchased,a0
 	cmpi	1,a0
 	jrls	w3p_1
 
-;	move	@PSTATUS,a0		;a0=players in game (rep. by bits)
+;	move	@PSTATUS2,a0		;a0=players in game (rep. by bits)
 ;	cmpi	8,a0			;check for player 4 only
 ;	jreq	w3p_1			;br=yep
 ;	cmpi	4,a0			;check for player 3 only
@@ -3846,13 +3846,13 @@ w3p_1	rets
 	movi	BAST_D_P,b0			;default pal. for city imgs.
 	addi	[TM_NAME_SPC,0],a1		;add spacing
 	cmpi	MIDDLE_TEAM_NAME,a10		;plotting hi-lighted city ?
-	jrne	#nhlit2				;br=nope
+	jrne	nhlit2				;br=nope
 ;	movi	BAST_W_P,b0			;HILITED middle city name
 	movi	BAST_Y_P,b0			;HILITED middle city name
 	addi	[1,0],a1			;space around the backplate
 #nhlit2
 	cmpi	MIDDLE_TEAM_NAME-1,a10	      	;1 after hilited city ?
-	jrne	#nhlit2a			;br=nope
+	jrne	nhlit2a			;br=nope
 	addi	[1,0],a1			;space around the backplate
 #nhlit2a
 	move	*a11,a2,L			;get TEAM NAME image ptr
@@ -3861,7 +3861,7 @@ w3p_1	rets
 	PULL	a0,a1
 
 	addi	OFFSET_NXT_CITY_NAME,a11        ;ptr. next city img. (skip city nbr.)
-	dsj	a10,#ccn_1
+	dsj	a10,ccn_1
 	rets
 
 
@@ -3929,9 +3929,9 @@ hd_bkdrp_tbl
 	move	a0,*a8(OPAL)
 
 	move	*a8(OCTRL),a1
-	andi	>80ff,a1		;DMA flags
+	andi	080ffH,a1		;DMA flags
 	move	*a9(ICTRL),a14
-	andni	>80ff,a14		;DMA flags
+	andni	080ffH,a14		;DMA flags
 	or	a14,a1
 	move	a1,*a8(OCTRL)
 
@@ -3974,7 +3974,7 @@ ayn_0
  	SLEEPK	1
 
 ;
-; during option screen, if >1 player buys in while the other player was
+; during option screen, if 01H player buys in while the other player was
 ;  answering the yes/no question...stop all yes/no processing and return
 ;
 	calla	check_for_buyins

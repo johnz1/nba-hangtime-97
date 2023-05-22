@@ -73,7 +73,7 @@ JAM_GREAT	equ	4
 
 ;equates for this file
 
-M_YF	.equ	>8000	;Y free (OFLAGS)
+M_YF	.equ	08000H	;Y free (OFLAGS)
 
 
 	.text

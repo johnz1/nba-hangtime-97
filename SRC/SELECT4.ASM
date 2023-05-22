@@ -478,14 +478,14 @@ str_z
 
 ;	BSSX	TRIVIA_TEST,16
 ;	move	@TRIVIA_TEST,a0
-;	jrz	#tg1
+;	jrz	tg1
 ;
 ;	movk	4,a14
 ;	jruc	tg_3
 ;#tg1
 	clr	a14
 
-	move	@PSTATUS,a0
+	move	@PSTATUS2,a0
 	btst	0,a0				;plyr 1 ?
 	jrz	tg_0				;br=nope
 	move	@player1_data+PR_NAME1,a1
@@ -532,7 +532,7 @@ tg_3
 	movk	ADJTRIVIA,a0
 	calla	GET_ADJ
 	move	a0,a0			;if value is NON-ZERO, dont allow
-	jrz	#dotriv
+	jrz	dotriv
 	RETP
 
 #dotriv
@@ -654,7 +654,7 @@ tg_3
 
 	move	@GAMSTATE,a0
 	cmpi	INAMODE,a0
-	jrnz	#notam
+	jrnz	notam
 
 	movk	1,a0				;In attract
 	move	a0,@DISPLAYON
@@ -666,11 +666,11 @@ tg_3
 #butp
 	SLEEPK	1				;Show, wait, & die!
 	calla	get_all_buttons_cur2
-	jrz	#nobutp2
+	jrz	nobutp2
 	SOUND1	bounce_snd
-	jruc	#butp2
+	jruc	butp2
 #nobutp2
-	dsj	a8,#butp
+	dsj	a8,butp
 #butp2
 	RETP
 
@@ -692,11 +692,11 @@ tg_3
 #przlp	
 	SLEEPK	1
 	calla	get_all_buttons_down
-	jrz	#noprzb
+	jrz	noprzb
 	SOUND1	bounce_snd
-	jruc	#tg0
+	jruc	tg0
 #noprzb
-	dsj	a8,#przlp
+	dsj	a8,przlp
 #tg0
 	clr	a0				;Keep this page up while
 	move	a0,@DISPLAYON			; building the next one
@@ -720,7 +720,7 @@ tg_4	move	a0,@BAKMODS,L
 	movk	2,a10
 	CREATE0	plyr_select_answer
 	move	@TWOPLAYERS,a0		;0 = NO, 1 = YES 2 players
-	jrnz	#2plr
+	jrnz	2plr
 
 	clr	a10
 	CREATE0	plyr_select_answer
@@ -760,7 +760,7 @@ tg_4	move	a0,@BAKMODS,L
 tg_4a	
 	SLEEPK	1
 	calla	get_all_buttons_down
-	jrz	#noprzb1
+	jrz	noprzb1
 	SOUND1	bounce_snd
 	jruc	tg_4b
 #noprzb1
@@ -965,9 +965,9 @@ tt_2	SLEEPK	1
 	sll	6,a14
 
 	move	@TWOPLAYERS,a0		;0 = NO, 1 = YES 2 players
-	jrz	#2pr
+	jrz	2pr
 	addi	plyr_cursor_tbl2,a14
-	jruc	#2pr1    	
+	jruc	2pr1    	
 #2pr	addi	plyr_cursor_tbl,a14
 
 #2pr1

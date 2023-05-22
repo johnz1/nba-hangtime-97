@@ -221,7 +221,7 @@ tfire_timer_tbl
 	.asg	151,SCOREMAX		;When to "MAX" score imgs
 
 
-#******************************************************************
+*******************************************************************
 * Player is off screen for too long - put up an arrow pointing him out
 *
 *a10=0-3 for plyr #
@@ -283,26 +283,26 @@ tfire_timer_tbl
 	jrle	#do_rp
 	subk	1,a14
 	move	a14,*a0(used_turbo)
-	jruc	#no_rep
+	jruc	no_rep
 #do_rp
 ;DJT Start
 	callr	replenish_turbo
 ;Mike Vinikour wants 7!
 	movk	8,a1			;!!! Regular replenish factor
-	move	@PSTATUS,a14
+	move	@PSTATUS2,a14
 	btst	a11,a14			;Drone or human?
-	jrnz	#do_r			; br=human
+	jrnz	do_r			; br=human
 	movk	1,a2
 	xor	a11,a2
 	btst	a2,a14			;Drone or human teammate?
-	jrnz	#do_r			; br=human
+	jrnz	do_r			; br=human
 	srl	1,a2
 	sll	4,a2
 	neg	a2
 	.ref	t1ispro
 	addi	t1ispro+16,a2,L		;Chk other team win level
 	move	*a2,a2
-	jrn	#do_r			; br=novice, not many wins
+	jrn	do_r			; br=novice, not many wins
 	movk	4,a1			;!!! Pro replenish factor
 	jrp	#do_r			; br=pro, many wins but not champ yet
 	movk	1,a1			;!!! Champ replenish factor
@@ -310,7 +310,7 @@ tfire_timer_tbl
 	move	*a13(PDATA+48),a14	;turbo replenish ctr
 	addk	1,a14
 	cmp	a1,a14			;9 ;Quicken replenish
-	jrlt	#no_rrp
+	jrlt	no_rrp
 	callr	replenish_turbo
 	clr	a14
 #no_rrp
@@ -327,7 +327,7 @@ tfire_timer_tbl
 	jrle	#noton_l
 
 	move	a8,a8			;Active off arw?
-	jrz	#top			;br=no
+	jrz	top			;br=no
 
 	move	a8,a0			;Kill arw *obj
    	calla	DELOBJ
@@ -338,7 +338,7 @@ tfire_timer_tbl
 
 	callr	arw_on1plyr		;Turn on overhead arw
 
-	jruc	#top
+	jruc	top
 
 #noton_l
 	cmpi	POF_L,a2		;All the way off?
@@ -346,15 +346,15 @@ tfire_timer_tbl
 	clr	a14
 	move	a14,*a10(plyr_offtime)	;Plyr is on screen!
 	move	a8,a8			;In neutral zone. Active off arw?
-	jrz	#top			;br=no
+	jrz	top			;br=no
 #off_l
 	movk	1,a14
 	move	a14,*a10(plyr_offtime)	;Plyr is offscreen!
 
-	move	@ballpnum,a14		;>Chk if other team owns ball
-	jrn	#nown_l			;Ball owned? br=no
+	move	@ballpnum,a14		;0CHhk if other team owns ball
+	jrn	nown_l			;Ball owned? br=no
 	move	*a10(plyr_ownball),a14	;-=Teammate, 0=Neither, +=I have ball
-	jrnz	#nown_l
+	jrnz	nown_l
 	move	a11,a14			;Other team has it
 	subk	1,a14			;Is plyr off wrong side?
 	jrle	#nown_l			;br=no
@@ -364,22 +364,22 @@ tfire_timer_tbl
 	move	@WORLDTLX+16,a14
 	move	*a9(OXPOS),a3
 	sub	a14,a3
-	jrnn	#nn_l
+	jrnn	nn_l
 	neg	a3
 	sra	3,a3
-	jruc	#ps_l
+	jruc	ps_l
 #nn_l
 	sra	3,a3
 	neg	a3
 #ps_l
 	move	a8,a8			;Active off arw?
-	jrnz	#arw_on			;br=yes
+	jrnz	arw_on			;br=yes
 
  	movi	lft_lst,a2		;Off lft side
 	move	@TWOPLAYERS,a14		;0 = NO, 1 = YES 2 players
-	jrz	#off_sc
+	jrz	off_sc
 	movi	lf2_lst,a2
-	jruc	#off_sc
+	jruc	off_sc
 
 #noton_r
 	cmpi	POF_R,a1		;All the way off?
@@ -387,15 +387,15 @@ tfire_timer_tbl
 	clr	a14
 	move	a14,*a10(plyr_offtime)	;Plyr is on screen!
 	move	a8,a8			;In neutral zone. Active off arw?
-	jrz	#top			;br=no
+	jrz	top			;br=no
 #off_r
 	movk	1,a14
 	move	a14,*a10(plyr_offtime)	;Plyr is offscreen!
 
-	move	@ballpnum,a14		;>Chk if other team owns ball
-	jrn	#nown_r			;Ball owned? br=no
+	move	@ballpnum,a14		;0CHhk if other team owns ball
+	jrn	nown_r			;Ball owned? br=no
 	move	*a10(plyr_ownball),a14	;-=Teammate, 0=Neither, +=I have ball
-	jrnz	#nown_r
+	jrnz	nown_r
 	move	a11,a14			;Other team has it
 	subk	2,a14			;Is plyr off wrong side?
 	jrge	#nown_r			;br=no
@@ -406,20 +406,20 @@ tfire_timer_tbl
 	addi	TLX_O,a14
 	move	*a9(OXPOS),a3
 	sub	a14,a3
-	jrnn	#nn_r
+	jrnn	nn_r
 	neg	a3
 	sra	3,a3
-	jruc	#ps_r
+	jruc	ps_r
 #nn_r
 	sra	3,a3
 	neg	a3
 #ps_r
 	move	a8,a8			;Active off arw?
-	jrnz	#arw_on			;br=yes
+	jrnz	arw_on			;br=yes
 
  	movi	rgt_lst,a2		;Off rgt side
 	move	@TWOPLAYERS,a14		;0 = NO, 1 = YES 2 players
-	jrz	#off_sc
+	jrz	off_sc
 	movi	rg2_lst,a2
 
 #off_sc
@@ -448,11 +448,11 @@ tfire_timer_tbl
 ;	move	*a14(PR_PRIVILEGES),a14
 ;	jrle	#nxtt
 ;	btst	0,a14				;NO TAG ARROW privilege ?
-;	jrnz	#tag_of				;br=yes
+;	jrnz	tag_of				;br=yes
 ;#nxtt
 ;	move	@pup_notag,a14		;>POWER-UP LOGIC
 ;	btst	a11,a14				;Plyr arrow-off bit set?
-;	jrz	#tag_on				;br=no, show arrow
+;	jrz	tag_on				;br=no, show arrow
 ;#tag_of
 ;	move	a8,a0
 ;	calla	OBJOFF
@@ -469,16 +469,16 @@ tfire_timer_tbl
 	subk	2,a14
 	jrle	#arw_yz
 	cmp	a0,a4
-	jrz	#arw_yz
-	jrlt	#arw_xinc
+	jrz	arw_yz
+	jrlt	arw_xinc
 
 	cmpi	ARWLX_L,a4
-	jrz	#arw_yz
+	jrz	arw_yz
 	subk	1,a4
-	jruc	#arw_x
+	jruc	arw_x
 #arw_xinc
 	cmpi	ARWLX_R,a4
-	jrz	#arw_yz
+	jrz	arw_yz
 	addk	1,a4
 #arw_x
 	move	a4,*a8(OXPOS)
@@ -500,21 +500,21 @@ tfire_timer_tbl
 	add	a14,a0
 	move	a0,*a8(OYPOS)
 
-	move	@PSTATUS,a14		;No idiot box if drone
+	move	@PSTATUS2,a14		;No idiot box if drone
 	btst	a11,a14
-	jrz	#bot
+	jrz	bot
 
 	move	*a13(PDATA+32),a14	;Not, but is it time yet?
 	inc	a14
 	move	a14,*a13(PDATA+32)
 	cmpi	IDIOT_CNT,a14
-	jrlt	#bot
+	jrlt	bot
 
 	move	@gmqrtr,a14		;Yes, but no idiot box after 1st qrtr
-	jrnz	#zcnt
+	jrnz	zcnt
 
 	move	@inbound,a14		;Not, but no idiot box if inbounding
-	jrnn	#zcnt
+	jrnn	zcnt
 
 	movk	IDIOT_MSG,a0		;Tell plyr where he is!
 	move	a11,a1
@@ -526,11 +526,11 @@ tfire_timer_tbl
 #bot
 	SLEEPK	1
 	move	@HALT,a14
-	jrnz	#bot
+	jrnz	bot
 	move	@PCNT,a14		;Bump turbo replenish rate when
 	andi	3,a14			; off-screen (every 4th, not 6th)
-	jrnz	#no_rep
-	jruc	#do_rep
+	jrnz	no_rep
+	jruc	do_rep
 
 
 lft_lst	.long	arrown1l,arrown2l,arrown3l,arrown4l
@@ -540,7 +540,7 @@ rgt_lst	.long	arrown1r,arrown2r,arrown3r,arrown4r
 rg2_lst	.long	arrown1r2p,arrown1r2p,arrown2r2p,arrown2r2p
 
 
-#******************************************************************
+*******************************************************************
 *
 * Turn on a player arrow/# on top of his head
 * Individual #
@@ -558,7 +558,7 @@ rg2_lst	.long	arrown1r2p,arrown1r2p,arrown2r2p,arrown2r2p
 	PUSH	a7,a8,a9,a11
 	move	@GAMSTATE,a0
 	subk	INAMODE,a0
-	jrz	#x
+	jrz	x
 
 	move	*a10(plyr_PDATA_p),a0,L	;*PxDATA
 	move	*a0(head_arw_img),a0,L
@@ -578,7 +578,7 @@ rg2_lst	.long	arrown1r2p,arrown1r2p,arrown2r2p,arrown2r2p
 	rets
 
 
-#******************************************************************
+*******************************************************************
 *
 * Turn on a player arrow/# on top of his head
 *
@@ -595,14 +595,14 @@ rg2_lst	.long	arrown1r2p,arrown1r2p,arrown2r2p,arrown2r2p
 	PUSH	a7,a8,a9,a11
 	move	@GAMSTATE,a0
 	subk	INAMODE,a0
-	jrz	#x
+	jrz	x
 
 	move	*a10(head_arw_img),a9,L
 	move	*a9(OPLINK),a0,L
 
 	.if	DEBUG
 	calla	process_exist
-	jrnz	#ok
+	jrnz	ok
 	LOCKUP
 #ok
 	.endif
@@ -620,7 +620,7 @@ rg2_lst	.long	arrown1r2p,arrown1r2p,arrown2r2p,arrown2r2p
 	rets
 
 
-#******************************************************************
+*******************************************************************
 *
 * Turn on a player arrow/# on top of his head
 *
@@ -639,7 +639,7 @@ rg2_lst	.long	arrown1r2p,arrown1r2p,arrown2r2p,arrown2r2p
 	addi	plyrobj_t,a11
 
 	move	@TWOPLAYERS,a14		;0 = NO, 1 = YES 2 players
-	jrz	#not2
+	jrz	not2
 	addi	NUMPLYRS*32,a2
 #not2
 	move	*a0,a0,L
@@ -668,10 +668,10 @@ rg2_lst	.long	arrown1r2p,arrown1r2p,arrown2r2p,arrown2r2p
 ;--------------------
 
 arwon
-	move	@PSTATUS,a0
+	move	@PSTATUS2,a0
 	move	*a13(PDATA+64),a14
 	btst	a14,a0			;No arw if plyr is a drone
-	jrz	#arwait			;br=no arw
+	jrz	arwait			;br=no arw
 
 ;don't turn on ARROW if players' powerup is set
 	move	a14,a1
@@ -682,11 +682,11 @@ arwon
 	move	*a14(PR_PRIVILEGES),a14
 	jrle	#nxtt
 	btst	0,a14				;NO TAG ARROW privilege ?
-	jrnz	#arwtop				;br=yes
+	jrnz	arwtop				;br=yes
 #nxtt
 	move	@pup_notag,a0
 	btst	a1,a0			;plyrs bit set ?
-	jrnz	#arwtop			;br=yep, dont show arrow
+	jrnz	arwtop			;br=yep, dont show arrow
 
 	move	a9,a0
 	calla	OBJON
@@ -714,8 +714,8 @@ arwon
 #wtlp
 	SLEEPK	1
 	move	@HALT,a0
-	jrnz	#wtlp
-	dsj	a11,#arwtop
+	jrnz	wtlp
+	dsj	a11,arwtop
 
 	move	a9,a0
 	calla	OBJOFF
@@ -723,19 +723,19 @@ arwon
 #arwait	SLEEP	60
 	move	a9,a0
 	calla	OBJOFF
-	jruc	#arwait
+	jruc	arwait
 
 #arwt_t	.long	arrown1t,arrown2t,arrown3t,arrown4t
 	.long	arrown1t,arrown1t2p,arrown2t2p,arrown4t
 
 
-#******************************************************************
+*******************************************************************
 *
 * a10=PxDATA ram
 
  SUBR	stick_cpu
 
-	move	@PSTATUS,a0
+	move	@PSTATUS2,a0
 	btst	a11,a0
 	janz	SUCIDE
 	move	@GAMSTATE,a0
@@ -786,20 +786,20 @@ arwon
 	move	*a13(PDATA),a0,L	;Drone become human?
 	move	*a0(ply_time),a0
 	cmpi	25,a0
-	jrlt	#mex			;br=no
+	jrlt	mex			;br=no
 
 	move	a9,a8
 	jauc	DELOBJDIE
 
 #mex	SLEEPK	1
 	move	@HALT,a0
-	jrnz	#mex
-	dsj	a11,#metop
+	jrnz	mex
+	dsj	a11,metop
 	move	a9,a0
 	calla	DELOBJ	
 	DIE
 
-;#******************************************************************
+;*******************************************************************
 ;*
 ;* a10=PxDATA ram
 ;
@@ -839,12 +839,12 @@ arwon
 ;	move	*a13(PDATA),a0
 ;	dec	a0
 ;	move	a0,*a13(PDATA)
-;	jrnz	#cont
+;	jrnz	cont
 ;	movk	3,a0
 ;	move	a0,*a13(PDATA)
 ;
 ;	move	*a10+,a0,L
-;	jrz	#metop0
+;	jrz	metop0
 ;	SWAP	a8,a9
 ;	move	*a8(OFLAGS),a1
 ;	calla	obj_aniq
@@ -881,8 +881,8 @@ arwon
 ;
 ;#mex	SLEEPK	1
 ;;	move	@HALT,a0
-;;	jrnz	#mex
-;	jruc	#metop
+;;	jrnz	mex
+;	jruc	metop
 ;
 ;
 ;light_t
@@ -895,7 +895,7 @@ arwon
 ;	LWW	lighten7,1,69
 ;	.long	0
 ;
-;#******************************************************************
+;*******************************************************************
 ;*
 ;* a10=PxDATA ram
 ;
@@ -935,12 +935,12 @@ arwon
 ;	move	*a13(PDATA),a0
 ;	dec	a0
 ;	move	a0,*a13(PDATA)
-;	jrnz	#cont
+;	jrnz	cont
 ;	movk	3,a0
 ;	move	a0,*a13(PDATA)
 ;
 ;	move	*a10+,a0,L
-;	jrz	#metop0
+;	jrz	metop0
 ;	SWAP	a8,a9
 ;	move	*a8(OFLAGS),a1
 ;	calla	obj_aniq
@@ -978,10 +978,10 @@ arwon
 ;
 ;#mex	SLEEPK	1
 ;;	move	@HALT,a0
-;;	jrnz	#mex
-;	jruc	#metop
+;;	jrnz	mex
+;	jruc	metop
 
-#*********************************************************************
+**********************************************************************
 * Called from main loop to update credit counters, etc.
 
  SUBR	cr_cntrs_update
@@ -998,13 +998,13 @@ arwon
 	.endif
 
 	move	@GAMSTATE,a2
-	jrn	#x			;In diagnostics?
+	jrn	x			;In diagnostics?
 	cmpi	INAMODE,a2
-	jreq	#x
+	jreq	x
 	cmpi	ININTRO,a2
-	jreq	#x			;In stats?
+	jreq	x			;In stats?
 	subk	INPLYRINFO,a2
-	jreq	#x			;In stats?
+	jreq	x			;In stats?
 
 	move	@name_cnt,a0
 	dec	a0
@@ -1020,7 +1020,7 @@ arwon
 	move	@name_flop,a0
 	XORK	1,a0
 	move	a0,@name_flop
-	jrnz	#showpnames
+	jrnz	showpnames
 
 					;replace names with correct buyin message
 	movi	210,a0			;Longer time for buyin message / meter
@@ -1050,28 +1050,28 @@ arwon
 	.ref	pleasewt
 	move	@pleasewt,a14
 	btst	a3,a14
-	jrnz	#nxta
+	jrnz	nxta
 
 
 	move	@TWOPLAYERS,a7			;0 = NO, 1 = YES 2 players
-	jrz	#not2
+	jrz	not2
 	cmpi	P1DATA,a9
-	jrz	#nxt
+	jrz	nxt
 	cmpi	P4DATA,a9
-	jrz	#nxt
+	jrz	nxt
 #not2
 
 
 	move	*a9(ply_messages),a8,L
-	jrz	#nxt
+	jrz	nxt
 	move	a10,a0
 	move	@PSTATUS2,a14
 	btst	a3,a14
-	jrz	#no2			;This player has never been started
+	jrz	no2			;This player has never been started
 	move	a11,a0
 #no2
 
-;	jruc	#nxta
+;	jruc	nxta
 
 	movi	MSGOCTRL,a1
 	calla	obj_aniq_cnoff
@@ -1084,12 +1084,12 @@ arwon
 ;	calla	OBJOFF
 
 #nxt
-	jruc	#nxta
+	jruc	nxta
 
 #nxta
 	addi	PDSIZE,a9
 	addk	1,a3
-	dsj	a4,#msglp
+	dsj	a4,msglp
 
 	jruc	main0
 
@@ -1114,10 +1114,10 @@ arwon
 #pnlp
 	move	@pleasewt,a14			;Skip if "please"
 	btst	a3,a14      
-	jrnz	#nxtpn
+	jrnz	nxtpn
 
 	move	*a9(ply_messages),a8,L		;Skip & chk if name should be
-	jrz	#noani				; shown if no message (if 0)
+	jrz	noani				; shown if no message (if 0)
 
 	move	a8,a0				;Turn off message obj
 	calla	OBJOFF
@@ -1125,9 +1125,9 @@ arwon
 	move	*a9(ply_meter_imgs),a0,L	;Move down name obj Y
 	move	*a0(OYPOS),a14
 	cmpi	5,a14
-	jrnz	#dip
+	jrnz	dip
 	movi	15,a14
-	jruc	#dip2
+	jruc	dip2
 #dip
 	movi	18,a14
 #dip2
@@ -1135,32 +1135,32 @@ arwon
 	calla	OBJON
 
 	move	@TWOPLAYERS,a0
-	jrz	#not2p
+	jrz	not2p
 
 	cmpi	1,a3
-	jrz	#not2p
+	jrz	not2p
 	cmpi	2,a3
-	jrz	#not2p
+	jrz	not2p
 
 	move	a8,a0				;Definite drone. Make sure(!)
 	calla	OBJOFF				; message obj is off & go
-	jruc	#inhr				; show drone name
+	jruc	inhr				; show drone name
 #not2p
 	movi	tocontrol,a0			;Turn on "to control" in
 	movi	MSGOCTRL,a1			; message obj & go show plyr
 	calla	obj_aniq_cnoff			; name
-	jruc	#inhr
+	jruc	inhr
 
 #noani
 	move	*a9(ply_time),a1
 	subk	23,a1
-	jrlt	#nxtpn
+	jrlt	nxtpn
 #inhr
 	move	*a9(ply_meter_imgs),a8,L	;change box to name
 	move	a5,*a8(OPAL)
 	move	*a10,a0,L
 ;DJT Start
-	jrn	#inhr1				; br=not college player
+	jrn	inhr1				; br=not college player
 	move	*a8(OIMG),a0,L			;Default college name *img
 #inhr1
 ;DJT End
@@ -1171,7 +1171,7 @@ arwon
 	addi	PDSIZE,a9
 	addk	1,a3
 	addk	32,a10
-	dsj	a4,#pnlp
+	dsj	a4,pnlp
 
 ;--------------------
 
@@ -1234,7 +1234,7 @@ mlp103	addi	PDSIZE,a0
 ;	move	*a2(ply_meter_imgs+64),a0,L
 ;	calla	OBJOFF
 
-	dsj	a3,#lp
+	dsj	a3,lp
 
 	jruc	mlp110
 
@@ -1268,7 +1268,7 @@ mlp105
 ;	move	*a2(ply_meter_imgs+64),a0,L
 ;	calla	OBJON
 
-	dsj	a3,#lp2
+	dsj	a3,lp2
 
 mlp110
 ;;;;;;;	calla	prt_cr_timers	<- Did nothing!
@@ -1281,13 +1281,13 @@ mlp120	move	a3,@timertcnt
 	rets
 
 
-#*******************************
+********************************
 * Show tv score/time panel (Process)
 
  SUBR	score_showtvpanel2
 
 	move	@tvpanelon,a0,L
-	jrnz	#die
+	jrnz	die
 
 	move	a13,@tvpanelon,L
 	movi	4*TSEC+10,a11		;12*
@@ -1313,7 +1313,7 @@ mlp120	move	a3,@timertcnt
  SUBR	score_showtvpanel
 
 	move	@tvpanelon,a0,L
-	jrnz	#die
+	jrnz	die
 
 	move	a13,@tvpanelon,L
 
@@ -1348,7 +1348,7 @@ tv3	callr	tv_score  		;display big tv look score plate
 
 #tv4	SLEEPK	1
 	move	@HALT,a0
-	jrnz	#tv4
+	jrnz	tv4
 
 tv3a	movi	CLSDEAD|tvid,a0
 	calla	obj_del1c
@@ -1359,7 +1359,7 @@ tv3a	movi	CLSDEAD|tvid,a0
 	jrz	tv4
 
 	movb	@game_time+24,a0
-	jrz	#x
+	jrz	x
 
 tv4	movi	tvid,a0			;Delete big clock at botm of scrn
 	calla	KIL1C
@@ -1373,7 +1373,7 @@ tv4	movi	tvid,a0			;Delete big clock at botm of scrn
 #die	DIE
 
 
-#******************************************************************
+*******************************************************************
 * Redraw scoreboard credits message after a credit is registered.
 * Service credit or other!  Called at other times also!
 *
@@ -1418,30 +1418,30 @@ tv4	movi	tvid,a0			;Delete big clock at botm of scrn
 
 #us_p1
 	move	@TWOPLAYERS,a0
-	jrnz	#us_p2
+	jrnz	us_p2
 
 	move	a10,a0
 	move	@PSTATUS2,a4
 	btst	0,a4
-	jrz	#no_c1
+	jrz	no_c1
 	move	a11,a0			;A continue
 #no_c1
 	move	@P1DATA+ply_messages,a8,L
-	jrz	#no_m1
+	jrz	no_m1
 	move	*a8(OIMG),a2,L
 	cmp	a3,a2
-	jrnz	#no_m1
+	jrnz	no_m1
 	movi	MSGOCTRL,a1
 	calla	obj_aniq_cnoff
-	jruc	#us_p2
+	jruc	us_p2
 #no_m1
 	move	@P1DATA+ply_meter_imgs+32,a8,L
-	jrz	#us_p2
+	jrz	us_p2
 	move	*a8(OIMG),a1,L
 	cmpi	TURBO_01b,a1
-	jrz	#us_p2
+	jrz	us_p2
 	cmp	a0,a1
-	jrz	#us_p2			;already correct message
+	jrz	us_p2			;already correct message
 	movi	MSGOCTRL,a1
 	calla	obj_aniq_cnoff
 
@@ -1451,27 +1451,27 @@ tv4	movi	tvid,a0			;Delete big clock at botm of scrn
 	move	a10,a0
 	move	@PSTATUS2,a4
 	btst	1,a4
-	jrz	#no_c2
+	jrz	no_c2
 	move	a11,a0
 #no_c2
 	move	@P2DATA+ply_messages,a8,L
-	jrz	#no_m2
+	jrz	no_m2
 	move	*a8(OIMG),a2,L
 	cmp	a3,a2
-	jrnz	#no_m2
+	jrnz	no_m2
 	movi	MSGOCTRL,a1
 	calla	obj_aniq_cnoff
-	jruc	#us_p3
+	jruc	us_p3
 #no_m2
 	move	@P2DATA+ply_meter_imgs+32,a8,L
-	jrz	#us_p3
+	jrz	us_p3
 	move	*a8(OIMG),a1,L
 	cmpi	TURBO_01g,a1
-	jrz	#us_p3
+	jrz	us_p3
 	cmpi	TURBO_01b,a1
-	jrz	#us_p3
+	jrz	us_p3
 	cmp	a0,a1
-	jrz	#us_p3			;already correct message
+	jrz	us_p3			;already correct message
 	movi	MSGOCTRL,a1
 	calla	obj_aniq_cnoff
 
@@ -1481,27 +1481,27 @@ tv4	movi	tvid,a0			;Delete big clock at botm of scrn
 	move	a10,a0
 	move	@PSTATUS2,a4
 	btst	2,a4
-	jrz	#no_c3
+	jrz	no_c3
 	move	a11,a0
 #no_c3
 	move	@P3DATA+ply_messages,a8,L
-	jrz	#no_m3
+	jrz	no_m3
 	move	*a8(OIMG),a2,L
 	cmp	a3,a2
-	jrnz	#no_m3	      
+	jrnz	no_m3	      
 	movi	MSGOCTRL,a1
 	calla	obj_aniq_cnoff
-	jruc	#us_p4
+	jruc	us_p4
 #no_m3
 	move	@P3DATA+ply_meter_imgs+32,a8,L
-	jrz	#us_p4
+	jrz	us_p4
 	move	*a8(OIMG),a1,L
 	cmpi	TURBO_01y,a1
-	jrz	#us_p4
+	jrz	us_p4
 	cmpi	TURBO_01r,a1
-	jrz	#us_p4
+	jrz	us_p4
 	cmp	a0,a1
-	jrz	#us_p4			;already correct message
+	jrz	us_p4			;already correct message
 	movi	MSGOCTRL,a1
 	calla	obj_aniq_cnoff
 
@@ -1514,11 +1514,11 @@ tv4	movi	tvid,a0			;Delete big clock at botm of scrn
 	move	a10,a0
 	move	@PSTATUS2,a4
 	btst	3,a4
-	jrz	#no_c4
+	jrz	no_c4
 	move	a11,a0
 #no_c4
 	move	@P4DATA+ply_messages,a8,L
-	jrz	#no_m4
+	jrz	no_m4
 	move	*a8(OIMG),a2,L
 	cmp	a3,a2
 	jrnz	xo
@@ -1540,7 +1540,7 @@ xo
 	PULL	a8,a11
 	rets
 
-#****************************************************************
+*****************************************************************
 * Print credits or free play message in top score board
 *
 * Trashes a0-a7
@@ -1619,7 +1619,7 @@ prt_cr
 
 	movi	clock_imgs,a10
 	movi	#init_t,a11		;>Setup status images
-	jruc	#status
+	jruc	status
 #lp
 	move	*a11+,a1		;Y
 	move	*a11+,a3		;Z
@@ -1637,7 +1637,7 @@ prt_cr
 
 #status	move	*a11+,a0		;X
 	cmpi	4000,a0
-	jrne	#lp			;!End?
+	jrne	lp			;!End?
 
 	movk	1,a0			;Make clk inactive
 	move	a0,@clock_active
@@ -1648,19 +1648,19 @@ prt_cr
 #lp1	calla	prt_top_clock		;Update clk
 #lp1a	SLEEPK	1
 	move	@HALT,a0
-	jrnz	#lp1a
+	jrnz	lp1a
 
 	.if DEBUG | DUNKTST
 	move	@CLOCK_OFF,a0	;When testing dunks - PUT IN!
-	jrnz	#lp1a
+	jrnz	lp1a
 	.endif
 
 	.if	IMGVIEW
-	jruc	#lp1a			;Debug - no time clk on
+	jruc	lp1a			;Debug - no time clk on
 	.endif
 
 	move	@clock_active,a0	;Clk stopped (inbounding)? Yes if !0
-	jrnz	#lp1a
+	jrnz	lp1a
 
 ;We shouldn't do this GET_ADJ during game loop!
 ;Get at start of game 1 time only!
@@ -1672,38 +1672,38 @@ prt_cr
 	sll	4,a0
 	addi	timer_table-16,a0
 	move	*a0,a1
-	move	@PSTATUS,a0
-	cmpi	>f,a0			;Is it a 4 plyr game? No if !0
-	jrnz	#not4
+	move	@PSTATUS2,a0
+	cmpi	0fH,a0			;Is it a 4 plyr game? No if !0
+	jrnz	not4
 	addi	200h,a1			;100h;Yes. Make clk run faster!
 #not4
-;	movi	>ffff,a1		;Debug - make clk super fast!
+;	movi	0ffffH,a1		;Debug - make clk super fast!
 
 	move	@clock_speed,a0		;Add to clk speed frac
 	add	a1,a0
 	move	a0,@clock_speed
-	jrnc	#lp1a			;Time for a clk tick? No if !C
+	jrnc	lp1a			;Time for a clk tick? No if !C
 
 	movi	game_time,a10
 
 	movb	*a10,a0			;Get 10ths byte
-	jrz	#tag			;Full sec? Yes if 0
+	jrz	tag			;Full sec? Yes if 0
 	dec	a0			;No. Dec 10ths
 	movb	a0,*a10
 	move	*a10,a0,L		;Chk if qrtr over. Yes if 0
-	jrz	#qtrend
+	jrz	qtrend
 	srl	32-8,a0			;Under a min left?
-	jrnz	#lp1a			;No if !0 - no clk update
-	jruc	#lp1			;Update clk
+	jrnz	lp1a			;No if !0 - no clk update
+	jruc	lp1			;Update clk
 #tag	
 	movk	9,a0			;Reset 10ths
 	movb	a0,*a10
 
 	movb	*a10(1*8),a0		;Get secs byte
-	jrz	#tag1			;Full ten? Yes if 0
+	jrz	tag1			;Full ten? Yes if 0
 	dec	a0			;No. Dec secs
 	movb	a0,*a10(1*8)
-	jruc	#lp1			;Update clk
+	jruc	lp1			;Update clk
 #tag1
 	movk	9,a0			;Reset secs
 	movb	a0,*a10(1*8)
@@ -1716,10 +1716,10 @@ prt_cr
 ;;#nodaj1
 ;DJT End
 	movb	*a10(2*8),a0		;Get tens byte
-	jrz	#tag2			;Full min? Yes if 0
+	jrz	tag2			;Full min? Yes if 0
 	dec	a0			;No. Dec tens
 	movb	a0,*a10(2*8)
-	jruc	#lp1			;Update clk
+	jruc	lp1			;Update clk
 #tag2	
 	movk	5,a0			;Reset tens
 	movb	a0,*a10(2*8)
@@ -1729,12 +1729,12 @@ prt_cr
 	jrhs	#nodaj			;No if >=
 
 	cmpi	1,a0
-	jrnz	#reg
+	jrnz	reg
 ;	LOCKUP
 ;Bong clock on outside court at 1 minute
 ;	.ref	pup_court
 ;	move	@pup_court,a14
-;	jrz	#reg
+;	jrz	reg
  	.ref	chrch_bel_sp
 	SOUND1	chrch_bel_sp
 #reg
@@ -1747,7 +1747,7 @@ prt_cr
 	movb	*a10(3*8),a0		;Get mins byte & dec it
 	dec	a0
 	movb	a0,*a10(24)
-	jrnz	#lp1			;Update clk if more than a min left
+	jrnz	lp1			;Update clk if more than a min left
 
 ;Rearrange top clock to allow tenths
 
@@ -1767,7 +1767,7 @@ prt_cr
 
 	move	@bclok_imgs,a0,L	;Screen bottom clk on?
 	calla	ISOBJ
-	jrnz	#bclkon
+	jrnz	bclkon
 	CREATE	tvid,scr_clock		;No. Turn on bottom clk
 
 	SLEEPK	2
@@ -1776,7 +1776,7 @@ prt_cr
 #bclkon
 	move	*a0(OIMG),a1,L		;Is bottom clk min:sec or sec:10th?
 	cmpi	clock,a1
-	jrnz	#lp1			;Assume sec:10th if !0
+	jrnz	lp1			;Assume sec:10th if !0
 
 ;Rearrange bottom clock to allow tenths
 
@@ -1786,15 +1786,15 @@ prt_cr
 	calla	obj_aniq
 
 	move	@bclok_imgs+32,a1,L
-	movi	>136-15,a0
+	movi	0136H-15,a0
 	move	a0,*a1(OXPOS)
 	move	@bclok_imgs+64,a1,L
-	movi	>116-10,a0
+	movi	0116H-10,a0
 	move	a0,*a1(OXPOS)
 	move	@bclok_imgs+96,a1,L
-	movi	>120-10,a0
+	movi	0120H-10,a0
 	move	a0,*a1(OXPOS)
-	jruc	#lp1			;Update clk
+	jruc	lp1			;Update clk
 
 ;----------
 ; Quarter ended.
@@ -1820,7 +1820,7 @@ prt_cr
 	calla	prt_top_clock		;Update clk
 
 	move	@tvpanelon,a0,L		;Is tv panel on? Yes if !0
-	jrnz	#tag3
+	jrnz	tag3
 	movi	tvid,a0			;No. Delete bottom clk that is on
 	calla	KIL1C			; screen by itself
 	movi	CLSDEAD|bclockid,a0
@@ -1829,26 +1829,26 @@ prt_cr
 	SOUND1	horn_snd
 
 	move	@_4plyrsingame,a0
-	jrnz	#skip
-	move	@PSTATUS,a0
-	cmpi	>f,a0			;Is it a 4 plyr game? Yes if 0
-	jrz	#skip
+	jrnz	skip
+	move	@PSTATUS2,a0
+	cmpi	0fH,a0			;Is it a 4 plyr game? Yes if 0
+	jrz	skip
 	movk	1,a0
 	move	a0,@_4plyrsingame
 #skip
 	move	@_2plyr_competitive,a0
-	jrnz	#skip1			;br=not 2 plr competitive
-	move	@PSTATUS,a0
+	jrnz	skip1			;br=not 2 plr competitive
+	move	@PSTATUS2,a0
 	cmpi	1111b,a0
-	jreq	#skip1			;br=2 plyr competitive
+	jreq	skip1			;br=2 plyr competitive
 	cmpi	1010b,a0
-	jreq	#skip1			;br=2 plyr competitive
+	jreq	skip1			;br=2 plyr competitive
 	cmpi	1001b,a0
-	jreq	#skip1			;br=2 plyr competitive
+	jreq	skip1			;br=2 plyr competitive
 	cmpi	0110b,a0
-	jreq	#skip1			;br=2 plyr competitive
+	jreq	skip1			;br=2 plyr competitive
 	cmpi	0101b,a0
-	jreq	#skip1			;br=2 plyr competitive
+	jreq	skip1			;br=2 plyr competitive
 	movk	1,a0
 	move	a0,@_2plyr_competitive
 #skip1
@@ -1873,22 +1873,22 @@ prt_cr
 	movi	QRTRTIME,a0		;>Regular qrtr time
 	move	@gmqrtr,a1
 	subk	4,a1			;In an OT qrtr? No if <
-	jrlt	#regqtr
+	jrlt	regqtr
 
 ; Setup for OT quarter
 
 ;	SOUND1	intoot_snd
 
 	move	@tvpanelon,a0,L		;Is tv panel on? No if 0
-	jrz	#skp
+	jrz	skp
 	calla	process_exist		;Yes. Its process better exist!
-	jrz	#tvpwt
+	jrz	tvpwt
 	movi	tv3a,a7			;Turn off tv panel
 	calla	XFERPROC
 #tvpwt
 	SLEEPK	1
 	move	@tvpanelon,a0,L		;Wait for tv panel to turn off
-	jrnz	#tvpwt
+	jrnz	tvpwt
 #skp	
 ;;;;	movk	1,a0		;>OT qrtr time
 	movi	QRTRTIME,a0		;>OT qrtr time
@@ -1913,14 +1913,14 @@ prt_cr
 
 	move	@gmqrtr,a0
 	subk	2,a0
-	jrnz	#tag4
+	jrnz	tag4
 	CREATE0	do_show
 #tag4
 	callr	start_qrtr_tune
 	SLEEPK	1
 	calla	start_crowd_noise
 
-	jruc	#lp1			;Reenter main loop
+	jruc	lp1			;Reenter main loop
 
 
 ;-----------------------------------------------------------------------------
@@ -1929,21 +1929,21 @@ prt_cr
 
 	.ref	pup_nomusic,tuneend_snd
 	move	@pup_nomusic,a14
-	jrz	#play
+	jrz	play
 	move	@GAMSTATE,a14
 	subk	INAMODE,a14
-	jrz	#play
+	jrz	play
 	SOUND1	tuneend_snd
 	move	@gmqrtr,a14
 ;DJT Start
-	jrnz	#noplay
+	jrnz	noplay
 	.ref	hangtime_snd
 	SOUND1	hangtime_snd
-	jruc	#nodrnfr
+	jruc	nodrnfr
 #noplay
 	.ref	firstbskt,thr_smkn_sp
 	move	@firstbskt,a0
-	jrnn	#nodrnfr
+	jrnn	nodrnfr
 	CREATE0	do_smkn
 #nodrnfr
 ;DJT End
@@ -1951,12 +1951,12 @@ prt_cr
 #play
 	move	@balltmshotcnt,a14	;Is it a team on-fire?
 	subk	TMFIRE_MINCNT,a14
-	jrlt	#no			; br=no
+	jrlt	no			; br=no
 	SOUND1	tm_fire_tune
 	rets
 #no
 	move	@gmqrtr,a0
-	jrnz	#not1
+	jrnz	not1
 	SOUND1	tuneq1_snd
 	rets
 
@@ -1969,7 +1969,7 @@ prt_cr
 	move	*a0,a0,L
 	calla	snd_play1
 ;DJT Start
-	jruc	#noplay
+	jruc	noplay
 ;DJT End
 
 
@@ -1987,9 +1987,9 @@ tune_tc	.equ	($-tune_t)/32
 
 	movi	plyrobj_t,a10,L
 	movi	plyrproc_t,a11,L
-	move	@PSTATUS,a14
+	move	@PSTATUS2,a14
 	andi	3,a14
-	jrz	#tmsmk
+	jrz	tmsmk
 	addi	64,a10
 	addi	64,a11
 #tmsmk
@@ -2013,7 +2013,7 @@ tune_tc	.equ	($-tune_t)/32
 
 	movk	5,a0
 	move	@gmqrtr,a14
-	jrz	#tmsmk1
+	jrz	tmsmk1
 	movk	20,a0
 #tmsmk1
 	calla	PRCSLP
@@ -2073,17 +2073,17 @@ tune_tc	.equ	($-tune_t)/32
 	move	@game_time,a0,L		;Qrtr over? Yes if 0
 	jaz	SUCIDE
 	srl	16,a0			;Under 10 secs left? No if !0
-	jrnz	#tick
+	jrnz	tick
 	move	@clock_active,a0	;Yes. Clk active? No if !0
-	jrnz	#tick
+	jrnz	tick
 
 	movi	tick_snd,a0		;Yes. Do tick or tock sound
 ;	XORK	1,a9
-;	jrz	#tok
+;	jrz	tok
 ;	movi	tock_snd,a0
 ;#tok
 	calla	snd_play1
-	jruc	#tick
+	jruc	tick
 
 
 ;----------
@@ -2107,13 +2107,13 @@ tune_tc	.equ	($-tune_t)/32
 	.word	4000
 
 
-#****************************************************************
+*****************************************************************
 *
 
 prt_qrtr
 	move	@gmqrtr,a2
 	cmpi	qrtrt_c,a2
-	jrlt	#do_ot
+	jrlt	do_ot
 	movk	4,a2			;!!!Default for OT overflow
 #do_ot
 	sll	5,a2
@@ -2141,7 +2141,7 @@ qrtrt_c	.equ	($-qrtrt1)/32
 ;
 ;	move	@gmqrtr,a2
 ;	cmpi	qrtrt_c,a2
-;	jrlt	#do_ot
+;	jrlt	do_ot
 ;	movk	4,a2
 ;#do_ot
 ;	sll	5,a2
@@ -2183,25 +2183,25 @@ qrtrt_c	.equ	($-qrtrt1)/32
 
 ;	clr	a2
 ;	cmpi	P1DATA,a11
-;	jrz	#1
+;	jrz	1
 ;	movk	1,a2
 ;	cmpi	P2DATA,a11
-;	jrz	#1
+;	jrz	1
 ;	movk	2,a2
 ;	cmpi	P3DATA,a11
-;	jrz	#1
+;	jrz	1
 ;	movk	3,a2
 ;#1
 ;
 ;
-;;	move	@PSTATUS,a1
+;;	move	@PSTATUS2,a1
 ;;	btst	a2,a1
-;;	jrz	#notingame
+;;	jrz	notingame
 ;
 ;	move	*a11(ply_meter_imgs+40h),a2,L	;LITUP img 
 ;	clr	a1
 ;	move	a1,*a2(OFSET)
-;	movi	>2f,a2	;2f	 		;OSIZEX of litup meter img
+;	movi	02fH,a2	;2f	 		;OSIZEX of litup meter img
 ;	move	a2,*a11(ply_turbo)		;max out turbo meter
 ;	movk	1,a2
 ;	move	a2,*a11(ply_turbo_dl)		;turbo cnt delay
@@ -2219,7 +2219,7 @@ qrtrt_c	.equ	($-qrtrt1)/32
  SUBRP	replenish_turbo
 	move	*a0(ply_turbo),a1
 	cmpi	TURBO_CNT-1,a1			;!!! Max turbo meter
-	jrz	#x
+	jrz	x
 	addk	1,a1
 	move	a1,*a0(ply_turbo)
 	sll	5,a1
@@ -2232,7 +2232,7 @@ qrtrt_c	.equ	($-qrtrt1)/32
 
 ;	move	*a0(ply_meter_imgs+32),a2,L	;LITUP img 
 ;	move	*a2(OFSET),a1			;Need to shrink LITUP img
-;	jrz	#x
+;	jrz	x
 ;	subk	1,a1
 ;	move	a1,*a2(OFSET)
 ;	move	*a0(ply_turbo),a1
@@ -2260,18 +2260,18 @@ qrtrt_c	.equ	($-qrtrt1)/32
 	move	@ballpnumshot,a9
 	move	@plyr_onfire,a0
 	btst	a9,a0
-	jrz	#noaud				;br=not on fire
+	jrz	noaud				;br=not on fire
 
 	movi	AUD_HOTSTRKPTS,a0		;Audit plyr on-fire pts
 	.ref	ballnumscored
 	move	@ballnumscored,a14		;Was it a plyr on-fire?
 	subk	ONFIRE_MINCNT,a14
-	jrnn	#aud				; br=yes
+	jrnn	aud				; br=yes
 	movi	AUD_TM_FIRE_PTS,a0		;Audit team on-fire pts
 #aud
 	move	@GAMSTATE,a14
 	cmpi	INAMODE,a14			;Don't audit if in attract
-	jrz	#noaud
+	jrz	noaud
 	calla	AUD
 #noaud
 	move	a1,a10
@@ -2279,7 +2279,7 @@ qrtrt_c	.equ	($-qrtrt1)/32
 	CREATE0	start_animate
 
 	move	@assist_plyr,a1
-	jrz	#sx
+	jrz	sx
 	dec	a1
 
 ;;TEAM METER logic
@@ -2314,11 +2314,11 @@ flsh_bgnd
 	clr	a7
 
 	cmpi	3,a10			;How many pts scored?
-	jrnz	#not3
+	jrnz	not3
 
 	clr	a1			;Do 3 ptr animation
 	movi	THREPNTS,a2
-	movi	>7590,a3
+	movi	07590H,a3
 	calla	BEGINOBJ2
 
 	SLEEPK	1
@@ -2333,32 +2333,32 @@ flsh_bgnd
 	movi	THREP1,a11
 #f31
 	move	@game_time,a0,L
-	jrz	#fout
+	jrz	fout
 	move	*a11+,a0,L
 	calla	pal_getf
 	move	a0,*a8(OPAL)
 	SLEEPK	2
-	dsj	a10,#f31
-	dsj	a9,#f30
+	dsj	a10,f31
+	dsj	a9,f30
 
 	SLEEPK	20
 
-	jruc	#fout
+	jruc	fout
 
-;	movi	>0101,a2
+;	movi	00101H,a2
 ;	move	a2,*a8(OCONST)
 ;
 ;	movk	14,a10
 ;#f30
 ;	move	@game_time,a0,L
-;	jrz	#fout
+;	jrz	fout
 ;	callr	const_on
 ;	SLEEPK	4
 ;	callr	const_off
 ;	SLEEPK	7
-;	dsj	a10,#f30
+;	dsj	a10,f30
 ;
-;	jruc	#fout
+;	jruc	fout
 
 #not3
 	clr	a1			;Do 2 ptr animation
@@ -2368,14 +2368,14 @@ flsh_bgnd
 	movk	8,a10
 #f1
 	move	@game_time,a0,L
-	jrz	#fout
+	jrz	fout
 	move	a8,a0
 	calla	OBJON
 	SLEEPK	3
 	move	a8,a0
 	calla	OBJOFF
 	SLEEPK	3
-	dsj	a10,#f1
+	dsj	a10,f1
 
 #fout
 	move	a8,a0
@@ -2404,23 +2404,23 @@ flsh_bgnd
 	calla	BEGINOBJ2
 
 #set	move	@ballpnum,a0
-	jrn	#frbl
+	jrn	frbl
 	sll	4,a0
 	addi	#x_t2,a0
 	move	*a0,a0
 	move	a0,*a8(OXPOS)
 	SLEEPK	3
-	jruc	#set
+	jruc	set
 #frbl	move	a8,a0
 	calla	OBJOFF
 
 #frlp	SLEEPK	3
 
 	move	@ballpnum,a0
-	jrn	#frlp
+	jrn	frlp
 	move	a8,a0
 	calla	OBJON
-	jruc	#set
+	jruc	set
 
 #x_t2
 	.word	9,59h,0ebh,13bh
@@ -2435,9 +2435,9 @@ flsh_bgnd
 
 	movi	#mincol,a0
 	move	@game_time,a1,L			;print minutes
-	jrz	#tag4
+	jrz	tag4
 	srl	32-8,a1
-	jrnz	#tag4
+	jrnz	tag4
 	movi	#tenths,a0
 	movb	@game_time+0,a1			;print 10ths of sec
 #tag4
@@ -2490,19 +2490,19 @@ flsh_bgnd
 ;
 ;	movi	P1DATA,a9
 ;	clr	a11
-;prt05	move	@PSTATUS,a0		;Plyr start bits 0-3
+;prt05	move	@PSTATUS2,a0		;Plyr start bits 0-3
 ;	btst	a11,a0
-;	jrz	#nxt
+;	jrz	nxt
 ;
 ;;Check to see if player name is in place of credit timer!  If so, don't try
 ;;to print out timers
 ;
 ;	move	*a9(ply_meter_imgs),a8,L
-;	jrz	#nxt
+;	jrz	nxt
 ;
 ;	move	*a8(OIMG),a0,L
 ;	cmpi	LED_00,a0
-;	jrne	#nxt			;Not counter?
+;	jrne	nxt			;Not counter?
 ;
 ;	move	*a9(ply_time),a0
 ;	cmpi	1000,a0
@@ -2525,7 +2525,7 @@ flsh_bgnd
 ;	rets
 
 
-#***********************************************************************
+************************************************************************
 * Print small scores at top of screen
 
  SUBR	prt_top_scores
@@ -2557,7 +2557,7 @@ flsh_bgnd
 
 
 	move	@tvpanelon,a0,L
-	jrz	#x
+	jrz	x
 	movi	3*60,a1			;Add time to score plate proc!
 	move	a1,*a0(PTIME)
 
@@ -2569,7 +2569,7 @@ flsh_bgnd
 	rets
 
 
-#****************************************************************
+*****************************************************************
 * Turn on T.V. look score plate at the bottom of the screen.
 * Handle game clock, quarter #, team names, and score.  Then turn
 * off everything except maybe the game time.
@@ -2618,18 +2618,18 @@ tv4x
 	addi	qrtrt,a2
 
 	move	@game_time,a1,L
-	jrnz	#skip
+	jrnz	skip
 
 	addi	tie_eqrtrt-qrtrt,a2
 	move	@scores,a1
 	move	@scores+16,a3
 	cmp	a1,a3
-	jrz	#skip
+	jrz	skip
 
 	addi	eqrtrt-tie_eqrtrt,a2
 	move	@gmqrtr,a3
 	subk	4,a3
-	jrn	#skip
+	jrn	skip
 	clr	a0
 #skip
 	move	*a2,a2,L
@@ -2642,7 +2642,7 @@ tv4x
 	move	@team1,a2
 ;;	cmpi	27,a2
 	cmpi	NUM_TEAMS,a2
-	jrnz	#reg
+	jrnz	reg
 ;FIX!!!
 ;Special team named JAM
 	movi	NUM_TEAMS,a2
@@ -2661,7 +2661,7 @@ tv4x
 ;	movi	OSGEMD_M,a2
 ;	movi	GREENPAL,b0
 ;	calla	BEGINOBJP2
-	jruc	#nx
+	jruc	nx
 #reg	
 	sll	5,a2
 	addi	team_nms,a2
@@ -2675,7 +2675,7 @@ tv4x
 
 	cmpi	NUM_TEAMS,a2
 ;;	cmpi	27,a2
-	jrnz	#reg2
+	jrnz	reg2
 
 ;FIX!!!
 ;Special team named JAM
@@ -2695,7 +2695,7 @@ tv4x
 ;	movi	OSGEMD_M,a2
 ;	movi	GREENPAL,b0
 ;	calla	BEGINOBJP2
-;	jruc	#nx2
+;	jruc	nx2
 #reg2
 
 	sll	5,a2
@@ -2742,7 +2742,7 @@ flash_red
 	move	@last_score,a0,L
 	jaz	SUCIDE
 	cmpi	scores,a0
-	jrz	#tm1
+	jrz	tm1
 	movi	96,a9
 #tm1	movk	10,a11
 	addi	flsh_ptrs,a9
@@ -2767,7 +2767,7 @@ flash_red
 	move	*a9(64),a8,L
 	move	a0,*a8(OPAL)
 	SLEEPK	5
-	dsj	a11,#lp
+	dsj	a11,lp
 
 	clr	a0
 	move	a0,@last_score,L
@@ -2775,7 +2775,7 @@ flash_red
 		
 	
 
-#************************************************************************
+*************************************************************************
 * Print big score digits that are part of the tv score panel
 * Trashes scratch, A2-A8
 
@@ -2788,7 +2788,7 @@ flash_red
 	move	a1,a10
 	movk	6,b0
 #clp	move	a0,*a1+,L
-	dsj	b0,#clp
+	dsj	b0,clp
 
 
 	movi	CLSDEAD|tvscrid,a0
@@ -2807,7 +2807,7 @@ flash_red
 	move	a0,a9
 
 	srl	8,a0			;>Hundereds
-	jrz	#nohun
+	jrz	nohun
 
 	sll	32-4,a0
 	srl	32-4-5,a0		;*32
@@ -2824,7 +2824,7 @@ flash_red
 
 	move	a9,a0			;>Tens
 	srl	4,a0
-	jrz	#notens
+	jrz	notens
 
 	sll	32-4,a0
 	srl	32-4-5,a0		;*32
@@ -2857,7 +2857,7 @@ flash_red
 	move	a0,a9
 
 	srl	8,a0			;>Hundereds
-	jrz	#nohun2
+	jrz	nohun2
 
 	sll	32-4,a0
 	srl	32-4-5,a0		;*32
@@ -2874,7 +2874,7 @@ flash_red
 
 	move	a9,a0			;>Tens
 	srl	4,a0
-	jrz	#notens2
+	jrz	notens2
 
 	sll	32-4,a0
 	srl	32-4-5,a0		;*32
@@ -2909,7 +2909,7 @@ flash_red
 	.long	SCOR18_7,SCOR18_8,SCOR18_9
 
 
-#************************************************************************
+*************************************************************************
 * Turn on three images for big clock portion of TV score plate
 * Start a process which updates these imgs
 * That process must die when other tv score stuff is deleted!
@@ -2920,12 +2920,12 @@ flash_red
 	movi	bclok_imgs,a10			;for holding onto img pointer
 	move	@game_time,a5,L
 	srl 	24,a5
-	jrnz	#status
+	jrnz	status
 ;	jrnz	reg
 	movi	#init_t2,a11
-	jruc	#status
+	jruc	status
 ;reg	movi	#init_t,a11
-;	jruc	#status
+;	jruc	status
 #lp
 	move	*a11+,a1
 	sll	16,a0
@@ -2941,18 +2941,18 @@ flash_red
 
 #status	move	*a11+,a0			;X
 	cmpi	4000,a0
-	jrne	#lp				;!End?
+	jrne	lp				;!End?
 
 	callr	prt_tvtime
 	movi	gclockid,a0
 	clr	a1
 	not	a1
 	calla	EXISTP
-	jrz	#lp1
+	jrz	lp1
 
 
 	move	@game_time,a1,L
-	jrz	#lp1
+	jrz	lp1
 
 
 	movk	3,a1
@@ -2962,18 +2962,18 @@ flash_red
 	callr	prt_tvtime
 	SLEEPK	3
 
-	jruc	#lp1
+	jruc	lp1
 
 
  SUBRP	prt_tvtime	
 
 	movb	@game_time+24,a0		;print minutes
-	jrnz	#tag4
+	jrnz	tag4
 	movb	@game_time+0,a0			;print 10ths of sec
 #tag4	sll	5,a0
 	addi	numbs,a0
 	move	*a0,a0,L
-	move	@bclok_imgs+>20,a8,L
+	move	@bclok_imgs+020H,a8,L
 	move	*a8(OCTRL),a1
 	calla	obj_aniq
 
@@ -2981,7 +2981,7 @@ flash_red
 	sll	5,a0
 	addi	numbs,a0
 	move	*a0,a0,L
-	move	@bclok_imgs+>40,a8,L
+	move	@bclok_imgs+040H,a8,L
 	move	*a8(OCTRL),a1
 	calla	obj_aniq
 
@@ -2989,7 +2989,7 @@ flash_red
 	sll	5,a0
 	addi	numbs,a0
 	move	*a0,a0,L
-	move	@bclok_imgs+>60,a8,L
+	move	@bclok_imgs+060H,a8,L
 	move	*a8(OCTRL),a1
 	calla	obj_aniq
 	rets
@@ -3008,11 +3008,11 @@ flash_red
 #init_t2
 	.word	2-10,185+46,5010
 	.long	clock2
-	.word	>130-10,230,5020
+	.word	0130H-10,230,5020
 	.long	BRSH12_0
-	.word	>116-10,230,5020
+	.word	0116H-10,230,5020
 	.long	BRSH12_0
-	.word	>120-10,230,5020
+	.word	0120H-10,230,5020
 	.long	BRSH12_0
 	.word	4000
 
@@ -3025,7 +3025,7 @@ tie_eqrtrt
 	.long	TripleOT,TripleOT,TripleOT,TripleOT,TripleOT,TripleOT
 
 
-#****************************************************************
+*****************************************************************
 * Team on-fire timer
 * A9=team on fire (!0=team 1, 0=team 2)
 * Trashes scratch
@@ -3040,17 +3040,17 @@ tie_eqrtrt
 	move	a9,a11
 
 	move	@pup_nomusic,a14
-	jrz	#play
+	jrz	play
 	move	@GAMSTATE,a14
 	subk	INAMODE,a14
-	jrnz	#noplay
+	jrnz	noplay
 #play
 	SOUND1	tm_fire_tune
 #noplay
 
 	movi	[68,0],a10
 	move	a9,a9
-	jrnz	#tm1
+	jrnz	tm1
 	movi	[296,0],a10
 #tm1
 	move	a10,a0
@@ -3084,9 +3084,9 @@ tie_eqrtrt
 	sll	4,a0
 	addi	tfire_timer_tbl-16,a0
 	move	*a0,a0
-	move	@PSTATUS,a14
-	cmpi	>f,a14			;Is it a 4 plyr game? No if !0
-	jrnz	#not4
+	move	@PSTATUS2,a14
+	cmpi	0fH,a14			;Is it a 4 plyr game? No if !0
+	jrnz	not4
 	subk	1,a0			;Yes. Make clk run faster!
 #not4
 	move	a0,*a13(PDATA+64)	;Timer count
@@ -3096,15 +3096,15 @@ tie_eqrtrt
 #lp
 	SLEEPK	FLAME_ANICNT
 	move	@HALT,a0
-	jrnz	#lp
+	jrnz	lp
 
 	move	@balltmshotcnt,a14	;Team stil on-fire?
 	subk	TMFIRE_MINCNT,a14
-	jrn	#notmfire		; br=no
+	jrn	notmfire		; br=no
 
 	move	*a13(PDATA),A14,L	;Fire-frame ani *table
 	move	*a14+,a0,L
-	jrnz	#ani1
+	jrnz	ani1
 	movi	#frame,a14
 	move	*a14+,a0,L
 #ani1
@@ -3115,9 +3115,9 @@ tie_eqrtrt
 	SWAP	a8,a9
 
 	move	@clock_active,a0	;Clock active?
-	jrnz	#lp
+	jrnz	lp
 
-	dsj	a10,#lp
+	dsj	a10,lp
 
 ;KEEP this shit around...
 
@@ -3129,23 +3129,23 @@ tie_eqrtrt
 	
 	.ref	cntl_team
 	move	@cntl_team,a0
-	jrn	#lptick
-	jrz	#t1
+	jrn	lptick
+	jrz	t1
 ;Team 2
 	move	a11,a11
-	jrz	#cont
-	jruc	#lptick
+	jrz	cont
+	jruc	lptick
 
 #t1
 ;Team 1
 	move	a11,a11
-	jrz	#lptick
+	jrz	lptick
 
 #cont
 
 	move	*a13(PDATA+32),a14,L
 	cmpi	LED_0,a14
-	jrz	#clean_up
+	jrz	clean_up
 	move	-*a14,a0,L
 	move	a0,*a8(OSAG),L
 	move	a14,*a13(PDATA+32),L
@@ -3157,7 +3157,7 @@ tie_eqrtrt
 ;DJT ;FIX!!!  Get different snd
 	SOUND1	tfire_tcksnd	;warn_snd;Warn players clock is running down
 ;DJT End
-	jruc	#lptick
+	jruc	lptick
 
 #clean_up
 ;DJT Start
@@ -3171,10 +3171,10 @@ tie_eqrtrt
 	move	a0,@plyr_onfire
 
 	move	@pup_nomusic,a14
-	jrz	#play1
+	jrz	play1
 	move	@GAMSTATE,a14
 	subk	INAMODE,a14
-	jrnz	#noplay1
+	jrnz	noplay1
 #play1
 	callr	start_qrtr_tune
 #noplay1
@@ -3192,7 +3192,7 @@ tie_eqrtrt
 	.long	0
 
 
-#****************************************************************
+*****************************************************************
 * Start shot clock timer, when clock gets down to 10 seconds,
 * then display the clock in the lower corner furthest away from
 * the hoop.
@@ -3207,7 +3207,7 @@ tie_eqrtrt
 
 	.if DEBUG | DUNKTST
 	move	@CLOCK_OFF,a14
-	jrz	#ok
+	jrz	ok
 	rets
 #ok
 	.endif
@@ -3242,11 +3242,11 @@ tie_eqrtrt
 
 
 	movb	*a1(24),a3		;grab minutes byte
-	jrnz	#lp
+	jrnz	lp
 ;Possibly less than a minute left
 
 	move	a2,a2
-	jrnz	#not
+	jrnz	not
 
 #nosc
 	clr	a0
@@ -3254,35 +3254,35 @@ tie_eqrtrt
 	DIE
 #not
 	cmpi	1,a2
-	jrnz	#lp
+	jrnz	lp
 	cmpi	5,a0
 	jrle	#nosc
 
 #lp
 	SLEEP	40
 	move	@HALT,a0
-	jrnz	#lp
+	jrnz	lp
 
-;	jruc	#lp
+;	jruc	lp
 
-	dsj	a9,#lp
+	dsj	a9,lp
 
 #lp0	SLEEPK	10
 
 	move	@tvpanelon,a0,L
-	jrnz	#lp0
+	jrnz	lp0
 	move	@ballgoaltcnt,a0
 	jrgt	#lp0
 	move	@ballpnum,a0
-	jrn	#skp
+	jrn	skp
 	sll	5,a0
 	addi	plyrproc_t,a0
 	move	*a0,a0,L
 	move	*a0(plyr_jmpcnt),a14
-	jrnz	#lp0
+	jrnz	lp0
 	move	*a0(plyr_seqflgs),a0
 	btst	DUNK_B,a0
-	jrnz	#lp0			;!Dunking?
+	jrnz	lp0			;!Dunking?
 #skp
 	SLEEPK	10
 
@@ -3295,10 +3295,10 @@ tie_eqrtrt
 	jrnz	hoopl
 	movi	#init_t2,a11
 hoopl
-	jruc	#status
+	jruc	status
 
 	movi	#init_t,a11
-	jruc	#status
+	jruc	status
 #lp2
 	move	*a11+,a1		;Y
 	sll	16,a0
@@ -3314,11 +3314,11 @@ hoopl
 
 #status	move	*a11+,a0		;X
 	cmpi	4000,a0
-	jrne	#lp2			;!End?
+	jrne	lp2			;!End?
 
 #lp3
 	move	@tvpanelon,a0,L
-	jrnz	#x
+	jrnz	x
 
 	move	@shotram+32,a8,L		;first digit
 	move	@shotram+64,a9,L		;second digit
@@ -3342,32 +3342,32 @@ hoopl
 
 #lp3t	SLEEP	32
 	move	@HALT,a0
-	jrnz	#lp3t
+	jrnz	lp3t
 
 	move	@shotimer,a0
-	jrz	#tag
+	jrz	tag
 	dec	a0
 	move	a0,@shotimer
 
 	cmpi	4,a0
 	jrgt	#nowarn
-	jrne	#nospch
+	jrne	nospch
 
 	move	@ballpnum,a14
-	jrn	#nospch
+	jrn	nospch
 	SOUND1	sht_ball_sp
 #nospch
 	SOUND1	warn_snd	      ;Warn players shot clock is running down
 #nowarn
 
-	jruc	#lp3
+	jruc	lp3
 #tag	move	@shotimer+16,a0
-	jrz	#tag1
+	jrz	tag1
 	dec	a0
 	move	a0,@shotimer+16
 	movk	9,a0
 	move	a0,@shotimer
-	jruc	#lp3
+	jruc	lp3
 #tag1
 ;	SOUND1	error_found
 
@@ -3385,7 +3385,7 @@ hoopl
 	CREATE0	shot_clock_speech
 
 	move	@ballpnum,a11
-	jrnn	#ok1
+	jrnn	ok1
 	move	@ballpnumshot,a11
 #ok1
 	srl	1,a11
@@ -3410,7 +3410,7 @@ hoopl
 	move	a0,@clock_active
 
 sclockx	move	a10,a10
-	jrz	#x2
+	jrz	x2
 #x	movi	CLSDEAD|clockid,a0
 	calla	obj_del1c		;Delete any 24 second shot clock imgs
 #x2	clr	a0
@@ -3422,7 +3422,7 @@ markdi	SLEEP	120
 	calla	KIL1C 			;Kill existing shot clock proc
 	movi	CLSDEAD|clockid,a0
 	calla	obj_del1c		;Delete any 24 second shot clock imgs
-      	jruc	#x2
+      	jruc	x2
 
 numbs
 	.ref	BRSH12_0,BRSH12_1,BRSH12_2,BRSH12_3,BRSH12_4,BRSH12_5
@@ -3438,25 +3438,25 @@ bnumbs
 
 
 #init_t
-	.word	>13d,>e0,5000
+	.word	013dH,0e0H,5000
 	.long	NSHOTCLK
-	.word	>143,>d9,5000
+	.word	0143H,0d9H,5000
 	.long	BRSH20_0		;font90r
-	.word	>158,>d9,5000
+	.word	0158H,0d9H,5000
 	.long	BRSH20_0		;font90r
 	.word	4000
 
 #init_t2
-	.word	>1c,>e0,5000
+	.word	01cH,0e0H,5000
 	.long	NSHOTCLK
-	.word	>22,>d9,5000
+	.word	022H,0d9H,5000
 	.long	BRSH20_0		;font90r
-	.word	>37,>d9,5000
+	.word	037H,0d9H,5000
 	.long	BRSH20_0		;font90r
 	.word	4000
 		
 
-#********************************
+*********************************
 * Print in the zone text
 
  SUBR	tm_zone_msg
@@ -3493,7 +3493,7 @@ bnumbs
 
 	SOUND1	win_snd
 	SLEEPK	20
-	dsj	a10,#doannc_snd
+	dsj	a10,doannc_snd
 
 	DIE
 
@@ -3506,7 +3506,7 @@ bnumbs
 	.even
 
 
-#********************************
+*********************************
 * Print shot clock violation text
 
  SUBRP	shot_text
@@ -3576,7 +3576,7 @@ bnumbs
 	movi	76,a0
 	move	@gmqrtr,a1
 	subk	5,a1
-	jrn	#ot1
+	jrn	ot1
 
 	sll	5,a1
 	addi	#ot_t,a1
@@ -3619,7 +3619,7 @@ bnumbs
 #al
 	SOUND1	alert_snd
 	SLEEP	20
-	dsj	a10,#al
+	dsj	a10,al
 	DIE
 
 
@@ -3642,7 +3642,7 @@ bnumbs
 	.even
 
 
-#********************************
+*********************************
 * fix_dropout_msgs
 *
 
@@ -3665,13 +3665,13 @@ bnumbs
 ;	move	a10,a0			;Assume new plyr start
 ;	move	@PSTATUS2,a4		;Chk has-started bit
 ;	btst	0,a4			;Is it a continue? No if 0
-;	jrz	#new1
+;	jrz	new1
 ;	move	a11,a0			;Continue
 ;#new1
 	move	@P1DATA+ply_messages,a8,L
 	move	*a8(OIMG),a0,L
 	cmpi	please,a0
-	jrnz	#fdm_p2
+	jrnz	fdm_p2
 	move	a11,a0
 	movi	MSGOCTRL,a1
 	calla	obj_aniq_cnoff
@@ -3680,13 +3680,13 @@ bnumbs
 ;	move	a10,a0
 ;	move	@PSTATUS2,a4
 ;	btst	1,a4
-;	jrz	#new2
+;	jrz	new2
 ;	move	a11,a0			;Continue
 ;#new2
 	move	@P2DATA+ply_messages,a8,L
 	move	*a8(OIMG),a0,L
 	cmpi	please,a0
-	jrnz	#fdm_p3
+	jrnz	fdm_p3
 	move	a11,a0
 	movi	MSGOCTRL,a1
 	calla	obj_aniq_cnoff
@@ -3695,13 +3695,13 @@ bnumbs
 ;	move	a10,a0
 ;	move	@PSTATUS2,a4
 ;	btst	2,a4
-;	jrz	#new3
+;	jrz	new3
 ;	move	a11,a0			;Continue
 ;#new3
 	move	@P3DATA+ply_messages,a8,L
 	move	*a8(OIMG),a0,L
 	cmpi	please,a0
-	jrnz	#fdm_p4
+	jrnz	fdm_p4
 	move	a11,a0
 	movi	MSGOCTRL,a1
 	calla	obj_aniq_cnoff
@@ -3710,13 +3710,13 @@ bnumbs
 ;	move	a10,a0
 ;	move	@PSTATUS2,a4
 ;	btst	3,a4
-;	jrz	#new4
+;	jrz	new4
 ;	move	a11,a0			;Continue
 ;#new4
 	move	@P4DATA+ply_messages,a8,L
 	move	*a8(OIMG),a0,L
 	cmpi	please,a0
-	jrnz	#fdm_drop
+	jrnz	fdm_drop
 	move	a11,a0
 	movi	MSGOCTRL,a1
 	calla	obj_aniq_cnoff
@@ -3724,45 +3724,45 @@ bnumbs
 ;--------------------
 
 #fdm_drop
-	move	@PSTATUS,a0
+	move	@PSTATUS2,a0
 	move	@plyrsdropped,a1
 	btst	0,a1
-	jrz	#n1
+	jrz	n1
 	btst	0,a0
-	jrnz	#n1
+	jrnz	n1
 	movi	P1DATA,a3
 	movi	P1DATA+ply_messages,a9
 	movi	init_t1a,a11
 	callr	do_drop
 #n1
-	move	@PSTATUS,a0
+	move	@PSTATUS2,a0
 	move	@plyrsdropped,a1
 	btst	1,a1
-	jrz	#n2
+	jrz	n2
 	btst	1,a0
-	jrnz	#n2
+	jrnz	n2
 	movi	P2DATA,a3
 	movi	P2DATA+ply_messages,a9
 	movi	init_t2a,a11
 	callr	do_drop
 #n2
-	move	@PSTATUS,a0
+	move	@PSTATUS2,a0
 	move	@plyrsdropped,a1
 	btst	2,a1
-	jrz	#n3
+	jrz	n3
 	btst	2,a0
-	jrnz	#n3
+	jrnz	n3
 	movi	P3DATA,a3
 	movi	P3DATA+ply_messages,a9
 	movi	init_t3a,a11
 	callr	do_drop
 #n3
-	move	@PSTATUS,a0
+	move	@PSTATUS2,a0
 	move	@plyrsdropped,a1
 	btst	3,a1
-	jrz	#n4
+	jrz	n4
 	btst	3,a0
-	jrnz	#n4
+	jrnz	n4
 	movi	P4DATA,a3
 	movi	P4DATA+ply_messages,a9
 	movi	init_t4a,a11
@@ -3778,7 +3778,7 @@ bnumbs
 
 do_drop
 	move	*a9,a0,L
-	jrz	#ddrp
+	jrz	ddrp
 	calla	DELOBJ
 #ddrp
 	clr	a2
@@ -4000,7 +4000,7 @@ TUBEB10_P:
  SUBRP	nodrift_message
 
 	move	@pup_nodrift,a14
-	jrz	#nondm
+	jrz	nondm
 	SLEEPK	10
 	.ref	is_legal_sp
 	SOUND1	is_legal_sp
@@ -4024,7 +4024,7 @@ TUBEB10_P:
 #lpz
 	SLEEPK	1			;I quess, waiting for idiot boxes
 	move	@HALT,a0
-	jrnz	#lpz
+	jrnz	lpz
 
 ;	SLEEP	2*60-50
 
@@ -4064,9 +4064,9 @@ TUBEB10_P:
 	move	*a8(OPLINK),a0,L
 	move	*a0(plyr_headobj_p),a9,L
 
-	movi	>f8f8,a2
+	movi	0f8f8H,a2
 	move	a2,*a8(OCONST)
-	movi	>3f3f,a2
+	movi	03f3fH,a2
 	move	a2,*a9(OCONST)
 
 	movk	7,a10
@@ -4087,7 +4087,7 @@ TUBEB10_P:
 
 	SLEEPK	3
 
-	dsj	a10,#again
+	dsj	a10,again
 	DIE
 
 
@@ -4097,11 +4097,11 @@ TUBEB10_P:
 
 ;Check to see if any of the 4 players has turned on tournament mode!
 	move	@pup_tournament,a0
-	jrnz	#se2a			;br=yep
+	jrnz	se2a			;br=yep
 
 	movk	ADJTOURNEY,a0		;Tournament mode?
 	calla	GET_ADJ			;0-1
-	jrz	#se2a			;On? Br=yes
+	jrz	se2a			;On? Br=yes
 	clrc
 	rets
 
@@ -4116,13 +4116,13 @@ TUBEB10_P:
 	setc				;Yes, tournament mode on!
 	rets
 
-#*************************************
+**************************************
 * Show computer assistance off message
 
  SUBRP	cpu_assist_off
 
 	callr	tournament_on
-	jrnc	#set			;br=yep, tournament mode enabled
+	jrnc	set			;br=yep, tournament mode enabled
 
 ;tournament mode msg.
 
@@ -4150,16 +4150,16 @@ TUBEB10_P:
 	movi	[73,0],a1,L
 	movi	SECRETS2,a2,L
 	calla	BEGINOBJ2
-	jruc	#setin2
+	jruc	setin2
 
 ;cpu assistance adj. was set
 #set
 	movk	ADJCOMPASS,a0		;Computer assistance
 	calla	GET_ADJ			;0-1
-	jrnz	#setca			;On? Br=yes
+	jrnz	setca			;On? Br=yes
 	move	@pup_noassistance,a0
-	jrnz	#setcb			;br=wasn't set by player(s)
-	jruc	#set3
+	jrnz	setcb			;br=wasn't set by player(s)
+	jruc	set3
 #setca
 	movk	1,a0
 	move	a0,@pup_noassistance
@@ -4184,7 +4184,7 @@ TUBEB10_P:
 
 
 
-#*******************************
+********************************
 * Show secret messages
 
  SUBRP	shot_percent_msg
@@ -4219,7 +4219,7 @@ TUBEB10_P:
 
 
 
-#*******************************
+********************************
 * Show cpu substitution message
 
  SUBR	cpu_subs
@@ -4228,7 +4228,7 @@ TUBEB10_P:
 
 	movi	#ln0_setup,a2
 	move	a8,a8
-	jrz	#ok
+	jrz	ok
 	movi	#ln0_setupa,a2
 #ok
 	calla	setup_message
@@ -4262,7 +4262,7 @@ TUBEB10_P:
 
 ;	callr	tournament_on
 ;	jac	cpp_1
-	move	@PSTATUS,a0
+	move	@PSTATUS2,a0
 	btst	a10,a0
 	jreq	cpp_1				;br=plyr not in game
 	movi	PWRUP_Y,a9			;starting Y position
@@ -4271,7 +4271,7 @@ TUBEB10_P:
 	callr	big_plyr_head_msg
 	sub	a11,a9
 	move	a11,a11				;was power-up displayed ?
-	jreq	#noslp0				;br=nope
+	jreq	noslp0				;br=nope
 
 	SLEEPK	2
 
@@ -4279,7 +4279,7 @@ TUBEB10_P:
 	callr	huge_plyr_head_msg
 	sub	a11,a9
 	move	a11,a11				;was power-up displayed ?
-	jreq	#noslp1				;br=nope
+	jreq	noslp1				;br=nope
 
 	SLEEPK	2
 
@@ -4287,7 +4287,7 @@ TUBEB10_P:
 	callr	shotperc_msg
 	sub	a11,a9
 	move	a11,a11				;was power-up displayed ?
-	jreq	#noslp2				;br=nope
+	jreq	noslp2				;br=nope
 
 	SLEEPK	2
 
@@ -4295,7 +4295,7 @@ TUBEB10_P:
 	callr	notag_msg
 	sub	a11,a9
 	move	a11,a11				;was power-up displayed ?
-	jreq	#nosl2				;br=nope
+	jreq	nosl2				;br=nope
 
 	SLEEPK	2
 
@@ -4303,7 +4303,7 @@ TUBEB10_P:
 	callr	showhotspots_msg
 	sub	a11,a9
 	move	a11,a11				;was power-up displayed ?
-	jreq	#noslp3				;br=nope
+	jreq	noslp3				;br=nope
 
 	SLEEPK	2
 
@@ -4311,7 +4311,7 @@ TUBEB10_P:
 	callr	stealth_turbo_msg
 	sub	a11,a9
 	move	a11,a11				;was power-up displayed ?
-	jreq	#noslp4				;br=nope
+	jreq	noslp4				;br=nope
 
 	SLEEPK	2
 
@@ -4319,7 +4319,7 @@ TUBEB10_P:
 	callr	infinite_turbo_msg
 	sub	a11,a9
 	move	a11,a11				;was power-up displayed ?
-	jreq	#noslp5				;br=nope
+	jreq	noslp5				;br=nope
 
 	SLEEPK	2
 
@@ -4327,7 +4327,7 @@ TUBEB10_P:
 	callr	fast_passing_msg
 	sub	a11,a9
 	move	a11,a11				;was power-up displayed ?
-	jreq	#noslp6				;br=nope
+	jreq	noslp6				;br=nope
 
 	SLEEPK	2
 
@@ -4335,7 +4335,7 @@ TUBEB10_P:
 	callr	steal_power_msg
 	sub	a11,a9
 	move	a11,a11				;was power-up displayed ?
-	jreq	#noslp7				;br=nope
+	jreq	noslp7				;br=nope
 
 	SLEEPK	2
 
@@ -4343,7 +4343,7 @@ TUBEB10_P:
 	callr	maximum_speed_msg
 	sub	a11,a9
 	move	a11,a11				;was power-up displayed ?
-	jreq	#noslp8				;br=nope
+	jreq	noslp8				;br=nope
 
 	SLEEPK	2
 
@@ -4351,7 +4351,7 @@ TUBEB10_P:
 	callr	hyper_speed_msg
 	sub	a11,a9
 	move	a11,a11				;was power-up displayed ?
-	jreq	#noslp9				;br=nope
+	jreq	noslp9				;br=nope
 
 	SLEEPK	2
 
@@ -4359,7 +4359,7 @@ TUBEB10_P:
 	callr	no_pushing_msg
 	sub	a11,a9
 	move	a11,a11				;was power-up displayed ?
-	jreq	#noslpa				;br=nope
+	jreq	noslpa				;br=nope
 
 	SLEEPK	2
 
@@ -4367,7 +4367,7 @@ TUBEB10_P:
 	callr	maximum_power_msg
 	sub	a11,a9
 	move	a11,a11				;was power-up displayed ?
-	jreq	#noslpb				;br=nope
+	jreq	noslpb				;br=nope
 
 	SLEEPK	2
 
@@ -4375,7 +4375,7 @@ TUBEB10_P:
 	callr	goal_tending_msg
 	sub	a11,a9
 	move	a11,a11				;was power-up displayed ?
-	jreq	#noslpc				;br=nope
+	jreq	noslpc				;br=nope
 
 	SLEEPK	2
 
@@ -4383,7 +4383,7 @@ TUBEB10_P:
 cpp_1	DIE
 
 
-#*****************************************************************************
+******************************************************************************
 ;
 ;	This routine checks if players has activated the 
 ; power-up
@@ -4398,7 +4398,7 @@ cpp_1	DIE
 	clr	a11		    ;assume plyr didn't activate this power-up
 	move	@pup_nopush,a0
 	btst	a10,a0
-	jrz	#nxt
+	jrz	nxt
 	move	a10,a0
 	sll	5,a0
 	addi	xy_tbl,a0
@@ -4408,7 +4408,7 @@ cpp_1	DIE
 #nxt	rets
 
 
-#*****************************************************************************
+******************************************************************************
 ;
 ;	This routine checks if players has activated the 
 ; power-up
@@ -4423,7 +4423,7 @@ cpp_1	DIE
 	clr	a11		    ;assume plyr didn't activate this power-up
 	move	@pup_trbstealth,a0
 	btst	a10,a0
-	jrz	#nxt
+	jrz	nxt
 	move	a10,a0
 	sll	5,a0
 	addi	xy_tbl,a0
@@ -4433,7 +4433,7 @@ cpp_1	DIE
 #nxt	rets
 
 
-#*****************************************************************************
+******************************************************************************
 ;
 ;	This routine checks if players has activated the 
 ; power-up
@@ -4448,7 +4448,7 @@ cpp_1	DIE
 	clr	a11		    ;assume plyr didn't activate this power-up
 	move	@pup_fastpass,a0
 	btst	a10,a0
-	jrz	#nxt
+	jrz	nxt
 	move	a10,a0
 	sll	5,a0
 	addi	xy_tbl,a0
@@ -4458,7 +4458,7 @@ cpp_1	DIE
 #nxt	rets
 
 
-#*****************************************************************************
+******************************************************************************
 ;
 ;	This routine checks if players has activated the 
 ; power-up
@@ -4473,7 +4473,7 @@ cpp_1	DIE
 	clr	a11		    ;assume plyr didn't activate this power-up
 	move	@pup_maxspeed,a0
 	btst	a10,a0
-	jrz	#nxt
+	jrz	nxt
 	move	a10,a0
 	sll	5,a0
 	addi	xy_tbl,a0
@@ -4483,7 +4483,7 @@ cpp_1	DIE
 #nxt	rets
 
 
-#*****************************************************************************
+******************************************************************************
 ;
 ;	This routine checks if players has activated the 
 ; power-up
@@ -4506,7 +4506,7 @@ cpp_1	DIE
 	clr	a11		    ;assume plyr didn't activate this power-up
 	move	@pup_notag,a0
 	btst	a10,a0
-	jrz	#nxt
+	jrz	nxt
 	move	a10,a0
 	sll	5,a0
 	addi	xy_tbl,a0
@@ -4516,7 +4516,7 @@ cpp_1	DIE
 #nxt	rets
 
 
-#*****************************************************************************
+******************************************************************************
 ;
 ;	This routine checks if players has activated the 
 ; power-up
@@ -4531,7 +4531,7 @@ cpp_1	DIE
 	clr	a11		    ;assume plyr didn't activate this power-up
 	move	@pup_trbinfinite,a0
 	btst	a10,a0
-	jrz	#nxt
+	jrz	nxt
 	move	a10,a0
 	sll	5,a0
 	addi	xy_tbl,a0
@@ -4541,7 +4541,7 @@ cpp_1	DIE
 #nxt	rets
 
 
-#*****************************************************************************
+******************************************************************************
 ;
 ;	This routine checks if players has activated the 
 ; power-up
@@ -4556,7 +4556,7 @@ cpp_1	DIE
 	clr	a11		    ;assume plyr didn't activate this power-up
 	move	@pup_showhotspots,a0
 	btst	a10,a0
-	jrz	#nxt
+	jrz	nxt
 	move	a10,a0
 	sll	5,a0
 	addi	xy_tbl,a0
@@ -4566,7 +4566,7 @@ cpp_1	DIE
 #nxt	rets
 
 
-#*****************************************************************************
+******************************************************************************
 ;
 ;	This routine checks if players has activated the 
 ; power-up
@@ -4581,7 +4581,7 @@ cpp_1	DIE
 	clr	a11		    ;assume plyr didn't activate this power-up
 	move	@pup_goaltend,a0
 	btst	a10,a0
-	jrz	#nxt
+	jrz	nxt
 	move	a10,a0
 	sll	5,a0
 	addi	xy_tbl,a0
@@ -4594,7 +4594,7 @@ cpp_1	DIE
        BSSX	blkpower,16
 ;Need powerup for super blocking ability
 
-#*****************************************************************************
+******************************************************************************
 ;
 ;	This routine checks if players has activated the 
 ; power-up
@@ -4607,14 +4607,14 @@ cpp_1	DIE
  SUBRP	maximum_power_msg
 
 	move	@pup_strongmen,a0
-	jrz	#notst
+	jrz	notst
 ;Grand champ playing - make drones have max power
 ;DJT Start
 	subk	2,a0
 	jrp	#notst			; br=both teams have grand champs!
-	movk	>3,a3
-	jrz	#tag1			; br=team 2 has grand champs!
-	movk	>c,a3
+	movk	03H,a3
+	jrz	tag1			; br=team 2 has grand champs!
+	movk	0cH,a3
 #tag1
 ;DJT End
 	move	@pup_maxpower,a0
@@ -4624,7 +4624,7 @@ cpp_1	DIE
 	clr	a11		    ;assume plyr didn't activate this power-up
 	move	@pup_maxpower,a0
 	btst	a10,a0
-	jrz	#nxt
+	jrz	nxt
 	move	a10,a0
 	sll	5,a0
 	addi	xy_tbl,a0
@@ -4634,7 +4634,7 @@ cpp_1	DIE
 #nxt	rets
 
 
-#*****************************************************************************
+******************************************************************************
 ;
 ;	This routine checks if players has activated the 
 ; power-up
@@ -4649,7 +4649,7 @@ cpp_1	DIE
 	clr	a11		    ;assume plyr didn't activate this power-up
 	move	@pup_bighead,a0
 	btst	a10,a0
-	jrz	#nxt
+	jrz	nxt
 	move	a10,a0
 	sll	5,a0
 	addi	xy_tbl,a0
@@ -4658,7 +4658,7 @@ cpp_1	DIE
 	movi	IMG_SPC,a11
 #nxt	rets
 
-#*****************************************************************************
+******************************************************************************
 ;
 ;	This routine checks if players has activated the 
 ; power-up
@@ -4673,7 +4673,7 @@ cpp_1	DIE
 	clr	a11		    ;assume plyr didn't activate this power-up
 	move	@pup_hugehead,a0
 	btst	a10,a0
-	jrz	#nxt
+	jrz	nxt
 	move	a10,a0
 	sll	5,a0
 	addi	xy_tbl,a0
@@ -4683,7 +4683,7 @@ cpp_1	DIE
 #nxt	rets
 
 
-#*****************************************************************************
+******************************************************************************
 ;
 ;	This routine checks if players has activated the 
 ; power-up
@@ -4698,7 +4698,7 @@ cpp_1	DIE
 	clr	a11		    ;assume plyr didn't activate this power-up
 	move	@pup_hypspeed,a0
 	btst	a10,a0
-	jrz	#nxt
+	jrz	nxt
 	move	a10,a0
 	sll	5,a0
 	addi	xy_tbl,a0
@@ -4708,7 +4708,7 @@ cpp_1	DIE
 #nxt	rets
 
 
-#*****************************************************************************
+******************************************************************************
 ;
 ;	This routine checks if players has activated the 
 ; power-up
@@ -4723,7 +4723,7 @@ cpp_1	DIE
 	clr	a11		    ;assume plyr didn't activate this power-up
 	move	@pup_showshotper,a0
 	btst	a10,a0
-	jrz	#nxt
+	jrz	nxt
 	move	a10,a0
 	sll	5,a0
 	addi	xy_tbl,a0
@@ -4733,7 +4733,7 @@ cpp_1	DIE
 #nxt	rets
 
 
-#*****************************************************************************
+******************************************************************************
 ;
 ;	This routine checks if players has activated the 
 ; power-up
@@ -4746,14 +4746,14 @@ cpp_1	DIE
  SUBRP	steal_power_msg
 
 	move	@pup_strongmen,a0
-	jrz	#notst
+	jrz	notst
 ;Grand champ playing - make drones have max power
 ;DJT Start
 	subk	2,a0
 	jrp	#notst			; br=both teams have grand champs!
-	movk	>3,a3
-	jrz	#tag1			; br=team 2 has grand champs!
-	movk	>c,a3
+	movk	03H,a3
+	jrz	tag1			; br=team 2 has grand champs!
+	movk	0cH,a3
 #tag1
 ;DJT End
 	move	@pup_maxsteal,a0
@@ -4763,7 +4763,7 @@ cpp_1	DIE
 	clr	a11		    ;assume plyr didn't activate this power-up
 	move	@pup_maxsteal,a0
 	btst	a10,a0
-	jrz	#nxt
+	jrz	nxt
 	move	a10,a0
 	sll	5,a0
 	addi	xy_tbl,a0
@@ -4780,7 +4780,7 @@ xy_tbl
 	.long	P4_X
 
 
-#*****************************************************************************
+******************************************************************************
 ;
 ;	This routine checks if players has activated the 
 ; power-up

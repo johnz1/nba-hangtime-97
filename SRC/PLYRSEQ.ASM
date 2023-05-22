@@ -82,7 +82,7 @@
 
 ;equates for this file
 
-M_YF	.equ	>8000	;Y free (OFLAGS)
+M_YF	.equ	08000H	;Y free (OFLAGS)
 
 	.bss	keep_xvel,32
 	.bss	keep_zvel,32
@@ -740,14 +740,14 @@ seq_hold_block
 	move	*a13(plyr_hold_block),a0
 	dec	a0
 	move	a0,*a13(plyr_hold_block)
-	jrz	#cont_blk
+	jrz	cont_blk
 ;Check to see if player is still keeping his arm cocked
 	.ref	get_block_but_cur
 	move	*a13(plyr_num),a0
 	.ref	PSTATUS
-	move	@PSTATUS,a1
+	move	@PSTATUS2,a1
 	btst	a0,a1
-	jrnz	#notdrn
+	jrnz	notdrn
 ;Have drone keep arm cocked for a random time...
 ;Drone logic could improve here!
 	movi	900,a0
@@ -759,7 +759,7 @@ seq_hold_block
 	
 #notdrn	move	*a13(plyr_num),a0
 	calla	get_block_but_cur
-	jrz	#cont_blk
+	jrz	cont_blk
 ;Player is still holding button down, hold on swat frame!
 ;Go back to swat frame in front of hold block entry
 	subi	48+64,b4
@@ -931,7 +931,7 @@ rebound_t
 #ck_ball
 ;If ball is near head, and is close enough, no need to jump high!
 	move	*a13(plyr_balldist),a0
-	cmpi	>30,a0
+	cmpi	030H,a0
 	jrgt	#cont
 
 	.ref	ballobj_p
@@ -939,7 +939,7 @@ rebound_t
 	move	*a0(OYPOS),a14
 ;Could add in yvel here also for some more accuracy
 	cmpi	-100,a14
-	jrlt	#cont
+	jrlt	cont
 
 
 	move	*a13(plyr_seqdir),a0
@@ -1054,7 +1054,7 @@ rebounda_t
 #ck_ball
 ;If ball is near head, and is close enough, no need to jump high!
 	move	*a13(plyr_balldist),a0
-	cmpi	>30,a0
+	cmpi	030H,a0
 	jrgt	#cont
 
 	.ref	ballobj_p
@@ -1062,7 +1062,7 @@ rebounda_t
 	move	*a0(OYPOS),a14
 ;Could add in yvel here also for some more accuracy
 	cmpi	-100,a14
-	jrlt	#cont
+	jrlt	cont
 
 
 	move	*a13(plyr_seqdir),a0
@@ -1341,7 +1341,7 @@ fadeaside_seq5
 	sll	5,a0
 	addi	#side_fade_sp_tbl,a0
 	move	*a0,a0,L
-	jrz	#asf
+	jrz	asf
 	calla	snd_play1
 #asf	rets
 
@@ -1352,7 +1352,7 @@ fadeaside_seq5
 	sll	5,a0
 	addi	#fadeaway_sp_tbl,a0
 	move	*a0,a0,L
-	jrz	#no
+	jrz	no
 	calla	snd_play1
 #no	rets
 
@@ -1362,7 +1362,7 @@ fadeaside_seq5
 	sll	5,a0
 	addi	#fadein_sp_tbl,a0
 	move	*a0,a0,L
-	jrz	#no
+	jrz	no
 	calla	snd_play1
 #no1	rets
 
@@ -1872,11 +1872,11 @@ lower_jump
 ;	move	a0,*a8(OYVEL),L
 
 ;Give seq a little x drift
-	movi	>10000,a2		;For this desperation shot, we
+	movi	010000H,a2		;For this desperation shot, we
 	move	*a13(plyr_num),a0	;need some x velocity
 	subk	2,a0
-	jrlt	#ok
-	movi	->10000,a2
+	jrlt	ok
+	movi	-010000H,a2
 #ok	move	a2,*a8(OXVEL),L
 	rets
 	
@@ -2192,7 +2192,7 @@ passdo2_t
 
 dble_yvel
 	move	*a8(OYVEL),a14,L
-	jrz	#ex
+	jrz	ex
 	addi	30000h,a14
 	move	a14,*a8(OYVEL),L
 	rets
@@ -2330,18 +2330,18 @@ passnewoh_t
 choose_desp
 	move	*a13(plyr_tmdist),a14
 	cmpi	180,a14
-	jrlt	#not
+	jrlt	not
 	movi	600,a0
 	calla	RNDPER
 	jrls	#not
 ;Need to look at dir I was facing - not where pass code tells me to face.
 	move	*a13(plyr_old_seqdir),a0
 	cmpi	3,a0
-	jrz	#yes
+	jrz	yes
 	cmpi	4,a0
-	jrz	#yes
+	jrz	yes
 	cmpi	5,a0
-	jrnz	#not
+	jrnz	not
 
 #yes
 	movi	#desp_pass,b4

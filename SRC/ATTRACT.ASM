@@ -81,7 +81,7 @@
 ;DJT .refs removed
 ;DJT End
 	.ref	GET_AUD,DEF_PAGE
-	.ref	PSTATUS,PSTATUS2
+	.ref	PSTATUS2,PSTATUS2
 	.ref	dirqtimer,dirq_wait
 	.ref	dpageflip,dpageflip_off
 	.ref	WIPEOUT
@@ -251,12 +251,12 @@
 ;	calla	SNDSND
 
 	movi	ACTIVE,a0		;>Look for indestructables
-	jruc	#nxt
+	jruc	nxt
 
 #ilp	move	*a0(PROCID),a14
-	jrn	#slp			;Found?
+	jrn	slp			;Found?
 #nxt	move	*a0,a0,L
-	jrnz	#ilp
+	jrnz	ilp
 
 	calla	process_init		;Init process list
 
@@ -312,7 +312,7 @@
 ;DJT Start
 ;Temp - non stop gameplay in attract
 ;;	JSRP	demogame
-;;	jruc	#lp
+;;	jruc	lp
 ;;
 ;;	JSRP	show_nba_plyrs
 ;;	JSRP	show_designteam
@@ -366,23 +366,23 @@
 	inc	a0
 	move	a0,@amodeloop
 	srl	1,a0
-	jrnc	#no_aama
+	jrnc	no_aama
 	JSRP	show_aama
 #no_aama
 	move	@amodeloop,a0
 	andi	3,a0
 	subk	2,a0			;Show on non-zero loop count
-	jrnz	#chknxt
+	jrnz	chknxt
 	JSRP	show_designteam
 #chknxt
 	.if	TRIVCON
 	move	@amodeloop,a0
-	andi	>3f,a0
-	jrnz	#lp
+	andi	03fH,a0
+	jrnz	lp
 	JSRP	trivia_rules
 	.endif	;TRIVCON
 ;DJT End
-	jruc	#lp
+	jruc	lp
 
 
 	.def	pObj
@@ -390,7 +390,7 @@
 
 
 ;DJT Start
-#****************************************************************
+*****************************************************************
 * Attract design player screen
 
 	.ref	design_player_proc_amode,done_creating
@@ -417,30 +417,30 @@ amode_design
 	movi	#stick_t,a8
 #lp
 	move	*a8+,a10
-	jrn	#xb
+	jrn	xb
 	move	*a8+,a0
 #lp1a
 	move	a0,@stick_amode_mkplr
 #lp1
 	SLEEPK	1
 	move	a11,a11
-	jrnz	#nob
+	jrnz	nob
 
 	calla	get_all_buttons_cur2
-	jrz	#nob1
+	jrz	nob1
 
       	clr	a0
 	move	a0,@SOUNDSUP		;turn all sounds on
 	SOUND1	bounce_snd
 	movk	1,a0
 	move	a0,@SOUNDSUP		;turn all sounds off
-	jruc	#xb
+	jruc	xb
 #nob
 	subk	1,a11
 #nob1
 	clr	a0
-	dsj	a10,#lp1a
-	jruc	#lp
+	dsj	a10,lp1a
+	jruc	lp
 
 #xb
 	clr	a0
@@ -623,7 +623,7 @@ amode_design
 
 ;DJT End
 
-#****************************************************************
+*****************************************************************
 * Title screen
 
 show_title
@@ -641,7 +641,7 @@ show_title
 ;	movk	20,a0
 ;	calla	RNDRNG0
 ;	move	a0,*a8+,W
-;	dsj	a9,#llpp
+;	dsj	a9,llpp
 ;	jruc	$
 ;
 ;DJT End
@@ -716,16 +716,16 @@ show_title
 	movi	6*TSEC,a10
 #lp	SLEEPK	1
 	calla	get_all_buttons_cur2
-	jrz	#nob
+	jrz	nob
 
       	clr	a0
 	move	a0,@SOUNDSUP		;turn all sounds on
 	SOUND1	bounce_snd
 	movk	1,a0
 	move	a0,@SOUNDSUP		;turn all sounds off
-	jruc	#xb
+	jruc	xb
 #nob	
-	dsj	a10,#lp
+	dsj	a10,lp
 #xb
 ;DJT Start
 	movi	CYCPID,A0
@@ -753,7 +753,7 @@ title_scr_mod
 
 ttl_setscl
 	move	*a8(OIMG),a2,L
-	movi	[>100,0],a3
+	movi	[0100H,0],a3
 	clr	a14
 	movx	a10,a14
 	divu	a14,a3
@@ -773,7 +773,7 @@ ttl_setscl
 	rets
 
 
-#****************************************************************
+*****************************************************************
 * Show an operator message if one has been entered
 
 ;FIX!!!
@@ -789,14 +789,14 @@ ttl_setscl
 
 
 	calla	ADJ_PAGE
-	movk	CMESS_LINES,a2		;>Check for a message
+	movk	CMESS_LINES,a2		;0CHheck for a message
 	movi	CUSTOM_MESSAGE,a7
 #cmlp
 	calla	RC_BYTEI
-	jrnz	#msg
+	jrnz	msg
 	addi	CMESS_LINE_SIZE,a7
-	dsj	a2,#cmlp
-	jruc	#x
+	dsj	a2,cmlp
+	jruc	x
 #msg
 	calla	display_blank
 	calla	WIPEOUT
@@ -818,7 +818,7 @@ ttl_setscl
 	CREATE0	showdt_scl
 
 
-	movk	CMESS_LINES,a2		;>Check for a message
+	movk	CMESS_LINES,a2		;0CHheck for a message
 	movi	CUSTOM_MESSAGE,a7
 	movi	[50,200],a9
 #prtlp
@@ -832,7 +832,7 @@ ttl_setscl
 	movb	a0,*a2
 	addk	8,a2
 	move	a0,a0
-	jrnz	#getlp
+	jrnz	getlp
 
 
 	movi	INGA_Y_P,a0
@@ -851,12 +851,12 @@ ttl_setscl
 	movi	OBJLST,a14
 
 #olp	move	*a14,a14,L	;A14=*Next
-	jrz	#oend
+	jrz	oend
 	move	*a14(ODATA_p),a0,L
-	jrnz	#olp
-	movi	[>320,>320],a1
+	jrnz	olp
+	movi	[0320H,0320H],a1
 	move	a1,*a14(ODATA_p),L
-	jruc	#olp
+	jruc	olp
 #oend
 
 	PUSHP	a6
@@ -867,7 +867,7 @@ ttl_setscl
 	addi	[45,0],a9
 
 	addi	CMESS_LINE_SIZE,a7
-	dsj	a2,#prtlp
+	dsj	a2,prtlp
 
 
 
@@ -948,15 +948,15 @@ ttl_setscl
 	movi	1*TSEC,a10
 #lp0	SLEEPK	1
 	calla	get_all_buttons_cur2
-	jrz	#nob0
+	jrz	nob0
       	clr	a0
 	move	a0,@SOUNDSUP		;turn all sounds on
 	SOUND1	bounce_snd
 	movk	1,a0
 	move	a0,@SOUNDSUP		;turn all sounds off
-	jruc	#xb0
+	jruc	xb0
 #nob0
-	dsj	a10,#lp0
+	dsj	a10,lp0
 #xb0
 	clr	a10
 	movk	8,a11
@@ -1002,15 +1002,15 @@ ttl_setscl
 	movi	4*TSEC,a10
 #lp	SLEEPK	1
 	calla	get_all_buttons_cur2
-	jrz	#nob
+	jrz	nob
       	clr	a0
 	move	a0,@SOUNDSUP		;turn all sounds on
 	SOUND1	bounce_snd
 	movk	1,a0
 	move	a0,@SOUNDSUP		;turn all sounds off
-	jruc	#xb
+	jruc	xb
 #nob	
-	dsj	a10,#lp
+	dsj	a10,lp
 #xb
 	clr	a10
 	movk	8,a11
@@ -1046,7 +1046,7 @@ legal_msg_str
 
 ;DJT Start
 
-#****************************************************************
+*****************************************************************
 
  SUBRP	show_aama
 
@@ -1121,15 +1121,15 @@ legal_msg_str
 	movi	4*TSEC,a10
 #lp0	SLEEPK	1
 	calla	get_all_buttons_cur2
-	jrz	#nob0
+	jrz	nob0
       	clr	a0
 	move	a0,@SOUNDSUP		;turn all sounds on
 	SOUND1	bounce_snd
 	movk	1,a0
 	move	a0,@SOUNDSUP		;turn all sounds off
-	jruc	#xb0
+	jruc	xb0
 #nob0
-	dsj	a10,#lp0
+	dsj	a10,lp0
 #xb0
 	clr	a10
 	movk	8,a11
@@ -1157,7 +1157,7 @@ aama_rating_str
 	.even
 
 
-#****************************************************************
+*****************************************************************
 * Show design team names and messages
 
  SUBR	show_designteam
@@ -1182,12 +1182,12 @@ aama_rating_str
 	move	*a13(PROCID),a0
 	andni	1,a0
 	cmpi	GRANDCHAMP_PID,a0
-	jreq	#notocto
+	jreq	notocto
 
 	.ref	READ_DIP
 	calla	READ_DIP		;Read the dipswitches
 	btst	5,a0			;Is octopus bypass switch on?
-	jrnz	#notocto		; br=don't do audit/volume octopus
+	jrnz	notocto		; br=don't do audit/volume octopus
 	CREATE0	ck_octopus2
 #notocto
 
@@ -1216,7 +1216,7 @@ aama_rating_str
 
 	move	*a13(PROCID),a0
 	cmpi	GRANDCHAMP_PID,a0
-	jrne	#notgc
+	jrne	notgc
 	movk	INAMODE,a0
 	move	a0,@GAMSTATE
 #notgc
@@ -1225,7 +1225,7 @@ aama_rating_str
 
 	move	*a13(PROCID),a0
 	cmpi	DIAG_PID,a0
-	jreq	#sclout			;Called from octopuss?
+	jreq	sclout			;Called from octopuss?
 
 ;additional design
 
@@ -2030,26 +2030,26 @@ design_tm_mod
 	.word	0,0
 	.long	0
 
-;#*******************************
+;********************************
 ;* A8=*Data
 ;
 ; SUBRP	prt_dt
-;	jruc	#nxt
+;	jruc	nxt
 ;
 ;#prtlp
 ;	cmpi	-1,a0
-;	jrne	#nopal
+;	jrne	nopal
 ;
-;	move	*a8+,a0,L	;>Change pal
+;	move	*a8+,a0,L	;0CHhange pal
 ;	calla	pal_getf
 ;	move	a0,a6
-;	jruc	#nxt
+;	jruc	nxt
 ;
 ;#nopal
 ;	cmpi	-2,a0		;>New XY
-;	jrne	#noxy
+;	jrne	noxy
 ;	move	*a8+,a9,L
-;	jruc	#nxt
+;	jruc	nxt
 ;
 ;#noxy
 ;	subk	16,a8
@@ -2068,7 +2068,7 @@ design_tm_mod
 ;	move	*a8+,a4,L
 ;	calla	print_string_C2
 ;;	JSRP	STRLNRMO_1
-;	jruc	#cnx
+;	jruc	cnx
 ;
 ;#cn
 ;	move	a8,a4
@@ -2081,7 +2081,7 @@ design_tm_mod
 ;	srl	4,a8
 ;	sll	4,a8
 ;	move	*a8+,a2,L
-;	jrz	#noobj			;No object?
+;	jrz	noobj			;No object?
 ;
 ;	move	*a8+,a0,L
 ;	PUSH	a6,a8
@@ -2108,12 +2108,12 @@ design_tm_mod
 ;;	movi	OBJLST,a14
 ;;
 ;;#olp	move	*a14,a14,L	;A14=*Next
-;;	jrz	#oend
+;;	jrz	oend
 ;;	move	*a14(ODATA_p),a0,L
-;;	jrnz	#olp
-;;	movi	[>320,>320],a1
+;;	jrnz	olp
+;;	movi	[0320H,0320H],a1
 ;;	move	a1,*a14(ODATA_p),L
-;;	jruc	#olp
+;;	jruc	olp
 ;;#oend
 ;
 ;	PUSHP	a6
@@ -2121,30 +2121,30 @@ design_tm_mod
 ;	PULLP	a6
 ;#nxt
 ;	move	*a8+,a0
-;	jrnz	#prtlp
+;	jrnz	prtlp
 ;	RETP
 
 
-;#*******************************
+;********************************
 ;* A8=*Data
 ;
 ; SUBRP	prt_dt2
-;	jruc	#nxt
+;	jruc	nxt
 ;
 ;#prtlp
 ;	cmpi	-1,a0
-;	jrne	#nopal
+;	jrne	nopal
 ;
-;	move	*a8+,a0,L	;>Change pal
+;	move	*a8+,a0,L	;0CHhange pal
 ;	calla	pal_getf
 ;	move	a0,a6
-;	jruc	#nxt
+;	jruc	nxt
 ;
 ;#nopal
 ;	cmpi	-2,a0		;>New XY
-;	jrne	#noxy
+;	jrne	noxy
 ;	move	*a8+,a9,L
-;	jruc	#nxt
+;	jruc	nxt
 ;
 ;#noxy
 ;	subk	16,a8
@@ -2162,7 +2162,7 @@ design_tm_mod
 ;	srl	4,a8
 ;	sll	4,a8
 ;	move	*a8+,a2,L
-;	jrz	#noobj			;No object?
+;	jrz	noobj			;No object?
 ;
 ;	move	*a8+,a0,L
 ;	PUSH	a6,a8
@@ -2185,12 +2185,12 @@ design_tm_mod
 ;;	movi	OBJLST,a14
 ;;
 ;;#olp	move	*a14,a14,L	;A14=*Next
-;;	jrz	#oend
+;;	jrz	oend
 ;;	move	*a14(ODATA_p),a0,L
-;;	jrnz	#olp
-;;	movi	[>320,>320],a1
+;;	jrnz	olp
+;;	movi	[0320H,0320H],a1
 ;;	move	a1,*a14(ODATA_p),L
-;;	jruc	#olp
+;;	jruc	olp
 ;;#oend
 ;
 ;	PUSHP	a6
@@ -2198,7 +2198,7 @@ design_tm_mod
 ;	PULLP	a6
 ;#nxt
 ;	move	*a8+,a0
-;	jrnz	#prtlp
+;	jrnz	prtlp
 ;	RETP
 
 
@@ -2230,7 +2230,7 @@ inga16_asc_tbl
 
 
 
-#*******************************
+********************************
 * Look at the buttons, read a sequence table,
 * and set octopus2 flag if sequence successful
 
@@ -2244,25 +2244,25 @@ ck_octopus2
 
 	move	@SWITCH,a0
 	zext	a0
-	cmpi	>ffff,a0
-	jrnz	#tag1
+	cmpi	0ffffH,a0
+	jrnz	tag1
 	clr	a11
-	jruc	#lp
+	jruc	lp
 
 #tag1	move	a11,a11
-	jrnz	#lp
+	jrnz	lp
 
 	inc	a11
 
 	move	*a9,a1,W
 	zext	a1
 	cmp	a0,a1
-	jrz	#yes
+	jrz	yes
 	movi	butn_lst,a9
-	jruc	#lp
+	jruc	lp
 #yes	addk	16,a9
 	move	*a9,a0
-	jrnz	#lp
+	jrnz	lp
 	movk	1,a0
 	move	a0,@octopus2		
 
@@ -2274,30 +2274,30 @@ butn_lst
 ;p1turbo,p1turbo,p2shoot,p2shoot,p2shoot,p2pass,p2pass,p1shoot,p1pass,p2turbo
 ;p2turbo,p1turbo,p1turbo,p1turbo,p1turbo
 
-	.word	>ffbf,>ffbf,>efff,>efff,>efff,>dfff,>dfff
-	.word	>ffef,>ffdf,>bfff,>bfff,>ffbf,>ffbf,>ffbf,>ffbf,0
+	.word	0ffbfH,0ffbfH,0efffH,0efffH,0efffH,0dfffH,0dfffH
+	.word	0ffefH,0ffdfH,0bfffH,0bfffH,0ffbfH,0ffbfH,0ffbfH,0ffbfH,0
 
 
-;#*******************************
+;********************************
 ;
 ;showdt_scl
 ;#lp
 ;	movi	OBJLST,a14
 ;
 ;#olp	move	*a14,a14,L	;A14=*Next
-;	jrz	#oend
+;	jrz	oend
 ;	move	*a14(ODATA_p),a0,L
-;	cmpi	[>100,>100],a0
+;	cmpi	[0100H,0100H],a0
 ;	jrle	#olp
-;	subi	[>10,>10],a0
+;	subi	[010H,010H],a0
 ;	move	a0,*a14(ODATA_p),L
-;	jruc	#olp
+;	jruc	olp
 ;#oend
 ;	SLEEPK	1
-;	jruc	#lp
+;	jruc	lp
 
 
-#*****************************************************************************
+******************************************************************************
 
 	.if	0
 
@@ -2341,15 +2341,15 @@ butn_lst
 	movi	4*TSEC,a10
 #lp	SLEEPK	1
 	calla	get_all_buttons_cur2
-	jrz	#nob
+	jrz	nob
 ;      	clr	a0
 ;	move	a0,@SOUNDSUP		;turn all sounds on
 	SOUND1	bounce_snd
 ;	movk	1,a0
 ;	move	a0,@SOUNDSUP		;turn all sounds off
-	jruc	#xb
+	jruc	xb
 #nob	
-	dsj	a10,#lp
+	dsj	a10,lp
 #xb
 
 	clr	a10
@@ -2366,7 +2366,7 @@ butn_lst
 	.long	0
 
 
-#*****************************************************************************
+******************************************************************************
 
  SUBRP	drw_school
 
@@ -2415,15 +2415,15 @@ butn_lst
 	movi	3*TSEC,a10
 #lp	SLEEPK	1
 	calla	get_all_buttons_cur2
-	jrz	#nob
+	jrz	nob
 ;      	clr	a0
 ;	move	a0,@SOUNDSUP		;turn all sounds on
 	SOUND1	bounce_snd
 ;	movk	1,a0
 ;	move	a0,@SOUNDSUP		;turn all sounds off
-	jruc	#xb
+	jruc	xb
 #nob	
-	dsj	a10,#lp
+	dsj	a10,lp
 #xb
 
 	clr	a10
@@ -2440,7 +2440,7 @@ butn_lst
 
 
 
-#***************************************************************
+****************************************************************
 * Show some gameplay
 
  SUBRP	demogame
@@ -2471,7 +2471,7 @@ butn_lst
 #agn	movk	NUM_TEAMS-1,a0
 	calla	RNDRNG0
 	cmp	a0,a8
-	jreq	#agn
+	jreq	agn
 ;TEMP!!!
 ;DJT Start
 ;	movk	19,a0		;Team #
@@ -2538,18 +2538,18 @@ NONO1
 ;	movi	50*60,a10
 #lp	SLEEPK	2
 	calla	get_all_buttons_cur2
-	jrz	#nob
+	jrz	nob
       	clr	a0
 	move	a0,@SOUNDSUP		;turn all sounds on
 	SOUND1	bounce_snd
 	movk	1,a0
 	move	a0,@SOUNDSUP		;turn all sounds off
-	jruc	#xb
+	jruc	xb
 #nob	
-	dsj	a10,#lp
+	dsj	a10,lp
 #xb
 ;2/9/93
-;	jruc	#loop
+;	jruc	loop
 
 	movi	CYCPID,a0
 	calla	KIL1C
@@ -2602,7 +2602,7 @@ tunes_t
 	movi	PR_SIZE/16,a1
 #nhd
 	move	a0,*a2+
-	dsj	a1,#nhd
+	dsj	a1,nhd
 	subi	PR_SIZE,a2
 
 	movi	140,a0			;!!!
@@ -2641,7 +2641,7 @@ NUM_DEMOHEADS	.equ	($-demoheads)/16
 	.word	0,0,0,0				;Just in case!
 ;DJT End
 
-#*******************************
+********************************
 
 update_insert
 
@@ -2651,17 +2651,17 @@ update_insert
 	movi	OBJLST,a8
 
 #lp	move	*a8,a8,L
-	jrz	#x		;End?
+	jrz	x		;End?
 	move	*a8(OIMG),a0,L
 	cmpi	insert,a0
-	jrne	#lp		;No match?
+	jrne	lp		;No match?
   	move	*a8(OFLAGS),a4
 ;DJT Start
 	btst	B_CHARGEN,a4	;But don't change it if its a chargen name
-	jrnz	#lp
+	jrnz	lp
 ;DJT End
 	calla	ANI
-	jruc	#lp
+	jruc	lp
 #x	rets
 
 
@@ -2718,7 +2718,7 @@ ERRORLOG
 ;	MOVE	@GAMSTATE,A3	;A2 = [PSTATUS:GAMSTATE]
 ;	MOVX	A3,A2
 ;
-;	MOVE	@PSTATUS,A3	;A2 = [ERROR CODE:PSTATUS]
+;	MOVE	@PSTATUS2,A3	;A2 = [ERROR CODE:PSTATUS]
 ;	MOVX	A3,A2
 ;			
 ;	MOVE	*SP(0C0H),A3,L	;A3=GET THE RETURN ADDRESS
@@ -2732,7 +2732,7 @@ ERRORLOG
 ********************************
 * Get an audit
 * A4=Audit #
-* >A4=Audit
+* 0A4H=Audit
 
 GETAUD4
 	mmtm	sp,a0,a1
@@ -2743,7 +2743,7 @@ GETAUD4
 	mmfm	sp,a0,a1
 	rets
 
-#*****************************************************************************
+******************************************************************************
 	.asg	16,YSPACE
 
  SUBR	show_create_plyr_info
@@ -2808,8 +2808,8 @@ GETAUD4
 #capi1
 	SLEEPK	1
 	calla	get_all_buttons_cur2
-	jrnz	#capi2
-	dsj	a10,#capi1
+	jrnz	capi2
+	dsj	a10,capi1
 #capi2
 	SOUND1	bounce_snd
  	
@@ -2889,11 +2889,11 @@ GETAUD4
 #butp
 	SLEEPK	1
 	calla	get_all_buttons_cur2
-	jrz	#butp1
+	jrz	butp1
 	SOUND1	bounce_snd
-	jruc	#butp2
+	jruc	butp2
 #butp1
-	dsj	a10,#butp
+	dsj	a10,butp
 #butp2
 
 	movi	CYCPID,a0
@@ -2911,9 +2911,9 @@ GETAUD4
 #lp
 	SLEEPK	1
 	dec	a10
-	jrz	#tvout
+	jrz	tvout
 	move	@tvpanelon,a0,L
-	jrnz	#lp
+	jrnz	lp
 
 #tvout
 	callr	kill_tvpanel
@@ -2996,8 +2996,8 @@ GETAUD4
 #whopper_with_cheese
 	SLEEPK	1
 	calla	get_all_buttons_cur2
-	jrnz	#exit
-	dsj	a10,#whopper_with_cheese
+	jrnz	exit
+	dsj	a10,whopper_with_cheese
 #exit
 
 	SOUND1	bounce_snd
@@ -3044,7 +3044,7 @@ kill_tvpanel
 	move	a0,@sc_proc,L
 
 	move	@tvpanelon,a0,L
-	jrz	#x1
+	jrz	x1
 	calla	KILL
 	clr	a0
 	move	a0,@tvpanelon,L
@@ -3592,7 +3592,7 @@ hve_fun_str_setup
 	.even
 
 ;What's new about the game?
-#*****************************************************************************
+******************************************************************************
 	.asg	17,YSPACE
 
  SUBR	new_page
@@ -3655,7 +3655,7 @@ hve_fun_str_setup
 
 	move	*a9,a14
 	cmpi	4000,a14
-	jrz	#cont0
+	jrz	cont0
 
 	SLEEP	40
 
@@ -3663,10 +3663,10 @@ hve_fun_str_setup
 #whopper_with_chees
 	SLEEPK	1
 	calla	get_all_buttons_cur2
-	jrnz	#exi
-	dsj	a10,#whopper_with_chees
+	jrnz	exi
+	dsj	a10,whopper_with_chees
 #exi	move	a10,a10
-      	jrz	#contz
+      	jrz	contz
 
       	clr	a0
 	move	a0,@SOUNDSUP		;turn all sounds on
@@ -3674,27 +3674,27 @@ hve_fun_str_setup
 	movk	1,a0
 	move	a0,@SOUNDSUP		;turn all sounds off
 
-	jruc	#cont
+	jruc	cont
 #contz
 
 	movi	OBJLST,a10
-	jruc	#start
+	jruc	start
 #next_obj
 	move	*a10(OID),a0
 	cmpi	CLSNEUT|TYPTEXT|SUBMES1,a0
-	jrne	#not_gover
+	jrne	not_gover
 	movi	[15,0],a0
 	move	a0,*a10(OYVEL),L	;Fall off scrn
 #not_gover
 #start
 	move	*a10,a10,L
-	jrnz	#next_obj
+	jrnz	next_obj
 
 	SLEEPK	17
      
 	movi	CLSNEUT|TYPTEXT|SUBMES1,a0
 	calla	obj_del1c
-	jruc	#lp
+	jruc	lp
 
 #cont0
 	SLEEP	2*TSEC
@@ -3840,7 +3840,7 @@ LN2b_setup
 
 	.even
 
-#*****************************************************************************
+******************************************************************************
 	.ref	fontram
 
  SUBR	flash_bigtxt3
@@ -3853,13 +3853,13 @@ LN2b_setup
 	
 #lp
 	move	*a14,a14,L
-	jrz	#x
+	jrz	x
 	move	*a14(OID),a2
 	cmpi	CLSNEUT|TYPTEXT|SUBMES1,a2
-	jrne	#lp
+	jrne	lp
 	move	a14,*a3+,L
 	move	a4,*a3,L
-	jruc	#lp
+	jruc	lp
 
 		
 #x	movk	3,a10
@@ -3870,9 +3870,9 @@ LN2b_setup
 	
 #lp2
 	move	*a3+,a1,L
-	jrz	#xx
+	jrz	xx
 	move	a0,*a1(OPAL)
-	jruc	#lp2
+	jruc	lp2
 
 #xx	SLEEPK	3
 
@@ -3882,15 +3882,15 @@ LN2b_setup
 	
 #lp3
 	move	*a3+,a1,L
-	jrz	#xxx
+	jrz	xxx
 	move	a0,*a1(OPAL)
-	jruc	#lp3
+	jruc	lp3
 
 #xxx	SLEEPK	5
-	dsj	a10,#top
+	dsj	a10,top
 	DIE
 
-#*****************************************************************************
+******************************************************************************
 
 
 time_delay
@@ -3901,12 +3901,12 @@ td_1
 ;DJT Start
 	andni	1,a0
 	cmpi	GRANDCHAMP_PID,a0
-	jreq	#lpt			;Called from grand champion?
+	jreq	lpt			;Called from grand champion?
 ;DJT End
 	cmpi	DIAG_PID,a0
-	jreq	#lpt			;Called from octopuss?
+	jreq	lpt			;Called from octopuss?
 	calla	get_all_buttons_cur2
-	jrz	#lpt
+	jrz	lpt
       	clr	a0
 	move	a0,@SOUNDSUP		;turn all sounds on
 	SOUND1	bounce_snd
@@ -3953,7 +3953,7 @@ td_1
 
 
 
-#*****************************************************************************
+******************************************************************************
 * INPUT:	a0 = 0	(1st half stats)
 *		a0 = 1	(final game stats)
 *-----------------------------------------------------------------------------
@@ -3987,7 +3987,7 @@ td_1
  SUBR	stats_page2
 
 	PUSHP	a0
-	jruc	#tvout
+	jruc	tvout
 
  SUBR	stats_page
 
@@ -3997,9 +3997,9 @@ td_1
 
 #stop	SLEEPK	1
 	dec	a10
-	jrz	#tvout
+	jrz	tvout
 	move	@tvpanelon,a0,L
-	jrnz	#stop
+	jrnz	stop
 #tvout
 	callr	kill_tvpanel
 
@@ -4027,7 +4027,7 @@ td_1
 
 	movi	#halftime_mod,a0
 	move	@TWOPLAYERS,a1		;0 = NO, 1 = YES 2 players
-	jrz	#4_plyrs
+	jrz	4_plyrs
 	movi	#halftime_mod2,a0
 #4_plyrs
 	move	a0,@BAKMODS,L
@@ -4038,7 +4038,7 @@ td_1
 	PULLP	a0
 	movi	#str_heading1,a4
 	move	a0,a0
-	jrz	#1st_half
+	jrz	1st_half
 	movi	#str_heading2,a4
 #1st_half
 	calla	print_string_C2
@@ -4049,7 +4049,7 @@ td_1
 
 
 	move	@TWOPLAYERS,a1		;0 = NO, 1 = YES 2 players
-	jrz	#4_plyrsb
+	jrz	4_plyrsb
 
 	move	@special_heads,a0
 	move	@special_heads+10h,a1
@@ -4111,7 +4111,7 @@ td_1
 
 	movi	STARTY1+29,a0
 	move	@TWOPLAYERS,a1		;0 = NO, 1 = YES 2 players
-	jrz	#4_plyrs_ps1
+	jrz	4_plyrs_ps1
 	movi	STARTY1+29,a0
 #4_plyrs_ps1
 	move	a0,*a13(HTS_STARTY)
@@ -4133,7 +4133,7 @@ td_1
 
 	movi	STARTY2+29,a0
 	move	@TWOPLAYERS,a1		;0 = NO, 1 = YES 2 players
-	jrz	#4_plyrs_ps2
+	jrz	4_plyrs_ps2
 	movi	STARTY2+29,a0
 #4_plyrs_ps2
 	move	a0,*a13(HTS_STARTY)
@@ -4186,24 +4186,24 @@ td_1
 	CREATE	FLSH_TXT_PID,change_pal_on_text
 
 	move	@plyr_onfire,a10
-	jrz	#nofire
+	jrz	nofire
 	srl	1,a10
-	jrnc	#nop1
+	jrnc	nop1
 	clr	a11
 	CREATE	FIRE_ANIM_PID,anim_fire_for_best_plyr
 
 #nop1	srl	1,a10
-	jrnc	#nop2
+	jrnc	nop2
 	movk	1,a11
 	CREATE	FIRE_ANIM_PID,anim_fire_for_best_plyr
 
 #nop2	srl	1,a10
-	jrnc	#nop3
+	jrnc	nop3
 	movk	2,a11
 	CREATE	FIRE_ANIM_PID,anim_fire_for_best_plyr
 
 #nop3	srl	1,a10
-	jrnc	#nofire
+	jrnc	nofire
 	movk	3,a11
 	CREATE	FIRE_ANIM_PID,anim_fire_for_best_plyr
 #nofire
@@ -4221,8 +4221,8 @@ td_1
 #whopper_with_cheese
 	SLEEPK	1
 	calla	get_all_buttons_cur2
-	jrnz	#exit
-	dsj	a10,#whopper_with_cheese
+	jrnz	exit
+	dsj	a10,whopper_with_cheese
 #exit
 	SLEEPK	3
 
@@ -4242,7 +4242,7 @@ td_1
 
 	move	@gmqrtr,a0
 	cmpi	2,a0
-	jrnz	#noth
+	jrnz	noth
 	JSRP	plyr_subs
 	clr	a0
 	.ref	in_team_select
@@ -4255,11 +4255,11 @@ td_1
 	movk	ADJTRIVIA,a0		;Get difficulty level
 	calla	GET_ADJ
 	move	a0,a0			;if value is NON-ZERO, dont allow
-	jrnz	#notriv
+	jrnz	notriv
 
 	move	@gmqrtr,a0
 	cmpi	4,a0
-	jrlt	#notriv
+	jrlt	notriv
 	JSRP	trivia_game
 #notriv
 ;TRIVIA
@@ -4288,7 +4288,7 @@ td_1
 
 	move	@gmqrtr,a0
 	cmpi	4,a0
-	jrlt	#notn
+	jrlt	notn
 	SOUND1	crwdbed_kill
 #notn
 
@@ -4486,7 +4486,7 @@ COLTABRED
 
 	.even
 
-#*****************************************************************************
+******************************************************************************
 
 	.asg	 44,SX1
 	.asg	359,SX2
@@ -4517,7 +4517,7 @@ COLTABRED
 #score_setup
 	PRINT_STR	brush20_ascii,8,0,200,7,BRSH_Y_P,0
 
-#*****************************************************************************
+******************************************************************************
 *
 * INPUT:	a2 = * player to check
 *		a3 = * other player 1
@@ -4534,7 +4534,7 @@ COLTABRED
 	move	*a2(PS_2PTS_MADE*10h),a0
 	move	*a2(PS_3PTS_MADE*10h),a7
 	add	a7,a0
-	jrz	#not_best1
+	jrz	not_best1
 
 	move	*a3(PS_2PTS_MADE*10h),a1
 	move	*a3(PS_3PTS_MADE*10h),a7
@@ -4559,7 +4559,7 @@ COLTABRED
 
 	movi	BASTC_W_P,a6
 	move	*a2(PS_3PTS_MADE*10h),a0
-	jrz	#not_best2
+	jrz	not_best2
 	move	*a3(PS_3PTS_MADE*10h),a1
 	cmp	a1,a0
 	jrlo	#not_best2
@@ -4579,7 +4579,7 @@ COLTABRED
 	add	a7,a0
 	sll	1,a0				;x 2
 	add	a7,a0				;3 pts
-	jrz	#not_best4
+	jrz	not_best4
 
 	move	*a3(PS_2PTS_MADE*10h),a1
 	move	*a3(PS_3PTS_MADE*10h),a7
@@ -4612,7 +4612,7 @@ COLTABRED
 
 	movi	BASTC_W_P,a6
 	move	*a2(PS_DUNKS_MADE*10h),a0
-	jrz	#not_best5
+	jrz	not_best5
 	move	*a3(PS_DUNKS_MADE*10h),a1
 	cmp	a1,a0
 	jrlo	#not_best5
@@ -4629,7 +4629,7 @@ COLTABRED
 
 	movi	BASTC_W_P,a6
 	move	*a2(PS_ASSISTS*10h),a0
-	jrz	#not_best6
+	jrz	not_best6
 	move	*a3(PS_ASSISTS*10h),a1
 	cmp	a1,a0
 	jrlo	#not_best6
@@ -4646,7 +4646,7 @@ COLTABRED
 
 	movi	BASTC_W_P,a6
 	move	*a2(PS_STEALS*10h),a0
-	jrz	#not_best7
+	jrz	not_best7
 	move	*a3(PS_STEALS*10h),a1
 	cmp	a1,a0
 	jrlo	#not_best7
@@ -4663,7 +4663,7 @@ COLTABRED
 
 	movi	BASTC_W_P,a6
 	move	*a2(PS_BLOCKS*10h),a0
-	jrz	#not_best8
+	jrz	not_best8
 	move	*a3(PS_BLOCKS*10h),a1
 	cmp	a1,a0
 	jrlo	#not_best8
@@ -4682,7 +4682,7 @@ COLTABRED
 	move	*a2(PS_OFF_REB*10h),a0
 	move	*a2(PS_DEF_REB*10h),a7
 	add	a7,a0
-	jrz	#not_best9
+	jrz	not_best9
 
 	move	*a3(PS_OFF_REB*10h),a1
 	move	*a3(PS_DEF_REB*10h),a7
@@ -4706,7 +4706,7 @@ COLTABRED
 
 	movi	BASTC_W_P,a6
 	move	*a2(PS_INJURY*10h),a0
-	jrz	#not_besta
+	jrz	not_besta
 	move	*a3(PS_INJURY*10h),a1
 	cmp	a1,a0
 	jrlo	#not_besta
@@ -4724,7 +4724,7 @@ COLTABRED
 ;check turnovers
 	movi	BASTC_W_P,a6
 	move	*a2(PS_TURNOVERS*10h),a0
-	jrz	#not_bestb
+	jrz	not_bestb
 	move	*a3(PS_TURNOVERS*10h),a1
 	cmp	a1,a0
 	jrlo	#not_bestb
@@ -4740,7 +4740,7 @@ COLTABRED
 	rets
 
 
-#*****************************************************************************
+******************************************************************************
 
 	.asg	18,COLOFF1
 	.asg	67,COLOFF2
@@ -4803,7 +4803,7 @@ COLTABRED
 	move	*a10(PS_2PTS_TRY*10h),a0
 	move	*a10(PS_3PTS_TRY*10h),a1
 	add	a1,a0
-	jrz	#zippo1
+	jrz	zippo1
 	divu	a0,a3
 	move	a3,a0
 #zippo1
@@ -4858,7 +4858,7 @@ COLTABRED
 	movi	100,a0
 	mpyu	a0,a3
 	move	*a10(PS_3PTS_TRY*10h),a0
-	jrz	#zippo2
+	jrz	zippo2
 	divu	a0,a3
 	move	a3,a0
 #zippo2
@@ -5076,7 +5076,7 @@ COLTABRED
 	.asg	 75,HD_DX
 	.asg	190,HD_Y
 
-#*****************************************************************************
+******************************************************************************
 ;DJT Start
 
 ;ATLANTA
@@ -5237,7 +5237,7 @@ K_GILL	.equ	WALLACE+1
 
 	movk	4,a0			;# of passes+1
 	move	@tmnbr,a8
-	jruc	#botlp
+	jruc	botlp
 
 ;top of loop
 
@@ -5283,8 +5283,8 @@ K_GILL	.equ	WALLACE+1
 
 	movi	(HD_X+HD_DX)*2,a9		;figure X (*2 for odd DX)
 	sra	16,a10				;pull down cnt -=4
-	jrn	#x3
-	jrz	#x4
+	jrn	x3
+	jrz	x4
 	subi	HD_DX,a9
 #x4
 	subi	HD_DX,a9
@@ -5315,10 +5315,10 @@ K_GILL	.equ	WALLACE+1
 	calla	BEGINOBJ2
 
 	move	*a11+,a2,L			;*img - name
-	jrn	#nl0
+	jrn	nl0
 
 	cmpi	K_GILL,a2
-	jrz	#nork
+	jrz	nork
 	movi	rookie_setup,a2,L
 	calla	setup_message
 
@@ -5344,7 +5344,7 @@ K_GILL	.equ	WALLACE+1
 	movk	NAME_ID,a0
 	move	a0,@mess_objid
 	calla	print_string_C2
-	jruc	#nl1
+	jruc	nl1
 #nl0
 	movi	200,a0
 	move	*a2(ISIZEX),a1
@@ -5365,27 +5365,27 @@ K_GILL	.equ	WALLACE+1
 #wtlp1
 	SLEEPK	1
 	move	a10,a10
-	jrn	#wtlp2
+	jrn	wtlp2
 	calla	get_all_buttons_cur2
-;	jrnz	#o2		;dbg
-	jrnz	#mksnd
+;	jrnz	o2		;dbg
+	jrnz	mksnd
 #wtlp2
-	dsj	a8,#wtlp1
+	dsj	a8,wtlp1
 #o2
 	addi	[HD_DX,0],a9,L
 	subk	1,a10
-	jrz	#done
-	jrnn	#hdlp
+	jrz	done
+	jrnn	hdlp
 	addk	6,a10
-	jruc	#hdlp
+	jruc	hdlp
 #done
 	movk	15,a8
 #wtlp3
 	SLEEPK	1
 	calla	get_all_buttons_cur2
-	jrnz	#o3		;dbg
-;	jrnz	#mksnd
-	dsj	a8,#wtlp3
+	jrnz	o3		;dbg
+;	jrnz	mksnd
+	dsj	a8,wtlp3
 #o3
 	clr	a0				;Keep this page up while
 	move	a0,@DISPLAYON			; building the next one
@@ -5405,9 +5405,9 @@ K_GILL	.equ	WALLACE+1
 	move	a8,@tmnbr
 	dec	a0
 	move	a0,@tmloop
-;	jruc	#toplp			;FOR DEBUGING
-	jrnz	#toplp
-	jruc	#xb
+;	jruc	toplp			;FOR DEBUGING
+	jrnz	toplp
+	jruc	xb
 #mksnd
       	clr	a0
 	move	a0,@SOUNDSUP		;turn all sounds on
@@ -5697,7 +5697,7 @@ str_name_ptrs
 
 ;DJT End
 
-#*****************************************************************************
+******************************************************************************
 
 	.asg	8,#NOINITOFF
 	.asg	21,#OFF1
@@ -5710,27 +5710,27 @@ str_name_ptrs
  SUBR	rank_screen
 
 
-	move	@PSTATUS,a0			;if nobody has entered their
+	move	@PSTATUS2,a0			;if nobody has entered their
 	btst	0,a0				;initials, then skip this
-	jrz	#nop1
+	jrz	nop1
 	move	@player1_data+PR_NAME1,a0
 	jrgt	#have_initials
 #nop1
-	move	@PSTATUS,a0
+	move	@PSTATUS2,a0
 	btst	1,a0
-	jrz	#nop2
+	jrz	nop2
 	move	@player2_data+PR_NAME1,a0
 	jrgt	#have_initials
 #nop2
-	move	@PSTATUS,a0
+	move	@PSTATUS2,a0
 	btst	2,a0
-	jrz	#nop3
+	jrz	nop3
 	move	@player3_data+PR_NAME1,a0
 	jrgt	#have_initials
 #nop3
-	move	@PSTATUS,a0
+	move	@PSTATUS2,a0
 	btst	3,a0
-	jrz	#nop4
+	jrz	nop4
 	move	@player4_data+PR_NAME1,a0
 	jrgt	#have_initials
 #nop4
@@ -5762,7 +5762,7 @@ str_name_ptrs
 
 	movi	#rank_mod,a0
 	move	@TWOPLAYERS,a1		;0 = NO, 1 = YES 2 players
-	jrz	#not_2a
+	jrz	not_2a
 	movi	#rank_kit_mod,a0
 #not_2a
 	move	a0,@BAKMODS,L
@@ -5783,7 +5783,7 @@ str_name_ptrs
 
 ;	movi	#rank_mod,a0
 	move	@TWOPLAYERS,a1		;0 = NO, 1 = YES 2 players
-	jrnz	#is_2
+	jrnz	is_2
 
 	clr	a10
 	callr	print_column
@@ -5798,8 +5798,8 @@ str_name_ptrs
 #whopper_with_cheese
 	SLEEPK	1
 	calla	get_all_buttons_cur2
-	jrnz	#exit
-	dsj	a10,#whopper_with_cheese
+	jrnz	exit
+	dsj	a10,whopper_with_cheese
 #exit
 	SLEEPK	1
 
@@ -5934,7 +5934,7 @@ print_column
 
 	move	@PSTATUS2,a0
 	btst	a10,a0
-	jrz	#cpu_player
+	jrz	cpu_player
 
 	move	a10,a0
 	sll	5,a0			;x 32 bits
@@ -5951,7 +5951,7 @@ print_column
 	sll	6,a0			;x16x4
 	addi	#center_xs+10h,a0
 	move	@TWOPLAYERS,a1		;0 = NO, 1 = YES 2 players
-	jrz	#not_2c
+	jrz	not_2c
 	addi	10h,a0
 #not_2c
 	move	*a0,a0
@@ -5983,7 +5983,7 @@ print_column
 	sll	6,a0			;x16x4
 	addi	#center_xs,a0
 	move	@TWOPLAYERS,a1		;0 = NO, 1 = YES 2 players
-	jrz	#not_2d
+	jrz	not_2d
 	addi	20h,a0
 #not_2d
 	move	*a0,a0
@@ -6038,7 +6038,7 @@ print_column
 	movi	PCTY,a0
 	move	a0,@mess_cursy		;message cursor pos Y
 	move	*a11(PR_LOST),a2	;games lost
-	jrz	#no_losses
+	jrz	no_losses
 ; % < 1000
 	movi	#str_pct,a4		;"PCT: ."
 	callr	copy_rom_string
@@ -6052,7 +6052,7 @@ print_column
 	callr	dec_to_pct
 	callr	concat_string
 	callr	print_string_C		;centered
-	jruc	#skip_loss
+	jruc	skip_loss
 
 #no_losses
 	movi	#str_pct100,a4		;"PCT: 1.000"
@@ -6064,7 +6064,7 @@ print_column
 
 ;	move	*a11(PR_WINSTREAK),a0	;no. consecutive wins
 ;	cmpi	3,a0
-;	jrlt	#no_hilght
+;	jrlt	no_hilght
 ;	movi	BAST_W_P,a1		;highlight cycle colour
 ;	move	a1,@message_palette,L
 ;#no_hilght
@@ -6079,10 +6079,10 @@ print_column
 	movi	STREAKY2,a0
 	move	a0,@mess_cursy		;message cursor pos Y
 	move	*a11(PR_WINSTREAK),a0	;no. consecutive wins
-	jrnz	#not0
+	jrnz	not0
 	movi	#str_none,a4
 	callr	print_string_C2
-	jruc	#contws
+	jruc	contws
 #not0
 	PUSH	a0
 	movi	99,a1			;max value
@@ -6091,7 +6091,7 @@ print_column
 	PULL	a0
 	movi	#str_wins,a4
 	dec	a0
-	jrnz	#iswins
+	jrnz	iswins
 	movi	#str_win,a4
 #iswins
 	callr	concat_rom_string
@@ -6111,7 +6111,7 @@ print_column
 
 	movi	#str_all,a4		;" ALL"
 	callr	concat_rom_string
-	jruc	#skipit
+	jruc	skipit
 #not_all
 	movi	NUM_TEAMS,a1			;max value
 	callr	dec_to_asc
@@ -6134,7 +6134,7 @@ print_column
 
 	move	*a11(PR_NUMDEF),a0	;number teams defeated
 	cmpi	NUM_TEAMS,a0
-	jreq	#defeated_all
+	jreq	defeated_all
 
 	movi	BAST_Y_P,a0
 	move	a0,@message_palette,L
@@ -6200,7 +6200,7 @@ stats_str
 	.even
 
 
-#*****************************************************************************
+******************************************************************************
 ;
 ;
 ;deloff	SLEEP	1ch
@@ -6239,7 +6239,7 @@ stats_str
 ;delx	rets
 
 
-#********************************
+*********************************
 
  SUBR	winning_msg
 
@@ -6254,7 +6254,7 @@ stats_str
 	move	@scores,a0
 	move	@scores+16,a1
 	cmp	a0,a1
-	jrlt	#ok
+	jrlt	ok
 	move	@team2,a14
 #ok
 	move	a14,a10
@@ -6268,7 +6268,7 @@ stats_str
 
 	movi	#swin,a4
 	subk	30-1,a10
-	jrnz	#ok1
+	jrnz	ok1
 	movi	#swina,a4
 #ok1
 	move	*a4+,a0
@@ -6371,7 +6371,7 @@ strings	.long	#s1,#s2,#s3,#s4,#s5,#s6,#s7,#s8,#s9,#s10
 	.even
 
 
-#*****************************************************************************
+******************************************************************************
 ;DJT Start
 	.if	TRIVCON
  SUBR	trivia_rules
@@ -6379,7 +6379,7 @@ strings	.long	#s1,#s2,#s3,#s4,#s5,#s6,#s7,#s8,#s9,#s10
 	movk	ADJTRIVIA,a0		;Get difficulty level
 	calla	GET_ADJ
 	move	a0,a0			;if value is NON-ZERO, dont allow
-	jrnz	#notriv
+	jrnz	notriv
 
 	calla	display_blank
 	calla	WIPEOUT
@@ -6435,7 +6435,7 @@ strings	.long	#s1,#s2,#s3,#s4,#s5,#s6,#s7,#s8,#s9,#s10
 	movk	9,a0
 	move	a0,@mess_line_spacing
 
-	jruc	#nxt
+	jruc	nxt
 
 #dostr
 	move	*a11+,a0
@@ -6445,7 +6445,7 @@ strings	.long	#s1,#s2,#s3,#s4,#s5,#s6,#s7,#s8,#s9,#s10
 	calla	print_string_C2
 #nxt
 	move	*a11+,a4,L
-	jrnz	#dostr
+	jrnz	dostr
 
 	movk	1,a0
 	move	a0,@DISPLAYON
@@ -6459,7 +6459,7 @@ strings	.long	#s1,#s2,#s3,#s4,#s5,#s6,#s7,#s8,#s9,#s10
 	calla	KILBGND
 
 	move	*a11+,a4,L
-	jrn	#dostr
+	jrn	dostr
 
 	move	a4,a10
 
@@ -6471,15 +6471,15 @@ strings	.long	#s1,#s2,#s3,#s4,#s5,#s6,#s7,#s8,#s9,#s10
 #butp
 	SLEEPK	1
 	calla	get_all_buttons_cur2
-	jrz	#nobutp2
+	jrz	nobutp2
 	SOUND1	bounce_snd
-	jruc	#butp2
+	jruc	butp2
 #nobutp2
-	dsj	a10,#butp
+	dsj	a10,butp
 
 #butp2
 	move	*a11,a4,L
-	jrnz	#lp
+	jrnz	lp
 
 	clr	a10
 	movk	8,a11
@@ -6833,7 +6833,7 @@ strings	.long	#s1,#s2,#s3,#s4,#s5,#s6,#s7,#s8,#s9,#s10
 
 	.if	0
 
-#****************************************************************
+*****************************************************************
 * Title screen
 
 ; SUBRP	show_title2
@@ -6879,15 +6879,15 @@ strings	.long	#s1,#s2,#s3,#s4,#s5,#s6,#s7,#s8,#s9,#s10
 ;	movi	7*TSEC,a10
 ;#lp	SLEEPK	1
 ;	calla	get_all_buttons_cur2
-;	jrz	#nob
+;	jrz	nob
 ;      	clr	a0
 ;	move	a0,@SOUNDSUP		;turn all sounds on
 ;	SOUND1	bounce_snd
 ;	movk	1,a0
 ;	move	a0,@SOUNDSUP		;turn all sounds off
-;	jruc	#xb
+;	jruc	xb
 ;#nob	
-;	dsj	a10,#lp
+;	dsj	a10,lp
 ;#xb
 ;	movi	CYCPID,a0
 ;	calla	KIL1C
@@ -6917,7 +6917,7 @@ strings	.long	#s1,#s2,#s3,#s4,#s5,#s6,#s7,#s8,#s9,#s10
 	.endif
 
 
-#*****************************************************************************
+******************************************************************************
 
 ; SUBRP	drw_stars
 ;
@@ -6995,7 +6995,7 @@ strings	.long	#s1,#s2,#s3,#s4,#s5,#s6,#s7,#s8,#s9,#s10
 
 
 
-#*****************************************************************************
+******************************************************************************
 
 ; SUBRP	drw_ladder
 ;
@@ -7044,7 +7044,7 @@ strings	.long	#s1,#s2,#s3,#s4,#s5,#s6,#s7,#s8,#s9,#s10
 ;
 ;	CREATE0	drwnbalogoUP
 ;
-;	movi	>772-4,a10
+;	movi	0772H-4,a10
 ;#lp	SLEEPK	1
 ;	move	@WORLDTLY,a0,L
 ;	subi	[2,8000h],a0
@@ -7053,14 +7053,14 @@ strings	.long	#s1,#s2,#s3,#s4,#s5,#s6,#s7,#s8,#s9,#s10
 ;
 ;
 ;	calla	get_all_buttons_cur2
-;	jrz	#nob
+;	jrz	nob
 ;      	clr	a0
 ;	move	a0,@SOUNDSUP		;turn all sounds on
 ;	SOUND1	bounce_snd
 ;	movk	1,a0
 ;	move	a0,@SOUNDSUP		;turn all sounds off
-;	jruc	#xb
-;#nob	dsj	a10,#lp
+;	jruc	xb
+;nob	dsj	a10,lp
 ;
 ;	SLEEP	4*64
 ;
@@ -7133,7 +7133,7 @@ strings	.long	#s1,#s2,#s3,#s4,#s5,#s6,#s7,#s8,#s9,#s10
 ;
 ;	move	a11,a0
 ;	movi	[248+48,0],a1
-;	movi	>7591,a3				;Z
+;	movi	07591H,a3				;Z
 ;	movi	DMAWNZ|M_NOCOLL,a4
 ;	move	a9,a2
 ;	movi	CLSDEAD,a5
@@ -7180,7 +7180,7 @@ strings	.long	#s1,#s2,#s3,#s4,#s5,#s6,#s7,#s8,#s9,#s10
 	
 
 ;#drlp	move	*a9+,a2,L
-;	jrz	#x
+;	jrz	x
 ;
 ;	move	*a9+,a0,L
 ;	move	*a9+,a1,L
@@ -7233,7 +7233,7 @@ strings	.long	#s1,#s2,#s3,#s4,#s5,#s6,#s7,#s8,#s9,#s10
 ;	clr	a6
 ;	clr	a7
 ;	calla	BEGINOBJ2
-;	jruc	#drlp
+;	jruc	drlp
 ;#x	rets
 
 
@@ -7249,7 +7249,7 @@ strings	.long	#s1,#s2,#s3,#s4,#s5,#s6,#s7,#s8,#s9,#s10
 
 ;#ladder_mod
 ;	.long	dabullBMOD
-;	.word	>ff4b+5,>ffa1+3
+;	.word	0ff4bH+5,0ffa1H+3
 ;	.long	ladderBMOD
 ;	.word	0+5,-92+360
 ;	.long	ladderBMOD
@@ -7280,7 +7280,7 @@ strings	.long	#s1,#s2,#s3,#s4,#s5,#s6,#s7,#s8,#s9,#s10
 
 
 
-#****************************************************************
+*****************************************************************
 
 ; SUBRP	drw_cutaway
 ;
@@ -7324,15 +7324,15 @@ strings	.long	#s1,#s2,#s3,#s4,#s5,#s6,#s7,#s8,#s9,#s10
 ;	movi	3*TSEC,a10
 ;#lp	SLEEPK	1
 ;	calla	get_all_buttons_cur2
-;	jrz	#nob
+;	jrz	nob
 ;      	clr	a0
 ;	move	a0,@SOUNDSUP		;turn all sounds on
 ;	SOUND1	bounce_snd
 ;	movk	1,a0
 ;	move	a0,@SOUNDSUP		;turn all sounds off
-;	jruc	#xb
+;	jruc	xb
 ;#nob	
-;	dsj	a10,#lp
+;	dsj	a10,lp
 ;#xb
 ;
 ;	clr	a10

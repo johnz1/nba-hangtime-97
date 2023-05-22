@@ -58,7 +58,7 @@ FREE	.long	0
 
 ********************************
 * Process list initialize
-* >A13=*Process active list
+* 0A13H=*Process active list
 * Trashes scratch
 
  SUBR	process_init
@@ -74,21 +74,21 @@ FREE	.long	0
 #lp	move	a1,a14
 	addi	PRCSIZ,a1
 	move	a1,*a14,L	;Set link
-	dsj	b0,#lp
+	dsj	b0,lp
 
 	move	a0,*a14,L	;Null last link
 
 	rets
 
 
-#*******************************
+********************************
 * Process dispatch
 
  SUBR	process_dispatch
 
 	.if	DEBUG
 	move	@SLDEBUG,a0
-	jrnn	#noline
+	jrnn	noline
 
 	movi	31*32,a0		;Proc usage
 	move	a0,@ERASELOC
@@ -111,7 +111,7 @@ FREE	.long	0
 
 #lp	calla	obj_yzsort		;Sort display list
 	move	@dirqtimer,a0
-	jrz	#lp			;Wait?
+	jrz	lp			;Wait?
 
 
 	calla	L_TIMER			;Linky timer
@@ -132,16 +132,16 @@ PRCLSP	move	a13,a1
 	move	a0,-*a1			;sleep
 
 
-;D3PTS	.equ	>120		;UHL *Points array (Cnt, XYZ,XYZ..)
+;D3PTS	.equ	0120H		;UHL *Points array (Cnt, XYZ,XYZ..)
 ;	.ref	d3vis_p
 ;
 ;	PUSH	a0,a1			;DEBUG
 ;	movi	d3vis_p,a1
 ;	move	*a1,a0,L
-;	jrz	#dx
+;	jrz	dx
 ;#debug	move	a1,a0
 ;	move	*a0,a1,L
-;	jrnz	#debug
+;	jrnz	debug
 ;	move	*a0(D3PTS),a1,L
 ;	jrz	$			;ERROR!!!
 ;#dx	PULL	a0,a1
@@ -167,8 +167,8 @@ prcd1
 	jrgt	prcd1			;Not ready?
 
 
-	move	a13,a1			;>Dispatch
-	addi	>40,a1
+	move	a13,a1			;0DHispatch
+	addi	040H,a1
 	mmfm	a1,a7,a8,a9,a10,a11,a12	;*Wake, regs, *stack
 	jump	a7			;Do process
 
@@ -176,7 +176,7 @@ prcd1
 prcdx	rets
 
 
-#********************************
+*********************************
 * Process kills itself
 
 SUCIDE
@@ -195,18 +195,18 @@ suclp	move	a1,a2		;save previous
 	PUSH	a5
 	move	*a1(PROCID),a5
 	cmpi	takepid,a5
-	jrz	#caught
+	jrz	caught
 
 ;	cmpi	1000h,a5
-;	jrz	#caught
+;	jrz	caught
 ;	cmpi	1100h,a5
-;	jrz	#caught
+;	jrz	caught
 ;	cmpi	1200h,a5
-;	jrz	#caught
+;	jrz	caught
 ;	cmpi	1300h,a5
-;	jrz	#caught
+;	jrz	caught
 
-	jruc	#nocaught
+	jruc	nocaught
 
 #caught
 	LOCKUP
@@ -241,14 +241,14 @@ sucerr
 	jruc	prcd1
 
 
-#*******************************
+********************************
 * Kill process (won't kill self)
 * A0=*Process to kill
 * Trashes scratch
 
 KILL
 	cmp	a0,a13
-	jreq	#x		;Killing self?
+	jreq	x		;Killing self?
 
 	movi	ACTIVE,a1
 
@@ -256,7 +256,7 @@ KILL
 	move	*a1,a1,L
 	jrz	killerr		;Can't find?
 	cmp	a1,a0
-	jrne	#lp		;Not the one?
+	jrne	lp		;Not the one?
 
 
 	.if	DEBUG
@@ -264,7 +264,7 @@ KILL
 	PUSH	a2
 	move	*a1(PROCID),a2,L
 	cmpi	takepid,a2
-	jrnz	#ok
+	jrnz	ok
 	LOCKUP
 #ok	PULL	a2
 
@@ -274,14 +274,14 @@ KILL
 ;	PUSH	a2
 ;	move	*a1(PROCID),a2
 ;	cmpi	1000h,a2
-;	jrz	#caught
+;	jrz	caught
 ;	cmpi	1100h,a2
-;	jrz	#caught
+;	jrz	caught
 ;	cmpi	1200h,a2
-;	jrz	#caught
+;	jrz	caught
 ;	cmpi	1300h,a2
-;	jrz	#caught
-;	jruc	#nocaught
+;	jrz	caught
+;	jruc	nocaught
 ;#caught	LOCKUP
 ;#nocaught
 ;	PULL	a2
@@ -302,14 +302,14 @@ killerr
 	.else
 	CALLERR	6,0
 	.endif
-	jruc	#x
+	jruc	x
 
 
 ********************************
 * Create a process
 * A1=PID, A7=PC, A8,A9,A10,A11 Passed parameters
 * A13=*Current process
-* >A0=*Created process (Flags invalid!)
+* 0A0H=*Created process (Flags invalid!)
 * Trashes A14,B0-B1
 
 GETPRC
@@ -351,18 +351,18 @@ xferprc0
 
 	PUSH	a1
 	calla	process_exist
-	jrnz	#found
+	jrnz	found
 	PULL	a1
       
 	LOCKUP
-	jruc	#cont
+	jruc	cont
 #found
 	PULL	a1
 #cont
 
 	move	*a0(PROCID),a14
 	cmpi	takepid,a14
-	jrnz	#tag2
+	jrnz	tag2
 
 	LOCKUP
 #tag2
@@ -412,7 +412,7 @@ KILALL
 KIL1C
 	clr	a1
 
-#*******************************
+********************************
 * Kill a class of processes
 * A0=PID
 * A1=!Mask (bits to remove)
@@ -422,23 +422,23 @@ KILALLN
 	move	a2,b0
 	move	a3,b1
 
-	zext	a1		;Won't kill PIDS >8000+
+	zext	a1		;Won't kill PIDS 08000H+
 	andn	a1,a0		;Form match
 	movi	ACTIVE,a2
 
 #lp	move	a2,a3		;Save previous
 	move	*a2,a2,L
-	jrz	#x		;Done?
+	jrz	x		;Done?
 	move	*a2(PROCID),a14
-;	jrnn	#ok
+;	jrnn	ok
 ;	LOCKUP
 ;#ok
 	andn	a1,a14		;Apply mask
 	cmp	a0,a14
-	jrne	#lp		;No match?
+	jrne	lp		;No match?
 
 	cmp	a2,a13
-	jreq	#lp		;Current proecess?
+	jreq	lp		;Current proecess?
 
 
 	.if	DEBUG
@@ -446,7 +446,7 @@ KILALLN
 	PUSH	a4
 	move	*a2(PROCID),a4,L
 	cmpi	takepid,a4
-	jrnz	#ok
+	jrnz	ok
 	LOCKUP
 #ok	PULL	a4
 
@@ -456,14 +456,14 @@ KILALLN
 ;	PUSH	a5
 ;	move	*a2(PROCID),a5
 ;	cmpi	1000h,a5
-;	jrz	#caught
+;	jrz	caught
 ;	cmpi	1100h,a5
-;	jrz	#caught
+;	jrz	caught
 ;	cmpi	1200h,a5
-;	jrz	#caught
+;	jrz	caught
 ;	cmpi	1300h,a5
-;	jrz	#caught
-;	jruc	#nocaught
+;	jrz	caught
+;	jruc	nocaught
 ;#caught	LOCKUP
 ;#nocaught
 ;	PULL	a5
@@ -477,7 +477,7 @@ KILALLN
 	move	a14,*a2,L
 	move	a2,@FREE,L
 	move	a3,a2
-	jruc	#lp
+	jruc	lp
 
 #x	move	b0,a2
 	move	b1,a3
@@ -492,7 +492,7 @@ KILALLN
 KOP_1C
 	clr	a1
 
-#*******************************
+********************************
 * Knock out a class of processes
 * A0=PID, A1=!Mask (Bits to remove), A2=Time to add
 * Trashes scratch
@@ -503,22 +503,22 @@ KOP_ALL
 	movi	ACTIVE,a3,L
 
 #lp	move	*a3,a3,L	;Get next
-	jrz	#x		;End?
+	jrz	x		;End?
 	move	*a3(PROCID),a14
 	andn	a1,a14		;Mask
 	cmp	a0,a14
-	jrnz	#lp		;No match?
+	jrnz	lp		;No match?
 
 	move	*a3(PTIME),a14	;Add sleep
 	add	a2,a14
 	move	a14,*a3(PTIME)
-	jruc	#lp
+	jruc	lp
 
 #x	move	b0,a3
 	rets
 
 
-#*******************************
+********************************
 * Check to see if process exists
 * A0=*Process
 * Rets: Z=Not found, NZ=Found
@@ -528,15 +528,15 @@ process_exist
 	movi	ACTIVE,a1
 
 #lp	move	*a1,a1,L
-	jrz	#x		;End?
+	jrz	x		;End?
 	cmp	a0,a1
-	jrne	#lp		;!Match?
+	jrne	lp		;!Match?
 	move	a0,a0		;Clr Z
 
 #x	rets
 
 
-#*******************************
+********************************
 * Find if at least one process, other than calling process, exists
 * A0=PROCID
 * A1=Mask
@@ -550,14 +550,14 @@ EXISTP
 	movi	ACTIVE,a2
 
 #lp	move	*a2,a2,L
-	jrz	#x		;End?
+	jrz	x		;End?
 	move	*a2(PROCID),a4
 	and	a1,a4
 	cmp	a0,a4
-	jrne	#lp		;!Match?
+	jrne	lp		;!Match?
 
 	cmp	a2,a13
-	jreq	#lp		;Self?
+	jreq	lp		;Self?
 
 #x	move	a2,a0
 

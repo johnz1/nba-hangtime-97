@@ -127,7 +127,7 @@ MBUFF_SIZE	equ	40
 	.text
 
 
-#*****************************************************************************
+******************************************************************************
 
  SUBRP	clear_buffers
 
@@ -141,7 +141,7 @@ clear_buffer
 	movi	message_buffer,a1
 #clear_loop1
 	move	a0,*a1+
-	dsj	a2,#clear_loop1
+	dsj	a2,clear_loop1
 	rets
 
 clear_buffer2
@@ -150,11 +150,11 @@ clear_buffer2
 	movi	message_buffer2,a1
 #clear_loop2
 	move	a0,*a1+
-	dsj	a2,#clear_loop2
+	dsj	a2,clear_loop2
 	rets
 
 
-#*****************************************************************************
+******************************************************************************
 * INPUT:	a3 = * string dest
 *		a4 = * name string
 *-----------------------------------------------------------------------------
@@ -169,13 +169,13 @@ clear_buffer2
 	movi	6*8,a5
 #lp
 	move	*a4+,a0				;get LETTER nbr. from record
-	jrz	#no_more
+	jrz	no_more
 	sll	4,a0				;*16
 	addi	init_convert_table,a0,L
 	movb	*a0,*a3				;get ascii LETTER from table
 	addk	8,a3
 	subk	8,a5
-	jrnz	#lp
+	jrnz	lp
 
 #no_more
 	subi	48,a3
@@ -184,7 +184,7 @@ clear_buffer2
 ;DJT End
 
 
-#*****************************************************************************
+******************************************************************************
 *-----------------------------------------------------------------------------
 
 
@@ -215,7 +215,7 @@ clear_buffer2
 	move	*a2(PR_WON),a0
 	move	*a2(PR_LOST),a1
 	add	a0,a1
-	jrnz	#has_record
+	jrnz	has_record
 
 	movi	LINE6_Y,a0
 	move	a0,@mess_cursy		;message cursor pos Y
@@ -228,8 +228,8 @@ clear_buffer2
 #pps1	SLEEPK	1
 	move	*a13(PC_PLAYNUM),a0
 	calla	get_but_val_down
-	jrnz	#pps2
-	dsj	a10,#pps1
+	jrnz	pps2
+	dsj	a10,pps1
 #pps2	move	*a13(PC_OBJID),a0	;OBJ ID's created by this PROC
 	calla	obj_del1c		;delete all objs with this ID
 	RETP
@@ -244,7 +244,7 @@ clear_buffer2
 	movi	LINE1_Y,a0
 	move	@GAMSTATE,a14
 	cmpi	INPLYRDESIGN,a14
-	jrne	#ntcp
+	jrne	ntcp
 	movi	LINE6_Y,a0
 #ntcp	move	a0,@mess_cursy		;message cursor pos X
 
@@ -306,7 +306,7 @@ clear_buffer2
 
 	move	*a13(PC_DATADDR),a0,L	;start of player data
 	move	*a0(PR_LOST),a2		;games lost
-	jrz	#no_losses
+	jrz	no_losses
 ; % < 1000
 	movi	str_line0d,a4		;"PCT: ."
 	callr	copy_rom_string
@@ -321,7 +321,7 @@ clear_buffer2
 	callr	dec_to_pct
 	callr	concat_string
 	callr	print_string_C		;centered
-	jruc	#skip_loss
+	jruc	skip_loss
 
 #no_losses
 	movi	str_line0d1,a4		;"PCT: 1.000"
@@ -358,7 +358,7 @@ clear_buffer2
 	jrge	#defr			;br=at least 5 games played
 	movi	str_na,a4
 	callr	print_string_C2
-	jruc	#offr
+	jruc	offr
 #defr
 	move	*a8(RS_DEF_RANK),a0
 	calla	compute_plyr_def_rank
@@ -394,7 +394,7 @@ clear_buffer2
 	jrge	#offr1			;br=at least 5 games played
 	movi	str_na,a4
 	callr	print_string_C2
-	jruc	#pg01
+	jruc	pg01
 #offr1
 	move	*a8(RS_OFF_RANK),a0
 	calla	compute_plyr_off_rank
@@ -408,8 +408,8 @@ clear_buffer2
 #pg1	SLEEPK	1
 	move	*a13(PC_PLAYNUM),a0
 	calla	get_but_val_down
-	jrnz	#pg1a
-	dsj	a10,#pg1
+	jrnz	pg1a
+	dsj	a10,pg1
 #pg1a	move	*a13(PC_OBJID),a0	;OBJ ID's created by this PROC
 	calla	obj_del1c		;delete all objs with this ID
 
@@ -428,7 +428,7 @@ clear_buffer2
 	movi	LINE1_Y,a0
 	move	@GAMSTATE,a14
 	cmpi	INPLYRDESIGN,a14
-	jrne	#ntcp2
+	jrne	ntcp2
 	movi	LINE6_Y,a0
 #ntcp2	move	a0,@mess_cursy		;message cursor pos X
 
@@ -443,10 +443,10 @@ clear_buffer2
 	move	a0,@mess_cursy
 	move	*a13(PC_DATADDR),a0,L	;start of player data
 	move	*a0(PR_WINSTREAK),a0	;no. consecutive wins
-	jrnz	#not0
+	jrnz	not0
 	movi	str_none,a4
 	callr	print_string_C2
-	jruc	#contws
+	jruc	contws
 #not0
 	PUSH	a0
 	movi	99,a1			;max value
@@ -455,7 +455,7 @@ clear_buffer2
 	PULL	a0
 	movi	str_wins,a4
 	dec	a0
-	jrnz	#iswins
+	jrnz	iswins
 	movi	str_win,a4
 #iswins
 	callr	concat_rom_string
@@ -488,7 +488,7 @@ clear_buffer2
 	move	*a14(PR_COUNT),a0	;games played
 	divu	a0,a1			;wins*1000/played
 	move	a1,a7
-	jrz	#ptss			;br="00.00"
+	jrz	ptss			;br="00.00"
 	clr	a6
 	movi	100,a1				;max value
 	divu	a1,a6
@@ -505,7 +505,7 @@ clear_buffer2
 	callr	dec_to_asc
 	callr	concat_string
 	callr	print_string_C
-	jruc	#ptss1
+	jruc	ptss1
 
 #ptss	movi	str_00,a4
 	callr	print_string_C2
@@ -538,7 +538,7 @@ clear_buffer2
 	move	*a14(PR_COUNT),a0	;games played
 	divu	a0,a1			;wins*1000/played
 	move	a1,a7
-	jrz	#ptsa			;br="00.00"
+	jrz	ptsa			;br="00.00"
 	clr	a6
 	movi	100,a1				;max value
 	divu	a1,a6
@@ -555,7 +555,7 @@ clear_buffer2
 	callr	dec_to_asc
 	callr	concat_string
 	callr	print_string_C
-	jruc	#ptsa1
+	jruc	ptsa1
 
 #ptsa	movi	str_00,a4
 	callr	print_string_C2
@@ -585,7 +585,7 @@ clear_buffer2
 	jrp	#not0a
 	movi	str_none,a4
 	callr	print_string_C2
-	jruc	#contcp
+	jruc	contcp
 #not0a
 	clr	a1
 	move	*a0(PR_HEIGHT_PTS),a14
@@ -628,8 +628,8 @@ clear_buffer2
 #pg2	SLEEPK	1
 	move	*a13(PC_PLAYNUM),a0
 	calla	get_but_val_cur
-	jrnz	#pg2a
-	dsj	a10,#pg2
+	jrnz	pg2a
+	dsj	a10,pg2
 #pg2a	move	*a13(PC_OBJID),a0	;OBJ ID's created by this PROC
 	calla	obj_del1c		;delete all objs with this ID
 
@@ -646,7 +646,7 @@ clear_buffer2
 	movi	LINE1_Y,a0
 	move	@GAMSTATE,a14
 	cmpi	INPLYRDESIGN,a14
-	jrne	#ntcp3
+	jrne	ntcp3
 	movi	LINE6_Y,a0
 #ntcp3	move	a0,@mess_cursy		;message cursor pos X
 
@@ -665,10 +665,10 @@ clear_buffer2
 	move	a1,@message_palette,L
 	move	*a13(PC_DATADDR),a0,L	;start of player data
 	move	*a0(PR_TRIVIA_PTS),a0	;no. consecutive wins
-	jrnz	#trva
+	jrnz	trva
 	movi	str_none,a4
 	callr	print_string_C2
-	jruc	#wrld1
+	jruc	wrld1
 #trva	movi	200,a1			;max value
 	callr	dec_to_asc
 	callr	print_string_C3		;centered
@@ -711,12 +711,12 @@ clear_buffer2
 	move	*a14,a4,L
 
 ;	move	a14,a14
-;	jrnz	#wrld2			;br=plyr has a WORLD RECORD
+;	jrnz	wrld2			;br=plyr has a WORLD RECORD
 ;
 ;
 ;	movi	str_none,a4
 ;	callr	print_string_C2
-;	jruc	#nxtcpu
+;	jruc	nxtcpu
 ;
 ;#wrld2
 ;	movi	str_one,a4
@@ -740,7 +740,7 @@ clear_buffer2
 	move	*a1(PR_TEAMSDEF),a1,L	;number teams defeated (in BITS!!)
 	andi	ALL_TMS_DEFEATD,a1
 	cmpi	ALL_TMS_DEFEATD,a1,L	;Beat them all?
-	jreq	#nonxt			; br=yes
+	jreq	nonxt			; br=yes
 
 ;DJT End
 	movi	BAST_Y_P,a1		;highlight cycle colour
@@ -800,7 +800,7 @@ clear_buffer2
 
 	movi	str_all,a4		" ALL"
 	callr	concat_rom_string
-	jruc	#skipit
+	jruc	skipit
 #not_all
 	movi	NUM_TEAMS,a1		;max value
 	callr	dec_to_asc
@@ -829,8 +829,8 @@ clear_buffer2
 #pg3	SLEEPK	1
 	move	*a13(PC_PLAYNUM),a0
 	calla	get_but_val_cur
-	jrnz	#pg3a
-	dsj	a10,#pg3
+	jrnz	pg3a
+	dsj	a10,pg3
 #pg3a	move	*a13(PC_OBJID),a0	;OBJ ID's created by this PROC
 	calla	obj_del1c		;delete all objs with this ID
 
@@ -990,7 +990,7 @@ trivia_show_info_str
 ;DJT End
 
 
-#*****************************************************************************
+******************************************************************************
 ******************************************************************************
  SUBRP	setup_page
 
@@ -1006,12 +1006,12 @@ trivia_show_info_str
 
 	move	*a13(PC_CENTERX),a0
 	move	@TWOPLAYERS,a1		;0 = NO, 1 = YES 2 players
-	jrz	#no2
+	jrz	no2
 	move	*a13(PC_CENTERXkit),a0
 #no2	move	a0,@mess_cursx		;message cursor pos X
 	rets
 
-#*****************************************************************************
+******************************************************************************
 *-----------------------------------------------------------------------------
  SUBRP	print_teams_defeated
 
@@ -1034,7 +1034,7 @@ trivia_show_info_str
 	move	*a13(PC_CENTERX),a0
 	inc	a0
 	move	@TWOPLAYERS,a1			;0 = NO, 1 = YES 2 players
-	jrz	#no_2p
+	jrz	no_2p
 	move	*a13(PC_CENTERXkit),a0
 #no_2p
 	move	a0,@mess_cursx		;message cursor pos X
@@ -1069,7 +1069,7 @@ trivia_show_info_str
 	movi	NUM_TEAMS,a2
 #next_team
 	srl	1,a1
-	jrnc	#not_def
+	jrnc	not_def
 	PUSH	a1,a2
 	movi	NUM_TEAMS,a0
 	sub	a2,a0			;0-26
@@ -1083,7 +1083,7 @@ trivia_show_info_str
 	move	a0,@mess_cursy		;message cursor pos Y
 	PULL	a1,a2
 #not_def
-	dsj	a2,#next_team
+	dsj	a2,next_team
 
 	rets
 
@@ -1126,7 +1126,7 @@ trivia_show_info_str
 	move	a0,@mess_cursy		;message cursor pos Y
 	PULL	a1,a2
 #def
-	dsj	a2,#next_team2
+	dsj	a2,next_team2
 	rets
 
 
@@ -1135,7 +1135,7 @@ trivia_show_info_str
 #str_def	.string	85h,0	;"DEFEATED",0
 	.even
 
-#*****************************************************************************
+******************************************************************************
 *
 * INPUT:	a0 = number to convert
 *		a1 = max value
@@ -1158,9 +1158,9 @@ trivia_show_info_str
 
 	andi	0f000h,a0
 	srl	3*4,a0
-	jrnz	#no_zero0
+	jrnz	no_zero0
 	move	a3,a3			;leading zero
-	jrz	#skip_zero0
+	jrz	skip_zero0
 #no_zero0
 	inc	a3
 	addi	'0',a0
@@ -1171,9 +1171,9 @@ trivia_show_info_str
 	move	a1,a0
 	andi	0f00h,a0
 	srl	2*4,a0
-	jrnz	#no_zero1
+	jrnz	no_zero1
 	move	a3,a3			;leading zero
-	jrz	#skip_zero1
+	jrz	skip_zero1
 #no_zero1
 	inc	a3
 	addi	'0',a0
@@ -1184,9 +1184,9 @@ trivia_show_info_str
 	move	a1,a0
 	andi	0f0h,a0
 	srl	1*4,a0
-	jrnz	#no_zero2
+	jrnz	no_zero2
 	move	a3,a3			;leading zero
-	jrz	#skip_zero2
+	jrz	skip_zero2
 #no_zero2
 	inc	a3
 	addi	'0',a0
@@ -1206,7 +1206,7 @@ trivia_show_info_str
 
 
 ;DJT Start
-#*****************************************************************************
+******************************************************************************
 *
 * INPUT:	a0 = number to convert (two-digit BCD max)
 *		a1 = max value
@@ -1241,7 +1241,7 @@ trivia_show_info_str
 ;DJT End
 
 
-#*****************************************************************************
+******************************************************************************
 *
 * INPUT:	a0 = number to convert
 * converts value in A0 to an decimal ASCII % string in message_buffer2
@@ -1279,7 +1279,7 @@ trivia_show_info_str
 	rets
 
 
-#*****************************************************************************
+******************************************************************************
 *
 * copies string in message_buffer2 to message_buffer
 *
@@ -1295,10 +1295,10 @@ trivia_show_info_str
 	addk	8,a3
 	movb	*a3,*a2
 	movb	*a3,a0				;NULL?
-	jrnz	#next_char
+	jrnz	next_char
 	rets
 
-#*****************************************************************************
+******************************************************************************
 * concatenates string in message_buffer2 to string in message_buffer
 *-----------------------------------------------------------------------------
  SUBRP	concat_string
@@ -1308,7 +1308,7 @@ trivia_show_info_str
 #next_char
 	addk	8,a2
 	movb	*a2,a0
-	jrnz	#next_char
+	jrnz	next_char
 	subk	8,a2
 
 #next_char2
@@ -1316,11 +1316,11 @@ trivia_show_info_str
 	addk	8,a3
 	movb	*a3,*a2
 	movb	*a3,a0				;NULL?
-	jrnz	#next_char2
+	jrnz	next_char2
 
 	rets
 
-#*****************************************************************************
+******************************************************************************
 *
 * INPUT:	a4 = * null terminated rom string
 *
@@ -1339,11 +1339,11 @@ trivia_show_info_str
 	addk	8,a4
 	movb	*a4,*a1
 	movb	*a4,a0				;NULL ?
-	jrnz	#next_char
+	jrnz	next_char
 
 	rets
 
-#*****************************************************************************
+******************************************************************************
 * INPUT:	a4 = * null terminated rom string
 *
 * concatenates string in rom to string in message_buffer
@@ -1355,7 +1355,7 @@ trivia_show_info_str
 #next_char
 	addk	8,a1
 	movb	*a1,a0
-	jrnz	#next_char
+	jrnz	next_char
 
 	subk	8,a1
 	subk	8,a4
@@ -1365,11 +1365,11 @@ trivia_show_info_str
 	addk	8,a4
 	movb	*a4,*a1
 	movb	*a4,a0				;NULL ?
-	jrnz	#next_char2
+	jrnz	next_char2
 
 	rets
 
-#*****************************************************************************
+******************************************************************************
 * INPUT:	a4 = * null terminated rom string
 *
 * concatenates string in rom to string in message_buffer2
@@ -1380,7 +1380,7 @@ trivia_show_info_str
 #next_char
 	addk	8,a1
 	movb	*a1,a0
-	jrnz	#next_char
+	jrnz	next_char
 
 	subk	8,a1
 	subk	8,a4
@@ -1390,11 +1390,11 @@ trivia_show_info_str
 	addk	8,a4
 	movb	*a4,*a1
 	movb	*a4,a0				;NULL ?
-	jrnz	#next_char2
+	jrnz	next_char2
 
 	rets
 
-#*****************************************************************************
+******************************************************************************
 *
 * INPUT:	a4 = * NULL terminated ASCII string (print_string2)
 *
@@ -1412,32 +1412,32 @@ get_string_len2
 	addk	8,a4
 	movb	*a4,a0
 	andi	0ffh,a0
-	jrz	#done
+	jrz	done
 	cmpi	1,a0
-	jreq	#done
+	jreq	done
 	cmpi	32,a0
-	jrne	#no_space
+	jrne	no_space
 	move	@mess_space_width,a0
 	add	a0,a2
-	jruc	#next_char
+	jruc	next_char
 #no_space
 	sll	5,a0			;x 32 bits
 	move	@message_ascii,a1,L
 	add	a1,a0
 	move	*a0,a1,L		;* image
-	jrz	#next_char
+	jrz	next_char
 	move	*a1,a0			;image width
 	add	a0,a2
 	move	@mess_spacing,a0
 	add	a0,a2
-	jruc	#next_char
+	jruc	next_char
 
 #done
 	move	@mess_spacing,a0
 	sub	a0,a2
 	rets
 
-#*****************************************************************************
+******************************************************************************
 *
 * INPUT:	a4 = * NULL terminated ASCII string (print_string_C2)
 *		centers & prints a text string
@@ -1479,7 +1479,7 @@ print_string_C2
 	PULL	a2,a4
 	rets
 
-#*****************************************************************************
+******************************************************************************
 *
 * INPUT:	a4 = * NULL terminated ASCII string (print_string_C2)
 *		right justifies & prints a text string
@@ -1511,7 +1511,7 @@ print_string_R2
 	PULL	a2,a4
 	rets
 
-#*****************************************************************************
+******************************************************************************
 *
 * INPUT:	a4 = * NULL terminated ASCII string (print_string2)
 *
@@ -1538,9 +1538,9 @@ print_string2b
 	addk	8,a4
 	movb	*a4,a0
 	andi	0ffh,a0
-	jrz	#done
+	jrz	done
 	cmpi	1,a0
-	jrne	#no_newline
+	jrne	no_newline
 ;newline
 	move	@mess_line_spacing,a0
 	move	@mess_cursy,a1
@@ -1551,22 +1551,22 @@ print_string2b
 	addi	8,a4			;skip newline char
 	call	a0
 	subi	8,a4
-	jruc	#next_char
+	jruc	next_char
 #no_newline
 	cmpi	32,a0
-	jrne	#no_space
+	jrne	no_space
 ;space
 	move	@mess_space_width,a0
 	move	@mess_cursx2,a1
 	add	a0,a1
 	move	a1,@mess_cursx2
-	jruc	#next_char
+	jruc	next_char
 #no_space
 	sll	5,a0			;x 32 bits
 	move	@message_ascii,a1,L
 	add	a1,a0
 	move	*a0,a2,L		;* image
-	jrz	#next_char
+	jrz	next_char
 
 	PUSH	a4,a8
 	move	@message_palette,b0,L	;* palette
@@ -1587,20 +1587,20 @@ print_string2b
 	add	a0,a1
 	move	a1,@mess_cursx2
 	PULL	a4,a8
-	jruc	#next_char
+	jruc	next_char
 
 #done
 	rets
 
 
-#*****************************************************************************
+******************************************************************************
 *
 *-----------------------------------------------------------------------------
 
  SUBR	kern_chars
 
 	movb	*a4,a0
-	jrz	#nok
+	jrz	nok
 	move	@mess_cursx2,a1
 	add	a0,a1
 	move	a1,@mess_cursx2
@@ -1614,7 +1614,7 @@ print_string2b
 	rets
 
 
-#*****************************************************************************
+******************************************************************************
 * INPUT	:   a2 = * to message
 *-----------------------------------------------------------------------------
  SUBRP	setup_message
@@ -1640,7 +1640,7 @@ print_string2b
 	rets
 
 
-#*****************************************************************************
+******************************************************************************
 * INPUT	:	a2 = * to message
 *-----------------------------------------------------------------------------
  SUBRP	print_message
@@ -1671,7 +1671,7 @@ print_string2b
 	rets
 
 
-#*****************************************************************************
+******************************************************************************
 
 num_str_tbl
 	.long	str_none
@@ -1696,7 +1696,7 @@ init_convert_img
 	.long	BAST8T_S,BAST8T_T,BAST8T_U,BAST8T_V,BAST8T_W,BAST8T_X
 	.long	BAST8T_Y,BAST8T_Z,BAST8TEXC,0,BAST8TSPC
 
-#*****************************************************************************
+******************************************************************************
 *            FONT TABLES
 ******************************************************************************
 

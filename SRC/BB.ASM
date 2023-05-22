@@ -326,7 +326,7 @@
 	calla	InitPIC
 
 ;	.if	DEBUG
-;	move	a0,@>1e00000		;Clr FPGA rom protect
+;	move	a0,@01e00000H		;Clr FPGA rom protect
 ;	.endif
 
 ; Moved to PU DIAGS
@@ -349,11 +349,11 @@
 	.if	TUNIT
 	move	@TALKPORT,a0		;Check if watchdog was real
 	btst	B_WDOG,a0		;Bit should be low if dog fired
-	jrnz	#cont			;No watchdog?
+	jrnz	cont			;No watchdog?
 	.endif
 
 	movk	AUDLOCK,a0		;Watchdog
-	jruc	#aud
+	jruc	aud
 
 #lockup
 
@@ -363,8 +363,8 @@
 #cont
 
 ;	move	@clipsrunning,a0,L	;>Restore game if clips crashed
-;	cmpi	>12345678,a0
-;	jrne	#notclip		;Not a clip reset?
+;	cmpi	012345678H,a0
+;	jrne	notclip		;Not a clip reset?
 ;
 ;	calla	io_init			;Initialize the I/O regs
 ;	movi	DIE+X2E,a0
@@ -398,7 +398,7 @@
 initp50
 	calla	READ_DIP		;skip if UJ2 bit 6 set
 	btst	6,a0
-	jrnz	#nopt
+	jrnz	nopt
 	jauc	POWERTST		;board test etc...
 #nopt
 
@@ -426,10 +426,10 @@ initp50
 	move	@SOUNDIRQ,a0		;Read watchdog status
 	btst	8,a0			;Is this reset from a watchdog?
 ;DJT Start
-	jrnz	#cont			; br=no
+	jrnz	cont			; br=no
 
 	movk	AUDLOCK,a0		;Audit a Dog
-	jruc	#aud
+	jruc	aud
 #cont
 	move	@WDOGRAM,a0,L		;Has machine been initialized?
 	cmpi	WDOGNUM,a0
@@ -463,7 +463,7 @@ initp50
 	.endif
 
 
-#********************************
+*********************************
 *
 
  SUBR	WARMSET
@@ -492,7 +492,7 @@ initp50
 	calla	INIT_TAB		;Reset todays high score table
 
 ;	movk	1,a0
-;	move	a0,@>fff80000,L
+;	move	a0,@0fff80000H,L
 
 	.if	DEBUG
 	callr	testcode
@@ -501,7 +501,7 @@ initp50
 ;;;;	CREATE	SNDMON_PID,dcs_watchdog
 
 	calla	CKDIAG
-	jrz	#main_go		;No diag switches closed?
+	jrz	main_go		;No diag switches closed?
 
 	CREATE	DIAG_PID,DIAG		;Fire off the diag process
 	jruc	mainlp
@@ -516,7 +516,7 @@ initp50
 	CREATE0	amode_start		;Fire up the attract mode
 
 
-#*******************************
+********************************
 * Main loop
 
  SUBR	mainlp
@@ -552,9 +552,9 @@ mainpok
 	jrle	#fok
 	subk	1,a0
 	move	a0,@passfudge
-	jrnz	#fok
+	jrnz	fok
 	move	@ballpnum,a14
-	jrnn	#fok
+	jrnn	fok
 	move	a0,@ballprcv_p,L
  .if DEBUG
 	LOCKUP
@@ -581,7 +581,7 @@ mainpok
 	jrle	#ok4
 	subk	1,a0
 	move	a0,@assist_delay
-	jrnz	#ok4
+	jrnz	ok4
 	clr	a1
 	move	a1,@assist_plyr
 #ok4
@@ -590,7 +590,7 @@ mainpok
 	subk	1,a0
 	move	a0,@rebound_delay
 ;Why...
-;	jrnz	#ok5
+;	jrnz	ok5
 ;	clr	a1
 ;	move	a1,@rebound_delay
 
@@ -616,7 +616,7 @@ mainpok
 ;	.bss	last_snd_st,16
 ;	move	@_soundirq_addr,a0
 ;	move	*a0,a0
-;	andi	>400,a0
+;	andi	0400H,a0
 ;	move	@last_snd_st,a14
 ;	cmp	a0,a14
 ;	jrz	wsr_1
@@ -627,7 +627,7 @@ mainpok
 	.endif
 
 	move	@HALT,a0
-	jrnz	#skipit
+	jrnz	skipit
 	move	@last_name_time,a0
 	inc	a0
 	move	a0,@last_name_time	;# ticks since player name called
@@ -651,7 +651,7 @@ mainpok
 
 
 
-#***************************************************************
+****************************************************************
 * Unstack switch queue
 
 
@@ -661,9 +661,9 @@ mainpok
 ;
 ;#lp	move	@swstack_p,a3,L
 ;	cmpi	swstacktop,a3		;Stack at start?
-;	jreq	#x			;Empty?
+;	jreq	x			;Empty?
 ;	move	@FREE,a0,L
-;	jrz	#x			;No processes left?
+;	jrz	x			;No processes left?
 ;
 ;	move	*a3+,a0			;Get entry
 ;	move	a3,@swstack_p,L		;Update stack
@@ -674,12 +674,12 @@ mainpok
 ;	add	a0,a2			;*3
 ;	addi	switch_t,a2
 ;	move	*a2+,a1
-;	jrz	#lp			;No PID?
+;	jrz	lp			;No PID?
 ;	move	*a2+,a7,L		;*Code
 ;	movi	ACTIVE,a13		;*Proc list
 ;	calla	GETPRC
 ;	addk	1,a4
-;	jruc	#lp
+;	jruc	lp
 ;#x	subk	1,a4
 ;	jrle	#xx
 ;	LOCKUP
@@ -687,9 +687,9 @@ mainpok
 
 #lp	move	@swstack_p,a3,L
 	cmpi	swstacktop,a3		;Stack at start? Yes if =
-	jreq	#x
+	jreq	x
 	move	@FREE,a0,L		;Any procs left? No if 0
-	jrz	#x
+	jrz	x
 
 	move	*a3+,a0			;Get entry
 	move	a3,@swstack_p,L		;Update stack ptr
@@ -700,11 +700,11 @@ mainpok
 	add	a0,a2			;*3 for tbl offset from
 	addi	switch_t,a2		; table start
 	move	*a2+,a1			;Get switch PID; none if 0
-	jrz	#lp
+	jrz	lp
 	move	*a2+,a7,L		;*Switch code
 	movi	ACTIVE,a13		;*Proc list
 	calla	GETPRC
-	jruc	#lp
+	jruc	lp
 
 #x	rets
 
@@ -768,21 +768,21 @@ switch_t	;(Process ID or 0, *Routine)	;Put in audit??
  SUBR	plyr_strtb1
 
 	move	@TWOPLAYERS,a0		;0 = NO, 1 = YES 2 players
-	jrnz	#strtb2
+	jrnz	strtb2
 
 	clr	a8			;A8=Player #
 	movi	P1DATA,a11		;A11=*plyr data
 
 	move	@GAMSTATE,a0
 	cmpi	IN_PRE_PLYR_DESIGN,a0
-	jreq	#psb_x			;br=dont take credits (entering CREATE PLAYER)
+	jreq	psb_x			;br=dont take credits (entering CREATE PLAYER)
 	cmpi	INPLYRDESIGN,a0		;player designing character ?
 	jrne	plyr_strtbut		;br=no
 
 	move	@p1_slide_box_flag,a0
-	jrnz	#psb_x			;br=process EXISTS...dont allow
+	jrnz	psb_x			;br=process EXISTS...dont allow
 	CREATE	P1_BOX_SLIDE_PID,slide_info_box_on_off	;br=tell player -CREDIT NOT TAKEN
-	jruc	#psb_x			;dont process further
+	jruc	psb_x			;dont process further
 
 
 ;-------------------
@@ -790,21 +790,21 @@ switch_t	;(Process ID or 0, *Routine)	;Put in audit??
  SUBR	plyr_strtb2
 
 	move	@TWOPLAYERS,a0		;0 = NO, 1 = YES 2 players
-	jrnz	#strtb3
+	jrnz	strtb3
 #strtb2
 	movk	1,a8
 	movi	P2DATA,a11
 
 	move	@GAMSTATE,a0
 	cmpi	IN_PRE_PLYR_DESIGN,a0
-	jreq	#psb_x			;br=dont take credits (entering CREATE PLAYER)
+	jreq	psb_x			;br=dont take credits (entering CREATE PLAYER)
 	cmpi	INPLYRDESIGN,a0		;player designing character ?
 	jrne	plyr_strtbut		;br=no
 
 	move	@p2_slide_box_flag,a0
-	jrnz	#psb_x			;br=process EXISTS...dont allow
+	jrnz	psb_x			;br=process EXISTS...dont allow
 	CREATE	P2_BOX_SLIDE_PID,slide_info_box_on_off	;br=tell player -CREDIT NOT TAKEN
-	jruc	#psb_x			;dont process further
+	jruc	psb_x			;dont process further
 
 
 ;-------------------
@@ -812,21 +812,21 @@ switch_t	;(Process ID or 0, *Routine)	;Put in audit??
  SUBR	plyr_strtb3
 
 	move	@TWOPLAYERS,a0		;0 = NO, 1 = YES 2 players
-	jrnz	#psb_x
+	jrnz	psb_x
 #strtb3
 	movk	2,a8
 	movi	P3DATA,a11
 
 	move	@GAMSTATE,a0
 	cmpi	IN_PRE_PLYR_DESIGN,a0
-	jreq	#psb_x			;br=dont take credits (entering CREATE PLAYER)
+	jreq	psb_x			;br=dont take credits (entering CREATE PLAYER)
 	cmpi	INPLYRDESIGN,a0		;player designing character ?
 	jrne	plyr_strtbut		;br=no
 
 	move	@p3_slide_box_flag,a0
-	jrnz	#psb_x			;br=process EXISTS...dont allow
+	jrnz	psb_x			;br=process EXISTS...dont allow
 	CREATE	P3_BOX_SLIDE_PID,slide_info_box_on_off	;br=tell player -CREDIT NOT TAKEN
-	jruc	#psb_x			;dont process further
+	jruc	psb_x			;dont process further
 
 
 ;-------------------
@@ -834,21 +834,21 @@ switch_t	;(Process ID or 0, *Routine)	;Put in audit??
  SUBR	plyr_strtb4
 
 	move	@TWOPLAYERS,a0		;0 = NO, 1 = YES 2 players
-	jrnz	#psb_x
+	jrnz	psb_x
 
 	movk	3,a8
 	movi	P4DATA,a11
 
 	move	@GAMSTATE,a0
 	cmpi	IN_PRE_PLYR_DESIGN,a0
-	jreq	#psb_x			;br=dont take credits (entering CREATE PLAYER)
+	jreq	psb_x			;br=dont take credits (entering CREATE PLAYER)
 	cmpi	INPLYRDESIGN,a0		;player designing character ?
 	jrne	plyr_strtbut		;br=no
 
 	move	@p4_slide_box_flag,a0
-	jrnz	#psb_x			;br=process EXISTS...dont allow
+	jrnz	psb_x			;br=process EXISTS...dont allow
 	CREATE	P4_BOX_SLIDE_PID,slide_info_box_on_off	;br=tell player -CREDIT NOT TAKEN
-	jruc	#psb_x			;dont process further
+	jruc	psb_x			;dont process further
 
 
 ;--------------------
@@ -860,7 +860,7 @@ plyr_strtbut
 
 	move	@GAMSTATE,a1
 	cmpi	INAMODE,a1		;In attract? No if !=
-	jrne	#chkstrt
+	jrne	chkstrt
 	calla	CR_STRTP		;Yes. Have credits to start? Yes if >=
 	jrhs	#chkstrt
 
@@ -888,30 +888,30 @@ plyr_strtbut
 
 #chkstrt
 	cmpi	INPLYRINFO,a1		;No start if on plyr info scrn
-	jreq	#psb_x
+	jreq	psb_x
 
 	move	@WFLG,a0		;No start if window is growing
-	jrnz	#psb_x
+	jrnz	psb_x
 	move	@ENTERON,a0		;No start if initials being entered
-	jrnz	#psb_x
+	jrnz	psb_x
 
 	move	@pleasewt,a0		;No start if plyr should be waiting
 	btst	a8,a0			;(bit #=plyr #)
-	jrnz	#psb_x
+	jrnz	psb_x
 
-	move	@PSTATUS,a0		;Chk plyr status. Already in game?
+	move	@PSTATUS2,a0		;Chk plyr status. Already in game?
 	btst	a8,a0			;(bit #=plyr #)
-	jrz	#startplyr		;No if 0
+	jrz	startplyr		;No if 0
 
 	move	@game_purchased,a0	;Yes. Already bought whole game?
 	btst	a8,a0			;(bit #=plyr #)
-	jrz	#chkaddmore
+	jrz	chkaddmore
 ;Yes. Show max'd message here & die
 	DIE
 
 #chkaddmore
 	cmpi	INGAME,a1		;Don't add more during game play
-	jrz	#psb_x
+	jrz	psb_x
 
 	calla	CR_CONTP		;Have credits to continue?
 	jrlo	conttimers_cnt		;No if < (do continue timers & die)
@@ -929,7 +929,7 @@ plyr_strtbut
 
 	callr	paidcreds_add		;Update everything & die
 	calla	update_scorebrd
-	jruc	#psb_x
+	jruc	psb_x
 
 
 ;--------------------
@@ -937,9 +937,9 @@ plyr_strtbut
 
 #startplyr
 	move	@GAMSTATE,a1
-	jrn	#psb_x			;In diagnostics? Yes if - (go die)
+	jrn	psb_x			;In diagnostics? Yes if - (go die)
 	cmpi	INGAMEOV,a1		;In game over? Yes if = (go die)
-	jreq	#psb_x
+	jreq	psb_x
 
 	cmpi	INAMODE,a1		;New start from attract? Yes if =
 	jreq	game_start
@@ -947,12 +947,12 @@ plyr_strtbut
 	jreq	game_start2
 
 	cmpi	ININTRO,a1		;New start on stats scrn? Yes if =
-	jreq	#psbstart
+	jreq	psbstart
 
 	move	@game_time,a14,L	;Chk game clk. Do start if 0
-	jrnz	#notz
+	jrnz	notz
 	cmpi	INGAME,a1
-	jrnz	#psbstart
+	jrnz	psbstart
 	.if	DEBUG
 	LOCKUP
 	.endif
@@ -963,15 +963,15 @@ plyr_strtbut
 
 	movk	ADJFREPL,a0		;Well into qrtr but do start if in
 	calla	GET_ADJ			; free play (is !0)
-	jrnz	#psbstart
+	jrnz	psbstart
 
 	move	@PSTATUS2,a0		;Not free. Chk for previous start
 	btst	a8,a0			;(bit #=plyr #)
-	jrz	#isnew			;Player never started? Never if 0
+	jrz	isnew			;Player never started? Never if 0
 
 	calla	CR_CONTP		;Has. Have credits to continue?
 	jalo	SUCIDE			;No if < (go die)
-	jruc	#dowaitmes
+	jruc	dowaitmes
 #isnew
 	calla	CR_STRTP		;Hasn't. Have credits to start?
 	jalo	SUCIDE			;No if < (go die)
@@ -991,11 +991,11 @@ plyr_strtbut
 	srl	1,a14
 	move	@winningteam,a0
 	cmp	a14,a0			;Was plyr on winning team?
-	jreq	#psbfree		;Yes if = (start is free)
+	jreq	psbfree		;Yes if = (start is free)
 
 	move	@PSTATUS2,a0		;No. Chk for previous start
 	btst	a8,a0			;(bit #=plyr #)
-	jrz	#psbcred		;Player never started? Never if 0
+	jrz	psbcred		;Player never started? Never if 0
 
 	calla	CR_CONTP		;Has. Have credits to continue?
 	jrlo	conttimers_cnt		;No if < (do continue timers & die)
@@ -1008,7 +1008,7 @@ plyr_strtbut
 
 	movk	AUD1CONT,a0		;Audit a continue
 	calla	AUD1
-	jruc	#dostart
+	jruc	dostart
 
 #psbcred
 	calla	CR_STRTP		;Hasn't. Have credits to start?
@@ -1021,7 +1021,7 @@ plyr_strtbut
 
 	move	@GAMSTATE,a1
 	subk	ININTRO,a1		;Don't audit a start if in intro?!!!
-	jreq	#dostart
+	jreq	dostart
 
 	movk	AUD1STRT,a0		;Audit a start
 	calla	AUD1
@@ -1033,11 +1033,11 @@ plyr_strtbut
 	sll	a8,a7
 
 	cmpi	ININTRO,a1		;If in intro, do regular start
-	jreq	#do_psb_intro
+	jreq	do_psb_intro
 
 	movk	ADJFREPL,a0		;If in free play, do free play start
 	calla	GET_ADJ
-	jrnz	#do_psb_free
+	jrnz	do_psb_free
 
 	move	@game_time,a14,L	;In-game start. Chk game clk
 	cmpi	2020000h,a14		;!!!Do start if >= 2:20.0 remain
@@ -1046,7 +1046,7 @@ plyr_strtbut
 	movk	ADJCSTRT,a0		;Get # credits req'd to start
 	move	@PSTATUS2,a14		;Want start or continue credits?
 	btst	a8,a14			;(bit #=plyr #)
-	jrz	#psb1			;New start if 0
+	jrz	psb1			;New start if 0
 	movk	ADJCCONT,a0		;Get # credits req'd to continue
 #psb1
 	calla	GET_ADJ
@@ -1063,13 +1063,13 @@ plyr_strtbut
 	movk	ADJCSTRT,a0		;Get # credits req'd to start
 	move	@PSTATUS2,a14		;Want start or continue credits?
 	btst	a8,a14			;(bit #=plyr #)
-	jrz	#psb2			;New start if 0
+	jrz	psb2			;New start if 0
 	movk	ADJCCONT,a0		;Get # credits req'd to continue
 #psb2
 	calla	GET_ADJ
 	callr	paidcreds_add
 
-	move	@PSTATUS,a14		;Set plyr in-game bit
+	move	@PSTATUS2,a14		;Set plyr in-game bit
 	or	a7,a14
 	move	a14,@PSTATUS
 
@@ -1078,7 +1078,7 @@ plyr_strtbut
 	move	a14,@PSTATUS2
 
 	move	@gmqrtr,a0
-	jrz	#inintro_x
+	jrz	inintro_x
 
 	move	@newptr,a0,L
 	move	a11,*a0+,L		;Save PnDATA ptr
@@ -1087,19 +1087,19 @@ plyr_strtbut
 	move	a1,*a0,L
 	move	a0,@newptr,L
 
-	jruc	#inintro_x
+	jruc	inintro_x
 
 #do_psb_free
 	movk	ADJCSTRT,a0		;Get # credits req'd to start
 	move	@PSTATUS2,a14		;Want start or continue credits?
 	btst	a8,a14			;(bit #=plyr #)
-	jrz	#psb3			;New start if 0
+	jrz	psb3			;New start if 0
 	movk	ADJCCONT,a0		;Get # credits req'd to continue
 #psb3
 	calla	GET_ADJ
 	callr	paidcreds_add
 
-	move	@PSTATUS,a14		;Set plyr in-game bit
+	move	@PSTATUS2,a14		;Set plyr in-game bit
 	or	a7,a14
 	move	a14,@PSTATUS
 
@@ -1121,14 +1121,14 @@ plyr_strtbut
  
 	move	@GAMSTATE,a14
 	subk	ININTRO,a14		;In intro? No credit imgs to update
-	jrz	#frp_1			; if so (if 0)
+	jrz	frp_1			; if so (if 0)
  
 	movi	CLSDEAD|creditid,a0
 	calla	obj_del1c		;Kill credit imgs
 	calla	prt_credits		;Do updated credit imgs
 #frp_1
 	move	*a11(ply_messages),a0,L	;Any insert|press|please msg?
-	jrz	#imgson_x		;Done with setup if not (if 0)
+	jrz	imgson_x		;Done with setup if not (if 0)
 
 	calla	DELOBJ			;Kill the msg obj
 	clr	a0
@@ -1142,7 +1142,7 @@ plyr_strtbut
 	move	a8,a0
 	sll	5,a0
 	move	@TWOPLAYERS,a14		;0 = NO, 1 = YES 2 players
-	jrz	#4_plyrs
+	jrz	4_plyrs
 	addi	4*32,a0
 #4_plyrs
 	addi	#cr_box,a0
@@ -1154,7 +1154,7 @@ plyr_strtbut
 	addi	16+16+16+32,a11
 
 	move	*a9,a0,L
-	jrz	#cv
+	jrz	cv
 	calla	DELOBJ
 #cv
 	callr	prt_status
@@ -1180,7 +1180,7 @@ plyr_strtbut
 ;	addi	plyr_data_tbl,a9		;>Setup for created plyr name
 ;	move	*a9,a0,L
 ;	move	*a0(PR_CREATED_PLYR),a14
-;	jrz	#inintro			;!!!Wanna go here?
+;	jrz	inintro			;!!!Wanna go here?
 ;	addi	PR_NAME1,a0
 ;	movi	[END_CHAR,END_CHAR],a14
 ;	move	*a0,a1,L
@@ -1237,7 +1237,7 @@ sticklst
 	movk	4,a9
 start1
 	move	*a10+,a11,L
-	jrz	#done
+	jrz	done
 	move	*a10+,a8
 	CREATE0	#frepl
 	dsj	a9,start1
@@ -1247,7 +1247,7 @@ start1
 #clp
 	move	a0,*a2+,L
 	move	a0,*a2+,W
-	dsjs	a14,#clp
+	dsjs	a14,clp
 
 	DIE
 
@@ -1270,7 +1270,7 @@ paidcreds_add
 	srl	1,a14
 	move	@winningteam,a2
 	cmp	a14,a2
-	jrnz	#nothalf
+	jrnz	nothalf
 	sll	3,a0			;Double paid credits
 
 #nothalf
@@ -1291,17 +1291,17 @@ paidcreds_add
 	movk	4,a2
 	sub	a1,a2
 	cmp	a2,a14
-	jrlt	#no
+	jrlt	no
 
 	move	@GAMSTATE,a0
 	cmpi	INAMODE,a0
-	jreq	#no
+	jreq	no
 	move	@gmqrtr,a14
-	jrnz	#full
+	jrnz	full
 ;If matchup scrn is on, still do this!
 	.ref	inmatchup
 	move	@inmatchup,a0
-	jrz	#no
+	jrz	no
 
 #full
 	move	@game_purchased,a0	;set purchased bit
@@ -1341,7 +1341,7 @@ paidcreds_add
 	rets
 
 
-#********************************
+*********************************
 * A0=units to add
 
 add_plyr_time
@@ -1354,14 +1354,14 @@ add_plyr_time
 
 	move	@GAMSTATE,a0
 	subk	ININTRO,a0
-	jreq	#x
+	jreq	x
 	move	*a11(ply_meter_imgs),a0,L
-	jrz	#nxt
+	jrz	nxt
 
 	move	*a11(ply_meter_imgs+32),a0,L
 	move	*a0(OIMG),a1,L
 	cmpi	start,a1
-	jrnz	#nxt
+	jrnz	nxt
 	movk	9,a1
 	move	a1,*a0(OYPOS)
 #nxt
@@ -1381,7 +1381,7 @@ or_t	.word	1,2,4,8
 	DIE
 
 
-#***************************************************************
+****************************************************************
 * Start game from INFREEPRICE mode (Process)
 * A8=Plyr # (0-3)
 * A11=*PxDATA
@@ -1394,7 +1394,7 @@ game_start2
 	jrz	gs2
 
 
-#***************************************************************
+****************************************************************
 * Start game from amode (Process)
 * A8=Plyr # (0-3)
 * A11=*PxDATA
@@ -1417,7 +1417,7 @@ gs2
 	movi	P1DATA,a1
 	movi	PDSIZE*4/16,A2
 #zlp	move	a0,*a1+
-	dsj	a2,#zlp
+	dsj	a2,zlp
 
 	clr	a0
 	move	a0,@gmqrtr
@@ -1461,7 +1461,7 @@ gs2
 	movi	INPLYRINFO,a0		;>START button lock-out
 	move	a0,@GAMSTATE
 	subk	INAMODE,a1
-	jrne	#notnew
+	jrne	notnew
 
 	calla	display_blank
 	calla	WIPEOUT
@@ -1542,7 +1542,7 @@ gs2
 	CREATE0	monitor_fullgame
 
 	move	@winningteam,a1
-	jrnn	#skip
+	jrnn	skip
 
 	movk	1,a0
 	move	a0,@HALT
@@ -1601,15 +1601,15 @@ gs2
 ;	.ref	get_stick_val_cur
 ;	calla	get_stick_val_cur
 ;	subk	1,a0
-;	jrnz	#noqktriv
+;	jrnz	noqktriv
 ;	move	a8,a0
 ;	.ref	get_but_val_cur
 ;	calla	get_but_val_cur
 ;	subk	7,a0
-;	jrnz	#noqktriv
+;	jrnz	noqktriv
 ;	movk	1,a0
 ;	move	a0,@TRIVIA_TEST
-;	jruc	#redo
+;	jruc	redo
 ;#noqktriv
 ;;FIXX!!! end
 
@@ -1625,55 +1625,55 @@ gs2
  	calla	get_all_buttons_cur2
 ;If stick held up at start, show outdoor court
 	btst	0,a2
-	jrz	#nooutdoor
+	jrz	nooutdoor
 	move	a2,@pup_court
 #nooutdoor
 ;If pass button is pressed at start, allow rim-detect single-stepping
 	clr	a1
 	move	a1,@RIM_STEP
 	btst	1,a0
-	jrz	#norimstep
+	jrz	norimstep
 	move	a0,@RIM_STEP
 #norimstep
 ;If turbo button is pressed at start, turn off clock
 	clr	a1
 	move	a1,@CLOCK_OFF
 	btst	2,a0
-	jrz	#noclkoff
+	jrz	noclkoff
 	move	a0,@CLOCK_OFF
 #noclkoff
 ;If shoot button is pressed at start, skip initials & go to game
 	clr	a1
 	move	a1,@QUICK_TIP
 	btst	0,a0
-	jrz	#normal
+	jrz	normal
 	move	a0,@QUICK_TIP
 	move	a0,@pup_showshotper
 
 	move	a8,a8
-	jrz	#p1bp
+	jrz	p1bp
 	CREATE0	plyr_strtb1
 #p1bp
 	cmpi	1,a8
-	jrz	#p2bp
+	jrz	p2bp
 	CREATE0	plyr_strtb2
 #p2bp
 	cmpi	2,a8
-	jrz	#p3bp
+	jrz	p3bp
 	CREATE0	plyr_strtb3
 #p3bp
 	cmpi	3,a8
-	jrz	#p4bp
+	jrz	p4bp
 	CREATE0	plyr_strtb4
 #p4bp
 
 	SLEEPK	1
 
-	movk	>f,a0
+	movk	0fH,a0
 	move	a0,@PSTATUS
 	move	a0,@PSTATUS2		;Player has started bit flags
 	
-	jruc	#skip_entry				;Button pressed?
+	jruc	skip_entry				;Button pressed?
 
 #normal
 	.endif
@@ -1681,9 +1681,9 @@ gs2
 #redo
 	JSRP	initials_entry
 	move	a0,a0			;is plyr coming from CREATE PLAYER ?
-	jrz	#ok			;br=no
+	jrz	ok			;br=no
 	jauc	amode_start		;Start attract mode
-;;;;	jrne	#redo
+;;;;	jrne	redo
 
 	.if	DEBUG
 #skip_entry
@@ -1693,7 +1693,7 @@ gs2
 	move	@team2,a1
 	and	a0,a1
 	move	a1,a1
-	jrnn	#bomb_out		;restart attract mode etc...
+	jrnn	bomb_out		;restart attract mode etc...
 
 	jauc	amode_start		;Start attract mode
 
@@ -1742,7 +1742,7 @@ paid_t	.long	P1DATA+crds_paid,P2DATA+crds_paid,P3DATA+crds_paid
 ;DJT Start
 ;;;;	.ref	security_chk
 ;DJT End
-;;;;	movi	security_chk->1df60,a8
+;;;;	movi	security_chk-01df60H,a8
 
 	movk	1,a0
 	move	a0,@dpageflip		;ON
@@ -1778,10 +1778,10 @@ paid_t	.long	P1DATA+crds_paid,P2DATA+crds_paid,P3DATA+crds_paid
 ;-----------
 ;This is checksummed!
 ;seccall1
-;	move	a8,a1			;>Check security
-;	addi	>1df60,a1
+;	move	a8,a1			;0CHheck security
+;	addi	01df60H,a1
 ;	getpc	a7
-;	addi	>40,a7
+;	addi	040H,a7
 ;	move	a7,-*sp,L
 ;	jump	a1			;Rets: A0=0 if OK!
 ;seccall1end
@@ -1850,11 +1850,11 @@ paid_t	.long	P1DATA+crds_paid,P2DATA+crds_paid,P3DATA+crds_paid
 ;	movi	sounds_list,a1
 ;#slp
 ;	move	a0,*a1+
-;	dsj	a2,#slp
+;	dsj	a2,slp
 
 
 	move	@pup_court,a14		;Outdoor court?
-	jrz	#nootd			; br=no
+	jrz	nootd			; br=no
 	movk	OTD_CNT-1,a0
 	calla	RNDRNG0
 	sll	5,a0
@@ -1865,12 +1865,12 @@ paid_t	.long	P1DATA+crds_paid,P2DATA+crds_paid,P3DATA+crds_paid
 	clr	a0
 	clr	a1
 	clr	a3
-	movi	>8000,a4
+	movi	08000H,a4
 	clr	a5
 	clr	a6
 	clr	a7
 	calla	BEGINOBJ2
-	jruc	#crtpset
+	jruc	crtpset
 #nootd
 	move	@team1,a0
 	sll	6,a0
@@ -1909,14 +1909,14 @@ paid_t	.long	P1DATA+crds_paid,P2DATA+crds_paid,P3DATA+crds_paid
 	move	a0,@gndstat		;On
 
 
-;	jruc	#skip3d
+;	jruc	skip3d
 ;	CREATE0	_3d_test
 ;#skip3d
 
 
 	move	@GAMSTATE,a0
 	subk	INAMODE,a0
-	jreq	#demo
+	jreq	demo
 
 	movk	INGAME,a0
 	move	a0,@GAMSTATE
@@ -1986,15 +1986,15 @@ paid_t	.long	P1DATA+crds_paid,P2DATA+crds_paid,P3DATA+crds_paid
 	callr	start_arws
 
 ;	move	@SWITCH,a0
-;	andi	>7072,a0
-;	jrnz	#no3d
+;	andi	07072H,a0
+;	jrnz	no3d
 ;
 ;	move	@GAMSTATE,a0
 ;	subk	INAMODE,a0
-;	jreq	#no3d
+;	jreq	no3d
 ;
 ;	move	@played3d,a0
-;	jrnz	#no3d
+;	jrnz	no3d
 ;
 ;	movk	1,a0
 ;	move	a0,@played3d
@@ -2106,7 +2106,7 @@ crt_pals_z
 ;	movi	ARWPID,a0
 ;	calla	obj_del1c
 
-	movi	ARWPID,a1			;>Do init stuff for humans
+	movi	ARWPID,a1			;0DHo init stuff for humans
 	movi	plyr_lost,a7,L
 
 	movk	3,a10				;Pass plyr #
@@ -2171,15 +2171,15 @@ crt_pals_z
 ;	move	*a0(plyr_attrib_p),a0,L
 ;	move	*a0(PAT_HEADT_p),a0,L
 ;	cmpi	RA_H,a0
-;	jrnz	#ck2
+;	jrnz	ck2
 ;;	cmpi	EB_H,a0
-;;	jrz	#doit1
+;;	jrz	doit1
 ;;	cmpi	JTO_H,a0
-;;	jrnz	#ck2
+;;	jrnz	ck2
 ;
 ;;	move	@special_heads,a0
 ;;	cmpi	32,a0
-;;	jrnz	#ck2
+;;	jrnz	ck2
 ;
 ;#doit1	clr	a11
 ;	movi	P1DATA,a10
@@ -2192,15 +2192,15 @@ crt_pals_z
 ;	move	*a0(plyr_attrib_p),a0,L
 ;	move	*a0(PAT_HEADT_p),a0,L
 ;	cmpi	RA_H,a0
-;	jrnz	#ck3
+;	jrnz	ck3
 ;;	cmpi	EB_H,a0
-;;	jrz	#doit2
+;;	jrz	doit2
 ;;	cmpi	JTO_H,a0
-;;	jrnz	#ck3
+;;	jrnz	ck3
 ;
 ;;	move	@special_heads+10h,a0
 ;;	cmpi	32,a0
-;;	jrnz	#ck3
+;;	jrnz	ck3
 ;
 ;#doit2	movk	1,a11
 ;	movi	P2DATA,a10
@@ -2213,15 +2213,15 @@ crt_pals_z
 ;	move	*a0(plyr_attrib_p),a0,L
 ;	move	*a0(PAT_HEADT_p),a0,L
 ;	cmpi	RA_H,a0
-;	jrnz	#ck4
+;	jrnz	ck4
 ;;	cmpi	EB_H,a0
-;;	jrz	#doit3
+;;	jrz	doit3
 ;;	cmpi	JTO_H,a0
-;;	jrnz	#ck4
+;;	jrnz	ck4
 ;
 ;;	move	@special_heads+20h,a0
 ;;	cmpi	32,a0
-;;	jrnz	#ck4
+;;	jrnz	ck4
 ;
 ;#doit3	movk	2,a11
 ;	movi	P3DATA,a10
@@ -2234,15 +2234,15 @@ crt_pals_z
 ;	move	*a0(plyr_attrib_p),a0,L
 ;	move	*a0(PAT_HEADT_p),a0,L
 ;	cmpi	RA_H,a0
-;	jrnz	#ck5
+;	jrnz	ck5
 ;;	cmpi	EB_H,a0
-;;	jrz	#doit4
+;;	jrz	doit4
 ;;	cmpi	JTO_H,a0
-;;	jrnz	#ck5
+;;	jrnz	ck5
 ;
 ;;	move	@special_heads+30h,a0
 ;;	cmpi	32,a0
-;;	jrnz	#ck5
+;;	jrnz	ck5
 ;
 ;#doit4	movk	3,a11
 ;	movi	P4DATA,a10
@@ -2253,7 +2253,7 @@ crt_pals_z
 ;#ck5
 ;	DIE
 
-#*******************************
+********************************
 * Tell idiots to use turbo for running if they aren't (Process)
 
 check_idiot
@@ -2262,9 +2262,9 @@ check_idiot
 
 #c1	SLEEP	TSEC
 	move	@HALT,a0
-	 jrnz	#c1
+	 jrnz	c1
 
-	dsj	a10,#c1
+	dsj	a10,c1
 
 	movi	30,a2
 
@@ -2297,7 +2297,7 @@ check_idiot
 ;	movi	organ1_snd,a0
 ;	move	@HCOUNT,a1
 ;	btst	1,a1
-;	jrnz	#ckk
+;	jrnz	ckk
 ;	movi	organ2_snd,a0
 ;#ckk
 ;	calla	snd_play1
@@ -2338,9 +2338,9 @@ close
 
 	.if	DEBUG
 	move	@CLOCK_OFF,a0
-	jrnz	#skip_inst
+	jrnz	skip_inst
 	move	@QUICK_TIP,a14
-	jrnz	#skip_inst
+	jrnz	skip_inst
 	.endif
 	.ref	instructions
 	JSRP	instructions		;TAKE OUT to skip instructions!
@@ -2353,15 +2353,15 @@ close
 ;DJT Start
 	.ref	t1ispro,t2ispro
 	move	@t1ispro,a14
-	jrnn	#smkn
+	jrnn	smkn
 	move	@t2ispro,a14
-	jrn	#notsmkn
+	jrn	notsmkn
 #smkn
 	.ref	do_smkn
 	CREATE0	do_smkn
 ;;	.ref	thr_smkn_sp
 ;;	SOUND1	thr_smkn_sp
-	jruc	#smksmk
+	jruc	smksmk
 #notsmkn
 	SLEEP	35
 	SOUND1	heres_tip_sp
@@ -2376,7 +2376,7 @@ close
 	DIE
 
 
-;#**********************************
+;***********************************
 ;* Create and init team meters objs.
 ;
 ; SUBRP	team_meters
@@ -2420,7 +2420,7 @@ close
 ;	.long	TEAMZN_01r
 ;
 ;
-;#***************************************
+;****************************************
 ;* Update count and image for team
 ;*
 ;* INPUT:  a1 - player number
@@ -2431,7 +2431,7 @@ close
 ;	PUSH	a1
 ;
 ;	srl	1,a1
-;	jrnz	#tm2
+;	jrnz	tm2
 ;
 ;	move	@tm1_meter_cnt,a1
 ;	add	a14,a1
@@ -2443,7 +2443,7 @@ close
 ;	addi	tm_meter_img_tbl,a1
 ;	move	*a1,a14,L			;get NEW img ptr
 ;	move	@tm1_meter_obj,a1,L		;get CURRENT img ptr
-;	jruc	#chng
+;	jruc	chng
 ;#tm2
 ;	move	@tm2_meter_cnt,a1
 ;	add	a14,a1
@@ -2500,7 +2500,7 @@ close
 ;NUM_MTR_IMGS	equ	(tm_meter_img_tbl_end-tm_meter_img_tbl)/32
 
 
-#*******************************
+********************************
 * Display player and game status info (Process)
 ;DJT Start
 
@@ -2534,9 +2534,9 @@ close
 	movi	init_t1,a11
 	movi	P1DATA+ply_meter_imgs,a9
 	callr	prt_status
-	move	@PSTATUS,a0
+	move	@PSTATUS2,a0
 	btst	0,a0				;Is plyr 1 in? Yes if !0
-	jrnz	#tag1
+	jrnz	tag1
 	movi	init_t1a,a11			;No. Setup "insert coin"
 	movi	P1DATA+ply_messages,a9
 	callr	prt_status
@@ -2558,13 +2558,13 @@ close
 
 	movi	init_t2,a11
 	move	@TWOPLAYERS,a14			;Two plyr kit? No if 0
-	jrz	#2kit2
+	jrz	2kit2
 	movi	init_t2kit,a11
 #2kit2	movi	P2DATA+ply_meter_imgs,a9
 	callr	prt_status
-	move	@PSTATUS,a0
+	move	@PSTATUS2,a0
 	btst	1,a0				;Is plyr 2 in? Yes if !0
-	jrnz	#tag2
+	jrnz	tag2
 	movi	init_t2a,a11			;No. Setup "insert coin"
 	movi	P2DATA+ply_messages,a9
 	callr	prt_status
@@ -2586,13 +2586,13 @@ close
 
 	movi	init_t3,a11
 	move	@TWOPLAYERS,a14			;Two plyr kit? No if 0
-	jrz	#2kit3
+	jrz	2kit3
 	movi	init_t3kit,a11
 #2kit3	movi	P3DATA+ply_meter_imgs,a9
 	callr	prt_status
-	move	@PSTATUS,a0
+	move	@PSTATUS2,a0
 	btst	2,a0				;Is plyr 3 in? Yes if !0
-	jrnz	#tag3
+	jrnz	tag3
 	movi	init_t3a,a11			;No. Setup "insert coin"
 	movi	P3DATA+ply_messages,a9
 	callr	prt_status
@@ -2615,9 +2615,9 @@ close
 	movi	init_t4,a11
 	movi	P4DATA+ply_meter_imgs,a9
 	callr	prt_status
-	move	@PSTATUS,a0
+	move	@PSTATUS2,a0
 	btst	3,a0				;Is plyr 4 in? Yes if !0
-	jrnz	#tag4
+	jrnz	tag4
 	movi	init_t4a,a11			;No. Setup "insert coin"
 	movi	P4DATA+ply_messages,a9
 	callr	prt_status
@@ -2641,20 +2641,20 @@ close
 ;;;;;;;	calla	prt_cr_timers	<- Did nothing!
 
 ; ** JBJ commented out on 4-13-95
-;	movi	seccall1+>3df2,a0	;>Chksum security call code
+;	movi	seccall1+03df2H,a0	;0CHhksum security call code
 ;	movk	(seccall1end-seccall1)/16,b0
-;	movi	->259e0d-2,a8		;1st value
-;#csumlp	move	*a0(->3df2),a1
+;	movi	-0259e0dH-2,a8		;1st value
+;#csumlp	move	*a0(-03df2H),a1
 ;	add	a1,a8
 ;	addk	16,a0
-;	dsj	b0,#csumlp
-;					;>Chksum security_chk code
-;	movi	security_chk+>4bbb,a0
+;	dsj	b0,csumlp
+;					;0CHhksum security_chk code
+;	movi	security_chk+04bbbH,a0
 ;	movi	68+128*2,b0		;#Words
-;#csmlp	move	*a0(->4bbb),a1
+;#csmlp	move	*a0(-04bbbH),a1
 ;	add	a1,a8
 ;	addk	16,a0
-;	dsj	b0,#csmlp
+;	dsj	b0,csmlp
 ;; ** JBJ commented out on 4-13-95
 
 	SLEEPK	5
@@ -2697,15 +2697,15 @@ close
 
 	move	*a3(PR_CREATED_PLYR),a14	;Is this a created plyr?
 	subk	1,a14
-	jrz	#tag1cp
+	jrz	tag1cp
 
 	movi	names,a3,L
 	add	a0,a3
 	move	*a3,a14,L			;College player?
-	jrn	#tag1a				; br=no
+	jrn	tag1a				; br=no
 	move	*a3(32*NUMPLYRS),a3,L		;Get college *name
 	addi	M_CHARGEN+M_PIXSCAN,a2,W	;Set char_gen flags
-	jruc	#tag1b
+	jruc	tag1b
 #tag1cp
 	addi	PR_NAME1,a3,W			;Yes. Chk validity of name
 	move	*a3,a14
@@ -2715,7 +2715,7 @@ close
 	move	*a3+,a14
 	cmpi	END_CHAR,a14,W			;In range? No if >
 	jrhi	#tag1a
-	dsj	a4,#tag1lp
+	dsj	a4,tag1lp
 	subi	NAME_LETTERS*16,a3,W		;Reset ptr
 	addi	M_CHARGEN,a2,W			;Set char_gen flags
 #tag1b
@@ -2759,7 +2759,7 @@ close
 
 	move	*a11+,a0		;X
 	cmpi	4000,a0
-	jrne	#lp			;!End?
+	jrne	lp			;!End?
 	rets
 
 
@@ -2850,14 +2850,14 @@ COLRPRC
 
 
 
-#*******************************
+********************************
 * Trash free object list because security failed (Process)
 * A8=Security status (-2=OK!)
 
  SUBRP	security_trashstuff
 
 ;	addk	2,a8
-;	jrz	#x		;OK?
+;	jrz	x		;OK?
 ;	movi	TSEC*60*5+1,a0
 ;	calla	RNDRNG0
 ;	addi	TSEC*60*4-3,a0
@@ -2865,7 +2865,7 @@ COLRPRC
 ;	movi	OFREE,a1
 ;	movk	10,a2
 ;#lp	move	*a1,a1,L
-;	dsj	a2,#lp
+;	dsj	a2,lp
 ;	move	a0,*a1,L	;Trash 10th free objs *next (-1)
 ;
 #x	DIE
@@ -2894,7 +2894,7 @@ COLRPRC
 ;
 ;	movk	AUDBEGIN,a0
 ;	calla	AUD1
-;	move	@PSTATUS,a0
+;	move	@PSTATUS2,a0
 ;	subk	3,a0
 ;;	jrne	apbx
 ;
@@ -2939,7 +2939,7 @@ COLRPRC
 * A8 =Window size
 * A10=Center point of window (screen relative)
 *
-* >A8 = *Window object or 0 (Z)
+* 0A8H = *Window object or 0 (Z)
 * Trashes A9-A11
 
 OWINDOW
@@ -2963,7 +2963,7 @@ OWINDOW
 	move	a10,a0
 
 	srl	1,a11			;XY/2
-	andi	>7fff7fff,a11
+	andi	07fff7fffH,a11
 
 	subxy	a11,a10
 	addxy	a0,a11
@@ -3121,7 +3121,7 @@ fixa3xy
 ********************************
 * Get random # with mask
 * A0=Mask
-* >A0=Rnd # (Pass CC)
+* 0A0H=Rnd # (Pass CC)
 * Trashes scratch
 
  SUBRP	rnd
@@ -3144,11 +3144,11 @@ fixa3xy
 ;DJT Start
 	movi	player_names,a10
 	move	@team1,a2
-	jrz	#out
+	jrz	out
 #lp
 	addi	NEXT_TEAM_NAMES,a10		;compute offset into table
 	dec	a2
-	jrnz	#lp	
+	jrnz	lp	
 #out
 	move	@team1,a0
 	sll	4,a0
@@ -3161,14 +3161,14 @@ fixa3xy
 	move	*a10(32),a2,L		;Name *img
 
 	move	@special_heads,a14	;Do plyr 1
-	jrn	#not_spec1
+	jrn	not_spec1
 	sll	5,a14
 	addi	our_names,a14
 	move	*a14,a1,L
 #not_spec1
 	move	a1,@names,L
 	move	a1,a1				;College player?
-	jrn	#notcol1			; br=no
+	jrn	notcol1			; br=no
 	sll	5,a1				;Get college name *string
 	addi	col_name_ptrs,a1,L
 	move	*a1,a1,L
@@ -3176,14 +3176,14 @@ fixa3xy
 	move	a1,@original_names,L
 
 	move	@special_heads+16,a14	;Do plyr 2
-	jrn	#not_spec2
+	jrn	not_spec2
 	sll	5,a14
 	addi	our_names,a14
 	move	*a14,a2,L
 #not_spec2
 	move	a2,@names+32,L
 	move	a2,a2				;College player?
-	jrn	#notcol2			; br=no
+	jrn	notcol2			; br=no
 	sll	5,a2				;Get college name *string
 	addi	col_name_ptrs,a2,L
 	move	*a2,a2,L
@@ -3194,11 +3194,11 @@ fixa3xy
 ;
 	movi	player_names,a10
 	move	@team2,a2
-	jrz	#out2
+	jrz	out2
 #lp2
 	addi	NEXT_TEAM_NAMES,a10		;compute offset into table
 	dec	a2
-	jrnz	#lp2
+	jrnz	lp2
 #out2
 	move	@team2,a0
 	sll	4,a0
@@ -3211,14 +3211,14 @@ fixa3xy
 	move	*a10(32),a2,L		;Name *img
 
 	move	@special_heads+32,a14	;Do plyr 3
-	jrn	#not_spec3
+	jrn	not_spec3
 	sll	5,a14
 	addi	our_names,a14
 	move	*a14,a1,L
 #not_spec3
 	move	a1,@names+64,L
 	move	a1,a1				;College player?
-	jrn	#notcol3			; br=no
+	jrn	notcol3			; br=no
 	sll	5,a1				;Get college name *string
 	addi	col_name_ptrs,a1,L
 	move	*a1,a1,L
@@ -3226,14 +3226,14 @@ fixa3xy
 	move	a1,@original_names+64,L
 
 	move	@special_heads+48,a14	;Do plyr 4
-	jrn	#not_spec4
+	jrn	not_spec4
 	sll	5,a14
 	addi	our_names,a14
 	move	*a14,a2,L
 #not_spec4
 	move	a2,@names+96,L
 	move	a2,a2				;College player?
-	jrn	#notcol4			; br=no
+	jrn	notcol4			; br=no
 	sll	5,a2				;Get college name *string
 	addi	col_name_ptrs,a2,L
 	move	*a2,a2,L
@@ -3315,7 +3315,7 @@ gottime
  SUBRP	testcode
 
 
-#*******************************
+********************************
 * DMA window test (DEBUG)
 
 	.if 0			;Totally commented out!
@@ -3326,10 +3326,10 @@ gottime
 	move	a0,@DMACTRL
 	move	a0,@DMACTRL
 
-	clr	a1			;>Clr screen mem
-	movi	>200000/32,b0
+	clr	a1			;0CHlr screen mem
+	movi	0200000H/32,b0
 #clrscr	move	a0,*a1+,L
-	dsj	b0,#clrscr
+	dsj	b0,clrscr
 
 	clr	a0
 	move	a0,@DMATEST
@@ -3337,23 +3337,23 @@ gottime
 	movi	0,a0
 	move	a0,@DMAOFFST
 
-	movk	>10,a1
+	movk	010H,a1
 	move	a1,@DMACONF
 	movi	[350+56,50+56],a1	;L/R
 	move	a1,@DMAWINDOW,L
 
-	movi	>30,a1
+	movi	030H,a1
 	move	a1,@DMACONF		;Top/Bottom
 	movi	[200,50],a1
 	move	a1,@DMAWINDOW,L
 
 
-	movi	[>100,>100],a3		;Y:X scale
+	movi	[0100H,0100H],a3		;Y:X scale
 	clr	a4
 	movi	[100,100+56],a8		;Y:X
 	movi	[100,200],a7		;V:H size
-	movi	>2000000,a10		;SAG
-	movi	>900c0000,a11		;CTRL:OFSET
+	movi	02000000H,a10		;SAG
+	movi	0900c0000H,a11		;CTRL:OFSET
 
 	movi	20000,b2
 #lp	rl	16,a4
@@ -3361,25 +3361,25 @@ gottime
 	movi	DMAREGS,a14
 
 #dwt	move	@DMACTRL,a0
-	jrn	#dwt
+	jrn	dwt
 
 	mmtm	a14,a3,a4,a7,a8,a10,a11
 
 	rl	16,a4
 
 #xok	addk	1,a4			;Color+1
-	andi	>ff,a4
+	andi	0ffH,a4
 	move	a4,a0
 	sll	8,a0
 	or	a0,a4
 
-	dsj	b2,#lp
+	dsj	b2,lp
 
 	eint
 
 	.endif			;End of totally commented out!
 
-#*******************************
+********************************
 * DMA 1x1 test (DEBUG)
 
 	.if 0			;Totally commented out!
@@ -3390,10 +3390,10 @@ gottime
 	move	a0,@DMACTRL
 	move	a0,@DMACTRL
 
-	clr	a1			;>Clr screen mem
-	movi	>200000/32,b0
+	clr	a1			;0CHlr screen mem
+	movi	0200000H/32,b0
 #clrscr	move	a0,*a1+,L
-	dsj	b0,#clrscr
+	dsj	b0,clrscr
 
 	clr	a0
 	move	a0,@DMATEST
@@ -3401,32 +3401,32 @@ gottime
 	movi	0,a0
 	move	a0,@DMAOFFST
 
-	movk	>10,a1
+	movk	010H,a1
 	move	a1,@DMACONF
 	movi	[350,50],a1		;L/R
 	movi	[399,0],a1		;L/R
 	move	a1,@DMAWINDOW,L
 
-	movi	>30,a1
+	movi	030H,a1
 	move	a1,@DMACONF		;Top/Bottom
 	movi	[200,50],a1
 	movi	[253,0],a1
 	move	a1,@DMAWINDOW,L
 
 
-	movi	[>100,>100],a3		;Y:X scale
+	movi	[0100H,0100H],a3		;Y:X scale
 	clr	a4
 	clr	a8			;Y:X
-	movi	>10001,a7		;V:H size
-	movi	>2000000,a10		;SAG
-	movi	>900c0000,a11		;CTRL:OFSET
+	movi	010001H,a7		;V:H size
+	movi	02000000H,a10		;SAG
+	movi	0900c0000H,a11		;CTRL:OFSET
 
 #lp	rl	16,a4
 
 	movi	DMAREGS,a14
 
 #dwt	move	@DMACTRL,a0
-	jrn	#dwt
+	jrn	dwt
 
 	mmtm	a14,a3,a4,a7,a8,a10,a11
 
@@ -3434,40 +3434,40 @@ gottime
 
 	addk	1,a8
 	btst	9,a8
-	jrz	#xok
-	addi	>10000,a8		;+1 Y
+	jrz	xok
+	addi	010000H,a8		;+1 Y
 	btst	8+16,a8
-	jrz	#yok
+	jrz	yok
 	addk	4,a4
-#yok	andi	>ff01ff,a8
+#yok	andi	0ff01ffH,a8
 
 #xok	addk	1,a4
-	andi	>ff,a4
+	andi	0ffH,a4
 	move	a4,a0
 	sll	8,a0
 	or	a0,a4
 
 	addk	1,a10			;SAG+1
 
-	jruc	#lp
+	jruc	lp
 
 	eint
 
 	.endif			;End of totally commented out!
 
-#*******************************
+********************************
 * Instruction speed test (DEBUG)
 
 	.if 0			;Totally commented out!
 
 	dint
-	movi	>2c,a0			;Enable cache
-	movi	>802c,a0		;Disable cache
+	movi	02cH,a0			;Enable cache
+	movi	0802cH,a0		;Disable cache
 	move	a0,@CONTROL
-	movi	>f010,a0
+	movi	0f010H,a0
 	move	a0,@DPYCTL
 	move	@HSTCTLH,a0
-	andi	>bfff,a0
+	andi	0bfffH,a0
 	move	a0,@HSTCTLH
 
 
@@ -3481,7 +3481,7 @@ gottime
 ;	move	*a1,a14,L		;5,8
 ;	move	@CPUAVG,a14,L		;7,16
 ;	move	@CPUAVG,a14,L		;7,16
-;	dsj	a0,#lpsf		;3,9
+;	dsj	a0,lpsf		;3,9
 
 
 #nxt
@@ -3490,9 +3490,9 @@ gottime
 	movi	SCRATCH,a2
 
 #lp	move	*a7,a0
-	jrnz	#lp
+	jrnz	lp
 #lp2	move	*a7,a0
-	jrz	#lp2
+	jrz	lp2
 
 #lp3
 ;	calla	#1
@@ -3510,7 +3510,7 @@ gottime
 ;#2
 ;	movi	100,a0
 ;	nop
-;	movi	>11111111,a0
+;	movi	011111111H,a0
 ;	move	@SCRATCH,a0
 ;	move	*a2(0),*a2(0)
 ;	move	*a2,a0
@@ -3524,8 +3524,8 @@ gottime
 ;	move	a0,@SCRATCH,L
 ;	move	@SCRATCH,a0,L
 ;	move	@SCRATCH,a0,L
-	movi	SCRATCH+>1000,a0
-	movi	SCRATCH+>1000,a1
+	movi	SCRATCH+01000H,a0
+	movi	SCRATCH+01000H,a1
 ;	move	-*a0,-*a1,L
 ;	move	-*a0,-*a1,L
 ;	move	-*a0,-*a1,L
@@ -3537,7 +3537,7 @@ gottime
 
 	addk	1,a6			;1,4
 	move	*a7,a0			;3,6
-	jrnz	#lp3			;2,5
+	jrnz	lp3			;2,5
 
 	movi	16*50000000/8/62,a1
 	divu	a6,a1
@@ -3548,20 +3548,20 @@ gottime
 	srl	4,a0
 
 	trap	29
-	jruc	#nxt
+	jruc	nxt
 
 	movi	COLRAM,a8
 #lp5	move	*a7,a0
 #lp6	move	*a7,a1
 	cmp	a1,a0
-	jreq	#lp6
+	jreq	lp6
 
 	movi	90,a2
 	movk	5,a0
 #lp8	move	a0,*a8		;1+(1),5
 	addk	2,a0		;1,4
-	dsj	a2,#lp8		;2,5
-	jruc	#lp5
+	dsj	a2,lp8		;2,5
+	jruc	lp5
 
 	eint
 

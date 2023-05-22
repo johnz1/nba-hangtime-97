@@ -111,7 +111,7 @@
 	.ref	get_all_sticks_cur,get_all_sticks_cur2
 
 	.ref	team1,team2
-	.ref	PSTATUS,PSTATUS2
+	.ref	PSTATUS2,PSTATUS2
 	.ref	scores
 	.ref	SOUNDSUP
 	.ref	mess_line_spacing
@@ -1106,7 +1106,7 @@ gwr_2
 	rets
 
 
-#*****************************************************************************
+******************************************************************************
 * INPUT:	a6 = * temp world record ram
 *-----------------------------------------------------------------------------
 * RETURN:	a0 = 8 bit checksum value
@@ -1226,7 +1226,7 @@ gwr_2
 	movi	tm_stat_ram,a2
 #clrit
 	move	a0,*a2+
-	dsj	a1,#clrit
+	dsj	a1,clrit
 
 	movi	NUM_TM_RECORDS,a11			;nbr records
 	movi	TEAM_RECORD_ORIGIN,a10			;start addr.
@@ -1237,11 +1237,11 @@ gwr_2
 
 	PULL	a10,a11
 	addi	PKDTR_SIZE*2,a10	;cmos words
-	dsj	a11,#clear_loop
+	dsj	a11,clear_loop
 	rets
 
 
-#*****************************************************************************
+******************************************************************************
 * INPUT:	a6  = * team data
 *		a10 = * cmos record dest
 *-----------------------------------------------------------------------------
@@ -1277,7 +1277,7 @@ gwr_2
 	movb	*a2,a0
 	calla	WC_BYTEI
 	addk	8,a2
-	dsj	a3,#next_word
+	dsj	a3,next_word
 
 	PULL	a7
 	PULL	a6
@@ -1570,7 +1570,7 @@ ctor_5
 	PULL	a1
  	rets
 
-#******************************************************************************
+*******************************************************************************
 *		This routine boosts the players attribute points if he has
 * a winning streak.
 *******************************************************************************
@@ -1602,19 +1602,19 @@ ctor_5
 	move	@scores+16,a9
 	move	a10,a14
 	srl	1,a14
-	jrz	#tm1				;br=team 1
+	jrz	tm1				;br=team 1
 	sub	a9,a8
-	jrnn	#nxt				;br=lost
+	jrnn	nxt				;br=lost
 	inc	a5
-	jruc	#tmd
+	jruc	tmd
 #tm1
 	sub	a8,a9
-	jrnn	#nxt				;br=player lost
+	jrnn	nxt				;br=player lost
 	inc	a5
 #tmd	
 	movk	3,a1
 	modu	a1,a5				;divide by 3
-	jrnz	#nxt				;br=not third win
+	jrnz	nxt				;br=not third win
 
 	movk	2,a9				;2 pts.
 	move	*a0(PR_WON),a14
@@ -1660,10 +1660,10 @@ ctor_5
 #nxt
 	dec	a10
 	jrge	#apap_0
-;	dsj	a10,#apap_0
+;	dsj	a10,apap_0
 
 	move	a11,a11
-	jrz	#ext				;br=no plyrs reached level
+	jrz	ext				;br=no plyrs reached level
 
 	SLEEP	175
 
@@ -1685,7 +1685,7 @@ ctor_5
 
 
 
-#******************************************************************************
+*******************************************************************************
 * 		This routine is called from GAME OVER
 *******************************************************************************
  SUBRP	save_player_records
@@ -1723,7 +1723,7 @@ _CHI	.equ	3
 #vok3
 	move	@PSTATUS2,a14
 	andi	0011b,a14
-	jrz	#chktm2				;br=no humans plyrs on team 1
+	jrz	chktm2				;br=no humans plyrs on team 1
 	move	@player1_data+PR_PTS_SCORED,a14
 	add	a0,a14
 	move	a14,@player1_data+PR_PTS_SCORED
@@ -1743,7 +1743,7 @@ _CHI	.equ	3
 #chktm2
 	move	@PSTATUS2,a14
 	andi	01100b,a14
-	jrz	#chktm				;br=no humans plyrs on team 2
+	jrz	chktm				;br=no humans plyrs on team 2
 	move	@player3_data+PR_PTS_SCORED,a14
 	add	a1,a14
 	move	a14,@player3_data+PR_PTS_SCORED
@@ -1772,7 +1772,7 @@ _CHI	.equ	3
 	move	@player1_data+PR_WINSTREAK,a0
 	inc	a0
 	andi	_6BITS,a0
-	jrz	#no_wrap1
+	jrz	no_wrap1
 	move	a0,@player1_data+PR_WINSTREAK
 #no_wrap1
 
@@ -1782,7 +1782,7 @@ _CHI	.equ	3
 	move	@player2_data+PR_WINSTREAK,a0
 	inc	a0
 	andi	_6BITS,a0
-	jrz	#no_wrap2
+	jrz	no_wrap2
 	move	a0,@player2_data+PR_WINSTREAK
 #no_wrap2
 
@@ -1796,7 +1796,7 @@ _CHI	.equ	3
 
 	move	@PSTATUS2,a0		;if opponent is human then don't
 	andi	01100b,a0		;count wins for top five teams
-	jrz	#t2cpu
+	jrz	t2cpu
 	andni	(1<<_CHI) | (1<<_SEA) | (1<<_ORL) | (1<<_SAN) | (1<<_UTA),a1
 #t2cpu
 	move	@player1_data+PR_TEAMSDEF,a0,L
@@ -1805,7 +1805,7 @@ _CHI	.equ	3
 	move	@player2_data+PR_TEAMSDEF,a0,L
 	or	a1,a0
 	move	a0,@player2_data+PR_TEAMSDEF,L
-	jruc	#cont1
+	jruc	cont1
 
 #t2_wins
 	move	@player3_data+PR_WON,a0
@@ -1814,7 +1814,7 @@ _CHI	.equ	3
 	move	@player3_data+PR_WINSTREAK,a0
 	inc	a0
 	andi	_6BITS,a0
-	jrz	#no_wrap3
+	jrz	no_wrap3
 	move	a0,@player3_data+PR_WINSTREAK
 #no_wrap3
 
@@ -1824,7 +1824,7 @@ _CHI	.equ	3
 	move	@player4_data+PR_WINSTREAK,a0
 	inc	a0
 	andi	_6BITS,a0
-	jrz	#no_wrap4
+	jrz	no_wrap4
 	move	a0,@player4_data+PR_WINSTREAK
 #no_wrap4
 
@@ -1838,7 +1838,7 @@ _CHI	.equ	3
 
 	move	@PSTATUS2,a0		;if opponent is human then don't
 	andi	011b,a0			;count wins for top five teams
-	jrz	#t1cpu
+	jrz	t1cpu
 	andni	(1<<_CHI) | (1<<_SEA) | (1<<_ORL) | (1<<_SAN) | (1<<_UTA),a1
 #t1cpu
 	move	@player3_data+PR_TEAMSDEF,a0,L
@@ -1854,33 +1854,33 @@ _CHI	.equ	3
 	move	*a13(PC_DATADDR),a0,L
 	PUSHP	a0
 
-	move	@PSTATUS,a0
+	move	@PSTATUS2,a0
 	btst	0,a0
-	jrz	#no1
+	jrz	no1
 	move	@player1_data+PR_NAME1,a0
 	jrle	#no1
 	movi	player1_data,a6
 	calla	save_record
 #no1
-	move	@PSTATUS,a0
+	move	@PSTATUS2,a0
 	btst	1,a0
-	jrz	#no2
+	jrz	no2
 	move	@player2_data+PR_NAME1,a0
 	jrle	#no2
 	movi	player2_data,a6
 	calla	save_record
 #no2
-	move	@PSTATUS,a0
+	move	@PSTATUS2,a0
 	btst	2,a0
-	jrz	#no3
+	jrz	no3
 	move	@player3_data+PR_NAME1,a0
 	jrle	#no3
 	movi	player3_data,a6
 	calla	save_record
 #no3
-	move	@PSTATUS,a0
+	move	@PSTATUS2,a0
 	btst	3,a0
-	jrz	#no4
+	jrz	no4
 	move	@player4_data+PR_NAME1,a0
 	jrle	#no4
 	movi	player4_data,a6
@@ -1890,9 +1890,9 @@ _CHI	.equ	3
 	calla	sort_wins			;for new ranking
 
 
-	move	@PSTATUS,a0
+	move	@PSTATUS2,a0
 	btst	0,a0
-	jrz	#no1b
+	jrz	no1b
 	move	@player1_data+PR_NAME1,a0
 	jrle	#no1b
 	movi	player1_data,a0
@@ -1900,9 +1900,9 @@ _CHI	.equ	3
 	callr	get_player_record		;re-calc rank etc..
 #no1b
 
-	move	@PSTATUS,a0
+	move	@PSTATUS2,a0
 	btst	1,a0
-	jrz	#no2b
+	jrz	no2b
 	move	@player2_data+PR_NAME1,a0
 	jrle	#no2b
 	movi	player2_data,a0
@@ -1910,9 +1910,9 @@ _CHI	.equ	3
 	callr	get_player_record		;re-calc rank etc..
 #no2b
 
-	move	@PSTATUS,a0
+	move	@PSTATUS2,a0
 	btst	2,a0
-	jrz	#no3b
+	jrz	no3b
 	move	@player3_data+PR_NAME1,a0
 	jrle	#no3b
 	movi	player3_data,a0
@@ -1920,9 +1920,9 @@ _CHI	.equ	3
 	callr	get_player_record		;re-calc rank etc..
 #no3b
 
-	move	@PSTATUS,a0
+	move	@PSTATUS2,a0
 	btst	3,a0
-	jrz	#no4b
+	jrz	no4b
 	move	@player4_data+PR_NAME1,a0
 	jrle	#no4b
 	movi	player4_data,a0
@@ -1935,7 +1935,7 @@ _CHI	.equ	3
 
 
 
-#*****************************************************************************
+******************************************************************************
 
  SUBR	clear_player_stats
 
@@ -1944,10 +1944,10 @@ _CHI	.equ	3
 	movi	PS_SIZE*4,b0
 #clear_next
 	move	a0,*a1+
-	dsj	b0,#clear_next
+	dsj	b0,clear_next
 	rets
 
-#*****************************************************************************
+******************************************************************************
 *
 * INPUT:	a0 = stat number (use equates in GAME.EQU)
 *		a1 = player number
@@ -1968,7 +1968,7 @@ _CHI	.equ	3
 	move	*a0,a14
 	rets
 
-#*****************************************************************************
+******************************************************************************
 *
 * INPUT:	a0 = stat number (use equates in GAME.EQU)
 *		a1 = player number
@@ -1988,7 +1988,7 @@ _CHI	.equ	3
 	move	a14,*a0
 	rets
 
-#*****************************************************************************
+******************************************************************************
 *
 * INPUT:	a0 = stat number (use equates in GAME.EQU)
 *		a1 = player number
@@ -2010,7 +2010,7 @@ _CHI	.equ	3
 
 
 
-#*****************************************************************************
+******************************************************************************
 * INPUT:	a6 = * player data
 *-----------------------------------------------------------------------------
 * RETURN:	a0 = 8 bit checksum value
@@ -2095,7 +2095,7 @@ _CHI	.equ	3
 	rets
 
 
-#*****************************************************************************
+******************************************************************************
 * INPUT:	a6  = * player data
 *		a10 = * cmos record
 *-----------------------------------------------------------------------------
@@ -2103,7 +2103,7 @@ _CHI	.equ	3
 
 	PUSH	a6,a7
  	movi	temp_record,a6
-	jruc	#start
+	jruc	start
 
  SUBRP	get_plr_record
 
@@ -2120,7 +2120,7 @@ _CHI	.equ	3
 	calla	RC_BYTEI
 	movb	a0,*a2
 	addk	8,a2
-	dsj	a3,#next_word
+	dsj	a3,next_word
 
 	movi	packed_record,a2
 
@@ -2261,10 +2261,10 @@ _CHI	.equ	3
 	movi	NUM_TEAMS,a2
 #next_team
 	srl	1,a1
-	jrnc	#not_def
+	jrnc	not_def
 	inc	a0			;teams defeated count ++
 #not_def
-	dsj	a2,#next_team
+	dsj	a2,next_team
 	move	a0,*a6(PR_NUMDEF)	;number teams defeated
 	PULL	a2
 
@@ -2274,7 +2274,7 @@ _CHI	.equ	3
 	move	a0,a1
 	callr	calc_checksum
 	cmp	a0,a1
-	jreq	#checksum_ok
+	jreq	checksum_ok
 
 	.if	DEBUG
 	LOCKUP
@@ -2288,7 +2288,7 @@ _CHI	.equ	3
 
 
 
-#*****************************************************************************
+******************************************************************************
 * INPUT:	a6  = * player data
 *		a10 = * cmos record dest
 *-----------------------------------------------------------------------------
@@ -2296,7 +2296,7 @@ _CHI	.equ	3
 
 	PUSH	a6
 	movi	temp_record,a6
-	jruc	#start
+	jruc	start
 
  SUBRP	put_plr_record
 
@@ -2452,14 +2452,14 @@ _CHI	.equ	3
 	movb	*a2,a0
 	calla	WC_BYTEI
 	addk	8,a2
-	dsj	a3,#next_word
+	dsj	a3,next_word
 
 	PULL	a7
 	PULL	a6
 	rets
 
 
-#*****************************************************************************
+******************************************************************************
 * INPUT:	a6 = * player data
 *-----------------------------------------------------------------------------
 * RETURN:	a10 = * matching CMOS record (a10 = 0 if no match found)
@@ -2475,7 +2475,7 @@ _CHI	.equ	3
 #search_loop
 	callr	get_temp_record		;data in temp_record
 	callr	compare_record
-	jrne	#no_match
+	jrne	no_match
 	rets
 
 #no_match
@@ -2484,12 +2484,12 @@ _CHI	.equ	3
 	inc	a11
 	cmpi	NUM_PRECORDS-1,a11
 	jrlo	#search_loop
-;	dsj	a11,#search_loop
+;	dsj	a11,search_loop
 	clr	a10
  	rets
 
 
-#*****************************************************************************
+******************************************************************************
 * INPUT:	NONE
 *-----------------------------------------------------------------------------
 * RETURN: 	a10 = * free CMOS record
@@ -2506,10 +2506,10 @@ _CHI	.equ	3
 #search_loop
 	callr	get_temp_record
 ;	move	@temp_record+PR_COUNT,a0
-;	jrz	#free_record
+;	jrz	free_record
 
 	move	@temp_record+PR_COUNT,a0
-	jrnz	#plyd
+	jrnz	plyd
 	move	@temp_record+PR_CREATED_PLYR,a0
 	jrle	#free_record			;br=!created plr & no gme plyd
 #plyd
@@ -2521,7 +2521,7 @@ _CHI	.equ	3
 	move	a10,a9			;least used record to date
 #skip					;(lowest lastplay count)
 	addi	PKDPR_SIZE*2,a10	;cmos words
-	dsj	a11,#search_loop
+	dsj	a11,search_loop
 	move	a9,a10
 	rets
 
@@ -2529,13 +2529,13 @@ _CHI	.equ	3
  	rets
 
 
-#*****************************************************************************
+******************************************************************************
 * INPUT:	a6 = * player data
 *-----------------------------------------------------------------------------
  SUBRP	compare_record
 
 	move	@temp_record+PR_COUNT,a1	;valid record?
-	jrnz	#mybe				;br=so far...
+	jrnz	mybe				;br=so far...
 
 	move	@temp_record+PR_CREATED_PLYR,a1	;created player ?
 	jrle	#no_match			;br=yes, and no games played
@@ -2543,59 +2543,59 @@ _CHI	.equ	3
 #mybe	move	*a6(PR_NAME1),a0
 	move	@temp_record+PR_NAME1,a1
 	cmp	a0,a1
-	jrne	#no_match
+	jrne	no_match
 
 	move	*a6(PR_NAME2),a0
 	move	@temp_record+PR_NAME2,a1
 	cmp	a0,a1
-	jrne	#no_match
+	jrne	no_match
 
 	move	*a6(PR_NAME3),a0
 	move	@temp_record+PR_NAME3,a1
 	cmp	a0,a1
-	jrne	#no_match
+	jrne	no_match
 
 	move	*a6(PR_NAME4),a0
 	move	@temp_record+PR_NAME4,a1
 	cmp	a0,a1
-	jrne	#no_match
+	jrne	no_match
 
 	move	*a6(PR_NAME5),a0
 	move	@temp_record+PR_NAME5,a1
 	cmp	a0,a1
-	jrne	#no_match
+	jrne	no_match
 
 	move	*a6(PR_NAME6),a0
 	move	@temp_record+PR_NAME6,a1
 	cmp	a0,a1
-	jrne	#no_match
+	jrne	no_match
 
 	move	*a6(PR_PIN_NBR1),a0		;just entered pin number #1
 	move	@temp_record+PR_PIN_NBR1,a1	;number in players record
 	cmp	a0,a1				;do they match ?
-	jrne	#no_match			;br=no
+	jrne	no_match			;br=no
 
 	move	*a6(PR_PIN_NBR2),a0		;just entered pin number #2
 	move	@temp_record+PR_PIN_NBR2,a1	;number in players record
 	cmp	a0,a1				;do they match ?
-	jrne	#no_match			;br=no
+	jrne	no_match			;br=no
 
 	move	*a6(PR_PIN_NBR3),a0		;just entered pin number #3
 	move	@temp_record+PR_PIN_NBR3,a1	;number in players record
 	cmp	a0,a1				;do they match ?
-	jrne	#no_match			;br=no
+	jrne	no_match			;br=no
 
 	move	*a6(PR_PIN_NBR4),a0		;just entered pin number #4
 	move	@temp_record+PR_PIN_NBR4,a1	;number in players record
 	cmp	a0,a1				;do they match ?
-	jrne	#no_match			;br=no
+	jrne	no_match			;br=no
 	rets					;Z set
 
 #no_match
 	movi	1,a0				;clear Z
 	rets
 
-#*****************************************************************************
+******************************************************************************
 * INPUT:	a4 = cmos record number (0 - NUM_RECORDS-1 )
 * RETURN:	a2 = player rank
 *	        a9 = ptr to record sort array
@@ -2609,7 +2609,7 @@ _CHI	.equ	3
 	move	*a9,a8,L
 	move	*a8(RS_RECORD_NUM),a0
 	cmp	a4,a0
-	jreq	#found_match
+	jreq	found_match
 
 	addi	20h,a9
 	inc	a2
@@ -2619,7 +2619,7 @@ _CHI	.equ	3
 	PULL	a8
 	rets
 
-#*****************************************************************************
+******************************************************************************
 *-----------------------------------------------------------------------------
  SUBRP	get_player_record
 
@@ -2627,7 +2627,7 @@ _CHI	.equ	3
 
 	callr	find_record
 	move	a10,a10
-	jrz	#no_match
+	jrz	no_match
 	callr	get_plr_record
 
 ;	movi	NUM_PRECORDS,a4
@@ -2676,14 +2676,14 @@ _CHI	.equ	3
 	rets
 
 
-#*****************************************************************************
+******************************************************************************
 * INPUT:	a6 = * player data
 *-----------------------------------------------------------------------------
  SUBRP	save_record
 
 	callr	find_record
 	move	a10,a10
-	jrnz	#found_match
+	jrnz	found_match
 	movk	1,a0			;1st game
 	move	a0,*a6(PR_COUNT)
 	movi	50,a0
@@ -2713,7 +2713,7 @@ _CHI	.equ	3
 	rets
 
 
-#*****************************************************************************
+******************************************************************************
 * decs lastplay count for all records
 *-----------------------------------------------------------------------------
  SUBRP	dec_lastplay
@@ -2725,7 +2725,7 @@ _CHI	.equ	3
 
 	callr	get_temp_record		;read record
 	move	@temp_record+PR_LASTPLAY,a0
-	jrz	#at_min
+	jrz	at_min
 	dec	a0
 	move	a0,@temp_record+PR_LASTPLAY
 	callr	put_temp_record		;write out record
@@ -2733,10 +2733,10 @@ _CHI	.equ	3
 
 	PULL	a10,a11
 	addi	PKDPR_SIZE*2,a10	;cmos words
-	dsj	a11,#dec_loop
+	dsj	a11,dec_loop
 	rets
 
-#*****************************************************************************
+******************************************************************************
 
  SUBR	get_all_records
 
@@ -2768,7 +2768,7 @@ _CHI	.equ	3
 	clr	a14
 	move	a14,*a9(RS_TRIVIA_PTS)
 	move	a14,*a9(RS_WINS)
-	jruc	#nonme
+	jruc	nonme
 #vldnme
 	move	@temp_record+PR_TRIVIA_PTS,a0
 	move	a0,*a9(RS_TRIVIA_PTS)
@@ -2789,7 +2789,7 @@ _CHI	.equ	3
 
 	move	@temp_record+PR_WON,a0		;wins
 	move	a0,*a9(RS_WINS)
-	jrnz	#has_wins
+	jrnz	has_wins
 #nonme
 	move	@temp_record+PR_COUNT,a0	;games played
 	move	a0,*a9(RS_GAMES_PLAYED)
@@ -2797,7 +2797,7 @@ _CHI	.equ	3
 	move	a0,*a9(RS_AVERAGE)
 	move	a0,*a9(RS_TEAMSDEF)
 	move	a0,*a9(RS_STREAK)
-	jruc	#cont1
+	jruc	cont1
 
 #has_wins
 	movi	1000,a1
@@ -2829,7 +2829,7 @@ _CHI	.equ	3
 ;	This routine computes the PLAYERS defensive rank
 ;
 ;INPUT: a0 - players defensive ability
-; >a0 - players defensive rank
+; 0a0H - players defensive rank
 ;-----------------------------------------------------------------------------
  SUBR	compute_plyr_def_rank
 
@@ -2858,7 +2858,7 @@ cpdr_3	PULL	a2,a9,a10
 ;	This routine computes the PLAYERS offensive rank
 ;
 ;INPUT: a0 - players offensive ability
-; >a0 - players offensive rank
+; 0a0H - players offensive rank
 ;-----------------------------------------------------------------------------
  SUBR	compute_plyr_off_rank
 
@@ -2881,7 +2881,7 @@ cpor_3	PULL	a2,a9,a10
  	rets
 
 
-#******************************************************************************
+*******************************************************************************
 *
 * INPUT:	call get_all_records to build ram copy of records
 *
@@ -2934,14 +2934,14 @@ cpor_3	PULL	a2,a9,a10
 ;;	addi	RS_SIZE,a9
 	addi	20h,a9
 
-	dsj	a10,#loop2
+	dsj	a10,loop2
 	move	a14,a14
-	jrz	#done
-	dsj	a11,#loop1
+	jrz	done
+	dsj	a11,loop1
 #done
 	rets
 
-#******************************************************************************
+*******************************************************************************
 * INPUT:	call get_all_records to build ram copy of records
 *
 *	sorts players based on streaks
@@ -2993,14 +2993,14 @@ cpor_3	PULL	a2,a9,a10
 	move	a4,*a9(20h),L
 #no_swap
 	addi	20h,a9
-	dsj	a10,#loop2
+	dsj	a10,loop2
 	move	a14,a14
-	jrz	#done
-	dsj	a11,#loop1
+	jrz	done
+	dsj	a11,loop1
 #done
 	rets
 
-#******************************************************************************
+*******************************************************************************
 *
 * INPUT:	call get_all_records to build ram copy of records
 *
@@ -3053,14 +3053,14 @@ cpor_3	PULL	a2,a9,a10
 	move	a4,*a9(20h),L
 #no_swap
 	addi	20h,a9
-	dsj	a10,#loop2
+	dsj	a10,loop2
 	move	a14,a14
-	jrz	#done
-	dsj	a11,#loop1
+	jrz	done
+	dsj	a11,loop1
 #done
 	rets
 
-#******************************************************************************
+*******************************************************************************
 *
 * INPUT:	call get_all_records to build ram copy of records
 *
@@ -3103,15 +3103,15 @@ cpor_3	PULL	a2,a9,a10
 	move	a4,*a9(20h),L
 #no_swap
 	addi	20h,a9
-	dsj	a10,#loop2
+	dsj	a10,loop2
 	move	a14,a14
-	jrz	#done
-	dsj	a11,#loop1
+	jrz	done
+	dsj	a11,loop1
 #done
 	rets
 
 
-#******************************************************************************
+*******************************************************************************
 * INPUT:	defeated teams in A1
 * RETURN:	a0 = # teams defeated
 *------------------------------------------------------------------------------
@@ -3123,14 +3123,14 @@ cpor_3	PULL	a2,a9,a10
 ;;;;	movk	27,a2
 #next_team
 	srl	1,a1
-	jrnc	#not_def
+	jrnc	not_def
 	inc	a0			;teams defeated count ++
 #not_def
-	dsj	a2,#next_team
+	dsj	a2,next_team
 	PULL	a1,a2
 	rets
 
-#*****************************************************************************
+******************************************************************************
 * clears out all cmos player records  (and fills in SPECIAL PLAYER records)
 * and puts in defaults for high score table
 *-----------------------------------------------------------------------------
@@ -3141,7 +3141,7 @@ cpor_3	PULL	a2,a9,a10
 	movi	temp_record,a2
 #clrit
 	move	a0,*a2+
-	dsj	a1,#clrit
+	dsj	a1,clrit
 
 	movi	NUM_PRECORDS,a11
 	movi	RECORD_ORIGIN,a10
@@ -3152,7 +3152,7 @@ cpor_3	PULL	a2,a9,a10
 
 	PULL	a10,a11
 	addi	PKDPR_SIZE*2,a10	;cmos words
-	dsj	a11,#clear_loop
+	dsj	a11,clear_loop
 
 	movk	8,a11			;23 lines in 'team_inits' table
 
@@ -3227,7 +3227,7 @@ cpor_3	PULL	a2,a9,a10
 
 	addi	10*10h,a9
 	addi	PKDPR_SIZE*2,a10	;cmos words
-	dsj	a11,#init_loop
+	dsj	a11,init_loop
 	rets
 
 
@@ -3258,7 +3258,7 @@ RECMAC	.macro	NAME,PIN_NUM,PLAYED,WINS,STREAK,DEFEATED
 	.even
 
 
-#*****************************************************************************
+******************************************************************************
 *
 * INPUT:	a10 = * cmos record to delete
 
@@ -3271,7 +3271,7 @@ RECMAC	.macro	NAME,PIN_NUM,PLAYED,WINS,STREAK,DEFEATED
 	callr	put_temp_record		;write out record
 	rets
 
-#*****************************************************************************
+******************************************************************************
 *
 * INPUT:	a0 = hiscore type
 *
@@ -3376,7 +3376,7 @@ RECMAC	.macro	NAME,PIN_NUM,PLAYED,WINS,STREAK,DEFEATED
 	JSRPR	a0
 
 	move	@hiscore_type,a0
-	jrnz	#no_unblank
+	jrnz	no_unblank
 
 ;	SLEEPK	1
 
@@ -3392,7 +3392,7 @@ RECMAC	.macro	NAME,PIN_NUM,PLAYED,WINS,STREAK,DEFEATED
 	movi	3*TSEC,a10
 #waitt
 	SLEEPK	1
-	dsj	a10,#waitd
+	dsj	a10,waitd
 	move	@hiscore_cnt,a14		;wait until done sliding on
 	jrgt	#waitt
 
@@ -3405,9 +3405,9 @@ RECMAC	.macro	NAME,PIN_NUM,PLAYED,WINS,STREAK,DEFEATED
 #delay
 	SLEEPK	1
 	calla	get_all_buttons_cur2
-	jrnz	#exit0
-	dsj	a10,#delay
-	jruc	#exit
+	jrnz	exit0
+	dsj	a10,delay
+	jruc	exit
 #exit0
 	movi	HISCR_SCALE_PID,a0
 	calla	KIL1C
@@ -3416,7 +3416,7 @@ RECMAC	.macro	NAME,PIN_NUM,PLAYED,WINS,STREAK,DEFEATED
 	SOUND1	bounce_snd
 	movk	1,a0
 	move	a0,@SOUNDSUP		;turn all sounds off
-	jruc	#skipt2			;br=dont do obj. transition
+	jruc	skipt2			;br=dont do obj. transition
 #exit
 	movi	HISCR_SCALE_PID,a0
 	calla	KIL1C
@@ -3431,8 +3431,8 @@ RECMAC	.macro	NAME,PIN_NUM,PLAYED,WINS,STREAK,DEFEATED
 #delay1
 	SLEEPK	1
 	calla	get_all_buttons_cur2
-	jrnz	#skipt2
-	dsj	a10,#delay1
+	jrnz	skipt2
+	dsj	a10,delay1
 #exit1
 	movi	TYPTEXT+1,a8
 	movi	TYPTEXT+8,a9
@@ -3795,7 +3795,7 @@ BSTCYCB_P
 
 	movi	#str_1000,a4
 	calla	copy_rom_string
-	jruc	#skp2
+	jruc	skp2
 #nmax
 	movi	999,a1			;max value
 	calla	dec_to_asc
@@ -3992,7 +3992,7 @@ str_per
 
 	PULLP	a9,a10
 	addi	20h,a9
-	dsj	a10,#nxt_plr
+	dsj	a10,nxt_plr
 	RETP
 
 #str_pts
@@ -4082,7 +4082,7 @@ str_per
 
 	PULLP	a9,a10
 	addi	20h,a9
-	dsj	a10,#meth4
+	dsj	a10,meth4
 	RETP
 
 ;-----------------------------------------------------------------------------
@@ -4206,7 +4206,7 @@ str_per
 
 	PULLP	a9,a10
 	addi	20h,a9
-	dsj	a10,#meth5
+	dsj	a10,meth5
 	RETP
 
 
@@ -4466,11 +4466,11 @@ wrld_rec_msg4
 	calla	copy_rom_string
 
 	move	*a8(RS_AVERAGE),a0
-	jrnz	#not_zip
+	jrnz	not_zip
 
 	movi	#str_0,a4
 	calla	copy_rom_string
-	jruc	#skip1
+	jruc	skip1
 #not_zip
 	cmpi	1000,a0
 	jrlo	#not_max
@@ -4479,7 +4479,7 @@ wrld_rec_msg4
 	calla	copy_rom_string
 	movi	COL5-9,a0
 	move	a0,@mess_cursx
-	jruc	#skip2
+	jruc	skip2
 #not_max
 	movi	999,a1			;max value
 	calla	dec_to_pct
@@ -4495,7 +4495,7 @@ wrld_rec_msg4
 
 	PULLP	a9,a10
 	addi	20h,a9
-	dsj	a10,#next_player
+	dsj	a10,next_player
 	RETP
 
 
@@ -4811,7 +4811,7 @@ sinl_5
 
 	PULLP	a9,a10
 	addi	20h,a9
-	dsj	a10,#next_player1b
+	dsj	a10,next_player1b
 	RETP
 
 
@@ -4903,11 +4903,11 @@ sinl_5
 	calla	copy_rom_string
 
 	move	*a8(RS_AVERAGE),a0
-	jrnz	#not_zip2
+	jrnz	not_zip2
 
 	movi	#str_0,a4
 	calla	copy_rom_string
-	jruc	#skip1b
+	jruc	skip1b
 #not_zip2
 	cmpi	1000,a0
 	jrlo	#not_max2
@@ -4916,7 +4916,7 @@ sinl_5
 	calla	copy_rom_string
 	movi	COL5-9,a0
 	move	a0,@mess_cursx
-	jruc	#skip2b
+	jruc	skip2b
 
 #not_max2
 	movi	999,a1			;max value
@@ -4935,7 +4935,7 @@ sinl_5
 
 	PULLP	a9,a10
 	addi	20h,a9
-	dsj	a10,#next_player2
+	dsj	a10,next_player2
 	RETP
 
 #exppals
@@ -5008,7 +5008,7 @@ sinl_5
 
 	movi	#str_none,a4
 	calla	print_string_C2
-	jruc	#not_champ
+	jruc	not_champ
 #is_champ
 	movi	temp_record+PR_NAME1,a4		;* src initials
 	movi	message_buffer,a3		;* string dest
@@ -5022,7 +5022,7 @@ sinl_5
 
 	PULLP	a9,a10
 	addi	20h,a9
-	dsj	a10,#next_player2b
+	dsj	a10,next_player2b
 	RETP
 
 #str_none
@@ -5106,7 +5106,7 @@ sinl_5
 
 	PULLP	a9,a10
 	addi	10h,a9
-	dsj	a10,#next_team
+	dsj	a10,next_team
 	RETP
 
 ;DJT Start
@@ -5192,10 +5192,10 @@ sinl_5
 ;;	addi	RS_SIZE,a9
 	addi	20h,a9
 
-	dsj	a10,#lop2
+	dsj	a10,lop2
 	move	a14,a14
-	jrz	#dne
-	dsj	a11,#lop1
+	jrz	dne
+	dsj	a11,lop1
 #dne
 	rets
 
@@ -5248,10 +5248,10 @@ sinl_5
 ;;	addi	RS_SIZE,a9
 	addi	20h,a9
 
-	dsj	a10,#loop2
+	dsj	a10,loop2
 	move	a14,a14
-	jrz	#done
-	dsj	a11,#loop1
+	jrz	done
+	dsj	a11,loop1
 #done
 	rets
 ;DJT Start
@@ -5597,7 +5597,7 @@ LN0b_setup
 	.even
 
 
-#*****************************************************************************
+******************************************************************************
 
 RECORDS_ONSCREEN	equ	10
 
@@ -5654,40 +5654,40 @@ RECORDS_ONSCREEN	equ	10
 	SLEEPK	1
 	calla	get_all_sticks_down2
 	move	a0,a0
-	jrnz	#got_stick
-	dsj	a10,#loopy
+	jrnz	got_stick
+	dsj	a10,loopy
 
 #wait_for_input
 	SLEEPK	1
 	calla	get_all_buttons_cur2
-	jrnz	#exit
+	jrnz	exit
 
 #got_stick
 	PULLP	a4
 	calla	get_all_sticks_cur2
 	btst	1,a0
-	jrz	#no_down
+	jrz	no_down
 	move	a4,a1
 	addi	RECORDS_ONSCREEN,a1
 	cmpi	NUM_PRECORDS,a1
 	jrhs	#no_down
 	addi	RECORDS_ONSCREEN,a4
-	jruc	#display_loop
+	jruc	display_loop
 #no_down
 	btst	0,a0
-	jrz	#no_up
+	jrz	no_up
 	move	a4,a4
-	jrz	#no_up
+	jrz	no_up
 	subi	RECORDS_ONSCREEN,a4
-	jruc	#display_loop
+	jruc	display_loop
 #no_up
 	PUSHP	a4
-	jruc	#wait_for_input
+	jruc	wait_for_input
 #exit
 	PULLP	a4
 	RETP
 
-#*****************************************************************************
+******************************************************************************
 * INPUT:	a4 = starting record (0 - NUM_PRECORDS-1)
 *-----------------------------------------------------------------------------
  SUBRP	display_audits
@@ -5738,11 +5738,11 @@ RECORDS_ONSCREEN	equ	10
 	move	a0,@mess_cursx		;message cursor pos X
 
 	move	@temp_record+PR_COUNT,a0
-	jrnz	#not_empty
+	jrnz	not_empty
 
 	movi	str_unused,a4
 	calla	print_string_C2
-	jruc	#skipit
+	jruc	skipit
 #not_empty
 	calla	print_string_C		;centered
 
@@ -5771,7 +5771,7 @@ RECORDS_ONSCREEN	equ	10
 	PULL	a4
 	PULL	a6,a10
 	addi	PKDPR_SIZE*2,a10	;cmos words
-	dsj	a6,#search_loop
+	dsj	a6,search_loop
 ;DJT Start
 #done
 ;DJT End

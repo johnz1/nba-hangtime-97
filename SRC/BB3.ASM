@@ -145,7 +145,7 @@
 	.bss	stormobj,32	;outdoor crt MK storm obj
 
 
-#*******************************
+********************************
 * Initialize the game objs
 * Trashes scratch, A0-A11
 
@@ -159,24 +159,24 @@
 
 	movi	#init_t,a11		;>Setup crowd, hoops, side crowd
 	move	@pup_court,a0
-	jrz	#next
+	jrz	next
 	CREATE0	otd_scroller
 	move	a0,@otdscroll_p,L
 	movi	#init_otd_t,a11		;>Setup outdoor court objs
-	jruc	#next
+	jruc	next
 #lp
 	cmpi	4001,a0			;>Start process
-	jrne	#svptr
+	jrne	svptr
 	clr	a1
 	move	*a11+,a7,L		;*Code
 	calla	GETPRC			;Pass last obj in A8
-	jruc	#next
+	jruc	next
 
 #svptr	cmpi	4002,a0			;>Save variable
-	jrne	#obj
+	jrne	obj
 	move	*a11+,a1,L		;*Var
 	move	a8,*a1,L
-	jruc	#next
+	jruc	next
 
 #obj	move	*a11+,a1		;Y
 	sll	16,a0
@@ -208,8 +208,8 @@
 	move	a6,*a8(OXANI),L		;save for debug ref only
 
 	btst	B_3DQ,a4
-	jrz	#next
-					;>Convert 3D to 3DQ
+	jrz	next
+					;0CHonvert 3D to 3DQ
 	add	a9,a3			;add Z offset to Z
 	move	a3,a5			;save for later X2Z conv
 	subi	GZBASE,a3
@@ -248,7 +248,7 @@
 
 #next	move	*a11+,a0		;X
 	cmpi	4000,a0
-	jrne	#lp			;!End?
+	jrne	lp			;!End?
 
 	move	@team1,a0
 	move	a0,@oteam1
@@ -911,7 +911,7 @@
 	move	*a1,a0			;Copy coach palette cnt & palette
 	addk	1,a0
 #bcp1	move	*a1+,*a2+
-	dsjs	a0,#bcp1
+	dsjs	a0,bcp1
 
 	move	@bkcrt_colors,a1,L
 	move	*a1+,a0
@@ -919,7 +919,7 @@
 	sll	4,a14
 	sub	a14,a2
 #bcp2	move	*a1+,*a2+
-	dsjs	a0,#bcp2
+	dsjs	a0,bcp2
 
 	move	a3,a0
 	calla	pal_getf
@@ -939,7 +939,7 @@
 	move	@team1,a3
 	move	@team2,a4
 	movi	tm1pal_t,a2
-	jruc	#set_tm
+	jruc	set_tm
 
  SUBRP	set_tm2_colors
 
@@ -959,17 +959,17 @@
 	addi	teampal_t,a3
 	addi	teampal_t,a4
 	movb	*a3,a3
-	jrn	#keepc			;I always keep? yes if neg
+	jrn	keepc			;I always keep? yes if neg
 	movb	*a4,a4
 	move	a4,a14
 	sll	32-4,a3
 	sll	32-4,a14
 	cmp	a3,a14
-	jrne	#keepc			;Different colors?
+	jrne	keepc			;Different colors?
 	move	a4,a4
-	jrn	#altc			;Other team always keeps?
+	jrn	altc			;Other team always keeps?
 	cmpi	tm2pal_t,a2
-	jrz	#keepc			;2nd team?
+	jrz	keepc			;2nd team?
 #altc	addk	32,a6			;use alternates
 #keepc
 
@@ -983,7 +983,7 @@
 	move	*a1+,a0			;Copy bench palette
 	addk	16,a3
 #bbp1	move	*a1+,*a3+
-	dsjs	a0,#bbp1
+	dsjs	a0,bbp1
 
 	move	a2,a3			;Save *pal
 	movi	128,a0
@@ -995,9 +995,9 @@
 	move	*a1+,a0
 	.if	DEBUG
 	cmpi	16,a0
-	jrnz	#lck0
+	jrnz	lck0
 	cmpi	53,a14
-	jrz	#nolck0
+	jrz	nolck0
 #lck0
 	LOCKUP
 #nolck0
@@ -1006,33 +1006,33 @@
 	sll	4,a14
 	add	a14,a2
 #bbp1a	move	*a1+,*a2+
-	dsjs	a0,#bbp1a
+	dsjs	a0,bbp1a
 
 	move	*a6(PAT_PALT_p),a1,L	;Copy trim
 	move	*a1+,a0
 	.if	DEBUG
 	cmpi	17,a0
-	jrz	#nolck1
+	jrz	nolck1
 	LOCKUP
 #nolck1
 	.endif
 	addk	16,a1
 	subk	1,a0 
 #bbp2	move	*a1+,*a2+
-	dsjs	a0,#bbp2
+	dsjs	a0,bbp2
 
 	move	*a6(PAT_PALU_p),a1,L	;Copy uniform
 	move	*a1+,a0
 	.if	DEBUG
 	cmpi	25,a0
-	jrz	#nolck2
+	jrz	nolck2
 	LOCKUP
 #nolck2
 	.endif
 	addk	16,a1
 	subk	1,a0 
 #bbp3	move	*a1+,*a2+
-	dsjs	a0,#bbp3
+	dsjs	a0,bbp3
 
 	addi	13*16,a2		;Skip shoes
 
@@ -1040,27 +1040,27 @@
 	move	*a1+,a0
 	.if	DEBUG
 	cmpi	12,a0
-	jrz	#nolck3
+	jrz	nolck3
 	LOCKUP
 #nolck3
 	.endif
 	addk	16,a1
 	subk	1,a0
 #bbp4	move	*a1+,*a2+
-	dsjs	a0,#bbp4
+	dsjs	a0,bbp4
 
 	move	*a6(PAT_PALVP_p),a1,L	;Copy trim
 	move	*a1+,a0
 	.if	DEBUG
 	cmpi	12,a0
-	jrz	#nolck4
+	jrz	nolck4
 	LOCKUP
 #nolck4
 	.endif
 	addk	16,a1
 	subk	1,a0
 #bbp5	move	*a1+,*a2+
-	dsjs	a0,#bbp5
+	dsjs	a0,bbp5
 
 	move	a3,a0
 	calla	pal_getf
@@ -1068,7 +1068,7 @@
 	DIE
 
 
-#*******************************
+********************************
 * Outdoor court obj scroller
 *
 
@@ -1085,16 +1085,16 @@
 
 	move	@P1CTRL,a0
 	cmpi	JOY_UP_RIGHT,a0
-	jrz	#ok
+	jrz	ok
 	move	@P2CTRL,a0
 	cmpi	JOY_UP_RIGHT,a0
-	jrz	#ok
+	jrz	ok
 	move	@P3CTRL,a0
 	cmpi	JOY_UP_RIGHT,a0
-	jrz	#ok
+	jrz	ok
 	move	@P4CTRL,a0
 	cmpi	JOY_UP_RIGHT,a0
-	jrz	#ok
+	jrz	ok
 
 
 ;	movi	100,a0
@@ -1104,7 +1104,7 @@
 	move	@stormobj,a0,L
 	.ref	OBJOFF
 	calla	OBJOFF
-	jruc	#ok2
+	jruc	ok2
 #ok
 	.ref	robo_2_snd
 	SOUND1	robo_2_snd
@@ -1121,7 +1121,7 @@
 #lp
 	SLEEPK	1
 	move	@HALT,a14
-	jrnz	#lp
+	jrnz	lp
 
  SUBR	otdscroller_wake
 
@@ -1174,10 +1174,10 @@
 	addi	34h,a1
 	move	a1,*a14(OYPOS)
 
-	jruc	#lp
+	jruc	lp
 
 
-#*******************************
+********************************
 *
 * Blink city lights for outdoor court
 
@@ -1346,7 +1346,7 @@
 	DIE
 
 
-#*******************************
+********************************
 * Init crowd ani procs
 *
 
@@ -1356,7 +1356,7 @@
 	movi	crwd_ram_plist,a10
 
 	move	@pup_court,a8			;Outdoor court?
-	jrnz	#x				; br=yes
+	jrnz	x				; br=yes
 
 ;	move	@bnchl_p,a8,L
 ;	movi	BNCHPL_LST,a11
@@ -1518,7 +1518,7 @@
 ;	jaz	SUCIDE
 ;	move	a1,*a0(PTIME)
 ;	addk	1,a1
-;	jruc	#lp
+;	jruc	lp
 
 
 #*-------------------
@@ -1534,11 +1534,11 @@
 ;#skp
 	movk	1,a1
 	move	@chldr_ram_plft,a0,L
-	jrz	#noc0
+	jrz	noc0
 	move	a1,*a0(PTIME)
 #noc0
 	move	@chldr_ram_prgt,a0,L
-	jrz	#noc1
+	jrz	noc1
 	move	a1,*a0(PTIME)
 #noc1
 	movi	crwd_ram_plist,a10
@@ -1547,7 +1547,7 @@
 	jaz	SUCIDE
 	move	a1,*a0(PTIME)
 	addk	1,a1
-	jruc	#lp
+	jruc	lp
 
 
 #*-------------------
@@ -1558,7 +1558,7 @@
 ;	SLEEP	32767
 ;
 ;	move	a11,a10			;Get *seq list
-;	jruc	#lp
+;	jruc	lp
 ;#lptop
 ;	move	*a8(OIMG),a3,L		;>Get old & set new *img
 ;	move	a1,*a8(OIMG),L
@@ -1584,7 +1584,7 @@
 ;	calla	PRCSLP
 ;#lp
 ;	move	*a10+,a1,L		;New *img or is seq complete?
-;	jrnz	#lptop			; br=new *img
+;	jrnz	lptop			; br=new *img
 ;
 ;	jruc	bnch_ani
 
@@ -1597,7 +1597,7 @@
 	SLEEP	32767
 
 	move	a11,a10			;Get *seq list
-	jruc	#lp
+	jruc	lp
 #lptop
 	move	*a8(OIMG),a3,L		;>Get old & set new *img
 	move	a1,*a8(OIMG),L
@@ -1623,7 +1623,7 @@
 	calla	PRCSLP
 #lp
 	move	*a10+,a1,L		;New *img or is seq complete?
-	jrnz	#lptop			; br=new *img
+	jrnz	lptop			; br=new *img
 
 	jruc	crwd_ani
 
@@ -1646,7 +1646,7 @@ chldr_ani
 	SLEEP	32767
 
 	move	a11,a10			;Get *seq list
-	jruc	#lp
+	jruc	lp
 #lptop
 	move	*a8(OIMG),a3,L		;>Get old & set new *img
 	move	a1,*a8(OIMG),L
@@ -1673,7 +1673,7 @@ chldr_ani
 	calla	PRCSLP
 #lp
 	move	*a10+,a1,L		;New *img or is seq complete?
-	jrnz	#lptop			; br=new *img
+	jrnz	lptop			; br=new *img
 
 	jruc	chldr_ani
 
@@ -2098,7 +2098,7 @@ HOT_Y_P:
 	.word	07FFFH,07FFFH,07FB7H,07F71H,07F4BH,07F05H,07EC0H,07E60H
 
 
-#*******************************
+********************************
 * Turn on random advertisement
 *
 
@@ -2141,13 +2141,13 @@ HOT_Y_P:
 
 	move	*a8(OIMG),a0,L
 	cmpi	RF_KOM1_L,a0
-	jrnz	#noani0
+	jrnz	noani0
 ;Start an animation for this ad
 	CREATE	adpid,MK3_ad
-	jruc	#noani
+	jruc	noani
 #noani0
 	cmpi	RF_CHAL_L,a0
-	jrnz	#noani
+	jrnz	noani
 ;Start an animation for this ad
 	CREATE	adpid,wwf_ad
 #noani
@@ -2308,7 +2308,7 @@ mk3_lp
 	jruc	mk3_lp
 
 
-#********************************
+*********************************
 * Animate backboard to proper angle (Process)
 * A8=*Object (left)
 
@@ -2328,32 +2328,32 @@ mk3_lp
 #lp
 	move	a8,a6			;Set for lft hoop
 	move	*a11,a0			;Chk current crt X
-	jrn	#lft
+	jrn	lft
 	move	a9,a6			;Set for rgt hoop
 #lft
 	abs	a0
 	subi	BOARD_ANI_MINX,A0	;Too far away (hoop off screen)?
-	jrn	#fixbb			;Yes if neg
+	jrn	fixbb			;Yes if neg
 
 	srl	4,a0			;Shf X down for anim-step #
 	sll	5,a0			;Shf up for tbl offset
 	addi	#ani_t,a0
 	move	@pup_court,a14		;Outdoor court?
-;;	jrz	#nootd			; br=no
-	jrz	#bok			; br=no
+;;	jrz	nootd			; br=no
+	jrz	bok			; br=no
 	addi	#ani_otd_t-#ani_t,a0,W	;Set ptr to shattered tbl
-;;	jruc	#bok
+;;	jruc	bok
 ;;#nootd
 ;;	move	*a10,a14		;Is bkbrd shattered? No if 0
 ;;;FIX!!!
-;;	jruc	#bok		;Skip code for bboard shatter ani
-;;	jrz	#bok
+;;	jruc	bok		;Skip code for bboard shatter ani
+;;	jrz	bok
 ;;	addi	#sani_t-#ani_t,a0,W	;Set ptr to shattered tbl
 #bok
 	move	*a0,a0,L		;Deref for new backboard ptr
 	move	*a6(OIMG),a14,L		;Get old *bkbrd
 	cmp	a14,a0			;New image?
-	jrz	#slp			; br=yes
+	jrz	slp			; br=yes
 	move	*a14,a1			;Get old bkbrd ISIZEX:IANIOFFX
 	move	*a14(IANIOFFX),a2
 	sll	16,a1
@@ -2371,7 +2371,7 @@ mk3_lp
 
 	subxy	a14,a1			;Calc XY SIZE:ANI changes
 	cmp	a8,a6			;Doing lft or rgt hoop? Lft if =
-	jreq	#nof
+	jreq	nof
 	move	a1,a14			;Rgt hoop. Assume(!) it is the FLIPH
 	sra	16,a14			; of lft hoop & correct ani X with
 	sext	a1			; hoop SIZEX diff
@@ -2390,7 +2390,7 @@ mk3_lp
 ;	jrxz	#slp			;any X change?
 ;	move	*a6(OFLAGS),a1		;yes, lets assume some more!
 ;	btst	B_FLIPH,a1		;don't worry about it if its not
-;	jrz	#slp			; flipped
+;	jrz	slp			; flipped
 ;	move	*a6(OXPOS),a1		;correct X for change in size
 ;	subxy	a0,a1
 ;	move	a1,*a6(OXPOS)
@@ -2417,12 +2417,12 @@ mk3_lp
 	move	a0,*a9(OFLAGS)
 ;	movi	OBJLST,A1		;Find rgt rimbase & do it too
 ;#fndbr	move	*a1,a1,L
-;	jrz	#nobr			;End?
+;	jrz	nobr			;End?
 ;	move	*a1(OIMG),a2,L
 ;	cmpi	rimbase,a2
-;	jrne	#fndbr			;No match?
+;	jrne	fndbr			;No match?
 ;	move	*a1(OXPOS),a2		;The side we want?
-;	jrn	#fndbr
+;	jrn	fndbr
 ;	move	*a1(OFLAGS),a0		;Rgt rimbase
 ;	andi	~M_3DQ,a0
 ;	or	a14,a0
@@ -2447,12 +2447,12 @@ mk3_lp
 	move	a0,*a8(OFLAGS)
 ;	movi	OBJLST,A1		;Find lft rimbase & do it too
 ;#fndbl	move	*a1,a1,L
-;	jrz	#nobl			;End?
+;	jrz	nobl			;End?
 ;	move	*a1(OIMG),a2,L
 ;	cmpi	rimbase,a2
-;	jrne	#fndbl			;No match?
+;	jrne	fndbl			;No match?
 ;	move	*a1(OXPOS),a2		;The side we want?
-;	jrnn	#fndbl
+;	jrnn	fndbl
 ;	move	*a1(OFLAGS),a0		;Lft rimbase
 ;	andi	~M_3DQ,a0
 ;	or	a14,a0
@@ -2460,27 +2460,27 @@ mk3_lp
 ;#nobl
 	.endif
 
-	jruc	#lp
+	jruc	lp
 
 #fixbb	clr	a0			;Hoop off-screen. Make sure it won't
 	move	a0,*a10			; be shattered next time we see it
 
 	move	@rimlf,a1,L		;Assume doing lft hoop
 	cmp	a8,a6			;Lft or rgt? Lft if =
-	jreq	#fxbb1
+	jreq	fxbb1
 	movk	1,a0			;Set for rgt hoop
 	move	@rimrf,a1,L
 #fxbb1
 	move	*a1(OIMG),a1,L		;Deref *obj
 	cmpi	RIM0_F_00,a1,L		;Is it norm hoop img? Yes if =
-	jreq	#slp
+	jreq	slp
 ;DJT Start
 	cmpi	CHAN1F_01,a1,L		;Is it norm hoop img? Yes if =
-	jreq	#slp
+	jreq	slp
 ;DJT End
 	clr	a1			;No. Do netani to reset the hoop
 	callr	net_ani
-	jruc	#slp
+	jruc	slp
 
 
 #ani_t
@@ -2511,7 +2511,7 @@ mk3_lp
 	DIE
 
 
-#********************************
+*********************************
 * Animate net/rim after made or missed shot
 * A0=0 if left hoop, !0 if rgt hoop
 * A1=Ani seq # (0-17)
@@ -2522,10 +2522,10 @@ mk3_lp
 	PUSH	a7,a8,a9,a10
 
 	move	a0,a0
-	jrz	#lft
+	jrz	lft
 	move	@rimrf,a8,L		;*Right hoop objs
 	move	@rimrb,a9,L
-    	jruc	#tag
+    	jruc	tag
 #lft
 	move	@rimlf,a8,L		;Left ^
 	move	@rimlb,a9,L
@@ -2533,7 +2533,7 @@ mk3_lp
 	sll	5,a1
 	addi	#net_t,a1
 	move	@pup_court,a14
-	jrz	#tag1
+	jrz	tag1
 	addi	#netc_t-#net_t,a1
 #tag1
 	move	*a1,a10,L
@@ -2616,7 +2616,7 @@ do_net_ani
 	movk	4,a0
 #slp
 	calla	PRCSLP
-	jruc	#lp
+	jruc	lp
 
 ;--------------------
 
@@ -2863,7 +2863,7 @@ netc15_l
 	.long	CHAN3F_10,CHAN3B_10
 	.long	CHAN1F_01,CHAN1B_01,0
 
-#*****************************************************************************
+******************************************************************************
 *
 * Start secret powerup processes at start of matchup_screen
 *
@@ -2886,21 +2886,21 @@ netc15_l
 	move	a13,a8
 	addi	PDATA+48,a8
 	.ref	PSTATUS
-#lp	move	@PSTATUS,a0
+#lp	move	@PSTATUS2,a0
 	btst	a9,a0
-	jrz	#inc
+	jrz	inc
 
 	movi	#special_moves,a2	;This player in game, start processes
 #loop
 	move	*a2+,a7,L
-	jrz	#inc
+	jrz	inc
 	movi	SMOVE_PID,a1
 	calla	GETPRC
-	jruc	#loop
+	jruc	loop
 #inc
 	subk	16,a8
 	subk	1,a9
-	jrnn	#lp
+	jrnn	lp
 
 	clr	a8
 	clr	a9
@@ -2919,7 +2919,7 @@ netc15_l
 	move	@P1CTRL,a0
 	xor	a0,a8
 	sll	32-7,a8
-	jrz	#no1
+	jrz	no1
 	move	a0,a8
 	sll	32-7,a8
 	srl	32-7,a8
@@ -2934,7 +2934,7 @@ netc15_l
 	move	@P2CTRL,a0
 	xor	a0,a9
 	sll	32-7,a9
-	jrz	#no2
+	jrz	no2
 	move	a0,a9
 	sll	32-7,a9
 	srl	32-7,a9
@@ -2949,7 +2949,7 @@ netc15_l
 	move	@P3CTRL,a0
 	xor	a0,a10
 	sll	32-7,a10
-	jrz	#no3
+	jrz	no3
 	move	a0,a10
 	sll	32-7,a10
 	srl	32-7,a10
@@ -2964,7 +2964,7 @@ netc15_l
 	move	@P4CTRL,a0
 	xor	a0,a11
 	sll	32-7,a11
-	jrz	#no4
+	jrz	no4
 	move	a0,a11
 	sll	32-7,a11
 	srl	32-7,a11
@@ -2977,7 +2977,7 @@ netc15_l
 	move	a0,a11
 ;DJT End
 
-	jruc	#stklp
+	jruc	stklp
 
 
 ******************************************************************************
@@ -3003,7 +3003,7 @@ netc15_l
 	.long	0
 
 
-#*******************************************************************************
+********************************************************************************
 * a8=PnCTRL for this player
 * a9=plyr #
 
@@ -3048,7 +3048,7 @@ sp_lockcombo
 ;DJT moved down
 ;DJT End
 
-#*******************************************************************************
+********************************************************************************
 * a8=PnCTRL for this player
 * a9=plyr #
 
@@ -3082,7 +3082,7 @@ sp_bighead
 ;DJT flash_backdrop moved down
 ;DJT End
 
-#*******************************************************************************
+********************************************************************************
 * a8=PnCTRL for this player
 * a9=plyr #
 
@@ -3120,7 +3120,7 @@ sp_hugehead
  	jruc	pupflash
 ;DJT End
 
-#*******************************************************************************
+********************************************************************************
 * a8=PnCTRL for this player
 * a9=plyr #
 
@@ -3179,7 +3179,7 @@ sp_showshotper
 ;DJT Start
  	jruc	pupflash
 
-#*******************************************************************************
+********************************************************************************
 * a8=PnCTRL for this player
 * a9=plyr #
 
@@ -3211,7 +3211,7 @@ sp_showhotspot
  	jruc	pupflash
 
 ;DJT End
-#*******************************************************************************
+********************************************************************************
 * a8=PnCTRL for this player
 * a9=plyr #
 
@@ -3247,7 +3247,7 @@ sp_notag
  	jruc	pupflash
 ;DJT End
 
-#*******************************************************************************
+********************************************************************************
 * a8=PnCTRL for this player
 * a9=plyr #
 
@@ -3290,7 +3290,7 @@ sp_nodrift
 ;;	jruc	pupmsg
 ;DJT End
 
-#*******************************************************************************
+********************************************************************************
 * a8=PnCTRL for this player
 * a9=plyr #
 
@@ -3322,7 +3322,7 @@ sp_noassistance
  	jruc	pupflash
 ;DJT End
 
-#*******************************************************************************
+********************************************************************************
 * a8=PnCTRL for this player
 * a9=plyr #
 
@@ -3360,7 +3360,7 @@ sp_aba
 	jruc	pupmsg
 ;DJT End
 
-#*******************************************************************************
+********************************************************************************
 * a8=PnCTRL for this player
 * a9=plyr #
 
@@ -3377,22 +3377,22 @@ sp_court
 	SLEEPK	1
 	callr	#cbani
 	move	*a8,a10
-	jrnz	#lp
+	jrnz	lp
 #lp1
 	SLEEPK	1
 	callr	#cbani
 	move	*a8,a10
-	jrz	#lp1
+	jrz	lp1
 	sll	32-7,a10
 	srl	32-7,a10
 
 	clr	a0
 	cmpi	JOY_LEFT,a10
-	jreq	#lp2
+	jreq	lp2
 
 	movk	1,a0
 	cmpi	JOY_RIGHT,a10
-	jrne	#lp
+	jrne	lp
 #lp2
 	move	a0,@pup_court
 
@@ -3404,14 +3404,14 @@ sp_court
 
 	movi	BAST_W_P,a11
 	cmpi	JOY_LEFT,a10
-	jrne	#lp4
+	jrne	lp4
 	move	a11,@message_palette,L
 #lp4
 	movi	msg_indoor,a4,L
 	calla	print_string_C2
 
 	cmpi	JOY_RIGHT,a10
-	jreq	#lp5
+	jreq	lp5
 	movi	BAST_B_P,a11
 #lp5
 	move	a11,@message_palette,L
@@ -3425,7 +3425,7 @@ sp_court
 	move	@pup_msgs,a0,L
 	movk	1<<MSG_OUTDOOR,a14
 	and	a0,a14
-	jrnz	#lp3
+	jrnz	lp3
 
 	addk	1<<MSG_OUTDOOR,a0
 	move	a0,@pup_msgs,L
@@ -3442,25 +3442,25 @@ sp_court
 	add	a0,a11
 	move	*a11,a0,L
 	calla	snd_play1
-	jruc	#lp
+	jruc	lp
 
 
 	.ref	CBANI_T
 #cbani
 	move	*a13(PDATA),a10,L
-	jrz	#cbx
+	jrz	cbx
 	move	*a13(PDATA+64),a0,L
 	subk	1,a0
-	jrnz	#cbc
+	jrnz	cbc
 #cba0
 	move	*a10+,a2,L
-	jrnz	#cba1
+	jrnz	cba1
 #cbmake
 	movi	CBANI_T,a10,L
-	jruc	#cba0
+	jruc	cba0
 #cba1
 	move	*a13(PDATA+32),a11,L
-	jrnz	#cba2
+	jrnz	cba2
 	clr	a0
 	movi	[189,0],a1,L
 	movi	20000,a3		;Z
@@ -3477,7 +3477,7 @@ sp_court
 	move	*a2(ISAG),*a11(OSAG),L
 	movi	[120,0],a0,L
 	move	@pup_court,a14
-	jrz	#cba3
+	jrz	cba3
 	movi	[269,0],a0,L
 #cba3
 	move	a0,*a11(OXVAL),L
@@ -3515,7 +3515,7 @@ sp_court
  .endif
 ;DJT End
 
-#*******************************************************************************
+********************************************************************************
 * a8=PnCTRL for this player
 * a9=plyr #
 
@@ -3612,7 +3612,7 @@ flash_backdrop
 	movk	3,a9
 #tg0
 	SLEEPK	1
-	dsj	a9,#tg0
+	dsj	a9,tg0
 	setf	4,0,0
 	movk	M_WRNONZ,a0
 	move	a0,*a8(OCTRL)		;Write 4 low bits
@@ -3621,9 +3621,9 @@ flash_backdrop
 	movk	3,a9
 #tg2
 	SLEEPK	1
-	dsj	a9,#tg2
+	dsj	a9,tg2
 
-	dsj	a11,#again
+	dsj	a11,again
 
 	DIE
 

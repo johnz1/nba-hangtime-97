@@ -1626,7 +1626,7 @@ cnl_1a	clr	a0				;x val
 	move	*a13(PC_NAM1OBJ),a8,L
 	move	*a8(OIMG),a0,L
 	cmpi	BAST10SPC,a0
-	jreq	#is_space1
+	jreq	is_space1
 	calla	obj_on
 #is_space1
 	move	*a8(OSIZEX),a0			;width of object
@@ -1634,13 +1634,13 @@ cnl_1a	clr	a0				;x val
 
 ;second char. of name
 	move	*a2+,a0
-;;;;	jrn	#skip
+;;;;	jrn	skip
 	inc	a7
 	addk	2,a5				;+ 2 pixel space
 	move	*a13(PC_NAM2OBJ),a8,L
 	move	*a8(OIMG),a0,L
 	cmpi	BAST10SPC,a0
-	jreq	#is_space2
+	jreq	is_space2
 	calla	obj_on
 #is_space2
 	move	*a8(OSIZEX),a0			;width of object
@@ -1648,13 +1648,13 @@ cnl_1a	clr	a0				;x val
 
 ;third char. of name
 	move	*a2+,a0
-;;;;	jrn	#skip
+;;;;	jrn	skip
 	inc	a7
 	addk	2,a5				;+ 2 pixel space
 	move	*a13(PC_NAM3OBJ),a8,L
 	move	*a8(OIMG),a0,L
 	cmpi	BAST10SPC,a0
-	jreq	#is_space3
+	jreq	is_space3
 	calla	obj_on
 #is_space3
 	move	*a8(OSIZEX),a0			;width of object
@@ -1662,13 +1662,13 @@ cnl_1a	clr	a0				;x val
 
 ;fourth char. of name
 	move	*a2+,a0
-;;;;	jrn	#skip
+;;;;	jrn	skip
 	inc	a7
 	addk	2,a5				;+ 2 pixel space
 	move	*a13(PC_NAM4OBJ),a8,L
 	move	*a8(OIMG),a0,L
 	cmpi	BAST10SPC,a0
-	jreq	#is_space4
+	jreq	is_space4
 	calla	obj_on
 #is_space4
 	move	*a8(OSIZEX),a0			;width of object
@@ -1676,13 +1676,13 @@ cnl_1a	clr	a0				;x val
 
 ;fifth char. of name
 	move	*a2+,a0
-;;;;	jrn	#skip
+;;;;	jrn	skip
 	inc	a7
 	addk	2,a5				;+ 2 pixel space
 	move	*a13(PC_NAM5OBJ),a8,L
 	move	*a8(OIMG),a0,L
 	cmpi	BAST10SPC,a0
-	jreq	#is_space5
+	jreq	is_space5
 	calla	obj_on
 #is_space5
 	move	*a8(OSIZEX),a0			;width of object
@@ -1690,14 +1690,14 @@ cnl_1a	clr	a0				;x val
 
 ;sixth char. of name
 	move	*a2+,a0
-;;;;	jrn	#skip
+;;;;	jrn	skip
 	inc	a7
 	addk	2,a5				;+ 2 pixel space
 	move	*a13(PC_NAM6OBJ),a8,L
 	move	*a8(OIMG),a0,L
 	cmpi	BAST10SPC,a0
 ;	cmpi	OSGEMD_SPC,a0
-	jreq	#is_space6
+	jreq	is_space6
 	calla	obj_on
 #is_space6
 	move	*a8(OSIZEX),a0			;width of object
@@ -1705,13 +1705,13 @@ cnl_1a	clr	a0				;x val
 
 ;seventh char. of name
 ;	move	*a2,a0
-;	jrn	#skip
+;	jrn	skip
 ;	inc	a7
 ;	addk	2,a5				;+ 2 pixel space
 ;	move	*a13(PC_NAM7OBJ),a8,L
 ;	move	*a8(OIMG),a0,L
 ;	cmpi	OSGEMD_SPC,a0
-;	jreq	#is_space7
+;	jreq	is_space7
 ;	calla	obj_on
 ;#is_space7
 ;	move	*a8(OSIZEX),a0			;width of object
@@ -1723,7 +1723,7 @@ cnl_1a	clr	a0				;x val
 	move	*a13(PC_CENTERX2),a6
 
 	move	@TWOPLAYERS,a0			;0 = NO, 1 = YES 2 players
-	jrz	#no_2p
+	jrz	no_2p
 	move	*a13(PC_CENTERXkit),a6
 #no_2p
 	sub	a5,a6				;center - width/2
