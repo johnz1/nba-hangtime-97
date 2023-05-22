@@ -153,9 +153,10 @@ PIXPERFRM	.equ	frmpalptr+32			;32b
 
 	srl	16,a9
 	move	@dpage,a14
-	jrnz	p2
+	jrnz	#p2
 	addi	PAGE1YO,a9		;Start in page 1 if page 0 is being displayed
-#p2
+
+p2
 	sll	9,a9
 	add	a7,a9
 	sll	3,a9

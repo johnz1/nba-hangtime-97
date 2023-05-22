@@ -21,12 +21,13 @@
 	.include	"sys.equ"
 	.include	"game.equ"
 	.include	"audit.equ"
-	.include	"macros.h"
+	.include	"macros.hdr"
 	.include	"link.equ"
 
 ;	.include	"roboimg.glo"
 	.include	"roboimg.tbl"
-	.include	"fontsimg.glo"
+;	.include	"fontsimg.glo"
+	.include	"fonttbl.glo"		; AM: seems this never compiled.
 
 	;kludge
 	.ref	robo_p

@@ -11,3 +11,23 @@ Findings:
 arc/D3.asm seems to hold battlezone game?
 robo.asm is robotron. Seems they wanted to include this at some point. Same with WWF, it never got included?
 SRC seems to be Max Hangtime l1/m1 1.0, not sure yet.
+
+assembling diag.asm: Seems to be OK, after fixer python :)
+assembling unzip.asm
+
+     156 00000090     cbf6          jrnz    p2
+ *********  AN IDENTIFIER IN THE EXPRESSION IS INVALID
+
+     158                    #p2
+ *********  ILLEGAL LABEL
+
+- They have labels starting with # in the code.
+- They have labels starting with # that are duplicates
+- They have routines like jrnz #label. 
+- But sometimes they don't use the #label in the jrnz or djsj.. mweh
+- The GSPA assembler does not like jrnz #label thing.
+- The GSPA assembler does not like #label as a start of a routine.
+
+looking at mk3's unzip.asm 'blowline' routine
+- routine name has SUBRP in front of it (.even)
+- #lp got changed to lp7
