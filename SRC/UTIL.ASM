@@ -21,6 +21,7 @@
 *.Last mod - 3/22/93 16:25
 *.Last mod - 4/12/95 11:02am
 **************************************************************
+* AM: needs no fixes!
 	.file	"util.asm"
 	.title	"utility subroutines"
 	.width	132
