@@ -1,0 +1,13 @@
+Notes on Hangtime work.
+-----------------------
+
+22-05-2023 Notes started.
+
+Todo:
+- Fix images /lod etc. write a bat file.
+- preasm.exe replacement.. :(
+
+Findings:
+arc/D3.asm seems to hold battlezone game?
+robo.asm is robotron. Seems they wanted to include this at some point. Same with WWF, it never got included?
+SRC seems to be Max Hangtime l1/m1 1.0, not sure yet.

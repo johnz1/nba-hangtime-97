@@ -1,5 +1,5 @@
 # Luigi30 fixer py
-# Mods for SmashTV by Asure
+# Mods for Hangtime by Asure
 import glob
 import re
 
