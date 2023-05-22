@@ -21,7 +21,7 @@
 	.include	"gsp.equ"
 
 	.include	"imgtbl.glo"
-	.include	"imgtbl2.glo"
+;	.include	"imgtbl2.glo"		;where is this from? is it needed?
 	.include	"bgndtbl.glo"
 	.include	"game.equ"
 	.include	"audit.equ"
