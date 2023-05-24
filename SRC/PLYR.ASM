@@ -725,11 +725,11 @@ IBZ_DEF2	.equ	CZMID+70
 	movi	plyrproc_t+32*NUMPLYRS,a2	;Set ptrs & cnt to make plyrs
 	movi	plyrobj_t+32*(NUMPLYRS-1),a9
 	movk	NUMPLYRS-1,a8			;-1 to fall thru for last one
-#strtp
+#strtp1
 	CREATE0	plyr_main
 	move	a0,-*a2,L		;Save *proc
 	subk	32,a9
-	dsj	a8,strtp
+	dsj	a8,strtp1
 
 	move	a13,-*a2,L
 ;	jruc	plyr_main		;0
@@ -981,9 +981,10 @@ IBZ_DEF2	.equ	CZMID+70
 	move	*a14+,a3		;get team #'s & determine which one
 	move	*a14,a4			; we are now
 	btst	1,a11
-	jrz	t1
+	jrz	    t1b
 	SWAP	a3,a4
-#t1	sll	3,a3
+#t1b
+	sll	3,a3
 	sll	3,a4
 	addi	teampal_t,a3
 	addi	teampal_t,a4
@@ -1017,9 +1018,9 @@ IBZ_DEF2	.equ	CZMID+70
 	.ref	SHT11			;MK SPECIAL FLAG
 	move	*a7(PAT_SHOTSKILL),a1	;Check for special pals
 	cmpi	SHT11,a1
-	jrne	reg			;Stay with defined pals if !=
+	jrne	reg1		;Stay with defined pals if !=
 	move	a7,a6
-#reg
+#reg1
 
 	move	*a7(PAT_PALF_p),a1,L	;Copy flesh
 ;	.ref	NFL55_p
@@ -1241,9 +1242,9 @@ IBZ_DEF2	.equ	CZMID+70
 
 	.if	DEBUG
 	move	@QUICK_TIP,a14
-	jrz	skipq
+	jrz	skipq1
 	movk	STND_SEQ,a0
-#skipq
+#skipq1
 	.endif
 
 	move	*a13(plyr_dir),a7
@@ -1303,7 +1304,7 @@ IBZ_DEF2	.equ	CZMID+70
 ;------------------------------
 ; Top of main player proc loop
 
-#lp
+#main_lp                             ;top of main player loop
 	move	@HALT,a0
 	jrnz	halted
 
@@ -2774,7 +2775,7 @@ IBZ_DEF2	.equ	CZMID+70
 	.endif
 
 
-anicnt	dsj	a10,noani
+anicnt	dsj	a10,noani1
 
 	move	*a13(plyr_ani_p),a14,L		;>Set new ani
 #getdel	move	*a14+,a10			;Delay
@@ -2864,7 +2865,7 @@ nocode	jrnz	100
 	move	a14,*a3(OCTRL+4)
 #nohflip
 	setf	16,1,0
-#noani
+#noani1
 
 ;-------
 
@@ -3408,7 +3409,7 @@ nocode	jrnz	100
 ;	callr	plyr_setgndaligndot
 ;	.endif
 
-	SLOOP	1,#lp
+	SLOOP	1,#main_lp  ;Assumption this need to go to main player loop.
 
 ;--------------------
 ; plyr # bit val (1,2,3 or 4,8,C) to tm # bit val (1 or 2)
@@ -3672,9 +3673,10 @@ NUM_HOTSPOTS	.equ	(hotspot_xz_tend-hotspot_xz_t)/32
 
 	clr	a14			;Dir 5-7 have reversed FLIPH
 	cmpi	5,a1
-	jrlt	nohf
+	jrlt	nohf1
 	movi	M_FLIPH,a14
-#nohf	move	a14,*a13(plyr_anirevff)
+#nohf1
+	move	a14,*a13(plyr_anirevff)
 
 	sll	32-3,a1			;Clr bits
 	srl	32-3-5,a1		;*32
@@ -4109,7 +4111,8 @@ NUM_HOTSPOTS	.equ	(hotspot_xz_tend-hotspot_xz_t)/32
 ;--------------------
 ; top of test loop
 
-#lp	move	*a7+,a9,L
+#test_lp	; Top of test loop
+    move	*a7+,a9,L
 
 	move	*a9(OZPOS),a2		;Chk Z
 	sub	a6,a2
@@ -4460,7 +4463,7 @@ NUM_HOTSPOTS	.equ	(hotspot_xz_tend-hotspot_xz_t)/32
 #nesy
 #setstg	move	a10,*a13(plyr_stagcnt)
 
-next	dsj	b1,lp
+next	dsj	b1,test_lp
 
 
 #x	PULL	a2,a3,a4,a5,a6,a7,a9,a10,a11
@@ -4655,7 +4658,7 @@ tryblk_t
 
 	move	*a13(plyr_num),a14
 	srl	1,a14
-	jrnz	reg			;Team1?
+	jrnz	reg2			;Team1?
 
 	move	*a8(OXPOS),a14
 	sub	a0,a14
@@ -4663,7 +4666,7 @@ tryblk_t
 	cmpi	110h,a14		;160
 	jrlt	tryhk2
 	jruc	yes
-#reg
+#reg2
 	move	*a8(OXPOS),a14
 	sub	a14,a0
 ;	abs	a0
@@ -7123,14 +7126,14 @@ alleyoop_seq_tbl
 	move	a2,@shot_distance
 	movi	ALLEYOOP_PAS_SEQ,a0
 	move	*a13(plyr_jmpcnt),a14
-	jrz	reg
+	jrz	reg3
 	movi	PASSDO_SEQ,a0
 	move	*a13(plyr_tmdist),a14
 	cmpi	110*DIST_REDUCTION,a14
-	jrgt	#reg
+	jrgt	#reg3
 	movi	PASSDO2_SEQ,a0
 
-#reg
+#reg3
 
 ;	move	*a13(plyr_dir),a7
 	move	*a13(plyr_newdir),a7	;Turn toward alley-ooper
@@ -8311,7 +8314,7 @@ alleyoop_seq_tbl
 	subk	1,b0			;1 step
 	jrgt	#bndlp
 
-	jruc	outb
+	jruc	outb4
 
 #outb3
 	add	a1,a3
@@ -8333,7 +8336,7 @@ alleyoop_seq_tbl
 	add	a14,a5
 	add	a9,a10
 	addi	GRAVB,a9
-#outb
+#outb4
 	sra	16,a3
 	sra	16,a5
 
@@ -8830,9 +8833,9 @@ RTIME	.equ	25
 
 	move	*a8(OZPOS),a14
 	subi	GZBASE,a14
-	jrge	#zok
+	jrge	#zok1
 	clr	a14
-#zok	srl	4,a14			;/16
+#zok1	srl	4,a14			;/16
 	sll	6,a14			;*64
 	add	a14,a0
 	addk	32,a0
@@ -8878,9 +8881,9 @@ RTIME	.equ	25
 
 	move	*a8(OZPOS),a14
 	subi	GZBASE,a14
-	jrge	#zok
+	jrge	#zok2
 	clr	a14
-#zok	srl	4,a14			;/16
+#zok2	srl	4,a14			;/16
 	sll	6,a14			;*64
 	add	a14,a0
 	addk	32,a0
@@ -8930,9 +8933,9 @@ RTIME	.equ	25
 
 	move	*a8(OZPOS),a14
 	subi	GZBASE,a14
-	jrge	#zok
+	jrge	#zok3
 	clr	a14
-#zok	srl	4,a14			;/16
+#zok3	srl	4,a14			;/16
 	sll	6,a14			;*64
 	addk	32,a0
 	add	a14,a0
@@ -8978,9 +8981,9 @@ RTIME	.equ	25
 	move	a1,*a4(OZPOS)
 
 	subi	CZMIN,a0		;-Base
-	jrge	#zok
+	jrge	#zok4
 	clr	a0
-#zok	srl	5,a0			;/32
+#zok4	srl	5,a0			;/32
 	move	*a8(OYPOS),a1
 	move	*a13(plyr_aniy),a14
 	add	a14,a1			;Ani pt position
@@ -9069,9 +9072,9 @@ RTIME	.equ	25
 
 					;0CaHlc head scale anixy (A3,A5)
 	subi	GZBASE,a14		;-Base
-	jrge	#zok
+	jrge	#zok5
 	clr	a14
-#zok	srl	4,a14			;/16
+#zok5	srl	4,a14			;/16
 	sll	6,a14			;*64
 	move	*a6(ODATA_p),a0,L
 	addk	32,a0
@@ -9092,14 +9095,14 @@ RTIME	.equ	25
 
 	move	*a6(OCTRL),a14
 	btst	B_FLIPH,a14
-	jrz	nohf			;No flip?
+	jrz	nohf2			;No flip?
 
 	move	*a2,a2			;ISIZEX
 	subk	1,a2
 	sll	16,a2			;*64K
 	neg	a3
 	add	a2,a3			;+size
-#nohf
+#nohf2
 
 	callr	anipt3_getsclxy
 
@@ -9141,9 +9144,9 @@ RTIME	.equ	25
 ;
 ;					;0CaHlc head scale anixy (A3,A5)
 ;	subi	GZBASE,a14		;-Base
-;	jrge	#zok
+;	jrge	#zok6
 ;	clr	a14
-;#zok	srl	4,a14			;/16
+;#zok6	srl	4,a14			;/16
 ;	sll	6,a14			;*64
 ;	move	*a6(ODATA_p),a0,L
 ;	addk	32,a0
@@ -9216,7 +9219,7 @@ RTIME	.equ	25
 
 	.if	DEBUG
 	move	@QUICK_TIP,a0
-	jrnz	skipq
+	jrnz	skipq3
 	.endif
 
 	clr	a9
@@ -9227,7 +9230,7 @@ RTIME	.equ	25
 	CREATE	METER_PID,jumpball_meter
 	.ref	jumpball_meter
 	.if	DEBUG
-#skipq
+#skipq3
 	.endif
 
 	movk	1,a0
@@ -9275,8 +9278,8 @@ RTIME	.equ	25
 #skipq2
 	.endif
 	movk	1,a10
-#lp
-	dsj	a10,noani
+#ani_lp
+	dsj	a10,noani2
 
 #getwt	move	*a9+,a10
 	jrz	refdone
@@ -9299,7 +9302,7 @@ RTIME	.equ	25
 	neg	a1
 	move	a1,*a8(OYPOS)			;Set on gnd
 
-#noani
+#noani2
 	move	*a13(plyr_ownball),a0
 	jrz	noball				;Tossed up?
 
@@ -9321,7 +9324,7 @@ RTIME	.equ	25
 	SLEEPK	1
 	move	@HALT,a0
 	jrnz	noball
-	jruc	lp
+	jruc	ani_lp
 
 #refdone
 	SLEEPK	5
@@ -9560,9 +9563,10 @@ RTIME	.equ	25
 	movi	t1bcnt,a9		;0CHount button1 down presses
 	move	*a11(plyr_num),a1
 	btst	1,a1
-	jrz	t1
+	jrz	    t1c
 	addk	16,a9
-#t1	clr	a0
+#t1c	
+    clr	a0
 	move	@PSTATUS2,a14
 	btst	a1,a14
 	jrnz	human			;Human opponent?
@@ -9572,10 +9576,10 @@ RTIME	.equ	25
 	.if	DEBUG
 ;Quick jump ball for debugging
 	move	@QUICK_TIP,a14
-	jrnz	skipq
+	jrnz	skipq4
 	.endif
 	SLEEPK	25
-#skipq
+#skipq4
 
 	move	@plyrobj_t+32,a0,L
 ;	move	*a0(OXVEL),a14,L
@@ -9975,11 +9979,11 @@ RTIME	.equ	25
 	setf	1,0,0
 	move	*a8(OCTRL+4),*a3(OCTRL+4)	;Copy HFlip bit
 	move	*a2(IFLAGS+FLIPH_IFB),a14	;Chk reverse bit
-	jrz	nohflip
+	jrz	nohflip1
 	move	*a3(OCTRL+4),a14		;Reverse hflip
 	addk	1,a14
 	move	a14,*a3(OCTRL+4)
-#nohflip
+#nohflip1
 	setf	16,1,0
 
 	move	@plyrproc_t+32,a13,L
@@ -10059,11 +10063,11 @@ doplyrs
 	movi	plyrproc_t+32*NUMPLYRS,a2
 	movi	plyrobj_t+32*(NUMPLYRS-1),a9
 	movk	NUMPLYRS-1,a8
-#strtp
+#strtp2
 	CREATE0	plyr_main
 	move	a0,-*a2,L		;Save *proc
 	subk	32,a9
-	dsj	a8,strtp
+	dsj	a8,strtp2
 
 	move	a13,-*a2,L
 	jruc	plyr_main		;0
@@ -10463,7 +10467,8 @@ test
 ;Del old side arrows for all players & in plyr_lost A8
 	movi	plyrproc_t,a9
 	movk	4,a10
-#lp	move	*a9+,a0,L
+#arrow_lp
+	move	*a9+,a0,L
 	move	*a0(plyr_lost_ptr),a2,L
 	move	*a2(PA8),a0,L
 	jrz	nxt
@@ -10475,7 +10480,7 @@ test
 	calla	DELOBJ
 	clr	a0
 	move	a0,*a2(PA8),L
-nxt	dsj	a10,lp
+nxt	dsj	a10,arrow_lp
 
 	DIE
 
@@ -10668,7 +10673,7 @@ do_cpu_stats
  SUBRP	plyr_endqfinishshot
 
 	movi	TSEC*5/2,a10
-#lp
+#shot_lp
 	move	@ballpnum,a0
 	jrnn	stop			;Somebody has ball?
 	move	@ballobj_p,a2,L
@@ -10678,7 +10683,7 @@ do_cpu_stats
 
 	SLEEPK	2
 
-gbcnt	dsj	a10,lp
+gbcnt	dsj	a10,shot_lp
 
 #stop
 	move	@ballpnum,a0
@@ -11045,13 +11050,13 @@ nofade_t			;Pals not to fade
 	move	@PSTATUS2,a3
 	movk	2,a9
 	move	a11,a11
-	jrz	t1
+	jrz	t11
 	addk	32,a0			;Team 2 is inbounding
 	addk	32,a0
 	movk	1,a2
 	srl	2,a3
 	clr	a9
-#t1
+#t11
 	move	*a0+,a8,L		;A8=*Proc of plyr who gets ball
 	move	*a0+,a7,L
 	move	a2,@inbound		;Inbounding team (0-1)
@@ -11156,22 +11161,23 @@ nofade_t			;Pals not to fade
 
 
 	movi	TSEC*3,a10		;Max wait for inbounder to get OOB
-#outlp
+#outlp1
 	SLEEPK	1
 
 	callr	plyrtob_moveo3		;Move other plyrs to their spots
 
 	movi	-IBX_OOB,a0		;Set X per team inbounding
 	move	a11,a11
-	jrz	outl			;Team2 on def
+	jrz	    outl1			;Team2 on def
 	neg	a0
-#outl	addi	WRLDMID,a0
+#outl1	    
+    addi	WRLDMID,a0
 	movi	IBZ_OOB,a1
 	move	*a13(ptob_pball),a2
 	move	a2,@ballpnum
 	callr	plyrtob_seekxy		;Move inbounder to OOB spot
-	jrz	outofb			;He's there if 0
-	dsj	a10,outlp		;Don't wait longer then A10
+	jrz	    outofb			;He's there if 0
+	dsj	    a10,outlp1		;Don't wait longer then A10
 #outofb
 	movi	-1,a0
 	move	a0,*a8(plyr_dribmode)
@@ -11179,12 +11185,12 @@ nofade_t			;Pals not to fade
 
 
 	movi	TSEC*3,a10		;Max wait for other 3 to get in place
-#wtlp
+#wtlp1
 	SLEEPK	1
 
 	callr	plyrtob_moveo3		;Move other plyrs to their spots
 	jrz	inpos			;They're there if 0
-	dsj	a10,wtlp		;Don't wait longer then A10
+	dsj	a10,wtlp1		;Don't wait longer then A10
 ;	.if	DEBUG
 ;	LOCKUP
 ;	.endif
@@ -11556,12 +11562,12 @@ plyrtob_dopass
 	movk	2,a9			;A9=1st p# of team on defense
 	movi	plyrproc_t,a0
 	move	a11,a2
-	jrz	t1
+	jrz	t12
 	clr	a9
 	addk	32,a0
 	addk	32,a0
 	movk	2,a2
-#t1
+#t12
 	move	*a0+,a8,L		;A8=*Proc of plyr who gets ball
 	move	*a0+,a7,L
 	move	*a8(plyr_hpdist),a0
@@ -11578,7 +11584,7 @@ plyrtob_dopass
 	movi	-1,a0
 	move	a0,@ballpnumlast
 
-#outlp
+#outlp2
 	SLEEPK	1
 
 	move	*a13(ptob_pball),a0	;Ensure goaltender has ball
@@ -11590,22 +11596,23 @@ plyrtob_dopass
 
 	movi	-IBX_OOB,a0		;Set X per team inbounding
 	move	a11,a11
-	jrz	outl			;Team2 on def
-	neg	a0
-#outl	addi	WRLDMID,a0
+	jrz	    outl2			;Team2 on def
+	neg	    a0
+#outl2	    
+    addi	WRLDMID,a0
 	movi	IBZ_OOB,a1
 	move	*a13(ptob_pball),a2
 	callr	plyrtob_seekxy		;Move inbounder to OOB spot
-	jrnz	outlp			;He's not there yet if !0
+	jrnz	outlp2			;He's not there yet if !0
 
 
 	movi	TSEC*3,a10		;Max wait for other 3 to get in place
-#wtlp
+#wtlp2
 	SLEEPK	1
 
 	callr	plyrtob_moveo3		;Move other plyrs to their spots
 	jrz	inpos			;They're there if 0
-	dsj	a10,wtlp		;Don't wait longer then A10
+	dsj	a10,wtlp2		;Don't wait longer then A10
 #inpos
 	SLEEP	60			;Pause before inbounding
 
@@ -11900,22 +11907,22 @@ plyrtob_dopass
 	jrgt	#o45_67
 	abs	a0
 	sub	a7,a1			;A1=SrcY-DestY
-	jrnn	gotoct
+	jrnn	gotoct1
 	movk	2,a2			;Oct 2-3
 	abs	a1
-	jruc	d_sw
+	jruc	d_sw1
 #o45_67
 	movk	4,a2			;Oct 4-5
 	sub	a7,a1			;A1=SrcY-DestX
 	abs	a1
-	jrnn	o_up
+	jrnn	o_up1
 	movk	6,a2			;Oct 6-7
-#d_sw
+#d_sw1
 	SWAP	a0,a1			;Swap XY delts for oct 23 & 67
-#o_up
+#o_up1
 	sll	4,a2			;Oct*16
 
-#gotoct
+#gotoct1
 	clr	a14
 	cmp	a1,a0			;0CHmp slope
 	jrhs	#300
@@ -11937,12 +11944,12 @@ plyrtob_dopass
 	srl	4,a0			;Bigger/16
 	jrnz	350
 	jruc	x
-#lp2
+#lp2a
 	subk	1,a2			;Next 1/16 oct
 	add	a0,a14			;+1/16
 #350
 	cmp	a1,a14
-	jrlo	#lp2
+	jrlo	#lp2a
 
 #x
 	movi	07fH,a0
@@ -11986,22 +11993,22 @@ plyrtob_dopass
 	jrgt	#o45_67
 	abs	a0
 	sub	a7,a1			;A1=SrcY-DestY
-	jrnn	gotoct
+	jrnn	gotoct2
 	movk	2,a2			;Oct 2-3
 	abs	a1
-	jruc	d_sw
+	jruc	d_sw2
 #o45_67
 	movk	4,a2			;Oct 4-5
 	sub	a7,a1			;A1=SrcY-DestX
 	abs	a1
-	jrnn	o_up
+	jrnn	o_up2
 	movk	6,a2			;Oct 6-7
-#d_sw
+#d_sw2
 	SWAP	a0,a1			;Swap XY delts for oct 23 & 67
-#o_up
+#o_up2
 	sll	4,a2			;Oct*16
 
-#gotoct
+#gotoct2
 	clr	a14
 	cmp	a1,a0			;0CHmp slope
 	jrhs	#300
@@ -12012,12 +12019,12 @@ plyrtob_dopass
 	srl	4,a1			;Bigger/16
 	jrnz	250
 	jruc	x
-#lp1
+#lp1a
 	addk	1,a2			;Next 1/16 oct
 	add	a1,a14			;+1/16
 #250
 	cmp	a0,a14
-	jrlo	#lp1
+	jrlo	#lp1a
 	jruc	x
 
 #300
@@ -12029,12 +12036,12 @@ plyrtob_dopass
 	srl	4,a0			;Bigger/16
 	jrnz	350
 	jruc	x
-#lp2
+#lp2b
 	subk	1,a2			;Next 1/16 oct
 	add	a0,a14			;+1/16
 #350
 	cmp	a1,a14
-	jrlo	#lp2
+	jrlo	#lp2b
 
 #x					;0CaHlc distance (long+short/2.667)
 	srl	1,b0			;Shorter/2
@@ -12233,7 +12240,7 @@ plyrtob_dopass
 	.if 0		;1=SHOW COURT DOTS, 0=DON'T
 	movi	#init_t,a11		;>Setup gnd dot images
 	jruc	5
-#lp
+#dots_lp
 	addi	200,a0
 	sll	16,a0
 	clr	a1			;Y
@@ -12243,7 +12250,7 @@ plyrtob_dopass
 	move	a0,*a8(OCONST)
 #5	move	*a11+,a0		;X
 	cmpi	4000,a0
-	jrne	lp			;!End?
+	jrne	dots_lp			;!End?
 	.endif
 
 
