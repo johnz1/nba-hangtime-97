@@ -170,9 +170,9 @@ GOTHGHT	MMFM	SP,A1,A2,A3,A4,A7,A8,A9,A10,A11
 
 * A1 = BLOCK TABLE BASE + OFFSET TO X VAL
 * A14 - THRESHHOLD FOR SWITCHING FROM BINARY TO LINEAR SEARCH
-* A9 = LOW # -- # GREATEST BACKGROUND BLOCK
-* A10 = MID # -- (HIGH + LOW) >> 1
-* A2 = HIGH # -- # OF LOWEST BACKGROUND BLOCK
+* A9 = LOW  --  GREATEST BACKGROUND BLOCK
+* A10 = MID  -- (HIGH + LOW) >> 1
+* A2 = HIGH  --  OF LOWEST BACKGROUND BLOCK
 
  SUBRP	bgnd_get1stx
 
@@ -184,7 +184,7 @@ GOTHGHT	MMFM	SP,A1,A2,A3,A4,A7,A8,A9,A10,A11
 	addi	MAP_X,a1	;block tbl base + x offset
 	movk	5,a14		;threshhold for switching from binary to linear search
 
-#lp	move	a2,a10
+get1stx_lp	move	a2,a10
 	sub	a9,a10		;if (high - low) <= 5 finish with linear search
 	cmp	a14,a10
 	jrle	lsrch
@@ -200,9 +200,9 @@ GOTHGHT	MMFM	SP,A1,A2,A3,A4,A7,A8,A9,A10,A11
 	jrlt	blow
 
 	move	a10,a2		;high = mid
-	jruc	lp
+	jruc	get1stx_lp
 blow	move	a10,a9		;low = mid
-	jruc	lp
+	jruc	get1stx_lp
 
 lsrch
 	;* FINISH WITH A LINEAR SEARCH OF BLOCK TABLE FROM LOW TO HIGH
@@ -211,26 +211,26 @@ lsrch
 	;* A9 = LOW ADDRESS -- PTS TO X OFFSET OF BLOCK
 	;* A2 = HIGH ADDRESS -- PTS TO X OFFSET OF BLOCK
 
-	SLL	6,A9		;LOW BLOCK # TO LOW BLOCK OFFSET
-	SLL	6,A2		;HIGH BLOCK # TO HIGH BLOCK OFFSET
+	SLL	6,A9		;LOW BLOCK  TO LOW BLOCK OFFSET
+	SLL	6,A2		;HIGH BLOCK  TO HIGH BLOCK OFFSET
 	ADD	A1,A9
 	ADD	A1,A2
 	MOVI	BLOCK_SIZE,A8
-#linlp
+linlp
 	MOVE	*A9,A10		;X COOR
 	CMP	A0,A10
 	JRGE	GOTB		;IF LOW->X >= A0 GOTO FOUND
 	ADD	A8,A9
 	CMP	A2,A9
-	jrle	#linlp
+	jrle	linlp
 	clr	a0		;block not found, return 0
-	jruc	x
+	jruc	get1stx_x
 
 GOTB
 	move	a9,a0		;return a ptr to the block
 	subi	MAP_X,a0
 
-#x
+get1stx_x
 	PULL	a1,a2,a8,a9,a10
 	rets
 
@@ -394,22 +394,22 @@ GOTB
 	move	a7,a6		;a6 will point to bakbits after mod
 	jruc	next
 
-#lp
+scanmod_lp
 	move	*a0+,a9,L	;Y:X start
 
 	move	*a8+,a11,L	;Mod Y:X size
 	addxy	a9,a11		;Mod Y:X end
 
-	move	*a8+,a2		;# of blocks
+	move	*a8+,a2		; of blocks
 	add	a2,a6		;A6=*Next bakbits
 
 	cmpxy	a3,a11
-	jrxlt	#next		;Mod x end < tl x ?
-	jrylt	#next		;Mod y end < tl y ?
+	jrxlt	next		;Mod x end < tl x ?
+	jrylt	next		;Mod y end < tl y ?
 
 	cmpxy	a9,a4
-	jrxlt	#next		;Mod x start > br x ?
-	jrylt	#next		;Mod y start > br y ?
+	jrxlt	next		;Mod x start > br x ?
+	jrylt	next		;Mod y start > br y ?
 
 	sll	6,a2		;*64 (each block is 4 words)
 	move	*a8+,a1,L	;A1=*block table
@@ -423,12 +423,12 @@ GOTB
 	addxy	a9,a3
 	addxy	a9,a4
 
-#next	move	a6,a7
+next	move	a6,a7
 	move	*a0+,a8,L	;* module
-	jrnz	lp		;!End?
+	jrnz	scanmod_lp		;!End?
 
 
-#x	rets
+scanmod_x	rets
 
 
 ********************************
@@ -456,7 +456,7 @@ GOTB
 	sext	a0
 	subi	WIDEST_BLOCK,a0	;1st x coordinate of a block
 	callr	bgnd_get1stx
-	jrz	x		;no blocks with > X ?
+	jrz	    addmod_x		;no blocks with > X ?
 
 	movi	BLOCK_SIZE,a6
 
@@ -468,18 +468,18 @@ GOTB
 	sub	a6,a0		;subtract block size
 	move	a0,a7
 
-#sclp1
+sclp1
 	addk	1,a8
 	add	a6,a7		;Next block
 	cmp	a2,a7
-	jrge	#x		;End?
+	jrge	addmod_x		;End?
 
 	movb	*a8,a0		;Check bakbit
 	jrn	sclp1		;Already displayed?
 
 	move	*a7(MAP_X),a1
 	cmpxy	a3,a1
-	JRXGE	#qscanstrt	;Block X >= TL X ? (Do quicker scan)
+	JRXGE	qscanstrt	;Block X >= TL X ? (Do quicker scan)
 
 	move	*a7(MAP_HDR),a14
 	sll	32-12,a14	;Bits 0-11 are hdr offset
@@ -492,42 +492,42 @@ GOTB
 	move	*a14,a0		;MAP_W
 	add	a0,a1
 	cmpxy	a3,a1
-	JRXLT	#sclp1		;Block X+W < TL X ? (not in range)
+	JRXLT	sclp1		;Block X+W < TL X ? (not in range)
 
 	move	*a7(MAP_Y),a1
 	sll	16,a1
 	cmpxy	a4,a1
-	JRYGE	#sclp1       	;Block Y >= BR Y ?
+	JRYGE	sclp1       	;Block Y >= BR Y ?
 
 	move	*a14(MAP_H),a0
 	sll	16,a0
 	add	a0,a1
 	cmpxy	a3,a1
-	JRYLT	#sclp1		;Block Y+H < TL Y ?
+	JRYLT	sclp1		;Block Y+H < TL Y ?
 
 	callr	bgnd_addblk
 	jrnc	sclp1
 
-	jruc	x		;No more blocks!
+	jruc	addmod_x		;No more blocks!
 
 
 * Since blocks are sorted from left to right, we can do a quicker scan
 * once block left > display left
 
-#sclp2
+sclp2
 	addk	1,a8
 	add	a6,a7		;Next block
 	cmp	a2,a7
-	jrge	#x		;End?
+	jrge	addmod_x		;End?
 
 	movb	*a8,a0		;Check bakbit
 	jrn	sclp2		;Already displayed?
 
-#qscanstrt
+qscanstrt
 	move	*a7(MAP_Y),a1
 	sll	16,a1
 	cmpxy	a4,a1
-	JRYGE	#sclp2       	;Block Y >= BR Y ?
+	JRYGE	sclp2       	;Block Y >= BR Y ?
 
 	move	*a7(MAP_HDR),a14
 	sll	32-12,a14	;Bits 0-11 are hdr offset
@@ -541,17 +541,17 @@ GOTB
 	sll	16,a0
 	add	a0,a1
 	cmpxy	a3,a1
-	JRYLT	#sclp2		;Block Y+H < TL Y ?
+	JRYLT	sclp2		;Block Y+H < TL Y ?
 
 	move	*a7(MAP_X),a1
 	cmpxy	a4,a1
-	JRXGE	#x		;BLOCK X > BR X ?
+	JRXGE	addmod_x		;BLOCK X > BR X ?
 
 	callr	bgnd_addblk
 	jrnc	sclp2
 
 
-#x	PULL	a0,a6,a7
+addmod_x	PULL	a0,a6,a7
 	rets
 
 
@@ -572,7 +572,7 @@ GOTB
 
 
 	calla	GETOBJ
-	jrz	x
+	jrz	addblk_x
 
 	movb	*a8,a14		;set bit in bitmap for block on list
 	ori	080H,a14
@@ -639,9 +639,9 @@ bsetpal
 	ori	08002H,a4		;A4=flags (08000H dma go, 2)
 	srl	4,a3			;remove palette bits
 	sll	32-2,a3
-	jrc	#trans			;Transparent?
+	jrc	trans			;Transparent?
 	addk	1,a4
-#trans	srl	26,a3			;Line up flip bits
+trans	srl	26,a3			;Line up flip bits
 	or	a3,a4
 
 	move	*a1+,a2,L		;ISIZE
@@ -664,14 +664,14 @@ bsetpal
 	move	a4,*a0(OZPOS)
 
 	subi	20,a4			;> 100?
-	jrgt	#no_rel
+	jrgt	no_rel
 	move	*a0(OFLAGS),a4
 	ori	M_SCRNREL,a4
 	move	a4,*a0(OFLAGS)
 	move	*a0(OYPOS),a4
 	andi	0ffh,a4
 	move	a4,*a0(OYPOS)
-#no_rel
+no_rel
 
 	clr	a4
 	move	a4,*a0(OXVEL),L
@@ -682,12 +682,13 @@ bsetpal
 	PULL	a0,a2,a3,a4
 	rets
 
-#normz	call	b2			;Call insert routine
+normz	call	b2			;Call insert routine
 	clrc
 	PULL	a0,a2,a3,a4
 	rets
 
-#x	setc				;failure to get object
+addblk_x	
+    setc				;failure to get object
 	PULL	a0,a2,a3,a4
 	rets
 
@@ -728,11 +729,12 @@ bak_null
 
  SUBR	bgnd_delnonvis
 
-#lp	move	a8,a9			;ptr to prev in a9
+delnonvis_lp	
+    move	a8,a9			;ptr to prev in a9
 	move	*a8,a8,L		;ptr to next in a8
-	jrz	x			;End?
+	jrz	delnonvis_x			;End?
 
-#lp2	MOVE	*A8(OXPOS),A7
+lp2	MOVE	*A8(OXPOS),A7
 	CMPXY	A7,A4
 	JRXLT	DEL_IT			;JUMP IF BR X < BLOCK X
 
@@ -751,7 +753,7 @@ bak_null
 	SLL	16,A7
 	ADD	A7,A0
 	CMPXY	A3,A0
-	JRYGE	#lp			;JUMP IF TL Y <= BLOCK Y+H
+	JRYGE	delnonvis_lp			;JUMP IF TL Y <= BLOCK Y+H
 
 DEL_IT
 	move	*a8(OPLINK),a0,L	;0CHlr the on display list bit
@@ -767,7 +769,7 @@ DEL_IT
 	move	*a9,a8,L		;A8=*Next obj
 	jrnz	lp2			;More?
 
-#x	rets
+delnonvis_x	rets
 
 
 
