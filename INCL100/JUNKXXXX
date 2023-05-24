@@ -1,0 +1,471 @@
+	.DATA
+NPAL1:
+	.long   NFL55_p
+NPALW1:
+	.long   NFLW55_p
+XSPAL1:
+	.long   TR_ATLP_P
+XSPAL2:
+	.long   UN_ATLP_P
+XSPAL3:
+	.long   SW_ATLP_P
+XSPAL4:
+	.long   VP_ATLP_P
+XSPAL5:
+	.long   TR_ATLS_P
+XSPAL6:
+	.long   UN_ATLS_P
+XSPAL7:
+	.long   SW_ATLS_P
+XSPAL8:
+	.long   VP_ATLS_P
+XSPAL9:
+	.long   TR_BOSP_P
+XSPAL10:
+	.long   UN_BOSP_P
+XSPAL11:
+	.long   SW_BOSP_P
+XSPAL12:
+	.long   VP_BOSP_P
+XSPAL13:
+	.long   TR_BOSS_P
+XSPAL14:
+	.long   UN_BOSS_P
+XSPAL15:
+	.long   SW_BOSS_P
+XSPAL16:
+	.long   VP_BOSS_P
+XSPAL17:
+	.long   TR_CHAP_P
+XSPAL18:
+	.long   UN_CHAP_P
+XSPAL19:
+	.long   SW_CHAP_P
+XSPAL20:
+	.long   VP_CHAP_P
+XSPAL21:
+	.long   TR_CHAS_P
+XSPAL22:
+	.long   UN_CHAS_P
+XSPAL23:
+	.long   SW_CHAS_P
+XSPAL24:
+	.long   VP_CHAS_P
+XSPAL25:
+	.long   TR_CHIP_P
+XSPAL26:
+	.long   UN_CHIP_P
+XSPAL27:
+	.long   SW_CHIP_P
+XSPAL28:
+	.long   VP_CHIP_P
+XSPAL29:
+	.long   TR_CHIS_P
+XSPAL30:
+	.long   UN_CHIS_P
+XSPAL31:
+	.long   SW_CHIS_P
+XSPAL32:
+	.long   VP_CHIS_P
+XSPAL33:
+	.long   TR_CLEP_P
+XSPAL34:
+	.long   UN_CLEP_P
+XSPAL35:
+	.long   SW_CLEP_P
+XSPAL36:
+	.long   VP_CLEP_P
+XSPAL37:
+	.long   TR_CLES_P
+XSPAL38:
+	.long   UN_CLES_P
+XSPAL39:
+	.long   SW_CLES_P
+XSPAL40:
+	.long   VP_CLES_P
+XSPAL41:
+	.long   TR_DALP_P
+XSPAL42:
+	.long   UN_DALP_P
+XSPAL43:
+	.long   SW_DALP_P
+XSPAL44:
+	.long   VP_DALP_P
+XSPAL45:
+	.long   TR_DALS_P
+XSPAL46:
+	.long   UN_DALS_P
+XSPAL47:
+	.long   SW_DALS_P
+XSPAL48:
+	.long   VP_DALS_P
+XSPAL49:
+	.long   TR_DENP_P
+XSPAL50:
+	.long   UN_DENP_P
+XSPAL51:
+	.long   SW_DENP_P
+XSPAL52:
+	.long   VP_DENP_P
+XSPAL53:
+	.long   TR_DENS_P
+XSPAL54:
+	.long   UN_DENS_P
+XSPAL55:
+	.long   SW_DENS_P
+XSPAL56:
+	.long   VP_DENS_P
+XSPAL57:
+	.long   TR_DETP_P
+XSPAL58:
+	.long   UN_DETP_P
+XSPAL59:
+	.long   SW_DETP_P
+XSPAL60:
+	.long   VP_DETP_P
+XSPAL61:
+	.long   TR_DETS_P
+XSPAL62:
+	.long   UN_DETS_P
+XSPAL63:
+	.long   SW_DETS_P
+XSPAL64:
+	.long   VP_DETS_P
+XSPAL65:
+	.long   TR_GLDP_P
+XSPAL66:
+	.long   UN_GLDP_P
+XSPAL67:
+	.long   SW_GLDP_P
+XSPAL68:
+	.long   VP_GLDP_P
+XSPAL69:
+	.long   TR_GLDS_P
+XSPAL70:
+	.long   UN_GLDS_P
+XSPAL71:
+	.long   SW_GLDS_P
+XSPAL72:
+	.long   VP_GLDS_P
+XSPAL73:
+	.long   TR_HOUP_P
+XSPAL74:
+	.long   UN_HOUP_P
+XSPAL75:
+	.long   SW_HOUP_P
+XSPAL76:
+	.long   VP_HOUP_P
+XSPAL77:
+	.long   TR_HOUS_P
+XSPAL78:
+	.long   UN_HOUS_P
+XSPAL79:
+	.long   SW_HOUS_P
+XSPAL80:
+	.long   VP_HOUS_P
+XSPAL81:
+	.long   TR_INDP_P
+XSPAL82:
+	.long   UN_INDP_P
+XSPAL83:
+	.long   SW_INDP_P
+XSPAL84:
+	.long   VP_INDP_P
+XSPAL85:
+	.long   TR_INDS_P
+XSPAL86:
+	.long   UN_INDS_P
+XSPAL87:
+	.long   SW_INDS_P
+XSPAL88:
+	.long   VP_INDS_P
+XSPAL89:
+	.long   TR_LACP_P
+XSPAL90:
+	.long   UN_LACP_P
+XSPAL91:
+	.long   SW_LACP_P
+XSPAL92:
+	.long   VP_LACP_P
+XSPAL93:
+	.long   TR_LACS_P
+XSPAL94:
+	.long   UN_LACS_P
+XSPAL95:
+	.long   SW_LACS_P
+XSPAL96:
+	.long   VP_LACS_P
+XSPAL97:
+	.long   TR_LALP_P
+XSPAL98:
+	.long   UN_LALP_P
+XSPAL99:
+	.long   SW_LALP_P
+XSPAL100:
+	.long   VP_LALP_P
+XSPAL101:
+	.long   TR_LALS_P
+XSPAL102:
+	.long   UN_LALS_P
+XSPAL103:
+	.long   SW_LALS_P
+XSPAL104:
+	.long   VP_LALS_P
+XSPAL105:
+	.long   TR_MIAP_P
+XSPAL106:
+	.long   UN_MIAP_P
+XSPAL107:
+	.long   SW_MIAP_P
+XSPAL108:
+	.long   VP_MIAP_P
+XSPAL109:
+	.long   TR_MIAS_P
+XSPAL110:
+	.long   UN_MIAS_P
+XSPAL111:
+	.long   SW_MIAS_P
+XSPAL112:
+	.long   VP_MIAS_P
+XSPAL113:
+	.long   TR_MILP_P
+XSPAL114:
+	.long   UN_MILP_P
+XSPAL115:
+	.long   SW_MILP_P
+XSPAL116:
+	.long   VP_MILP_P
+XSPAL117:
+	.long   TR_MILS_P
+XSPAL118:
+	.long   UN_MILS_P
+XSPAL119:
+	.long   SW_MILS_P
+XSPAL120:
+	.long   VP_MILS_P
+XSPAL121:
+	.long   TR_MINP_P
+XSPAL122:
+	.long   UN_MINP_P
+XSPAL123:
+	.long   SW_MINP_P
+XSPAL124:
+	.long   VP_MINP_P
+XSPAL125:
+	.long   TR_MINS_P
+XSPAL126:
+	.long   UN_MINS_P
+XSPAL127:
+	.long   SW_MINS_P
+XSPAL128:
+	.long   VP_MINS_P
+XSPAL129:
+	.long   TR_NEJP_P
+XSPAL130:
+	.long   UN_NEJP_P
+XSPAL131:
+	.long   SW_NEJP_P
+XSPAL132:
+	.long   VP_NEJP_P
+XSPAL133:
+	.long   TR_NEJS_P
+XSPAL134:
+	.long   UN_NEJS_P
+XSPAL135:
+	.long   SW_NEJS_P
+XSPAL136:
+	.long   VP_NEJS_P
+XSPAL137:
+	.long   TR_NEYP_P
+XSPAL138:
+	.long   UN_NEYP_P
+XSPAL139:
+	.long   SW_NEYP_P
+XSPAL140:
+	.long   VP_NEYP_P
+XSPAL141:
+	.long   TR_NEYS_P
+XSPAL142:
+	.long   UN_NEYS_P
+XSPAL143:
+	.long   SW_NEYS_P
+XSPAL144:
+	.long   VP_NEYS_P
+XSPAL145:
+	.long   TR_ORLP_P
+XSPAL146:
+	.long   UN_ORLP_P
+XSPAL147:
+	.long   SW_ORLP_P
+XSPAL148:
+	.long   VP_ORLP_P
+XSPAL149:
+	.long   TR_ORLS_P
+XSPAL150:
+	.long   UN_ORLS_P
+XSPAL151:
+	.long   SW_ORLS_P
+XSPAL152:
+	.long   VP_ORLS_P
+XSPAL153:
+	.long   TR_PHLP_P
+XSPAL154:
+	.long   UN_PHLP_P
+XSPAL155:
+	.long   SW_PHLP_P
+XSPAL156:
+	.long   VP_PHLP_P
+XSPAL157:
+	.long   TR_PHLS_P
+XSPAL158:
+	.long   UN_PHLS_P
+XSPAL159:
+	.long   SW_PHLS_P
+XSPAL160:
+	.long   VP_PHLS_P
+XSPAL161:
+	.long   TR_PHXP_P
+XSPAL162:
+	.long   UN_PHXP_P
+XSPAL163:
+	.long   SW_PHXP_P
+XSPAL164:
+	.long   VP_PHXP_P
+XSPAL165:
+	.long   TR_PHXS_P
+XSPAL166:
+	.long   UN_PHXS_P
+XSPAL167:
+	.long   SW_PHXS_P
+XSPAL168:
+	.long   VP_PHXS_P
+XSPAL169:
+	.long   TR_PORP_P
+XSPAL170:
+	.long   UN_PORP_P
+XSPAL171:
+	.long   SW_PORP_P
+XSPAL172:
+	.long   VP_PORP_P
+XSPAL173:
+	.long   TR_PORS_P
+XSPAL174:
+	.long   UN_PORS_P
+XSPAL175:
+	.long   SW_PORS_P
+XSPAL176:
+	.long   VP_PORS_P
+XSPAL177:
+	.long   TR_SACP_P
+XSPAL178:
+	.long   UN_SACP_P
+XSPAL179:
+	.long   SW_SACP_P
+XSPAL180:
+	.long   VP_SACP_P
+XSPAL181:
+	.long   TR_SACS_P
+XSPAL182:
+	.long   UN_SACS_P
+XSPAL183:
+	.long   SW_SACS_P
+XSPAL184:
+	.long   VP_SACS_P
+XSPAL185:
+	.long   TR_SANP_P
+XSPAL186:
+	.long   UN_SANP_P
+XSPAL187:
+	.long   SW_SANP_P
+XSPAL188:
+	.long   VP_SANP_P
+XSPAL189:
+	.long   TR_SANS_P
+XSPAL190:
+	.long   UN_SANS_P
+XSPAL191:
+	.long   SW_SANS_P
+XSPAL192:
+	.long   VP_SANS_P
+XSPAL193:
+	.long   TR_SEAP_P
+XSPAL194:
+	.long   UN_SEAP_P
+XSPAL195:
+	.long   SW_SEAP_P
+XSPAL196:
+	.long   VP_SEAP_P
+XSPAL197:
+	.long   TR_SEAS_P
+XSPAL198:
+	.long   UN_SEAS_P
+XSPAL199:
+	.long   SW_SEAS_P
+XSPAL200:
+	.long   VP_SEAS_P
+XSPAL201:
+	.long   TR_TORP_P
+XSPAL202:
+	.long   UN_TORP_P
+XSPAL203:
+	.long   SW_TORP_P
+XSPAL204:
+	.long   VP_TORP_P
+XSPAL205:
+	.long   TR_TORS_P
+XSPAL206:
+	.long   UN_TORS_P
+XSPAL207:
+	.long   SW_TORS_P
+XSPAL208:
+	.long   VP_TORS_P
+XSPAL209:
+	.long   TR_UTAP_P
+XSPAL210:
+	.long   UN_UTAP_P
+XSPAL211:
+	.long   SW_UTAP_P
+XSPAL212:
+	.long   VP_UTAP_P
+XSPAL213:
+	.long   TR_UTAS_P
+XSPAL214:
+	.long   UN_UTAS_P
+XSPAL215:
+	.long   SW_UTAS_P
+XSPAL216:
+	.long   VP_UTAS_P
+XSPAL217:
+	.long   TR_VANP_P
+XSPAL218:
+	.long   UN_VANP_P
+XSPAL219:
+	.long   SW_VANP_P
+XSPAL220:
+	.long   VP_VANP_P
+XSPAL221:
+	.long   TR_VANS_P
+XSPAL222:
+	.long   UN_VANS_P
+XSPAL223:
+	.long   SW_VANS_P
+XSPAL224:
+	.long   VP_VANS_P
+XSPAL225:
+	.long   TR_WASP_P
+XSPAL226:
+	.long   UN_WASP_P
+XSPAL227:
+	.long   SW_WASP_P
+XSPAL228:
+	.long   VP_WASP_P
+XSPAL229:
+	.long   TR_WASS_P
+XSPAL230:
+	.long   UN_WASS_P
+XSPAL231:
+	.long   SW_WASS_P
+XSPAL232:
+	.long   VP_WASS_P
+	.TEXT
+

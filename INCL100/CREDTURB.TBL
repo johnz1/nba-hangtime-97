@@ -1,0 +1,202 @@
+	.DATA
+NSHOTCLK:
+	.word   52,59,0,36
+	.long   05698e93H
+	.word   06000H
+	.long   NSHOTCLKP
+MUGPLAT:
+	.word   71,60,-23,48
+	.long   0569d67bH
+	.word   06000H
+	.long   MUGPLAT_P
+TUBEPIEC:
+	.word   21,14,-92,2
+	.long   056a3a53H
+	.word   07000H
+colon:
+	.word   3,5,0,0
+	.long   056a425dH
+	.word   01000H
+	.long   ledw
+cpu:
+	.word   21,11,0,-4
+	.long   056a426cH
+	.word   05000H
+	.long   scorep
+freeply:
+	.word   43,6,0,0
+	.long   056a46efH
+	.word   05000H
+	.long   scorep
+credit:
+	.word   28,6,0,0
+	.long   056a4bf9H
+	.word   05000H
+	.long   scorep
+bbal:
+	.word   72,37,0,0
+	.long   056a4f41H
+	.word   06000H
+	.long   BBAL_P
+bbal_w:
+	.word   72,37,0,0
+	.long   056a4f41H
+	.word   06000H
+	.long   BBALF_P
+font60:
+	.word   5,6,0,0
+	.long   056a8db1H
+	.word   05000H
+	.long   scorep
+font61:
+	.word   3,6,-3,0
+	.long   056a8e47H
+	.word   05000H
+	.long   scorep
+font62:
+	.word   5,6,0,0
+	.long   056a8ea1H
+	.word   05000H
+	.long   scorep
+font63:
+	.word   5,6,0,0
+	.long   056a8f37H
+	.word   05000H
+	.long   scorep
+font64:
+	.word   5,6,0,0
+	.long   056a8fcdH
+	.word   05000H
+	.long   scorep
+font65:
+	.word   5,6,0,0
+	.long   056a9063H
+	.word   05000H
+	.long   scorep
+font66:
+	.word   5,6,0,0
+	.long   056a90f9H
+	.word   05000H
+	.long   scorep
+font67:
+	.word   5,6,0,0
+	.long   056a918fH
+	.word   05000H
+	.long   scorep
+font68:
+	.word   5,6,0,0
+	.long   056a9225H
+	.word   05000H
+	.long   scorep
+font69:
+	.word   5,6,0,0
+	.long   056a92bbH
+	.word   05000H
+	.long   scorep
+font60w:
+	.word   5,6,0,0
+	.long   056a9351H
+	.word   05000H
+	.long   scorepw
+font60r:
+	.word   5,6,0,0
+	.long   056a93e7H
+	.word   05000H
+	.long   scoreprd
+font60g:
+	.word   5,6,0,0
+	.long   056a947dH
+	.word   05000H
+	.long   scorepg
+font6?:
+	.word   5,6,0,0
+	.long   056a9513H
+	.word   05000H
+	.long   scorep
+font90r:
+	.word   8,9,0,0
+	.long   056a95a9H
+	.word   01000H
+	.long   ledr
+S_LED_0:
+	.word   7,7,0,0
+	.long   056a95f1H
+	.word   01000H
+	.long   ledw
+S_LED_1:
+	.word   3,7,-5,0
+	.long   056a9622H
+	.word   01000H
+	.long   ledw
+S_LED_2:
+	.word   7,7,0,0
+	.long   056a9637H
+	.word   01000H
+	.long   ledw
+S_LED_3:
+	.word   6,7,-1,0
+	.long   056a9668H
+	.word   01000H
+	.long   ledw
+S_LED_4:
+	.word   7,7,0,0
+	.long   056a9692H
+	.word   01000H
+	.long   ledw
+S_LED_5:
+	.word   7,7,0,0
+	.long   056a96c3H
+	.word   01000H
+	.long   ledw
+S_LED_6:
+	.word   7,7,0,0
+	.long   056a96f4H
+	.word   01000H
+	.long   ledw
+S_LED_7:
+	.word   6,7,-1,0
+	.long   056a9725H
+	.word   01000H
+	.long   ledw
+S_LED_8:
+	.word   7,7,0,0
+	.long   056a974fH
+	.word   01000H
+	.long   ledw
+S_LED_9:
+	.word   7,7,0,0
+	.long   056a9780H
+	.word   01000H
+	.long   ledw
+S_LED_MAX:
+	.word   25,9,1,1
+	.long   056a97b1H
+	.word   02000H
+	.long   ledw
+TURBO_01b:
+	.word   63,5,0,0
+	.long   056c4463H
+	.word   06000H
+	.long   TURBO_B_P
+TURBO_01y:
+	.word   63,5,0,0
+	.long   056c4463H
+	.word   06000H
+	.long   TURBO_Y_P
+TURBO_01g:
+	.word   63,5,0,0
+	.long   056c4463H
+	.word   06000H
+	.long   TURBO_G_P
+TURBO_01r:
+	.word   63,5,0,0
+	.long   056c4463H
+	.word   06000H
+	.long   TURBO_R_P
+S_LED_0r:
+	.word   7,7,0,0
+	.long   056c4bc5H
+	.word   01000H
+	.long   ledr
+	.TEXT
+

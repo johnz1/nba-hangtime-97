@@ -1,0 +1,203 @@
+	.DATA
+ATL:
+	.word   103,21,0,0
+	.long   0126ad47H
+	.word   06000H
+	.long   BST18Y_P
+BOST:
+	.word   94,23,0,1
+	.long   0126dff9H
+	.word   06000H
+	.long   BST18Y_P
+CHAR:
+	.word   134,21,0,0
+	.long   012712a5H
+	.word   06000H
+	.long   BST18Y_P
+CHI:
+	.word   104,22,0,1
+	.long   01275499H
+	.word   06000H
+	.long   BST18Y_P
+CLEV:
+	.word   134,21,0,0
+	.long   01278a39H
+	.word   06000H
+	.long   BST18Y_P
+DAL:
+	.word   92,23,0,1
+	.long   0127cc2dH
+	.word   06000H
+	.long   BST18Y_P
+DEN:
+	.word   91,21,0,0
+	.long   0127fdc5H
+	.word   06000H
+	.long   BST18Y_P
+DET:
+	.word   99,21,0,0
+	.long   01282a8fH
+	.word   06000H
+	.long   BST18Y_P
+GOLDN:
+	.word   173,23,0,1
+	.long   01285b49H
+	.word   06000H
+	.long   BST18Y_P
+HOU:
+	.word   108,23,0,1
+	.long   0128b88bH
+	.word   06000H
+	.long   BST18Y_P
+IND:
+	.word   95,21,0,0
+	.long   0128f2c3H
+	.word   06000H
+	.long   BST18Y_P
+LA_CLIP:
+	.word   166,23,0,1
+	.long   01292185H
+	.word   06000H
+	.long   BST18Y_P
+LA_LAKS:
+	.word   147,23,0,1
+	.long   01297b01H
+	.word   06000H
+	.long   BST18Y_P
+MIAMI:
+	.word   68,21,0,0
+	.long   0129ca3fH
+	.word   06000H
+	.long   BST18Y_P
+MILW:
+	.word   132,22,0,0
+	.long   0129ebb7H
+	.word   06000H
+	.long   BST18Y_P
+MINN:
+	.word   128,23,0,1
+	.long   012a2fc7H
+	.word   06000H
+	.long   BST18Y_P
+NJ:
+	.word   149,23,0,1
+	.long   012a74c7H
+	.word   06000H
+	.long   BST18Y_P
+NY:
+	.word   126,21,0,0
+	.long   012ac519H
+	.word   06000H
+	.long   BST18Y_P
+ORL:
+	.word   111,21,0,0
+	.long   012b031dH
+	.word   06000H
+	.long   BST18Y_P
+PHIL:
+	.word   165,21,0,0
+	.long   012b39bfH
+	.word   06000H
+	.long   BST18Y_P
+PHX:
+	.word   101,21,0,0
+	.long   012b8af5H
+	.word   06000H
+	.long   BST18Y_P
+PORT:
+	.word   123,21,0,0
+	.long   012bbcabH
+	.word   06000H
+	.long   BST18Y_P
+SAC:
+	.word   159,23,0,1
+	.long   012bf935H
+	.word   06000H
+	.long   BST18Y_P
+SANANT:
+	.word   160,23,0,1
+	.long   012c4eebH
+	.word   06000H
+	.long   BST18Y_P
+SEA:
+	.word   103,23,0,1
+	.long   012ca52bH
+	.word   06000H
+	.long   BST18Y_P
+UTAH:
+	.word   61,22,0,0
+	.long   012cdcb1H
+	.word   06000H
+	.long   BST18Y_P
+WASH:
+	.word   150,23,0,1
+	.long   012cfc25H
+	.word   06000H
+	.long   BST18Y_P
+TORO:
+	.word   110,21,0,0
+	.long   012d4d01H
+	.word   06000H
+	.long   BST18Y_P
+VANC:
+	.word   139,22,0,0
+	.long   012d8325H
+	.word   06000H
+	.long   BST18Y_P
+SCOR18_0:
+	.word   17,21,0,0
+	.long   012dcad1H
+	.word   06000H
+	.long   BST18Y_P
+SCOR18_1:
+	.word   10,21,0,0
+	.long   012dd32fH
+	.word   06000H
+	.long   BST18Y_P
+SCOR18_1a:
+	.word   10,21,-4,0
+	.long   012dd32fH
+	.word   06000H
+	.long   BST18Y_P
+SCOR18_2:
+	.word   17,21,0,0
+	.long   012dd81bH
+	.word   06000H
+	.long   BST18Y_P
+SCOR18_3:
+	.word   17,23,0,1
+	.long   012de079H
+	.word   06000H
+	.long   BST18Y_P
+SCOR18_4:
+	.word   17,21,0,0
+	.long   012de9a3H
+	.word   06000H
+	.long   BST18Y_P
+SCOR18_5:
+	.word   16,22,0,0
+	.long   012df201H
+	.word   06000H
+	.long   BST18Y_P
+SCOR18_6:
+	.word   17,22,0,1
+	.long   012dfa41H
+	.word   06000H
+	.long   BST18Y_P
+SCOR18_7:
+	.word   17,21,0,0
+	.long   012e0305H
+	.word   06000H
+	.long   BST18Y_P
+SCOR18_8:
+	.word   18,21,0,0
+	.long   012e0b63H
+	.word   06000H
+	.long   BST18Y_P
+SCOR18_9:
+	.word   17,22,0,1
+	.long   012e143fH
+	.word   06000H
+	.long   BST18Y_P
+	.TEXT
+

@@ -343,24 +343,24 @@
 
 	move	@dirqtimer,a0
 	cmpi	400,a0
-	jrhs	#lockup			;Main loop died?
+	jrhs	#oldlockup			;Main loop died?
 
 
 	.if	TUNIT
 	move	@TALKPORT,a0		;Check if watchdog was real
 	btst	B_WDOG,a0		;Bit should be low if dog fired
-	jrnz	cont			;No watchdog?
+	jrnz	oldcont			;No watchdog?
 	.endif
 
 	movk	AUDLOCK,a0		;Watchdog
-	jruc	aud
+	jruc	oldaud
 
-#lockup
+#oldlockup
 
 	movi	AUD_LOCKUP,a0		;Main loop lockup
-#aud	calla	AUD1
+#oldaud	calla	AUD1
 
-#cont
+#oldcont
 
 ;	move	@clipsrunning,a0,L	;>Restore game if clips crashed
 ;	cmpi	012345678H,a0
@@ -562,31 +562,31 @@ mainpok
 #fok
 ;DJT End
 	move	@steals_off,a0
-	jrle	#ok
+	jrle	#gok
 	subk	1,a0
 	move	a0,@steals_off
-#ok
+#gok
 	move	@pushing_delay,a0
-	jrle	#ok2
+	jrle	#gok2
 	subk	1,a0
 	move	a0,@pushing_delay
-#ok2
+#gok2
 	move	@pass_off,a0
-	jrle	#ok3
+	jrle	#gok3
 	subk	1,a0
 	move	a0,@pass_off
-#ok3
+#gok3
 
 	move	@assist_delay,a0
-	jrle	#ok4
+	jrle	#gok4
 	subk	1,a0
 	move	a0,@assist_delay
-	jrnz	ok4
+	jrnz	gok4
 	clr	a1
 	move	a1,@assist_plyr
-#ok4
+#gok4
 	move	@rebound_delay,a0
-	jrle	#ok5
+	jrle	#gok5
 	subk	1,a0
 	move	a0,@rebound_delay
 ;Why...
@@ -594,21 +594,21 @@ mainpok
 ;	clr	a1
 ;	move	a1,@rebound_delay
 
-#ok5
+#gok5
 ;Used for disallowing swats off of rim...
 	.ref	in_cylinder
 	move	@in_cylinder,a0
-	jrle	#ok6
+	jrle	#gok6
 	subk	1,a0
 	move	a0,@in_cylinder
-#ok6
+#gok6
 ;Used for converting rejection art into rebound art if ball just hit rim
 	.ref	must_rebound
 	move	@must_rebound,a0
-	jrle	#ok7
+	jrle	#gok7
 	subk	1,a0
 	move	a0,@must_rebound
-#ok7
+#gok7
 
 
 
@@ -685,28 +685,29 @@ mainpok
 ;	LOCKUP
 ;#xx	rets
 
-#lp	move	@swstack_p,a3,L
+#stack_lp
+   	move	@swstack_p,a3,L
 	cmpi	swstacktop,a3		;Stack at start? Yes if =
-	jreq	x
+	jreq	stack_x
 	move	@FREE,a0,L		;Any procs left? No if 0
-	jrz	x
+	jrz	stack_x
 
 	move	*a3+,a0			;Get entry
 	move	a3,@swstack_p,L		;Update stack ptr
-	sll	32-4,a0			;Clr bits above max (15) value
-	srl	32-4-4,a0		;*16 for look-up calc
+	sll	    32-4,a0			;Clr bits above max (15) value
+	srl	    32-4-4,a0		;*16 for look-up calc
 	move	a0,a2
-	add	a0,a2
-	add	a0,a2			;*3 for tbl offset from
+	add	    a0,a2
+	add	    a0,a2			;*3 for tbl offset from
 	addi	switch_t,a2		; table start
 	move	*a2+,a1			;Get switch PID; none if 0
-	jrz	lp
+	jrz	    stack_lp
 	move	*a2+,a7,L		;*Switch code
 	movi	ACTIVE,a13		;*Proc list
 	calla	GETPRC
-	jruc	lp
+	jruc	stack_lp
 
-#x	rets
+#stack_x	rets
 
 switch_t	;(Process ID or 0, *Routine)	;Put in audit??
 
@@ -1142,9 +1143,9 @@ plyr_strtbut
 	move	a8,a0
 	sll	5,a0
 	move	@TWOPLAYERS,a14		;0 = NO, 1 = YES 2 players
-	jrz	4_plyrs
+	jrz	    S4_plyrs
 	addi	4*32,a0
-#4_plyrs
+#S4_plyrs
 	addi	#cr_box,a0
 	move	*a0,a11,L
 
@@ -1354,19 +1355,19 @@ add_plyr_time
 
 	move	@GAMSTATE,a0
 	subk	ININTRO,a0
-	jreq	x
+	jreq	plyr_time_x
 	move	*a11(ply_meter_imgs),a0,L
-	jrz	nxt
+	jrz	    plyr_time_nxt
 
 	move	*a11(ply_meter_imgs+32),a0,L
 	move	*a0(OIMG),a1,L
 	cmpi	start,a1
-	jrnz	nxt
+	jrnz	plyr_time_nxt
 	movk	9,a1
 	move	a1,*a0(OYPOS)
-#nxt
+#plyr_time_nxt
 ;;;;;;;	jauc	prt_cr_timers	<- Did nothing!
-#x
+#plyr_time_x
 	rets
 
 
@@ -1681,14 +1682,14 @@ gs2
 #redo
 	JSRP	initials_entry
 	move	a0,a0			;is plyr coming from CREATE PLAYER ?
-	jrz	ok			;br=no
+	jrz	inok			;br=no
 	jauc	amode_start		;Start attract mode
 ;;;;	jrne	redo
 
 	.if	DEBUG
 #skip_entry
 	.endif
-#ok
+#inok
 	move	@team1,a0
 	move	@team2,a1
 	and	a0,a1
@@ -2558,9 +2559,9 @@ close
 
 	movi	init_t2,a11
 	move	@TWOPLAYERS,a14			;Two plyr kit? No if 0
-	jrz	2kit2
+	jrz	setup_2kit2
 	movi	init_t2kit,a11
-#2kit2	movi	P2DATA+ply_meter_imgs,a9
+#setup_2kit2	movi	P2DATA+ply_meter_imgs,a9
 	callr	prt_status
 	move	@PSTATUS2,a0
 	btst	1,a0				;Is plyr 2 in? Yes if !0
@@ -2586,9 +2587,10 @@ close
 
 	movi	init_t3,a11
 	move	@TWOPLAYERS,a14			;Two plyr kit? No if 0
-	jrz	2kit3
+	jrz	    setup_2kit3
 	movi	init_t3kit,a11
-#2kit3	movi	P3DATA+ply_meter_imgs,a9
+setup_2kit3	
+    movi	P3DATA+ply_meter_imgs,a9
 	callr	prt_status
 	move	@PSTATUS2,a0
 	btst	2,a0				;Is plyr 3 in? Yes if !0
@@ -2742,7 +2744,7 @@ close
 * A9=ptr to sequentially store created *obj to
 * Destroys A0-A8, *A9(-32)=last created *obj
 
-#lp
+#gsobj_lp
 	move	*a11+,a1		;Y
 	sll	16,a0
 	sll	16,a1
@@ -2759,7 +2761,7 @@ close
 
 	move	*a11+,a0		;X
 	cmpi	4000,a0
-	jrne	lp			;!End?
+	jrne	gsobj_lp			;!End?
 	rets
 
 
@@ -3104,17 +3106,17 @@ OBJTIMLP
 
 fixa3xy
 	move	a3,a3
-	jrgt	#yok
+	jrgt	#winyok
 	movk	1,a0
 	sll	16,a0
 	movy	a0,a3
-#yok
+#winyok
 	movx	a3,a0
 	sext	a0
-	jrgt	#xok
+	jrgt	#winxok
 	movk	1,a0
 	movx	a0,a3
-#xok
+#winxok
 	rets
 
 
@@ -3144,47 +3146,47 @@ fixa3xy
 ;DJT Start
 	movi	player_names,a10
 	move	@team1,a2
-	jrz	out
-#lp
+	jrz	    out
+#set_names_lp
 	addi	NEXT_TEAM_NAMES,a10		;compute offset into table
 	dec	a2
-	jrnz	lp	
+	jrnz	set_names_lp	
 #out
 	move	@team1,a0
-	sll	4,a0
+	sll	    4,a0
 	addi	tm1set,a0
 	move	*a0,a14
-	sll	6,a14
-	add	a14,a10
+	sll	    6,a14
+	add	    a14,a10
 
 	move	*a10,a1,L		;Name *img
 	move	*a10(32),a2,L		;Name *img
 
 	move	@special_heads,a14	;Do plyr 1
-	jrn	not_spec1
-	sll	5,a14
+	jrn	    not_spec1
+	sll	    5,a14
 	addi	our_names,a14
 	move	*a14,a1,L
 #not_spec1
 	move	a1,@names,L
 	move	a1,a1				;College player?
-	jrn	notcol1			; br=no
-	sll	5,a1				;Get college name *string
+	jrn	    notcol1			; br=no
+	sll	    5,a1				;Get college name *string
 	addi	col_name_ptrs,a1,L
 	move	*a1,a1,L
 #notcol1
 	move	a1,@original_names,L
 
 	move	@special_heads+16,a14	;Do plyr 2
-	jrn	not_spec2
-	sll	5,a14
+	jrn	    not_spec2
+	sll	    5,a14
 	addi	our_names,a14
 	move	*a14,a2,L
 #not_spec2
 	move	a2,@names+32,L
 	move	a2,a2				;College player?
-	jrn	notcol2			; br=no
-	sll	5,a2				;Get college name *string
+	jrn	    notcol2			; br=no
+	sll	    5,a2				;Get college name *string
 	addi	col_name_ptrs,a2,L
 	move	*a2,a2,L
 #notcol2
@@ -3194,47 +3196,47 @@ fixa3xy
 ;
 	movi	player_names,a10
 	move	@team2,a2
-	jrz	out2
-#lp2
+	jrz	    out2
+#set_names_lp2
 	addi	NEXT_TEAM_NAMES,a10		;compute offset into table
-	dec	a2
-	jrnz	lp2
+	dec	    a2
+	jrnz	set_names_lp2
 #out2
 	move	@team2,a0
-	sll	4,a0
+	sll	    4,a0
 	addi	tm2set,a0
 	move	*a0,a14
-	sll	6,a14
-	add	a14,a10
+	sll	    6,a14
+	add	    a14,a10
 
 	move	*a10,a1,L		;Name *img
 	move	*a10(32),a2,L		;Name *img
 
 	move	@special_heads+32,a14	;Do plyr 3
-	jrn	not_spec3
-	sll	5,a14
+	jrn	    not_spec3
+	sll	    5,a14
 	addi	our_names,a14
 	move	*a14,a1,L
 #not_spec3
 	move	a1,@names+64,L
 	move	a1,a1				;College player?
-	jrn	notcol3			; br=no
-	sll	5,a1				;Get college name *string
+	jrn	    notcol3			; br=no
+	sll	    5,a1				;Get college name *string
 	addi	col_name_ptrs,a1,L
 	move	*a1,a1,L
 #notcol3
 	move	a1,@original_names+64,L
 
 	move	@special_heads+48,a14	;Do plyr 4
-	jrn	not_spec4
-	sll	5,a14
+	jrn	    not_spec4
+	sll	    5,a14
 	addi	our_names,a14
 	move	*a14,a2,L
 #not_spec4
 	move	a2,@names+96,L
 	move	a2,a2				;College player?
-	jrn	notcol4			; br=no
-	sll	5,a2				;Get college name *string
+	jrn	    notcol4			; br=no
+	sll	    5,a2				;Get college name *string
 	addi	col_name_ptrs,a2,L
 	move	*a2,a2,L
 #notcol4
@@ -3328,10 +3330,11 @@ gottime
 
 	clr	a1			;0CHlr screen mem
 	movi	0200000H/32,b0
-#clrscr	move	a0,*a1+,L
-	dsj	b0,clrscr
+#dclrscr	
+    move	a0,*a1+,L
+	dsj	    b0,dclrscr
 
-	clr	a0
+	clr	    a0
 	move	a0,@DMATEST
 
 	movi	0,a0
@@ -3356,24 +3359,24 @@ gottime
 	movi	0900c0000H,a11		;CTRL:OFSET
 
 	movi	20000,b2
-#lp	rl	16,a4
+#dlp	rl	16,a4
 
 	movi	DMAREGS,a14
 
-#dwt	move	@DMACTRL,a0
-	jrn	dwt
+#ddwt	move	@DMACTRL,a0
+	jrn	ddwt
 
 	mmtm	a14,a3,a4,a7,a8,a10,a11
 
 	rl	16,a4
 
-#xok	addk	1,a4			;Color+1
+#dxok	addk	1,a4			;Color+1
 	andi	0ffH,a4
 	move	a4,a0
 	sll	8,a0
 	or	a0,a4
 
-	dsj	b2,lp
+	dsj	b2,dlp
 
 	eint
 
