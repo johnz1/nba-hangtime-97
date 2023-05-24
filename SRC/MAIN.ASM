@@ -585,12 +585,13 @@ dip_init
 	movi	SYSCTRL,a4
 	move	*a1+,a0
 
-#lp	or	a2,a0
+#wdoglp	
+    or	    a2,a0
 	move	a0,*a4
-	xor	a3,a0
+	xor	    a3,a0
 	move	a0,*a4
 	move	*a1+,a0
-	jrnn	lp
+	jrnn	wdoglp
 
 	move	a2,*a4
 
@@ -664,7 +665,7 @@ DIRQ
 	move	a1,b13
 
 di50	move	a7,*a8			;Restore
-	jruc	60hzcode		;Skip flip
+	jruc	s60hzcode		;Skip flip
 
 
 #chkmp	move	@dirqtimer,a1
@@ -763,7 +764,7 @@ di400	move	a7,*a8			;Restore
 	clr	a0
 	move	a0,@dirqdraw		;Draw done
 
-#60hzcode				;*** This code must run at 60HZ
+#s60hzcode				;*** This code must run at 60HZ
 
 	move	@_clk_rd,a2,L		;Increment the time get counter
 	jrn	_no_gt			;If negative then no auto clock update
@@ -983,26 +984,28 @@ wdogbone_t
 	move	@swtemp1,a1,W		;Get previous state
 	move	a1,@swtemp2,W		;Save new previous previous
 	move	a0,@swtemp1,W		;Save new previous
-	and	a1,a2			;Only stack if UP then UP & now DOWN
+	and	    a1,a2			;Only stack if UP then UP & now DOWN
 	andn	a0,a2			; (new DOWNS now pos logic)
-	jrz	x			;None to do if 0
+	jrz	    swx			;None to do if 0
 
 	move	@swstack_p,a3,L		;Current switch stack ptr
 	movk	01fH,a1			;XOR constant
 
-#lp	cmpi	swstackbot,a3		;Switch stack overflow?
-	jreq	x
-	lmo	a2,a0
-	sll	a0,a2			;Get rid of DOWN bit
-	sll	1,a2
-	xor	a1,a0			;Do 1's comp to get true bit #
+#swlp	    
+    cmpi	swstackbot,a3		;Switch stack overflow?
+	jreq	swx
+	lmo	    a2,a0
+	sll	    a0,a2			;Get rid of DOWN bit
+	sll	    1,a2
+	xor	    a1,a0			;Do 1's comp to get true bit #
 	move	a0,-*a3,W		;Push switch # (0-15)
-	rl	a0,a2			;Restore remaining DOWN bits
-	jrnz	lp			;Continue if more are DOWN (!0)
+	rl	    a0,a2			;Restore remaining DOWN bits
+	jrnz	swlp			;Continue if more are DOWN (!0)
 
 	move	a3,@swstack_p,L		;Save new stack ptr
 
-#x	rets
+#swx	
+    rets
 
 
 **************************************************************************

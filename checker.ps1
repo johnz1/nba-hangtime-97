@@ -7,7 +7,7 @@ $regex = "^\s*#\w+"
 $directory = "D:\dosbox\tools\c\hangtime\src"
 
 # Get all files in the directory that have a .txt extension
-$files = Get-ChildItem $directory -Filter ndsp1.asm
+$files = Get-ChildItem $directory -Filter main.asm
 
 # Loop through each file and find duplicate labels
 foreach ($file in $files) {
