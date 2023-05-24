@@ -112,7 +112,7 @@ butn_plus
 	move	a1,*a13(PDATA+16)
 	jruc	swtop
 
-#sw2	btst	a11,a0			;14
+sw2	btst	a11,a0			;14
 	jrz	advance
 	btst	a10,a0			;12
 	jrnz	swtop

@@ -164,7 +164,7 @@
 	move	a0,@otdscroll_p,L
 	movi	#init_otd_t,a11		;>Setup outdoor court objs
 	jruc	next
-#lp
+#otdscroll_p_lp
 	cmpi	4001,a0			;>Start process
 	jrne	svptr
 	clr	a1
@@ -248,7 +248,7 @@
 
 #next	move	*a11+,a0		;X
 	cmpi	4000,a0
-	jrne	lp			;!End?
+	jrne	otdscroll_p_lp			;!End?
 
 	move	@team1,a0
 	move	a0,@oteam1
@@ -1118,10 +1118,10 @@
 	move	*a9(OYPOS),*a13(PDATA+64)
 	move	*a8(OYPOS),*a13(PDATA+80)
 
-#lp
+#otd_scroller_lp
 	SLEEPK	1
 	move	@HALT,a14
-	jrnz	lp
+	jrnz	otd_scroller_lp
 
  SUBR	otdscroller_wake
 
@@ -1174,7 +1174,7 @@
 	addi	34h,a1
 	move	a1,*a14(OYPOS)
 
-	jruc	lp
+	jruc	otd_scroller_lp
 
 
 ********************************
@@ -1534,20 +1534,20 @@
 ;#skp
 	movk	1,a1
 	move	@chldr_ram_plft,a0,L
-	jrz	noc0
+	jrz	    noc0
 	move	a1,*a0(PTIME)
 #noc0
 	move	@chldr_ram_prgt,a0,L
-	jrz	noc1
+	jrz	    noc1
 	move	a1,*a0(PTIME)
 #noc1
 	movi	crwd_ram_plist,a10
-#lp
+#start_animate_lp
 	move	*a10+,a0,L
-	jaz	SUCIDE
+	jaz	    SUCIDE
 	move	a1,*a0(PTIME)
 	addk	1,a1
-	jruc	lp
+	jruc	start_animate_lp
 
 
 #*-------------------
@@ -1597,8 +1597,8 @@
 	SLEEP	32767
 
 	move	a11,a10			;Get *seq list
-	jruc	lp
-#lptop
+	jruc	crwd_ani_lp
+#crwd_ani_lptop
 	move	*a8(OIMG),a3,L		;>Get old & set new *img
 	move	a1,*a8(OIMG),L
 	move	*a1,a2,L
@@ -1621,9 +1621,9 @@
 
 	move	*a10+,a0
 	calla	PRCSLP
-#lp
+#crwd_ani_lp
 	move	*a10+,a1,L		;New *img or is seq complete?
-	jrnz	lptop			; br=new *img
+	jrnz	crwd_ani_lptop			; br=new *img
 
 	jruc	crwd_ani
 
@@ -1646,8 +1646,8 @@ chldr_ani
 	SLEEP	32767
 
 	move	a11,a10			;Get *seq list
-	jruc	lp
-#lptop
+	jruc	chldr_ani_lp
+#chldr_ani_lptop
 	move	*a8(OIMG),a3,L		;>Get old & set new *img
 	move	a1,*a8(OIMG),L
 	move	*a1,a2,L
@@ -1671,9 +1671,9 @@ chldr_ani
 
 	move	*a10+,a0
 	calla	PRCSLP
-#lp
+#chldr_ani_lp
 	move	*a10+,a1,L		;New *img or is seq complete?
-	jrnz	lptop			; br=new *img
+	jrnz	chldr_ani_lptop			; br=new *img
 
 	jruc	chldr_ani
 
@@ -2325,22 +2325,22 @@ mk3_lp
 	move	@bbrgt_p,a9,L		;Init ptr to rgt hoop obj
 	movi	bbshatter,a10		;Init ptr to shattered flag
 	movi	gndx+16,a11		;Init ptr to look at current court X
-#lp
+#backboard_ani_lp
 	move	a8,a6			;Set for lft hoop
 	move	*a11,a0			;Chk current crt X
-	jrn	lft
+	jrn	    backboard_ani_lft
 	move	a9,a6			;Set for rgt hoop
-#lft
-	abs	a0
+#backboard_ani_lft
+	abs	    a0
 	subi	BOARD_ANI_MINX,A0	;Too far away (hoop off screen)?
-	jrn	fixbb			;Yes if neg
+	jrn	    fixbb			;Yes if neg
 
 	srl	4,a0			;Shf X down for anim-step #
 	sll	5,a0			;Shf up for tbl offset
 	addi	#ani_t,a0
 	move	@pup_court,a14		;Outdoor court?
-;;	jrz	nootd			; br=no
-	jrz	bok			; br=no
+;;	jrz	    nootd			; br=no
+	jrz	    bok			; br=no
 	addi	#ani_otd_t-#ani_t,a0,W	;Set ptr to shattered tbl
 ;;	jruc	bok
 ;;#nootd
@@ -2352,11 +2352,11 @@ mk3_lp
 #bok
 	move	*a0,a0,L		;Deref for new backboard ptr
 	move	*a6(OIMG),a14,L		;Get old *bkbrd
-	cmp	a14,a0			;New image?
-	jrz	slp			; br=yes
+	cmp	    a14,a0			;New image?
+	jrz	    backboard_ani_slp			; br=yes
 	move	*a14,a1			;Get old bkbrd ISIZEX:IANIOFFX
 	move	*a14(IANIOFFX),a2
-	sll	16,a1
+	sll	    16,a1
 	movx	a2,a1
 
 	move	a0,*a6(OIMG),L		;Set new *bkbrd,OSAG,OSIZE
@@ -2366,17 +2366,17 @@ mk3_lp
 	move	*a0(ISIZE),a14,L
 	move	a14,*a6(OSIZE),L
 	move	*a0(IANIOFFX),a2	;Get new bkbrd ISIZEX:IANIOFFX
-	sll	16,a14
+	sll	    16,a14
 	movx	a2,a14
 
 	subxy	a14,a1			;Calc XY SIZE:ANI changes
-	cmp	a8,a6			;Doing lft or rgt hoop? Lft if =
+	cmp	    a8,a6			;Doing lft or rgt hoop? Lft if =
 	jreq	nof
 	move	a1,a14			;Rgt hoop. Assume(!) it is the FLIPH
-	sra	16,a14			; of lft hoop & correct ani X with
+	sra	    16,a14			; of lft hoop & correct ani X with
 	sext	a1			; hoop SIZEX diff
-	neg	a1
-	add	a14,a1
+	neg	    a1
+	add	    a14,a1
 #nof
 	move	*a6(OXPOS),a14		;Correct X for change in size/ani
 	addxy	a1,a14
@@ -2387,7 +2387,7 @@ mk3_lp
 ;	move	a0,*a6(OSIZE),L
 ;
 ;	subxy	a1,a0			;calc XY size changes
-;	jrxz	#slp			;any X change?
+;	jrxz	#backboard_ani_slp			;any X change?
 ;	move	*a6(OFLAGS),a1		;yes, lets assume some more!
 ;	btst	B_FLIPH,a1		;don't worry about it if its not
 ;	jrz	slp			; flipped
@@ -2395,25 +2395,25 @@ mk3_lp
 ;	subxy	a0,a1
 ;	move	a1,*a6(OXPOS)
 ;
-#slp	SLEEPK	1
+#backboard_ani_slp	SLEEPK	1
 
 	.if CRTALGN
 	move	@P1CTRL,a14		;Make hoops go away if owners press
 	move	@P2CTRL,a0		; TURBO so hoop dot align can be
-	or	a0,a14			; checked
+	or	    a0,a14			; checked
 	xori	BUT3_M,a14
 	andi	BUT3_M,a14
-	srl	BUT3_B-B_3DQ,a14
+	srl	    BUT3_B-B_3DQ,a14
 	move	@rimrf,a1,L		;*Rgt hoop objs
 	move	@rimrb,a2,L
 	move	*a1(OFLAGS),a0
 	andi	~M_3DQ,a0
-	or	a14,a0
+	or	    a14,a0
 	move	a0,*a1(OFLAGS)
 	move	a0,*a2(OFLAGS)
 	move	*a9(OFLAGS),a0		;Rgt bbrd obj
 	andi	~M_3DQ,a0
-	or	a14,a0
+	or	    a14,a0
 	move	a0,*a9(OFLAGS)
 ;	movi	OBJLST,A1		;Find rgt rimbase & do it too
 ;#fndbr	move	*a1,a1,L
@@ -2430,20 +2430,20 @@ mk3_lp
 ;#nobr
 	move	@P3CTRL,a14
 	move	@P4CTRL,a0
-	or	a0,a14
+	or	    a0,a14
 	xori	BUT3_M,a14
 	andi	BUT3_M,a14
-	srl	BUT3_B-B_3DQ,a14
+	srl	    BUT3_B-B_3DQ,a14
 	move	@rimlf,a1,L		;*Lft hoop objs
 	move	@rimlb,a2,L
 	move	*a1(OFLAGS),a0
 	andi	~M_3DQ,a0
-	or	a14,a0
+	or	    a14,a0
 	move	a0,*a1(OFLAGS)
 	move	a0,*a2(OFLAGS)
 	move	*a8(OFLAGS),a0		;Lft bbrd obj
 	andi	~M_3DQ,a0
-	or	a14,a0
+	or	    a14,a0
 	move	a0,*a8(OFLAGS)
 ;	movi	OBJLST,A1		;Find lft rimbase & do it too
 ;#fndbl	move	*a1,a1,L
@@ -2460,7 +2460,7 @@ mk3_lp
 ;#nobl
 	.endif
 
-	jruc	lp
+	jruc	backboard_ani_lp
 
 #fixbb	clr	a0			;Hoop off-screen. Make sure it won't
 	move	a0,*a10			; be shattered next time we see it
@@ -2473,14 +2473,14 @@ mk3_lp
 #fxbb1
 	move	*a1(OIMG),a1,L		;Deref *obj
 	cmpi	RIM0_F_00,a1,L		;Is it norm hoop img? Yes if =
-	jreq	slp
+	jreq	backboard_ani_slp
 ;DJT Start
 	cmpi	CHAN1F_01,a1,L		;Is it norm hoop img? Yes if =
-	jreq	slp
+	jreq	backboard_ani_slp
 ;DJT End
 	clr	a1			;No. Do netani to reset the hoop
 	callr	net_ani
-	jruc	slp
+	jruc	backboard_ani_slp
 
 
 #ani_t
@@ -2522,18 +2522,18 @@ mk3_lp
 	PUSH	a7,a8,a9,a10
 
 	move	a0,a0
-	jrz	lft
+	jrz	    net_ani_lft
 	move	@rimrf,a8,L		;*Right hoop objs
 	move	@rimrb,a9,L
-    	jruc	tag
-#lft
+    jruc	tag
+#net_ani_lft
 	move	@rimlf,a8,L		;Left ^
 	move	@rimlb,a9,L
 #tag
 	sll	5,a1
 	addi	#net_t,a1
 	move	@pup_court,a14
-	jrz	tag1
+	jrz	    tag1
 	addi	#netc_t-#net_t,a1
 #tag1
 	move	*a1,a10,L
@@ -2590,9 +2590,10 @@ mk3_lp
 
 do_net_ani
 
-#lp	move	*a10+,a0,L
-	jaz	SUCIDE
-	jrp	#slp
+#do_net_ani_lp
+    move	*a10+,a0,L
+	jaz	    SUCIDE
+	jrp	    do_net_ani_slp
 
 	move	*a10+,a3,L
 
@@ -2614,9 +2615,9 @@ do_net_ani
 	move	a2,a8
 
 	movk	4,a0
-#slp
+#do_net_ani_slp
 	calla	PRCSLP
-	jruc	lp
+	jruc	do_net_ani_lp
 
 ;--------------------
 
@@ -2886,9 +2887,11 @@ netc15_l
 	move	a13,a8
 	addi	PDATA+48,a8
 	.ref	PSTATUS
-#lp	move	@PSTATUS2,a0
+    .ref	PSTATUS2
+#powerups_lp
+   	move	@PSTATUS2,a0
 	btst	a9,a0
-	jrz	inc
+	jrz	    inc
 
 	movi	#special_moves,a2	;This player in game, start processes
 #loop
@@ -2900,7 +2903,7 @@ netc15_l
 #inc
 	subk	16,a8
 	subk	1,a9
-	jrnn	lp
+	jrnn	powerups_lp
 
 	clr	a8
 	clr	a9
@@ -3057,11 +3060,11 @@ sp_lockcombo
 sp_bighead
 
 	SLEEPK	1
-#lp
+#bighead_lp
 	clr	a11
 
 ;DJT Start
-	WAITSWITCH_DWN	JOY_UP|BUT_TURBO|BUT_PASS,#lp,0
+	WAITSWITCH_DWN	JOY_UP|BUT_TURBO|BUT_PASS,#bighead_lp,0
 ;DJT End
 
 ;a9=0-3 for player
@@ -3069,8 +3072,8 @@ sp_bighead
 	.ref	pup_hugehead
 	move	@pup_bighead,a0
 	movk	1,a1
-	sll	a9,a1
-	or	a1,a0
+	sll	    a9,a1
+	or	    a1,a0
 	move	a0,@pup_bighead
 	move	@pup_hugehead,a0
 	andn	a1,a0
@@ -3087,22 +3090,22 @@ sp_bighead
 * a9=plyr #
 
 ;#TIMEOUT	.equ	40
-#TIMEOUT	.equ	60
+#TIMEOUT	.equ	80
 
 sp_hugehead
 
 	SLEEPK	1
-#lp
+#hugehead_lp
 	clr	a11
 
 ;DJT Start
-	WAITSWITCH_DWN	JOY_UP,#lp,0
+	WAITSWITCH_DWN	JOY_UP,#hugehead_lp,0
 
 	movi	#TIMEOUT,a11
 
-	WAITSWITCH_DWN	JOY_UP,#lp,0
-	WAITSWITCH_DWN	BUT_PASS,#lp,0
-	WAITSWITCH_DWN	BUT_TURBO,#lp,0
+	WAITSWITCH_DWN	JOY_UP,#hugehead_lp,0
+	WAITSWITCH_DWN	BUT_PASS,#hugehead_lp,0
+	WAITSWITCH_DWN	BUT_TURBO,#hugehead_lp,0
 ;DJT End
 
 ;a9=0-3 for player
@@ -3125,12 +3128,12 @@ sp_hugehead
 * a9=plyr #
 
 ;#TIMEOUT	.equ	55
-#TIMEOUT	.equ	60
+;#TIMEOUT	.equ	60
 
 sp_showshotper
 
 	SLEEPK	1
-#lp
+#showshotper_lp
 ;	clr	a11
 ;
 ;	WAITSWITCH_DWN	JOY_LEFT,0,#lp
@@ -3153,17 +3156,17 @@ sp_showshotper
 	clr	a11
 
 ;DJT Start
-	WAITSWITCH_DWN	JOY_UP,#lp,0
+	WAITSWITCH_DWN	JOY_UP,#showshotper_lp,0
 
 	movi	#TIMEOUT,a11
 
-	WAITSWITCH_DWN	JOY_UP_RIGHT,#lp,1
-	WAITSWITCH_DWN	JOY_RIGHT,#lp,1
-	WAITSWITCH_DWN	JOY_DOWN_RIGHT,#lp,1
-	WAITSWITCH_DWN	JOY_DOWN,#lp,1
-	WAITSWITCH_DWN	JOY_DOWN_LEFT,#lp,1
-	WAITSWITCH_DWN	JOY_LEFT,#lp,1
-	WAITSWITCH_DWN	JOY_UP_LEFT,#lp,1
+	WAITSWITCH_DWN	JOY_UP_RIGHT,#showshotper_lp,1
+	WAITSWITCH_DWN	JOY_RIGHT,#showshotper_lp,1
+	WAITSWITCH_DWN	JOY_DOWN_RIGHT,#showshotper_lp,1
+	WAITSWITCH_DWN	JOY_DOWN,#showshotper_lp,1
+	WAITSWITCH_DWN	JOY_DOWN_LEFT,#showshotper_lp,1
+	WAITSWITCH_DWN	JOY_LEFT,#showshotper_lp,1
+	WAITSWITCH_DWN	JOY_UP_LEFT,#showshotper_lp,1
 
 ;a9=0-3 for player
 	movi	pwrup_snds,a11
@@ -3183,21 +3186,21 @@ sp_showshotper
 * a8=PnCTRL for this player
 * a9=plyr #
 
-#TIMEOUT	.equ	60
+;#TIMEOUT	.equ	60
 
 sp_showhotspot
 
 	SLEEPK	1
-#lp
+#showhotspot_lp
 	clr	a11
 
-	WAITSWITCH_DWN	JOY_UP,#lp,0
+	WAITSWITCH_DWN	JOY_UP,#showhotspot_lp,0
 
 	movi	#TIMEOUT,a11
 
-	WAITSWITCH_DWN	JOY_UP|BUT_SHOOT,#lp,1
-	WAITSWITCH_DWN	JOY_UP,#lp,1
-	WAITSWITCH_DWN	JOY_UP|BUT_SHOOT,#lp,1
+	WAITSWITCH_DWN	JOY_UP|BUT_SHOOT,#showhotspot_lp,1
+	WAITSWITCH_DWN	JOY_UP,#showhotspot_lp,1
+	WAITSWITCH_DWN	JOY_UP|BUT_SHOOT,#showhotspot_lp,1
 
 ;a9=0-3 for player
 	.ref	pup_showhotspots
@@ -3216,30 +3219,30 @@ sp_showhotspot
 * a9=plyr #
 
 ;#TIMEOUT	.equ	50
-#TIMEOUT	.equ	60
+;#TIMEOUT	.equ	60
 
 sp_notag
 
 	SLEEPK	1
-#lp
+#notag_lp
 	clr	a11
 
 ;DJT Start
-	WAITSWITCH_DWN	JOY_LEFT,#lp,0
+	WAITSWITCH_DWN	JOY_LEFT,#notag_lp,0
 
 	movi	#TIMEOUT,a11
 
-	WAITSWITCH_DWN	JOY_LEFT,#lp,0
-	WAITSWITCH_DWN	BUT_PASS,#lp,0
-	WAITSWITCH_DWN	BUT_TURBO,#lp,0
+	WAITSWITCH_DWN	JOY_LEFT,#notag_lp,0
+	WAITSWITCH_DWN	BUT_PASS,#notag_lp,0
+	WAITSWITCH_DWN	BUT_TURBO,#notag_lp,0
 ;DJT End
 
 ;a9=0-3 for player
 	.ref	pup_notag
 	move	@pup_notag,a0
 	movk	1,a1
-	sll	a9,a1
-	or	a1,a0
+	sll	    a9,a1
+	or	    a1,a0
 	move	a0,@pup_notag
 
 ;DJT Start
@@ -3252,22 +3255,22 @@ sp_notag
 * a9=plyr #
 
 ;#TIMEOUT	.equ	50
-#TIMEOUT	.equ	60
+;#TIMEOUT	.equ	80
 
 sp_nodrift
 
 	SLEEPK	1
-#lp
+#nodrift_lp
 	clr	a11
 
 ;DJT Start
-	WAITSWITCH_DWN	JOY_DOWN,#lp,0
+	WAITSWITCH_DWN	JOY_DOWN,#nodrift_lp,0
 
 	movi	#TIMEOUT,a11
 
-	WAITSWITCH_DWN	JOY_DOWN,#lp,0
-	WAITSWITCH_DWN	BUT_SHOOT,#lp,0
-	WAITSWITCH_DWN	BUT_TURBO,#lp,0
+	WAITSWITCH_DWN	JOY_DOWN,#nodrift_lp,0
+	WAITSWITCH_DWN	BUT_SHOOT,#nodrift_lp,0
+	WAITSWITCH_DWN	BUT_TURBO,#nodrift_lp,0
 ;DJT End
 
 ;a9=0-3 for player
@@ -3294,22 +3297,22 @@ sp_nodrift
 * a8=PnCTRL for this player
 * a9=plyr #
 
-#TIMEOUT	.equ	60
+;#TIMEOUT	.equ	60
 
 sp_noassistance
 
 	SLEEPK	1
-#lp
+#noassistance_lp
 	clr	a11
 
 ;DJT Start
-	WAITSWITCH_DWN	JOY_RIGHT,#lp,0
+	WAITSWITCH_DWN	JOY_RIGHT,#noassistance_lp,0
 
 	movi	#TIMEOUT,a11
 
-	WAITSWITCH_DWN	JOY_RIGHT|BUT_PASS,#lp,1
-	WAITSWITCH_DWN	JOY_RIGHT,#lp,1
-	WAITSWITCH_DWN	JOY_RIGHT|BUT_PASS,#lp,1
+	WAITSWITCH_DWN	JOY_RIGHT|BUT_PASS,#noassistance_lp,1
+	WAITSWITCH_DWN	JOY_RIGHT,#noassistance_lp,1
+	WAITSWITCH_DWN	JOY_RIGHT|BUT_PASS,#noassistance_lp,1
 ;DJT End
 
 ;a9=0-3 for player
@@ -3327,24 +3330,24 @@ sp_noassistance
 * a9=plyr #
 
 ;#TIMEOUT	.equ	40
-#TIMEOUT	.equ	60
+;#TIMEOUT	.equ	60
 
 sp_aba
 
 	SLEEPK	1
-#lp
+#aba_lp
 	clr	a11
 
 ;DJT Start
-	WAITSWITCH_DWN	JOY_RIGHT,#lp,0
+	WAITSWITCH_DWN	JOY_RIGHT,#aba_lp,0
 
 	movi	#TIMEOUT,a11
 
-	WAITSWITCH_DWN	JOY_RIGHT|BUT_SHOOT,#lp,1
-	WAITSWITCH_DWN	JOY_RIGHT,#lp,1
-	WAITSWITCH_DWN	JOY_RIGHT|BUT_TURBO,#lp,1
-	WAITSWITCH_DWN	JOY_RIGHT,#lp,1
-	WAITSWITCH_DWN	JOY_RIGHT|BUT_PASS,#lp,1
+	WAITSWITCH_DWN	JOY_RIGHT|BUT_SHOOT,#aba_lp,1
+	WAITSWITCH_DWN	JOY_RIGHT,#aba_lp,1
+	WAITSWITCH_DWN	JOY_RIGHT|BUT_TURBO,#aba_lp,1
+	WAITSWITCH_DWN	JOY_RIGHT,#aba_lp,1
+	WAITSWITCH_DWN	JOY_RIGHT|BUT_PASS,#aba_lp,1
 ;DJT End
 
 ;a9=0-3 for player
@@ -3366,34 +3369,34 @@ sp_aba
 
 ;DJT Start
 	.ref	mess_objid,message_palette,mess_cursx
-#TIMEOUT	.equ	60
+;#TIMEOUT	.equ	60
 
 sp_court
 	clr	a0
 	move	a0,*a13(PDATA),L
 	move	a0,*a13(PDATA+32),L
 
-#lp
+#court_lp
 	SLEEPK	1
 	callr	#cbani
 	move	*a8,a10
-	jrnz	lp
-#lp1
+	jrnz	court_lp
+#court_lp1
 	SLEEPK	1
 	callr	#cbani
 	move	*a8,a10
-	jrz	lp1
+	jrz	court_lp1
 	sll	32-7,a10
 	srl	32-7,a10
 
 	clr	a0
 	cmpi	JOY_LEFT,a10
-	jreq	lp2
+	jreq	court_lp2
 
 	movk	1,a0
 	cmpi	JOY_RIGHT,a10
-	jrne	lp
-#lp2
+	jrne	court_lp
+#court_lp2
 	move	a0,@pup_court
 
 	movi	msg_doors_setup,a2,L
@@ -3404,16 +3407,16 @@ sp_court
 
 	movi	BAST_W_P,a11
 	cmpi	JOY_LEFT,a10
-	jrne	lp4
+	jrne	court_lp4
 	move	a11,@message_palette,L
-#lp4
+#court_lp4
 	movi	msg_indoor,a4,L
 	calla	print_string_C2
 
 	cmpi	JOY_RIGHT,a10
-	jreq	lp5
+	jreq	court_lp5
 	movi	BAST_B_P,a11
-#lp5
+#court_lp5
 	move	a11,@message_palette,L
 	move	@mess_cursx,a0
 	addi	70,a0
@@ -3424,8 +3427,8 @@ sp_court
 	movi	crtsel_snds,a11,L
 	move	@pup_msgs,a0,L
 	movk	1<<MSG_OUTDOOR,a14
-	and	a0,a14
-	jrnz	lp3
+	and	    a0,a14
+	jrnz	court_lp3
 
 	addk	1<<MSG_OUTDOOR,a0
 	move	a0,@pup_msgs,L
@@ -3436,19 +3439,19 @@ sp_court
 	callr	#cbmake
 	CREATE0	flash_backdrop
 	movi	pwrup_snds,a11,L
-#lp3
+#court_lp3
 	move	a9,a0
-     	sll	5,a0
-	add	a0,a11
+    sll	    5,a0
+	add	    a0,a11
 	move	*a11,a0,L
 	calla	snd_play1
-	jruc	lp
+	jruc	court_lp
 
 
 	.ref	CBANI_T
 #cbani
 	move	*a13(PDATA),a10,L
-	jrz	cbx
+	jrz	    cbx
 	move	*a13(PDATA+64),a0,L
 	subk	1,a0
 	jrnz	cbc
@@ -3491,16 +3494,16 @@ sp_court
 
  .if 0
 	SLEEPK	1
-#lp
+#court2_lp
 	clr	a11
 
 	WAITSWITCH_DWN	JOY_LEFT,#lp,0
 
 	movi	#TIMEOUT,a11
 
-	WAITSWITCH_DWN	JOY_LEFT|BUT_TURBO,#lp,1
-	WAITSWITCH_DWN	JOY_LEFT,#lp,1
-	WAITSWITCH_DWN	JOY_LEFT|BUT_TURBO,#lp,1
+	WAITSWITCH_DWN	JOY_LEFT|BUT_TURBO,#court2_lp,1
+	WAITSWITCH_DWN	JOY_LEFT,#court2_lp,1
+	WAITSWITCH_DWN	JOY_LEFT|BUT_TURBO,#court2_lp,1
 
 ;a9=0-3 for player
 	movk	1,a0
@@ -3519,29 +3522,29 @@ sp_court
 * a8=PnCTRL for this player
 * a9=plyr #
 
-#TIMEOUT	.equ	80
+;#TIMEOUT	.equ	80
 
 sp_special
 
 	SLEEPK	1
-#lp
+#special_lp
 	clr	a11
 
 ;DJT Start
-	WAITSWITCH_DWN	BUT_SHOOT,#lp,0
+	WAITSWITCH_DWN	BUT_SHOOT,#special_lp,0
 
 	movi	#TIMEOUT,a11
 
-	WAITSWITCH_DWN	BUT_SHOOT,#lp,0
-	WAITSWITCH_DWN	JOY_UP|BUT_SHOOT,#lp,1
-	WAITSWITCH_DWN	JOY_UP_RIGHT|BUT_SHOOT,#lp,1
-	WAITSWITCH_DWN	JOY_RIGHT|BUT_SHOOT,#lp,1
-	WAITSWITCH_DWN	JOY_DOWN_RIGHT|BUT_SHOOT,#lp,1
-	WAITSWITCH_DWN	JOY_DOWN|BUT_SHOOT,#lp,1
-	WAITSWITCH_DWN	JOY_DOWN_LEFT|BUT_SHOOT,#lp,1
-	WAITSWITCH_DWN	JOY_LEFT|BUT_SHOOT,#lp,1
-	WAITSWITCH_DWN	JOY_UP_LEFT|BUT_SHOOT,#lp,1
-	WAITSWITCH_DWN	JOY_UP|BUT_SHOOT,#lp,1
+	WAITSWITCH_DWN	BUT_SHOOT,#special_lp,0
+	WAITSWITCH_DWN	JOY_UP|BUT_SHOOT,#special_lp,1
+	WAITSWITCH_DWN	JOY_UP_RIGHT|BUT_SHOOT,#special_lp,1
+	WAITSWITCH_DWN	JOY_RIGHT|BUT_SHOOT,#special_lp,1
+	WAITSWITCH_DWN	JOY_DOWN_RIGHT|BUT_SHOOT,#special_lp,1
+	WAITSWITCH_DWN	JOY_DOWN|BUT_SHOOT,#special_lp,1
+	WAITSWITCH_DWN	JOY_DOWN_LEFT|BUT_SHOOT,#special_lp,1
+	WAITSWITCH_DWN	JOY_LEFT|BUT_SHOOT,#special_lp,1
+	WAITSWITCH_DWN	JOY_UP_LEFT|BUT_SHOOT,#special_lp,1
+	WAITSWITCH_DWN	JOY_UP|BUT_SHOOT,#special_lp,1
 ;DJT End
 
 ;a9=0-3 for player
@@ -3549,14 +3552,14 @@ sp_special
 	move	a0,@pup_aba
 	move	a0,@pup_court
 
-	sll	a9,a0
+	sll	    a9,a0
 
 	move	@pup_showshotper,a1
 	jrnz	nossp
 	move	a0,@pup_showshotper
 nossp
 	move	@pup_bighead,a1
-	or	a0,a1
+	or	    a0,a1
 	move	a1,@pup_bighead
 	move	@pup_hugehead,a1
 	andn	a0,a1
@@ -3573,9 +3576,9 @@ nossp
 pupmsg
 	move	@pup_msgs,a0,L
 	move	a3,a14
-	and	a0,a14
+	and	    a0,a14
 	jrnz	pupflash
-	add	a3,a0
+	add	    a3,a0
 	move	a0,@pup_msgs,L
 	calla	setup_message
 	calla	print_string_C2
@@ -3584,8 +3587,8 @@ pupflash
 	CREATE0	flash_backdrop
 
 pupsnd
-     	sll	5,a9
-	add	a9,a11
+    sll	    5,a9
+	add	    a9,a11
 	move	*a11,a0,L
 	calla	snd_play1
 

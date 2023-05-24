@@ -1,0 +1,19 @@
+	.DATA
+CR4THD02:
+	.word   128,42,0,66
+	.long   05eda390H
+	.word   00H
+CR4THD03:
+	.word   140,51,4,75
+	.long   05ee4b90H
+	.word   00H
+CR4THD04:
+	.word   142,63,4,87
+	.long   05ef2ab0H
+	.word   00H
+CR4THD05:
+	.word   138,59,3,83
+	.long   05f04240H
+	.word   00H
+	.TEXT
+
