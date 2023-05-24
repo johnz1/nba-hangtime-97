@@ -111,16 +111,16 @@ morfpal11	equ	FADERAM+10*16*64
  SUBR	pal_init
 
 	movi	PALRAM,a0		;*Pal list
-	movi	PALRSIZ*NUMPAL/16,b0	;# of words
+	movi	PALRSIZ*NUMPAL/16,b0	; of words
 
 	clr	a1
-#l1	move	a1,*a0+
+l1	move	a1,*a0+
 	dsj	b0,l1
 
 	movi	PALTRAM,a0		;*xfer ram
-	movi	PALTSIZ*NUMPALT/16,b0	;# of words
+	movi	PALTSIZ*NUMPALT/16,b0	; of words
 
-#l2	move	a1,*a0+
+l2	move	a1,*a0+
 	dsj	b0,l2
 
 ;always start with DIAGP as pal 0!
@@ -139,9 +139,10 @@ morfpal11	equ	FADERAM+10*16*64
 	movi	PALRAM+PALRSIZ,a2	;Skip 1st pal
 
 	movi	NUMPAL-1,a3		;Chk all pals
-	movi	00101H,a4		;2nd PAL #
+	movi	00101H,a4		;2nd PAL 
 
-#lp	move	@OBJLST,a0,L
+pal_clean_lp
+	move	@OBJLST,a0,L
 	jrz	cp30			;No objs, chk backgnd
 
 cp20	move	*a0(OPAL),a14
@@ -182,16 +183,16 @@ cp80	addi	00101H,a4		;Next pal
 	.endif
 
 cp90	addk	PALRSIZ,a2
-	dsj	a3,lp
+	dsj	a3,pal_clean_lp
 
 	PULL	a0,a2,a3,a4
 	rets
 
 
 ********************************
-* Find the color map # to which the given palette is assigned
+* Find the color map  to which the given palette is assigned
 * A0=*Pallette
-* 0A0H=PAL # (DMA format) or 0 (Z)
+* 0A0H=PAL  (DMA format) or 0 (Z)
 * Trashes scratch
 
  SUBR	pal_find
@@ -199,15 +200,16 @@ cp90	addk	PALRSIZ,a2
 	movi	PALRAM,a1
 	movi	NUMPAL,b0
 
-#lp	move	*a1+,a14,L	;Get * palette
-	cmp	a0,a14
+pal_find_lp
+    move	*a1+,a14,L	;Get * palette
+	cmp	    a0,a14
 	jreq	ok		;Found?
-	dsj	b0,lp
-	clr	a0		;Set Z
+	dsj	    b0,pal_find_lp
+	clr	    a0		;Set Z
 	rets
 
-#ok	subi	NUMPAL,b0	;Compute pal #
-	neg	b0
+ok	subi	NUMPAL,b0	;Compute pal 
+	neg	    b0
 	move	b0,a1
 
 	.if	PAL64
@@ -218,7 +220,7 @@ cp90	addk	PALRSIZ,a2
 	add	a14,a1
 	.endif
 
-	move	a1,a0		;Return pal #
+	move	a1,a0		;Return pal 
 	sll	8,a1
 	add	a1,a0
 	addk	1,a1		;Clr Z (OK)
@@ -240,16 +242,18 @@ cp90	addk	PALRSIZ,a2
 
 	movi	PALRAM,a1	;0CHheck if palette already exists
 	movi	NUMPAL,a3
-gfp4	move	*a1+,a2,L	;Get *palette
-	cmp	a0,a2
+gfp4	
+    move	*a1+,a2,L	;Get *palette
+	cmp	    a0,a2
 	jreq	getpn		;Already in color ram?
-	dsj	a3,gfp4
+	dsj	    a3,gfp4
 
 	movi	PALFRAM,a1	;0CHheck for a spare palette
 	movi	NMFPAL,a3
-gfp8	move	*a1+,a2,L
-	jrz	getfp		;Palette empty? Grab it
-	dsj	a3,gfp8
+gfp8	
+    move	*a1+,a2,L
+	jrz	    getfp		;Palette empty? Grab it
+	dsj	    a3,gfp8
 
 	.if	DEBUG
 ;	LOCKUP
@@ -259,12 +263,14 @@ gfp8	move	*a1+,a2,L
 
 	movi	PALFRAM,a1	;0CHheck for a spare palette
 	movi	NMFPAL,a3
-gfp20	move	*a1+,a2,L
-	jrz	getfp		;Palette empty? Grab it
-	dsj	a3,gfp20
+gfp20	
+    move	*a1+,a2,L
+	jrz	    getfp		;Palette empty? Grab it
+	dsj	    a3,gfp20
 
-#err	PULL	a2,a3
-	clr	a0		;Set Z error
+err1	
+    PULL	a2,a3
+	clr	    a0		;Set Z error
 	rets
 
 
@@ -306,7 +312,7 @@ gbp8	move	*a1+,a2,L
 gbp10	move	*a1+,a2,L
 	jrz	gbp30		;Palette empty? Grab it
 	dsj	a3,gbp10
-	jruc	err
+	jruc	err1
 
 
 getfp	addk	NMBPAL,a3	;>Setup your new palette
@@ -318,8 +324,8 @@ getfp
 
 
 gbp30	PUSH	a0,a1
-	move	a3,a1		;Palette #
-	subi	NUMPAL,a1	;Compute palette #
+	move	a3,a1		;Palette 
+	subi	NUMPAL,a1	;Compute palette 
 	neg	a1
 
 	.if	PAL64
@@ -331,13 +337,13 @@ gbp30	PUSH	a0,a1
 	.endif
 
 	sll	8,a1		;*256
-	move	*a0+,a2		;Get # colors in pal
+	move	*a0+,a2		;Get  colors in pal
 	callr	pal_set		;Setup pal transfer
 	mmfm	sp,a0,a1
-	jrz	err		;Failed to get transfer?
+	jrz	err1		;Failed to get transfer?
 	move	a0,-*a1,L	;Stuff palette *
 
-getpn	subi	NUMPAL,a3	;Compute palette #
+getpn	subi	NUMPAL,a3	;Compute palette 
 	neg	a3
 
 	.if	PAL64
@@ -348,7 +354,7 @@ getpn	subi	NUMPAL,a3	;Compute palette #
 	add	a1,a3
 	.endif
 
-	move	a3,a0		;Return palette #
+	move	a3,a0		;Return palette 
 	sll	8,a3
 	add	a3,a0		;Double it up for DMA
 
@@ -370,23 +376,25 @@ getpn	subi	NUMPAL,a3	;Compute palette #
 	move	a3,b1
 
 	movi	PALTRAM,a3
-	movi	NUMPALT,b0	;# of palette transfers allowed
+	movi	NUMPALT,b0	; of palette transfers allowed
 
-#lp	move	*a3+,a14
+pal_set_lp
+	move	*a3+,a14
 	jrz	set		;Cell free?
 	addi	PALTSIZ-16,a3
-	dsj	b0,lp
+	dsj	b0,pal_set_lp
 	.if	DEBUG
 	LOCKUP
 	eint
 	.endif
-	jruc	x
+	jruc	pal_set_x
 
-#set	move	a0,*a3+,L	;Set PALSRC
+set	move	a0,*a3+,L	;Set PALSRC
 	move	a1,*a3		;Set PALDEST
 	move	a2,*a3(-48)	;Set PLDCNT (Must set last)
 
-#x	move	b1,a3
+pal_set_x
+	move	b1,a3
 	move	b0,b0		;Return Z (error) or NZ (ok)
 	rets
 
@@ -401,13 +409,14 @@ getpn	subi	NUMPAL,a3	;Compute palette #
  SUBR	pal_transfer
 
 	movi	PALTRAM,a0
-	movi	NUMPALT,a3	;# OF PALETTES
+	movi	NUMPALT,a3	; OF PALETTES
 
 	clr	a6
 	movi	COLRAM,a7
 
-#lp	move	*a0,a4		;Get count
-	jrz	x		;End?
+pal_transfer_lp
+	move	*a0,a4		;Get count
+	jrz	    pal_transfer_x		;End?
 
 	move	a6,*a0+		;Clear out tranfer count
 	move	*a0+,a1,L	;Source address
@@ -429,28 +438,34 @@ getpn	subi	NUMPAL,a3	;Compute palette #
 
 	sll	32-9,a4		;Make 0-511
 	srl	32-9+1,a4
-	jrnc	1		;Even data count?
+	jrnc	pal_transfer_1		;Even data count?
 	move	*a1+,*a2+
 
-#1	srl	1,a4		;/2 data count
-	jrnc	2		;Even?
+pal_transfer_1
+	srl	1,a4		;/2 data count
+	jrnc	pal_transfer_2		;Even?
 	move	*a1+,*a2+,L
 
-#2	srl	1,a4		;/2 data count
-	jrnc	3		;Even?
+pal_transfer_2
+	srl	1,a4		;/2 data count
+	jrnc	a3		;Even?
 	move	*a1+,*a2+,L
 	move	*a1+,*a2+,L
-3	jrz	5		;Cnt=0?
+pal_transfer_3
+	jrz	pal_transfer_5		;Cnt=0?
 
-#4	move	*a1+,*a2+,L
+pal_transfer_4
 	move	*a1+,*a2+,L
 	move	*a1+,*a2+,L
 	move	*a1+,*a2+,L
-	dsj	a4,4
+	move	*a1+,*a2+,L
+	dsj	a4,pal_transfer_4
 
-5	dsj	a3,lp
+pal_transfer_5
+	dsj	a3,pal_transfer_lp
 
-#x	rets
+pal_transfer_x
+	rets
 
 
 
@@ -464,19 +479,20 @@ getpn	subi	NUMPAL,a3	;Compute palette #
 	PUSH	a2
 
 	callr	pal_find
-	jrz	err
+	jrz	err2
 	sll	8,a0
 	move	a0,a1
 	movi	FADERAM,a0
 	movk	32,b0
 	clr	a2
-#lp	move	a2,*a0+,L
+lp	move	a2,*a0+,L
 	dsj	b0,lp
 	movi	FADERAM,a0
 	movi	64,a2
 	callr	pal_set
 
-#err	PULL	a2
+err2	
+    PULL	a2
 	rets
 
 
@@ -522,7 +538,7 @@ getpn	subi	NUMPAL,a3	;Compute palette #
 ;	move	*a1+,a14
 ;	move	a14,*a0+
 ;	SLL	23,A14		;TOP BITS OF FIELD ARE FLAGS
-;	SRL	23,A14		;ONLY 9 BITS NEEDED FOR # COLORS
+;	SRL	23,A14		;ONLY 9 BITS NEEDED FOR  COLORS
 ;	MOVI	07C00H,A4	;A4 - PRE MULT MASK FOR 5 BITS OF RED
 ;;	MOVI	003E0H,A6	;A6 - PRE MULT MASK FOR 5 BITS OF GREEN
 ;;	MOVI	0001FH,A8	;A8 - PRE MULT MASK FOR 5 BITS OF BLUE
@@ -571,8 +587,8 @@ getpn	subi	NUMPAL,a3	;Compute palette #
 ;	PULL	a8,a10,a11
 ;
 ;	movi	FADERAM,a0	;*Color data
-;	move	a11,a1		;Pal#
-;	move	*a0+,a2		;#Colors
+;	move	a11,a1		;Pal
+;	move	*a0+,a2		;Colors
 ;	jruc	pal_set
 
 
@@ -608,7 +624,7 @@ fi30	callr	pal_find
 	jrnz	fi60			;OK?
 	not	a0			;Make neg (should = -256)
 fi60	sll	8,a0
-	move	a0,*a6+			;Save palette #
+	move	a0,*a6+			;Save palette 
 	dsj	a7,fi20
 
 fi70	clr	a8			;A8=Brightness
@@ -634,10 +650,10 @@ fi200	move	*a11+,a1,L
 	move	a8,a2
 	callr	pal_fade
 	move	a5,a0			;*Palette colors
-	move	*a6+,a1			;Palette #
+	move	*a6+,a1			;Palette 
 	cmpi	-256,a1			;FF00
 	jreq	fi230			;Couldn't find?
-	move	*a0+,a2			;#Colors
+	move	*a0+,a2			;Colors
 	callr	pal_set
 fi230	addi	FPALSZ,a5
 	dsj	a7,fi200
@@ -688,7 +704,7 @@ fo30	callr	pal_find
 	jrnz	fo60
 	not	a0			;Make neg
 fo60	sll	8,a0
-	move	a0,*a6+			;Save palette #
+	move	a0,*a6+			;Save palette 
 	dsj	a7,fo20
 
 fo70	movi	128,a8			;A8=Brightness
@@ -713,10 +729,10 @@ fo220	move	a5,a0
 	move	a8,a2
 	callr	pal_fade
 	move	a5,a0			;*Palette colors
-	move	*a6+,a1			;Palette #
+	move	*a6+,a1			;Palette 
 	cmpi	-256,a1			;FF00
 	jrz	fo250
-	move	*a0+,a2			;#Colors
+	move	*a0+,a2			;Colors
 	callr	pal_set
 fo250	addi	FPALSZ,a5
 	dsj	a7,fo200
@@ -753,11 +769,11 @@ fo800	DIE
 
 	PUSH	a3,a5,a7,a8
 
-	move	*a1+,a14	;# Colors
+	move	*a1+,a14	; Colors
 	move	a14,*a0+
 
 	sll	32-9,a14	;Remove any flags
-	srl	32-9,a14	;9 bits needed for # colors
+	srl	32-9,a14	;9 bits needed for  colors
 
 pf1c	movk	01fH,a8		;A8=5 bit color mask
 
@@ -852,7 +868,7 @@ fbfx	PULL	a2,a6,a7,a8,a9,a10
 * fadeonep - Fade one palette (Process)
 *
 * A8=*Palette to be faded
-* A9=Palette slot # (0 to NUMPAL-1)
+* A9=Palette slot  (0 to NUMPAL-1)
 * A10=Add value per fade (!0)
 
 fadeonep
@@ -883,7 +899,7 @@ foplp
 
 	move	a5,a0		;>Move faded palette to palram
 	move	a9,a1
-	move	*a0+,a2		;Get # colors in palette
+	move	*a0+,a2		;Get  colors in palette
 	callr	pal_set		;Set transfer
 
 	SLEEPK	2
@@ -952,7 +968,7 @@ ptwx	PULL	a2,a6,a7,a8,a9,a10
 ********************************
 * Brighten one palette (Process)
 * A8=*Palette to be faded
-* A9=Palette slot #
+* A9=Palette slot 
 * A10=Add value per loop (!0)
 
 brightenonep
@@ -984,7 +1000,7 @@ boplp	add	a10,a11
 
 	move	a5,a0		;>Move faded palette to palram
 	move	a9,a1
-	move	*a0+,a2		;Get # colors in palette
+	move	*a0+,a2		;Get  colors in palette
 	callr	pal_set		;Set transfer
 
 	SLEEPK	3
@@ -1041,11 +1057,11 @@ abaex	DIE
 
 	PUSH	a3,a5,a7,a8
 
-	move	*a1+,a14	;# Colors
+	move	*a1+,a14	; Colors
 	move	a14,*a0+
 
 	sll	23,a14		;Remove any flags
-	srl	23,a14		;9 bits needed for # colors
+	srl	23,a14		;9 bits needed for  colors
 
 pb1c	movk	01fH,a8		;A8=Mask for 5 bits of color
 
@@ -1175,7 +1191,7 @@ pbbok	sll	10,a3
 	move	a0,@irqskyeo
 
 	move	@fade_start,a10
-#fade_loop
+fade_loop
 
 	move	@irqskyeo,a11
 	movk	01fH,a7
@@ -1203,7 +1219,7 @@ pbbok	sll	10,a3
 	movi	FADERAM,a4
 	movi	PALRAM,a1
 	movi	NUMPAL,a3
-#next_pal
+next_pal
 	move	*a1+,a2,L	;Get *palette
 	jrz	empty_pal
 
@@ -1211,20 +1227,20 @@ pbbok	sll	10,a3
 	jrz	skip_check
 	jruc	start
 
-#next_check
+next_check
 	cmp	a9,a2
 	jreq	done		;skip this palette
-#start
+start
 	move	*a7+,a9,L
 	jrnz	next_check
 
-#skip_check
+skip_check
 
 	move	*a2+,a5		;Number colours in palette
 	move	a5,a8
 	move	a4,a6
 
-#copy_loop
+copy_loop
 	move	*a2+,a11
 	movk	01fH,a7
 	and	a11,a7		;A7  = Blue
@@ -1255,11 +1271,11 @@ pbbok	sll	10,a3
 	movi	NUMPAL,a1
 	sub	a3,a1		;dest palette ( 0 - NUMPAL-1 )
 	sll	8,a1		;
-	move	a5,a2		;# colours
+	move	a5,a2		; colours
 	callr	pal_set
 	PULL	a1,a2
-#done
-#empty_pal
+done
+empty_pal
 	addi	FPALSZ,a4
 	dsj	a3,next_pal
 
@@ -1268,20 +1284,20 @@ pbbok	sll	10,a3
 	move	@fade_start,a0
 	move	@fade_end,a1
 	cmp	a0,a1
-	jrhi	#fading_up
+	jrhi	fading_up
 				;fading_down
 	move	@fade_inc,a0	;signed inc
 	sub	a0,a10
 	cmp	a1,a10
-	jrge	#fade_loop
+	jrge	fade_loop
 
 	DIE
 
-#fading_up
+fading_up
 	move	@fade_inc,a0	;signed inc
 	add	a0,a10
 	cmp	a1,a10
-	jrls	#fade_loop
+	jrls	fade_loop
 
 	DIE
 
