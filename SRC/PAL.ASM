@@ -46,6 +46,7 @@
 	.ref	DIAGP
 
 ;defs
+;some heads & pals, they are in HDSMSC8.IMG, somehow they don't get included?
 	.def	BOON_F,TOBIAS_F,OURSL_F
 	.def	EDDIE_F
 	.def	FIFI_F
@@ -448,7 +449,7 @@ pal_transfer_1
 
 pal_transfer_2
 	srl	1,a4		;/2 data count
-	jrnc	a3		;Even?
+	jrnc	pal_transfer_3		;Even?
 	move	*a1+,*a2+,L
 	move	*a1+,*a2+,L
 pal_transfer_3

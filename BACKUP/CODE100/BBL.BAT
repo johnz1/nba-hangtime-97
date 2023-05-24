@@ -26,7 +26,7 @@ REM Check locked status of LOD files
 :CHKLOCK
 set ~bbl=
 c:
-cd \video\bball\img
+cd \hangtime\img\
 
 type BB.LOD    |find "***>"|find ",0"|if not errorlevel 1 set ~bbl=%~bbl%1
 type BB2.LOD   |find "***>"|find ",0"|if not errorlevel 1 set ~bbl=%~bbl%2
