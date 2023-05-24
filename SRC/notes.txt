@@ -63,3 +63,28 @@ jrnz
 jrnc
 jsrp
 dsj
+and then they use jrge and jrgt #dmawt in mproc.asm :(
+
+SOME TE Hacking 4.0
+unzip.asm is in TE around 93E8 in flat rom.
+sec table is at 0x93ee -> 0x95ed bin  (37870 -> 38381 , 1FF size 511?)
+#sec_t
+	.long	>00000000
+	.long	>04081020   -> 20 10 08 04 in flat rom
+	.long	>08102000
+	.long	>0C183122
+..
+	.long	>3F3F3F1F
+
+For JAM 3.01
+5EEE -> 5FD5 size 511?
+24302 - 24533
+#sec_t	.long	021283b3bH	;0
+	.long	02439383bH
+	.long	031283b3bH
+	.long	0302b3938H
+	.long	031283b3bH
+...
+	.long	01a302b11H
+	.long	00b31283bH
+	.long	00e26383bH			
