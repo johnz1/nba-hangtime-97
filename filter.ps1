@@ -1,0 +1,1 @@
+﻿Get-Content plyr.asm | Where { $_ -notmatch "^*" } | Set-Content filteredfile.txt
