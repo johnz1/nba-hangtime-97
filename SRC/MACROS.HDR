@@ -742,24 +742,23 @@ CALLERR	.macro	NUM,REGS
 	mmfm	sp,a1,a2
 	.endm
 
-;DJT Start
-WAITSWITCH_DWN	.macro	SWITCHES,FAILADDR,NODEADFLAG
+WAITSWITCH_DWN	.macro	SWITCHES,MASK,FAILADDR
 
 lp?
 	SLEEPK	1
 	dec	a11
 	jrz	:FAILADDR:
 
+;	move	*a8(SPECIAL_MOVE_ADDR),a0,L
+;	jrnz	:FAILADDR:
+;	move	*a8(BUT_VAL_DOWN),a0
+;	move	*a8(BUT_VAL_CUR),a0
+
 	move	*a8,a0
- .if  :NODEADFLAG:
-	jrz	:FAILADDR:
- .endif
-	sll	32-7,a0
-	srl	32-7,a0
+	andni	:MASK:,a0
 	jrz	lp?
 	cmpi	:SWITCHES:,a0
 	jrne	:FAILADDR:
 
 	.endm
-;DJT End
 
