@@ -61,6 +61,8 @@
 	.ref	sumrslts_sp
 	.ref	shot_type
 
+    .ref    PSTATUS2
+
 ;FIX!!!!  We can get rid of the pal data for these pals in imgpal3 before
 ;game ships!  Check zwilpal, etc.  All unused pals!
 ;	.ref	PLYRFX2_P
@@ -105,13 +107,13 @@ alley_oop1_t
 ;(direction 3 only)
 	.word	DFLGS				;Flags for sequence
 	.long	seq_stand			;Code for end of sequence
-	.long	#1,#2,#3,#4
-	.long	#5,#4,#3,#2
-#2
-#3
-#4
-#1
-#5
+	.long	#aoop1,#aoop2,#aoop3,#aoop4
+	.long	#aoop5,#aoop4,#aoop3,#aoop2
+#aoop2
+#aoop3
+#aoop4
+#aoop1
+#aoop5
 	WLW	2,M1SPDU1,F
 	WLLW	-1,seq_strtdunk,M1SPDU17,73	;Next frame begins elevation
 	WLW	-1,seq_jam_speech,JAM_ALLEYOOP
@@ -145,13 +147,13 @@ alley_oop2_t
 ;(direction 3 only)
 	.word	DFLGS				;Flags for sequence
 	.long	seq_stand			;Code for end of sequence
-	.long	#1,#2,#3,#4
-	.long	#5,#4,#3,#2
-#2
-#3
-#4
-#1
-#5
+	.long	#aoop21,#aoop22,#aoop23,#aoop24
+	.long	#aoop25,#aoop24,#aoop23,#aoop22
+#aoop22
+#aoop23
+#aoop24
+#aoop21
+#aoop25
 	WLW	2,W3FLDU1,F
 	WLLW	-1,seq_strtdunk,W3FLDU12,70
 	WLW	-1,seq_jam_speech,JAM_ALLEYOOP
@@ -181,13 +183,13 @@ alley_oop3_t
 ;(direction 3 only)
 	.word	DFLGS				;Flags for sequence
 	.long	seq_stand			;Code for end of sequence
-	.long	#1,#2,#3,#4
-	.long	#5,#4,#3,#2
-#2
-#3
-#4
-#1
-#5
+	.long	#aoop31,#aoop32,#aoop33,#aoop34
+	.long	#aoop35,#aoop34,#aoop33,#aoop32
+#aoop32
+#aoop33
+#aoop34
+#aoop31
+#aoop35
 	WLW	2,W3CRZDU2,F
 	WLLW	-1,seq_strtdunk,W3CRZDU18,75
 	WLW	-1,seq_jam_speech,JAM_ALLEYOOP
@@ -222,13 +224,13 @@ alley_oop4_t
 ;(direction 3 only)
 	.word	DFLGS				;Flags for sequence
 	.long	seq_stand			;Code for end of sequence
-	.long	#1,#2,#3,#4
-	.long	#5,#4,#3,#2
-#2
-#3
-#4
-#1
-#5
+	.long	#aoop41,#aoop42,#aoop43,#aoop44
+	.long	#aoop45,#aoop44,#aoop43,#aoop42
+#aoop42
+#aoop43
+#aoop44
+#aoop41
+#aoop45
 	WLW	3,S3BKDU1,F
 	WLLW	-1,seq_strtdunk,S3BKDU14,70
 	WLW	-1,seq_jam_speech,JAM_ALLEYOOP
@@ -261,13 +263,13 @@ alley_oop5_t
 ;(direction 4,8 only)
 	.word	DFLGS				;Flags for sequence
 	.long	seq_stand			;Code for end of sequence
-	.long	#1,#2,#3,#4
-	.long	#5,#4,#3,#2
-#1
-#2
-#3
-#4
-#5
+	.long	#aoop51,#aoop52,#aoop53,#aoop54
+	.long	#aoop55,#aoop54,#aoop53,#aoop52
+#aoop51
+#aoop52
+#aoop53
+#aoop54
+#aoop55
 	WLW	3,S8ALY401,F
 	WLLW	-1,seq_strtdunk,S8ALY414,70
 	WLW	-1,seq_jam_speech,JAM_ALLEYOOP
@@ -315,13 +317,13 @@ alley_oop6_t
 ;(direction 3 only)
 	.word	DFLGS				;Flags for sequence
 	.long	seq_stand			;Code for end of sequence
-	.long	#1,#2,#3,#4
-	.long	#5,#4,#3,#2
-#1
-#5
-#2
-#3
-#4
+	.long	#aoop61,#aoop62,#aoop63,#aoop64
+	.long	#aoop65,#aoop64,#aoop63,#aoop62
+#aoop61
+#aoop65
+#aoop62
+#aoop63
+#aoop64
 	WLW	3,W3SPNDU1,F
 	WLLW	-1,seq_strtdunk,W3SPNDU19,70
 	WLW	-1,seq_jam_speech,JAM_ALLEYOOP
@@ -359,13 +361,13 @@ alley_oop7_t
 ;(direction 2,6 only)
 	.word	DFLGS				;Flags for sequence
 	.long	seq_stand			;Code for end of sequence
-	.long	#1,#2,#3,#4
-	.long	#5,#4,#3,#2
-#1
-#5
-#2
-#3
-#4
+	.long	#aoop71,#aoop72,#aoop73,#aoop74
+	.long	#aoop75,#aoop74,#aoop73,#aoop72
+#aoop71
+#aoop75
+#aoop72
+#aoop73
+#aoop74
 	WLW	3,S8ALY201,F
 	WLLW	-1,seq_strtdunk,S8ALY212,70
 	WLW	-1,seq_jam_speech,JAM_ALLEYOOP
@@ -394,13 +396,13 @@ alley_oop8_t
 ;(direction 1 only)
 	.word	DFLGS				;Flags for sequence
 	.long	seq_stand			;Code for end of sequence
-	.long	#1,#2,#3,#4
-	.long	#5,#4,#3,#2
-#1
-#2
-#3
-#4
-#5
+	.long	#aoop81,#aoop82,#aoop83,#aoop84
+	.long	#aoop85,#aoop84,#aoop83,#aoop82
+#aoop81
+#aoop82
+#aoop83
+#aoop84
+#aoop85
 	WLW	3,M5OHPB1,FF
 	WLLW	-1,seq_strtdunk,M2DKDU14,74
 	WLW	-1,seq_jam_speech,JAM_ALLEYOOP
@@ -433,13 +435,13 @@ alley_oop9_t
 ;(direction 5 only)
 	.word	DFLGS				;Flags for sequence
 	.long	seq_stand			;Code for end of sequence
-	.long	#1,#2,#3,#4
-	.long	#5,#4,#3,#2
-#1
-#2
-#3
-#4
-#5
+	.long	#aoop91,#aoop92,#aoop93,#aoop94
+	.long	#aoop95,#aoop94,#aoop93,#aoop92
+#aoop91
+#aoop92
+#aoop93
+#aoop94
+#aoop95
 	WLW	4,M5REVDU1,F
 	WLLW	-1,seq_strtdunk,M5REVDU14,74
 	WLW	-1,seq_jam_speech,JAM_ALLEYOOP
@@ -469,13 +471,13 @@ alley_oop10_t
 ;(direction 1 only)
 	.word	DFLGS|LAYUP_M
 	.long	seq_stand			;Code for end of sequence
-	.long	#1,#2,#3,#4
-	.long	#5,#4,#3,#2
-#1
-#2
-#3
-#4
-#5
+	.long	#aoop101,#aoop102,#aoop103,#aoop104
+	.long	#aoop105,#aoop104,#aoop103,#aoop102
+#aoop101
+#aoop102
+#aoop103
+#aoop104
+#aoop105
 	WLW	2,S1SETLA1,F
 ;DJT Start
 	WLLW	-1,seq_strtdunk,S1SETLA5,64-10
@@ -505,13 +507,13 @@ alley_oop11_t
 ;(direction 2 only)
 	.word	DFLGS|LAYUP_M
 	.long	seq_stand			;Code for end of sequence
-	.long	#1,#2,#3,#4
-	.long	#5,#4,#3,#2
-#1
-#2
-#3
-#4
-#5
+	.long	#aoop111,#aoop112,#aoop113,#aoop114
+	.long	#aoop115,#aoop114,#aoop113,#aoop112
+#aoop111
+#aoop112
+#aoop113
+#aoop114
+#aoop115
 	WLW	2,S2HBHLA1,F
 ;DJT Start
 	WLLW	-1,seq_strtdunk,S2HBHLA6,76-10
@@ -541,13 +543,13 @@ alley_oop12_t
 ;(direction 3 only)
 	.word	DFLGS|LAYUP_M
 	.long	seq_stand			;Code for end of sequence
-	.long	#1,#2,#3,#4
-	.long	#5,#4,#3,#2
-#1
-#2
-#3
-#4
-#5
+	.long	#aoop121,#aoop122,#aoop123,#aoop124
+	.long	#aoop125,#aoop124,#aoop123,#aoop122
+#aoop121
+#aoop122
+#aoop123
+#aoop124
+#aoop125
 	WLW	3,S3BEHLA1,F
 ;DJT Start
 	WLLW	-1,seq_strtdunk,S3BETLA6,76-10
@@ -578,13 +580,13 @@ alley_oop13_t
 ;(direction 4 only)
 	.word	DFLGS|LAYUP_M
 	.long	seq_stand			;Code for end of sequence
-	.long	#1,#2,#3,#4
-	.long	#5,#4,#3,#2
-#1
-#2
-#3
-#4
-#5
+	.long	#aoop131,#aoop132,#aoop133,#aoop134
+	.long	#aoop135,#aoop134,#aoop133,#aoop132
+#aoop131
+#aoop132
+#aoop133
+#aoop134
+#aoop135
 	WLW	3,S4SETLA1,F
 ;DJT Start
 	WLLW	-1,seq_strtdunk,S4SETLA5,76-10
@@ -614,13 +616,13 @@ alley_oop14_t
 ;(direction 5 only)
 	.word	DFLGS|LAYUP_M
 	.long	seq_stand			;Code for end of sequence
-	.long	#1,#2,#3,#4
-	.long	#5,#4,#3,#2
-#1
-#2
-#3
-#4
-#5
+	.long	#aoop141,#aoop142,#aoop143,#aoop144
+	.long	#aoop145,#aoop144,#aoop143,#aoop142
+#aoop141
+#aoop142
+#aoop143
+#aoop144
+#aoop145
 	WLW	3,S5SETLA1,F
 ;DJT Start
 	WLLW	-1,seq_strtdunk,S5SETLA5,65-10
@@ -676,12 +678,12 @@ dunka_t
 ;(medium range)
 	.word	DFLGS				;Flags for sequence
 	.long	seq_stand			;Code for end of sequence
-	.long	#1,#2,#3,#4
-	.long	#5,#4,#3,#2
+	.long	#dunka_t1,#dunka_t2,#dunka_t3,#dunka_t4
+	.long	#dunka_t5,#dunka_t4,#dunka_t3,#dunka_t2
 
 
-#1
-#2
+#dunka_t1
+#dunka_t2
 	WLW	2,M1SPDU1,F
 	WLLW	-1,seq_strtdunk,M1SPDU18,73	;Next frame begins elevation
 	WLW	-1,seq_jam_speech,JAM_EASY	;Anncr excitement level
@@ -710,9 +712,9 @@ dunka_t
 	WLW	3,M1SPDU19,F
 	WLW	3,M1SPDU20,F
 	WLW	-1,seq_newdir,0*16
-#3
-#4
-#5
+#dunka_t3
+#dunka_t4
+#dunka_t5
 	W0
 
 *********************************
@@ -720,19 +722,19 @@ dunka2_t
 ;(medium range)
 	.word	DFLGS				;Flags for sequence
 	.long	seq_stand			;Code for end of sequence
-	.long	#1,#2,#3,#4
-	.long	#5,#4,#3,#2
+	.long	#dunka2_t1,#dunka2_t2,#dunka2_t3,#dunka2_t4
+	.long	#dunka2_t5,#dunka2_t4,#dunka2_t3,#dunka2_t2
 
-#1
+#dunka2_t1
 	WLW	2,M1SPDU1,F
 	WLLW	-1,seq_strtdunk,M1SPDU18,36	;Next frame begins elevation
-	WLL	-1,seq_goto_line,#1a
+	WLL	-1,seq_goto_line,#dunka2_t1a
 	W0
 
-#2
+#dunka2_t2
 	WLW	2,M1SPDU1,F
 	WLLW	-1,seq_strtdunk,M1SPDU17,36	;Next frame begins elevation
-#1a	WLW	-1,seq_jam_speech,JAM_EASY	;Anncr excitement level
+#dunka2_t1a	WLW	-1,seq_jam_speech,JAM_EASY	;Anncr excitement level
 	WL	-1,seq_low_dnk_spch
 	WLW	3,M1SPDU2,F
 	WLW	3,M1SPDU3,F
@@ -757,9 +759,9 @@ dunka2_t
 	WLW	3,M1SPDU19,F			;Lands on ground
 	WLW	3,M1SPDU20,F			;Lands on ground
 	WLW	-1,seq_newdir,0*16
-#3
-#4
-#5
+#dunka2_t3
+#dunka2_t4
+#dunka2_t5
 	W0
 
 *********************************
@@ -767,18 +769,18 @@ dunka3_t
 ;(short range)
 	.word	DFLGS				;Flags for sequence
 	.long	seq_stand			;Code for end of sequence
-	.long	#1,#2,#3,#4
-	.long	#5,#4,#3,#2
+	.long	#dunka3_t1,#dunka3_t2,#dunka3_t3,#dunka3_t4
+	.long	#dunka3_t5,#dunka3_t4,#dunka3_t3,#dunka3_t2
 
-#1
+#dunka3_t1
 	WLW	2,M1SPDU1,F
 	WLLW	-1,seq_strtdunk,M1SPDU18,25	;Next frame begins elevation
-	WLL	-1,seq_goto_line,#1a
+	WLL	-1,seq_goto_line,#dunka3_t1a
 	W0
-#2
+#dunka3_t2
 	WLW	2,M1SPDU1,F
 	WLLW	-1,seq_strtdunk,M1SPDU17,25	;Next frame begins elevation
-#1a	WLW	-1,seq_jam_speech,JAM_EASY	;Anncr excitement level
+#dunka3_t1a	WLW	-1,seq_jam_speech,JAM_EASY	;Anncr excitement level
 	WL	-1,seq_low_dnk_spch
 	WLW	2,M1SPDU2,F
 	WLW	1,M1SPDU3,F
@@ -803,9 +805,9 @@ dunka3_t
 	WLW	3,M1SPDU19,F			;Lands on ground
 	WLW	3,M1SPDU20,F			;Lands on ground
 	WLW	-1,seq_newdir,0*16
-#3
-#4
-#5
+#dunka3_t3
+#dunka3_t4
+#dunka3_t5
 	W0
 
 
@@ -814,10 +816,10 @@ dunkb_t
 ;(medium,far range)
 	.word	DFLGS
 	.long	seq_stand
-	.long	#1,#2,#3,#4
-	.long	#5,#4,#3,#2
-#2
-#3
+	.long	#dunkb_t1,#dunkb_t2,#dunkb_t3,#dunkb_t4
+	.long	#dunkb_t5,#dunkb_t4,#dunkb_t3,#dunkb_t2
+#dunkb_t2
+#dunkb_t3
 	WLW	3,M3TUKDU1,F
 	WLLW	-1,seq_strtdunk,M3TUKDU14,70
 	WLW	-1,seq_jam_speech,JAM_EASY
@@ -842,9 +844,9 @@ dunkb_t
 	WLW	3,M3TUKDU16,F
 	WLW	3,M3TUKDU17,F
 	WLW	-1,seq_newdir,0*16
-#1
-#4
-#5
+#dunkb_t1
+#dunkb_t4
+#dunkb_t5
 	W0
 
 *********************************
@@ -852,10 +854,10 @@ dunkb2_t
 ;(medium,far range)
 	.word	DFLGS
 	.long	seq_stand
-	.long	#1,#2,#3,#4
-	.long	#5,#4,#3,#2
-#2
-#3
+	.long	#dunkb2_t1,#dunkb2_t2,#dunkb2_t3,#dunkb2_t4
+	.long	#dunkb2_t5,#dunkb2_t4,#dunkb2_t3,#dunkb2_t2
+#dunkb2_t2
+#dunkb2_t3
 	WLW	3,M3TUKDU1,F
 	WLLW	-1,seq_strtdunk,M3TUKDU14,59
 	WLW	-1,seq_jam_speech,JAM_EASY
@@ -880,9 +882,9 @@ dunkb2_t
 	WLW	3,M3TUKDU16,F
 	WLW	3,M3TUKDU17,F
 	WLW	-1,seq_newdir,0*16
-#1
-#4
-#5
+#dunkb2_t1
+#dunkb2_t4
+#dunkb2_t5
 	W0
 	
 *********************************
@@ -890,9 +892,9 @@ dunkb3_t
 ;(medium,far range)
 	.word	DFLGS
 	.long	seq_stand
-	.long	#1,#2,#3,#4
-	.long	#5,#4,#3,#2
-#1
+	.long	#dunkb3_t1,#dunkb3_t2,#dunkb3_t3,#dunkb3_t4
+	.long	#dunkb3_t5,#dunkb3_t4,#dunkb3_t3,#dunkb3_t2
+#dunkb3_t1
 	WLW	3,M2DKDU1,F
 	WLLW	-1,seq_strtdunk,M2DKDU7,85
 	WLW	-1,seq_jam_speech,JAM_MED
@@ -917,7 +919,7 @@ dunkb3_t
 	WLW	-1,seq_newdir,1*16
 	W0
 
-#2
+#dunkb3_t2
 	WLW	3,M2DKDU1,F
 	WLLW	-1,seq_strtdunk,M2DKDU8,75
 	WLW	-1,seq_jam_speech,JAM_MED
@@ -940,9 +942,9 @@ dunkb3_t
 	WLW	3,M2DKDU15,F
 	WLW	3,M2DKDU16,F
 	WLW	-1,seq_newdir,1*16
-#3
-#4
-#5
+#dunkb3_t3
+#dunkb3_t4
+#dunkb3_t5
 	W0
 
 *********************************
@@ -950,9 +952,9 @@ dunkc_t
 ;(medium range)
 	.word	DFLGS
 	.long	seq_stand
-	.long	#1,#2,#3,#4
-	.long	#5,#4,#3,#2
-#1
+	.long	#dunkc_t1,#dunkc_t2,#dunkc_t3,#dunkc_t4
+	.long	#dunkc_t5,#dunkc_t4,#dunkc_t3,#dunkc_t2
+#dunkc_t1
 	WLW	3,M2DKDU1,F
 	WLLW	-1,seq_strtdunk,M2DKDU7,42
 	WLW	-1,seq_jam_speech,JAM_MED
@@ -977,7 +979,7 @@ dunkc_t
 	WLW	-1,seq_newdir,1*16
 	W0
 
-#2
+#dunkc_t2
 	WLW	3,M2DKDU1,F
 	WLLW	-1,seq_strtdunk,M2DKDU14,75
 	WLW	-1,seq_jam_speech,JAM_MED
@@ -1001,9 +1003,9 @@ dunkc_t
 	WLW	3,M2DKDU15,F
 	WLW	3,M2DKDU16,F
 	WLW	-1,seq_newdir,1*16
-#3
-#4
-#5
+#dunkc_t3
+#dunkc_t4
+#dunkc_t5
 	W0
 
 
@@ -1013,10 +1015,10 @@ dunkd_t
 ;(medium,far range)
 	.word	DFLGS
 	.long	seq_stand
-	.long	#1,#2,#3,#4
-	.long	#5,#4,#3,#2
-#3
-#4
+	.long	#dunkd_t1,#dunkd_t2,#dunkd_t3,#dunkd_t4
+	.long	#dunkd_t5,#dunkd_t4,#dunkd_t3,#dunkd_t2
+#dunkd_t3
+#dunkd_t4
 	WLW	3,M3SPRDU1,F
 	WLLW	-1,seq_strtdunk,M3SPRDU9,74
 	WLW	-1,seq_jam_speech,JAM_GOOD
@@ -1034,9 +1036,9 @@ dunkd_t
 	WLW	3,M3SPRDU10,F
 	WLW	3,M3SPRDU11,F
 	WLW	-1,seq_newdir,4*16
-#1
-#2
-#5
+#dunkd_t1
+#dunkd_t2
+#dunkd_t5
 	W0
 
 
@@ -1045,10 +1047,10 @@ dunkd2_t
 ;(short range)
 	.word	DFLGS
 	.long	seq_stand
-	.long	#1,#2,#3,#4
-	.long	#5,#4,#3,#2
-#3
-#4
+	.long	#dunkd2_t1,#dunkd2_t2,#dunkd2_t3,#dunkd2_t4
+	.long	#dunkd2_t5,#dunkd2_t4,#dunkd2_t3,#dunkd2_t2
+#dunkd2_t3
+#dunkd2_t4
 	WLW	2,M3SPRDU1,F
 	WLLW	-1,seq_strtdunk,M3SPRDU9,24
 	WLW	-1,seq_jam_speech,JAM_MED
@@ -1066,9 +1068,9 @@ dunkd2_t
 	WLW	3,M3SPRDU10,F
 	WLW	3,M3SPRDU11,F
 	WLW	-1,seq_newdir,4*16
-#1
-#2
-#5
+#dunkd2_t1
+#dunkd2_t2
+#dunkd2_t5
 	W0
 
 
@@ -1077,10 +1079,10 @@ dunke_t
 ;(short range)
 	.word	DFLGS
 	.long	seq_stand
-	.long	#1,#2,#3,#4
-	.long	#5,#4,#3,#2
-#4
-#5
+	.long	#dunke_t1,#dunke_t2,#dunke_t3,#dunke_t4
+	.long	#dunke_t5,#dunke_t4,#dunke_t3,#dunke_t2
+#dunke_t4
+#dunke_t5
 	WLW	4,M5REVDU1,F
 	WLLW	-1,seq_strtdunk,M5REVDU14,27
 	WLW	-1,seq_jam_speech,JAM_MED
@@ -1103,9 +1105,9 @@ dunke_t
 	WLW	3,M5REVDU15,F
 	WLW	3,M5REVDU16,F
 	WLW	-1,seq_newdir,6*16
-#1
-#2
-#3
+#dunke_t1
+#dunke_t2
+#dunke_t3
 	W0
 
 *********************************
@@ -1113,10 +1115,10 @@ dunke2_t
 ;(short,medium range)
 	.word	DFLGS
 	.long	seq_stand
-	.long	#1,#2,#3,#4
-	.long	#5,#4,#3,#2
-#4
-#5
+	.long	#dunke2_t1,#dunke2_t2,#dunke2_t3,#dunke2_t4
+	.long	#dunke2_t5,#dunke2_t4,#dunke2_t3,#dunke2_t2
+#dunke2_t4
+#dunke2_t5
 	WLW	4,M5REVDU1,F
 	WLLW	-1,seq_strtdunk,M5REVDU14,76
 	WLW	-1,seq_jam_speech,JAM_GOOD
@@ -1139,9 +1141,9 @@ dunke2_t
 	WLW	3,M5REVDU15,F
 	WLW	3,M5REVDU16,F
 	WLW	-1,seq_newdir,6*16
-#1
-#2
-#3
+#dunke2_t1
+#dunke2_t2
+#dunke2_t3
 	W0
 
 
@@ -1150,10 +1152,10 @@ dunkf_t
 ;(short,medium range)
 	.word	DFLGS
 	.long	seq_stand
-	.long	#1,#2,#3,#4
-	.long	#5,#4,#3,#2
-#1
-#2
+	.long	#dunkf_t1,#dunkf_t2,#dunkf_t3,#dunkf_t4
+	.long	#dunkf_t5,#dunkf_t4,#dunkf_t3,#dunkf_t2
+#dunkf_t1
+#dunkf_t2
 	WLW	3,S1TUKDU1,F
 	WLLW	-1,seq_strtdunk,S1TUKDU8,95
 	WLW	-1,seq_jam_speech,JAM_GOOD
@@ -1175,9 +1177,9 @@ dunkf_t
 	WLW	3,S1TUKDU10,F
 	WLW	3,S1TUKDU11,F
 	WLW	-1,seq_newdir,0*16
-#3
-#4
-#5
+#dunkf_t3
+#dunkf_t4
+#dunkf_t5
 	W0
 
 
@@ -1186,11 +1188,11 @@ dunkg_t
 ;(medium,far range)
 	.word	DFLGS
 	.long	seq_stand
-	.long	#1,#2,#3,#4
-	.long	#5,#4,#3,#2
-#2
-#3
-#4
+	.long	#dunkg_t1,#dunkg_t2,#dunkg_t3,#dunkg_t4
+	.long	#dunkg_t5,#dunkg_t4,#dunkg_t3,#dunkg_t2
+#dunkg_t2
+#dunkg_t3
+#dunkg_t4
 	WLW	3,S3BKDU1,F
 	WLLW	-1,seq_strtdunk,S3BKDU14,78
 	WLW	-1,seq_jam_speech,JAM_MED
@@ -1215,8 +1217,8 @@ dunkg_t
 	WLW	3,S3BKDU15,F
 	WLW	3,S3BKDU16,F
 	WLW	-1,seq_newdir,2*16
-#1
-#5
+#dunkg_t1
+#dunkg_t5
 	W0
 
 *********************************
@@ -1224,11 +1226,11 @@ dunkg2_t
 ;(medium,far range)
 	.word	DFLGS
 	.long	seq_stand
-	.long	#1,#2,#3,#4
-	.long	#5,#4,#3,#2
-#2
-#3
-#4
+	.long	#dunkg2_t1,#dunkg2_t2,#dunkg2_t3,#dunkg2_t4
+	.long	#dunkg2_t5,#dunkg2_t4,#dunkg2_t3,#dunkg2_t2
+#dunkg2_t2
+#dunkg2_t3
+#dunkg2_t4
 	WLW	3,S3BKDU1,F
 	WLLW	-1,seq_strtdunk,S3BKDU14,89
 	WLW	-1,seq_jam_speech,JAM_GOOD
@@ -1253,8 +1255,8 @@ dunkg2_t
 	WLW	3,S3BKDU15,F
 	WLW	3,S3BKDU16,F
 	WLW	-1,seq_newdir,2*16
-#1
-#5
+#dunkg2_t1
+#dunkg2_t5
 	W0
 
 *********************************
@@ -1262,10 +1264,10 @@ dunkj_t
 ;(medium,far range, 8-10 skill)
 	.word	DFLGS
 	.long	seq_stand
-	.long	#1,#2,#3,#4
-	.long	#5,#4,#3,#2
-#3
-#4
+	.long	#dunkj_t1,#dunkj_t2,#dunkj_t3,#dunkj_t4
+	.long	#dunkj_t5,#dunkj_t4,#dunkj_t3,#dunkj_t2
+#dunkj_t3
+#dunkj_t4
 	WLW	3,W3SPRDU1,F
 	WLLW	-1,seq_strtdunk,W3SPRDU14,87
 	WLW	-1,seq_jam_speech,JAM_GREAT
@@ -1288,9 +1290,9 @@ dunkj_t
 	WLW	4,S3BKDU15,F
 	WLW	4,S3BKDU16,F
 	WLW	-1,seq_newdir,2*16
-#1
-#2
-#5
+#dunkj_t1
+#dunkj_t2
+#dunkj_t5
 	W0
 
 *********************************
@@ -1298,11 +1300,11 @@ dunkj2_t
 ;(medium range, 5-7 skill)
 	.word	DFLGS
 	.long	seq_stand
-	.long	#1,#2,#3,#4
-	.long	#5,#4,#3,#2
-#2
-#3
-#4
+	.long	#dunkj2_t1,#dunkj2_t2,#dunkj2_t3,#dunkj2_t4
+	.long	#dunkj2_t5,#dunkj2_t4,#dunkj2_t3,#dunkj2_t2
+#dunkj2_t2
+#dunkj2_t3
+#dunkj2_t4
 	WLW	3,W3SPRDU1,F
 	WLLW	-1,seq_strtdunk,W3SPRDU14,67
 	WLW	-1,seq_jam_speech,JAM_GOOD
@@ -1325,8 +1327,8 @@ dunkj2_t
 	WLW	4,S3BKDU15,F
 	WLW	4,S3BKDU16,F
 	WLW	-1,seq_newdir,2*16
-#1
-#5
+#dunkj2_t1
+#dunkj2_t5
 	W0
 
 
@@ -1335,16 +1337,16 @@ dunkk_t
 ;(medium,far range, skill 6-10)
 	.word	DFLGS
 	.long	seq_stand
-	.long	#1,#2,#3,#4
-	.long	#5,#4,#3,#2
-#1
+	.long	#dunkk_t1,#dunkk_t2,#dunkk_t3,#dunkk_t4
+	.long	#dunkk_t5,#dunkk_t4,#dunkk_t3,#dunkk_t2
+#dunkk_t1
 	WLW	3,W3SPNDU1,FF
 	WLLW	-1,seq_strtdunk,W3SPNDU14,50
 	WLW	-1,seq_jam_speech,JAM_GREAT
 	WL	-1,seq_low_dnk_spch
-	WLL	-1,seq_goto_line,#1a
-#2
-#3
+	WLL	-1,seq_goto_line,#dunkk_t1a
+#dunkk_t2
+#dunkk_t3
 	WLW	3,W3SPNDU1,F
 	WLLW	-1,seq_strtdunk,W3SPNDU19,58
 	WLW	-1,seq_jam_speech,JAM_GREAT
@@ -1352,7 +1354,7 @@ dunkk_t
 	WLW	3,W3SPNDU2,F
 	WLW	3,W3SPNDU3,F
 	WLW	3,W3SPNDU4,F
-#1a	WLW	3,W3SPNDU5,F
+#dunkk_t1a	WLW	3,W3SPNDU5,F
 	WLW	3,W3SPNDU6,F
 	WLW	3,W3SPNDU7,F
 	WLW	3,W3SPNDU8,F
@@ -1375,8 +1377,8 @@ dunkk_t
 	WLW	3,W3SWDU11,F
 	WLW	3,W3SWDU12,F
 	WLW	-1,seq_newdir,2*16
-#4
-#5
+#dunkk_t4
+#dunkk_t5
 	W0
 
 
@@ -1385,18 +1387,18 @@ dunkk2_t
 ;(medium,far range, skill 6-10)
 	.word	DFLGS
 	.long	seq_stand
-	.long	#1,#2,#3,#4
-	.long	#5,#4,#3,#2
-#1
+	.long	#dunkk2_t1,#dunkk2_t2,#dunkk2_t3,#dunkk2_t4
+	.long	#dunkk2_t5,#dunkk2_t4,#dunkk2_t3,#dunkk2_t2
+#dunkk2_t1
 	WLW	3,W3SPNDU1,FF
 	WLLW	-1,seq_strtdunk,W3SPNDU14,76
 	WLW	-1,seq_jam_speech,JAM_GREAT
 	WL	-1,seq_high_dnk_spch
-	WLL	-1,seq_goto_line,#1a
+	WLL	-1,seq_goto_line,#dunkk2_t1a
 
-#2
-#3
-#4
+#dunkk2_t2
+#dunkk2_t3
+#dunkk2_t4
 	WLW	3,W3SPNDU1,F
 	WLLW	-1,seq_strtdunk,W3SPNDU19,84
 	WLW	-1,seq_jam_speech,JAM_GREAT
@@ -1404,7 +1406,7 @@ dunkk2_t
 	WLW	3,W3SPNDU2,F
 	WLW	3,W3SPNDU3,F
 	WLW	3,W3SPNDU4,F
-#1a	WLW	3,W3SPNDU5,F
+#dunkk2_t1a	WLW	3,W3SPNDU5,F
 	WLW	3,W3SPNDU6,F
 	WLW	3,W3SPNDU7,F
 	WLW	3,W3SPNDU8,F
@@ -1427,7 +1429,7 @@ dunkk2_t
 	WLW	3,W3SWDU11,F
 	WLW	3,W3SWDU12,F
 	WLW	-1,seq_newdir,2*16
-#5
+#dunkk2_t5
 	W0
 
 
