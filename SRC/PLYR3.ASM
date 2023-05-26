@@ -968,9 +968,9 @@ vels_tbl
  SUBR	rim_salt
 
 	movk	8,a9
-#lp	CREATE0	#do_salt
+#lp3	CREATE0	#do_salt
 	SLEEPK	2
-	dsj	a9,lp
+	dsj	a9,lp3
 	DIE
 
 #do_salt
@@ -1081,7 +1081,7 @@ vels_tbl
 
 #lpclr
 	movi	-1,a8			;Plyr# thats showing hotspot
-#lp
+#lp4
 	SLEEPK	4
 	move	@game_time,a14,L	;Die for sure at end of 1st qrtr
 	jrz	kill_showhotspot
@@ -1089,7 +1089,7 @@ vels_tbl
 	move	@ballpnum,a6		;Anyone have the ball?
 	jrnn	chkplyr		; br=yes
 	move	a8,a8			;Need to kill a show?
-	jrn	lp			; br=no show going
+	jrn	lp4			; br=no show going
 #kill
 	movk	1,a14			;Kill show next time through
 	move	a14,*a9(PA11)
@@ -1104,7 +1104,7 @@ vels_tbl
 	jrz	kill			; br=this plyr isn't
 	movk	2,a14			;Keep plyr hotspot active
 	move	a14,*a9(PA11)
-	jruc	lp
+	jruc	lp4
 
 #noshow
 	move	a8,a8			;Need to kill a show?
@@ -1127,12 +1127,12 @@ vels_tbl
 	jrz	t99
 	move	*a10(plyr_hotspot_p),a14,L
 	move	a14,a9
-	jrnz	lp
+	jrnz	lp4
 #t99
  .endif
 	CREATE0	show_hotspot_proc_coor
 	move	a0,a9
-	jruc	lp
+	jruc	lp4
 	
 #kill_showhotspot
 	
@@ -1331,7 +1331,7 @@ vels_tbl
 	move	a13,*a10(plyr_hotspot_p),L	;give plyr proc access
 
 	movk	3,a11			;!!! timeout counter
-#lp
+#lp5
 	SLEEPK	1
 	
 	move	@game_time,a14,L
@@ -1344,15 +1344,15 @@ vels_tbl
 	jrnz	lp1
  .if DEBUG
 	move	@CLOCK_OFF,a14
-	jrnz	lp1
+	jrnz	lp15
  .endif
 	subk	1,a11
 	jrz	kill_hotspot
-#lp1
+#lp15
 	move	*a0(IANIOFFX),*a8(OXANI+16)
 	move	*a8(OCTRL),a1
 	calla	obj_aniq_cnoff
-	jruc	lp
+	jruc	lp5
 
 kill_hotspot
 	clr	a14
@@ -1698,7 +1698,7 @@ kill_hotspot
 	calla	convfmprel
 	jruc	alp
 
-#lp
+#lp6
 	move	*a8(OCTRL),a1
 	move	*a0(ICTRL),a14
 	andi	08003H,a1
@@ -1720,7 +1720,7 @@ kill_hotspot
 #slp
 	calla	PRCSLP
 	move	*a9+,a0,L
-	jrnz	lp
+	jrnz	lp6
 	jauc	DELOBJDIE
 
 
@@ -1997,55 +1997,55 @@ jmp_t	.long	set1,set1,set1,set2,set2
 
 ;Set of dunks for #5 skill level 
 
-d5u_t	.long	#d1u_t,#d2u_t,#d3u_t,#d4u_t
-	.long	#d5u_t,#d4u_t,#d3u_t,#d2u_t, #d1u_t
+d5u_t	.long	#d1u_t5,#d2u_t5,#d3u_t5,#d4u_t5
+	.long	#d5u_t5,#d4u_t5,#d3u_t5,#d2u_t5, #d1u_t5
 
-d5s_t	.long	#d1s_t,#d2s_t,#d3s_t,#d4s_t
-	.long	#d5s_t,#d4s_t,#d3s_t,#d2s_t, #d1s_t
+d5s_t	.long	#d1s_t5,#d2s_t5,#d3s_t5,#d4s_t5
+	.long	#d5s_t5,#d4s_t5,#d3s_t5,#d2s_t5, #d1s_t5
 
-d5m_t	.long	#d1m_t,#d2m_t,#d3m_t,#d4m_t
-	.long	#d5m_t,#d4m_t,#d3m_t,#d2m_t, #d1m_t
+d5m_t	.long	#d1m_t5,#d2m_t5,#d3m_t5,#d4m5_t
+	.long	#d5m_t5,#d4m_t5,#d3m_t5,#d2m_t5, #d1m_t5
 
-d5l_t	.long	#d1l_t,#d2l_t,#d3l_t,#d4l_t
-	.long	#d5l_t,#d4l_t,#d3l_t,#d2l_t, #d1l_t
+d5l_t	.long	#d1l_t5,#d2l_t5,#d3l_t5,#d4l_t5
+	.long	#d5l_t5,#d4l_t5,#d3l_t5,#d2l_t5, #d1l_t5
 
 ;UNDER hoop
-#d1u_t	.word	3-1
+#d1u_t5	.word	3-1
 	.word	DUNKA3_SEQ,DUNKS2_SEQ,DUNKU3_SEQ
 
-#d2u_t	.word	4-1
+#d2u_t5	.word	4-1
 	.word	DUNKA3_SEQ,DUNKL3_SEQ,DUNKP2_SEQ,DUNKU3_SEQ
 
-#d3u_t	.word	3-1
+#d3u_t5	.word	3-1
 	.word	DUNKD2_SEQ,DUNKL3_SEQ,DUNKU3_SEQ
 
-#d4u_t	.word	4-1
+#d4u_t5	.word	4-1
 	.word	DUNKD2_SEQ,DUNKE_SEQ,DUNKL3_SEQ,DUNKP2_SEQ
 
-#d5u_t	.word	2-1
+#d5u_t5	.word	2-1
 	.word	DUNKE_SEQ,DUNKP2_SEQ
 
 
 ;NEAR hoop
-#d1s_t	.word	6-1
+#d1s_t5	.word	6-1
 	.word	DUNKA2_SEQ,DUNKP2_SEQ,DUNKA2_SEQ,DUNKP2_SEQ
 	.word	DUNKS2_SEQ,DUNKU3_SEQ
 
-#d2s_t	.word	3-1
+#d2s_t5	.word	3-1
 	.word	DUNKA2_SEQ,DUNKP2_SEQ,DUNKU3_SEQ
 
-#d3s_t	.word	1-1
+#d3s_t5	.word	1-1
 	.word	DUNKU3_SEQ
 
-#d4s_t	.word	3-1
+#d4s_t5	.word	3-1
 	.word	DUNKE_SEQ,DUNKP2_SEQ,DUNKP2_SEQ
 
-#d5s_t	.word	2-1
+#d5s_t5	.word	2-1
 	.word	DUNKE_SEQ,DUNKP2_SEQ
 
 
 ;MEDIUM to hoop
-#d1m_t
+#d1m_t5
 	.word	13-1
 	.word	DUNKA_SEQ,DUNKA2_SEQ,DUNKC_SEQ,DUNKK_SEQ
 	.word	DUNKK2_SEQ,DUNKK_SEQ,DUNKZ3_SEQ,DUNKR2_SEQ
@@ -2053,7 +2053,7 @@ d5l_t	.long	#d1l_t,#d2l_t,#d3l_t,#d4l_t
 	.word	DUNKZ3_SEQ
 
 
-#d2m_t
+#d2m_t5
 	.word	14-1
 	.word	DUNKA_SEQ,DUNKA2_SEQ,DUNKB_SEQ,DUNKJ2_SEQ
 	.word	DUNKK_SEQ,DUNKN_SEQ,DUNKC_SEQ,DUNKP_SEQ
@@ -2061,33 +2061,34 @@ d5l_t	.long	#d1l_t,#d2l_t,#d3l_t,#d4l_t
 	.word	DUNKY2_SEQ,DUNKZ2_SEQ
 
 
-#d3m_t	
+#d3m_t5	
 	.word	12-1
 	.word	DUNKB_SEQ,DUNKJ_SEQ,DUNKQ_SEQ,DUNKV_SEQ
 	.word	DUNKLAY_SEQ,DUNKY2_SEQ,DUNKJ2_SEQ,DUNKD_SEQ
 	.word	DUNKK_SEQ,DUNKX2_SEQ,DUNKX3_SEQ,DUNKT_SEQ
 
 
-#d4m_t
+#d4m_t5
 	.word	9-1
 	.word	DUNKJ2_SEQ,DUNKP_SEQ,DUNKQ_SEQ,DUNKT2_SEQ
 	.word	DUNKP_SEQ,DUNKX2_SEQ,DUNKX3_SEQ,DUNKD_SEQ
 	.word	DUNKE2_SEQ
 
 
-#d5m_t
+#d5m_t5
 	.word	3-1
 	.word	DUNKE2_SEQ,DUNKP_SEQ,DUNKZ_SEQ
 
 
 ;FAR from hoop
-#d1l_t	.word	11-1
+#d1l_t5
+	.word	11-1
 	.word	DUNKB3_SEQ,DUNKU2_SEQ,DUNKK2_SEQ,DUNKN_SEQ
 	.word	DUNKY2_SEQ,DUNKN3_SEQ,DUNKO_SEQ,DUNKP3_SEQ
 	.word	DUNKY_SEQ,DUNKLAY_SEQ,DUNKZ3_SEQ
 
 
-#d2l_t	.word	32-1
+#d2l_t5	.word	32-1
 	.word	DUNKA_SEQ,DUNKB_SEQ,DUNKK2_SEQ,DUNKB3_SEQ
 	.word	DUNKN_SEQ,DUNKN2_SEQ,DUNKN3_SEQ,DUNKO_SEQ
 	.word	DUNKP_SEQ,DUNKP3_SEQ,DUNKG2_SEQ,DUNKF_SEQ
@@ -2098,7 +2099,7 @@ d5l_t	.long	#d1l_t,#d2l_t,#d3l_t,#d4l_t
 	.word	DUNKT4_SEQ,DUNKU8_SEQ,DUNKU8_SEQ,DUNKT4_SEQ
 
 
-#d3l_t	.word	37-1
+#d3l_t5	.word	37-1
 	.word	DUNKB_SEQ,DUNKK2_SEQ,DUNKD_SEQ,DUNKG2_SEQ
 	.word	DUNKL_SEQ,DUNKN_SEQ,DUNKN2_SEQ,DUNKJ_SEQ
 	.word	DUNKN3_SEQ,DUNKO_SEQ,DUNKP3_SEQ,DUNKQ_SEQ
@@ -2111,7 +2112,7 @@ d5l_t	.long	#d1l_t,#d2l_t,#d3l_t,#d4l_t
 	.word	DUNKL2_SEQ
 
 
-#d4l_t	.word	21-1
+#d4l_t5	.word	21-1
 	.word	DUNKG2_SEQ,DUNKJ_SEQ,DUNKK2_SEQ,DUNKY_SEQ
 	.word	DUNKP_SEQ,DUNKQ_SEQ,DUNKQ2_SEQ,DUNKX2_SEQ
 	.word	DUNKW_SEQ,DUNKW2_SEQ,DUNKW3_SEQ,DUNKX_SEQ
@@ -2120,11 +2121,11 @@ d5l_t	.long	#d1l_t,#d2l_t,#d3l_t,#d4l_t
 	.word	DUNKD_SEQ
 
 
-#d5l_t	.word	6-1
+#d5l_t5	.word	6-1
 	.word	DUNKP_SEQ,DUNKW_SEQ,DUNKW2_SEQ,DUNKW3_SEQ
 	.word	DUNKX_SEQ,DUNKZ_SEQ
 
-
+*!!AM** done up to here.
 *****************************************************************************
 ;Set of dunks for #4 skill players
 
@@ -2143,7 +2144,7 @@ d4l_t	.long	#d1l_t,#d2l_t,#d3l_t,#d4l_t
 ;UNDER hoop
 #d1u_t	.word	3-1
 	.word	DUNKA3_SEQ,DUNKS2_SEQ,DUNKU3_SEQ
-
+    
 #d2u_t	.word	3-1
 	.word	DUNKA3_SEQ,DUNKL3_SEQ,DUNKP2_SEQ
 
@@ -3091,11 +3092,11 @@ OFFSCR_X	equ	221
 	sub	a1,a0
 	sra	2,a0
 	movk	3-1,a1
-#lp	move	*a14+,a8,L
+#lp7	move	*a14+,a8,L
 	move	*a8(OXVAL),a2,L
 	add	a0,a2
 	move	a2,*a8(OXVAL),L
-	dsj	a1,lp
+	dsj	a1,lp7
 	rets
 
 
@@ -3405,7 +3406,7 @@ OFFSCR_X	equ	221
 #test
 	movk	2,a5			;# clips to show
 	clr	a6
-#lp
+#lp8
 	move	a6,a0
 	addk	1,a6
 	sll	5,a0
@@ -3465,7 +3466,7 @@ OFFSCR_X	equ	221
 
 	PULLP	a5,a6
 
-	dsj	a5,lp
+	dsj	a5,lp8
 
 	.if	CLIPTEST
 	jruc	test			;Infinite loop
@@ -3565,9 +3566,9 @@ half_mod
  SUBR	plyr_smoketrail
 
 	movk	15,a11
-#lp	CREATE0	plyr_smokepuff
+#lp9	CREATE0	plyr_smokepuff
 	SLEEPK	4
-	dsj	a11,lp
+	dsj	a11,lp9
 
 	DIE
 
@@ -3579,9 +3580,9 @@ half_mod
  SUBR	plyr_smoketrail2
 
 	movk	20,a11
-#lp	CREATE0	plyr_smokepuff
+#lp10	CREATE0	plyr_smokepuff
 	SLEEPK	1
-	dsj	a11,lp
+	dsj	a11,lp10
 
 	DIE
 
@@ -3666,10 +3667,10 @@ mslstxy_t
 	jruc	plyr_takeoutball
 
 	movi	TSEC,a10		;>Let shot finish
-#lp	movi	-1,a0
+#lp11	movi	-1,a0
 	move	a0,@ballpnum
 	SLEEPK	1
-	dsj	a10,lp
+	dsj	a10,lp11
 
 
 	movi	[20,0],a0
