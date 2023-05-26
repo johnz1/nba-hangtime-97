@@ -313,7 +313,7 @@ church
 ;----------
 ; main proc loop
 
-#lp
+#lp1
 	.if	DEBUG
 
 	.bss	#tmp_debounce,16
@@ -381,10 +381,10 @@ church
 	jrnz	halted
 
 	move	@ballgoaltcnt,a0	;Dec goal tend cnt if 00H
-	jrle	#skipgt
+	jrle	#skipgt1
 	subk	1,a0
 	move	a0,@ballgoaltcnt
-#skipgt
+#skipgt1
 
 ;----------
 ; check if its time for ball on-fire effects
@@ -392,10 +392,10 @@ church
 	move	@plyr_onfire,a3		;Get last plyr on-fire bits or 0
 
 	move	@balltmscored,a1	;Chk if a team is on-fire
-	jrn	notmfire		; br=no
+	jrn	notmfire1		; br=no
 	move	@balltmshotcnt,a4	;Maybe. Chk shot cnt
 	subk	TMFIRE_MINCNT,a4
-	jrn	notmfire		; br=no
+	jrn	notmfire1		; br=no
 
 	movk	2+1,a2			;Set team 1 on-fire
 	move	a1,a1			;Was it team 1?
@@ -403,7 +403,7 @@ church
 	movk	8+4,a2			;Set team 2 on-fire
 	jruc	chkownr
 
-#notmfire
+#notmfire1
 	clr	a2			;Set for no on-fire
 	move	@ballpnumscored,a0	;Last plyr who scored (0-3) or neg
 	jrn	chkhot			; br=no plyr on-fire
@@ -500,9 +500,9 @@ church
 #aud
 	move	@GAMSTATE,a14
 	cmpi	INAMODE,a14		;Don't audit if in attract
-	jrz	noaud
+	jrz	noaud1
 	calla	AUD1
-#noaud
+#noaud1
 ;	move	@fire_flags,a14		;Set plyr been on-fire bit
 ;	or	a2,a14
 ;	move	a14,@fire_flags
@@ -951,14 +951,14 @@ church
 	calla	plyr_setshtdly
 
 	cmpi	07f00H,a2		;04000H
-	jrlt	nosnd
+	jrlt	nosnd1
 
 	movi	dribble3_snd,a0,L
 	move	@pup_court,a14
 	jrnz	ply1			;br=outdoor court
 	movi	dribble_snd,a0,L
 #ply1	calla	snd_play1
-#nosnd
+#nosnd1
 	neg	a3
 ;
 ;	addi	HOOPY-10,A3	;TEMP!!! Floats ball
@@ -990,7 +990,7 @@ church
 	callr	ball_chkpcollide
 
 #halted
-	SLOOP	1,#lp
+	SLOOP	1,#lp1
 
 
 ********************************
@@ -1074,7 +1074,7 @@ church
 	.endif
 
 	cmpi	HOOPY+20,a7		;Below all collision pts? Yes if >=
-	jrge	#x
+	jrge	#x1
 
 	clr	b2			;B2=Rim collision flag
 
@@ -1083,7 +1083,7 @@ church
 	jrlt	ok
 
 	move	@ballscorezhit,a0	;Far, but have we hit 1st score zone?
-	jrp	#ok			; br=yes, continue score detect
+	jrp	#ok1			; br=yes, continue score detect
 
 	movi	200,a0			;!!!Far. Set long odds
 	cmpi	01c0H*DIST_ADDITION,a14	;!!!How far?
@@ -1096,22 +1096,22 @@ church
 	addi	150,a0			;!!!
 #nohelp
 	calla	RNDPER			;Scoreable or unscoreable?
-	jrhi	#ok
+	jrhi	#ok1
 	movi	lhoopl_t,a10		;Set ptr for unscoreable hoop
 	movi	HOOPLX,b3		;B3=Hoop X
 	cmpi	WRLDMID,a6
-	jrlt	left
+	jrlt	left1
 	movi	lhoopr_t,a10
 	movi	HOOPRX,b3
-	jruc	left
-#ok
+	jruc	left1
+#ok1
 	movi	hoopl_t,a10		;Set ptr for scoreable hoop
 	movi	HOOPLX,b3		;B3=Hoop X
 	cmpi	WRLDMID,a6
-	jrlt	left
+	jrlt	left1
 	movi	hoopr_t,a10
 	movi	HOOPRX,b3
-#left
+#left1
 	move	*a8(OZPOS),a5		;A5=Ball Z
 	move	@ballscorezhit,a0	;Haven't scored? No if >=
 	jrge	#chkpts
@@ -1143,7 +1143,7 @@ church
 ;----------
 ; Top of rim pt chk loop
 
-#lp
+#lp2
 	move	*a10+,a3		;Rim Y
 	move	*a10+,a4		;Rim Z
 	move	*a10+,a11		;Rim zone #
@@ -1270,10 +1270,10 @@ church
 	clr	a0			;Yes. Do rim bend anim
 	move	@rimlf,a1,L		;Assume doing lft hoop
 	cmpi	WRLDMID,a6		;Bend lft or rgt rim? Lft if <
-	jrlt	netani
+	jrlt	netani1
 	movk	1,a0			;Set for rgt hoop
 	move	@rimrf,a1,L
-#netani
+#netani1
 	move	*a1(OIMG),a1,L		;Deref *obj
 	cmpi	FLAME_F_13,a1,L		;Is it burnt hoop img? Yes if =
 	jreq	nobend
@@ -1481,11 +1481,11 @@ church
 	move	a5,a2
 	abs	a2
 	cmpi	BBRD_ZWID/2,a2
-	jrgt	#x
+	jrgt	#x1
 	subi	BBRD_Y-BBRD_YWID/2,a7	;Chk Y
 	abs	a7
 	cmpi	BBRD_YWID/2,a7
-	jrgt	#x
+	jrgt	#x1
 	move	*a8(OXVAL),a6,L		;Add ani X to check ball center
 	move	*a13(ball_anix),a14
 	sll	16,a14
@@ -1542,7 +1542,7 @@ church
 #newzv
 	move	a0,*a8(OZVEL),L		;Try to unstick
 
-#x	PULL	a2,a3,a4,a5,a6,a7,a9,a10,a11
+#x1	PULL	a2,a3,a4,a5,a6,a7,a9,a10,a11
 	rets
 
 
@@ -1898,7 +1898,7 @@ rim_snds
 
 
 	move	*a8(OYVEL),a0,L
-	jrle	#x			;Moving up?
+	jrle	#x2			;Moving up?
 
 	addk	1,a11
 	jrne	low
@@ -1909,7 +1909,7 @@ rim_snds
 
 #low
 	move	@ballscorezhit,a0
-	jrle	#x			;No top hit?
+	jrle	#x2			;No top hit?
 
 	movi	-1,a0
 	move	a0,@ballscorezhit
@@ -1926,10 +1926,10 @@ rim_snds
 	clr	a2
 	move	*a8(OXPOS),a14
 	cmpi	WRLDMID,a14
-	jrlt	left
+	jrlt	left2
 	clr	a0			;Team 1
 	movk	32,a2
-#left
+#left2
 	addi	scores,a0		;+Base
 	move	@ballptsforshot,a1
 	move	a1,a3
@@ -2078,16 +2078,16 @@ rim_snds
 
 	move	@GAMSTATE,a0
 	cmpi	INAMODE,a0		;Don't audit if in attract
-	jrz	noaud
+	jrz	noaud2
 	move	a14,a0
 	calla	AUD1
-#noaud
+#noaud2
 	PULL	a0
 	cmpi	TMFIRE_MINCNT,a7	;Is a team on-fire?
-	jrlo	#notmfire		; br=no
+	jrlo	#notmfire2		; br=no
 	cmp	a5,a2			;Same team as last time?
 	jreq	ply1st			; br=yes
-#notmfire
+#notmfire2
 	addk	1,a7			;Assume it is same team
 	cmp	a5,a2			;Same team as last time?
 	jreq	sametm			; br=yes
@@ -2161,7 +2161,7 @@ rim_snds
 #crt2
 	movk	NET_DUNK,a1		;Dunk netani #
 	btst	DUNK_B,a6		;Was it a dunk? Yes if !0
-	jrnz	netani
+	jrnz	netani2
 
 	CREATE0	plyr_jscrowdsnd		;For good jump shot
 
@@ -2199,7 +2199,7 @@ rim_snds
 	sll	32-2,a0
 	srl	32-31,a0
 	add	a0,a1
-#netani
+#netani2
 	move	*a3(32),a4		;Chk for team on-fire
 	cmp	a2,a4
 	jrnz	notmf			; br=not
@@ -2388,7 +2388,7 @@ rim_snds
 
 	calla	scored_speech
 
-#x	PULL	a2,a3,a4,a5,a6,a7,a10,a11
+#x2	PULL	a2,a3,a4,a5,a6,a7,a10,a11
 	rets
 
 dnk_snd_tbl
@@ -2506,31 +2506,32 @@ cos_t
 	movk	18,a10			;A10=Z coll radius
 	move	*a8(OYPOS),a0
 	cmpi	-28,a0
-	jrlt	lp
+	jrlt	lp3
 	move	*a8(OYVEL),a0,L
 	abs	a0
 	cmpi	0c000H,a0
-	jrgt	#lp
+	jrgt	#lp3
 	movi	35,a10			;Larger radius
 
-#lp	move	*a5+,a11,L
+#lp3	move	*a5+,a11,L
 
 	move	*a11(OPLINK),a2,L
 	move	*a2(plyr_attrib_p),a2,L
 	move	*a2(PAT_DEFSKILL),a2
-	sll	4,a2
+	sll	    4,a2
 	subk	18,a10
-	jrz	tbl1
+	jrz	t   bl1
 	addi	tbl2,a2
 	jruc	tbo
 #tbl1	
 	addi	tbl1,a2
-#tbo	move	*a2,a10
+#tbo	
+    move	*a2,a10
 
 	move	*a11(OZPOS),a2		;0CHhk Z
-	sub	a6,a2
-	abs	a2
-	sub	a10,a2
+	sub	    a6,a2
+	abs	    a2
+	sub	    a10,a2
 	jrge	#nxt
 
 	move	*a11(OXPOS),a1		;0CHhk box X
@@ -2650,9 +2651,9 @@ tkdnk_t	.word	200
 	move	*a14(PAT_POWER),a0		;A0=Power of guy dunking
 	move	@pup_maxpower,a1
 	btst	a2,a1
-	jrz	nochng				; br=not max power
+	jrz	nochng1				; br=not max power
 	movk	9,a0				;Max power! Can't take ball!
-#nochng
+#nochng1
 	move	*a11(OPLINK),a14,L
 	move	*a14(plyr_num),a2		;A2=Plyr# of guy taking ball
 	move	*a14(plyr_attrib_p),a14,L
@@ -2695,7 +2696,7 @@ tkdnk_t	.word	200
 #ok0
 	PULL	a0,a1,a2
 ;DJT End
-#ok
+#ok2
 	move	*a3(plyr_jmpcnt),a14
 	jrle	#ongnd
 	move	*a3(plyr_aniy),a14
@@ -2720,13 +2721,13 @@ tkdnk_t	.word	200
 
 	move	*a11(OCTRL),a14
 	btst	B_FLIPH,a14
-	jrz	nof			;No flip?
+	jrz	nof1		;No flip?
 
 	move	*a2,a2			;ISIZEX
 	subk	1,a2
 	neg	a0
 	add	a2,a0			;+size
-#nof
+#nof1
 	move	*a11(OXPOS),a14
 	add	a14,a0
 	sub	a4,a0
@@ -2790,7 +2791,7 @@ tkdnk_t	.word	200
 
 
 	move	@ballgoaltcnt,a0	;0CHhk goaltending
-	jrle	#skipgt
+	jrle	#skipgt2
 	move	@ballpnumshot,a1
 	move	*a3(plyr_num),a14
 	srl	1,a1
@@ -2875,7 +2876,7 @@ tkdnk_t	.word	200
 	move	a7,a2
 	CREATE0	plyr_goaltending	;Pass A11
 	move	a2,a7
-	jruc	skipgt
+	jruc	skipgt2
 #nogt
 	movk	PS_BLOCKS,a0		;It's a block
 	move	*a3(plyr_num),a1
@@ -2890,7 +2891,7 @@ tkdnk_t	.word	200
 	calla	arw_on1plyr		;Guy who picks up ball gets arw
 	PULL	a7,a10
 
-#skipgt
+#skipgt2
 
 	callr	flash_ball
 ;	SOUND1	cheer_snd
@@ -2965,7 +2966,7 @@ tkdnk_t	.word	200
 	calla	plyr_setshtdly
 	PULL	a3
 
-	jruc	x
+	jruc	x3
 
 fix_airb
 	movk	1,a0
@@ -3042,7 +3043,7 @@ fix_airb
 
 	move	*a8(OYPOS),a0
 	addk	30,a0			;Not if ball near ground
-	jrgt	#x
+	jrgt	#x3
 
 	move	*a3(plyr_dir),a0
 	callr	sinecos_get
@@ -3059,7 +3060,7 @@ fix_airb
 ;New, 1/22/93
 	move	@PCNT,a0
 	ANDK	7,a0
-	jrnz	x
+	jrnz	x3
 
 	movk	25,a0
 	move	a0,*a3(plyr_shtdly)
@@ -3067,7 +3068,7 @@ fix_airb
 ;(Why is this being called, if plyr doesn't keep ball, its not rejected!!)
 ;FIX!!!
 ;	calla	rejected_dnk_speech
-	jruc	x
+	jruc	x3
 
 #ablk
 ;2/3/92
@@ -3102,14 +3103,14 @@ fix_airb
 
 #rej
 	move	@must_rebound,a0
-	jrz	cont
+	jrz	cont1
 	move	*a3(plyr_seq),a0
 	cmpi	BLOCK_SEQ,a0
 	jrz	rej1
 	cmpi	BLOCKREJ_SEQ,a0
 	jrz	rej1
 	cmpi	FASTBLOCKREJ_SEQ,a0
-	jrnz	cont
+	jrnz	cont1
 #rej1
 	move	*a3(plyr_ohpdist),a14
 	cmpi	55,a14
@@ -3120,13 +3121,13 @@ fix_airb
 	LOCKUP
 	.endif
 
-	jruc	cont
+	jruc	cont1
 
 #cont0
 ;Could also check my proximity to floor...
 	move	*a3(plyr_jmpcnt),a14
 	jrnz	convert_rej		;Br=I was trying to swat a rebound!
-#cont
+#cont1
 
 	movk	PS_BLOCKS,a0		;It's a block
 	move	*a3(plyr_num),a1
@@ -3457,10 +3458,10 @@ stl2	.word	160,170,180,195,200
 	move	*a3(plyr_num),a1
 	calla	inc_player_stat
 	move	@my_ballpnumlast,a1
-	jrn	x
+	jrn	x3
 	movk	PS_TURNOVERS,a0
 	calla	inc_player_stat
-	jruc	x			;nxt
+	jruc	x3			;nxt
 
 #nope
 
@@ -3566,7 +3567,7 @@ stl2	.word	160,170,180,195,200
 
 #tagx
 	move	@must_rebound,a0
-	jrz	x
+	jrz	x3
 
 #convert_rej0
 	move	*a3(plyr_seq),a0
@@ -3575,12 +3576,12 @@ stl2	.word	160,170,180,195,200
 	cmpi	BLOCKREJ_SEQ,a0
 	jrz	rej1a
 	cmpi	FASTBLOCKREJ_SEQ,a0
-	jrnz	x
+	jrnz	x3
 #rej1a
 
 ;Could also check my proximity to floor...
 	move	*a3(plyr_jmpcnt),a14
-	jrz	x
+	jrz	x3
 
 #convert_rej
 ;DJT removed
@@ -3606,7 +3607,7 @@ stl2	.word	160,170,180,195,200
 	move	a0,@pushing_delay
 	movi	15,a0
 	calla	plyr_setshtdly
-	jruc	x
+	jruc	x3
 
 
 #nxt5	
@@ -3638,7 +3639,7 @@ stl2	.word	160,170,180,195,200
 nxt	dsj	a7,lp
 
 
-#x	PULL	a2,a3,a4,a5,a6,a7,a10,a11
+#x3	PULL	a2,a3,a4,a5,a6,a7,a10,a11
 	rets
 
 tbl1	.word	16+2,17+2,18+2,18+2,18+2,18+2,18+2,19+2,20+2,21+2,22+2,23+2
@@ -3730,13 +3731,13 @@ tbl5	.word	500,500,500,500,500,500,500,500,500,500,500,500
  SUBRP	flash_ball
 
 	move	@inbound,a0
-	jrnn	x
+	jrnn	x4
 	move	@ballflash,a0
-	jrnz	x
+	jrnz	x4
 	PUSH	a7
 	CREATE0	ball_flash
 	PULL	a7
-#x	rets	
+#x4	rets	
 
 
 ball_flash
@@ -3769,7 +3770,8 @@ ball_flash
 
 	dsj	a10,again
 
-#die	clr	a0
+#diea
+	clr	a0
 	move	a0,@ballflash
 
 	move	@HCOUNT,a14
@@ -3869,27 +3871,27 @@ ball_flash
 
 	movi	plyrproc_t,a6
 	movk	NUMPLYRS,a3
-#lp
+#lp4
 	move	a4,a2
 	srl	1,a5
-	jrnc	set			;Drone?
+	jrnc	set1		;Drone?
 
 	move	@PSTATUS2,a0
 	move	a0,a1
 	sll	32-2,a0
-	jrz	set			;Drone team?
+	jrz	set1			;Drone team?
 	ANDK	0cH,a1
-	jrz	set			;Drone team?
+	jrz	set1			;Drone team?
 
 	move	@pup_noassistance,a0
 	jrnz	noset
 
 	movk	ADJCOMPASS,a0		;Computer assistance
 	calla	GET_ADJ			;0-1
-	jrz	set			;On?
+	jrz	set1			;On?
 #noset
 	clr	a2
-#set
+#set1
 	move	*a6+,a0,L
 	move	a2,*a0(plyr_ptsdown)
 
@@ -3901,7 +3903,7 @@ ball_flash
 	neg	a4
 	.endif
 
-nxt	dsj	a3,lp
+nxt	dsj	a3,lp4
 
 	PULL	a2,a3,a4,a5,a6
 	rets
@@ -4153,9 +4155,9 @@ pt_1
 
 	move	*a8(OCTRL),a1,W
 	btst	B_FLIPH,a1
-	jrz	sx			;No flip?
+	jrz	sx0			;No flip?
 	neg	a0
-#sx	add	a0,a14
+#sx0	add	a0,a14
 	move	a14,*a8(OXPOS)
 
 	move	*b4+,b0				;get Y offset
@@ -4182,10 +4184,10 @@ pt_1
  SUBR	seq_offset2
 
 	move	*a13(plyr_offset_flag),a14
-	jrz	cont
+	jrz	cont2
 	addi	48,b4
 	rets
-#cont	movk	1,a14
+#cont2	movk	1,a14
 	move	a14,*a13(plyr_offset_flag)
 	move	*b4+,b0				;get X offset
 	move	b0,a0
@@ -4193,9 +4195,9 @@ pt_1
 
 	move	*a8(OCTRL),a1,W
 	btst	B_FLIPH,a1
-	jrz	sx			;No flip?
+	jrz	sx1			;No flip?
 	neg	a0
-#sx	add	a0,a14
+#sx1	add	a0,a14
 	move	a14,*a8(OXPOS)
 
 	move	*b4+,b0				;get Y offset
@@ -4249,7 +4251,7 @@ stnd1
 
 
 	move	*a13(plyr_ownball),a1
-	jrle	#set
+	jrle	#set2
 
 
 	move	*a13(plyr_num),a2
@@ -4306,16 +4308,16 @@ stnd1
 	jrne	setnostl		;!In elbo?
 	move	*a11,a1
 	sll	32-6,a1
-	jrz	set			;No buttons?
+	jrz	set2			;No buttons?
 
 
 #stndwb
 	movk	STNDWB_SEQ,a0
 	move	*a13(plyr_seq),a14
 	cmpi	ELBO2_SEQ,a14
-	jrne	set
+	jrne	set2
 	movk	STNDWB2_SEQ,a0	        ;stops glitch from elbo swing to stand
-#set	calla	plyr_setseq
+#set2	calla	plyr_setseq
 
 	move	*a13(plyr_ani1st_p),a0,L
 	move	a0,b4
@@ -4362,12 +4364,12 @@ stnd1
 	move	*b4+,b0
 	move	b0,a7
 	move	*a13(plyr_anirevff),a0
-	jrz	x
+	jrz	x5
 	srl	4,a7
 	sll	3,a7
 	addi	#t,a7
 	movb	*a7,a7
-#x	move	a7,*a13(plyr_dir)
+#x5	move	a7,*a13(plyr_dir)
 	rets
 
 #t	.byte	0,7*16,6*16,5*16,4*16,3*16,2*16,1*16
@@ -4382,12 +4384,12 @@ stnd1
 	movk	RUN_SEQ,a0		;>Setup run sequence
 
 	move	*a13(plyr_turbon),a14
-	jrz	cont
+	jrz	cont3
 
 ;Skip next frame of animation + next seq_command
 	addi	112,b4
 	movk	RUNTURB_SEQ,a0		;>Setup run sequence
-#cont
+#cont3
 	move	a0,*a13(plyr_seq)
 	rets
 
@@ -4400,12 +4402,12 @@ stnd1
 	movk	RUNDRIB_SEQ,a0		;>Setup run sequence
 
 	move	*a13(plyr_turbon),a14
-	jrz	cont
+	jrz	cont4
 
 ;Skip next frame of animation + next seq_command
 	addi	112,b4
 	movk	RUNDRIBTURB_SEQ,a0		;>Setup run sequence
-#cont
+#cont4
 	move	a0,*a13(plyr_seq)
 	rets
 
@@ -4429,9 +4431,9 @@ stnd1
  SUBR	seq_stayinair
 
 	move	*a13(plyr_jmpcnt),a0
-	jrz	x
+	jrz	x6
 	subi	2*32+3*16,b4
-#x	rets
+#x6	rets
 
 ********************************
 * Sequence - Keep zx vel for later skid on butt
@@ -4477,7 +4479,7 @@ stnd1
 ;;WORD	plyr_keeppal	;Keep pal for reuse upon finish of flames
 ;
 ;	move	*a13(plyr_keeppal),a0
-;	jrnz	x
+;	jrnz	x7
 ;	move	*a8(OPAL),a0
 ;	move	a0,*a13(plyr_keeppal)
 ;	movi	FIREFALP,a0
@@ -4488,7 +4490,7 @@ stnd1
 ;	move	*a1(OPAL),a14
 ;	move	a14,*a13(plyr_hdkeeppal)
 ;	move	a0,*a1(OPAL)
-;#x
+;#x7
 ;	rets
 
 ********************************
@@ -4497,7 +4499,7 @@ stnd1
 ; SUBR	seq_stopfire
 ;
 ;	move	*a13(plyr_keeppal),a0
-;	jrz	x
+;	jrz	x8
 ;	move	a0,*a8(OPAL)
 ;;Do head also
 ;	move	*a13(plyr_hdkeeppal),a0
@@ -4505,7 +4507,7 @@ stnd1
 ;	move	a0,*a1(OPAL)
 ;	clr	a0
 ;	move	a0,*a13(plyr_keeppal)
-;#x
+;#x8
 ;	rets
 
 ********************************
@@ -4553,14 +4555,14 @@ stnd1
 	move	*a13(plyr_seq),a0
 	move	a6,a1
 	sll	32-4,a1
-	jrnz	set			;Pushing joy?
+	jrnz	set3		;Pushing joy?
 
 	movk	STNDDEF_SEQ,a0		;>Setup stand sequence
 	move	*a13(plyr_ownball),a14
-	jrle	#set
+	jrle	#set3
 	movk	STNDDRIBDEF_SEQ,a1
 
-set	jruc	plyr_setseq
+set3	jruc	plyr_setseq
 
 
 ********************************
@@ -4707,7 +4709,7 @@ set	jruc	plyr_setseq
 	move	*a13(plyr_num),a14
 	move	@ballpnum,a0
 	cmp	a14,a0
-	jrnz	nofire			; br=not shooter
+	jrnz	nofire1			; br=not shooter
 
 	movk	1,a1			;1st shot turns off show hotspot pup
 	sll	a14,a1
@@ -4726,7 +4728,7 @@ set	jruc	plyr_setseq
 	jrnz	fchkhs			; br=from hotspot
 	move	a1,a1			;See if fire would bog out
 	jrz	dofire			; br=no, else forget it
-	jruc	nofire
+	jruc	nofire1
 
 #fchkhs
 	move	a14,a0			;Chk hotspot shot cnt
@@ -4750,15 +4752,15 @@ set	jruc	plyr_setseq
 	.ref	show_hotspot_plyr_coor
 	CREATE0	show_hotspot_plyr_coor
 	move	a13,*a0(PA10),L
-	jruc	nofire
+	jruc	nofire1
 #disc
 	.ref	update_hotspot_plyr_coor
 	calla	update_hotspot_plyr_coor
-	jruc	nofire
+	jruc	nofire1
 
 #notfire
 	move	*a13(plyr_hotspotf),a0	;No fire. Chk hotspot jump flag
-	jrz	nofire			; br=not from hotspot
+	jrz	nofire1			; br=not from hotspot
 	move	a14,a0			;Chk hotspot shot cnt
 	sll	4,a0
 	addi	hotspot_count,a0
@@ -4776,7 +4778,7 @@ set	jruc	plyr_setseq
 	move	a13,*a0(PA10),L
 ;DJT End
 
-#nofire
+#nofire1
 
 	rets
 
@@ -4860,11 +4862,11 @@ set	jruc	plyr_setseq
 
 ;If near my own hoop, I am probably trying to G.T.!  So allow high jump!
 	move	@ballshotinair,a0	;Shooter # if shot in air, else -1
-	jrn	cont
+	jrn	cont5
 	move	*a13(plyr_hpdist),a0
 	cmpi	70,a0			;About 3 feet away from my hoop
 	jrlt	seq_jump2
-#cont
+#cont5
 	movk	1,a0			;Start jump
 	move	a0,*a13(plyr_jmpcnt)
 
@@ -4923,12 +4925,12 @@ set	jruc	plyr_setseq
 	move	*a5(OZVEL),a1,L
 	move	*a5(OYVEL),a2,L
 	movk	30,b0
-#newblp
+#newblp1
 	add	a0,a6
 	add	a1,a7
 	add	a2,a9
 	addi	GRAVB,a2
-	dsj	b0,newblp
+	dsj	b0,newblp1
 
 	sra	16,a6
 	sra	16,a7
@@ -4956,15 +4958,15 @@ set	jruc	plyr_setseq
 	sra	10,a1			;/1024
 
 	move	*a13(plyr_newdir),a14
-	jrge	#ndok
+	jrge	#ndok1
 	move	*a13(plyr_dir),a14
-#ndok	addk	8,a14
+#ndok1	addk	8,a14
 	sll	32-7,a14
 	srl	32-7+4,a14
 	subk	4,a14
-	jrle	#nof			;No flip?
+	jrle	#nof2			;No flip?
 	neg	a1
-#nof
+#nof2
 	add	a1,a6
 
 
@@ -4980,7 +4982,7 @@ set	jruc	plyr_setseq
 ;	addk	8,a14			;Round up
 ;	srl	4,a14			;Lose frac
 ;	sll	4,a14			;*16
-;	addi	#z_t,a14
+;	addi	#z_ta,a14
 ;	move	*a14,a5
 
 	move	*a8(OZPOS),a1
@@ -4999,22 +5001,22 @@ set	jruc	plyr_setseq
 ;	addk	10,a1
 
 #noreb	cmp	a1,a3
-	jrlt	x1ok
+	jrlt	x1ok1
 	move	a1,a3
-#x1ok
+#x1ok1
 	cmp	a1,a5
-	jrlt	z1ok
+	jrlt	z1ok1
 	move	a1,a5
-#z1ok
+#z1ok1
 	neg	a1
 	cmp	a1,a3
-	jrgt	#x2ok
+	jrgt	#x2ok1
 	move	a1,a3
-#x2ok
+#x2ok1
 	cmp	a1,a5
-	jrgt	#z2ok
+	jrgt	#z2ok1
 	move	a1,a5
-#z2ok
+#z2ok1
 
 	sll	16,a3
 	sll	16,a5
@@ -5122,7 +5124,7 @@ set	jruc	plyr_setseq
 ;;	cmp	a14,a6
 ;;	jrnz	nofire
 	btst	a14,a6
-	jrz	nofire
+	jrz	nofire2
 
 ;This guy on fire, let him jump higher!
 ;	cmpi	-050200H,a1		;T.E.
@@ -5133,7 +5135,7 @@ set	jruc	plyr_setseq
 	movi	-054200H,a1
 	jruc	maxok
 
-#nofire
+#nofire2
 ;Maximum jumping height!
 ;FIX!!  Should be linked to attribute!
 ;	cmpi	-04b200H,a1		;4a200
@@ -5198,11 +5200,11 @@ set	jruc	plyr_setseq
 	move	a1,*a8(OYVEL),L
 
 
-#x	PULL	a6,a7,a9
+#x9	PULL	a6,a7,a9
 	rets
 
 
-#z_t	.word	CZMID+12,CZMID+8,CZMID,CZMID-8
+#z_ta	.word	CZMID+12,CZMID+8,CZMID,CZMID-8
 	.word	CZMID-12,CZMID-8,CZMID,CZMID+8
 	.word	CZMID+12
 
@@ -5237,12 +5239,12 @@ set	jruc	plyr_setseq
 	move	*a5(OYVEL),a2,L
 	movk	20,b0
 	movi	GRAVB,a14
-#newblp
+#newblp2
 	add	a0,a6
 	add	a1,a7
 	add	a2,a9
 	add	a14,a2
-	dsj	b0,newblp
+	dsj	b0,newblp2
 
 	sra	16,a6
 	sra	16,a7
@@ -5268,9 +5270,9 @@ set	jruc	plyr_setseq
 	sll	32-7,a14
 	srl	32-7+4,a14
 	subk	4,a14
-	jrle	#nof			;No flip?
+	jrle	#nof3			;No flip?
 	neg	a1
-#nof
+#nof3
 	add	a1,a6
 
 
@@ -5309,7 +5311,7 @@ set	jruc	plyr_setseq
 	sll	16,a5
 	divs	a4,a3
 	divs	a4,a5
-#setvel
+#setvela
 	move	a3,*a8(OXVEL),L
 	move	a5,*a8(OZVEL),L
 
@@ -5320,17 +5322,17 @@ set	jruc	plyr_setseq
 	divs	a4,a3
 	sub	a3,a1
 	cmpi	-01c000H,a1
-	jrlt	minok
+	jrlt	minoka
 	movi	-01c000H,a1		;Min
-#minok
+#minoka
 ;	cmpi	-04a000H,a1
-;	jrgt	#maxok
+;	jrgt	#maxoka
 
 ;	LOCKUP
 ;	PULL	a6,a7,a9
 ;	jruc	seq_stand
 
-#maxok	move	a1,*a8(OYVEL),L
+#maxoka	move	a1,*a8(OYVEL),L
 
 
 	PULL	a6,a7,a9
@@ -5377,9 +5379,9 @@ set	jruc	plyr_setseq
 
 	move	*a8(OCTRL),a14
 	btst	B_FLIPH,a14
-	jrz	nof
+	jrz	nof4
 	neg	a1
-#nof
+#nof4
 	add	a1,a3
 
 
@@ -5452,12 +5454,12 @@ set	jruc	plyr_setseq
 	PUSH	a10
 	clr	a10
 	cmpi	48h,a4
-	jrlt	nosnd
+	jrlt	nosnd2
 	movi	10,a0			;2% do bogus snd
 	calla	RNDPER
-	jrls	#nosnd	
+	jrls	#nosnd2	
 	movk	1,a10
-#nosnd	
+#nosnd2	
 	move	a7,a2
 	CREATE0	plyr_camflash
 	move	a2,a7
@@ -5474,7 +5476,7 @@ set	jruc	plyr_setseq
 	move	*a13(plyr_num),a14
 	move	@ballpnum,a0
 	cmp	a14,a0
-	jrnz	nofire			; br=not shooter
+	jrnz	nofire3			; br=not shooter
 
 	movk	1,a1			;1st shot turns off show hotspot pup
 	sll	a14,a1
@@ -5484,17 +5486,17 @@ set	jruc	plyr_setseq
 
 	move	@plyr_onfire,a0
 	btst	a14,a0
-	jrz	nofire			; br=shooter not on fire
+	jrz	nofire3			; br=shooter not on fire
 
 	move	@tvpanelon,a0,L
-	jrnz	nofire			; br=don't bog out
+	jrnz	nofire3			; br=don't bog out
 
 	.ref	fire_circle
 	CREATE0	fire_circle
 	move	a13,*a0(PA10),L
 ;DJT End
 
-#nofire
+#nofire3
 
 
 
@@ -5514,30 +5516,31 @@ set	jruc	plyr_setseq
  SUBR	plyr_camflash
 
 	move	@pup_court,a14
-	jrnz	die			;br=outdoor court, no camera flashes
+	jrnz	dieb			;br=outdoor court, no camera flashes
 
 	movk	7,a0
 	callr	rnd
 	addk	17,a0
 	move	a0,a8
-#lp	CREATE0	plyr_cflsh
+#lp5
+	CREATE0	plyr_cflsh
 	move	a10,a10
-	jrz	nosnd
+	jrz	    nosnd3
 	CREATE0	plyr_cflsh_snd
-#nosnd
+#nosnd3
 	movk	4,a0			;7
 	callr	rnd
 ;	addk	2,a0
 	addk	4,a0
 	calla	PRCSLP
-	dsj	a8,lp
-#die
+	dsj	    a8,lp5
+#dieb
 	DIE
 
 plyr_cflsh_snd
 	movk	3,a0
 	callr	rndrng0
-	sll	5,a0
+	sll	    5,a0
 	addi	flsh_t,a0
 ;FIX!!!  Ugly camera flash snd
 	move	*a0,a0,L
@@ -5699,11 +5702,11 @@ plyr_cflsh
 	move	*a13(plyr_num),a14
 	move	@plyr_onfire,a0
 	btst	a14,a0
-	jrz	nofire
+	jrz	nofire4
 
 	.ref	flash_white
 	calla	flash_white
-#nofire
+#nofire4
 
 ;Deliver a facial?
 	move	*a13(plyr_o1dist),a0
@@ -5829,7 +5832,7 @@ plyr_cflsh
 
 	rets
 
-#x	addk	16,b4
+#x10	addk	16,b4
 	rets
 
 *******************************
@@ -6036,7 +6039,7 @@ plyr_cflsh
 	movi	150,a0			;200
 #xz2					;Layups 30%
 	calla	RNDPER
-	jrls	#x			;br=nope
+	jrls	#x11			;br=nope
 #skpck
 
 	move	*a5(PA8),a2,L
@@ -6045,7 +6048,7 @@ plyr_cflsh
 	sub	a0,a1
 
 	cmpi	054H,a1			;060H,5c,58
-	jrgt	#x			;Too far above me?
+	jrgt	#x11			;Too far above me?
 
 ;player pushed speech here
 
@@ -6053,11 +6056,11 @@ plyr_cflsh
 	move	*a13(plyr_num),a14
 	move	@pup_maxpower,a0
 	btst	a14,a0
-	jrz	nochng
+	jrz	nochng2
 ;This guy has max power!  Don't knock him down!
 	movk	9,a3
 	jruc	maxp
-#nochng
+#nochng2
 	move	*a13(plyr_attrib_p),a0,L
 	move	*a0(PAT_POWER),a3
 #maxp
@@ -6133,7 +6136,7 @@ plyr_cflsh
 	move	*a5(plyr_num),a14
 	move	@pup_maxpower,a1
 	btst	a14,a1
-	jrz	nochng1
+	jrz	nochng3
 ;This guy has max power!  Don't knock him down!
 	movi	-GRAVB*7,a0		;7
 ;	movi	-GRAVB*8,a0		;7
@@ -6150,9 +6153,9 @@ plyr_cflsh
 	movk	16,a0
 	move	@HCOUNT,a1
 	btst	0,a1
-	jrz	nochng1
+	jrz	nochng3
 	movk	24,a0			;16
-#nochng1
+#nochng3
 	move	a0,*a5(plyr_stagcnt)
 
 	move	@ballpnum,a0
@@ -6253,7 +6256,7 @@ plyr_cflsh
 ;;	cmp	a0,a1
 ;;	jrz	x
 	btst	a0,a1
-	jrnz	x			;br=plyr on-fire
+	jrnz	x11			;br=plyr on-fire
 
 	move	*a13(plyr_PDATA_p),a2,L
 	move	*a2(ply_turbo),a1
@@ -6268,7 +6271,7 @@ plyr_cflsh
 	move	*a2(ply_meter_imgs+32),a0,L
 	move	*a1(0),*a0(OSAG),L
 
-#x	PULL	a11
+#x11	PULL	a11
 	rets
 
 ;	subk	7,a1
@@ -6308,20 +6311,20 @@ plyr_cflsh
 
 	move	*a13(plyr_o1dist),a14
 	subi	40*DIST_REDUCTION,a14
-	jrge	#o1far			;Too far?
+	jrge	#o1far1			;Too far?
 
 	move	@HCOUNT,a14
 	btst	0,a14
-	jrz	o1far			;Skip? (50%)
+	jrz	o1far1			;Skip? (50%)
 
 	move	*a4,a5,L		;A5=*O proc
 	move	*a13(plyr_o1dir),a0
 	callr	#elbo
-#o1far
+#o1far1
 
 	move	*a13(plyr_o2dist),a14
 	subi	40*DIST_REDUCTION,a14
-	jrge	#x			;Too far?
+	jrge	#x12			;Too far?
 
 	move	@HCOUNT,a14
 	btst	0,a14
@@ -6332,7 +6335,7 @@ plyr_cflsh
 	move	*a13(plyr_o2dir),a0
 	callr	#elbo
 
-#x	rets
+#x12	rets
 
 
 #elbo
@@ -6351,7 +6354,7 @@ plyr_cflsh
 	move	a0,*a2(OZVEL),L
 	move	a1,*a2(OXVEL),L
 	move	*a5(plyr_jmpcnt),a0
-	jrnz	injmp
+	jrnz	injmpo
 	movk	1,a0
 	move	a0,*a5(plyr_jmpcnt)
 	movi	-GRAVB*9,a0		;Up 15
@@ -6361,7 +6364,7 @@ plyr_cflsh
 	move	*a5(plyr_num),a14
 	move	@pup_maxpower,a1
 	btst	a14,a1
-	jrz	injmp
+	jrz	injmpo
 ;This guy has max power!  Don't knock him down!
 	movi	-GRAVB*7,a0		;7
 ;	movi	-GRAVB*8,a0		;7
@@ -6375,7 +6378,7 @@ plyr_cflsh
 	move	a0,*a5(plyr_stagcnt)
 	rets
 
-#injmp
+#injmpo
 	movk	32,a0
 	move	a0,*a5(plyr_stagcnt)
 

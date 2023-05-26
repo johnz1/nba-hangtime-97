@@ -4,11 +4,11 @@ $external_counter = 0
 $regex = "^\s*#\w+"
 
 # Set the directory containing the files to search
-$directory = "D:\dosbox\tools\c\hangtime\src\old"
+$directory = "D:\dosbox\tools\c\hangtime\src"
 #$directory = "D:\dosbox\tools\c\hangtime\BACKUP\CODE113M\"
 
 # Get all files in the directory that have a .txt extension
-$files = Get-ChildItem $directory -Filter plyr.asm
+$files = Get-ChildItem $directory -Filter plyr2.asm
 
 # Loop through each file and find duplicate labels
 foreach ($file in $files) {
