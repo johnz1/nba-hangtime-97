@@ -66,7 +66,7 @@
 	.ref	tvpanelon
 	.ref	RNDRNG0
 	.ref	READ_DIP
-
+    .ref    PSTATUS2 ; !!AM!! missing from many .asm it seems.
 	.ref	pal_getf
 
 ;From plyrat3.asm
@@ -777,11 +777,11 @@ CLIPTEST	.equ	0
 
 	movi	4*60,a10
 
-#stop	SLEEPK	1
+#stopa	SLEEPK	1
 	subk	1,a10
 	jrle	#tvout
 	move	@tvpanelon,a0,L
-	jrnz	stop
+	jrnz	stopa
 #tvout
 
 	RETP
@@ -985,9 +985,9 @@ vels_tbl
 	addi	10000h,a0
 	move	a0,a7
 	btst	0,a7
-	jrz	1
+	jrz	z1
 	movi	#salt2_t,a9
-#1
+#z1
 	move	*a8(OZPOS),a3
 	addk	1h,a3
 	move	*a8(OYVAL),a1,L
@@ -1313,7 +1313,7 @@ vels_tbl
 	.ref	TWOPLAYERS
 	move	@TWOPLAYERS,a14		;0 = NO, 1 = YES 2 players
 	jrz	nkit
-	addi	#2p_t-#hotspot_t,a11
+	addi	#z2p_t-#hotspot_t,a11
 #nkit
 	move	*a11,a11,L		;Get hotspot pal ptr
 	movi	#hotspot_ani,a9,L	;Starting *ani
@@ -1377,7 +1377,7 @@ kill_hotspot
 #hotspot_t
 	.long	HOTC_B_P,HOTC_G_P
 	.long	HOTC_Y_P,HOTC_R_P
-#2p_t
+#z2p_t
 	.long	HOTC_B_P,HOTC_B_P
 	.long	HOTC_R_P,HOTC_R_P
 
@@ -1487,11 +1487,11 @@ kill_hotspot
 
 
 	move	@pup_court,a14
-	jrz	notd
+	jrz	notd1
 
 	CREATE0	#foot_smoke
 	CREATE0	#foot_smoke2
-#notd
+#notd1
 
 	movi	#fire_circle_t,a9
 
@@ -1540,7 +1540,7 @@ kill_hotspot
 #foot_smoke
 	SLEEPK	2
 #foot_smoke2
-	movi	#smoke_t,a9
+	movi	#smoke_ta,a9
 
 	movi	20000h,a0
 	calla	RNDRNG0
@@ -1573,7 +1573,7 @@ kill_hotspot
 	jauc	FRQDELDIE
 
 
-#smoke_t 
+#smoke_ta 
 	.ref	SMOKE_P
 	LW	SMOKE01,1
 	LW	SMOKE02,2
@@ -1637,11 +1637,11 @@ kill_hotspot
 
 ;Use blue smoke for team on fire
 	addi	smoke_team_t,a0
-	jruc	cont
+	jruc	contb
 #reg
 
 	addi	smoke_t,a0
-#cont	move	*a0,a9,L
+#contb	move	*a0,a9,L
 
 	move	*a8(OZPOS),a3		;puff ZPOS
 	movk	3,a0
@@ -1989,7 +1989,7 @@ set1
 ; Which set of dunks to use based on 0-10 attribute level
 ;
 jmp_t	.long	set1,set1,set1,set2,set2
-	.long	set3,set4,set4,set5,set5,set5
+	    .long	set3,set4,set4,set5,set5,set5
 
 
 *****************************************************************************
@@ -2003,7 +2003,7 @@ d5u_t	.long	#d1u_t5,#d2u_t5,#d3u_t5,#d4u_t5
 d5s_t	.long	#d1s_t5,#d2s_t5,#d3s_t5,#d4s_t5
 	.long	#d5s_t5,#d4s_t5,#d3s_t5,#d2s_t5, #d1s_t5
 
-d5m_t	.long	#d1m_t5,#d2m_t5,#d3m_t5,#d4m5_t
+d5m_t	.long	#d1m_t5,#d2m_t5,#d3m_t5,#d4m_t5
 	.long	#d5m_t5,#d4m_t5,#d3m_t5,#d2m_t5, #d1m_t5
 
 d5l_t	.long	#d1l_t5,#d2l_t5,#d3l_t5,#d4l_t5
@@ -2129,90 +2129,90 @@ d5l_t	.long	#d1l_t5,#d2l_t5,#d3l_t5,#d4l_t5
 *****************************************************************************
 ;Set of dunks for #4 skill players
 
-d4u_t	.long	#d1u_t,#d2u_t,#d3u_t,#d4u_t
-	.long	#d5u_t,#d4u_t,#d3u_t,#d2u_t, #d1u_t
+d4u_t	.long	#d1u_t4,#d2u_t4,#d3u_t4,#d4u_t4
+	.long	#d5u_t4,#d4u_t4,#d3u_t4,#d2u_t4, #d1u_t4
 
-d4s_t	.long	#d1s_t,#d2s_t,#d3s_t,#d4s_t
-	.long	#d5s_t,#d4s_t,#d3s_t,#d2s_t, #d1s_t
+d4s_t	.long	#d1s_t4,#d2s_t4,#d3s_t4,#d4s_t4
+	.long	#d5s_t4,#d4s_t4,#d3s_t4,#d2s_t4, #d1s_t4
 
-d4m_t	.long	#d1m_t,#d2m_t,#d3m_t,#d4m_t
-	.long	#d5m_t,#d4m_t,#d3m_t,#d2m_t, #d1m_t
+d4m_t	.long	#d1m_t4,#d2m_t4,#d3m_t4,#d4m_t4
+	.long	#d5m_t4,#d4m_t4,#d3m_t4,#d2m_t4, #d1m_t4
 
-d4l_t	.long	#d1l_t,#d2l_t,#d3l_t,#d4l_t
-	.long	#d5l_t,#d4l_t,#d3l_t,#d2l_t, #d1l_t
+d4l_t	.long	#d1l_t4,#d2l_t4,#d3l_t4,#d4l_t4
+	.long	#d5l_t4,#d4l_t4,#d3l_t4,#d2l_t4, #d1l_t4
 
 ;UNDER hoop
-#d1u_t	.word	3-1
+#d1u_t4	.word	3-1
 	.word	DUNKA3_SEQ,DUNKS2_SEQ,DUNKU3_SEQ
     
-#d2u_t	.word	3-1
+#d2u_t4	.word	3-1
 	.word	DUNKA3_SEQ,DUNKL3_SEQ,DUNKP2_SEQ
 
-#d3u_t	.word	3-1
+#d3u_t4	.word	3-1
 	.word	DUNKD2_SEQ,DUNKL3_SEQ,DUNKU3_SEQ
 
-#d4u_t	.word	4-1
+#d4u_t4	.word	4-1
 	.word	DUNKD2_SEQ,DUNKE_SEQ,DUNKL3_SEQ,DUNKP2_SEQ
 
-#d5u_t	.word	2-1
+#d5u_t4	.word	2-1
 	.word	DUNKE_SEQ,DUNKP2_SEQ
 
 
 ;NEAR hoop
-#d1s_t	.word	4-1
+#d1s_t4	.word	4-1
 	.word	DUNKA2_SEQ,DUNKS2_SEQ,DUNKU3_SEQ,DUNKLAY3C_SEQ
 
-#d2s_t	.word	6-1
+#d2s_t4	.word	6-1
 	.word	DUNKA2_SEQ,DUNKP2_SEQ,DUNKU3_SEQ,DUNKR_SEQ
 	.word	DUNKLAY3C_SEQ,DUNKP2_SEQ
 
-#d3s_t	.word	2-1
+#d3s_t4	.word	2-1
 	.word	DUNKU3_SEQ,DUNKLAY3C_SEQ
 
-#d4s_t	.word	2-1
+#d4s_t4	.word	2-1
 	.word	DUNKE_SEQ,DUNKP2_SEQ
 
-#d5s_t	.word	2-1
+#d5s_t4	.word	2-1
 	.word	DUNKE_SEQ,DUNKP2_SEQ
 
 
 ;MEDIUM to hoop
-#d1m_t	.word	12-1
+#d1m_t4	.word	12-1
 	.word	DUNKA_SEQ,DUNKA2_SEQ,DUNKB3_SEQ,DUNKC_SEQ
 	.word	DUNKK_SEQ,DUNKR2_SEQ,DUNKU2_SEQ,DUNKY2_SEQ
 	.word	DUNKZ3_SEQ,DUNKR2_SEQ,DUNKZ3_SEQ,DUNKLAY3A_SEQ
 
 
-#d2m_t	.word	16-1
+#d2m_t4	.word	16-1
 	.word	DUNKA_SEQ,DUNKA2_SEQ,DUNKB_SEQ,DUNKC_SEQ
 	.word	DUNKK_SEQ,DUNKR_SEQ,DUNKT_SEQ,DUNKJ2_SEQ
 	.word	DUNKLAY_SEQ,DUNKZ2_SEQ,DUNKZ3_SEQ,DUNKLAY8_SEQ
 	.word	DUNKP_SEQ,DUNKY2_SEQ,DUNKJ2_SEQ,DUNKT2_SEQ
 
 
-#d3m_t	.word	11-1
+#d3m_t4	.word	11-1
 	.word	DUNKB_SEQ,DUNKD_SEQ,DUNKJ2_SEQ,DUNKV_SEQ
 	.word	DUNKY2_SEQ,DUNKT_SEQ,DUNKT2_SEQ,DUNKX2_SEQ
 	.word	DUNKQ_SEQ,DUNKLAY_SEQ,DUNKX3_SEQ
 
 
-#d4m_t	.word	8-1
+#d4m_t4	.word	8-1
 	.word	DUNKJ2_SEQ,DUNKX3_SEQ,DUNKE2_SEQ,DUNKD_SEQ
 	.word	DUNKP_SEQ,DUNKQ_SEQ,DUNKX2_SEQ,DUNKT2_SEQ
 
 
-#d5m_t	.word	3-1
+#d5m_t4	.word	3-1
 	.word	DUNKP_SEQ,DUNKE2_SEQ,DUNKZ_SEQ
 
 
 ;FAR from hoop
-#d1l_t	.word	12-1
+#d1l_t4	.word	12-1
 	.word	DUNKB3_SEQ,DUNKU2_SEQ,DUNKK2_SEQ,DUNKN_SEQ
 	.word	DUNKN2_SEQ,DUNKP3_SEQ,DUNKU2_SEQ,DUNKY2_SEQ
 	.word	DUNKY_SEQ,DUNKLAY_SEQ,DUNKZ3_SEQ,DUNKP3_SEQ
 
 
-#d2l_t	.word	25-1
+#d2l_t4	.word	25-1
 	.word	DUNKZ3_SEQ,DUNKB_SEQ,DUNKK2_SEQ,DUNKB3_SEQ
 	.word	DUNKF_SEQ,DUNKG_SEQ,DUNKG2_SEQ,DUNKJ2_SEQ
 	.word	DUNKY2_SEQ,DUNKK2_SEQ,DUNKT3_SEQ,DUNKT5_SEQ
@@ -2222,7 +2222,7 @@ d4l_t	.long	#d1l_t,#d2l_t,#d3l_t,#d4l_t
 	.word	DUNKU2_SEQ
 
 
-#d3l_t	.word	28-1
+#d3l_t4	.word	28-1
 	.word	DUNKB_SEQ,DUNKJ_SEQ,DUNKD_SEQ,DUNKQ_SEQ
 	.word	DUNKG_SEQ,DUNKG2_SEQ,DUNKJ_SEQ,DUNKY2_SEQ
 	.word	DUNKK2_SEQ,DUNKL_SEQ,DUNKN2_SEQ,DUNKP3_SEQ
@@ -2231,7 +2231,7 @@ d4l_t	.long	#d1l_t,#d2l_t,#d3l_t,#d4l_t
 	.word	DUNKV_SEQ,DUNKV2_SEQ,DUNKW_SEQ,DUNKW3_SEQ
 	.word	DUNKX_SEQ,DUNKLAY8_SEQ,DUNKO2_SEQ,DUNKL2_SEQ
 
-#d4l_t	.word	21-1
+#d4l_t4	.word	21-1
 	.word	DUNKJ_SEQ,DUNKD_SEQ,DUNKG_SEQ,DUNKP_SEQ
 	.word	DUNKG2_SEQ,DUNKJ_SEQ,DUNKD_SEQ,DUNKK2_SEQ
 	.word	DUNKQ_SEQ,DUNKQ2_SEQ,DUNKT3_SEQ,DUNKY2_SEQ
@@ -2240,7 +2240,7 @@ d4l_t	.long	#d1l_t,#d2l_t,#d3l_t,#d4l_t
 	.word	DUNKY_SEQ
 
 
-#d5l_t	.word	5-1
+#d5l_t4	.word	5-1
 	.word	DUNKP_SEQ,DUNKW_SEQ,DUNKW3_SEQ,DUNKX_SEQ
 	.word	DUNKZ_SEQ
 
@@ -2248,90 +2248,90 @@ d4l_t	.long	#d1l_t,#d2l_t,#d3l_t,#d4l_t
 *****************************************************************************
 ;Set of dunks for #3 skill players
 
-d3u_t	.long	#d1u_t,#d2u_t,#d3u_t,#d4u_t
-	.long	#d5u_t,#d4u_t,#d3u_t,#d2u_t, #d1u_t
+d3u_t	.long	#d1u_t3,#d2u_t3,#d3u_t3,#d4u_t3
+	.long	#d5u_t3,#d4u_t3,#d3u_t3,#d2u_t3, #d1u_t3
 
-d3s_t	.long	#d1s_t,#d2s_t,#d3s_t,#d4s_t
-	.long	#d5s_t,#d4s_t,#d3s_t,#d2s_t, #d1s_t
+d3s_t	.long	#d1s_t3,#d2s_t3,#d3s_t3,#d4s_t3
+	.long	#d5s_t3,#d4s_t3,#d3s_t3,#d2s_t3, #d1s_t3
 
-d3m_t	.long	#d1m_t,#d2m_t,#d3m_t,#d4m_t
-	.long	#d5m_t,#d4m_t,#d3m_t,#d2m_t, #d1m_t
+d3m_t	.long	#d1m_t3,#d2m_t3,#d3m_t3,#d4m_t3
+	.long	#d5m_t3,#d4m_t3,#d3m_t3,#d2m_t3, #d1m_t3
 
-d3l_t	.long	#d1l_t,#d2l_t,#d3l_t,#d4l_t
-	.long	#d5l_t,#d4l_t,#d3l_t,#d2l_t, #d1l_t
+d3l_t	.long	#d1l_t3,#d2l_t3,#d3l_t3,#d4l_t3
+	.long	#d5l_t3,#d4l_t3,#d3l_t3,#d2l_t3, #d1l_t3
 
 ;UNDER hoop
-#d1u_t	.word	2-1
+#d1u_t3	.word	2-1
 	.word	DUNKS2_SEQ,DUNKU3_SEQ
 
-#d2u_t	.word	1-1
+#d2u_t3	.word	1-1
 	.word	DUNKA3_SEQ
 
-#d3u_t	.word	2-1
+#d3u_t3	.word	2-1
 	.word	DUNKD2_SEQ,DUNKU3_SEQ
 
-#d4u_t	.word	1-1
+#d4u_t3	.word	1-1
 	.word	DUNKD2_SEQ
 
-#d5u_t	.word	1-1
+#d5u_t3	.word	1-1
 	.word	DUNKE_SEQ
 
 
 ;NEAR hoop
-#d1s_t	.word	4-1
+#d1s_t3	.word	4-1
 	.word	DUNKA2_SEQ,DUNKS2_SEQ,DUNKU3_SEQ,DUNKLAY3C_SEQ
 
-#d2s_t	.word	4-1
+#d2s_t3	.word	4-1
 	.word	DUNKA2_SEQ,DUNKP2_SEQ,DUNKU3_SEQ,DUNKLAY3C_SEQ
 
-#d3s_t	.word	2-1
+#d3s_t3	.word	2-1
 	.word	DUNKU3_SEQ,DUNKLAY3C_SEQ
 
-#d4s_t	.word	3-1
+#d4s_t3	.word	3-1
 	.word	DUNKE_SEQ,DUNKE_SEQ,DUNKP2_SEQ
 
-#d5s_t	.word	2-1
+#d5s_t3	.word	2-1
 	.word	DUNKE_SEQ,DUNKP2_SEQ
 
 
 ;MEDIUM to hoop
-#d1m_t	.word	12-1
+#d1m_t3	.word	12-1
 	.word	DUNKA_SEQ,DUNKA2_SEQ,DUNKB3_SEQ,DUNKC_SEQ
 	.word	DUNKK_SEQ,DUNKLAY6_SEQ,DUNKR2_SEQ,DUNKZ3_SEQ
 	.word	DUNKLAY_SEQ,DUNKLAY3A_SEQ,DUNKLAY7_SEQ,DUNKLAY3B_SEQ
 
 
-#d2m_t	.word	16-1
+#d2m_t3	.word	16-1
 	.word	DUNKA2_SEQ,DUNKB_SEQ,DUNKK_SEQ,DUNKC_SEQ
 	.word	DUNKP_SEQ,DUNKR_SEQ,DUNKJ2_SEQ,DUNKZ3_SEQ
 	.word	DUNKLAY_SEQ,DUNKLAY2_SEQ,DUNKZ3_SEQ,DUNKLAY3A_SEQ
 	.word	DUNKLAY3C_SEQ,DUNKLAY5_SEQ,DUNKLAY7_SEQ,DUNKLAY8_SEQ
 
 
-#d3m_t	.word	15-1
+#d3m_t3	.word	15-1
 	.word	DUNKD_SEQ,DUNKJ2_SEQ,DUNKK_SEQ,DUNKLAY3B_SEQ
 	.word	DUNKQ_SEQ,DUNKV_SEQ,DUNKX3_SEQ,DUNKB_SEQ
 	.word	DUNKLAY2_SEQ,DUNKLAY3_SEQ,DUNKX2_SEQ,DUNKLAY8_SEQ
 	.word	DUNKLAY6_SEQ,DUNKLAY7A_SEQ,DUNKX2_SEQ
 
 
-#d4m_t	.word	11-1
+#d4m_t3	.word	11-1
 	.word	DUNKD_SEQ,DUNKE2_SEQ,DUNKX3_SEQ,DUNKP_SEQ
 	.word	DUNKT2_SEQ,DUNKJ2_SEQ,DUNKLAY6_SEQ,DUNKX2_SEQ
 	.word	DUNKQ_SEQ,DUNKQ_SEQ,DUNKX2_SEQ
 
-#d5m_t	.word	4-1
+#d5m_t3	.word	4-1
 	.word	DUNKE2_SEQ,DUNKP_SEQ,DUNKLAY6_SEQ,DUNKZ_SEQ
 
 
 ;FAR from hoop
-#d1l_t	.word	11-1
+#d1l_t3	.word	11-1
 	.word	DUNKB3_SEQ,DUNKB3_SEQ,DUNKK2_SEQ,DUNKN2_SEQ
 	.word	DUNKP3_SEQ,DUNKU2_SEQ,DUNKY_SEQ,DUNKLAY7_SEQ
 	.word	DUNKLAY_SEQ,DUNKLAY3_SEQ,DUNKLAY3B_SEQ
 
 
-#d2l_t	.word	28-1
+#d2l_t3	.word	28-1
 	.word	DUNKA_SEQ,DUNKB_SEQ,DUNKB_SEQ,DUNKB3_SEQ
 	.word	DUNKG_SEQ,DUNKG2_SEQ,DUNKJ2_SEQ,DUNKP3_SEQ
 	.word	DUNKP_SEQ,DUNKK2_SEQ,DUNKN2_SEQ,DUNKY_SEQ
@@ -2341,7 +2341,7 @@ d3l_t	.long	#d1l_t,#d2l_t,#d3l_t,#d4l_t
 	.word	DUNKT4_SEQ,DUNKU8_SEQ,DUNKU2_SEQ,DUNKX3_SEQ
 
 
-#d3l_t	.word	29-1
+#d3l_t3	.word	29-1
 	.word	DUNKB_SEQ,DUNKB2_SEQ,DUNKD_SEQ,DUNKX_SEQ
 	.word	DUNKG_SEQ,DUNKG2_SEQ,DUNKJ_SEQ,DUNKW_SEQ
 	.word	DUNKK2_SEQ,DUNKL_SEQ,DUNKN2_SEQ,DUNKP3_SEQ
@@ -2352,7 +2352,7 @@ d3l_t	.long	#d1l_t,#d2l_t,#d3l_t,#d4l_t
 	.word	DUNKLAY7A_SEQ
 
 
-#d4l_t	.word	18-1
+#d4l_t3	.word	18-1
 	.word	DUNKD_SEQ,DUNKG_SEQ,DUNKP_SEQ,DUNKQ_SEQ
 	.word	DUNKG2_SEQ,DUNKJ_SEQ,DUNKK2_SEQ,DUNKX_SEQ
 	.word	DUNKQ2_SEQ,DUNKT3_SEQ,DUNKLAY6_SEQ,DUNKY_SEQ
@@ -2360,7 +2360,7 @@ d3l_t	.long	#d1l_t,#d2l_t,#d3l_t,#d4l_t
 	.word	DUNKT4_SEQ,DUNKU8_SEQ
 
 
-#d5l_t	.word	6-1
+#d5l_t3	.word	6-1
 	.word	DUNKP_SEQ,DUNKW_SEQ,DUNKW3_SEQ,DUNKX_SEQ
 	.word	DUNKLAY6_SEQ,DUNKZ_SEQ
 
@@ -2368,104 +2368,104 @@ d3l_t	.long	#d1l_t,#d2l_t,#d3l_t,#d4l_t
 *****************************************************************************
 ;Set of dunks for #2 skill players
 
-d2u_t	.long	#d1u_t,#d2u_t,#d3u_t,#d4u_t
-	.long	#d5u_t,#d4u_t,#d3u_t,#d2u_t, #d1u_t
+d2u_t	.long	#d1u_t2,#d2u_t2,#d3u_t2,#d4u_t2
+	.long	#d5u_t2,#d4u_t2,#d3u_t2,#d2u_t2, #d1u_t2
 
-d2s_t	.long	#d1s_t,#d2s_t,#d3s_t,#d4s_t
-	.long	#d5s_t,#d4s_t,#d3s_t,#d2s_t, #d1s_t
+d2s_t	.long	#d1s_t2,#d2s_t2,#d3s_t2,#d4s_t2
+	.long	#d5s_t2,#d4s_t2,#d3s_t2,#d2s_t2, #d1s_t2
 
-d2m_t	.long	#d1m_t,#d2m_t,#d3m_t,#d4m_t
-	.long	#d5m_t,#d4m_t,#d3m_t,#d2m_t, #d1m_t
+d2m_t	.long	#d1m_t2,#d2m_t2,#d3m_t2,#d4m_t2
+	.long	#d5m_t2,#d4m_t2,#d3m_t2,#d2m_t2, #d1m_t2
 
-d2l_t	.long	#d1l_t,#d2l_t,#d3l_t,#d4l_t
-	.long	#d5l_t,#d4l_t,#d3l_t,#d2l_t, #d1l_t
+d2l_t	.long	#d1l_t2,#d2l_t2,#d3l_t2,#d4l_t2
+	.long	#d5l_t2,#d4l_t2,#d3l_t2,#d2l_t2, #d1l_t2
 
 ;UNDER hoop
-#d1u_t	.word	1-1
+#d1u_t2	.word	1-1
 	.word	DUNKS2_SEQ
 
-#d2u_t	.word	1-1
+#d2u_t2	.word	1-1
 	.word	DUNKA3_SEQ
 
-#d3u_t	.word	1-1
+#d3u_t2	.word	1-1
 	.word	DUNKU3_SEQ
 
-#d4u_t	.word	1-1
+#d4u_t2	.word	1-1
 	.word	DUNKE_SEQ
 
-#d5u_t	.word	1-1
+#d5u_t2	.word	1-1
 	.word	DUNKE_SEQ
 
 
 ;NEAR hoop
-#d1s_t	.word	2-1
+#d1s_t2	.word	2-1
 	.word	DUNKU3_SEQ,DUNKLAY3C_SEQ
 
-#d2s_t	.word	1-1
+#d2s_t2	.word	1-1
 	.word	DUNKLAY3C_SEQ
 
-#d3s_t	.word	1-1
+#d3s_t2	.word	1-1
 	.word	DUNKLAY3C_SEQ
 
-#d4s_t	.word	1-1
+#d4s_t2	.word	1-1
 	.word	DUNKA2_SEQ
 
-#d5s_t	.word	1-1
+#d5s_t2	.word	1-1
 	.word	DUNKE_SEQ
 
 
 ;MEDIUM to hoop
-#d1m_t	.word	6-1
+#d1m_t2	.word	6-1
 	.word	DUNKA2_SEQ,DUNKC_SEQ,DUNKLAY3_SEQ,DUNKLAY3A_SEQ
 	.word	DUNKLAY5_SEQ,DUNKLAY6_SEQ
 
 
-#d2m_t	.word	13-1
+#d2m_t2	.word	13-1
 	.word	DUNKP_SEQ,DUNKR_SEQ,DUNKA2_SEQ,DUNKC_SEQ,DUNKA_SEQ
 	.word	DUNKLAY8_SEQ,DUNKLAY_SEQ,DUNKLAY2_SEQ,DUNKLAY7A_SEQ
 	.word	DUNKLAY5_SEQ,DUNKLAY6_SEQ,DUNKLAY7_SEQ,DUNKJ2_SEQ
 	.word	DUNKLAY3_SEQ
 
 
-#d3m_t	.word	14-1
+#d3m_t2	.word	14-1
 	.word	DUNKJ2_SEQ,DUNKP3_SEQ,DUNKQ_SEQ,DUNKLAY8_SEQ
 	.word	DUNKLAY_SEQ,DUNKLAY2_SEQ,DUNKLAY3_SEQ,DUNKLAY3A_SEQ
 	.word	DUNKLAY5_SEQ,DUNKLAY6_SEQ,DUNKLAY7_SEQ,DUNKLAY7A_SEQ
 	.word	DUNKT_SEQ,DUNKD_SEQ
 
 
-#d4m_t	.word	5-1
+#d4m_t2	.word	5-1
 	.word	DUNKQ_SEQ,DUNKE2_SEQ,DUNKJ_SEQ,DUNKD_SEQ
 	.word	DUNKLAY6_SEQ
 
 
-#d5m_t	.word	2-1
+#d5m_t2	.word	2-1
 	.word	DUNKE2_SEQ,DUNKLAY6_SEQ
 
 
 ;FAR from hoop
-#d1l_t	.word	7-1
+#d1l_t2	.word	7-1
 	.word	DUNKP3_SEQ,DUNKU2_SEQ,DUNKLAY_SEQ,DUNKLAY3C_SEQ
 	.word	DUNKLAY3_SEQ,DUNKLAY3B_SEQ,DUNKLAY7_SEQ
 
 
-#d2l_t	.word	10-1
+#d2l_t2	.word	10-1
 	.word	DUNKLAY2_SEQ,DUNKLAY3_SEQ,DUNKLAY3A_SEQ,DUNKLAY7A_SEQ
 	.word	DUNKLAY7_SEQ,DUNKLAY8_SEQ,DUNKA_SEQ,DUNKB3_SEQ
 	.word	DUNKB2_SEQ,DUNKLAY_SEQ
 
 
-#d3l_t	.word	12-1
+#d3l_t2	.word	12-1
 	.word	DUNKG_SEQ,DUNKG2_SEQ,DUNKJ_SEQ,DUNKQ_SEQ
 	.word	DUNKD_SEQ,DUNKLAY_SEQ,DUNKLAY2_SEQ,DUNKLAY3_SEQ
 	.word	DUNKLAY3A_SEQ,DUNKLAY6_SEQ,DUNKLAY7_SEQ,DUNKLAY8_SEQ
 
 
-#d4l_t	.word	3-1
+#d4l_t2	.word	3-1
 	.word	DUNKJ_SEQ,DUNKLAY6_SEQ,DUNKG_SEQ
 
 
-#d5l_t	.word	3-1
+#d5l_t2	.word	3-1
 	.word	DUNKP_SEQ,DUNKW3_SEQ,DUNKLAY6_SEQ
 
 
@@ -2485,77 +2485,77 @@ d1l_t	.long	#d1l_t,#d2l_t,#d3l_t,#d4l_t
 	.long	#d5l_t,#d4l_t,#d3l_t,#d2l_t, #d1l_t
 
 ;UNDER hoop
-#d1u_t	.word	1-1
+#d1u_t1	.word	1-1
 	.word	DUNKS2_SEQ
 
-#d2u_t	.word	1-1
+#d2u_t1	.word	1-1
 	.word	DUNKA3_SEQ
 
-#d3u_t	.word	1-1
+#d3u_t1	.word	1-1
 	.word	DUNKD2_SEQ
 
-#d4u_t	.word	1-1
+#d4u_t1	.word	1-1
 	.word	DUNKE_SEQ
 
-#d5u_t	.word	1-1
+#d5u_t1	.word	1-1
 	.word	DUNKE_SEQ
 
 
 ;NEAR hoop
-#d1s_t	.word	2-1
+#d1s_t1	.word	2-1
 	.word	DUNKLAY7_SEQ,DUNKLAY6_SEQ
 
-#d2s_t	.word	1-1
+#d2s_t1	.word	1-1
 	.word	DUNKLAY6_SEQ
 
-#d3s_t	.word	2-1
+#d3s_t1	.word	2-1
 	.word	DUNKLAY3C_SEQ,DUNKLAY7_SEQ
 
-#d4s_t	.word	2-1
+#d4s_t1	.word	2-1
 	.word	DUNKLAY3C_SEQ,DUNKLAY6_SEQ
 
-#d5s_t	.word	2-1
+#d5s_t1	.word	2-1
 	.word	DUNKLAY3C_SEQ,DUNKLAY6_SEQ
 
 
 ;MEDIUM to hoop
-#d1m_t	.word	2-1
+#d1m_t1	.word	2-1
 	.word	DUNKLAY6_SEQ,DUNKLAY7_SEQ
 
 
-#d2m_t	.word	2-1
+#d2m_t1	.word	2-1
 	.word	DUNKLAY5_SEQ,DUNKLAY6_SEQ
 
 
-#d3m_t	.word	3-1
+#d3m_t1	.word	3-1
 	.word	DUNKLAY5_SEQ,DUNKLAY6_SEQ,DUNKLAY3C_SEQ
 
 
-#d4m_t	.word	2-1
+#d4m_t1	.word	2-1
 	.word	DUNKLAY3C_SEQ,DUNKLAY6_SEQ
 
-#d5m_t	.word	2-1
+#d5m_t1	.word	2-1
 	.word	DUNKLAY3C_SEQ,DUNKLAY6_SEQ
 
 
 ;FAR from hoop
-#d1l_t	.word	2-1
+#d1l_t1	.word	2-1
 	.word	DUNKLAY5_SEQ,DUNKLAY6_SEQ
 
 
-#d2l_t	.word	2-1
+#d2l_t1	.word	2-1
 	.word	DUNKLAY6_SEQ,DUNKLAY7_SEQ
 
 
-#d3l_t	.word	2-1
+#d3l_t1	.word	2-1
 	.word	DUNKLAY6_SEQ,DUNKLAY8_SEQ
 
 
-#d4l_t	.word	2-1
+#d4l_t1	.word	2-1
 	.word	DUNKLAY3C_SEQ,DUNKLAY6_SEQ
 
 
-#d5l_t	.word	2-1
+#d5l_t1	.word	2-1
 	.word	DUNKLAY3C_SEQ,DUNKLAY6_SEQ
 
 
@@ -2887,7 +2887,7 @@ OFFSCR_X	equ	221
 	move	a11,a11
 	jrz	update
 	dec	a11
-	jruc	cont
+	jruc	contc
 #update
 	movi	[OFFSCR_X,0],a0
 	callr	#set_x
@@ -2895,7 +2895,7 @@ OFFSCR_X	equ	221
 	move	*a10(plyr_meter_time),a14
 	jrnz	onscr
 
-#cont
+#contc
 	SLEEPK	1
 	jruc	offscr_loop
 
@@ -3415,9 +3415,9 @@ OFFSCR_X	equ	221
 
 	move	@clipbits,a2,L
 	cmpi	03ffffH,a2		;18 bits
-	jrlo	#ok
+	jrlo	#ok4
 	clr	a2
-#ok
+#ok4
 #crlp	movk	18-1,a0			;Total # clips
 	calla	RNDRNG0
 	btst	a0,a2
