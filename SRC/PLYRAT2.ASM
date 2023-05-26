@@ -351,13 +351,13 @@ mpat_9a	PULL	a7
 	movi	player_names,a10
 	move	*a2,a0			;get team nbr.
 ;DJT Start
-	jrz	out3
-#lp3
+	jrz	out3a
+#lp3a
 	addi	NEXT_TEAM_NAMES,a10
 	dec	a0
-	jrnz	lp3
+	jrnz	lp3a
 ;DJT End
-#out3
+#out3a
 	move	*a2,a0			;get team nbr. again
 	sll	4,a0
 	add	a3,a0
@@ -370,11 +370,11 @@ mpat_9a	PULL	a7
 	move	*a10,a0,L
 	movi	name_sort,a14
 	movi	-1,a10
-#lp4
+#lp4a
 	inc	a10
 	move	*a14+,a1,L
 	cmp	a1,a0
-	jrnz	lp4
+	jrnz	lp4a
 
 	.if	HEADCK
 	.ref	debug_plyr_num
@@ -391,13 +391,13 @@ mpat_9a	PULL	a7
 
 ;addi 320 for each name
 	movi	ATL_t,a1
-#lp5	cmpi	0,a10
-	jrz	out
+#lp5a	cmpi	0,a10
+	jrz	outa
 	addi	PLYRAT_TBL_SIZE,a1
 	dec	a10
-	jruc	lp5
+	jruc	lp5a
 
-#out
+#outa
 	move	a1,a10
 
 ;if player is playing with special initials use those attributes
@@ -405,13 +405,13 @@ mpat_9a	PULL	a7
 	sll	4,a0				;*16
 	addi	special_heads,a0
 	move	*a0,a0				;a0=head nbr of special head
-	jrn	norm2
+	jrn	norm2a
 
 #ncrtd	
 	movi	PAT_SIZE,a1
 	mpyu	a0,a1
 	addi	spechds_t,a1
-#norm2	move	a1,*a13(plyr_attrib_p),L
+#norm2a	move	a1,*a13(plyr_attrib_p),L
 #norm3	rets
 
 
@@ -466,13 +466,13 @@ a3_tbl	.long	0,32
 	movi	player_names,a10
 	move	*a2,a0
 ;DJT Start
-	jrz	out3
+	jrz	out3b
 #lp3
 	addi	NEXT_TEAM_NAMES,a10
 	dec	a0
 	jrnz	lp3
 ;DJT End
-#out3
+#out3b
 	move	*a2,a0
 	sll	4,a0
 	add	a3,a0
@@ -494,22 +494,22 @@ a3_tbl	.long	0,32
 ;addi 320 for each name
 	movi	ATL_t,a1
 #lp5	cmpi	0,a10
-	jrz	out
+	jrz	outb
 	addi	PLYRAT_TBL_SIZE,a1
 	dec	a10
 	jruc	lp5
 
-#out
+#outb
 
 	move	a8,a0
 	sll	4,a0			;*16
 	addi	special_heads,a0
 	move	*a0,a0
-	jrn	norm2
+	jrn	norm2b
 	movi	PAT_SIZE,a1
 	mpyu	a0,a1
 	addi	spechds_t,a1
-#norm2
+#norm2b
 	addi	272+16,a1			;272
 	move	*a1,a0,L
 	move	*a0(5*32),a0,L
