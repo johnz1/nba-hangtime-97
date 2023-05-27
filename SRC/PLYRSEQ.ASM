@@ -539,10 +539,10 @@ stnddribdef_t
 block_t
 	.word	NOJUMP_M|DRIFT_M|BLOCKREB_M|NOJOY_M
 	.long	seq_stand
-	.long	#1,#2,#3,#4,#5,#4,#3,#2
+	.long	#block_t1,#block_t2,#block_t3,#block_t4,#block_t5,#block_t4,#block_t3,#block_t2
 
 
-#1
+#block_t1
 	WLW	2,w1blokl1,F
 	WLW	2,w1blokl2,F
 	WLL	-1,seq_block,w1blokl4
@@ -554,7 +554,7 @@ block_t
 	WLW	2,w1blokl2,F
 	WLW	2,w1blokl1,F
 	W0
-#2
+#block_t2
 	WLW	2,w2blokl1,F
 	WLW	2,w2blokl2,F
 	WLL	-1,seq_block,w2blokl4
@@ -564,7 +564,7 @@ block_t
 	WLW	2,w2blokl2,F
 	WLW	2,w2blokl1,F
 	W0
-#3
+#block_t3
 	WLW	2,w3blokl1,F
 	WLW	2,w3blokl2,F
 	WLL	-1,seq_block,w3blokl4
@@ -574,7 +574,7 @@ block_t
 	WLW	2,w3blokl2,F
 	WLW	2,w3blokl1,F
 	W0
-#4
+#block_t4
 	WLW	2,w4blokl1,F
 	WLW	2,w4blokl2,F
 	WLL	-1,seq_block,w4blokl4
@@ -584,7 +584,7 @@ block_t
 	WLW	2,w4blokl2,F
 	WLW	2,w4blokl1,F
 	W0
-#5
+#block_t5
 	WLW	2,w5blokl1,F
 	WLW	2,w5blokl2,F
 	WLL	-1,seq_block,w5blokl1
@@ -645,9 +645,9 @@ block_t
 nospear_t
 	.word	NOJUMP_M|DRIFT_M|BLOCKREB_M|NOJOY_M
 	.long	seq_stand
-	.long	#1,#2,#3,#4,#5,#4,#3,#2
+	.long	#nospear_t1,#nospear_t2,#nospear_t3,#nospear_t4,#nospear_t5,#nospear_t4,#nospear_t3,#nospear_t2
 
-#1
+#nospear_t1
 	WLW	1,w1blokl4,F
 	WLW	3,w1reb5,F
 	WLW	99,w1reb7,F
@@ -655,7 +655,7 @@ nospear_t
 	WLW	3,w1reb9,F
 	WLW	3,w1reb10,F
 	W0
-#2
+#nospear_t2
 	WLW	1,w2blokl4,F
 	WLW	3,w2reb3,F
 ;	WLW	1,w2reb4,F
@@ -666,7 +666,7 @@ nospear_t
 	WLW	3,w2reb9,F
 	WLW	3,w2reb10,F
 	W0
-#3
+#nospear_t3
 ;	WLW	1,w3blokl4,F
 ;	WLW	3,w3reb3,F
 ;	WLW	1,w3reb4,F
@@ -676,7 +676,7 @@ nospear_t
 ;	WLW	3,w3reb9,F
 ;	WLW	3,w3reb10,F
 ;	W0
-#4
+#nospear_t4
 	WLW	1,w4blokl4,F
 	WLW	3,w4reb5,F
 	WLW	99,w4reb7,F
@@ -684,7 +684,7 @@ nospear_t
 	WLW	3,w4reb9,F
 	WLW	3,w4reb10,F
 	W0
-#5
+#nospear_t5
 	WLW	1,w5blokl4,F
 	WLW	3,w5reb5,F
 	WLW	99,w5reb7,F
@@ -697,8 +697,8 @@ nospear_t
 blockrej_t
 	.word	NOJUMP_M|DRIFT_M|BLOCKREB_M|NOJOY_M
 	.long	seq_stand
-	.long	#1,#2,#3,#4,#5,#4,#3,#2
-#1
+	.long	#blockrej_t1,#blockrej_t2,#blockrej_t3,#blockrej_t4,#blockrej_t5,#blockrej_t4,#blockrej_t3,#blockrej_t2
+#blockrej_t1
 	WLW	2,w1rej1,F
 	WLL	-1,seq_block,w1rej6	;29
 	WLW	-1,seq_set_hold,25
@@ -768,8 +768,8 @@ seq_hold_block
 
 
 
-#2
-#3
+#blockrej_t2
+#blockrej_t3
 	WLW	2,w2rej1,F
 	WLL	-1,seq_block,w2rej6
 	WLW	-1,seq_set_hold,25
@@ -804,8 +804,8 @@ seq_hold_block
 ;	WLW	3,w3rej10,F	
 ;	WLW	3,w3rej11,F	
 ;	W0
-#4
-#5
+#blockrej_t4
+#blockrej_t5
 	WLW	2,w4rej1,F
 	WLL	-1,seq_block,w4rej1
 	WLW	-1,seq_set_hold,25
@@ -829,8 +829,8 @@ seq_hold_block
 fastblockrej_t
 	.word	NOJUMP_M|DRIFT_M|BLOCKREB_M|NOJOY_M
 	.long	seq_stand
-	.long	#1,#2,#3,#4,#5,#4,#3,#2
-#1
+	.long	#fastblock1,#fastblock2,#fastblock3,#fastblock4,#fastblock5,#fastblock4,#fastblock3,#fastblock2
+#fastblock1
 	WLW	2,w1rej1,F
 	WLL	-1,seq_block,w1rej6	;29
 	WLW	-1,seq_set_hold,25
@@ -849,8 +849,8 @@ fastblockrej_t
 	WLW	3,w1rej10,F	
 	WLW	3,w1rej11,F	
 	W0
-#2
-#3
+#fastblock2
+#fastblock3
 	WLW	2,w2rej1,F
 	WLL	-1,seq_block,w2rej6
 	WLW	-1,seq_set_hold,25
@@ -884,8 +884,8 @@ fastblockrej_t
 ;	WLW	3,w3rej10,F	
 ;	WLW	3,w3rej11,F	
 ;	W0
-#4
-#5
+#fastblock4
+#fastblock5
 	WLW	2,w4rej1,F
 	WLL	-1,seq_block,w4rej1
 ;	WLL	-1,seq_block,w4rej6
@@ -910,8 +910,8 @@ fastblockrej_t
 rebound_t
 	.word	NOJUMP_M|DRIFT_M|BLOCKREB_M|NOSTEAL_M|NOJOY_M
 	.long	seq_stand
-	.long	#1,#2,#3,#4,#5,#4,#3,#2
-#1
+	.long	#rebound_t1,#rebound_t2,#rebound_t3,#rebound_t4,#rebound_t5,#rebound_t4,#rebound_t3,#rebound_t2
+#rebound_t1
 	WLW	2,w1reb10,F
 	WLW	2,w1reb9,F
 	WL	-1,#ck_ball
@@ -923,7 +923,7 @@ rebound_t
 	WLW	3,w1reb9,F
 	WLW	3,w1reb10,F
 	W0
-#1a
+#rebound_t1a
 	WLW	5,w1reb8,F
 	WLW	3,w1reb9,F
 	WLW	3,w1reb10,F
@@ -950,9 +950,9 @@ rebound_t
 #cont
 	rets
 
-#tbl	.long	#1a,#2a,#3a,#4a,#5a,#4a,#3a,#2a
+#tbl	.long	#rebound_t1a,#rebound_t2a,#rebound_t3a,#rebound_t4a,#rebound_t5a,#rebound_t4a,#rebound_t3a,#rebound_t2a
 
-#2
+#rebound_t2
 	WLW	2,w2reb1,F
 	WLW	2,w2reb2,F
 	WL	-1,#ck_ball
@@ -966,7 +966,7 @@ rebound_t
 	WLW	3,w2reb9,F
 	WLW	3,w2reb10,F
 	W0
-#2a
+#rebound_t2a
 	WLW	5,w2reb8,F
 	WLW	3,w2reb9,F
 	WLW	3,w2reb10,F
@@ -988,8 +988,8 @@ rebound_t
 ;	WLW	5,w3reb9,F
 ;	WLW	3,w3reb10,F
 ;	W0
-#3
-#4
+#rebound_t3
+#rebound_t4
 	WLW	2,w4reb10,F
 	WLW	2,w4reb9,F
 	WL	-1,#ck_ball
@@ -1003,12 +1003,12 @@ rebound_t
 	WLW	3,w4reb9,F
 	WLW	3,w4reb10,F
 	W0
-#3a
-#4a
+#rebound_t3a
+#rebound_t4a
 	WLW	5,w4reb9,F
 	WLW	3,w4reb10,F
 	W0
-#5
+#rebound_t5
 	WLW	2,w5reb9,F
 	WLW	2,w5reb8,F
 	WL	-1,#ck_ball
@@ -1019,7 +1019,7 @@ rebound_t
 	WLW	3,w5reb8,F
 	WLW	3,w5reb9,F
 	W0
-#5a
+#rebound_t5a
 	WLW	5,w5reb8,F
 	WLW	3,w5reb9,F
 	W0
@@ -1028,9 +1028,9 @@ rebound_t
 rebounda_t
 	.word	NOJUMP_M|DRIFT_M|BLOCKREB_M|NOSTEAL_M|NOJOY_M|NOCOLLP_M
 	.long	seq_stand
-	.long	#1,#2,#3,#4,#5,#4,#3,#2
-;	.long	#2,#2,#2,#2,#2,#2,#2,#2
-#1
+	.long	#rebounda_t1,#rebounda_t2,#rebounda_t3,#rebounda_t4,#rebounda_t5,#rebounda_t4,#rebounda_t3,#rebounda_t2
+;	.long	#rebounda_t2,#rebounda_t2,#rebounda_t2,#rebounda_t2,#rebounda_t2,#rebounda_t2,#rebounda_t2,#rebounda_t2
+#rebounda_t1
 	WLW	2,w1reb10,F
 	WLW	2,w1reb9,F
 	WL	-1,#ck_ball
@@ -1043,7 +1043,7 @@ rebounda_t
 	WLW	3,w1reb10,F
 	WL	-1,clr_autorbnd
 	W0
-#1a
+#rebounda_t1a
 	WLW	5,w1reb8,F
 	WLW	3,w1reb9,F
 	WLW	3,w1reb10,F
@@ -1073,9 +1073,9 @@ rebounda_t
 #cont
 	rets
 
-#tbl	.long	#1a,#2a,#3a,#4a,#5a,#4a,#3a,#2a
+#tbl	.long	#rebounda_t1a,#rebounda_t2a,#rebounda_t3a,#rebounda_t4a,#rebounda_t5a,#rebounda_t4a,#rebounda_t3a,#rebounda_t2a
 
-#2
+#rebounda_t2
 	WLW	2,w2reb1,F
 	WLW	2,w2reb2,F
 	WL	-1,#ck_ball
@@ -1091,7 +1091,8 @@ rebounda_t
 	WL	-1,clr_autorbnd
 	W0
 
-#2a	WLW	5,w2reb8,F
+#rebounda_t2a
+	WLW	5,w2reb8,F
 	WLW	3,w2reb9,F
 	WLW	3,w2reb10,F
 	WL	-1,clr_autorbnd
@@ -1117,8 +1118,8 @@ rebounda_t
 ;	WL	-1,clr_autorbnd
 ;	W0
 
-#3
-#4
+#rebounda_t3
+#rebounda_t4
 	WLW	2,w4reb10,F
 	WLW	2,w4reb9,F
 	WL	-1,#ck_ball
@@ -1133,13 +1134,13 @@ rebounda_t
 	WLW	3,w4reb10,F
 	WL	-1,clr_autorbnd
 	W0
-#3a
-#4a
+#rebounda_t3a
+#rebounda_t4a
 	WLW	5,w4reb9,F
 	WLW	3,w4reb10,F
 	WL	-1,clr_autorbnd
 	W0
-#5
+#rebounda_t5
 	WLW	2,w5reb9,F
 	WLW	2,w5reb8,F
 	WL	-1,#ck_ball
@@ -1151,7 +1152,8 @@ rebounda_t
 	WLW	3,w5reb9,F
 	WL	-1,clr_autorbnd
 	W0
-#5a	WLW	5,w5reb8,F
+#rebounda_t5a
+	WLW	5,w5reb8,F
 	WLW	3,w5reb9,F
 	WL	-1,clr_autorbnd
 	W0

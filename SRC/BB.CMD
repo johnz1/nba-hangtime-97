@@ -30,7 +30,7 @@ PLYRAT2.OBJ		/* fixed file. basketball player code */
 PLYRSEQ.OBJ		/* basketball plyr sequence code */
 PLYRRSEQ.OBJ		/* basketball plyr sequence code */
 PLYRSEQ2.OBJ		/* basketball plyr sequence code */
-PLYRDSEQ.OBJ		/* basketball plyr dunk sequence code */
+PLYRDSEQ.OBJ		/* nightmare, but done fixin. basketball plyr dunk sequence code */
 PLYRDSQ2.OBJ		/* basketball plyr dunk sequence code */
 PLYRLSEQ.OBJ		/* basketball plyr sequence code */
 PLYRSTND.OBJ		/* basketball plyr sequence code */
