@@ -8,7 +8,7 @@ $directory = "D:\dosbox\tools\c\hangtime\src"
 #$directory = "D:\dosbox\tools\c\hangtime\BACKUP\CODE113M\"
 
 # Get all files in the directory that have a .txt extension
-$files = Get-ChildItem $directory -Filter PLYRSEQ2.ASM
+$files = Get-ChildItem $directory -Filter PLYRDSQ2.ASM
 
 # Loop through each file and find duplicate labels
 foreach ($file in $files) {
