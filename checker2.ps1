@@ -1,4 +1,4 @@
-﻿$sourceFile = "D:\dosbox\tools\c\hangtime\src\old\plyrseq.asm"
+﻿$sourceFile = "D:\dosbox\tools\c\hangtime\src\PLYRRSEQ.asm"
 
 $content = Get-Content $sourceFile
 

@@ -27,7 +27,7 @@ PLYR3.OBJ		/* fixed file. basketball player code */
 PLYRAT.OBJ		/* no changes. basketball player code */
 PLYRAT2.OBJ		/* fixed file. basketball player code */
 /* PLYRAT3.OBJ - unused, but built during make. */
-PLYRSEQ.OBJ		/* basketball plyr sequence code */
+PLYRSEQ.OBJ		/* fixed file. basketball plyr sequence code */
 PLYRRSEQ.OBJ		/* basketball plyr sequence code */
 PLYRSEQ2.OBJ		/* basketball plyr sequence code */
 PLYRDSEQ.OBJ		/* nightmare, but done fixin. basketball plyr dunk sequence code */

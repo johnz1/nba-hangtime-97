@@ -84,7 +84,7 @@ run_t
 runturb_t
 	.word	0
 	.long	0
-	.long	#1,#2,#3,#4,#5,#4,#3,#2
+	.long	#rt1,#rt2,#rt3,#rt4,#rt5,#rt4,#rt3,#rt2
 	.asg	3,N
 
 ;runturb_t
@@ -96,7 +96,7 @@ runturb_t
 ;FIX!!!
 ;Could reduce overhead here!
 
-#1
+#rt1
 	.ref	seq_ck_turbo
 	.ref	seq_skip_1frm
 	.ref	seq_ck_drib_turbo
@@ -150,7 +150,7 @@ runturb_t
 	WL	-1,seq_skip_1frm
 	WLW	2,w1run11,F
 	W0
-#2
+#rt2
 	WL	-1,seq_ck_turbo
 	WLW	1,w2run1,F
 	WL	-1,seq_skip_1frm
@@ -200,7 +200,7 @@ runturb_t
 	WL	-1,seq_skip_1frm
 	WLW	2,w2run11,F
 	W0
-#3
+#rt3
 ;	WL	-1,seq_run
 	WL	-1,seq_ck_turbo
 	WLW	3,w3run1,F
@@ -247,7 +247,7 @@ runturb_t
 	WL	-1,seq_skip_1frm
 	WLW	2,w3spr11,F
 	W0
-#4
+#rt4
 	WL	-1,seq_ck_turbo
 	WLW	3,w4run1,F
 	WL	-1,seq_skip_1frm
@@ -293,7 +293,7 @@ runturb_t
 	WL	-1,seq_skip_1frm
 	WLW	2,w4spr11,F
 	W0
-#5
+#rt5
 	WL	-1,seq_ck_turbo
 	WLW	3,w5run1,F
 	WL	-1,seq_skip_1frm
@@ -345,7 +345,7 @@ rundrib_t
 rundribturb_t
 	.word	DRIBBLE_M
 	.long	0
-	.long	#1,#2,#3,#4,#5,#4,#3,#2
+	.long	#rtb1,#rtb2,#rtb3,#rtb4,#rtb5,#rtb4,#rtb3,#rtb2
 	.asg	3,N
 
 ;	.word	DRIBBLE_M
@@ -355,7 +355,7 @@ rundribturb_t
 
 
 
-#1
+#rtb1
 	WL	-1,seq_ck_drib_turbo
 	WLW	1,w1drun1,F
 	WL	-1,seq_skip_1frm
@@ -405,7 +405,7 @@ rundribturb_t
 	WL	-1,seq_skip_1frm
 	WLW	2,w1drun11,F
 	W0
-#2
+#rtb2
 	WL	-1,seq_ck_drib_turbo
 	WLW	1,w2drun1,F
 	WL	-1,seq_skip_1frm
@@ -455,7 +455,7 @@ rundribturb_t
 	WL	-1,seq_skip_1frm
 	WLW	2,w2drun11,F
 	W0
-#3
+#rtb3
 	WL	-1,seq_ck_drib_turbo
 	WLW	1,w3drun1,F
 	WL	-1,seq_skip_1frm
@@ -505,7 +505,7 @@ rundribturb_t
 	WL	-1,seq_skip_1frm
 	WLW	2,w3dspr11,F
 	W0
-#4
+#rtb4
 	WL	-1,seq_ck_drib_turbo
 	WLW	1,w4drun1,F
 	WL	-1,seq_skip_1frm
@@ -555,7 +555,7 @@ rundribturb_t
 	WL	-1,seq_skip_1frm
 	WLW	2,w4dspr11,F
 	W0
-#5
+#rtb5
 	WL	-1,seq_ck_drib_turbo
 	WLW	1,w5drun1,F
 	WL	-1,seq_skip_1frm
@@ -908,10 +908,10 @@ walkbdef_t
 walkldef_t
 	.word	WALK_M
 	.long	seq_resetseq
-	.long	#1,#2,#3,#4
-	.long	#5,#4,#3,#2
+	.long	#wdef1,#wdef2,#wdef3,#wdef4
+	.long	#wdef5,#wdef4,#wdef3,#wdef2
 
-#1
+#wdef1
 	WLW	2,w1dfcr1,F
 	WLW	2,w1dfcr2,F
 	WLW	2,w1dfcr3,F
@@ -919,7 +919,7 @@ walkldef_t
 	WLW	2,w1dfcr5,F
 	WLW	2,w1dfcr6,F
 	W0
-#2
+#wdef2
 	WLW	2,w2dfcr1,F
 ;	WLW	2,w2dfcr6,F
 	WLW	2,w2dfcr5,F
@@ -927,7 +927,7 @@ walkldef_t
 	WLW	2,w2dfcr3,F
 	WLW	2,w2dfcr2,F
 	W0
-#3
+#wdef3
 	WLW	2,w3dfcr1,F
 	WLW	2,w3dfcr9,F
 	WLW	2,w3dfcr8,F
@@ -938,7 +938,7 @@ walkldef_t
 	WLW	2,w3dfcr3,F
 	WLW	2,w3dfcr2,F
 	W0
-#4
+#wdef4
 	WLW	2,w4dfcr1,F
 	WLW	2,w4dfcr9,F
 	WLW	2,w4dfcr8,F
@@ -949,7 +949,7 @@ walkldef_t
 	WLW	2,w4dfcr3,F
 	WLW	2,w4dfcr2,F
 	W0
-#5
+#wdef5
 	WLW	2,w5dfcr1,F
 	WLW	2,w5dfcr9,F
 	WLW	2,w5dfcr8,F
@@ -965,10 +965,10 @@ walkldef_t
 walkrdef_t
 	.word	WALK_M
 	.long	seq_resetseq
-	.long	#1,#2,#3,#4
-	.long	#5,#4,#3,#2
+	.long	#wdt1,#wdt2,#wdt3,#wdt4
+	.long	#wdt5,#wdt4,#wdt3,#wdt2
 
-#1
+#wdt1
 	WLW	2,w1dfcr1,F
 	WLW	2,w1dfcr6,F
 	WLW	2,w1dfcr5,F
@@ -976,7 +976,7 @@ walkrdef_t
 	WLW	2,w1dfcr3,F
 	WLW	2,w1dfcr2,F
 	W0
-#2
+#wdt2
 	WLW	2,w2dfcr1,F
 	WLW	2,w2dfcr2,F
 	WLW	2,w2dfcr3,F
@@ -984,7 +984,7 @@ walkrdef_t
 	WLW	2,w2dfcr5,F
 ;	WLW	2,w2dfcr6,F
 	W0
-#3
+#wdt3
 	WLW	2,w3dfcr1,F
 	WLW	2,w3dfcr2,F
 	WLW	2,w3dfcr3,F
@@ -995,7 +995,7 @@ walkrdef_t
 	WLW	2,w3dfcr8,F
 	WLW	2,w3dfcr9,F
 	W0
-#4
+#wdt4
 	WLW	2,w4dfcr1,F
 	WLW	2,w4dfcr2,F
 	WLW	2,w4dfcr3,F
@@ -1006,7 +1006,7 @@ walkrdef_t
 	WLW	2,w4dfcr8,F
 	WLW	2,w4dfcr9,F
 	W0
-#5
+#wdt5
 	WLW	2,w5dfcr1,F
 	WLW	2,w5dfcr2,F
 	WLW	2,w5dfcr3,F

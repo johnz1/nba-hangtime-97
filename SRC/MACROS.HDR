@@ -199,7 +199,7 @@ WL	.macro	w,l
 	.word	:w:
 	.long	:l:
 	.endm
-WLW	.macro	w,l,w2
+WLW	.macro	w,l,w2 
 	.word	:w:
 	.long	:l:
 	.word	:w2:
