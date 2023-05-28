@@ -118,10 +118,10 @@ M_YF	.equ	08000H	;Y free (OFLAGS)
 quicklay_t
 	.word	NOJUMP_M|SHOOT_M|NOJOY_M
 	.long	seq_stand
-	.long	#1,#2,#3,#4,#5,#4,#3,#2
+	.long	#ql1,#ql2,#ql3,#ql4,#ql5,#ql4,#ql3,#ql2
 	.asg	3,N
 
-#1
+#ql1
 	WLW	2,S1SETLA1,F
 	WL	-1,seq_jump
 	WLW	3,S1SETLA2,F
@@ -136,7 +136,7 @@ quicklay_t
 	WLW	-1,seq_newdir,0*16
 	W0
 
-#2
+#ql2
 	WL	-1,pick_rand2
 	WLW	2,S2HBHLA1,F
 	WL	-1,seq_jump
@@ -152,7 +152,7 @@ quicklay_t
 	WLW	-1,seq_newdir,1*16
 	W0
 
-#3
+#ql3
 	WL	-1,pick_rand3
 	WLW	2,M3SPRLA1,F
 	WL	-1,seq_jump
@@ -168,7 +168,7 @@ quicklay_t
 	WLW	-1,seq_newdir,1*16
 	W0
 
-#3a
+#ql3a
 	WLW	2,S3HBHLA1,F
 	WL	-1,seq_jump
 	WLW	3,S3HBHLA2,F
@@ -182,7 +182,7 @@ quicklay_t
 	WLW	-1,seq_newdir,1*16
 	W0
 
-#4
+#ql4
 	WLW	3,S4SETLA1,F
 	WL	-1,seq_jump
 	WLW	3,S4SETLA2,F
@@ -197,7 +197,7 @@ quicklay_t
 	WLW	-1,seq_newdir,3*16
 	W0
 
-#5
+#ql5
 	WLW	3,S5SETLA1,F
 	WL	-1,seq_jump
 	WLW	3,S5SETLA2,F
@@ -226,7 +226,7 @@ rs2
 
 
 rand2_tbl
-	.long	#3a,0,0,#3a,0,#3a,0
+	.long	#ql3a,0,0,#ql3a,0,#ql3a,0
 
 	
 
@@ -243,7 +243,7 @@ rs3	rets
 
 
 rand3_tbl
-	.long	#3a,0,#3a,0,0,#3a,0
+	.long	#ql3a,0,#ql3a,0,0,#ql3a,0
 ;	.long	#3a,#3a,#3a,#3a,#3a,#3a,#3a
 
 
@@ -251,10 +251,10 @@ rand3_tbl
 layup_t
 	.word	NOJUMP_M|SHOOT_M|NOJOY_M
 	.long	seq_stand
-	.long	#1,#2,#3,#4,#5,#4,#3,#2
+	.long	#lu1,#lu2,#lu3,#lu4,#lu5,#lu4,#lu3,#lu2
 	.asg	3,N
 
-#1
+#lu1
 	WLW	2,S1SETLA1,F
 	WL	-1,seq_jump
 	WLW	3,S1SETLA2,F
@@ -271,7 +271,7 @@ layup_t
 	WLW	-1,seq_newdir,0*16
 	W0
 
-#2
+#lu2
 	WLW	2,S2HBHLA1,F
 	WL	-1,seq_jump
 	WLW	3,S2HBHLA2,F
@@ -288,7 +288,7 @@ layup_t
 	WLW	-1,seq_newdir,1*16
 	W0
 
-#3
+#lu3
 	WLW	2,M3SPRLA1,F
 	WL	-1,seq_jump
 	WLW	3,M3SPRLA2,F
@@ -305,7 +305,7 @@ layup_t
 	WLW	-1,seq_newdir,1*16
 	W0
 
-#3a
+#lu3a
 	WLW	1,S3HBHLA1,F
 	WL	-1,seq_jump
 	WLW	3,S3HBHLA1,F
@@ -321,7 +321,7 @@ layup_t
 	WLW	-1,seq_newdir,1*16
 	W0
 
-#4
+#lu4
 	WLW	2,S4SETLA1,F
 	WL	-1,seq_jump
 	WLW	3,S4SETLA2,F
@@ -337,7 +337,7 @@ layup_t
 	WLW	-1,seq_newdir,3*16
 	W0
 
-#5
+#lu5
 	WLW	3,S5SETLA1,F
 	WL	-1,seq_jump
 	WLW	3,S5SETLA2,F
@@ -359,10 +359,10 @@ layup_t
 layupreb_t
 	.word	NOJUMP_M|SHOOT_M|NOJOY_M
 	.long	seq_stand
-	.long	#1,#2,#3,#4,#5,#4,#3,#2
+	.long	#lur1,#lur2,#lur3,#lur4,#lur5,#lur4,#lur3,#lur2
 	.asg	3,N
 
-#1
+#lur1
 	WLW	2,S1SETLA1,F
 	WLW	3,S1SETLA2,F
 	WLW	3,S1SETLA3,F
@@ -378,7 +378,7 @@ layupreb_t
 	W0
 
 
-#2
+#lur2
 	WLW	2,S2HBHLA1,F
 	WLW	3,S2HBHLA2,F
 	WLW	3,S2HBHLA3,F
@@ -393,7 +393,7 @@ layupreb_t
 	WLW	-1,seq_newdir,1*16
 	W0
 
-#3
+#lur3
 	WLW	2,S3HBHLA1,F
 	WLW	3,S3HBHLA2,F
 	WLW	1,S3HBHLA3,F
@@ -407,7 +407,7 @@ layupreb_t
 	WLW	-1,seq_newdir,1*16
 	W0
 
-#4
+#lur4
 	WLW	3,S4SETLA1,F
 	WLW	3,S4SETLA2,F
 	WLW	3,S4SETLA3,F
@@ -421,7 +421,7 @@ layupreb_t
 	WLW	3,S4SETLA9,F
 	WLW	-1,seq_newdir,3*16
 	W0
-#5
+#lur5
 	WLW	3,S5SETLA1,F
 	WLW	3,S5SETLA2,F
 	WLW	3,S5SETLA3,F

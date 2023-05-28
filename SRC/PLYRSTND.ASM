@@ -194,12 +194,12 @@ stndwb_t
 stndwb2_t
 	.word	EASYSTAG_M|NOMV_M
 	.long	0
-	.long	#stndwb1_l,#stndwb2_l,#stndwb3_l,#stndwb4_l
-	.long	#stndwb5_l,#stndwb4_l,#stndwb3_l,#stndwb2_l
+	.long	#stndwb1a_l,#stndwb2a_l,#stndwb3a_l,#stndwb4a_l
+	.long	#stndwb5a_l,#stndwb4a_l,#stndwb3a_l,#stndwb2a_l
 
 
 	.asg	5,N		;5
-#stndwb1_l
+#stndwb1a_l
 
 	WLW	N,w1stwbl1,F
 	WLW	N,w1stwbl2,F
@@ -208,7 +208,7 @@ stndwb2_t
 	WLW	N,w1stwbl3,F
 	WLW	N,w1stwbl2,F
 	W0
-#stndwb2_l
+#stndwb2a_l
 	WLW	N,w2stwbl1,F
 	WLW	N,w2stwbl2,F
 	WLW	N,w2stwbl3,F
@@ -216,7 +216,7 @@ stndwb2_t
 	WLW	N,w2stwbl3,F
 	WLW	N,w2stwbl2,F
 	W0
-#stndwb3_l
+#stndwb3a_l
 	WLW	N,w3stwbl1,F
 	WLW	N,w3stwbl2,F
 	WLW	N,w3stwbl3,F
@@ -224,7 +224,7 @@ stndwb2_t
 	WLW	N,w3stwbl3,F
 	WLW	N,w3stwbl2,F
 	W0
-#stndwb4_l
+#stndwb4a_l
 	WLW	N,w4stwbl1,F
 	WLW	N,w4stwbl2,F
 	WLW	N,w4stwbl3,F
@@ -232,7 +232,7 @@ stndwb2_t
 	WLW	N,w4stwbl3,F
 	WLW	N,w4stwbl2,F
 	W0
-#stndwb5_l
+#stndwb5a_l
 	WLW	N,w5stwbl1,F
 	WLW	N,w5stwbl2,F
 	WLW	N,w5stwbl3,F

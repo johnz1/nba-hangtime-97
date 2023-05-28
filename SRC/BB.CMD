@@ -28,13 +28,13 @@ PLYRAT.OBJ		/* no changes. basketball player code */
 PLYRAT2.OBJ		/* fixed file. basketball player code */
 /* PLYRAT3.OBJ - unused, but built during make. */
 PLYRSEQ.OBJ		/* fixed file. basketball plyr sequence code */
-PLYRRSEQ.OBJ		/* fixed file. basketball plyr sequence code */
+PLYRRSEQ.OBJ		/* fixed file. basketball plyr run sequence code */
 PLYRSEQ2.OBJ		/* fixed file. basketball plyr sequence code */
 PLYRDSEQ.OBJ		/* nightmare, but done fixin. basketball plyr dunk sequence code */
-PLYRDSQ2.OBJ		/* basketball plyr dunk sequence code */
-PLYRLSEQ.OBJ		/* basketball plyr sequence code */
-PLYRSTND.OBJ		/* basketball plyr sequence code */
-SCORE.OBJ		/* score stuff */
+PLYRDSQ2.OBJ		/* fixed file. basketball plyr dunk sequence code*/
+PLYRLSEQ.OBJ		/* fixed file. basketball plyr layups sequence code  */
+PLYRSTND.OBJ		/* fixed file. basketball plyr stand sequence code */
+SCORE.OBJ		/* fixed file. doublecheck! score stuff,clocks,on fire clk.. */
 SCORE2.OBJ		/* score stuff */
 SOUNDS.OBJ		/* sound processor */
 PATCH.OBJ		/* TV PATCH/BREAKPOINT HOOK */

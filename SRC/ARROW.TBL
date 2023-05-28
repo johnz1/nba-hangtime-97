@@ -1,0 +1,128 @@
+	.DATA
+arrown1l:
+	.word   28,16,0,0
+	.long   04f63930H
+	.word   05000H
+	.long   ARR_B_P
+arrown1r:
+	.word   28,16,0,0
+	.long   04f641f0H
+	.word   05000H
+	.long   ARR_B_P
+arrown2l:
+	.word   28,16,0,0
+	.long   04f64ab0H
+	.word   05000H
+	.long   ARR_G_P
+arrown2r:
+	.word   28,16,0,0
+	.long   04f65370H
+	.word   05000H
+	.long   ARR_G_P
+arrown3l:
+	.word   28,16,0,0
+	.long   04f65c30H
+	.word   05000H
+	.long   ARR_Y_P
+arrown3r:
+	.word   28,16,0,0
+	.long   04f664f0H
+	.word   05000H
+	.long   ARR_Y_P
+arrown4l:
+	.word   28,16,0,0
+	.long   04f66db0H
+	.word   05000H
+	.long   ARR_R_P
+arrown4r:
+	.word   28,16,0,0
+	.long   04f67670H
+	.word   05000H
+	.long   ARR_R_P
+arrown1t:
+	.word   16,26,7,25
+	.long   04f67f30H
+	.word   05000H
+	.long   ARR_B_P
+arrown2t:
+	.word   16,26,7,25
+	.long   04f68750H
+	.word   05000H
+	.long   ARR_G_P
+arrown3t:
+	.word   16,26,7,25
+	.long   04f68f70H
+	.word   05000H
+	.long   ARR_Y_P
+arrown4t:
+	.word   16,26,7,25
+	.long   04f69790H
+	.word   05000H
+	.long   ARR_R_P
+arrown1l2p:
+	.word   28,16,0,0
+	.long   04f63930H
+	.word   05000H
+	.long   ARR_B_P
+arrown1r2p:
+	.word   28,16,0,0
+	.long   04f641f0H
+	.word   05000H
+	.long   ARR_B_P
+arrown2l2p:
+	.word   28,16,0,0
+	.long   04f64ab0H
+	.word   05000H
+	.long   ARR_R_P
+arrown2r2p:
+	.word   28,16,0,0
+	.long   04f65370H
+	.word   05000H
+	.long   ARR_R_P
+arrown1t2p:
+	.word   16,26,7,25
+	.long   04f67f30H
+	.word   05000H
+	.long   ARR_B_P
+arrown2t2p:
+	.word   16,26,7,25
+	.long   04f68750H
+	.word   05000H
+	.long   ARR_R_P
+nflash1:
+	.word   3,3,1,1
+	.long   04f69fb0H
+	.word   06000H
+	.long   BBALFLA_P
+nflash2:
+	.word   9,9,4,4
+	.long   04f69fe6H
+	.word   06000H
+	.long   BBALFLA_P
+nflash3:
+	.word   20,19,10,9
+	.long   04f6a1ccH
+	.word   06000H
+	.long   BBALFLA_P
+nflash3a:
+	.word   35,37,17,18
+	.long   04f6aab4H
+	.word   06000H
+	.long   BBALFLA_P
+nflash4:
+	.word   22,23,11,11
+	.long   04f6c90eH
+	.word   06000H
+	.long   BBALFLA_P
+nflash5:
+	.word   50,44,24,22
+	.long   04f6d4eaH
+	.word   06000H
+	.long   BBALFLA_P
+nflash6:
+	.word   61,51,30,25
+	.long   04f7087aH
+	.word   06000H
+	.long   BBALFLA_P
+	.TEXT
+
