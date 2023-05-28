@@ -90,12 +90,12 @@ M_YF	.equ	08000H	;Y free (OFLAGS)
 tip_t
 	.word	NOJOY_M|NOCOLLP_M|NOBALL_M|NOJUMP_M
 	.long	0
-	.long	#1,#2,#3,#4,#5,#4,#3,#2
+	.long	#t1,#t2,#t3,#t4,#t5,#t4,#t3,#t2
 
 	.asg	3,N
 
-#1
-#2
+#t1
+#t2
 	WLW	N,w2tipst1,F
 	WLW	N,w2tipst2,F
 	WLW	N,w2tipst3,F
@@ -106,9 +106,9 @@ tip_t
 	WLW	N,w2tipst2,F
 	W0
 
-#3
-#4
-#5
+#t3
+#t4
+#t5
 	WLW	4,w4tipst1,F
 	WLW	4,w4tipst2,F
 	WLW	4,w4tipst3,F
@@ -123,11 +123,11 @@ tip_t
 tipj_t
 	.word	NOJOY_M|NOCOLLP_M|NOBALL_M|NOJUMP_M
 	.long	seq_stand
-	.long	#1,#2,#3,#4,#5,#4,#3,#2
+	.long	#tj1,#tj2,#tj3,#tj4,#tj5,#tj4,#tj3,#tj2
 
 
-#1
-#2
+#tj1
+#tj2
 	WLW	3,w2tip1,F
 	WLW	3,w2tip2,F
 	WLW	3,w2tip3,F
@@ -138,9 +138,9 @@ tipj_t
 	WLW	3,w2tip5,F
 	WLW	3,w2tip4,F
 	W0
-#3
-#4
-#5
+#tj3
+#tj4
+#tj5
 	WLW	3,w4tip1,F
 	WLW	3,w4tip2,F
 	WLW	3,w4tip3,F
@@ -158,11 +158,11 @@ tipstnd_t
 ;	.word	NOJOY_M|NOCOLLP_M|NOBALL_M|NOJUMP_M
 	.word	NOJOY_M|NOCOLLP_M|NOJUMP_M
 	.long	seq_stand
-	.long	#1,#2,#3,#4,#5,#4,#3,#2
+	.long	#tst1,#tst2,#tst3,#tst4,#tst5,#tst4,#tst3,#tst2
 
 
-#1
-#2
+#tst1
+#tst2
 	WLW	3,w2hndne5,F
 	WLW	3,w2hndne4,F
 	WLW	3,w2hndne3,F
@@ -236,9 +236,9 @@ tipstnd_t
 	WLW	1,w2stand1,F
 	W0
 
-#3
-#4
-#5
+#tst3
+#tst4
+#tst5
 	WLW	24,w4hndhp5,F
 	WLW	29,w4hndhp5,F
 	WLW	29,w4hndhp5,F
@@ -290,9 +290,9 @@ tipstnd_t
 alleyoop_pas_t
 	.word	PASS_M|NOJUMP_M|NOJOY_M
 	.long	seq_stand
-	.long	#1,#2,#3,#4,#5,#4,#3,#2
+	.long	#aop1,#aop2,#aop3,#aop4,#aop5,#aop4,#aop3,#aop2
 	
-#1
+#aop1
 	WLW	3,W1ALPAS1,F
 	WLW	3,W1ALPAS2,F
 	WLW	3,W1ALPAS3,F
@@ -304,7 +304,7 @@ alleyoop_pas_t
 	WLW	3,W1ALPAS1,F
 	W0
 
-#2
+#aop2
 	WLW	3,W2ALPAS1,F
 	WLW	3,W2ALPAS2,F
 	WLW	3,W2ALPAS3,F
@@ -316,7 +316,7 @@ alleyoop_pas_t
 	WLW	3,W2ALPAS1,F
 	W0
 
-#3
+#aop3
 	WLW	3,W3ALPAS1,F
 	WLW	3,W3ALPAS2,F
 	WLW	3,W3ALPAS3,F
@@ -328,7 +328,7 @@ alleyoop_pas_t
 	WLW	3,W3ALPAS1,F
 	W0
 
-#4
+#aop4
 	WLW	3,W4ALPAS1,F
 	WLW	3,W4ALPAS2,F
 	WLW	3,W4ALPAS3,F
@@ -340,7 +340,7 @@ alleyoop_pas_t
 	WLW	3,W4ALPAS1,F
 	W0
 	
-#5
+#aop5
 	WLW	3,W5ALPAS1,F
 	WLW	3,W5ALPAS2,F
 	WLW	3,W5ALPAS3,F
@@ -359,7 +359,7 @@ alleyoop_pas_t
 passnl_t
 	.word	PASS_M|NOJOY_M
 	.long	seq_stand
-	.long	#1,#1,#1,#1,#1,#1,#1,#1
+	.long	#pnl1,#pnl1,#pnl1,#pnl1,#pnl1,#pnl1,#pnl1,#pnl1
 
 	.asg	3,N
 #choose
@@ -371,11 +371,11 @@ passnl_t
 	move	a0,b4
 	rets
 
-#tbl	.long	#1a,#2,#3,#4,#5,#6,#7,#8
+#tbl	.long	#pnl1a,#pnl2,#pnl3,#pnl4,#pnl5,#pnl6,#pnl7,#pnl8
 
-#1
+#pnl1
 	WL	-1,#choose
-#1a
+#pnl1a
 	WLW	3,W1NLPR1,F
 	WLW	3,W1NLPR2,F
 	WL	-1,plyr_pass
@@ -386,8 +386,8 @@ passnl_t
 	WLW	3,W1NLPR1,F
 	WLW	-1,seq_newdir,0*16
 	W0
-#2
-#8
+#pnl2
+#pnl8
 	WLW	3,W2NLPR1,F
 	WLW	3,W2NLPR2,F
 	WLW	3,W2NLPR3,F
@@ -398,8 +398,8 @@ passnl_t
 	WLW	3,W2NLPR1,F
 	WLW	-1,seq_newdir,1*16
 	W0
-#3
-#7
+#pnl3
+#pnl7
 	WLW	3,W3NLPR1,F
 	WLW	3,W3NLPR2,F
 	WLW	3,W3NLPR3,F
@@ -411,8 +411,8 @@ passnl_t
 	WLW	3,W3NLPR1,F
 	WLW	-1,seq_newdir,2*16
 	W0
-#4
-#6
+#pnl4
+#pnl6
 	WLW	3,W4NLPR1,F
 	WLW	3,W4NLPR2,F
 	WLW	3,W4NLPR3,F
@@ -423,7 +423,7 @@ passnl_t
 	WLW	3,W4NLPR1,F
 	WLW	-1,seq_newdir,3*16
 	W0
-#5
+#pnl5
 	WLW	3,W5NLPR1,F
 	WLW	3,W5NLPR2,F
 	WL	-1,plyr_pass
@@ -440,9 +440,9 @@ passnl_t
 stagger_t
 	.word	NOMV_M|NOBALL_M|NOJUMP_M|NOJOY_M|SAMEDIR_M
 	.long	seq_stand
-	.long	#1,#2,#3,#4,#5,#4,#3,#2
+	.long	#stg1,#stg2,#stg3,#stg4,#stg5,#stg4,#stg3,#stg2
 	.asg	5,N				;4
-#1
+#stg1
 	WLW	N,w1flai1,F
 	WLL	-1,seq_snd,boo_snd
 	WLW	N,w1flai2,F
@@ -451,7 +451,7 @@ stagger_t
 	WLW	N,w1flai1,F
 	W0
 
-#2
+#stg2
 	WLW	N,w2flai1,F
 	WLL	-1,seq_snd,boo_snd
 	WLW	N,w2flai2,F
@@ -459,7 +459,7 @@ stagger_t
 	WLW	N,w2flai2,F
 	WLW	N,w2flai1,F
 	W0
-#3
+#stg3
 	WLW	N,w3flai1,F
 	WLL	-1,seq_snd,boo_snd
 	WLW	N,w3flai2,F
@@ -469,7 +469,7 @@ stagger_t
 	WLW	N,w3flai2,F
 	WLW	N,w3flai1,F
 	W0
-#4
+#stg4
 	WLW	N,w4flai1,F
 	WLL	-1,seq_snd,boo_snd
 	WLW	N,w4flai2,F
@@ -478,7 +478,7 @@ stagger_t
 	WLW	N,w4flai1,F
 	W0
 
-#5
+#stg5
 	WLW	N,w5flai2,F
 	WLL	-1,seq_snd,boo_snd
 	WLW	N,w5flai3,F
@@ -493,9 +493,9 @@ stagger_t
 fall_t
 	.word	NOMV_M|NOBALL_M|NOJUMP_M|NOJOY_M|SAMEDIR_M
 	.long	seq_stand
-	.long	#1,#2,#3,#4,#5,#4,#3,#2
+	.long	#fall1,#fall2,#fall3,#fall4,#fall5,#fall4,#fall3,#fall2
 	.asg	2,N
-#1
+#fall1
 	WLWWW	-1,seq_offset2,0,-32,0
 	WLW	N,w1fall1,F
 	WLL	-1,seq_snd,fall1_snd
@@ -530,7 +530,7 @@ seq_clr_flag
 	clr	a0
 	move	a0,*a13(plyr_offset_flag)
 	rets
-#2
+#fall2
 	WLWWW	-1,seq_offset2,0,-30,0
 	WLW	N,w2fall1,F
 	WLL	-1,seq_snd,fall1_snd
@@ -558,7 +558,7 @@ seq_clr_flag
 	WLW	N,w2fall20,F
 	WLW	N,w2fall21,F
 	W0
-#3
+#fall3
 	WLWWW	-1,seq_offset2,0,-37,0
 	WLW	N,w3fall1,F
 	WLL	-1,seq_snd,fall1_snd
@@ -589,7 +589,7 @@ seq_clr_flag
 	WLW	N,w3fall23,F
 	WLW	N,w3fall24,F
 	W0
-#4
+#fall4
 	WLWWW	-1,seq_offset2,0,-37,0
 	WLW	N,w4fall1,F
 	WLL	-1,seq_snd,fall1_snd
@@ -619,7 +619,7 @@ seq_clr_flag
 	WLW	N,w4fall22,F
 	W0
 
-#5
+#fall5
 	WLWWW	-1,seq_offset2,0,-42,0
 	WLW	N,w5fall1,F
 	WLL	-1,seq_snd,fall1_snd
@@ -654,13 +654,13 @@ seq_clr_flag
 flyback_t
 	.word	NOMV_M|NOBALL_M|NOJUMP_M|NOJOY_M|NOCOLLP_M|SAMEDIR_M
 	.long	seq_stand
-	.long	#1,#2,#3,#4,#5,#4,#3,#2
+	.long	#fbk1,#fbk2,#fbk3,#fbk4,#fbk5,#fbk4,#fbk3,#fbk2
 flybackwb_t
 	.word	NOMV_M|NOJUMP_M|NOJOY_M|NOCOLLP_M|SAMEDIR_M
 	.long	seq_stand
-	.long	#1,#2,#3,#4,#5,#4,#3,#2
+	.long	#fbk1,#fbk2,#fbk3,#fbk4,#fbk5,#fbk4,#fbk3,#fbk2
 	.asg	2,N
-#1
+#fbk1
 	WLWWW	-1,seq_offset2,0,-32,0
 	WLW	N,w1fall1,F
 	WLL	-1,seq_snd,fall1_snd
@@ -694,7 +694,7 @@ flybackwb_t
 	WLW	N,w1fall23,F
 	W0
 
-#2
+#fbk2
 	WLWWW	-1,seq_offset2,0,-30,0
 	WLW	N,w2fall1,F
 	WLL	-1,seq_snd,fall1_snd
@@ -725,7 +725,7 @@ flybackwb_t
 	WLW	N,w2fall20,F
 	WLW	N,w2fall21,F
 	W0
-#3
+#fbk3
 	WLWWW	-1,seq_offset2,0,-37,0
 	WLW	N,w3fall1,F
 	WLL	-1,seq_snd,fall1_snd
@@ -759,7 +759,7 @@ flybackwb_t
 	WLW	N,w3fall23,F
 	WLW	N,w3fall24,F
 	W0
-#4
+#fbk4
 	WLWWW	-1,seq_offset2,0,-37,0
 	WLW	N,w4fall1,F
 	WLL	-1,seq_snd,fall1_snd
@@ -792,7 +792,7 @@ flybackwb_t
 	WLW	N,w4fall22,F
 	W0
 
-#5
+#fbk5
 	WLWWW	-1,seq_offset2,0,-42,0
 	WLW	N,w5fall1,F
 	WLL	-1,seq_snd,fall1_snd
@@ -828,13 +828,13 @@ flybackwb_t
 flyback2_t	;(push, no fall)
 	.word	NOMV_M|NOJOY_M|NOBALL_M|NOJUMP_M|NOCOLLP_M|SAMEDIR_M
 	.long	seq_stand
-	.long	#1,#2,#3,#4,#5,#4,#3,#2
+	.long	#fbl21,#fbl22,#fbl23,#fbl24,#fbl25,#fbl24,#fbl23,#fbl22
 flybackwb2_t
 	.word	NOMV_M|NOJOY_M|NOJUMP_M|NOSTEAL_M|NOCOLLP_M|SAMEDIR_M
 	.long	seq_stand
-	.long	#1,#2,#3,#4,#5,#4,#3,#2
+	.long	#fbl21,#fbl22,#fbl23,#fbl24,#fbl25,#fbl24,#fbl23,#fbl22
 	.asg	3,N
-#1
+#fbl21
 	WLW	N,w1flai1,F
 ;	WLL	-1,seq_snd,boo_snd
 	WLL	-1,seq_snd,flail_snd
@@ -847,7 +847,7 @@ flybackwb2_t
 	WLW	N,w1flai8,F
 	W0
 
-#2
+#fbl22
 	WLW	N,w2flai1,F
 ;	WLL	-1,seq_snd,boo_snd
 	WLL	-1,seq_snd,flail_snd
@@ -861,7 +861,7 @@ flybackwb2_t
 	WLW	N,w2flai9,F
 	WLW	N,w2flai11,F
 	W0
-#3
+#fbl23
 	WLW	N,w3flai1,F
 ;	WLL	-1,seq_snd,boo_snd
 	WLL	-1,seq_snd,flail_snd
@@ -875,7 +875,7 @@ flybackwb2_t
 	WLW	N,w3flai9,F
 	WLW	N,w3flai1,F
 	W0
-#4
+#fbl24
 	WLW	N,w4flai1,F
 ;	WLL	-1,seq_snd,boo_snd
 	WLL	-1,seq_snd,flail_snd
@@ -888,7 +888,7 @@ flybackwb2_t
 	WLW	N,w4flai8,F
 	W0
 
-#5
+#fbl25
 	WLW	N,w5flai2,F
 ;	WLL	-1,seq_snd,boo_snd
 	WLL	-1,seq_snd,flail_snd
@@ -907,9 +907,9 @@ flybackwb2_t
 pickup_t
 	.word	NOMV_M|NOSTEAL_M|NOJUMP_M|NOJOY_M
 	.long	seq_stand
-	.long	#1,#2,#3,#4,#5,#4,#3,#2
+	.long	#pu1,#pu2,#pu3,#pu4,#pu5,#pu4,#pu3,#pu2
 	.asg	2,N
-#1
+#pu1
 	WLW	N,w1pikup1,F|M_YF
 	WLW	N,w1pikup2,F|M_YF
 	WLW	N,w1pikup3,F
@@ -920,7 +920,7 @@ pickup_t
 	WLW	N,w1pikup2,F
 	WLW	N,w1pikup1,F
 	W0
-#2
+#pu2
 	WLW	N,w2pikup1,F|M_YF
 	WLW	N,w2pikup2,F|M_YF
 	WLW	N,w2pikup3,F
@@ -931,7 +931,7 @@ pickup_t
 	WLW	N,w2pikup2,F
 	WLW	N,w2pikup1,F
 	W0
-#3
+#pu3
 	WLW	N,w3pikup1,F|M_YF
 	WLW	N,w3pikup2,F|M_YF
 	WLW	N,w3pikup3,F
@@ -942,7 +942,7 @@ pickup_t
 	WLW	N,w3pikup2,F
 	WLW	N,w3pikup1,F
 	W0
-#4
+#pu4
 	WLW	N,w4pikup1,F|M_YF
 	WLW	N,w4pikup2,F|M_YF
 	WLW	N,w4pikup3,F
@@ -953,7 +953,7 @@ pickup_t
 	WLW	N,w4pikup2,F
 	WLW	N,w4pikup1,F
 	W0
-#5
+#pu5
 	WLW	N,w5pikup1,F|M_YF
 	WLW	N,w5pikup2,F|M_YF
 	WLW	N,w5pikup3,F
@@ -970,11 +970,11 @@ pickup_t
 elbo_t
 	.word	NOMV_M|NOSTEAL_M|NOJUMP_M|NOJOY_M
 	.long	seq_stand
-	.long	#1,#2,#3,#4,#5,#4,#3,#2
+	.long	#lb1,#lb2,#lb3,#lb4,#lb5,#lb4,#lb3,#lb2
 	.asg	5,N
 
-#1
-#2
+#lb1
+#lb2
 	WLW	N-1,w1elbo5,F
 	WLL	-1,seq_snd,elbow1_snd
 	WL	-1,seq_elbo
@@ -992,9 +992,9 @@ elbo_t
 	WLW	N-2,w1elbo6,F
 	WLW	N-2,w1elbo5,F
 	W0
-#3
-#4
-#5
+#lb3
+#lb4
+#lb5
 	WLW	N-1,w4elbo5,F
 	WLL	-1,seq_snd,elbow1_snd
 	WL	-1,seq_elbo
@@ -1017,10 +1017,10 @@ elbo_t
 elbo2_t
 	.word	NOMV_M|NOJOY_M|NOSTEAL_M|NOJUMP_M
 	.long	seq_stand
-	.long	#1,#2,#3,#4,#5,#4,#3,#2
+	.long	#lb21,#lb22,#lb23,#lb24,#lb25,#lb24,#lb23,#lb22
 	.asg	4,N
-#1
-#2
+#lb21
+#lb22
 	WLW	N-1,w1elbo5,F
 	WLL	-1,seq_snd,elbow1_snd
 	WL	-1,seq_elbo
@@ -1038,9 +1038,9 @@ elbo2_t
 	WLW	N-2,w1elbo6,F
 	WLW	N-2,w1elbo5,F
 	W0
-#3
-#4
-#5
+#lb23
+#lb24
+#lb25
 	WLW	N-1,w4elbo5,F
 	WLL	-1,seq_snd,elbow1_snd
 	WL	-1,seq_elbo
@@ -1063,7 +1063,7 @@ elbo2_t
 spinmove_t
 	.word	NOJOY_M|NOSTEAL_M|NOJUMP_M|NOCOLLP_M
 	.long	#chnge_seq
-	.long	#1,#2,#3,#4,#5,#6,#7,#8
+	.long	#spn1,#spn2,#spn3,#spn4,#spn5,#spn6,#spn7,#spn8
 
 #chnge_seq
 	clr	a14
@@ -1073,7 +1073,7 @@ spinmove_t
 	calla	plyr_setseq
 	rets
 
-#1
+#spn1
 	WL	-1,#speech_call
 	WLW	2,W3SPMVA5,F
 	WL	-1,#set_xzvels_d1
@@ -1196,7 +1196,7 @@ spinmove_t
 	and	a1,a0
 	rets
 
-#2
+#spn2
 	WL	-1,#speech_call
 	WLW	2,W3SPMVA1,F
 	WL	-1,#set_xzvels_d2
@@ -1232,7 +1232,7 @@ spinmove_t
 ;	WL	-1,#reset_dribble
 	W0
 
-#3
+#spn3
 	WL	-1,#speech_call
 	WLW	2,W3SPMVA1,F
 	WL	-1,#set_xzvels_d3
@@ -1268,7 +1268,7 @@ spinmove_t
 ;	WL	-1,#reset_dribble
 	W0
 
-#4
+#spn4
 	WL	-1,#speech_call
 	WLW	2,W3SPMVA1,F
 	WL	-1,#set_xzvels_d4
@@ -1303,7 +1303,7 @@ spinmove_t
 	WLW	2,W3SPMVA20,F
 ;	WL	-1,#reset_dribble
 	W0
-#5
+#spn5
 	
 	WL	-1,#speech_call
 	WL	-1,#set_xzvels_d5
@@ -1340,7 +1340,7 @@ spinmove_t
 ;	WL	-1,#reset_dribble
 	W0
 
-#6
+#spn6
 	WL	-1,#speech_call
 	WLW	2,W3SPMVA1,F
 	WL	-1,#set_xzvels_d6
@@ -1376,7 +1376,7 @@ spinmove_t
 ;	WL	-1,#reset_dribble
 	W0
 
-#7
+#spn7
 	WL	-1,#speech_call
 	WLW	2,W3SPMVA1,F
 	WL	-1,#set_xzvels_d7
@@ -1412,7 +1412,7 @@ spinmove_t
 ;	WL	-1,#reset_dribble
 	W0
 
-#8
+#spn8
 	WL	-1,#speech_call
 	WLW	2,W3SPMVA1,F
 	WL	-1,#set_xzvels_d8
