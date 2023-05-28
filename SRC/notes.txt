@@ -1,5 +1,23 @@
 Notes on Hangtime work.
 -----------------------
+28-05-2023 
+Many files now hit the memory limits in dosbox, even dosbox ECE. Not sure if hard limit, or file open errors.
+
+Observations from plyr.asm, plyrseq.asm
+These use _a lot_ of #lables and there is a million of them in the file, #1, #2, #3, and so on.
+A lot of tables are constructed using them.
+It seems a #* is used as some sort of section marker in these files.
+It would appear preasm has types of markers between areas in the .asm file?
+
+pseudocode
+- in a .asm text file
+- sections starts with #*. 
+- create a table for each section found in the file.
+- print the number of sections found on screen.
+- labels start with # and contain alphanumeric characters and/or  _ underscore.
+- For each section find all labels and group them by section. Remember to exclude the label with the #* that defines the section start.
+- print the number of sections found on screen, as well as the labels found in that section.
+- Save the results a a .csv file.
 
 22-05-2023 Notes started.
 

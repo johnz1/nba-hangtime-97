@@ -56,6 +56,8 @@
 	.ref	seq_snd
 	.ref	clr_autorbnd
 
+    .ref    PSTATUS2
+
 	.ref	rndrng0
 	.ref	seq_handle_fade_away,seq_handle_fadeaside
 	.ref	fades_sp,fadeaway_sp,leans_bck_sp
@@ -914,7 +916,7 @@ rebound_t
 #rebound_t1
 	WLW	2,w1reb10,F
 	WLW	2,w1reb9,F
-	WL	-1,#ck_ball
+	WL	-1,#ck_balla
 	WLL	-1,seq_block,w1reb5
 	WLW	3,w1reb8,F
 	WLW	27,w1reb5,F
@@ -928,34 +930,34 @@ rebound_t
 	WLW	3,w1reb9,F
 	WLW	3,w1reb10,F
 	W0
-#ck_ball
+#ck_balla
 ;If ball is near head, and is close enough, no need to jump high!
 	move	*a13(plyr_balldist),a0
 	cmpi	030H,a0
-	jrgt	#cont
+	jrgt	#conta
 
 	.ref	ballobj_p
 	move	@ballobj_p,a0,L
 	move	*a0(OYPOS),a14
 ;Could add in yvel here also for some more accuracy
 	cmpi	-100,a14
-	jrlt	cont
+	jrlt	conta
 
 
 	move	*a13(plyr_seqdir),a0
 	sll	5,a0
-	addi	#tbl,a0
+	addi	#tblr,a0
 	move	*a0,a0,L
 	move	a0,b4
-#cont
+#conta
 	rets
 
-#tbl	.long	#rebound_t1a,#rebound_t2a,#rebound_t3a,#rebound_t4a,#rebound_t5a,#rebound_t4a,#rebound_t3a,#rebound_t2a
+#tblr	.long	#rebound_t1a,#rebound_t2a,#rebound_t3a,#rebound_t4a,#rebound_t5a,#rebound_t4a,#rebound_t3a,#rebound_t2a
 
 #rebound_t2
 	WLW	2,w2reb1,F
 	WLW	2,w2reb2,F
-	WL	-1,#ck_ball
+	WL	-1,#ck_balla
 	WLL	-1,seq_block,w2reb6
 	WLW	27,w2reb3,F
 ;	WLW	1,w2reb4,F		;Land
@@ -974,7 +976,7 @@ rebound_t
 ;#3
 ;	WLW	2,w3reb1,F
 ;	WLW	2,w3reb2,F
-;	WL	-1,#ck_ball
+;	WL	-1,#ck_balla
 ;	WLL	-1,seq_block,w3reb3
 ;	WLW	27,w3reb3,F
 ;	WLW	1,w3reb4,F		;Land
@@ -992,7 +994,7 @@ rebound_t
 #rebound_t4
 	WLW	2,w4reb10,F
 	WLW	2,w4reb9,F
-	WL	-1,#ck_ball
+	WL	-1,#ck_balla
 	WLL	-1,seq_block,w4reb4
 	WLW	2,w4reb8,F
 	WLW	2,w4reb7,F
@@ -1011,7 +1013,7 @@ rebound_t
 #rebound_t5
 	WLW	2,w5reb9,F
 	WLW	2,w5reb8,F
-	WL	-1,#ck_ball
+	WL	-1,#ck_balla
 	WLL	-1,seq_block,w5reb7
 	WLW	3,w5reb7,F
 	WLW	27,w5reb5,F
@@ -1033,7 +1035,7 @@ rebounda_t
 #rebounda_t1
 	WLW	2,w1reb10,F
 	WLW	2,w1reb9,F
-	WL	-1,#ck_ball
+	WL	-1,#ck_ballb
 	WLL	-1,seq_rebounda,w1reb5
 	WLW	2,w1reb8,F
 	WLW	27,w1reb5,F
@@ -1051,34 +1053,34 @@ rebounda_t
 	W0
 
 
-#ck_ball
+#ck_ballb
 ;If ball is near head, and is close enough, no need to jump high!
 	move	*a13(plyr_balldist),a0
 	cmpi	030H,a0
-	jrgt	#cont
+	jrgt	#contb
 
 	.ref	ballobj_p
 	move	@ballobj_p,a0,L
 	move	*a0(OYPOS),a14
 ;Could add in yvel here also for some more accuracy
 	cmpi	-100,a14
-	jrlt	cont
+	jrlt	contb
 
 
 	move	*a13(plyr_seqdir),a0
 	sll	5,a0
-	addi	#tbl,a0
+	addi	#tblr2,a0
 	move	*a0,a0,L
 	move	a0,b4
-#cont
+#contb
 	rets
 
-#tbl	.long	#rebounda_t1a,#rebounda_t2a,#rebounda_t3a,#rebounda_t4a,#rebounda_t5a,#rebounda_t4a,#rebounda_t3a,#rebounda_t2a
+#tblr2	.long	#rebounda_t1a,#rebounda_t2a,#rebounda_t3a,#rebounda_t4a,#rebounda_t5a,#rebounda_t4a,#rebounda_t3a,#rebounda_t2a
 
 #rebounda_t2
 	WLW	2,w2reb1,F
 	WLW	2,w2reb2,F
-	WL	-1,#ck_ball
+	WL	-1,#ck_ballb
 	WLL	-1,seq_rebounda,w2reb3
 	WLW	27,w2reb3,F
 ;	WLW	1,w2reb4,F		;Land
@@ -1101,7 +1103,7 @@ rebounda_t
 ;#3
 ;	WLW	2,w3reb1,F
 ;	WLW	2,w3reb2,F
-;	WL	-1,#ck_ball
+;	WL	-1,#ck_ballb
 ;	WLL	-1,seq_rebounda,w3reb3
 ;	WLW	27,w3reb3,F
 ;	WLW	1,w3reb4,F		;Land
@@ -1122,7 +1124,7 @@ rebounda_t
 #rebounda_t4
 	WLW	2,w4reb10,F
 	WLW	2,w4reb9,F
-	WL	-1,#ck_ball
+	WL	-1,#ck_ballb
 	WLL	-1,seq_rebounda,w4reb4
 	WLW	2,w4reb8,F
 	WLW	2,w4reb7,F
@@ -1143,7 +1145,7 @@ rebounda_t
 #rebounda_t5
 	WLW	2,w5reb9,F
 	WLW	2,w5reb8,F
-	WL	-1,#ck_ball
+	WL	-1,#ck_ballb
 	WLL	-1,seq_rebounda,w5reb7
 	WLW	2,w5reb7,F
 	WLW	27,w5reb5,F
@@ -1423,11 +1425,11 @@ undr_hoop_sht_tbl	;(team 2)
 ;	.word	NOJUMP_M|NOJOY_M
 	.word	NOJUMP_M|SHOOT_M|NOJOY_M
 	.long	seq_stand
-	.long	#1,#2,#3,#4,#5,#6,#7,#8
-#2
-#8
+	.long	#uhsht_1,#uhsht_2,#uhsht_3,#uhsht_4,#uhsht_5,#uhsht_6,#uhsht_7,#uhsht_8
+#uhsht_2
+#uhsht_8
 	WLW	2,w2js1,F
-#1a
+#uhsht_1a
 	WLW	3,W1UNDR1,F
 	WLW	3,W1UNDR2,F
 	WL	-1,seq_jump
@@ -1444,14 +1446,14 @@ undr_hoop_sht_tbl	;(team 2)
 	WLW	3,W1UNDR9,F
 	WLW	-1,seq_newdir,0*16
 	W0
-#1
+#uhsht_1
 	WLW	2,w1js1,F
-	WLL	-1,seq_goto_line,#1a
+	WLL	-1,seq_goto_line,#uhsht_1a
 	W0
 
-#4
+#uhsht_4
 	WLW	2,w4js1,F
-#6
+#uhsht_6
 	WLW	3,W5UNDR1,F
 	WLW	3,W5UNDR2,F
 	WLW	3,W5UNDR3,F
@@ -1469,8 +1471,8 @@ undr_hoop_sht_tbl	;(team 2)
 	WLW	3,W5UNDR11,F
 	WLW	-1,seq_newdir,4*16
 	W0
-#3
-#7
+#uhsht_3
+#uhsht_7
 	WLW	2,w3js1,F
 
 	WLW	3,W1UNDR1,F
@@ -1490,7 +1492,7 @@ undr_hoop_sht_tbl	;(team 2)
 	WLW	-1,seq_newdir,0*16
 	W0
 
-#5
+#uhsht_5
 	WLW	3,W5UNDR1,F
 	WLW	3,W5UNDR2,F
 	WLW	3,W5UNDR3,F
@@ -1516,18 +1518,18 @@ undr_hoop_sht_tbl2	;(team 1)
 ;	.word	NOJUMP_M|NOJOY_M
 	.word	NOJUMP_M|SHOOT_M|NOJOY_M
 	.long	seq_stand
-	.long	#1,#2,#3,#4,#5,#6,#7,#8
+	.long	#uhshta_1,#uhshta_2,#uhshta_3,#uhshta_4,#uhshta_5,#uhshta_6,#uhshta_7,#uhshta_8
 
-#1
+#uhshta_1
 	WLW	2,w1js1,FF
-	WLL	-1,seq_goto_line,#1a
-#2
+	WLL	-1,seq_goto_line,#uhshta_1a
+#uhshta_2
 	WLW	2,w2js1,FF
-	WLL	-1,seq_goto_line,#1a
-#8
+	WLL	-1,seq_goto_line,#uhshta_1a
+#uhshta_8
 	WLW	2,w2js1,F
-	WLL	-1,seq_goto_line,#8a
-#1a
+	WLL	-1,seq_goto_line,#uhshta_8a
+#uhshta_1a
 	WLW	2,W1UNDR1,FF
 	WLW	2,W1UNDR2,FF
 	WL	-1,seq_jump
@@ -1545,10 +1547,10 @@ undr_hoop_sht_tbl2	;(team 1)
 	WLW	-1,seq_newdir,0*16
 	W0
 
-#3
-#7
+#uhshta_3
+#uhshta_7
 	WLW	2,w3js1,F
-#8a
+#uhshta_8a
 	WLW	2,W1UNDR1,F
 	WLW	2,W1UNDR2,F
 	WL	-1,seq_jump
@@ -1566,7 +1568,7 @@ undr_hoop_sht_tbl2	;(team 1)
 	WLW	-1,seq_newdir,0*16
 	W0
 
-#5
+#uhshta_5
 	WLW	2,W5UNDR1,FF
 	WLW	2,W5UNDR2,FF
 	WLW	2,W5UNDR3,FF
@@ -1585,9 +1587,9 @@ undr_hoop_sht_tbl2	;(team 1)
 	WLW	-1,seq_newdir,4*16
 	W0
 
-#4
+#uhshta_4
 	WLW	2,w4js1,F
-#6
+#uhshta_6
 	WLW	2,W5UNDR1,F
 	WLW	2,W5UNDR2,F
 	WLW	2,W5UNDR3,F
@@ -1651,10 +1653,10 @@ sxv3_1	move	a14,*a8(OXVEL),L
 shoot_t
 	.word	NOJUMP_M|SHOOT_M|NOJOY_M
 	.long	seq_stand
-	.long	#1,#2,#3,#4,#5,#4,#3,#2
+	.long	#shoot_t1,#shoot_t2,#shoot_t3,#shoot_t4,#shoot_t5,#shoot_t4,#shoot_t3,#shoot_t2
 
 	.asg	3,N
-#1
+#shoot_t1
 	WLW	N,w1js1,F
 	WLLL	-1,seq_handle_fadeaside,fadeaside_seq1,fadeaside_seq1a
 	WLW	N,w1js2,F
@@ -1669,7 +1671,7 @@ shoot_t
 	WLW	4,w1js9,F
 	WLW	4,w1js10,F
 	W0
-#2
+#shoot_t2
 	WLW	N,w2js1,F
 	WLW	N,w2js2,F
 	WLLL	-1,seq_handle_fade_away,fadeaway_seq2,fadein_seq2
@@ -1684,7 +1686,7 @@ shoot_t
 	WLW	4,w2js9,F
 	WLW	4,w2js10,F
 	W0
-#3
+#shoot_t3
 	WLW	N,w3js1,F
 	WLW	N,w3js2,F
 	WLLL	-1,seq_handle_fade_away,fadeaway_seq3,fadein_seq3
@@ -1699,7 +1701,7 @@ shoot_t
 	WLW	4,w3js9,F
 	WLW	4,w3js10,F
 	W0
-#4
+#shoot_t4
 	WLW	N,w4js1,F
 	WLW	N,w4js2,F
 	WLLL	-1,seq_handle_fade_away,fadeaway_seq4,fadein_seq4
@@ -1714,7 +1716,7 @@ shoot_t
 	WLW	4,w4js9,F
 	WLW	4,w4js10,F
 	W0
-#5
+#shoot_t5
 	WLW	N,w5js1,F
 	WLLL	-1,seq_handle_fadeaside,fadeaside_seq5,fadeaside_seq5a
 	WLW	N,w5js2,F
@@ -1734,10 +1736,10 @@ shoot_t
 qshoot_t
 	.word	NOJUMP_M|SHOOT_M|NOJOY_M
 	.long	seq_stand
-	.long	#1,#2,#3,#4,#5,#4,#3,#2
+	.long	#qshoot_t1,#qshoot_t2,#qshoot_t3,#qshoot_t4,#qshoot_t5,#qshoot_t4,#qshoot_t3,#qshoot_t2
 
 	.asg	3,N
-#1
+#qshoot_t1
 	WLW	N,w1js1,F
 	WLW	N,w1js2,F
 	WLW	N,w1js3,F
@@ -1750,7 +1752,7 @@ qshoot_t
 	WLW	3,w1js9,F
 	WLW	3,w1js10,F
 	W0
-#2
+#qshoot_t2
 	WLW	N,w2js1,F
 	WLW	N,w2js2,F
 	WLW	N,w2js3,F
@@ -1763,7 +1765,7 @@ qshoot_t
 	WLW	3,w2js9,F
 	WLW	3,w2js10,F
 	W0
-#3
+#qshoot_t3
 	WLW	N,w3js1,F
 	WLW	N,w3js2,F
 	WLW	N,w3js3,F
@@ -1776,7 +1778,7 @@ qshoot_t
 	WLW	3,w3js9,F
 	WLW	3,w3js10,F
 	W0
-#4
+#qshoot_t4
 	WLW	N,w4js1,F
 	WLW	N,w4js2,F
 	WLW	N,w4js3,F
@@ -1789,7 +1791,7 @@ qshoot_t
 	WLW	3,w4js9,F
 	WLW	3,w4js10,F
 	W0
-#5
+#qshoot_t5
 	WLW	N,w5js1,F
 	WLW	N,w5js2,F
 	WLW	N,w5js3,F
@@ -1808,19 +1810,19 @@ qshoot_t
 shootdesp_t
 	.word	NOJUMP_M|SHOOT_M|NOJOY_M
 	.long	seq_stand
-	.long	#1,#2,#3,#4,#5,#4,#3,#2
+	.long	#shootdesp_t1,#shootdesp_t2,#shootdesp_t3,#shootdesp_t4,#shootdesp_t5,#shootdesp_t4,#shootdesp_t3,#shootdesp_t2
 
-#1
-#2
-#3
-#4
-#5
+#shootdesp_t1
+#shootdesp_t2
+#shootdesp_t3
+#shootdesp_t4
+#shootdesp_t5
 ;Use this as a pass also!
 	WLW	3,T4DESPA1,F
 	WLL	-1,seq_snd,swipe_snd
 	WLW	3,T4DESPA2,F
 	WL	-1,seq_jump
-	WL	-1,#lower_jump
+	WL	-1,#lower_jumpa
 	WLW	3,T4DESPA3,F
 	WLW	3,T4DESPA4,F
 	WLW	1,T4DESPA5,F
@@ -1834,24 +1836,24 @@ shootdesp_t
 ;	WLW	4,T4DESPA10,F
 	W0
 
-#lower_jump
+#lower_jumpa
 	move	*a8(OYVEL),a0,L
 	sra	1,a0
 	move	a0,*a8(OYVEL),L
 
-	jruc	lower_jump
+	jruc	lower_jumpa
 
 
 #*
 shootdesp3_t
 	.word	NOJUMP_M|SHOOT_M|NOJOY_M
 	.long	seq_stand
-	.long	#1,#2,#3,#4,#5,#4,#3,#2
-#1
-#2
-#3
-#4
-#5
+	.long	#shootdesp3_t1,#shootdesp3_t2,#shootdesp3_t3,#shootdesp3_t4,#shootdesp3_t5,#shootdesp3_t4,#shootdesp3_t3,#shootdesp3_t2
+#shootdesp3_t1
+#shootdesp3_t2
+#shootdesp3_t3
+#shootdesp3_t4
+#shootdesp3_t5
 	WLW	4,T3DESPB1,F
 	WLW	4,T3DESPB2,F
 	WL	-1,seq_jump
@@ -1888,8 +1890,8 @@ lower_jump
 shootdesp2_t
 	.word	NOJUMP_M|SHOOT_M|NOJOY_M
 	.long	seq_stand
-	.long	#3,#3,#3,#3,#3,#3,#3,#3
-#3
+	.long	#sd2_t3,#sd2_t3,#sd2_t3,#sd2_t3,#sd2_t3,#sd2_t3,#sd2_t3,#sd2_t3
+#sd2_t3
 	WLW	2,T3DESPA1,F
 	WLL	-1,seq_snd,swipe_snd
 	WLW	2,T3DESPA2,F
@@ -2004,10 +2006,10 @@ passc_t
 fastpassc_t
 	.word	PASS_M|NOJOY_M
 	.long	seq_stand
-	.long	#passc1_l,#passc2_l,#passc3_l,#passc4_l
-	.long	#passc5_l,#passc4_l,#passc3_l,#passc2_l
+	.long	#ps1a_l,#ps2a_l,#ps3a_l,#ps4a_l
+	.long	#ps5a_l,#ps4a_l,#ps3a_l,#ps2a_l
 	.asg	2,N
-#passc1_l
+#ps1a_l
 	WLW	N,w1cp1,F
 	WLW	N,w1cp2,F
 	WLW	N,w1cp3,F
@@ -2021,7 +2023,7 @@ fastpassc_t
 	WLW	N,w1cp2,F
 	WLW	N,w1cp1,F
 	W0
-#passc2_l
+#ps2a_l
 	WLW	N,w2cp1,F
 	WLW	N,w2cp2,F
 	WLW	N,w2cp3,F
@@ -2035,7 +2037,7 @@ fastpassc_t
 	WLW	N,w2cp2,F
 	WLW	N,w2cp1,F
 	W0
-#passc3_l
+#ps3a_l
 	WLW	N,w3cp1,F
 	WLW	N,w3cp2,F
 	WLW	N,w3cp3,F
@@ -2049,7 +2051,7 @@ fastpassc_t
 	WLW	N,w3cp2,F
 	WLW	N,w3cp1,F
 	W0
-#passc4_l
+#ps4a_l
 	WLW	N,w4cp1,F
 	WLW	N,w4cp2,F
 	WLW	N,w4cp3,F
@@ -2063,7 +2065,7 @@ fastpassc_t
 	WLW	N,w4cp2,F
 	WLW	N,w4cp1,F
 	W0
-#passc5_l
+#ps5a_l
 	WLW	N,w5cp1,F
 	WLW	N,w5cp2,F
 	WLW	N,w5cp3,F
@@ -2083,10 +2085,10 @@ fastpassc_t
 passdo_t
 	.word	PASS_M|NOJUMP_M|NOJOY_M
 	.long	seq_stand
-	.long	#passdo1_l,#passdo2_l,#passdo3_l,#passdo4_l
-	.long	#passdo5_l,#passdo4_l,#passdo3_l,#passdo2_l
+	.long	#pd1_l,#pd2_l,#pd3_l,#pd4_l
+	.long	#pd5_l,#pd4_l,#pd3_l,#pd2_l
 
-#passdo1_l
+#pd1_l
 	WL	-1,dble_yvel
 	WLW	1,w1jupa,F
 	WL	-1,plyr_pass
@@ -2095,7 +2097,7 @@ passdo_t
 	WLW	4,w1js2,F
 	WLW	3,w1js1,F
 	W0
-#passdo2_l
+#pd2_l
 	WL	-1,dble_yvel
 	WLW	1,w2jupa,F
 	WL	-1,plyr_pass
@@ -2105,7 +2107,7 @@ passdo_t
 	WLW	3,w2js2,F
 	WLW	2,w2js1,F
 	W0
-#passdo3_l
+#pd3_l
 	WL	-1,dble_yvel
 	WLW	1,w3jupa,F
 	WL	-1,plyr_pass
@@ -2116,7 +2118,7 @@ passdo_t
 	WLW	3,w3js2,F
 	WLW	2,w3js1,F
 	W0
-#passdo4_l
+#pd4_l
 	WL	-1,dble_yvel
 	WLW	1,w4jupa,F
 	WL	-1,plyr_pass
@@ -2127,7 +2129,7 @@ passdo_t
 	WLW	3,w4js2,F
 	WLW	2,w4js1,F
 	W0
-#passdo5_l
+#pd5_l
 	WL	-1,dble_yvel
 	WLW	1,w5jupa,F
 	WL	-1,plyr_pass
@@ -2141,10 +2143,10 @@ passdo_t
 passdo2_t
 	.word	PASS_M|NOJUMP_M|NOJOY_M
 	.long	seq_stand
-	.long	#passdo21_l,#passdo22_l,#passdo23_l,#passdo24_l
-	.long	#passdo25_l,#passdo24_l,#passdo23_l,#passdo22_l
+	.long	#pd21_l,#pd22_l,#pd23_l,#pd24_l
+	.long	#pd25_l,#pd24_l,#pd23_l,#pd22_l
 
-#passdo21_l
+#pd21_l
 	WL	-1,dble_yvel
 	WLW	1,w1js4,F
 	WL	-1,plyr_pass
@@ -2152,7 +2154,7 @@ passdo2_t
 	WLW	4,w1js2,F
 	WLW	3,w1js1,F
 	W0
-#passdo22_l
+#pd22_l
 	WL	-1,dble_yvel
 	WLW	1,w2js4,F
 	WL	-1,plyr_pass
@@ -2161,7 +2163,7 @@ passdo2_t
 	WLW	3,w2js2,F
 	WLW	2,w2js1,F
 	W0
-#passdo23_l
+#pd23_l
 	WL	-1,dble_yvel
 	WLW	1,w3js5,F
 	WL	-1,plyr_pass
@@ -2171,7 +2173,7 @@ passdo2_t
 	WLW	3,w3js2,F
 	WLW	2,w3js1,F
 	W0
-#passdo24_l
+#pd24_l
 	WL	-1,dble_yvel
 	WLW	1,w4js5,F
 	WL	-1,plyr_pass
@@ -2181,7 +2183,7 @@ passdo2_t
 	WLW	3,w4js2,F
 	WLW	2,w4js1,F
 	W0
-#passdo25_l
+#pd25_l
 	WL	-1,dble_yvel
 	WLW	1,w5js4,F
 	WL	-1,plyr_pass
@@ -2208,9 +2210,9 @@ dble_yvel
 passs_t
 	.word	PASS_M|NOJOY_M
 	.long	seq_stand
-	.long	#1,#2,#3,#4,#5,#4,#3,#2
+	.long	#passs1,#passs2,#passs3,#passs4,#passs5,#passs4,#passs3,#passs2
 	.asg	2,N
-#1
+#passs1
 	WLW	N,w1cp1,F
 	WLW	N,w1cp2,F
 	WLW	N,w1cp3,F
@@ -2222,7 +2224,7 @@ passs_t
 	WLW	N,w1cp2,F
 	WLW	N,w1cp1,F
 	W0
-#2
+#passs2
 	WLW	N,w2cp1,F
 	WLW	N,w2cp2,F
 	WLW	N,w2cp3,F
@@ -2234,7 +2236,7 @@ passs_t
 	WLW	N,w2cp2,F
 	WLW	N,w2cp1,F
 	W0
-#3
+#passs3
 	WLW	N,w3cp1,F
 	WLW	N,w3cp2,F
 	WLW	N,w3cp3,F
@@ -2246,7 +2248,7 @@ passs_t
 	WLW	N,w3cp2,F
 	WLW	N,w3cp1,F
 	W0
-#4
+#passs4
 	WLW	N,w4cp1,F
 	WLW	N,w4cp2,F
 	WLW	N,w4cp3,F
@@ -2258,7 +2260,7 @@ passs_t
 	WLW	N,w4cp2,F
 	WLW	N,w4cp1,F
 	W0
-#5
+#passs5
 	WLW	N,w5cp1,F
 	WLW	N,w5cp2,F
 	WLW	N,w5cp3,F
@@ -2276,11 +2278,11 @@ passs_t
 passnewoh_t
 	.word	PASS_M|NOJOY_M
 	.long	seq_stand
-	.long	#passnoh1_l,#passnoh2_l,#passnoh3_l,#passnoh4_l
-	.long	#passnoh5_l,#passnoh4_l,#passnoh3_l,#passnoh2_l
+	.long	#pn1a_l,#pn2a_l,#pn3a_l,#pn4a_l
+	.long	#pn5a_l,#pn4a_l,#pn3a_l,#pn2a_l
 
 	.asg	3,N
-#passnoh1_l
+#pn1a_l
 	WLW	N,w1ohp1,F
 	WLW	N,w1ohp2,F
 	WLW	N,w1ohp3,F
@@ -2295,7 +2297,7 @@ passnewoh_t
 	WLW	N,w1ohp10,F
 	WLW	N,w1ohp11,F
 	W0
-#passnoh2_l
+#pn2a_l
 	WLW	N,w2ohp1,F
 	WLW	N,w2ohp2,F
 	WLW	N,w2ohp3,F
@@ -2309,7 +2311,7 @@ passnewoh_t
 	WLW	N,w2ohp10,F
 	WLW	N,w2ohp11,F
 	W0
-#passnoh3_l
+#pn3a_l
 ;If passer is facing #4 or #5 and we are doing a #3 pass, sometimes use
 ;desperation art as a pass!
 	WL	-1,choose_desp
@@ -2371,7 +2373,7 @@ choose_desp
 
 
 
-#passnoh4_l
+#pn4a_l
 	WLW	N,w4ohp1,F
 	WLW	N,w4ohp2,F
 	WLW	N,w4ohp3,F
@@ -2386,7 +2388,7 @@ choose_desp
 	WLW	N,w4ohp10,F
 	WLW	N,w4ohp11,F
 	W0
-#passnoh5_l
+#pn5a_l
 	WLW	N,w5ohp1,F
 	WLW	N,w5ohp2,F
 	WLW	N,w5ohp3,F
@@ -2407,11 +2409,11 @@ choose_desp
 fastpassnewoh_t
 	.word	PASS_M|NOJOY_M
 	.long	seq_stand
-	.long	#passnoh1_l,#passnoh2_l,#passnoh3_l,#passnoh4_l
-	.long	#passnoh5_l,#passnoh4_l,#passnoh3_l,#passnoh2_l
+	.long	#fpn_1_l,#fpn_2_l,#fpn_3_l,#fpn_4_l
+	.long	#fpn_5_l,#fpn_4_l,#fpn_3_l,#fpn_2_l
 
 	.asg	2,N
-#passnoh1_l
+#fpn_1_l
 	WLW	N,w1ohp1,F
 	WLW	N,w1ohp2,F
 	WLW	N,w1ohp3,F
@@ -2426,7 +2428,7 @@ fastpassnewoh_t
 	WLW	N,w1ohp10,F
 	WLW	N,w1ohp11,F
 	W0
-#passnoh2_l
+#fpn_2_l
 	WLW	N,w2ohp1,F
 	WLW	N,w2ohp2,F
 	WLW	N,w2ohp3,F
@@ -2441,7 +2443,7 @@ fastpassnewoh_t
 	WLW	N,w2ohp10,F
 	WLW	N,w2ohp11,F
 	W0
-#passnoh3_l
+#fpn_3_l
 	WL	-1,choose_desp
 
 	WLW	N,w3ohp1,F
@@ -2458,7 +2460,7 @@ fastpassnewoh_t
 	WLW	N,w3ohp10,F
 	WLW	N,w3ohp11,F
 	W0
-#passnoh4_l
+#fpn_4_l
 	WLW	N,w4ohp1,F
 	WLW	N,w4ohp2,F
 	WLW	N,w4ohp3,F
@@ -2473,7 +2475,7 @@ fastpassnewoh_t
 	WLW	N,w4ohp10,F
 	WLW	N,w4ohp11,F
 	W0
-#passnoh5_l
+#fpn_5_l
 	WLW	N,w5ohp1,F
 	WLW	N,w5ohp2,F
 	WLW	N,w5ohp3,F
@@ -2495,12 +2497,12 @@ fastpassnewoh_t
 passbh_t
 	.word	PASS_M|NOJOY_M
 	.long	seq_stand
-	.long	#1,#1,#1,#1,#1,#1,#1,#1
+	.long	#passbh1,#passbh1,#passbh1,#passbh1,#passbh1,#passbh1,#passbh1,#passbh1
 
 	.asg	3,N
-#1
-	WL	-1,#choose
-#1a
+#passbh1
+	WL	-1,#choosea
+#passbh1a
 	WLW	N,T1HINDR10,F
 	WLW	N,T1HINDR9,F
 	WLW	N-1,T1HINDR8,F
@@ -2514,20 +2516,21 @@ passbh_t
 	WLW	-1,seq_newdir,0*16
 	W0
 
-#choose
+#choosea
 ;Need to look at dir I was facing - not where pass code tells me to face.
 	move	*a13(plyr_old_seqdir),a0
 	sll	5,a0
-	addi	#tbl,a0
+	addi	#tblchoose,a0
 	move	*a0,a0,L
 	move	a0,b4
 	rets
 
-#tbl	.long	#1a,#2,#3,#4,#5,#6,#7,#8
+#tblchoose
+   	.long	#passbh1a,#passbh2,#passbh3,#passbh4,#passbh5,#passbh6,#passbh7,#passbh8
 
 
-#2
-#8
+#passbh2
+#passbh8
 	WLW	N,T2HINDR10,F
 	WLW	N,T2HINDR9,F
 	WLW	N-1,T2HINDR8,F
@@ -2541,8 +2544,8 @@ passbh_t
 	WLW	-1,seq_newdir,1*16
 	W0
 
-#3
-#7
+#passbh3
+#passbh7
 	WLW	N,T3HINDR10,F
 	WLW	N,T3HINDR9,F
 	WLW	N-1,T3HINDR8,F
@@ -2555,9 +2558,9 @@ passbh_t
 	WLW	N,T3HINDR10,F
 	WLW	-1,seq_newdir,2*16
 	W0
-#4
-#5
-#6
+#passbh4
+#passbh5
+#passbh6
 	WLW	N,T4HINDR10,F
 	WLW	N,T4HINDR9,F
 	WLW	N-1,T4HINDR8,F
@@ -2575,27 +2578,27 @@ passbh_t
 passbh2_t
 	.word	PASS_M|NOJOY_M
 	.long	seq_stand
-	.long	#1,#1,#1,#1,#1,#1,#1,#1
+	.long	#passbh2_1,#passbh2_1,#passbh2_1,#passbh2_1,#passbh2_1,#passbh2_1,#passbh2_1,#passbh2_1
 
 	.asg	3,N
-#choose
+#chooseb
 ;Need to look at dir I was facing - not where pass code tells me to face.
 	move	*a13(plyr_old_seqdir),a0
 	sll	5,a0
-	addi	#tbl,a0
+	addi	#tblpassbh2,a0
 	move	*a0,a0,L
 	move	a0,b4
 	rets
 
-#tbl	.long	#1a,#2,#3,#4,#5,#6,#7,#8
+#tblpassbh2	.long	#passbh2_1a,#passbh2_2,#passbh2_3,#passbh2_4,#passbh2_5,#passbh2_6,#passbh2_7,#passbh2_8
 
-#1
-	WL	-1,#choose
-#1a
+#passbh2_1
+	WL	-1,#chooseb
+#passbh2_1a
 ;Should never get here...
 
-#8
-#2
+#passbh2_8
+#passbh2_2
 	WLW	N,T2HINDL10,F
 	WLW	N,T2HINDL9,F
 	WLW	N-1,T2HINDL8,F
@@ -2609,8 +2612,8 @@ passbh2_t
 	WLW	-1,seq_newdir,1*16
 	W0
 
-#3
-#7
+#passbh2_3
+#passbh2_7
 	WLW	N,T3HINDL10,F
 	WLW	N,T3HINDL9,F
 	WLW	N-1,T3HINDL8,F
@@ -2623,7 +2626,7 @@ passbh2_t
 	WLW	N,T3HINDL10,F
 	WLW	-1,seq_newdir,2*16
 	W0
-#4
+#passbh2_4
 	WLW	N,T4HINDL10,F
 	WLW	N,T4HINDL9,F
 	WLW	N-1,T4HINDL8,F
@@ -2636,8 +2639,8 @@ passbh2_t
 	WLW	N,T4HINDL10,F
 	WLW	-1,seq_newdir,3*16
 	W0
-#5
-#6
+#passbh2_5
+#passbh2_6
 ;Is this seq used?
 	WLW	N,T4HINDR10,F
 	WLW	N,T4HINDR9,F
@@ -2657,8 +2660,8 @@ passbh2_t
 steal_t
 	.word	NOMV_M|NOSTEAL_M|NOJUMP_M|NOJOY_M
 	.long	seq_stealstand
-	.long	#1,#2,#3,#4,#5,#4,#3,#2
-#1
+	.long	#steal_1,#steal_2,#steal_3,#steal_4,#steal_5,#steal_4,#steal_3,#steal_2
+#steal_1
 	WLW	1,T1SWPE5,F
 	WLL	-1,seq_snd,swipe_snd
 	WLW	1,T1SWPE6,F
@@ -2686,7 +2689,7 @@ steal_t
 	WLW	1,T1SWPE3,F
 	WLW	1,T1SWPE4,F
 	W0
-#2
+#steal_2
 	WLW	1,T2SWPE3,F
 	WLL	-1,seq_snd,swipe_snd
 	WLW	1,T2SWPE4,F
@@ -2714,7 +2717,7 @@ steal_t
 	WLW	1,T2SWPE1,F
 	WLW	1,T2SWPE2,F
 	W0
-#3
+#steal_3
 	WLW	1,T3SWPE5,F
 	WLL	-1,seq_snd,swipe_snd
 	WLW	1,T3SWPE6,F
@@ -2742,7 +2745,7 @@ steal_t
 	WLW	1,T3SWPE3,F
 	WLW	1,T3SWPE4,F
 	W0
-#4
+#steal_4
 	WLW	1,T4SWPE6,F
 	WLL	-1,seq_snd,swipe_snd
 	WLW	1,T4SWPE7,F
@@ -2770,7 +2773,7 @@ steal_t
 	WLW	1,T4SWPE4,F
 	WLW	1,T4SWPE5,F
 	W0
-#5
+#steal_5
 	WLW	1,T5SWPE5,F
 	WLL	-1,seq_snd,swipe_snd
 	WLW	1,T5SWPE6,F
@@ -2803,8 +2806,8 @@ steal_t
 push_t
 	.word	NOMV_M|NOJUMP_M|NOJOY_M
 	.long	seq_stand
-	.long	#1,#2,#3,#4,#5,#4,#3,#2
-#1
+	.long	#push_1,#push_2,#push_3,#push_4,#push_5,#push_4,#push_3,#push_2
+#push_1
 	WLW	2,w1push1,F
 	WLW	2,w1push2,F
 	WLW	4,w1push3,F
@@ -2818,7 +2821,7 @@ push_t
 	WLW	2,w1push10,F
 	WLW	2,w1push11,F
 	W0
-#2
+#push_2
 	WLW	2,w2push1,F
 	WLW	2,w2push2,F
 	WLW	4,w2push3,F
@@ -2832,7 +2835,7 @@ push_t
 	WLW	2,w2push10,F
 	WLW	2,w2push11,F
 	W0
-#3
+#push_3
 	WLW	2,w3push1,F
 	WLW	2,w3push2,F
 	WLW	4,w3push3,F
@@ -2846,7 +2849,7 @@ push_t
 	WLW	2,w3push10,F
 	WLW	2,w3push11,F
 	W0
-#4
+#push_4
 	WLW	2,w4push1,F
 	WLW	2,w4push2,F
 	WLW	4,w4push3,F
@@ -2860,7 +2863,7 @@ push_t
 	WLW	2,w4push10,F
 	WLW	2,w4push11,F
 	W0
-#5
+#push_5
 	WLW	2,w5push1,F
 	WLW	2,w5push2,F
 	WLW	4,w5push3,F
