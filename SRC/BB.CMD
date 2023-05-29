@@ -26,7 +26,6 @@ PLYR2.OBJ		/* fixed file. basketball player code */
 PLYR3.OBJ		/* fixed file. basketball player code */
 PLYRAT.OBJ		/* no changes. basketball player code */
 PLYRAT2.OBJ		/* fixed file. basketball player code */
-/* PLYRAT3.OBJ - unused, but built during make. */
 PLYRSEQ.OBJ		/* fixed file. basketball plyr sequence code */
 PLYRRSEQ.OBJ		/* fixed file. basketball plyr run sequence code */
 PLYRSEQ2.OBJ		/* fixed file. basketball plyr sequence code */
@@ -35,29 +34,29 @@ PLYRDSQ2.OBJ		/* fixed file. basketball plyr dunk sequence code*/
 PLYRLSEQ.OBJ		/* fixed file. basketball plyr layups sequence code  */
 PLYRSTND.OBJ		/* fixed file. basketball plyr stand sequence code */
 SCORE.OBJ		/* fixed file. doublecheck! score stuff,clocks,on fire clk.. */
-SCORE2.OBJ		/* score stuff */
+SCORE2.OBJ		/* fixed file. score stuff */
 SOUNDS.OBJ		/* sound processor */
-PATCH.OBJ		/* TV PATCH/BREAKPOINT HOOK */
-TEXT.OBJ		/* font tables */
+PATCH.OBJ		/* file OK. TV PATCH/BREAKPOINT HOOK */
+TEXT.OBJ		/* fixed file, had to comment stuff to avoid mem error! font tables */
 ATTRACT.OBJ		/* attract mode */
 STRING.OBJ		/* string printing stuff */
 RECORD.OBJ		/* CMOS records etc */
 SPEECH.OBJ		/* announcer speech etc... */
 SELECT.OBJ		/* name & team selection */
 SELECT2.OBJ		/* name & team selection */
-ADJUST.OBJ		/* TEST MENUS ADJUSTMENT CODE */
+ADJUST.OBJ		/* fixed file. TEST MENUS ADJUSTMENT CODE */
 AUDIT.OBJ		/* audits and adjustments handling */
 TEST.OBJ		/* fixed file. test program */
 DIAG.OBJ		/* SYSTEM DIAGNOSTICS CODE */
 MENU.OBJ		/* test menus */
-HSTD.OBJ		/* robo high-score-to-date management */
+HSTD.OBJ		/* fixed file. robo high-score-to-date management */
 MAKEPLR.OBJ		/* create player logic */
 MAKEPLR2.OBJ		/* create player logic */
 SCREEN.OBJ		/* fixed file. */
 SELECT3.OBJ
 SELECT4.OBJ
-PLYRAT3.OBJ		/* basketball player code */
-UNZIP.OBJ
+PLYRAT3.OBJ		/* fixed file. basketball player code */
+UNZIP.OBJ               /* fixed file. Unzip gfx routines. */
 
 MEMORY				/* set up memory for sdb board */
 {

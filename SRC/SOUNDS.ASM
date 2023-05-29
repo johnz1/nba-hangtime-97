@@ -1224,13 +1224,13 @@ VOLUP	.equ	12
 
 	;in diagnostics?
 	move	@GAMSTATE,a0,W
-	jrn	done
+	jrn	done2
 
 	;already adjusting?
 	movi	VOLADJ_PID,a0
 	movi	0FFFFh,a1
 	calla	EXISTP
-	jrnz	done
+	jrnz	done2
 
 	;okay, adjust
 	movi	VOLADJ_PID,a14
@@ -1259,7 +1259,7 @@ VOLUP	.equ	12
 	move	@_coin_addr,a0,L
 	move	*a0,a0
 	btst	VOLUP,a0
-	jrnz	done
+	jrnz	done2
 	jruc	volup_loop
 
 #voldn_loop
@@ -1279,9 +1279,10 @@ VOLUP	.equ	12
 	move	@_coin_addr,a0,L
 	move	*a0,a0
 	btst	VOLDN,a0
-	jrnz	done
+	jrnz	done2
 	jruc	voldn_loop
-#done	DIE
+#done2
+	DIE
 
 ******************************************************************************
 	.end

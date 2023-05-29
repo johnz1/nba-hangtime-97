@@ -4,6 +4,7 @@ Notes on Hangtime work.
 Many files now hit the memory limits in dosbox, even dosbox ECE. Not sure if hard limit, or file open errors.
 
 Observations from plyr.asm, plyrseq.asm
+from score2.asm: it finds and eliminates duplicate BSSX lines?!
 These use _a lot_ of #lables and there is a million of them in the file, #1, #2, #3, and so on.
 A lot of tables are constructed using them.
 It seems a #* is used as some sort of section marker in these files.

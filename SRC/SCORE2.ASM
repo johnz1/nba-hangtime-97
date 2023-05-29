@@ -51,7 +51,7 @@
 	.ref	WFLG
  	.ref	get_but_val_cur,PSTATUS2,cntrs_delay,HALT,GET_ADJ
 	.ref	names,pal_getf,team1,team2
-	.ref	AUD,AUD1,scores,PSTATUS2
+	.ref	AUD,AUD1,scores,PSTATUS,PSTATUS2
 	.ref	UNIT_CLR,get_all_buttons_down
 	.ref	player1_data,player2_data,inbound
 	.ref	player3_data,player4_data
@@ -182,11 +182,11 @@ CONT_MAX	equ	10
 	addi	player_data,a14
 	move	*a14,a14,L
 	move	*a14(PR_COUNT),a7
-	jrn	no_inits
+	jrn	no_inits1
 	subk	5,a7
 	jage	SUCIDE
 
-#no_inits
+#no_inits1
 
 	move	a11,*a13(PDATA+288)
 
@@ -419,17 +419,18 @@ CONT_MAX	equ	10
 ;Make sure the proper player presses his button
 
 	movi	10*60,a8
-#whopper_with_cheese
+#whopper_with_cheese0
 	SLEEPK	1
 
 	move	*a13(PDATA+288),a0
 	calla	get_but_val_cur
 
 	move	a0,a0
-	jrnz	exit
-	dsj	a8,whopper_with_cheese
+	jrnz	exit0
+	dsj	a8,whopper_with_cheese0
 
-#exit	move	*a13(PDATA+192),a0,L
+#exit0	
+    move	*a13(PDATA+192),a0,L
 	calla	KILL
 
 	SOUND1	infoex_snd
@@ -635,7 +636,7 @@ CONT_MAX	equ	10
 	movi	30,a9
 	movk	8,a10
 
-#lft	SLEEPK	1
+#lft1	SLEEPK	1
 ;Send box off to lft
 	move	*a13(PDATA),a0,L
 	move	*a0(OYPOS),a1
@@ -650,7 +651,7 @@ CONT_MAX	equ	10
 	add	a10,a1
 	move	a1,*a0(OYPOS)
 
-	dsj	a9,lft
+	dsj	a9,lft1
 
 
 	move	*a13(PDATA),a0,L
@@ -863,14 +864,14 @@ pal_t
 	.BSS	AMPCNT,16
 	.BSS	XSET,16
 	.BSS	YSET,16
-	BSSX	SHK_ON,16
+;	BSSX	SHK_ON,16   ; !!AM!! duplicate
 
 	.ref	RNDRNG0
 
  SUBR	SHAKER
 
 	move	@SHK_ON,a0
-	jrnz	x
+	jrnz	x1
 	move	a10,a11
 	movk	8,a0
 	move	a0,@SHK_ON
@@ -879,7 +880,7 @@ pal_t
 	move	a11,@AMPCNT
 	
 	CREATE0	shakelp
-#x	RETS
+#x1	RETS
 	
 shakelp
 	move	@AMP,a0
@@ -967,33 +968,33 @@ shakelp
 	.ref	game_time
 	move	@game_time,a14,L
 	cmpi	0900H,a14
-	jrlt	x
+	jrlt	x2
 
 	move	a1,a14
 	sll	5,a14
 	addi	player_data,a14
 	move	*a14,a14,L
 	move	*a14(PR_COUNT),a7
-	jrn	no_inits
+	jrn	no_inits2
 	move	a0,a0
-	jrz	no_inits
+	jrz	no_inits2
 	subk	5,a7
-	jrge	#x
+	jrge	#x2
 
-#no_inits
+#no_inits2
 	move	@PSTATUS2,a14
 	btst	a1,a14
 
 	jrnz	notdrn			;Drone?
 	move	a0,a0
-	jrnz	x			;Out of credit message?
+	jrnz	x2			;Out of credit message?
 
 #notdrn
 	move	a0,a10
 	move	a1,a11
 	CREATE0	idiot_box2
 
-#x	PULL	a7,a10,a11
+#x2	PULL	a7,a10,a11
 	rets
 
 player_data
@@ -1033,10 +1034,10 @@ player_data
 	move	a0,@cntrs_delay
 
 	sll	5,a11
-	movi	boxy_t,a0
+	movi	boxy_t2,a0
 	add	a11,a0
 	move	*a0,a1,L
-	movi	boxx_t,a0
+	movi	boxx_t2,a0
 	add	a11,a0
 	move	*a0,a0,L
 	movi	infobox,a2
@@ -1048,7 +1049,7 @@ player_data
 	calla	BEGINOBJ2
 	move	a8,*a13(PDATA),L
 
-	movi	pal_t,a0
+	movi	pal_t2,a0
 
 	move	@TWOPLAYERS,a14		;0 = NO, 1 = YES 2 players
 	jrz	not2xx
@@ -1065,10 +1066,10 @@ player_data
 
 ;Blink this img red/wht
 
-	movi	boxy_t,a0
+	movi	boxy_t2,a0
 	add	a11,a0
 	move	*a0,a1,L
-	movi	boxx_t,a0
+	movi	boxx_t2,a0
 	add	a11,a0
 	move	*a0,a0,L
 	movi	ply_t,a2
@@ -1101,10 +1102,10 @@ player_data
 
 	move	a0,a10				;Keep blink proc
 
-	movi	boxy_t,a0
+	movi	boxy_t2,a0
 	add	a11,a0
 	move	*a0,a1,L
-	movi	boxx_t,a0
+	movi	boxx_t2,a0
 	add	a11,a0
 	move	*a0,a0,L
 	clr	a6
@@ -1130,11 +1131,11 @@ player_data
 	movi	30,a9
 	movi	-8,a10
 	cmpi	64,a11
-	jrlt	lft
+	jrlt	lft2
 ;Send box off to right	
 	movk	8,a10
-#lft	SLEEPK	1
-;Send box off to lft
+#lft2	SLEEPK	1
+;Send box off to lft2
 	move	*a13(PDATA),a0,L
 	move	*a0(OXPOS),a1
 	add	a10,a1
@@ -1147,7 +1148,7 @@ player_data
 	move	*a0(OXPOS),a1
 	add	a10,a1
 	move	a1,*a0(OXPOS)
-	dsj	a9,lft
+	dsj	a9,lft2
 
 	move	*a13(PDATA),a0,L
 	calla	DELOBJ
@@ -1217,8 +1218,8 @@ blink_plyr1
 
 bit_t	.word	1,2,4,8
 bit_and	.long	0eH,0dH,0bH,07H
-boxy_t	.long	[48,0],[48+70,0],[48,0],[48+70,0]
-boxx_t	.long	[7,0],[47h+6,0],[0dah+6,0],[127h-23,0]
+boxy_t2	.long	[48,0],[48+70,0],[48,0],[48+70,0]
+boxx_t2	.long	[7,0],[47h+6,0],[0dah+6,0],[127h-23,0]
 msg_t	.long	message1,message2,message3,message4,message5,message6
 	.long	message7,message2a
 const_on
@@ -1242,44 +1243,44 @@ const_off
   
 	movi	OBJLST,a14
 	movi	fontram,a3
-	clr	a4
+	clr	    a4
 	move	a4,*a3,L
 	
-#lp
+#lp0
 	move	*a14,a14,L
-	jrz	x
+	jrz	    x3
 	move	*a14(OID),a2
 	cmpi	CLSDEAD|123,a2
-	jrne	lp
+	jrne	lp0
 	move	a14,*a3+,L
 	move	a4,*a3,L
-	jruc	lp
+	jruc	lp0
 	
-#x	
+#x3	
 	movi	HANGF_W_P,a0
 	calla	pal_getf
 	movi	fontram,a3
 	
-#lp2
+#lp2a
 	move	*a3+,a1,L
-	jrz	xx
+	jrz	    xxa
 	move	a0,*a1(OPAL)
-	jruc	lp2
+	jruc	lp2a
 
-#xx	SLEEPK	3
+#xxa	SLEEPK	3
 
 	movi	HANGF_R_P,a0
 	calla	pal_getf
 	movi	fontram,a3
 	
-#lp3
+#lp3a
 	move	*a3+,a1,L
-	jrz	xxx
+	jrz	    xxxa
 	move	a0,*a1(OPAL)
-	jruc	lp3
+	jruc	lp3a
 
-#xxx	SLEEPK	5
-	jruc	x
+#xxxa	SLEEPK	5
+	jruc	x3
   
 
 #*
@@ -1287,31 +1288,31 @@ const_off
   
 	movi	OBJLST,a14
 	movi	fontram,a3
-	clr	a4
+	clr	    a4
 	move	a4,*a3,L
 	
-#lp
+#lpa
 	move	*a14,a14,L
-	jrz	x
+	jrz	    x4
 	move	*a14(OID),a2
 	cmpi	CLSDEAD|123,a2
-	jrne	lp
+	jrne	lpa
 	move	a14,*a3+,L
 	move	a4,*a3,L
-	jruc	lp
+	jruc	lpa
 	
-#x	
+#x4	
 	movi	BRSHGWKP,a0
 	calla	pal_getf
 	movi	fontram,a3
 	
 #lp2
 	move	*a3+,a1,L
-	jrz	xx
+	jrz	    xxb
 	move	a0,*a1(OPAL)
 	jruc	lp2
 
-#xx	SLEEPK	3
+#xxb	SLEEPK	3
 
 	movi	BRSH_B_P,a0
 	calla	pal_getf
@@ -1319,12 +1320,13 @@ const_off
 	
 #lp3
 	move	*a3+,a1,L
-	jrz	xxx
+	jrz	    xxxb
 	move	a0,*a1(OPAL)
 	jruc	lp3
 
-#xxx	SLEEPK	5
-	jruc	x
+#xxxb	
+    SLEEPK	5
+	jruc	x4
 
 
 **************************************************************************
@@ -1467,7 +1469,7 @@ const_off
 	movk	1,a0				;Fixed (?) game over stuff
 	move	a0,@DISPLAYON			;Fixed (?) game over stuff
 
-	movi	#pal_t,a10
+	movi	#pal_t2,a10
 	movi	64,a11
 	CREATE0	fade_down
 
@@ -1496,7 +1498,7 @@ const_off
 	jauc	amode_start		;Start attract mode
 
 
-#pal_t	.long	BRSH50R_P,0
+#pal_t2	.long	BRSH50R_P,0
 
 LN1b_setup
 	PRINT_STR	brush50_ascii,6,0,200,57,BRSH50R_P,0
@@ -1574,14 +1576,14 @@ game_ovr_mod
 	move	*a0(PR_PRIVILEGES),a0
 	jrle	#ushs				;br=not a created player
 	btst	1,a0				;STEALTH TURBO privilege ?
-	jrnz	x				;br=yes
+	jrnz	x5				;br=yes
 #ushs
 	move	@pup_trbstealth,a14		
 	btst	a11,a14				;Plyr have stealth turbo?
-	jrnz	x				;br=yes
+	jrnz	x5				;br=yes
 
 ;	move	*a10(plyr_keeppal),a14
-;	jrnz	x				;Br=flames on body mode
+;	jrnz	x5				;Br=flames on body mode
 
 	movi	wht_shoes,a0			;*pal data
 ;	btst	0,a11
@@ -1617,10 +1619,10 @@ game_ovr_mod
 #noturb
 	move	@GAMSTATE,a14			;No pal change in attract
 	cmpi	INAMODE,a14
-	jrz	x
+	jrz	x5
 	move	*a13(PDATA),a14,L		;Nothing to do if already set
 	cmp	a0,a14
-	jrz	x
+	jrz	x5
   	move	a0,*a13(PDATA),L		;Save *pal data
 	
 	move	*a9(OPAL),a1
@@ -1629,7 +1631,7 @@ game_ovr_mod
 ;	movk	16,a2				;!!!Color cnt
 	movk	13,a2				;!!!Color cnt
 	calla	pal_set
-#x
+#x5
 	rets
 
 
@@ -1857,7 +1859,7 @@ player_t
 	movi	guyhds,a9
 
 	SLEEPK	20
-#lp
+#lpw
 ;Do left side
 	movi	[-90,0],a0
 	movi	[92,0],a1
@@ -1866,7 +1868,7 @@ player_t
 	movi	DMAWNZ|M_NOCOLL,a4
 	movi	CLSDEAD,a5
 	movi	[4,8000h],a6
-	clr	a7
+	clr	    a7
 	calla	BEGINOBJ
 
 	CREATE0	del_me
@@ -1878,7 +1880,7 @@ player_t
 	movi	DMAWNZ|M_NOCOLL,a4
 	movi	CLSDEAD,a5
 	movi	[4,8000h],a6
-	clr	a7
+	clr	    a7
 	calla	BEGINOBJ
 
 	CREATE0	del_me
@@ -1921,13 +1923,14 @@ player_t
 	SOUND1	bounce_snd
 	movk	1,a0
 	move	a0,@SOUNDSUP		;turn all sounds off
-	jruc	x
-nob 	dsj	a11,lplp
-	dsj	a10,lp
+	jruc	x6
+nob 
+    dsj	    a11,lplp
+	dsj	    a10,lpw
 
 	SLEEP	2ah
 	
-#x	calla	pal_clean
+#x6	calla	pal_clean
 
 	RETP
 
@@ -1967,8 +1970,9 @@ del_me	SLEEP	74h
 
 ;	clr	a9
 
-#lp	move	*a10+,a4,L
-	jrz	x
+#lpq	
+    move	*a10+,a4,L
+	jrz	    x7
 	calla	print_string_C2
 
 	SLEEPK	11
@@ -1984,8 +1988,8 @@ del_me	SLEEP	74h
 	movi	CLSDEAD|123,a0
 	calla	obj_del1c		;delete text
 
-	jruc	lp
-#x
+	jruc	lpq
+#x77
 	movi	CLSDEAD|124,a0
 	calla	obj_del1c		;delete text
 
