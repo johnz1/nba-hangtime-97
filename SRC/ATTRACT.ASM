@@ -251,11 +251,11 @@
 ;	calla	SNDSND
 
 	movi	ACTIVE,a0		;>Look for indestructables
-	jruc	nxt
+	jruc	nxta
 
 #ilp	move	*a0(PROCID),a14
 	jrn	slp			;Found?
-#nxt	move	*a0,a0,L
+#nxta	move	*a0,a0,L
 	jrnz	ilp
 
 	calla	process_init		;Init process list
@@ -305,7 +305,7 @@
 
  SUBRP	amode
 
-#lp
+#lp4
 	movi	AMODE_PID,a0
 	move	a0,*a13(PROCID)
 
@@ -378,11 +378,11 @@
 	.if	TRIVCON
 	move	@amodeloop,a0
 	andi	03fH,a0
-	jrnz	lp
+	jrnz	lp4
 	JSRP	trivia_rules
 	.endif	;TRIVCON
 ;DJT End
-	jruc	lp
+	jruc	lp4
 
 
 	.def	pObj
@@ -415,9 +415,9 @@ amode_design
 
 	movi	2*TSEC,a11
 	movi	#stick_t,a8
-#lp
+#lp5
 	move	*a8+,a10
-	jrn	xb
+	jrn	xb1
 	move	*a8+,a0
 #lp1a
 	move	a0,@stick_amode_mkplr
@@ -434,15 +434,15 @@ amode_design
 	SOUND1	bounce_snd
 	movk	1,a0
 	move	a0,@SOUNDSUP		;turn all sounds off
-	jruc	xb
+	jruc	xb1
 #nob
 	subk	1,a11
 #nob1
 	clr	a0
 	dsj	a10,lp1a
-	jruc	lp
+	jruc	lp5
 
-#xb
+#xb1
 	clr	a0
 	move	a0,@stick_amode_mkplr
 
@@ -714,19 +714,19 @@ show_title
 
 
 	movi	6*TSEC,a10
-#lp	SLEEPK	1
+#lp6	SLEEPK	1
 	calla	get_all_buttons_cur2
-	jrz	nob
+	jrz	nob2
 
       	clr	a0
 	move	a0,@SOUNDSUP		;turn all sounds on
 	SOUND1	bounce_snd
 	movk	1,a0
 	move	a0,@SOUNDSUP		;turn all sounds off
-	jruc	xb
-#nob	
-	dsj	a10,lp
-#xb
+	jruc	xb2
+#nob2	
+	dsj	a10,lp6
+#xb2
 ;DJT Start
 	movi	CYCPID,A0
 	calla	KIL1C
@@ -796,7 +796,7 @@ ttl_setscl
 	jrnz	msg
 	addi	CMESS_LINE_SIZE,a7
 	dsj	a2,cmlp
-	jruc	x
+	jruc	x7
 #msg
 	calla	display_blank
 	calla	WIPEOUT
@@ -841,7 +841,7 @@ ttl_setscl
 
 	move	a13,a8
 	addi	som_string,a8
-	clr	a0
+	clr	    a0
 	movk	1,a10
 	movi	inga16_asc_tbl,a11
 	PUSHP	a9
@@ -850,8 +850,9 @@ ttl_setscl
 
 	movi	OBJLST,a14
 
-#olp	move	*a14,a14,L	;A14=*Next
-	jrz	oend
+#olp	
+    move	*a14,a14,L	;A14=*Next
+	jrz	    oend
 	move	*a14(ODATA_p),a0,L
 	jrnz	olp
 	movi	[0320H,0320H],a1
@@ -863,7 +864,7 @@ ttl_setscl
 	SLEEPK	30
 	PULLP	a6
 	PULLP	a2,a7
-#nxt
+#nxtb
 	addi	[45,0],a9
 
 	addi	CMESS_LINE_SIZE,a7
@@ -886,7 +887,7 @@ ttl_setscl
 
 	calla	WIPEOUT
 
-#x	RETP
+#x7	RETP
 ;End of FIX
 ;DJT Start
 	.endif	;OPERMES
@@ -946,18 +947,18 @@ ttl_setscl
 	SLEEP	1*TSEC
 
 	movi	1*TSEC,a10
-#lp0	SLEEPK	1
+#lp0a	SLEEPK	1
 	calla	get_all_buttons_cur2
-	jrz	nob0
+	jrz	nob0a
       	clr	a0
 	move	a0,@SOUNDSUP		;turn all sounds on
 	SOUND1	bounce_snd
 	movk	1,a0
 	move	a0,@SOUNDSUP		;turn all sounds off
-	jruc	xb0
-#nob0
-	dsj	a10,lp0
-#xb0
+	jruc	xb0a
+#nob0a
+	dsj	a10,lp0a
+#xb0a
 	clr	a10
 	movk	8,a11
 	CREATE0	fade_down
@@ -1000,18 +1001,18 @@ ttl_setscl
 	SLEEP	1*TSEC
 
 	movi	4*TSEC,a10
-#lp	SLEEPK	1
+#lp7	SLEEPK	1
 	calla	get_all_buttons_cur2
-	jrz	nob
+	jrz	nob3
       	clr	a0
 	move	a0,@SOUNDSUP		;turn all sounds on
 	SOUND1	bounce_snd
 	movk	1,a0
 	move	a0,@SOUNDSUP		;turn all sounds off
-	jruc	xb
-#nob	
-	dsj	a10,lp
-#xb
+	jruc	xb3
+#nob3	
+	dsj	a10,lp7
+#xb3
 	clr	a10
 	movk	8,a11
 	CREATE0	fade_down
@@ -1119,18 +1120,18 @@ legal_msg_str
 	SLEEP	1*TSEC
 
 	movi	4*TSEC,a10
-#lp0	SLEEPK	1
+#lp0b	SLEEPK	1
 	calla	get_all_buttons_cur2
-	jrz	nob0
+	jrz	nob0b
       	clr	a0
 	move	a0,@SOUNDSUP		;turn all sounds on
 	SOUND1	bounce_snd
 	movk	1,a0
 	move	a0,@SOUNDSUP		;turn all sounds off
-	jruc	xb0
-#nob0
-	dsj	a10,lp0
-#xb0
+	jruc	xb0b
+#nob0b
+	dsj	a10,lp0b
+#xb0b
 	clr	a10
 	movk	8,a11
 	CREATE0	fade_down
@@ -2240,17 +2241,17 @@ ck_octopus2
 	clr	a10
 	movi	butn_lst,a9
 
-#lp	SLEEPK	1
+#lp8	SLEEPK	1
 
 	move	@SWITCH,a0
 	zext	a0
 	cmpi	0ffffH,a0
 	jrnz	tag1
 	clr	a11
-	jruc	lp
+	jruc	lp8
 
 #tag1	move	a11,a11
-	jrnz	lp
+	jrnz	lp8
 
 	inc	a11
 
@@ -2259,10 +2260,10 @@ ck_octopus2
 	cmp	a0,a1
 	jrz	yes
 	movi	butn_lst,a9
-	jruc	lp
+	jruc	lp8
 #yes	addk	16,a9
 	move	*a9,a0
-	jrnz	lp
+	jrnz	lp8
 	movk	1,a0
 	move	a0,@octopus2		
 
@@ -2339,18 +2340,18 @@ butn_lst
 	SLEEP	1*TSEC+30
 
 	movi	4*TSEC,a10
-#lp	SLEEPK	1
+#lp9	SLEEPK	1
 	calla	get_all_buttons_cur2
-	jrz	nob
+	jrz	nob4
 ;      	clr	a0
 ;	move	a0,@SOUNDSUP		;turn all sounds on
 	SOUND1	bounce_snd
 ;	movk	1,a0
 ;	move	a0,@SOUNDSUP		;turn all sounds off
-	jruc	xb
-#nob	
-	dsj	a10,lp
-#xb
+	jruc	xb4
+#nob4	
+	dsj	a10,lp9
+#xb4
 
 	clr	a10
 	movk	8,a11
@@ -2413,18 +2414,19 @@ butn_lst
 	SLEEP	1*TSEC+30
 
 	movi	3*TSEC,a10
-#lp	SLEEPK	1
+#lp10
+   	SLEEPK	1
 	calla	get_all_buttons_cur2
-	jrz	nob
+	jrz	nob5
 ;      	clr	a0
 ;	move	a0,@SOUNDSUP		;turn all sounds on
 	SOUND1	bounce_snd
 ;	movk	1,a0
 ;	move	a0,@SOUNDSUP		;turn all sounds off
-	jruc	xb
-#nob	
-	dsj	a10,lp
-#xb
+	jruc	xb5
+#nob5	
+	dsj	a10,lp10
+#xb5
 
 	clr	a10
 	movk	8,a11
@@ -2536,18 +2538,19 @@ NONO1
 ;FIX!!!
 	movi	27*60,a10
 ;	movi	50*60,a10
-#lp	SLEEPK	2
+#lp11
+	SLEEPK	2
 	calla	get_all_buttons_cur2
-	jrz	nob
+	jrz	nob6
       	clr	a0
 	move	a0,@SOUNDSUP		;turn all sounds on
 	SOUND1	bounce_snd
 	movk	1,a0
 	move	a0,@SOUNDSUP		;turn all sounds off
-	jruc	xb
-#nob	
-	dsj	a10,lp
-#xb
+	jruc	xb6
+#nob6	
+	dsj	a10,lp11
+#xb6
 ;2/9/93
 ;	jruc	loop
 
@@ -2646,23 +2649,24 @@ NUM_DEMOHEADS	.equ	($-demoheads)/16
 update_insert
 
 	calla	CR_STRTP		;Credits to start
-	jrlo	#x			;No?
+	jrlo	#x5a		;No?
 	movi	start,a1
 	movi	OBJLST,a8
 
-#lp	move	*a8,a8,L
-	jrz	x		;End?
+#lp12
+	move	*a8,a8,L
+	jrz	x5a		;End?
 	move	*a8(OIMG),a0,L
 	cmpi	insert,a0
-	jrne	lp		;No match?
+	jrne	lp12		;No match?
   	move	*a8(OFLAGS),a4
 ;DJT Start
 	btst	B_CHARGEN,a4	;But don't change it if its a chargen name
-	jrnz	lp
+	jrnz	lp12
 ;DJT End
 	calla	ANI
-	jruc	lp
-#x	rets
+	jruc	lp12
+#x5a	rets
 
 
 
@@ -2779,7 +2783,7 @@ GETAUD4
 	movk	1,a0
 	calla	create_title_bar
 
-	movi	heading_setup,a2
+	movi	heading_setupa,a2
 	calla	setup_message
 	movi	#caplr_heading,a4
 	calla	print_string_C2
@@ -2850,9 +2854,9 @@ GETAUD4
 	movk	1,a0
 	calla	create_title_bar
 
-	movi	heading_setup,a2
+	movi	heading_setupa,a2
 	calla	setup_message
-	movi	#str_heading,a4
+	movi	#str_headinga,a4
 	calla	print_string_C2
 
 	movi	YSPACE,a0
@@ -2886,15 +2890,15 @@ GETAUD4
 	SLEEP	2*TSEC
 
 	movi	7*TSEC,a10
-#butp
+#butpa
 	SLEEPK	1
 	calla	get_all_buttons_cur2
-	jrz	butp1
+	jrz	    butp1a
 	SOUND1	bounce_snd
-	jruc	butp2
-#butp1
-	dsj	a10,butp
-#butp2
+	jruc	butp2a
+#butp1a
+	dsj	a10,butpa
+#butp2a
 
 	movi	CYCPID,a0
 	calla	KIL1C
@@ -2908,14 +2912,14 @@ GETAUD4
  SUBR	hint_page
 
 	movi	4*60,a10
-#lp
+#lp13
 	SLEEPK	1
 	dec	a10
-	jrz	tvout
+	jrz	tvouta
 	move	@tvpanelon,a0,L
-	jrnz	lp
+	jrnz	lp13
 
-#tvout
+#tvouta
 	callr	kill_tvpanel
 
 	SOUND1	bounce_snd
@@ -2957,9 +2961,9 @@ GETAUD4
 	movk	1,a0
 	calla	create_title_bar
 
-	movi	heading_setup,a2
+	movi	heading_setupa,a2
 	calla	setup_message
-	movi	#str_heading,a4
+	movi	#str_headinga,a4
 	calla	print_string_C2
 
 	movi	YSPACE,a0
@@ -2993,12 +2997,12 @@ GETAUD4
 	SLEEP	TSEC*2
 
 	movi	7*TSEC,a10
-#whopper_with_cheese
+#whopper_with_cheesea
 	SLEEPK	1
 	calla	get_all_buttons_cur2
-	jrnz	exit
-	dsj	a10,whopper_with_cheese
-#exit
+	jrnz	exita
+	dsj	a10,whopper_with_cheesea
+#exita
 
 	SOUND1	bounce_snd
 
@@ -3061,7 +3065,7 @@ kill_tvpanel
 	.asg	20,LN0
 	.asg	120,LN1
 
-heading_setup
+heading_setupa
 	PRINT_STR	brush20_ascii,8,0,200,7,BRSHGYOP,0
 heading2_setup
 	PRINT_STR	bast18_ascii,8,0,200,LN0+45,BST18B2_P,0
@@ -3069,7 +3073,7 @@ LN1_setup
 	PRINT_STR	bast10_ascii,6,0,44,LN1-10,BAST_D_P,0
 
 
-#str_heading
+#str_headinga
 	.string	"coaching tips",0
 	.even
 
@@ -3623,9 +3627,9 @@ hve_fun_str_setup
 	movk	1,a0
 	calla	create_title_bar
 
-	movi	#heading_setup,a2
+	movi	#heading_setupb,a2
 	calla	setup_message
-	movi	#str_heading,a4
+	movi	#str_headingb,a4
 	calla	print_string_C2
 
 	movk	1,a0
@@ -3636,7 +3640,7 @@ hve_fun_str_setup
 	calla	display_unblank
 
 	movi	#str_tbl,a9,L
-#lp
+#lp14
 	movi	LN1b_setup,a2
 	calla	setup_message
 	movi	CLSNEUT|TYPTEXT|SUBMES1,a0
@@ -3694,7 +3698,7 @@ hve_fun_str_setup
      
 	movi	CLSNEUT|TYPTEXT|SUBMES1,a0
 	calla	obj_del1c
-	jruc	lp
+	jruc	lp14
 
 #cont0
 	SLEEP	2*TSEC
@@ -3714,7 +3718,7 @@ hve_fun_str_setup
 	RETP
 
 
-#heading_setup
+#heading_setupb
 	PRINT_STR	brush20_ascii,8,0,200,7,BRSHGYOP,0
 LN1b_setup
 	PRINT_STR	brush50_ascii,24,0,200,62,BRSH50R_P,0
@@ -3729,112 +3733,112 @@ LN2b_setup
 
 ;DJT Start
 #str_tbl
-  .long	#str_h0
-  .long	#str_h0a
-  .long	#str_h1
-  .long	#str_h1a
-  .long	#str_h2
-  .long	#str_h2a
-  .long	#str_h3
-  .long	#str_h3a
-  .long	#str_h4
-  .long	#str_h4a
-  .long	#str_h5
-  .long	#str_h5a
-  .long	#str_h6
-  .long	#str_h6a
-  .long	#str_h7
-  .long	#str_h7a
+  .long	#xstr_h0
+  .long	#xstr_h0a
+  .long	#xstr_h1
+  .long	#xstr_h1a
+  .long	#xstr_h2
+  .long	#xstr_h2a
+  .long	#xstr_h3
+  .long	#xstr_h3a
+  .long	#xstr_h4
+  .long	#xstr_h4a
+  .long	#xstr_h5
+  .long	#xstr_h5a
+  .long	#xstr_h6
+  .long	#xstr_h6a
+  .long	#xstr_h7
+  .long	#xstr_h7a
  .if	TRIVCON
-  .long	#str_h8
-  .long	#str_h8a
+  .long	#xstr_h8
+  .long	#xstr_h8a
  .endif	;TRIVCON
-  .long	#str_h9
-  .long	#str_h9a
-  .long	#str_h10
-  .long	#str_h10a
+  .long	#xstr_h9
+  .long	#xstr_h9a
+  .long	#xstr_h10
+  .long	#xstr_h10a
   .long	4000,4000
 
 
-#str_heading
+#str_headingb
 	.string	"HANGTIME MAXIMIZED!",0
 ;	.string	"HANGTIME HIGHLIGHTS",0
 	.asg	1,CR		    
 
-#str_h0
+#xstr_h0
 	.string	"1997",0
 ;	.string	"150 NBA",0
-#str_h0a
+#xstr_h0a
 	.string	"LINEUPS",0
 ;	.string	"PLAYERS",0
 
-#str_h1
+#xstr_h1
 	.string	"COLLEGE",0
 ;	.string	"CREATE",0
-#str_h1a
+#xstr_h1a
 	.string	"ROOKIES",0
 ;	.string	"PLAYER",0
 
-#str_h2
+#xstr_h2
 	.string	"HOT",0
 ;	.string	"ALLEY",0
-#str_h2a
+#xstr_h2a
 	.string	"SPOTS",0
 ;	.string	"OOPS",0
 
-#str_h3
+#xstr_h3
 	.string	"TEAM",0
 ;	.string	"DOUBLE",0
-#str_h3a
+#xstr_h3a
 	.string	"FIRE",0
 ;	.string	"DUNKS",0
 
-#str_h4
+#xstr_h4
 	.string	"SIZZLING",0
 ;	.string	"ROOF TOP",0
-#str_h4a
+#xstr_h4a
 	.string	"FINALE",0
 ;	.string	"COURT",0
 
-#str_h5
+#xstr_h5
 	.string	"SMARTER",0
 ;	.string	"SPIN",0
-#str_h5a
+#xstr_h5a
 	.string	"DRONES",0
 ;	.string	"MOVES",0
 
-#str_h6
+#xstr_h6
 	.string	"RADICAL",0
 ;	.string	"DIGITAL",0
-#str_h6a
+#xstr_h6a
 	.string	"DUNKS",0
 ;	.string	"SOUND",0
 
-#str_h7
+#xstr_h7
 	.string	"BETTER",0
 ;	.string	"M DOC",0
-#str_h7a
+#xstr_h7a
 	.string	"GAMEPLAY",0
 ;	.string	"RAPS",0
 
  .if	TRIVCON
-#str_h8
+#xstr_h8
 	.string	"TRIVIA",0
-#str_h8a
+#xstr_h8a
 	.string	"CONTEST",0
  .endif	;TRIVCON
 
-#str_h9
+#xstr_h9
 	.string	"NEW",0
 ;	.string	"MEGA",0
-#str_h9a
+#xstr_h9a
 	.string	"POWERUPS",0
 ;	.string	"SECRETS",0
 
-#str_h10
+#xstr_h10
 	.string	"AND NEW",0
 ;	.string	"AND",0
-#str_h10a
+#xstr_h10a
 	.string	"SECRETS!",0
 ;	.string	"MORE!",0
 
@@ -3848,21 +3852,21 @@ LN2b_setup
   
 	movi	OBJLST,a14
 	movi	fontram,a3
-	clr	a4
+	clr	    a4
 	move	a4,*a3,L
 	
-#lp
+#lp15
 	move	*a14,a14,L
-	jrz	x
+	jrz	    x5
 	move	*a14(OID),a2
 	cmpi	CLSNEUT|TYPTEXT|SUBMES1,a2
-	jrne	lp
+	jrne	lp15
 	move	a14,*a3+,L
 	move	a4,*a3,L
-	jruc	lp
+	jruc	lp15
 
 		
-#x	movk	3,a10
+#x5	movk	3,a10
 	.ref	white_pal
 #top	movi	white_pal,a0
 	calla	pal_getf
@@ -3987,7 +3991,7 @@ td_1
  SUBR	stats_page2
 
 	PUSHP	a0
-	jruc	tvout
+	jruc	tvoutb
 
  SUBR	stats_page
 
@@ -3997,10 +4001,10 @@ td_1
 
 #stop	SLEEPK	1
 	dec	a10
-	jrz	tvout
+	jrz	tvoutb
 	move	@tvpanelon,a0,L
 	jrnz	stop
-#tvout
+#tvoutb
 	callr	kill_tvpanel
 
 	calla	display_blank
@@ -4027,20 +4031,20 @@ td_1
 
 	movi	#halftime_mod,a0
 	move	@TWOPLAYERS,a1		;0 = NO, 1 = YES 2 players
-	jrz	4_plyrs
+	jrz	    x4_plyrs
 	movi	#halftime_mod2,a0
-#4_plyrs
+#x4_plyrs
 	move	a0,@BAKMODS,L
 	calla	BGND_UD1
 
-	movi	#heading_setup,a2
+	movi	#heading_setupc,a2
 	calla	setup_message
 	PULLP	a0
 	movi	#str_heading1,a4
 	move	a0,a0
-	jrz	1st_half
+	jrz	    x1st_half
 	movi	#str_heading2,a4
-#1st_half
+#x1st_half
 	calla	print_string_C2
 
 	move	@special_heads,a1,L
@@ -4049,7 +4053,7 @@ td_1
 
 
 	move	@TWOPLAYERS,a1		;0 = NO, 1 = YES 2 players
-	jrz	4_plyrsb
+	jrz	x4_plyrsb
 
 	move	@special_heads,a0
 	move	@special_heads+10h,a1
@@ -4057,7 +4061,7 @@ td_1
 	move	a1,@special_heads
 	move	a0,@special_heads+10h
 
-#4_plyrsb
+#x4_plyrsb
 	movk	2,a0
 	calla	create_title_bar
 	calla	create_stat_titles
@@ -4111,9 +4115,9 @@ td_1
 
 	movi	STARTY1+29,a0
 	move	@TWOPLAYERS,a1		;0 = NO, 1 = YES 2 players
-	jrz	4_plyrs_ps1
+	jrz	x4_plyrs_ps1
 	movi	STARTY1+29,a0
-#4_plyrs_ps1
+#x4_plyrs_ps1
 	move	a0,*a13(HTS_STARTY)
 	callr	print_pstats
 
@@ -4133,9 +4137,9 @@ td_1
 
 	movi	STARTY2+29,a0
 	move	@TWOPLAYERS,a1		;0 = NO, 1 = YES 2 players
-	jrz	4_plyrs_ps2
+	jrz	x4_plyrs_ps2
 	movi	STARTY2+29,a0
-#4_plyrs_ps2
+#x4_plyrs_ps2
 	move	a0,*a13(HTS_STARTY)
 	callr	print_pstats
 
@@ -4188,21 +4192,21 @@ td_1
 	move	@plyr_onfire,a10
 	jrz	nofire
 	srl	1,a10
-	jrnc	nop1
+	jrnc	nop1a
 	clr	a11
 	CREATE	FIRE_ANIM_PID,anim_fire_for_best_plyr
 
-#nop1	srl	1,a10
-	jrnc	nop2
+#nop1a	srl	1,a10
+	jrnc	nop2a
 	movk	1,a11
 	CREATE	FIRE_ANIM_PID,anim_fire_for_best_plyr
 
-#nop2	srl	1,a10
-	jrnc	nop3
+#nop2a	srl	1,a10
+	jrnc	nop3a
 	movk	2,a11
 	CREATE	FIRE_ANIM_PID,anim_fire_for_best_plyr
 
-#nop3	srl	1,a10
+#nop3a	srl	1,a10
 	jrnc	nofire
 	movk	3,a11
 	CREATE	FIRE_ANIM_PID,anim_fire_for_best_plyr
@@ -4218,12 +4222,12 @@ td_1
 
 	movi	21*TSEC,a10
 
-#whopper_with_cheese
+#whopper_with_cheeseb
 	SLEEPK	1
 	calla	get_all_buttons_cur2
-	jrnz	exit
-	dsj	a10,whopper_with_cheese
-#exit
+	jrnz	exitb
+	dsj	a10,whopper_with_cheeseb
+#exitb
 	SLEEPK	3
 
 	calla	kill_fire_anim
@@ -4255,13 +4259,13 @@ td_1
 	movk	ADJTRIVIA,a0		;Get difficulty level
 	calla	GET_ADJ
 	move	a0,a0			;if value is NON-ZERO, dont allow
-	jrnz	notriv
+	jrnz	notriva
 
 	move	@gmqrtr,a0
 	cmpi	4,a0
-	jrlt	notriv
+	jrlt	notriva
 	JSRP	trivia_game
-#notriv
+#notriva
 ;TRIVIA
 	.endif	;TRIVCON
 ;DJT End
@@ -4477,7 +4481,7 @@ COLTABRED
 	.word	0,0
 	.long	0
 
-#heading_setup
+#heading_setupc
 	PRINT_STR	brush20_ascii,8,0,200,7,BRSHGYOP,0
 #str_heading1
 	.string	"1st half stats",0
@@ -4810,7 +4814,7 @@ COLTABRED
 	movi	100,a1			;max value
 	calla	dec_to_asc
 	calla	copy_string
-	movi	#str_pct,a4
+	movi	#xstr_pct,a4
 	calla	concat_rom_string
 	calla	print_string_R
 
@@ -4865,7 +4869,7 @@ COLTABRED
 	movi	100,a1			;max value
 	calla	dec_to_asc
 	calla	copy_string
-	movi	#str_pct,a4
+	movi	#xstr_pct,a4
 	calla	concat_rom_string
 	calla	print_string_R
 
@@ -5060,7 +5064,7 @@ COLTABRED
 
 #str_slash
 	.string	"/",0
-#str_pct
+#xstr_pct
 	.string	"%",0
 	.even
 
@@ -5197,7 +5201,7 @@ K_GILL	.equ	WALLACE+1
 	movk	1,a0
 	calla	create_title_bar
 
-	movi	#heading_setup,a2
+	movi	#heading_setupd,a2
 	calla	setup_message
 
 	movi	kern_chars,a0
@@ -5407,14 +5411,14 @@ K_GILL	.equ	WALLACE+1
 	move	a0,@tmloop
 ;	jruc	toplp			;FOR DEBUGING
 	jrnz	toplp
-	jruc	xb
+	jruc	xb7
 #mksnd
       	clr	a0
 	move	a0,@SOUNDSUP		;turn all sounds on
 	SOUND1	bounce_snd
 	movk	1,a0
 	move	a0,@SOUNDSUP		;turn all sounds off
-#xb
+#xb7
 	movi	CYCPID,a0
 	calla	KIL1C
 ;;	calla	pal_clean
@@ -5433,7 +5437,7 @@ K_GILL	.equ	WALLACE+1
 	PRINT_STR	brush20_ascii,8,0,125,59,BRSHGWKP,0
 	
 
-#heading_setup
+#heading_setupd
 	PRINT_STR	brush20_ascii,8,0,200,7,BRSHGYOP,kern_chars
 
 
@@ -5712,28 +5716,28 @@ str_name_ptrs
 
 	move	@PSTATUS2,a0			;if nobody has entered their
 	btst	0,a0				;initials, then skip this
-	jrz	nop1
+	jrz	nop1b
 	move	@player1_data+PR_NAME1,a0
 	jrgt	#have_initials
-#nop1
+#nop1b
 	move	@PSTATUS2,a0
 	btst	1,a0
-	jrz	nop2
+	jrz	nop2b
 	move	@player2_data+PR_NAME1,a0
 	jrgt	#have_initials
-#nop2
+#nop2b
 	move	@PSTATUS2,a0
 	btst	2,a0
-	jrz	nop3
+	jrz	nop3b
 	move	@player3_data+PR_NAME1,a0
 	jrgt	#have_initials
-#nop3
+#nop3b
 	move	@PSTATUS2,a0
 	btst	3,a0
-	jrz	nop4
+	jrz	nop4b
 	move	@player4_data+PR_NAME1,a0
 	jrgt	#have_initials
-#nop4
+#nop4b
 	RETP
 
 
@@ -5795,12 +5799,12 @@ str_name_ptrs
 
 	SLEEP	TSEC
 	movi	9*TSEC,a10
-#whopper_with_cheese
+#whopper_with_cheesec
 	SLEEPK	1
 	calla	get_all_buttons_cur2
-	jrnz	exit
-	dsj	a10,whopper_with_cheese
-#exit
+	jrnz	exitc
+	dsj	a10,whopper_with_cheesec
+#exitc
 	SLEEPK	1
 
 	RETP
@@ -5845,7 +5849,7 @@ str_name_ptrs
 
 	.asg	204,INITY
 
-#heading_setup
+#heading_setupe
 	PRINT_STR	bast18_ascii,8,0,200,6,BST18G_P,0
 #rank_setup1
 	PRINT_STR	bast8t_ascii,3,0,0,RANKY,BAST_W_P,0
@@ -6379,7 +6383,7 @@ strings	.long	#s1,#s2,#s3,#s4,#s5,#s6,#s7,#s8,#s9,#s10
 	movk	ADJTRIVIA,a0		;Get difficulty level
 	calla	GET_ADJ
 	move	a0,a0			;if value is NON-ZERO, dont allow
-	jrnz	notriv
+	jrnz	notrivb
 
 	calla	display_blank
 	calla	WIPEOUT
@@ -6404,7 +6408,7 @@ strings	.long	#s1,#s2,#s3,#s4,#s5,#s6,#s7,#s8,#s9,#s10
 	SLEEPK	1			;Make sure page is clear
 
 	movi	#strops,a11
-#lp
+#lp16
 	clr	a0
 	move	a0,@DISPLAYON
 	move	a0,@dpageflip
@@ -6420,9 +6424,9 @@ strings	.long	#s1,#s2,#s3,#s4,#s5,#s6,#s7,#s8,#s9,#s10
 	movk	24,a0
 	move	a0,@mess_line_spacing
 
-	movi	#heading_setup,a2
+	movi	#heading_setupf,a2 ;!!AM not sure if this one wants line 5852 or 6605?
 	calla	setup_message
-	movi	#str_heading,a4
+	movi	#str_headingc,a4
 	calla	print_string_C2
 
 	movi	#nopurch_setup,a2
@@ -6435,7 +6439,7 @@ strings	.long	#s1,#s2,#s3,#s4,#s5,#s6,#s7,#s8,#s9,#s10
 	movk	9,a0
 	move	a0,@mess_line_spacing
 
-	jruc	nxt
+	jruc	nxtc
 
 #dostr
 	move	*a11+,a0
@@ -6443,7 +6447,7 @@ strings	.long	#s1,#s2,#s3,#s4,#s5,#s6,#s7,#s8,#s9,#s10
 	move	a0,@mess_cursx
 	move	a1,@message_palette,L
 	calla	print_string_C2
-#nxt
+#nxtc
 	move	*a11+,a4,L
 	jrnz	dostr
 
@@ -6479,14 +6483,14 @@ strings	.long	#s1,#s2,#s3,#s4,#s5,#s6,#s7,#s8,#s9,#s10
 
 #butp2
 	move	*a11,a4,L
-	jrnz	lp
+	jrnz	lp16
 
 	clr	a10
 	movk	8,a11
 	CREATE0	fade_down
 
 	SLEEP	40
-#notriv
+#notrivb
  	RETP
 
 
@@ -6598,10 +6602,10 @@ strings	.long	#s1,#s2,#s3,#s4,#s5,#s6,#s7,#s8,#s9,#s10
 	.word	3
 	.word	0,0,(1fh*32+1fh)*32+1fh
 
-#heading_setup
+#heading_setupf
 	PRINT_STR	bast18_ascii,8,0,200,7,BSTGYO_P,0
 
-#str_heading
+#str_headingc
 	.string	"NBA HANGTIME SWEEPSTAKES",1
 	.string	"OFFICIAL RULES",0
 	.even
@@ -6609,7 +6613,7 @@ strings	.long	#s1,#s2,#s3,#s4,#s5,#s6,#s7,#s8,#s9,#s10
 #nopurch_setup
 	PRINT_STR	bast10_ascii,8,0,200,59,BAST_G_P,0
 
-#str_nopurch
+#str_nopurch   
 	.string	"NO PURCHASE NECESSARY",0
 	.even
 
