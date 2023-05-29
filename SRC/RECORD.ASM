@@ -10,6 +10,8 @@
 *.Last mod - 12/5/92 19:34
 *
 *  Updated to account for pin number rather than month and day
+*
+* !!AM!! remember to put back the POUND# for str_num when search and replace!!!
 ******************************************************************************
 
 	.file	"record.asm"
@@ -1224,20 +1226,20 @@ gwr_2
 	clr	a0
 	movi	TR_SIZE/16,a1
 	movi	tm_stat_ram,a2
-#clrit
+#clrita
 	move	a0,*a2+
-	dsj	a1,clrit
+	dsj	a1,clrita
 
 	movi	NUM_TM_RECORDS,a11			;nbr records
 	movi	TEAM_RECORD_ORIGIN,a10			;start addr.
-#clear_loop
+#clear_loopa
 	PUSH	a10,a11
 
 	callr	put_temp_tm_record		;write out record
 
 	PULL	a10,a11
 	addi	PKDTR_SIZE*2,a10	;cmos words
-	dsj	a11,clear_loop
+	dsj	a11,clear_loopa
 	rets
 
 
@@ -1273,11 +1275,11 @@ gwr_2
 
 	movi	PKDTR_SIZE/8,a3			;number bytes to write
 	movi	packed_tm_record,a2
-#next_word
+#next_worda
 	movb	*a2,a0
 	calla	WC_BYTEI
 	addk	8,a2
-	dsj	a3,next_word
+	dsj	a3,next_worda
 
 	PULL	a7
 	PULL	a6
@@ -1805,7 +1807,7 @@ _CHI	.equ	3
 	move	@player2_data+PR_TEAMSDEF,a0,L
 	or	a1,a0
 	move	a0,@player2_data+PR_TEAMSDEF,L
-	jruc	cont1
+	jruc	cont1a
 
 #t2_wins
 	move	@player3_data+PR_WON,a0
@@ -1847,7 +1849,7 @@ _CHI	.equ	3
 	move	@player4_data+PR_TEAMSDEF,a0,L
 	or	a1,a0
 	move	a0,@player4_data+PR_TEAMSDEF,L
-#cont1
+#cont1a
 
 	calla	dec_lastplay
 
@@ -2103,12 +2105,12 @@ _CHI	.equ	3
 
 	PUSH	a6,a7
  	movi	temp_record,a6
-	jruc	start
+	jruc	starta
 
  SUBRP	get_plr_record
 
 	PUSH	a6,a7				;a6 = * player data
-#start
+#starta
 	movi	RECORD_SELECT,A1
 	calla	SET_PAGE
 
@@ -2116,11 +2118,11 @@ _CHI	.equ	3
 
 	movi	PKDPR_SIZE/8,a3			;number bytes to fetch
 	movi	packed_record,a2
-#next_word
+#next_wordb
 	calla	RC_BYTEI
 	movb	a0,*a2
 	addk	8,a2
-	dsj	a3,next_word
+	dsj	a3,next_wordb
 
 	movi	packed_record,a2
 
@@ -2259,12 +2261,12 @@ _CHI	.equ	3
 	PUSH	a2
 	clr	a0
 	movi	NUM_TEAMS,a2
-#next_team
+#next_teama
 	srl	1,a1
-	jrnc	not_def
+	jrnc	not_defa
 	inc	a0			;teams defeated count ++
-#not_def
-	dsj	a2,next_team
+#not_defa
+	dsj	a2,next_teama
 	move	a0,*a6(PR_NUMDEF)	;number teams defeated
 	PULL	a2
 
@@ -2296,12 +2298,12 @@ _CHI	.equ	3
 
 	PUSH	a6
 	movi	temp_record,a6
-	jruc	start
+	jruc	startb
 
  SUBRP	put_plr_record
 
 	PUSH	a6
-#start
+#startb
 
 	movi	RECORD_SELECT,A1
 	calla	SET_PAGE
@@ -2448,11 +2450,11 @@ _CHI	.equ	3
 
 	movi	PKDPR_SIZE/8,a3			;number bytes to write
 	movi	packed_record,a2
-#next_word
+#next_wordc
 	movb	*a2,a0
 	calla	WC_BYTEI
 	addk	8,a2
-	dsj	a3,next_word
+	dsj	a3,next_wordc
 
 	PULL	a7
 	PULL	a6
@@ -2472,18 +2474,18 @@ _CHI	.equ	3
 
 	clr	a11
 	movi	RECORD_ORIGIN,a10
-#search_loop
+#search_loopa
 	callr	get_temp_record		;data in temp_record
 	callr	compare_record
-	jrne	no_match
+	jrne	no_matcha
 	rets
 
-#no_match
+#no_matcha
 	addi	PKDPR_SIZE*2,a10	;cmos words
 
 	inc	a11
 	cmpi	NUM_PRECORDS-1,a11
-	jrlo	#search_loop
+	jrlo	#search_loopa
 ;	dsj	a11,search_loop
 	clr	a10
  	rets
@@ -2503,7 +2505,7 @@ _CHI	.equ	3
 	movi	NUM_PRECORDS,a11
 	movi	RECORD_ORIGIN,a10
 	move	a10,a9			;least used record to date
-#search_loop
+#search_loopb
 	callr	get_temp_record
 ;	move	@temp_record+PR_COUNT,a0
 ;	jrz	free_record
@@ -2521,7 +2523,7 @@ _CHI	.equ	3
 	move	a10,a9			;least used record to date
 #skip					;(lowest lastplay count)
 	addi	PKDPR_SIZE*2,a10	;cmos words
-	dsj	a11,search_loop
+	dsj	a11,search_loopb
 	move	a9,a10
 	rets
 
@@ -2538,60 +2540,60 @@ _CHI	.equ	3
 	jrnz	mybe				;br=so far...
 
 	move	@temp_record+PR_CREATED_PLYR,a1	;created player ?
-	jrle	#no_match			;br=yes, and no games played
+	jrle	#no_matchb			;br=yes, and no games played
 
 #mybe	move	*a6(PR_NAME1),a0
 	move	@temp_record+PR_NAME1,a1
 	cmp	a0,a1
-	jrne	no_match
+	jrne	no_matchb
 
 	move	*a6(PR_NAME2),a0
 	move	@temp_record+PR_NAME2,a1
 	cmp	a0,a1
-	jrne	no_match
+	jrne	no_matchb
 
 	move	*a6(PR_NAME3),a0
 	move	@temp_record+PR_NAME3,a1
 	cmp	a0,a1
-	jrne	no_match
+	jrne	no_matchb
 
 	move	*a6(PR_NAME4),a0
 	move	@temp_record+PR_NAME4,a1
 	cmp	a0,a1
-	jrne	no_match
+	jrne	no_matchb
 
 	move	*a6(PR_NAME5),a0
 	move	@temp_record+PR_NAME5,a1
 	cmp	a0,a1
-	jrne	no_match
+	jrne	no_matchb
 
 	move	*a6(PR_NAME6),a0
 	move	@temp_record+PR_NAME6,a1
 	cmp	a0,a1
-	jrne	no_match
+	jrne	no_matchb
 
 	move	*a6(PR_PIN_NBR1),a0		;just entered pin number #1
 	move	@temp_record+PR_PIN_NBR1,a1	;number in players record
 	cmp	a0,a1				;do they match ?
-	jrne	no_match			;br=no
+	jrne	no_matchb			;br=no
 
 	move	*a6(PR_PIN_NBR2),a0		;just entered pin number #2
 	move	@temp_record+PR_PIN_NBR2,a1	;number in players record
 	cmp	a0,a1				;do they match ?
-	jrne	no_match			;br=no
+	jrne	no_matchb			;br=no
 
 	move	*a6(PR_PIN_NBR3),a0		;just entered pin number #3
 	move	@temp_record+PR_PIN_NBR3,a1	;number in players record
 	cmp	a0,a1				;do they match ?
-	jrne	no_match			;br=no
+	jrne	no_matchb			;br=no
 
 	move	*a6(PR_PIN_NBR4),a0		;just entered pin number #4
 	move	@temp_record+PR_PIN_NBR4,a1	;number in players record
 	cmp	a0,a1				;do they match ?
-	jrne	no_match			;br=no
+	jrne	no_matchb			;br=no
 	rets					;Z set
 
-#no_match
+#no_matchb
 	movi	1,a0				;clear Z
 	rets
 
@@ -2609,13 +2611,13 @@ _CHI	.equ	3
 	move	*a9,a8,L
 	move	*a8(RS_RECORD_NUM),a0
 	cmp	a4,a0
-	jreq	found_match
+	jreq	found_matcha
 
 	addi	20h,a9
 	inc	a2
 	cmpi	NUM_PRECORDS,a2
 	jrls	#loop
-#found_match
+#found_matcha
 	PULL	a8
 	rets
 
@@ -2627,7 +2629,7 @@ _CHI	.equ	3
 
 	callr	find_record
 	move	a10,a10
-	jrz	no_match
+	jrz	no_matchc
 	callr	get_plr_record
 
 ;	movi	NUM_PRECORDS,a4
@@ -2643,7 +2645,7 @@ _CHI	.equ	3
 ;DJT Start
  SUBR	gpr_no_match
 ;DJT End
-#no_match
+#no_matchc
 	clr	a0
 	move	a0,*a6(PR_COUNT)
 	move	a0,*a6(PR_WON)
@@ -2683,7 +2685,7 @@ _CHI	.equ	3
 
 	callr	find_record
 	move	a10,a10
-	jrnz	found_match
+	jrnz	found_matchb
 	movk	1,a0			;1st game
 	move	a0,*a6(PR_COUNT)
 	movi	50,a0
@@ -2692,7 +2694,7 @@ _CHI	.equ	3
 	callr	put_plr_record
 	rets
 
-#found_match
+#found_matchb
 
 	move	*a6(PR_COUNT),a0
 	cmpi	1023,a0
@@ -2894,51 +2896,51 @@ cpor_3	PULL	a2,a9,a10
  SUBRP	sort_wins
 
 	movi	NUM_PRECORDS-1,a11
-#loop1
+#loop1a
 	movi	NUM_PRECORDS-1,a10
 
 	movi	record_sort_ptrs,a9
 
 	clr	a14
-#loop2
+#loop2a
 	move	*a9,a4,L
 	move	*a9(20h),a5,L
 
 	move	*a4(RS_WINS),a0
 	move	*a5(RS_WINS),a1
 	cmp	a1,a0				;a0-a1
-	jrhi	#no_swap
-	jrlo	#swap
+	jrhi	#no_swap0
+	jrlo	#swap0
 
 ;same, so compare average
 	move	*a4(RS_AVERAGE),a0
 	move	*a5(RS_AVERAGE),a1
 	cmp	a1,a0				;a0-a1
-	jrhi	#no_swap
-	jrlo	#swap
+	jrhi	#no_swap0
+	jrlo	#swap0
 
 
 ;same, so compare teams defeated
 	move	*a4(RS_TEAMSDEF),a0
 	move	*a5(RS_TEAMSDEF),a1
 	cmp	a1,a0				;a0-a1
-	jrhs	#no_swap
+	jrhs	#no_swap0
 
-#swap
+#swap0
 	movk	1,a14
 
 	move	a5,*a9,L
 	move	a4,*a9(20h),L
 
-#no_swap
+#no_swap0
 ;;	addi	RS_SIZE,a9
 	addi	20h,a9
 
-	dsj	a10,loop2
+	dsj	a10,loop2a
 	move	a14,a14
-	jrz	done
-	dsj	a11,loop1
-#done
+	jrz	done1
+	dsj	a11,loop1a
+#done1
 	rets
 
 *******************************************************************************
@@ -2952,52 +2954,52 @@ cpor_3	PULL	a2,a9,a10
  SUBRP	sort_streak
 
 	movi	NUM_PRECORDS-1,a11
-#loop1
+#loop1b
 	movi	NUM_PRECORDS-1,a10
 	movi	record_sort_ptrs,a9
 	clr	a14
-#loop2
+#loop2b
 	move	*a9,a4,L
 	move	*a9(20h),a5,L
 
 	move	*a4(RS_STREAK),a0
 	move	*a5(RS_STREAK),a1
 	cmp	a1,a0				;a0-a1
-	jrhi	#no_swap
-	jrlo	#swap
+	jrhi	#no_swapa
+	jrlo	#swapa
 
 ;same, so compare wins
 	move	*a4(RS_WINS),a0
 	move	*a5(RS_WINS),a1
 	cmp	a1,a0				;a0-a1
-	jrhi	#no_swap
-	jrlo	#swap
+	jrhi	#no_swapa
+	jrlo	#swapa
 
 ;same, so compare average
 	move	*a4(RS_AVERAGE),a0
 	move	*a5(RS_AVERAGE),a1
 	cmp	a1,a0				;a0-a1
-	jrhi	#no_swap
-	jrlo	#swap
+	jrhi	#no_swapa
+	jrlo	#swapa
 
 
 ;same, so compare teams defeated
 	move	*a4(RS_TEAMSDEF),a0
 	move	*a5(RS_TEAMSDEF),a1
 	cmp	a1,a0				;a0-a1
-	jrhs	#no_swap
+	jrhs	#no_swapa
 
-#swap
+#swapa
 	movk	1,a14
 	move	a5,*a9,L
 	move	a4,*a9(20h),L
-#no_swap
+#no_swapa
 	addi	20h,a9
-	dsj	a10,loop2
+	dsj	a10,loop2b
 	move	a14,a14
-	jrz	done
-	dsj	a11,loop1
-#done
+	jrz	done2
+	dsj	a11,loop1b
+#done2
 	rets
 
 *******************************************************************************
@@ -3012,52 +3014,52 @@ cpor_3	PULL	a2,a9,a10
  SUBRP	sort_exp
 
 	movi	NUM_PRECORDS-1,a11
-#loop1
+#loop1c
 	movi	NUM_PRECORDS-1,a10
 	movi	record_sort_ptrs,a9
 	clr	a14
-#loop2
+#loop2c
 	move	*a9,a4,L
 	move	*a9(20h),a5,L
 	move	*a4(RS_GAMES_PLAYED),a0
 	move	*a5(RS_GAMES_PLAYED),a1
 	cmp	a1,a0				;a0-a1
-	jrhi	#no_swap
-	jrlo	#swap
+	jrhi	#no_swapb
+	jrlo	#swapb
 
 ;same, so compare wins
 	move	*a4(RS_WINS),a0
 	move	*a5(RS_WINS),a1
 	cmp	a1,a0				;a0-a1
-	jrhi	#no_swap
-	jrlo	#swap
+	jrhi	#no_swapb
+	jrlo	#swapb
 
 ;same, so compare average
 	move	*a4(RS_AVERAGE),a0
 	move	*a5(RS_AVERAGE),a1
 	cmp	a1,a0				;a0-a1
-	jrhi	#no_swap
-	jrlo	#swap
+	jrhi	#no_swapb
+	jrlo	#swapb
 
 
 ;same, so compare teams defeated
 	move	*a4(RS_TEAMSDEF),a0
 	move	*a5(RS_TEAMSDEF),a1
 	cmp	a1,a0				;a0-a1
-	jrhs	#no_swap
-;	jrlo	#swap
+	jrhs	#no_swapb
+;	jrlo	#swapb
 
-#swap
+#swapb
 	movk	1,a14
 	move	a5,*a9,L
 	move	a4,*a9(20h),L
-#no_swap
+#no_swapb
 	addi	20h,a9
-	dsj	a10,loop2
+	dsj	a10,loop2c
 	move	a14,a14
-	jrz	done
-	dsj	a11,loop1
-#done
+	jrz	done3
+	dsj	a11,loop1c
+#done3
 	rets
 
 *******************************************************************************
@@ -3071,43 +3073,43 @@ cpor_3	PULL	a2,a9,a10
  SUBRP	sort_champs
 
 	movi	NUM_PRECORDS-1,a11
-#loop1
+#loop1d
 	movi	NUM_PRECORDS-1,a10
 	movi	record_sort_ptrs,a9
 	clr	a14
-#loop2
+#loop2d
 	move	*a9,a4,L
 	move	*a9(20h),a5,L
 	move	*a4(RS_TEAMSDEF),a0
 	move	*a5(RS_TEAMSDEF),a1
 	cmp	a1,a0				;a0-a1
-	jrhi	#no_swap
-	jrlo	#swap
+	jrhi	#no_swapc
+	jrlo	#swapc
 
 ;same, so compare wins
 	move	*a4(RS_WINS),a0
 	move	*a5(RS_WINS),a1
 	cmp	a1,a0				;a0-a1
-	jrhi	#no_swap
-	jrlo	#swap
+	jrhi	#no_swapc
+	jrlo	#swapc
 
 ;same, so compare average
 	move	*a4(RS_AVERAGE),a0
 	move	*a5(RS_AVERAGE),a1
 	cmp	a1,a0				;a0-a1
-	jrhs	#no_swap
-;	jrlo	#swap
-#swap
+	jrhs	#no_swapc
+;	jrlo	#swapc
+#swapc
 	movk	1,a14
 	move	a5,*a9,L
 	move	a4,*a9(20h),L
-#no_swap
+#no_swapc
 	addi	20h,a9
-	dsj	a10,loop2
+	dsj	a10,loop2d
 	move	a14,a14
-	jrz	done
-	dsj	a11,loop1
-#done
+	jrz	done4
+	dsj	a11,loop1d
+#done4
 	rets
 
 
@@ -3121,12 +3123,12 @@ cpor_3	PULL	a2,a9,a10
 	clr	a0
 	movi	NUM_TEAMS,a2
 ;;;;	movk	27,a2
-#next_team
+#next_teamb
 	srl	1,a1
-	jrnc	not_def
+	jrnc	not_defb
 	inc	a0			;teams defeated count ++
-#not_def
-	dsj	a2,next_team
+#not_defb
+	dsj	a2,next_teamb
 	PULL	a1,a2
 	rets
 
@@ -3139,9 +3141,9 @@ cpor_3	PULL	a2,a9,a10
 	clr	a0
 	movi	PR_SIZE/16,a1
 	movi	temp_record,a2
-#clrit
+#clritb
 	move	a0,*a2+
-	dsj	a1,clrit
+	dsj	a1,clritb
 
 	movi	NUM_PRECORDS,a11
 	movi	RECORD_ORIGIN,a10
@@ -3407,7 +3409,7 @@ RECMAC	.macro	NAME,PIN_NUM,PLAYED,WINS,STREAK,DEFEATED
 	calla	get_all_buttons_cur2
 	jrnz	exit0
 	dsj	a10,delay
-	jruc	exit
+	jruc	exita
 #exit0
 	movi	HISCR_SCALE_PID,a0
 	calla	KIL1C
@@ -3417,7 +3419,7 @@ RECMAC	.macro	NAME,PIN_NUM,PLAYED,WINS,STREAK,DEFEATED
 	movk	1,a0
 	move	a0,@SOUNDSUP		;turn all sounds off
 	jruc	skipt2			;br=dont do obj. transition
-#exit
+#exita
 	movi	HISCR_SCALE_PID,a0
 	calla	KIL1C
 
@@ -5058,7 +5060,7 @@ sinl_5
 
 	movi	TOP_LINE,a11			;start Y (rank #1)
 
-#next_team
+#next_teamc
 	PUSHP	a9,a10
 
 	move	@mess_objid,a0
@@ -5106,7 +5108,7 @@ sinl_5
 
 	PULLP	a9,a10
 	addi	10h,a9
-	dsj	a10,next_team
+	dsj	a10,next_teamc
 	RETP
 
 ;DJT Start
@@ -5129,14 +5131,14 @@ sinl_5
 ******************************************************************************
 #sort_routines
 	.long	#sort_best		;0 (best overall player)
-	.long	#sort_champs		;1 (grand champions)
+	.long	#sort_champsa		;1 (grand champions)
 	.long	#sort_world_records	;2 (world records)
 	.long	#sort_win_prcnt		;3 (greatest win %)
-	.long	#sort_wins		;4 (most wins)
+	.long	#sort_winsa		;4 (most wins)
 	.long	#sort_offensive		;5 (best offensive players)
 	.long	#sort_defensive		;6 (best defensive players)
-	.long	#sort_exp		;7 (experienced players)
-	.long	#sort_streak		;8 (win streaks)
+	.long	#sort_expa		;7 (experienced players)
+	.long	#sort_streaka		;8 (win streaks)
 ;DJT Start
 	.if	TRIVCON
 	.long	#sort_trivia_pts	;9 (most trivia points)
@@ -5213,46 +5215,46 @@ sinl_5
 #sort_trivia_pts
 
 	movi	NUM_PRECORDS-1,a11
-#loop1	movi	NUM_PRECORDS-1,a10
+#loop1e	movi	NUM_PRECORDS-1,a10
 	movi	record_sort_ptrs,a9
 	clr	a14
-#loop2
+#loop2e
 	move	*a9,a4,L
 	move	*a9(20h),a5,L
 
 	move	*a4(RS_TRIVIA_PTS),a0
 	move	*a5(RS_TRIVIA_PTS),a1
 	cmp	a1,a0				;a0-a1
-	jrhi	#no_swap
-	jrlo	#swap
+	jrhi	#no_swapd
+	jrlo	#swapd
 
 ;same, so compare average
 	move	*a4(RS_WINS),a0
 	move	*a5(RS_WINS),a1
 	cmp	a1,a0				;a0-a1
-	jrhi	#no_swap
-	jrlo	#swap
+	jrhi	#no_swapd
+	jrlo	#swapd
 
 ;same, so compare teams defeated
 	move	*a4(RS_TEAMSDEF),a0
 	move	*a5(RS_TEAMSDEF),a1
 	cmp	a1,a0				;a0-a1
-	jrhs	#no_swap
-#swap
+	jrhs	#no_swapd
+#swapd
 	movk	1,a14
 
 	move	a5,*a9,L
 	move	a4,*a9(20h),L
 
-#no_swap
+#no_swapd
 ;;	addi	RS_SIZE,a9
 	addi	20h,a9
 
-	dsj	a10,loop2
+	dsj	a10,loop2e
 	move	a14,a14
-	jrz	done
-	dsj	a11,loop1
-#done
+	jrz	done5
+	dsj	a11,loop1e
+#done5
 	rets
 ;DJT Start
 	.endif	;TRIVCON
@@ -5424,19 +5426,19 @@ done_sd
 
 ;-----------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------
-#sort_wins
+#sort_winsa
 	callr	sort_wins
 	rets
 
 ;-----------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------
-#sort_exp
+#sort_expa
 	callr	sort_exp
 	rets
 
 ;-----------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------
-#sort_champs
+#sort_champsa
 	callr	sort_champs
 	rets
 
@@ -5460,7 +5462,7 @@ done_sd
 
 ;-----------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------
-#sort_streak
+#sort_streaka
 	calla	sort_streak
 	rets
 
@@ -5660,7 +5662,7 @@ RECORDS_ONSCREEN	equ	10
 #wait_for_input
 	SLEEPK	1
 	calla	get_all_buttons_cur2
-	jrnz	exit
+	jrnz	exitb
 
 #got_stick
 	PULLP	a4
@@ -5683,7 +5685,7 @@ RECORDS_ONSCREEN	equ	10
 #no_up
 	PUSHP	a4
 	jruc	wait_for_input
-#exit
+#exitb
 	PULLP	a4
 	RETP
 
@@ -5703,10 +5705,10 @@ RECORDS_ONSCREEN	equ	10
 	movi	RECORD_ORIGIN,a10
 	add	a1,a10
 	movi	RECORDS_ONSCREEN,a6
-#search_loop
+#search_loopc
 ;DJT Start
 	cmpi	NUM_PRECORDS,a4
-	jrhs	#done
+	jrhs	#done6
 
 ;DJT End
 	PUSH	a6,a10
@@ -5771,13 +5773,13 @@ RECORDS_ONSCREEN	equ	10
 	PULL	a4
 	PULL	a6,a10
 	addi	PKDPR_SIZE*2,a10	;cmos words
-	dsj	a6,search_loop
+	dsj	a6,search_loopc
 ;DJT Start
-#done
+#done6
 ;DJT End
 	rets
 
-str_num	.string "#",0
+;str_num	.string "#",0
 str_obr	.string	"(",0
 str_cbr	.string	")",0
 str_sp	.string	" ",0

@@ -35,12 +35,13 @@ PLYRLSEQ.OBJ		/* fixed file. basketball plyr layups sequence code  */
 PLYRSTND.OBJ		/* fixed file. basketball plyr stand sequence code */
 SCORE.OBJ		/* fixed file. doublecheck! score stuff,clocks,on fire clk.. */
 SCORE2.OBJ		/* fixed file. score stuff */
-SOUNDS.OBJ		/* sound processor */
+SOUNDS.OBJ		/* fixed file. sound processor */
 PATCH.OBJ		/* file OK. TV PATCH/BREAKPOINT HOOK */
 TEXT.OBJ		/* fixed file, had to comment stuff to avoid mem error! font tables */
-ATTRACT.OBJ		/* attract mode */
-STRING.OBJ		/* string printing stuff */
-RECORD.OBJ		/* CMOS records etc */
+TEXT2.OBJ		/* added file, memory issues when compiling. the tables are needed! */
+ATTRACT.OBJ		/* fixed file. attract mode */
+STRING.OBJ		/* fixed file. string printing stuff */
+RECORD.OBJ		/* fixed file CMOS records etc */
 SPEECH.OBJ		/* announcer speech etc... */
 SELECT.OBJ		/* name & team selection */
 SELECT2.OBJ		/* name & team selection */

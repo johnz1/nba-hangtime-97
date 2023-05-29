@@ -1146,9 +1146,9 @@ trivia_show_info_str
  SUBRP	dec_to_asc
 
 	cmp	a0,a1			;a1-a0
-	jrhi	#not_max
+	jrhi	#not_maxa
 	move	a1,a0			;set num to max
-#not_max
+#not_maxa
 
 	calla	BINBCD			;dec number in A0
 	move	a0,a1
@@ -1216,9 +1216,9 @@ trivia_show_info_str
  SUBR	dec_to_asc2
 
 	cmp	a0,a1			;a1-a0
-	jrhi	#not_max
+	jrhi	#not_maxb
 	move	a1,a0			;set num to max
-#not_max
+#not_maxb
 
 	calla	BINBCD			;dec number in A0
 	move	a0,a1
@@ -1290,12 +1290,12 @@ trivia_show_info_str
 	movi	message_buffer-8,a2
 	movi	message_buffer2-8,a3
 
-#next_char
+#next_chara
 	addk	8,a2
 	addk	8,a3
 	movb	*a3,*a2
 	movb	*a3,a0				;NULL?
-	jrnz	next_char
+	jrnz	next_chara
 	rets
 
 ******************************************************************************
@@ -1305,18 +1305,18 @@ trivia_show_info_str
 
 	movi	message_buffer-8,a2
 	movi	message_buffer2-8,a3
-#next_char
+#next_charb
 	addk	8,a2
 	movb	*a2,a0
-	jrnz	next_char
+	jrnz	next_charb
 	subk	8,a2
 
-#next_char2
+#next_char2a
 	addk	8,a2
 	addk	8,a3
 	movb	*a3,*a2
 	movb	*a3,a0				;NULL?
-	jrnz	next_char2
+	jrnz	next_char2a
 
 	rets
 
@@ -1334,12 +1334,12 @@ trivia_show_info_str
 
 	subk	8,a4
 
-#next_char
+#next_charc
 	addk	8,a1
 	addk	8,a4
 	movb	*a4,*a1
 	movb	*a4,a0				;NULL ?
-	jrnz	next_char
+	jrnz	next_charc
 
 	rets
 
@@ -1352,20 +1352,20 @@ trivia_show_info_str
  SUBRP	concat_rom_string
 
 	movi	message_buffer-8,a1
-#next_char
+#next_chard
 	addk	8,a1
 	movb	*a1,a0
-	jrnz	next_char
+	jrnz	next_chard
 
 	subk	8,a1
 	subk	8,a4
 
-#next_char2
+#next_char2b
 	addk	8,a1
 	addk	8,a4
 	movb	*a4,*a1
 	movb	*a4,a0				;NULL ?
-	jrnz	next_char2
+	jrnz	next_char2b
 
 	rets
 
@@ -1377,20 +1377,20 @@ trivia_show_info_str
  SUBRP	concat_rom_string2
 
 	movi	message_buffer2-8,a1
-#next_char
+#next_chare
 	addk	8,a1
 	movb	*a1,a0
-	jrnz	next_char
+	jrnz	next_chare
 
 	subk	8,a1
 	subk	8,a4
 
-#next_char2
+#next_char2c
 	addk	8,a1
 	addk	8,a4
 	movb	*a4,*a1
 	movb	*a4,a0				;NULL ?
-	jrnz	next_char2
+	jrnz	next_char2c
 
 	rets
 
@@ -1408,31 +1408,31 @@ trivia_show_info_str
 get_string_len2
 	clr	a2
 	subk	8,a4
-#next_char
+#next_charf
 	addk	8,a4
 	movb	*a4,a0
 	andi	0ffh,a0
-	jrz	done
+	jrz	donea
 	cmpi	1,a0
-	jreq	done
+	jreq	donea
 	cmpi	32,a0
-	jrne	no_space
+	jrne	no_spacea
 	move	@mess_space_width,a0
 	add	a0,a2
-	jruc	next_char
-#no_space
+	jruc	next_charf
+#no_spacea
 	sll	5,a0			;x 32 bits
 	move	@message_ascii,a1,L
 	add	a1,a0
 	move	*a0,a1,L		;* image
-	jrz	next_char
+	jrz	next_charf
 	move	*a1,a0			;image width
 	add	a0,a2
 	move	@mess_spacing,a0
 	add	a0,a2
-	jruc	next_char
+	jruc	next_charf
 
-#done
+#donea
 	move	@mess_spacing,a0
 	sub	a0,a2
 	rets
@@ -1534,11 +1534,11 @@ print_string2
 print_string2b
 
 	subk	8,a4
-#next_char
+#next_charg
 	addk	8,a4
 	movb	*a4,a0
 	andi	0ffh,a0
-	jrz	done
+	jrz	doneb
 	cmpi	1,a0
 	jrne	no_newline
 ;newline
@@ -1551,22 +1551,22 @@ print_string2b
 	addi	8,a4			;skip newline char
 	call	a0
 	subi	8,a4
-	jruc	next_char
+	jruc	next_charg
 #no_newline
 	cmpi	32,a0
-	jrne	no_space
+	jrne	no_spaceb
 ;space
 	move	@mess_space_width,a0
 	move	@mess_cursx2,a1
 	add	a0,a1
 	move	a1,@mess_cursx2
-	jruc	next_char
-#no_space
+	jruc	next_charg
+#no_spaceb
 	sll	5,a0			;x 32 bits
 	move	@message_ascii,a1,L
 	add	a1,a0
 	move	*a0,a2,L		;* image
-	jrz	next_char
+	jrz	next_charg
 
 	PUSH	a4,a8
 	move	@message_palette,b0,L	;* palette
@@ -1587,9 +1587,9 @@ print_string2b
 	add	a0,a1
 	move	a1,@mess_cursx2
 	PULL	a4,a8
-	jruc	next_char
+	jruc	next_charg
 
-#done
+#doneb
 	rets
 
 

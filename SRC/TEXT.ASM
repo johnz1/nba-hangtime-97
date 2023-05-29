@@ -21,8 +21,8 @@
 	.include	"text.tbl"
 	.include	"imgtbl.glo"
 	.include	"imgtbl2.glo"
-;!!AM!! these two cause out of memory when compiling..
-	.include	"plyrhd5.glo"
+;!!AM!! these two cause out of memory when compiling moved to TEXT2.ASM..
+;	.include	"plyrhd5.glo"
 ;	.include	"plyrhd5.tbl"
 	.include	"imgpal4.asm"
 	.include	"fonttbl.glo"
