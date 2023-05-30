@@ -1717,7 +1717,7 @@ scn_1	calla	snd_play1
 	SLEEPK	7
 
 	move	@ballrimhitcnt,a14
-	jrnz	done
+	jrnz	done1
 	move	*a8(OXVEL),a0,L
 	abs	a0			;Should we make a bbrd bounce sound?
 	cmpi	01fffH,a0		;!!! Min XVEL to make sound
@@ -1726,10 +1726,10 @@ scn_1	calla	snd_play1
 	SLEEPK	15
 
 	move	@ballscorezhit,a0
-	jrnz	done			;br=ball hit score zone
+	jrnz	done1			;br=ball hit score zone
 	move	@ballrimhitcnt,a14
 	cmpi	4,a14
-	jrhs	#done
+	jrhs	#done1
 
 	movk	6,a0
 	calla	rndrng0
@@ -1738,14 +1738,14 @@ scn_1	calla	snd_play1
 	move	*a0,a0,L
 	calla	snd_play1
 	SLEEP	70
-	jruc	done
+	jruc	done1
 #soft
 	movi	250,a0
 	calla	RNDPER
-	jrls	#done
+	jrls	#done1
 	SOUND1	soft_glas_sp
 	SLEEP	70
-#done
+#done1
 	clr	a14
 	move	a14,@bkbrd_proc_flg
 #die
@@ -1827,11 +1827,11 @@ scn_1	calla	snd_play1
 	
 
 #shoots_table
-	.long	#desperation
-	.long	#long_range
-	.long	#2_points
-	.long	#3_points
-	.long	#hook_shot
+	.long	#desperationa
+	.long	#long_rangea
+	.long	#x2_points
+	.long	#3_pointsa
+	.long	#hook_shota
 	.long	#lay_up
 	.long	#finger_roll
 	.long	#dunk_short
@@ -1841,7 +1841,7 @@ scn_1	calla	snd_play1
 	.long	#fade_in
 
 ****************
-#desperation
+#desperationa
 
 ;DJT Start
 	movk	11,a0
@@ -1853,12 +1853,12 @@ scn_1	calla	snd_play1
 ;DJT End
 	calla	rndrng0
 	sll	5,a0		;x 32 bits
-	addi	#desptab,a0
+	addi	#desptaba,a0
 	move	*a0,a0,L
 	calla	snd_play1
 	rets
 
-#desptab
+#desptaba
 ;DJT Start
 	.long	hail_mary_sp
 	.long	unlod_one_sp
@@ -1876,19 +1876,19 @@ scn_1	calla	snd_play1
 
 ;DJT End
 ****************
-#long_range
+#long_rangea
 
 ;DJT Start
 	movk	7,a0
 ;DJT End
 	calla	rndrng0
 	sll	5,a0		;x 32 bits
-	addi	#longtab,a0
+	addi	#longtaba,a0
 	move	*a0,a0,L
 	calla	snd_play1
 	rets
 
-#longtab
+#longtaba
 	.long	frm_l_rng_sp
 	.long	frm_dwntn_sp
 	.long	wild_shot_sp
@@ -1901,7 +1901,7 @@ scn_1	calla	snd_play1
 ;DJT End
 
 ****************
-#2_points
+#x2_points
 
 	callr	ugly_shot
 	jrnc	x2pts
@@ -1986,7 +1986,7 @@ scn_1	calla	snd_play1
 
 
 ****************
-#3_points
+#3_pointsa
 
 	callr	ugly_shot
 	jrnc	x3pts
@@ -2013,13 +2013,13 @@ scn_1	calla	snd_play1
 ;DJT End
 	calla	rndrng0
 	sll	5,a0
-	addi	#3ptab,a0
+	addi	#3ptaba,a0
 	move	*a0,a0,L
 	calla	snd_play1
 #x3pts
 	rets
 
-#3ptab
+#3ptaba
 	.long	frm_dwntn_sp
 	.long	frm_3_arc_sp
 	.long	for_thre1_sp
@@ -2040,13 +2040,13 @@ scn_1	calla	snd_play1
 ;DJT End
 
 ****************
-#hook_shot
+#hook_shota
 
 	clr	a0
 	move	a0,@skycalled
 
 	callr	ugly_shot
-	jrnc	xhook
+	jrnc	xhooka
 
 	movi	#hooktab_near,a2
 	move	@shot_distance,a14	;distance from hoop
@@ -2068,7 +2068,7 @@ scn_1	calla	snd_play1
 #hname
 	move	@plyr_shot,a0
 	callr	call_player_name
-#xhook
+#xhooka
 	rets
 
 
@@ -2234,10 +2234,10 @@ scn_1	calla	snd_play1
 
 
 #scored_table
-	.long	#desperation
-	.long	#long_range
-	.long	#2_points
-	.long	#3_points
+	.long	#desperationb
+	.long	#long_rangeb
+	.long	#y2_points
+	.long	#3_pointsb
 	.long	#hook_shot
 	.long	#lay_up
 	.long	#finger_roll
@@ -2248,7 +2248,7 @@ scn_1	calla	snd_play1
 	.long	#fade_in
 
 ****************
-#desperation
+#desperationb
 hotscored
 
 	callr	itsgood
@@ -2259,13 +2259,13 @@ hotscored
 ;DJT End
 	calla	rndrng0
 	sll	5,a0		;x 32 bits
-	addi	#desptab,a0
+	addi	#desptabb,a0
 	move	*a0,a0,L
 	calla	snd_play1
 #xdesp
 	rets
 
-#desptab
+#desptabb
 	.long	ohmy
 	.long	per_luck_sp
 	.long	its_good_sp
@@ -2277,7 +2277,7 @@ hotscored
 ;DJT End
 
 ****************
-#long_range
+#long_rangeb
 
 	callr	itsgood
 	jrnc	xlong
@@ -2287,13 +2287,13 @@ hotscored
 ;DJT End
 	calla	rndrng0
 	sll	5,a0		;x 32 bits
-	addi	#longtab,a0
+	addi	#longtabb,a0
 	move	*a0,a0,L
 	calla	snd_play1
 #xlong
 	rets
 
-#longtab
+#longtabb
 	.long	whata_sht_sp
 	.long	per_luck_sp
 	.long	its_good_sp
@@ -2311,11 +2311,11 @@ hotscored
 ;DJT End
 
 ****************
-#2_points
+#y2_points
 
 	movi	400,a0		;call 40% swishes
 	callr	swish_speech
-	jrnc	x2pts
+	jrnc	x2ptsb
 
 	movi	400,a0		;call backboard hit 25% time
 	calla	RNDPER
@@ -2335,7 +2335,7 @@ hotscored
 #nobkbd
 ;	movi	800,a0		;call scores 20% time
 ;	calla	RNDPER
-;	jrls	#x2pts
+;	jrls	#x2ptsb
 
 ;DJT Start
 	movk	19,a0
@@ -2346,7 +2346,7 @@ hotscored
 #2snd
 	move	*a0,a0,L
 	calla	snd_play1
-#x2pts
+#x2ptsb
 	rets
 
 
@@ -2390,7 +2390,7 @@ hotscored
 
 
 ****************
-#3_points
+#3_pointsb
 
 	callr	itsgood
 	jrnc	x3p
@@ -2404,14 +2404,14 @@ hotscored
 ;DJT End
 	calla	rndrng0
 	sll	5,a0
-	addi	#3ptab,a0
+	addi	#3ptabb,a0
 	move	*a0,a0,L
 	jrz	x3p
 	calla	snd_play1
 #x3p
 	rets
 
-#3ptab
+#3ptabb
 	.long	its_good_sp
 	.long	drains_it_sp
 	.long	goooood2_sp
@@ -2443,12 +2443,12 @@ hotscored
 #hook_shot
 
 	callr	itsgood
-	jrnc	xhook
+	jrnc	xhookb
 
 	move	@skycalled,a0	;sky hook called?
 	jrz	nosky
 
-	jruc	2_points	;call like regular 2 pointer
+	jruc	y2_points	;call like regular 2 pointer !!AM!! too many 2pts routines?
 	calla	snd_play1
 	rets
 
@@ -2456,7 +2456,7 @@ hotscored
 	movi	great_sht_sp,a0
 	calla	snd_play1
 
-#xhook
+#xhookb
 	rets
 
 
@@ -2801,7 +2801,7 @@ hotscored
 	move	a2,@last_name		;last player name called
 	clr	a0
 	move	a0,@last_name_time	;# ticks since name called
-#done
+#done2
 	PULL	a2
 	clrc
 	rets
@@ -2972,9 +2972,9 @@ hotscored
 	move	a0,@blowout_called
 	move	a0,@needshot_called
 
-#snd_fail
-	setc
-	rets
+;#snd_fail
+;	setc
+;	rets
 
 
 
@@ -3045,9 +3045,9 @@ hotscored
 	calla	snd_play1
 	rets
 
-#snd_fail
-	setc
-	rets
+;#snd_fail
+;	setc
+;	rets
 
 ******************************************************************************
 ;
@@ -3072,9 +3072,9 @@ hotscored
 	clrc
 	rets
 
-#snd_fail
-	setc
-	rets
+;#snd_fail
+;	setc
+;	rets
 
 
 #lucky_bnce_tbl
@@ -3117,9 +3117,9 @@ hotscored
 	clrc
 	rets
 
-#snd_fail
-	setc
-	rets
+;#snd_fail
+;	setc
+;	rets
 
 #uglytab
 ;DJT Start
@@ -3372,10 +3372,10 @@ calc_score_diff
 	PUSH	a1,a2,a4,a6,a7,a8
 
 	move	@game_time,a0,L		;don't call if clock run down
-	jrz	done
+	jrz	done3
 
 	move	@ballpnum,a1
-	jrn	done
+	jrn	done3
 
 	movi	HOOPLX,a6
 	move	*a13(PA8),a14
@@ -3395,9 +3395,9 @@ calc_score_diff
 	sll	5,a0
 	addi	#rebnd_near_hoop_tbl,a0
 	move	*a0,a0,L
-	jrz	done
+	jrz	done3
 	calla	snd_play1
-	jruc	done
+	jruc	done3
 
 #ntnear
 	movi	500,a0			;call name 50% time
@@ -3412,9 +3412,9 @@ calc_score_diff
 	sll	5,a0
 	addi	#rebnd_no_nme_tbl,a0
 	move	*a0,a0,L
-	jrz	done
+	jrz	done3
 	calla	snd_play1
-	jruc	done
+	jruc	done3
 #name
 	movi	200,a0			;call name 50% time
 	calla	RNDPER
@@ -3439,7 +3439,7 @@ calc_score_diff
 	move	a14,*a4,W			;end script
 	movi	sound_ram,a0,L
 	calla	script_play1
-	jruc	done
+	jruc	done3
 #aname
      	
 ;	movi	300,a0			;call name 50% time
@@ -3488,7 +3488,7 @@ calc_score_diff
 ;	move	a14,*a4,W			;end script
 ;	movi	sound_ram,a0,L
 ;	calla	script_play1
-;	jruc	done
+;	jruc	done3
 ;
 ;#bname
 	movi	sound_ram,a4,L
@@ -3507,7 +3507,7 @@ calc_score_diff
 	sll	5,a0
 	addi	#rebnd_nme_tbl,a0
 	move	*a0,a0,L
-	jrz	done
+	jrz	done3
 	move	a0,*a4+,L		;store REBOUND speech
 
 	movi	-1,a14
@@ -3519,7 +3519,7 @@ calc_score_diff
 	move	a0,@last_name		;last player name called
 	clr	a0
 	move	a0,@last_name_time	;# ticks since name called
-#done
+#done3
 	PULL	a1,a2,a4,a6,a7,a8
 	rets
 
@@ -3599,9 +3599,9 @@ calc_score_diff
 	sll	5,a0
 	addi	#facial_sp_tbl,a0
 	move	*a0,a0,L
-	jrz	done
+	jrz	done4
 	calla	snd_play1
-#done	rets
+#done4	rets
 
 
 #facial_sp_tbl
@@ -3616,16 +3616,16 @@ calc_score_diff
 	SLEEPK	20
 
 	move	@ballpnum,a0
-	jrnn	done
+	jrnn	done5
 
 	movk	10,a0
 	calla	rndrng0
 	sll	5,a0
 	addi	#ball_loose_sp_tbl,a0
 	move	*a0,a0,L
-	jrz	done
+	jrz	done5
 	calla	snd_play1
-#done	DIE
+#done5	DIE
 
 
 #ball_loose_sp_tbl
@@ -3651,9 +3651,9 @@ calc_score_diff
 	sll	5,a0
 	addi	#head_fake_sp_tbl,a0
 	move	*a0,a0,L
-	jrz	done
+	jrz	done6
 	calla	snd_play1
-#done	rets
+#done6	rets
 
 
 #head_fake_sp_tbl
@@ -3672,10 +3672,10 @@ calc_score_diff
  SUBRP	itsgood
 
 	move	@game_time,a0,L
-	jrnz	done
+	jrnz	done7
 	SOUND1	its_good_sp
 	rets
-#done
+#done7
 	setc
 	rets
 
@@ -3802,9 +3802,9 @@ calc_score_diff
 	move	*a0,a0,L
 	calla	snd_play1
 	rets
-#snd_fail
-	setc
-	rets
+;#snd_fail
+;	setc
+;	rets
 
 #noswish
 	cmpi	9,a1
@@ -3875,7 +3875,7 @@ calc_score_diff
 	jrls	#crwd_fx		; br=crowd/outdoor sounds
 
 	move	@pup_court,a14		;No br=organ sounds if indoor
-	jrnz	die			; br=outdoor court
+	jrnz	die1			; br=outdoor court
 ;DJT End
 
 	movk	3,a0
@@ -3884,7 +3884,7 @@ calc_score_diff
 	addi	#organ_script_tbl,a0
 	move	*a0,a0,L
 	calla	script_play1
-#die
+#die1
 	DIE	
 
 
@@ -3986,7 +3986,7 @@ calc_score_diff
 ;	movi	2,a0
 ;	move	a0,@next_call
 
-#snd_fail
+#snd_faila
 #no_call
 	DIE
 
@@ -4231,9 +4231,9 @@ calc_score_diff
 	rets
 
 #was_teammate
-#snd_fail
-	setc
-	rets
+;#snd_fail
+;	setc
+;	rets
 
 #onfiretab
 	.long	hot_hand_sp
@@ -4310,7 +4310,7 @@ calc_score_diff
 	jrnz	ngs0
 	movi	spins_out_sp,a0,L
 #ngs0	calla	snd_play1
-	jruc	done
+	jruc	done8
 #ngs1
 ;	cmpi	1,a0
 ;	jrls	#ngs2
@@ -4322,7 +4322,7 @@ calc_score_diff
 ;	move	*a0,a0,L
 ;	jrz	ngs2			;br=no rim spch, try miss spch
 ;	calla	snd_play1
-;	jruc	done
+;	jruc	done8
 ;#ngs2
 ;DJT Start
 	movk	6,a0
@@ -4331,27 +4331,27 @@ calc_score_diff
 	sll	5,a0
 	addi	#brick_sp_tbl,a0
 	move	*a0,a0,L
-	jrz	done
+	jrz	done8
 	calla	snd_play1
 
 	clr	a0
 	move	a0,*a10			;played, now clear it
-	jruc	done
+	jruc	done8
 
 #no_good
 	move	@game_time,a0,L		;always call if clock at zero
 	jrnz	ng2
 	SOUND1	nogood_sp
-	jruc	done
+	jruc	done8
 
 #ng2	movk	17,a0
 	calla	rndrng0
 	sll	5,a0
 	addi	#nogood_sp_tbl,a0
 	move	*a0,a0,L
-	jrz	done
+	jrz	done8
 	calla	snd_play1
-#done
+#done8
 	PULL	a10
 	rets
 
@@ -4437,9 +4437,9 @@ calc_score_diff
 
 	movi	450,a0
 	calla	RNDPER
-	jrls	#done
+	jrls	#done9
 	SOUND1	gm_undrwy_sp
-#done
+#done9
 	DIE
 
 
@@ -4456,9 +4456,9 @@ calc_score_diff
 	sll	5,a0
 	addi	#sht_clck_sp_tbl,a0
 	move	*a0,a0,L
-	jrz	done
+	jrz	donea
 	calla	snd_play1
-#done	DIE
+#donea	DIE
 
 
 #sht_clck_sp_tbl
@@ -4494,13 +4494,13 @@ calc_score_diff
 #plr1	movi	player_names,a10
 	move	@team1,a2
 ;DJT Start
-	jrz	out3
-#lp3
+	jrz	out3a
+#lp3a
 	addi	NEXT_TEAM_NAMES,a10		;compute offset into table
 	dec	a2
-	jrnz	lp3
+	jrnz	lp3a
 ;DJT End
-#out3
+#out3a
 	move	@team1,a0
 	sll	4,a0
 	addi	tm1set,a0
@@ -4543,13 +4543,13 @@ calc_score_diff
 #plr2	movi	player_names,a10
 	move	@team1,a2
 ;DJT Start
-	jrz	out3
-#lp3
+	jrz	out3b
+#lp3b
 	addi	NEXT_TEAM_NAMES,a10		;compute offset into table
 	dec	a2
-	jrnz	lp3
+	jrnz	lp3b
 ;DJT End
-#out3
+#out3b
 	move	@team1,a0
 	sll	4,a0
 	addi	tm1set,a0
@@ -4595,13 +4595,13 @@ calc_score_diff
 #plr3	movi	player_names,a10
 	move	@team2,a2
 ;DJT Start
-	jrz	out3
-#lp3
+	jrz	out3c
+#lp3c
 	addi	NEXT_TEAM_NAMES,a10		;compute offset into table
 	dec	a2
-	jrnz	lp3
+	jrnz	lp3c
 ;DJT End
-#out3
+#out3c
 	move	@team2,a0
 	sll	4,a0
 	addi	tm2set,a0
@@ -4645,13 +4645,13 @@ calc_score_diff
 #plr4	movi	player_names,a10
 	move	@team2,a2
 ;DJT Start
-	jrz	out3
-#lp3
+	jrz	out3d
+#lp3d
 	addi	NEXT_TEAM_NAMES,a10		;compute offset into table
 	dec	a2
-	jrnz	lp3
+	jrnz	lp3d
 ;DJT End
-#out3
+#out3d
 	move	@team2,a0
 	sll	4,a0
 	addi	tm2set,a0
