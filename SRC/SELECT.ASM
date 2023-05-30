@@ -1333,9 +1333,9 @@ t2rs_2
 ;;	movk	27,a1
 	movi	tm1set,a2
 	movi	tm2set,a3
-#lp	move	a0,*a2+
+#lpa	move	a0,*a2+
 	move	a0,*a3+
-	dsjs	a1,lp
+	dsjs	a1,lpa
 
 
 	movi	-1,a0
@@ -1368,9 +1368,9 @@ t2rs_2
 	movi	-1,a0			;init all 4 players data to -1
 	movi	player1_data,a1
 	movi	4*PR_SIZE/16,a2		;4 players @ PR_SIZE words each
-#init_loop
+#init_loopa
 	move	a0,*a1+
-	dsj	a2,init_loop
+	dsj	a2,init_loopa
 
 	clr	a0
 	movi	player1_data+PR_NAME1,a1
@@ -1505,9 +1505,9 @@ t2rs_2
 
 	movi	option_screen_mod,a0
 	move	@TWOPLAYERS,a1		;0 = NO, 1 = YES 2 players
-	jrz	not2
+	jrz	not2b
 	movi	option_screen_mod_kit,a0
-#not2	move	a0,@BAKMODS,L
+#not2b	move	a0,@BAKMODS,L
 	calla	BGND_UD1
 
 	CREATE0	strt_snd
@@ -1620,7 +1620,7 @@ strt_snd
 	movi	OBJLST,a14
 #lp8
 	move	*a14,a14,L
-	jrz	x
+	jrz	x5
 	move	*a14(OID),a2
 	cmpi	CLSDEAD|123,a2
 	jrne	lp8
@@ -1630,7 +1630,7 @@ strt_snd
 	movk	6,a0
 	move	a0,*a14(OZPOS)
 	jruc	lp8
-#x	rets
+#x5	rets
 
 
 #ypos	.word	62-3,129-3
@@ -1696,7 +1696,7 @@ nmety_1	move	a0,@BAKMODS,L
 	CREATE0	challenger
 
 	move	@TWOPLAYERS,a0		;0 = NO, 1 = YES 2 players
-	jrnz	2_plyrs
+	jrnz	x2_plyrsa
 
 	clr	a10
 	CREATE0	player_cursor
@@ -1707,7 +1707,7 @@ nmety_1	move	a0,@BAKMODS,L
 	movk	3,a10			;player 4
 	CREATE0	challenger
 
-#2_plyrs
+#x2_plyrsa
 	clr	a0
 	move	a0,@exit_status
 
@@ -1821,9 +1821,9 @@ BOX_X		equ	200
 	clr	a0
 	movi	teams_pop,a1		;zero all team selected counts
 	movi	NUM_TEAMS,a2
-#init_loop
+#init_loopb
 	move	a0,*a1+,L
-	dsj	a2,init_loop
+	dsj	a2,init_loopb
 
 
 	movi	AUD_WAS,a0		;audit number
@@ -2086,7 +2086,7 @@ bump_down
 ;#is_space4
 	move	*a8(OSIZEX),a0			;width of object
 	add	a0,a5
-#skip
+#skipa
 	inc	a5				;+ 1/2
 	srl	1,a5				;width / 2
 	move	*a13(PC_CENTERX2),a6
@@ -2097,13 +2097,13 @@ bump_down
 	sub	a5,a6				;center - width/2
 	movi	PC_PIN_NBR1,a4
 	add	a13,a4
-#loop
+#loopa
 	move	*a4+,a2,L		;* object
 	move	a6,*a2(OXPOS)
 	move	*a2(OSIZEX),a0		;width of object
 	add	a0,a6
 	addk	1,a6			;1 pixel spacing
-	dsj	a7,loop		;another img?
+	dsj	a7,loopa		;another img?
 	PULL	a1
 	rets
 
@@ -2183,18 +2183,18 @@ bump_down
 
 *****************************
 #curspos_actions			;6 letters in name,pin number
-	.long	#name0,#name1,#name2,#name3,#name4,#name5
-	.long	#pin1,#pin2,#pin3,#pin4
+	.long	#name0a,#name1a,#name2a,#name3a,#name4a,#name5a
+	.long	#pin1a,#pin2a,#pin3a,#pin4a
 ;;;	.long	#pltr1,#pltr2,#pltr3,#pltr4,#pltr5,#pltr6
 ;;;;	.long	#name0,#name1,#name2,#month,#day
 
 *****************************
-#name0
-#name1
-#name2
-#name3
-#name4
-#name5
+#name0a
+#name1a
+#name2a
+#name3a
+#name4a
+#name5a
 	move	*a13(PC_CHARPOS),a0	;0 - 2
 	sll	5,a0			;x 32 bits
 	addi	PC_NAM1OBJ,a0
@@ -2205,10 +2205,10 @@ bump_down
 ;	calla	print_initials
 	rets
 
-#pin1
-#pin2
-#pin3
-#pin4
+#pin1a
+#pin2a
+#pin3a
+#pin4a
 	move	*a13(PC_CHARPOS),a0	;3-6
 	subi	NAME_LETTERS,a0			;just to make shifting easier
 	sll	5,a0			;x 32 bits
@@ -2630,26 +2630,26 @@ noadj	dsj	a2,atloop
 
 
 #xy_starts
-	.long	#stxy1,#stxy2,#stxy3,#stxy4,#stxy5
+	.long	#stxy1a,#stxy2a,#stxy3a,#stxy4a,#stxy5a
 
 ;team select screen head positions
-#stxy1	.word	174			;Y
+#stxy1a	.word	174			;Y
 	.word	13,192 ,207,386		;head 1 X, head 2 X...etc
 
 ;match-up screen head positions
-#stxy2	.word	186			;Y
+#stxy2a	.word	186			;Y
 	.word	24,153,242,370
 
 ;team subsitution head positions
-#stxy3	.word	174
+#stxy3a	.word	174
 	.word	13,192 ,207,386		;head 1 X, head 2 X...etc
 
 ;final results page
-#stxy4	.word	168
+#stxy4a	.word	168
 	.word	29,177,223,373		;head 1 X, head 2 X...etc
 
 ;halftime stats page
-#stxy5	.word	103			;Y value
+#stxy5a	.word	103			;Y value
 	.word	28,177,223,372		;head 1 X, head 2 X...etc
 
 
@@ -2668,23 +2668,23 @@ noadj	dsj	a2,atloop
 	cmpi	2,a14				;half time ?
 	jrnz	cont1a
 	move	@fixbug,a14
-	jrz	do_team2
+	jrz	do_team2a
 #cont1a
 	move	@team1,a0
-	jrnn	valid_team1
+	jrnn	valid_team1c
 	move	@head1_obj,a8,L			;turn off 3 heads on TEAM 1
 	calla	obj_off
 	move	@head2_obj,a8,L
 	calla	obj_off
-	jruc	do_team2
+	jruc	do_team2a
 
-#valid_team1
+#valid_team1c
 ;DJT Start
 	movi	player_heads,a10
 	move	@team1,a2
 ;;;;	movi	team_sqaud_cnts,a0,L
-#lp	cmpi	0,a2
-	jrz	out
+#lpb	cmpi	0,a2
+	jrz	outz
 ;;;;	move	*a0+,a14
 ;;;;	sll	6,a14			;!!! *64 bits/squad
 ;;;;	add	a14,a10
@@ -2692,8 +2692,8 @@ noadj	dsj	a2,atloop
 ;DJT End
 ;;;;	addi	20*64,a10
 	dec	a2
-	jruc	lp			;point to first LINEUP of team1
-#out
+	jruc	lpb			;point to first LINEUP of team1
+#outz
 	move	@team1,a0
 	sll	4,a0			;mult. by 16 (for offset into array)
 	addi	tm1set,a0		;add to begining of array
@@ -2779,7 +2779,7 @@ noadj	dsj	a2,atloop
 ;
 ; Update Team 2 heads
 ;
-#do_team2
+#do_team2a
 	move	@team2,a0
 	cmpi	NUM_TEAMS,a0
 	jrnz	cont3a
@@ -2787,23 +2787,23 @@ noadj	dsj	a2,atloop
 	cmpi	2,a14				;halftime ?
 	jrnz	cont3a
 	move	@fixbug,a14
-	jrz	x
+	jrz	x6
 #cont3a
 	move	@team2,a0
-	jrnn	valid_team2
+	jrnn	valid_team2c
 	move	@head3_obj,a8,L			;turn off 3 heads for TEAM 2
 	calla	obj_off
 	move	@head4_obj,a8,L
 	calla	obj_off
-	jruc	x
+	jruc	x6
 
-#valid_team2
+#valid_team2c
 ;DJT Start
 	movi	player_heads,a10
 	move	@team2,a2
 ;;;;	movi	team_sqaud_cnts,a0,L
 #lp2	cmpi	0,a2
-	jrz	out2
+	jrz	out2c
 ;;;;	move	*a0+,a14
 ;;;;	sll	6,a14			;!!! *64 bits/squad
 ;;;;	add	a14,a10
@@ -2811,7 +2811,7 @@ noadj	dsj	a2,atloop
 ;DJT End
 	dec	a2
 	jruc	lp2			;point to first LINEUP of team2
-#out2
+#out2c
 	move	@team2,a0
 	sll	4,a0			;mult. by 16 (for offset into array)
 	addi	tm2set,a0		;add to begining of array
@@ -2915,7 +2915,7 @@ noadj	dsj	a2,atloop
 ;;	move	a1,*a8(OCTRL)
 ;;	calla	obj_aniq		;change object image
 ;;#spec_head5
-#x
+#x6
 	PULL	a10
 	clr a0
 	move	a0,@fixbug
@@ -2945,7 +2945,7 @@ noadj	dsj	a2,atloop
 	SOUND1	win_snd
 
 	movk	6,a10
-#again
+#againa
 	move	*a13(PDATA+16),a0
 	move	a0,*a8(OPAL)
 
@@ -2956,7 +2956,7 @@ noadj	dsj	a2,atloop
 
 	SLEEPK	3
 
-	dsj	a10,again
+	dsj	a10,againa
 #die
 	DIE
 
@@ -3012,7 +3012,7 @@ MUG_WHT_P:
  SUBR	update_player_names
 
 	move	@team1,a0
-	jrnn	valid_team1
+	jrnn	valid_team1a
 	move	@name1_obj,a8,L
 	calla	obj_off
 	movi	attrib1_obj,a2
@@ -3024,12 +3024,12 @@ MUG_WHT_P:
 	calla	attrib_off
 	jruc	do_team2
 
-#valid_team1
+#valid_team1a
 ;DJT Start
 	movi	player_names,a10		;table in score2.asm
 	move	@team1,a2
 ;;;;	movi	team_sqaud_cnts,a0,L
-#lp	cmpi	0,a2
+#lpc	cmpi	0,a2
 	jrz	out
 ;;;;	move	*a0+,a14
 ;;;;	sll	6,a14			;!!! *64 bits/squad
@@ -3038,7 +3038,7 @@ MUG_WHT_P:
 ;DJT End
 ;;;;	addi	20*64,a10
 	dec	a2
-	jruc	lp	
+	jruc	lpc	
 #out
 ;
 ; Compute offset into player_names table
@@ -3252,7 +3252,7 @@ MUG_WHT_P:
 ;
 #do_team2
 	move	@team2,a0
-	jrnn	valid_team2
+	jrnn	valid_team2a
 	move	@name3_obj,a8,L
 	calla	obj_off
 	movi	attrib3_obj,a2
@@ -3264,13 +3264,13 @@ MUG_WHT_P:
 	calla	attrib_off
 	rets
 
-#valid_team2
+#valid_team2a
 ;DJT Start
 	movi	player_names,a10
 	move	@team2,a2				
 ;;;;	movi	team_sqaud_cnts,a0,L
-#lp2	cmpi	0,a2
-	jrz	out2
+#lp2a	cmpi	0,a2
+	jrz	out2d
 ;;;;	move	*a0+,a14
 ;;;;	sll	6,a14			;!!! *64 bits/squad
 ;;;;	add	a14,a10
@@ -3278,8 +3278,8 @@ MUG_WHT_P:
 ;DJT End
 ;;;;	addi	20*64,a10
 	dec	a2
-	jruc	lp2
-#out2
+	jruc	lp2a
+#out2d
 ;
 ; Compute offset into player_names table
 ;
@@ -3446,18 +3446,18 @@ MUG_WHT_P:
 
 #hda4
 	move	@p4_hide_atts,a14
-	jrnn	done
+	jrnn	done1
 	movk	3,a10				;plyr 3
 	move	a10,@p4_hide_atts
 	CREATE0	hide_plyr_attribs
-	jruc	done
+	jruc	done1
 #ncp4
 	movi	attrib4_obj+20h,a11
 	addi	PR_SPEED_PTS,a10,L		;pt. at 1st attrib. in record
 	clr	a6
 	not	a6
 	calla	update_attribs
-	jruc	done
+	jruc	done1
 
 #p4ntc	movi	attrib4_obj+20h,a11
 	movi	player_names,a10
@@ -3488,7 +3488,7 @@ MUG_WHT_P:
 	addi	player_attribs,a10
 	move	@special_heads+30h,a6
 	calla	update_attribs
-#done	rets
+#done1	rets
 
 
 ******************************************************************************
@@ -3510,7 +3510,7 @@ flash_player_name
 ;	rets
 ;#objon
 
-#player_active
+#player_activea
 	calla	obj_on
 	move	a11,a2
 	calla	attrib_on
@@ -3616,15 +3616,15 @@ flash_player_name
 	move	@logo1_obj+20h,a8,L
 	calla	obj_on
 	move	@team1,a0
-	jrnn	valid_team1
+	jrnn	valid_team1b
 #tm1off
 	move	@logo1_obj,a8,L
 	calla	obj_off
 	move	@logo1_obj+20h,a8,L
 	calla	obj_off
-	jruc	team2
+	jruc	team2a
 
-#valid_team1
+#valid_team1b
 	sll	5,a0			;x 32 bits
 	addi	logos,a0
 	move	*a0,a2,L		;image addr
@@ -3641,7 +3641,7 @@ flash_player_name
 ;	movi	DMACNZ,a1		;DMA flags
 ;	calla	obj_aniq		;change object image (shadow)
 
-#team2
+#team2a
 	move	@tm2_show_tm_stats,a14
 	jrne	tm2off				;br=team stats visible
 
@@ -3650,7 +3650,7 @@ flash_player_name
 	move	@logo2_obj+20h,a8,L
 	calla	obj_on
 	move	@team2,a0
-	jrnn	valid_team2
+	jrnn	valid_team2b
 #tm2off
 	move	@logo2_obj,a8,L
 	calla	obj_off
@@ -3658,7 +3658,7 @@ flash_player_name
 	calla	obj_off
 	rets
 
-#valid_team2
+#valid_team2b
 	sll	5,a0			;x 32 bits
 	addi	logos,a0
 	move	*a0,a2,L		;image addr
@@ -3810,9 +3810,9 @@ update_cursor
 
 	move	a10,a0
 	move	@TWOPLAYERS,a1			;0 = NO, 1 = YES 2 players
-	jrz	not2
+	jrz	not2c
 	addk	4,a0				;adjust for KIT setup
-#not2
+#not2c
 	sll	5,a0				;x 32 bits
 	move	a0,b0
 	addi	#heading_imgs,a0
@@ -3821,7 +3821,7 @@ update_cursor
 
 	move	a10,a0
 	sll	6,a0			;x16x4
-	addi	#center_xs,a0
+	addi	#center_xsa,a0
 	move	@TWOPLAYERS,a1		;0 = NO, 1 = YES 2 players
 	jrz	not2a
 	addi	20h,a0
@@ -3900,7 +3900,7 @@ p3_heading_str_setup_kit
 p4_heading_str_setup_kit
 	PRINT_STR	bast8_ascii,4,0,346,11,BAST_W_P,0
 
-#center_xs	;for menu data (letters and pin number objs)
+#center_xsa	;for menu data (letters and pin number objs)
 	.word	54,60,	0,0		;player 1
 	.word	150,151,101,0		;player 2
 	.word	248,254,295,0		;player 3
@@ -3969,9 +3969,9 @@ stats_str
 	inc	a0
 	cmpi	MENU_LEVELS,a0
 ;	cmpi	3,a0
-	jrlt	ok
+	jrlt	ok7
 	clr	a0
-#ok
+#ok7
 	move	a0,*a13(PC_MENULEVEL)
 	calla	create_menu
 	calla	update_cursor
@@ -4033,10 +4033,10 @@ save_data_tbl
 
 	move	*a13(PC_CURSPOS),a0
 	cmpi	DEL_CHAR,a0				;delete icon?
-	jrne	no_delete
+	jrne	no_deletea
 
 	move	*a13(PC_CHARPOS),a0		;no delete, but can't select
-	jrz	zippo				;delete icon either
+	jrz	zippoa				;delete icon either
 
 	move	*a13(PC_DATADDR),a0,L		;start of player data
 	move	*a13(PC_CHARPOS),a1
@@ -4052,11 +4052,11 @@ save_data_tbl
 	dec	a0
 	move	a0,*a13(PC_CHARPOS)
 
-#zippo
+#zippoa
 	setc
 	rets
 
-#no_delete
+#no_deletea
 	clrc
 	rets
 
@@ -4256,12 +4256,12 @@ save_data_tbl
  SUBR	flash_cursor
 
 	movk	2,a11
-#again
+#againb
 	move	a9,*a8(OCONST)
 	SLEEPK	2
 	move	a10,*a8(OCONST)
 	SLEEPK	2
-	dsj	a11,again
+	dsj	a11,againb
 	RETP
 
 
@@ -4326,7 +4326,7 @@ MESSAGE_Y	equ	208<<16
 	jrz	not_kit
 	movi	#msg_x2,a6
 #not_kit
-#init_loop
+#init_loopc
 	move	*a6+,a0				;x val
 	sll	16,a0
 	PUSH	a4,a5,a6
@@ -4334,9 +4334,9 @@ MESSAGE_Y	equ	208<<16
 	move	@TWOPLAYERS,a1			;0 = NO, 1 = YES 2 players
 	jrz	skip_chk
 	cmpi	1,a4				;no player 1
-	jreq	skip
+	jreq	skipb
 	cmpi	4,a4				;no player 4
-	jreq	skip
+	jreq	skipb
 #skip_chk
 
 	movi	MESSAGE_Y,a1			;y val
@@ -4347,10 +4347,10 @@ MESSAGE_Y	equ	208<<16
 	clr	a6				;x vel
 	clr	a7				;y vel
 	calla	BEGINOBJ2
-#skip
+#skipb
 	PULL	a4,a5,a6
 	move	a8,*a5+,L
-	dsj	a4,init_loop
+	dsj	a4,init_loopc
 
 #msg_loop
 	movk	1,a1				;player 2
@@ -4362,7 +4362,7 @@ MESSAGE_Y	equ	208<<16
 	calla	update_credit_message
 
 	move	@TWOPLAYERS,a0			;0 = NO, 1 = YES 2 players
-	jrnz	2_plyrs
+	jrnz	x2_plyrsb
 
 	clr	a1				;player 1
 	move	@message1_obj,a8,L
@@ -4372,7 +4372,7 @@ MESSAGE_Y	equ	208<<16
 	move	@message4_obj,a8,L
 	calla	update_credit_message
 
-#2_plyrs
+#x2_plyrsb
 	SLEEPK	1
 	jruc	msg_loop
 
@@ -4395,16 +4395,16 @@ MESSAGE_Y	equ	208<<16
 
 	move	@PSTATUS2,a0
 	btst	a1,a0
-	jrnz	player_active
+	jrnz	player_activeb
 
 	move	@in_team_select,a14
-	jrz	no
+	jrz	    noa
 ;Check to see if teammate is in game, if so, don't blink messages over
 ;attributes
 	XORK	1,a1
 	btst	a1,a0
-	jrnz	player_active
-#no
+	jrnz	player_activeb
+#noa
 
 	move	@PCNT,a0		;frame count
 	btst	5,a0
@@ -4455,7 +4455,7 @@ MESSAGE_Y	equ	208<<16
 #objoff
 	movk	ADJFREPL,a0		;in free play?
 	calla	GET_ADJ
-	jrz	not_free
+	jrz	not_free1
 
 	calla	obj_on
 	movi	freplay3,a0		;* image
@@ -4463,8 +4463,8 @@ MESSAGE_Y	equ	208<<16
 	calla	obj_aniq		;change object image
 	rets
 
-#not_free
-#player_active
+#not_free1
+#player_activeb
 	calla	obj_off
 	rets
 
@@ -4546,7 +4546,7 @@ MESSAGE_Y	equ	208<<16
 #enter_ok
 	movk	ADJTOURNEY,a0		;Tournament mode?
 	calla	GET_ADJ			;0-1
-	jrnz	skip			;Br=Not in tournament mode
+	jrnz	skipc			;Br=Not in tournament mode
 ;Turn on tournament mode - no secrets message
 	move	*a13(PC_PLAYNUM),a8
 
@@ -4559,7 +4559,7 @@ MESSAGE_Y	equ	208<<16
 	or	a0,a1
 	move	a1,@exit_status		;no exit
 	SLEEP	90
-#skip
+#skipc
 	movk	1,a0
 	move	*a13(PC_PLAYNUM),a1
 	sll	a1,a0
@@ -4596,9 +4596,9 @@ MESSAGE_Y	equ	208<<16
 	sll	5,a0			;x 32 bits
 	addi	#player_menus,a0
 	move	@TWOPLAYERS,a1
-	jrz	not_2p
+	jrz	not_2pd
 	addi	4*32,a0
-#not_2p
+#not_2pd
 	move	*a0,a0,L		;menu start
 	move	a0,*a13(PC_MENUBASE),L
 	clr	a0			;menu number
@@ -4642,7 +4642,7 @@ MESSAGE_Y	equ	208<<16
 	move	*a13(PC_MENULEVEL),a0
 	cmpi	MENU_LEVELS,a0
 ;;	cmpi	3,a0
-	jreq	done
+	jreq	done2
 #no_action
 	move	*a13(PC_PLAYNUM),a0
 	calla	get_stick_val_down
@@ -4659,7 +4659,7 @@ MESSAGE_Y	equ	208<<16
 	calla	move_cursor
 	calla	update_cursor
 	jruc	loop
-#done
+#done2
 	move	*a13(PC_CURSOBJ),a0,L	;delete cursor
 	calla	DELOBJ
 	move	*a13(PC_OBJID),a0
@@ -4798,7 +4798,7 @@ ano_1	move	a13,a11
 	dsj	a10,dly2
 
 	movi	7*60,a10
-#wait2	SLEEPK	1
+#wait2a	SLEEPK	1
 	move	*a13(PC_PLAYNUM),a1
 	move	@PSTATUS2,a0
 	btst	a1,a0
@@ -4809,7 +4809,7 @@ ano_1	move	a13,a11
 	calla	get_but_val_cur
 	jrnz	exit2a
 	dec	a10
-	jrnz	wait2
+	jrnz	wait2a
 	jruc	exit2
 #exit2a
 	SOUND1	adv_stats
@@ -5148,11 +5148,11 @@ defeated
 #nt2p	calla	create_credits
 	calla	create_credit_timers
 
-#credit_loop
+#credit_loopa
 	calla	update_credits
 	calla	update_credit_timers
 	SLEEPK	1
-	jruc	credit_loop
+	jruc	credit_loopa
 
 ******************************************************************************
 ******************************************************************************
@@ -5161,10 +5161,10 @@ defeated
 	movi	[7,0],a0			;y offset
 	calla	create_credits
 
-#credit_loop
+#credit_loopb
 	calla	update_credits
 	SLEEPK	1
-	jruc	credit_loop
+	jruc	credit_loopb
 
 ******************************************************************************
 ******************************************************************************
@@ -5173,10 +5173,10 @@ defeated
 	clr	a0				;y offset
 	calla	create_credits
 
-#credit_loop
+#credit_loopc
 	calla	update_credits
 	SLEEPK	1
-	jruc	credit_loop
+	jruc	credit_loopc
 
 ******************************************************************************
 ;  This process creates/updates the CREDITS value during CREATE PLAYER mode
@@ -5201,10 +5201,10 @@ defeated
 	subi	00100000h,a0
 	move	a0,*a8(OXVAL),L			;move all CREDIT obj. left
 
-#credit_loop
+#credit_loopd
 	calla	update_credits
 	SLEEPK	1
-	jruc	credit_loop
+	jruc	credit_loopd
 
 
 
@@ -5261,7 +5261,7 @@ defeated
 	movi	credit,a2			;* image
 	movk	ADJFREPL,a0
 	calla	GET_ADJ
-	jrz	not_free
+	jrz	not_free2
 
 	move	@credit1_obj,a8,L
 	calla	obj_off
@@ -5270,7 +5270,7 @@ defeated
 
 	movi	freeply,a2			;* image
 
-#not_free
+#not_free2
 	PULL	a0
 	movi	CREDIT_Y-1,a1			;y val
 	add	a0,a1
@@ -5292,7 +5292,7 @@ defeated
 
 	movk	ADJFREPL,a0
 	calla	GET_ADJ
-	jrz	not_free
+	jrz	not_free3
 
 ;in free play
 	move	@credit1_obj,a8,L
@@ -5306,7 +5306,7 @@ defeated
 	calla	obj_aniq		;change object image
 	rets
 
-#not_free
+#not_free3
 	move	@credit3_obj,a8,L
 	movi	credit,a0		;* image
 	move	*a8(OCTRL),a1		;DMA flags
@@ -5316,11 +5316,11 @@ defeated
 	calla	BINBCD
 	PUSH	a0
 	andi	0f0h,a0
-	jrnz	ok
+	jrnz	ok5
 	move	@credit1_obj,a8,L
 	calla	obj_off
 	jruc	cont
-#ok
+#ok5
 ;;;	srl	4,a0			;/16
 ;;;	sll	5,a0			;*32 bits
 	sll	1,a0			;*32/16 = *2
@@ -5368,7 +5368,7 @@ defeated
 
 
 	move	@TWOPLAYERS,a5		;0 = NO, 1 = YES 2 players
-	jrnz	2_plyrs
+	jrnz	x2_plyrsc
 
 	clr	a5			;player number 1
 	calla	create_cr_timer
@@ -5379,7 +5379,7 @@ defeated
 	calla	create_cr_timer
 	movi	credtime4_obj,a0	;* obj
 	move	a8,*a0,L
-#2_plyrs
+#x2_plyrsc
 	.ref	join_cyc
 	calla	join_cyc
 
@@ -5398,9 +5398,9 @@ create_cr_timer
 	movi	#credit_balls,a2
 	movi	#credit_positions,a0
 	move	@TWOPLAYERS,a1			;0 = NO, 1 = YES 2 players
-	jrz	not_2p
+	jrz	not_2pe
 	movi	#credit_positions2,a0
-#not_2p
+#not_2pe
 	add	a5,a2
 	move	*a2,a2,L
 	add	a0,a5
@@ -5460,14 +5460,14 @@ create_cr_timer
 	calla	update_cr_timer
 
 	move	@TWOPLAYERS,a0		;0 = NO, 1 = YES 2 players
-	jrz	4_plyrs
+	jrz	x4_plyrs
 
 	move	@PSTATUS2,a0
 	subk	6,a0
-	jrnz	2_plyrs
+	jrnz	x2_plyrsd
 	jruc	cyc_kil
 
-#4_plyrs
+#x4_plyrs
 	clr	a10			;player 1
 	movi	credtime1_obj,a6	;* start of obj vars
 	move	@qtr_purchased,a7
@@ -5480,11 +5480,11 @@ create_cr_timer
 
 	move	@PSTATUS2,a0
 	subk	15,a0
-	jrnz	2_plyrs
+	jrnz	x2_plyrsd
 #cyc_kil
 	movi	JOIN_CYCLE_PID,a0
 	calla	KIL1C
-#2_plyrs
+#x2_plyrsd
 	rets
 
 
@@ -5504,11 +5504,11 @@ create_cr_timer
 #not_zip
 	move	@gmqrtr,a1
 	cmpi	4,a1
-	jrlt	ok
+	jrlt	ok6
 	movi	tXXX1,a0
 	jruc	setit
 
-#ok
+#ok6
 	sll	2,a1			;x 4
 	add	a7,a1
 	andi	15,a1
@@ -5710,9 +5710,9 @@ leds	.long	S_LED_0,S_LED_1,S_LED_2,S_LED_3,S_LED_4
 	sll	4,a4			;x 16 bits
 	addi	#plaque_xs,a4
 	move	@TWOPLAYERS,a0		;0 = NO, 1 = YES 2 players
-	jrz	not_2p
+	jrz	not_2pf
 	addi	4*16,a4
-#not_2p
+#not_2pf
 	move	*a4,a10
 	sll	16,a10			;x pos
 	CREATE0	fullgame_purchased
@@ -5776,22 +5776,22 @@ leds	.long	S_LED_0,S_LED_1,S_LED_2,S_LED_3,S_LED_4
  SUBR	monitor_buyins
 
 	move	@PSTATUS2,a10
-#again
+#againc
 	SLEEPK	1
 	move	a10,a1
 	move	@PSTATUS2,a10
 	move	a10,a0
 	xor	a0,a1			;bits changed
 	and	a0,a1			;down transitions only
-	jrz	again
-	jruc	again
+	jrz	againc
+	jruc	againc
 
 ******************************************************************************
 * sets which player is controlling each team
 *-----------------------------------------------------------------------------
  SUBR	team_control
 
-#again
+#againd
 	move	@team1_control,a0
 	jrn	no_control1
 	move	@PSTATUS2,a1
@@ -5841,7 +5841,7 @@ leds	.long	S_LED_0,S_LED_1,S_LED_2,S_LED_3,S_LED_4
 	move	a0,@team2
 #team2_ok
 	SLEEP	1
-	jruc	again
+	jruc	againd
 
 
 RGB	.macro	R,G,B
@@ -5946,16 +5946,16 @@ RGB	.macro	R,G,B
 ;#tm2ok
 
 	move	@team1_control,a1
-	jrnn	ok
+	jrnn	ok4
 	move	@PSTATUS2,a0
 	clr	a2
 	btst	0,a0
 	jrnz	set
 	movk	1,a2
 	btst	1,a0
-	jrz	ok
+	jrz	ok4
 #set	move	a2,@team1_control
-#ok
+#ok4
 	move	@team2_control,a1
 	jrnn	ok2
 	move	@PSTATUS2,a0

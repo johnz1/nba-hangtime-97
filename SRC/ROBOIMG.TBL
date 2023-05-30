@@ -1,1102 +1,1102 @@
 	.DATA
 robo_bad:
-	.word   8,11,0,0
-	.long   0337fc10H
+	.word   7,11,0,0
+	.long   0131531aH
 	.word   03000H
 	.long   robo_p
 bullet_hrz:
-	.word   12,1,0,0
-	.long   0337fd18H
+	.word   9,1,0,0
+	.long   01315401H
 	.word   04000H
 	.long   robo_p
 bullet_vrt:
-	.word   4,7,0,0
-	.long   0337fd48H
+	.word   3,7,0,0
+	.long   01315425H
 	.word   04000H
 	.long   robo_p
 bullet_bck:
-	.word   8,7,0,0
-	.long   0337fdb8H
+	.word   7,7,0,0
+	.long   01315479H
 	.word   04000H
 	.long   robo_p
 bullet_fnt:
-	.word   8,7,0,0
-	.long   0337fe98H
+	.word   7,7,0,0
+	.long   0131553dH
 	.word   04000H
 	.long   robo_p
 grunt_1:
-	.word   12,12,0,0
-	.long   0337ff78H
+	.word   9,12,0,0
+	.long   01315601H
 	.word   04000H
 	.long   robo_p
 grunt_2:
-	.word   12,13,0,0
-	.long   033801b8H
+	.word   9,13,0,0
+	.long   013157b1H
 	.word   04000H
 	.long   robo_p
 grunt_3:
-	.word   12,13,0,0
-	.long   03380428H
+	.word   9,13,0,0
+	.long   01315985H
 	.word   04000H
 	.long   robo_p
 robo_dead:
-	.word   8,11,0,0
-	.long   03380698H
+	.word   7,11,0,0
+	.long   01315b59H
 	.word   04000H
 	.long   robo_p
 enf_1:
-	.word   12,11,0,0
-	.long   033807f8H
+	.word   9,11,0,0
+	.long   01315c8dH
 	.word   04000H
 	.long   robo_p
 enf_g1:
-	.word   4,3,-3,-4
-	.long   03380a08H
+	.word   3,3,-3,-4
+	.long   01315e19H
 	.word   04000H
 	.long   robo_p
 enf_g2:
-	.word   4,5,-3,-3
-	.long   03380a38H
+	.word   3,5,-3,-3
+	.long   01315e3dH
 	.word   04000H
 	.long   robo_p
 enf_g3:
 	.word   4,6,-3,-3
-	.long   03380a88H
+	.long   01315e79H
 	.word   04000H
 	.long   robo_p
 enf_g4:
-	.word   8,9,-1,-1
-	.long   03380ae8H
+	.word   7,9,-1,-1
+	.long   01315ed9H
 	.word   04000H
 	.long   robo_p
 enf_g5:
-	.word   8,9,-2,-1
-	.long   03380c08H
+	.word   6,9,-2,-1
+	.long   01315fd5H
 	.word   04000H
 	.long   robo_p
 spark_1:
-	.word   8,7,0,0
-	.long   03380d28H
+	.word   7,7,0,0
+	.long   013160adH
 	.word   04000H
 	.long   robo_p
 spark_2:
-	.word   8,5,-1,-1
-	.long   03380e08H
+	.word   5,5,-1,-1
+	.long   01316171H
 	.word   04000H
 	.long   robo_p
 spark_3:
-	.word   8,7,0,0
-	.long   03380ea8H
+	.word   7,7,0,0
+	.long   013161d5H
 	.word   04000H
 	.long   robo_p
 spark_4:
-	.word   8,5,-1,-1
-	.long   03380f88H
+	.word   5,5,-1,-1
+	.long   01316299H
 	.word   04000H
 	.long   robo_p
 man_l1:
-	.word   8,11,-1,0
-	.long   03381028H
+	.word   5,11,-1,0
+	.long   013162fdH
 	.word   04000H
 	.long   robo_p
 man_l2:
-	.word   8,11,-1,0
-	.long   03381188H
+	.word   5,11,-1,0
+	.long   013163d9H
 	.word   04000H
 	.long   robo_p
 man_l3:
-	.word   8,11,-1,0
-	.long   033812e8H
+	.word   5,11,-1,0
+	.long   013164b5H
 	.word   04000H
 	.long   robo_p
 man_r1:
-	.word   8,11,0,0
-	.long   03381448H
+	.word   5,11,0,0
+	.long   01316591H
 	.word   04000H
 	.long   robo_p
 man_r2:
-	.word   8,11,0,0
-	.long   033815a8H
+	.word   5,11,0,0
+	.long   0131666dH
 	.word   04000H
 	.long   robo_p
 man_r3:
-	.word   8,11,0,0
-	.long   03381708H
+	.word   5,11,0,0
+	.long   01316749H
 	.word   04000H
 	.long   robo_p
 man_d1:
-	.word   8,11,0,0
-	.long   03381868H
+	.word   7,11,0,0
+	.long   01316825H
 	.word   04000H
 	.long   robo_p
 man_d2:
-	.word   8,12,0,0
-	.long   033819c8H
+	.word   7,12,0,0
+	.long   01316959H
 	.word   04000H
 	.long   robo_p
 man_d3:
-	.word   8,12,0,0
-	.long   03381b48H
+	.word   7,12,0,0
+	.long   01316aa9H
 	.word   04000H
 	.long   robo_p
 man_u1:
-	.word   8,11,0,0
-	.long   03381cc8H
+	.word   7,11,0,0
+	.long   01316bf9H
 	.word   04000H
 	.long   robo_p
 man_u2:
-	.word   8,12,0,0
-	.long   03381e28H
+	.word   7,12,0,0
+	.long   01316d2dH
 	.word   04000H
 	.long   robo_p
 man_u3:
-	.word   8,12,0,0
-	.long   03381fa8H
+	.word   7,12,0,0
+	.long   01316e7dH
 	.word   04000H
 	.long   robo_p
 skull:
-	.word   12,11,0,0
-	.long   03382128H
+	.word   11,11,0,0
+	.long   01316fcdH
 	.word   04000H
 	.long   robo_p
 one_k:
-	.word   12,5,0,0
-	.long   03382338H
+	.word   10,5,0,0
+	.long   013171b1H
 	.word   04000H
 	.long   robo_p
 two_k:
-	.word   12,5,0,0
-	.long   03382428H
+	.word   10,5,0,0
+	.long   01317279H
 	.word   04000H
 	.long   robo_p
 three_k:
-	.word   12,5,0,0
-	.long   03382518H
+	.word   10,5,0,0
+	.long   01317341H
 	.word   04000H
 	.long   robo_p
 four_k:
-	.word   12,5,0,0
-	.long   03382608H
+	.word   10,5,0,0
+	.long   01317409H
 	.word   04000H
 	.long   robo_p
 five_k:
-	.word   12,5,0,0
-	.long   033826f8H
+	.word   10,5,0,0
+	.long   013174d1H
 	.word   04000H
 	.long   robo_p
 mom_l1:
-	.word   8,14,0,0
-	.long   033827e8H
+	.word   5,14,0,0
+	.long   01317599H
 	.word   04000H
 	.long   robo_p
 mom_l2:
-	.word   8,13,0,0
-	.long   033829a8H
+	.word   6,13,0,0
+	.long   013176b1H
 	.word   04000H
 	.long   robo_p
 mom_l3:
-	.word   8,13,0,0
-	.long   03382b48H
+	.word   7,13,0,0
+	.long   013177e9H
 	.word   04000H
 	.long   robo_p
 mom_r1:
-	.word   8,13,0,0
-	.long   03382ce8H
+	.word   5,13,0,0
+	.long   01317955H
 	.word   04000H
 	.long   robo_p
 mom_r2:
-	.word   8,13,0,0
-	.long   03382e88H
+	.word   7,13,0,0
+	.long   01317a59H
 	.word   04000H
 	.long   robo_p
 mom_r3:
-	.word   8,13,0,0
-	.long   03383028H
+	.word   6,13,0,0
+	.long   01317bc5H
 	.word   04000H
 	.long   robo_p
 mom_d1:
-	.word   8,13,0,0
-	.long   033831c8H
+	.word   7,13,0,0
+	.long   01317cfdH
 	.word   04000H
 	.long   robo_p
 mom_d2:
-	.word   8,14,0,0
-	.long   03383368H
+	.word   7,14,0,0
+	.long   01317e69H
 	.word   04000H
 	.long   robo_p
 mom_d3:
-	.word   8,14,0,0
-	.long   03383528H
+	.word   7,14,0,0
+	.long   01317ff1H
 	.word   04000H
 	.long   robo_p
 mom_u1:
-	.word   8,13,0,0
-	.long   033836e8H
+	.word   7,13,0,0
+	.long   01318179H
 	.word   04000H
 	.long   robo_p
 mom_u2:
-	.word   8,14,0,0
-	.long   03383888H
+	.word   7,14,0,0
+	.long   013182e5H
 	.word   04000H
 	.long   robo_p
 mom_u3:
-	.word   8,14,0,0
-	.long   03383a48H
+	.word   7,14,0,0
+	.long   0131846dH
 	.word   04000H
 	.long   robo_p
 dad_l1:
 	.word   4,12,-2,0
-	.long   03383c08H
+	.long   013185f5H
 	.word   04000H
 	.long   robo_p
 dad_l2:
-	.word   8,12,-1,0
-	.long   03383cc8H
+	.word   7,12,-1,0
+	.long   013186b5H
 	.word   04000H
 	.long   robo_p
 dad_l3:
-	.word   8,12,0,0
-	.long   03383e48H
+	.word   7,12,0,0
+	.long   01318805H
 	.word   04000H
 	.long   robo_p
 dad_r1:
 	.word   4,12,-2,0
-	.long   03383fc8H
+	.long   01318955H
 	.word   04000H
 	.long   robo_p
 dad_r2:
-	.word   8,12,-1,0
-	.long   03384088H
+	.word   7,12,-1,0
+	.long   01318a15H
 	.word   04000H
 	.long   robo_p
 dad_r3:
-	.word   8,12,0,0
-	.long   03384208H
+	.word   7,12,0,0
+	.long   01318b65H
 	.word   04000H
 	.long   robo_p
 dad_d1:
 	.word   8,12,0,0
-	.long   03384388H
+	.long   01318cb5H
 	.word   04000H
 	.long   robo_p
 dad_d2:
 	.word   8,13,0,0
-	.long   03384508H
+	.long   01318e35H
 	.word   04000H
 	.long   robo_p
 dad_d3:
 	.word   8,13,0,0
-	.long   033846a8H
+	.long   01318fd5H
 	.word   04000H
 	.long   robo_p
 dad_u1:
 	.word   8,12,0,0
-	.long   03384848H
+	.long   01319175H
 	.word   04000H
 	.long   robo_p
 dad_u2:
 	.word   8,13,0,0
-	.long   033849c8H
+	.long   013192f5H
 	.word   04000H
 	.long   robo_p
 dad_u3:
 	.word   8,13,0,0
-	.long   03384b68H
+	.long   01319495H
 	.word   04000H
 	.long   robo_p
 kid_l1:
-	.word   4,10,0,0
-	.long   03384d08H
+	.word   3,10,0,0
+	.long   01319635H
 	.word   04000H
 	.long   robo_p
 kid_l2:
-	.word   8,10,1,0
-	.long   03384da8H
+	.word   5,10,1,0
+	.long   013196adH
 	.word   04000H
 	.long   robo_p
 kid_l3:
-	.word   8,10,1,0
-	.long   03384ee8H
+	.word   5,10,1,0
+	.long   01319775H
 	.word   04000H
 	.long   robo_p
 kid_r1:
-	.word   4,10,0,0
-	.long   03385028H
+	.word   3,10,0,0
+	.long   0131983dH
 	.word   04000H
 	.long   robo_p
 kid_r2:
-	.word   8,10,1,0
-	.long   033850c8H
+	.word   5,10,1,0
+	.long   013198b5H
 	.word   04000H
 	.long   robo_p
 kid_r3:
-	.word   8,10,1,0
-	.long   03385208H
+	.word   5,10,1,0
+	.long   0131997dH
 	.word   04000H
 	.long   robo_p
 kid_d1:
-	.word   8,10,0,0
-	.long   03385348H
+	.word   5,10,0,0
+	.long   01319a45H
 	.word   04000H
 	.long   robo_p
 kid_d2:
-	.word   8,11,0,0
-	.long   03385488H
+	.word   5,11,0,0
+	.long   01319b0dH
 	.word   04000H
 	.long   robo_p
 kid_d3:
-	.word   8,11,0,0
-	.long   033855e8H
+	.word   5,11,0,0
+	.long   01319be9H
 	.word   04000H
 	.long   robo_p
 kid_u1:
-	.word   8,10,0,0
-	.long   03385748H
+	.word   5,10,0,0
+	.long   01319cc5H
 	.word   04000H
 	.long   robo_p
 kid_u2:
-	.word   8,11,0,0
-	.long   03385888H
+	.word   5,11,0,0
+	.long   01319d8dH
 	.word   04000H
 	.long   robo_p
 kid_u3:
-	.word   8,11,0,0
-	.long   033859e8H
+	.word   5,11,0,0
+	.long   01319e69H
 	.word   04000H
 	.long   robo_p
 hulk_l1:
-	.word   8,14,-2,0
-	.long   03385b48H
+	.word   7,14,-2,0
+	.long   01319f45H
 	.word   04000H
 	.long   robo_p
 hulk_l2:
 	.word   12,14,0,0
-	.long   03385d08H
+	.long   0131a0cdH
 	.word   04000H
 	.long   robo_p
 hulk_l3:
 	.word   12,14,0,0
-	.long   03385fa8H
+	.long   0131a36dH
 	.word   04000H
 	.long   robo_p
 hulk_ud1:
-	.word   16,14,0,0
-	.long   03386248H
+	.word   13,14,0,0
+	.long   0131a60dH
 	.word   04000H
 	.long   robo_p
 hulk_ud2:
-	.word   16,16,0,0
-	.long   033865c8H
+	.word   13,16,0,0
+	.long   0131a8e5H
 	.word   04000H
 	.long   robo_p
 hulk_ud3:
-	.word   16,16,0,0
-	.long   033869c8H
+	.word   13,16,0,0
+	.long   0131ac25H
 	.word   04000H
 	.long   robo_p
 hulk_r1:
-	.word   8,14,-2,0
-	.long   03386dc8H
+	.word   7,14,-2,0
+	.long   0131af65H
 	.word   04000H
 	.long   robo_p
 hulk_r2:
 	.word   12,14,0,0
-	.long   03386f88H
+	.long   0131b0edH
 	.word   04000H
 	.long   robo_p
 hulk_r3:
 	.word   12,14,0,0
-	.long   03387228H
+	.long   0131b38dH
 	.word   04000H
 	.long   robo_p
 rfont_0:
-	.word   8,6,0,0
-	.long   033874c8H
+	.word   5,6,0,0
+	.long   0131b62dH
 	.word   04000H
 	.long   robo_p
 rfont_1:
 	.word   4,6,0,0
-	.long   03387588H
+	.long   0131b6a5H
 	.word   04000H
 	.long   robo_p
 rfont_2:
-	.word   8,6,0,0
-	.long   033875e8H
+	.word   5,6,0,0
+	.long   0131b705H
 	.word   04000H
 	.long   robo_p
 rfont_3:
-	.word   8,6,0,0
-	.long   033876a8H
+	.word   5,6,0,0
+	.long   0131b77dH
 	.word   04000H
 	.long   robo_p
 rfont_4:
-	.word   8,6,0,0
-	.long   03387768H
+	.word   5,6,0,0
+	.long   0131b7f5H
 	.word   04000H
 	.long   robo_p
 rfont_5:
-	.word   8,6,0,0
-	.long   03387828H
+	.word   5,6,0,0
+	.long   0131b86dH
 	.word   04000H
 	.long   robo_p
 rfont_6:
-	.word   8,6,0,0
-	.long   033878e8H
+	.word   5,6,0,0
+	.long   0131b8e5H
 	.word   04000H
 	.long   robo_p
 rfont_7:
-	.word   8,6,0,0
-	.long   033879a8H
+	.word   5,6,0,0
+	.long   0131b95dH
 	.word   04000H
 	.long   robo_p
 rfont_8:
-	.word   8,6,0,0
-	.long   03387a68H
+	.word   5,6,0,0
+	.long   0131b9d5H
 	.word   04000H
 	.long   robo_p
 rfont_9:
-	.word   8,6,0,0
-	.long   03387b28H
+	.word   5,6,0,0
+	.long   0131ba4dH
 	.word   04000H
 	.long   robo_p
 rfont_exc:
-	.word   4,7,0,0
-	.long   03387be8H
+	.word   3,7,0,0
+	.long   0131bac5H
 	.word   04000H
 	.long   robo_p
 rfont_comma:
-	.word   4,3,0,0
-	.long   03387c58H
+	.word   3,3,0,0
+	.long   0131bb19H
 	.word   04000H
 	.long   robo_p
 rfont_period:
-	.word   4,2,0,0
-	.long   03387c88H
+	.word   3,2,0,0
+	.long   0131bb3dH
 	.word   04000H
 	.long   robo_p
 rfont_a:
-	.word   8,6,0,0
-	.long   03387ca8H
+	.word   5,6,0,0
+	.long   0131bb55H
 	.word   03000H
 	.long   robo_p
 rfont_b:
-	.word   8,6,0,0
-	.long   03387d38H
+	.word   5,6,0,0
+	.long   0131bbafH
 	.word   03000H
 	.long   robo_p
 rfont_c:
-	.word   8,6,0,0
-	.long   03387dc8H
+	.word   5,6,0,0
+	.long   0131bc09H
 	.word   03000H
 	.long   robo_p
 rfont_d:
-	.word   8,6,0,0
-	.long   03387e58H
+	.word   5,6,0,0
+	.long   0131bc63H
 	.word   03000H
 	.long   robo_p
 rfont_e:
-	.word   8,6,0,0
-	.long   03387ee8H
+	.word   5,6,0,0
+	.long   0131bcbdH
 	.word   03000H
 	.long   robo_p
 rfont_f:
-	.word   8,6,0,0
-	.long   03387f78H
+	.word   5,6,0,0
+	.long   0131bd17H
 	.word   03000H
 	.long   robo_p
 rfont_g:
-	.word   8,6,0,0
-	.long   03388008H
+	.word   5,6,0,0
+	.long   0131bd71H
 	.word   03000H
 	.long   robo_p
 rfont_h:
-	.word   8,6,0,0
-	.long   03388098H
+	.word   5,6,0,0
+	.long   0131bdcbH
 	.word   03000H
 	.long   robo_p
 rfont_i:
-	.word   4,6,0,0
-	.long   03388128H
+	.word   3,6,0,0
+	.long   0131be25H
 	.word   03000H
 	.long   robo_p
 rfont_j:
-	.word   8,6,0,0
-	.long   03388170H
+	.word   5,6,0,0
+	.long   0131be5bH
 	.word   03000H
 	.long   robo_p
 rfont_k:
-	.word   8,6,0,0
-	.long   03388200H
+	.word   5,6,0,0
+	.long   0131beb5H
 	.word   03000H
 	.long   robo_p
 rfont_l:
-	.word   8,6,0,0
-	.long   03388290H
+	.word   5,6,0,0
+	.long   0131bf0fH
 	.word   03000H
 	.long   robo_p
 rfont_m:
-	.word   8,6,0,0
-	.long   03388320H
+	.word   5,6,0,0
+	.long   0131bf69H
 	.word   03000H
 	.long   robo_p
 rfont_n:
-	.word   8,6,0,0
-	.long   033883b0H
+	.word   5,6,0,0
+	.long   0131bfc3H
 	.word   03000H
 	.long   robo_p
 rfont_o:
-	.word   8,6,0,0
-	.long   03388440H
+	.word   5,6,0,0
+	.long   0131c01dH
 	.word   03000H
 	.long   robo_p
 rfont_p:
-	.word   8,6,0,0
-	.long   033884d0H
+	.word   5,6,0,0
+	.long   0131c077H
 	.word   03000H
 	.long   robo_p
 rfont_q:
-	.word   8,6,0,0
-	.long   03388560H
+	.word   5,6,0,0
+	.long   0131c0d1H
 	.word   03000H
 	.long   robo_p
 rfont_r:
-	.word   8,6,0,0
-	.long   033885f0H
+	.word   5,6,0,0
+	.long   0131c12bH
 	.word   03000H
 	.long   robo_p
 rfont_s:
-	.word   8,6,0,0
-	.long   03388680H
+	.word   5,6,0,0
+	.long   0131c185H
 	.word   03000H
 	.long   robo_p
 rfont_t:
-	.word   8,6,0,0
-	.long   03388710H
+	.word   5,6,0,0
+	.long   0131c1dfH
 	.word   03000H
 	.long   robo_p
 rfont_u:
-	.word   8,6,0,0
-	.long   033887a0H
+	.word   5,6,0,0
+	.long   0131c239H
 	.word   03000H
 	.long   robo_p
 rfont_v:
-	.word   8,6,0,0
-	.long   03388830H
+	.word   5,6,0,0
+	.long   0131c293H
 	.word   03000H
 	.long   robo_p
 rfont_w:
-	.word   8,6,0,0
-	.long   033888c0H
+	.word   5,6,0,0
+	.long   0131c2edH
 	.word   03000H
 	.long   robo_p
 rfont_x:
-	.word   8,6,0,0
-	.long   03388950H
+	.word   5,6,0,0
+	.long   0131c347H
 	.word   03000H
 	.long   robo_p
 rfont_y:
-	.word   8,6,0,0
-	.long   033889e0H
+	.word   5,6,0,0
+	.long   0131c3a1H
 	.word   03000H
 	.long   robo_p
 rfont_z:
-	.word   8,6,0,0
-	.long   03388a70H
+	.word   5,6,0,0
+	.long   0131c3fbH
 	.word   03000H
 	.long   robo_p
 rfont_lparens:
-	.word   4,6,0,0
-	.long   03388b00H
+	.word   3,6,0,0
+	.long   0131c455H
 	.word   03000H
 	.long   robo_p
 rfont_rparens:
-	.word   4,6,0,0
-	.long   03388b48H
+	.word   3,6,0,0
+	.long   0131c48bH
 	.word   03000H
 	.long   robo_p
 rfont_fslash:
 	.word   4,6,0,0
-	.long   03388b90H
+	.long   0131c4c1H
 	.word   03000H
 	.long   robo_p
 wave_text:
-	.word   20,5,0,0
-	.long   03388bd8H
+	.word   17,5,0,0
+	.long   0131c509H
 	.word   04000H
 	.long   robo_p
 circle_1:
-	.word   4,1,-7,-7
-	.long   03388d68H
+	.word   3,1,-7,-7
+	.long   0131c65dH
 	.word   04000H
 	.long   robo_p
 circle_2:
-	.word   4,3,-6,-6
-	.long   03388d78H
+	.word   3,3,-6,-6
+	.long   0131c669H
 	.word   04000H
 	.long   robo_p
 circle_3:
-	.word   8,5,-5,-5
-	.long   03388da8H
+	.word   5,5,-5,-5
+	.long   0131c68dH
 	.word   04000H
 	.long   robo_p
 circle_4:
-	.word   8,7,-4,-4
-	.long   03388e48H
+	.word   7,7,-4,-4
+	.long   0131c6f1H
 	.word   04000H
 	.long   robo_p
 circle_5:
-	.word   12,9,-3,-3
-	.long   03388f28H
+	.word   9,9,-3,-3
+	.long   0131c7b5H
 	.word   04000H
 	.long   robo_p
 circle_6:
-	.word   12,11,-2,-2
-	.long   033890d8H
+	.word   11,11,-2,-2
+	.long   0131c8f9H
 	.word   04000H
 	.long   robo_p
 circle_7:
-	.word   16,13,-1,-1
-	.long   033892e8H
+	.word   13,13,-1,-1
+	.long   0131caddH
 	.word   04000H
 	.long   robo_p
 circle_8:
-	.word   16,15,0,0
-	.long   03389628H
+	.word   15,15,0,0
+	.long   0131cd81H
 	.word   04000H
 	.long   robo_p
 rsmall_0:
-	.word   4,5,0,0
-	.long   033899e8H
+	.word   3,5,0,0
+	.long   0131d105H
 	.word   04000H
 	.long   robo_p
 rsmall_1:
-	.word   4,5,0,0
-	.long   03389a38H
+	.word   3,5,0,0
+	.long   0131d141H
 	.word   04000H
 	.long   robo_p
 rsmall_2:
-	.word   4,5,0,0
-	.long   03389a88H
+	.word   3,5,0,0
+	.long   0131d17dH
 	.word   04000H
 	.long   robo_p
 rsmall_3:
-	.word   4,5,0,0
-	.long   03389ad8H
+	.word   3,5,0,0
+	.long   0131d1b9H
 	.word   04000H
 	.long   robo_p
 rsmall_4:
-	.word   4,5,0,0
-	.long   03389b28H
+	.word   3,5,0,0
+	.long   0131d1f5H
 	.word   04000H
 	.long   robo_p
 rsmall_5:
-	.word   4,5,0,0
-	.long   03389b78H
+	.word   3,5,0,0
+	.long   0131d231H
 	.word   04000H
 	.long   robo_p
 rsmall_6:
-	.word   4,5,0,0
-	.long   03389bc8H
+	.word   3,5,0,0
+	.long   0131d26dH
 	.word   04000H
 	.long   robo_p
 rsmall_7:
-	.word   4,5,0,0
-	.long   03389c18H
+	.word   3,5,0,0
+	.long   0131d2a9H
 	.word   04000H
 	.long   robo_p
 rsmall_8:
-	.word   4,5,0,0
-	.long   03389c68H
+	.word   3,5,0,0
+	.long   0131d2e5H
 	.word   04000H
 	.long   robo_p
 rsmall_9:
-	.word   4,5,0,0
-	.long   03389cb8H
+	.word   3,5,0,0
+	.long   0131d321H
 	.word   04000H
 	.long   robo_p
 grunt_xv1:
-	.word   12,34,0,11
-	.long   03389d08H
+	.word   9,34,0,11
+	.long   0131d35dH
 	.word   04000H
 	.long   robo_p
 grunt_xv2:
-	.word   12,56,0,22
-	.long   0338a368H
+	.word   9,56,0,22
+	.long   0131d825H
 	.word   04000H
 	.long   robo_p
 grunt_xv3:
-	.word   12,78,0,33
-	.long   0338ade8H
+	.word   9,78,0,33
+	.long   0131e005H
 	.word   04000H
 	.long   robo_p
 grunt_xv4:
-	.word   12,100,0,44
-	.long   0338bc88H
+	.word   9,100,0,44
+	.long   0131eafdH
 	.word   04000H
 	.long   robo_p
 grunt_xdb1:
-	.word   28,34,9,11
-	.long   0338cf48H
+	.word   27,34,9,11
+	.long   0131f90dH
 	.word   04000H
 	.long   robo_p
 grunt_xdb2:
-	.word   52,56,18,22
-	.long   0338de28H
+	.word   49,56,18,22
+	.long   01320765H
 	.word   04000H
 	.long   robo_p
 grunt_xdb3:
-	.word   72,78,27,33
-	.long   03390ba8H
+	.word   71,78,27,33
+	.long   01323245H
 	.word   04000H
 	.long   robo_p
 grunt_xdb4:
-	.word   96,100,36,44
-	.long   03396368H
+	.word   93,100,36,44
+	.long   013288cdH
 	.word   04000H
 	.long   robo_p
 grunt_xh1:
-	.word   36,12,12,0
-	.long   0339f968H
+	.word   33,12,12,0
+	.long   01331a1dH
 	.word   04000H
 	.long   robo_p
 grunt_xh2:
-	.word   60,12,24,0
-	.long   033a0028H
+	.word   57,12,24,0
+	.long   0133204dH
 	.word   04000H
 	.long   robo_p
 grunt_xh3:
-	.word   84,12,36,0
-	.long   033a0b68H
+	.word   81,12,36,0
+	.long   01332afdH
 	.word   04000H
 	.long   robo_p
 grunt_xh4:
-	.word   108,12,48,0
-	.long   033a1b28H
+	.word   105,12,48,0
+	.long   01333a2dH
 	.word   04000H
 	.long   robo_p
 grunt_xdf1:
-	.word   28,34,18,11
-	.long   033a2f68H
+	.word   27,34,18,11
+	.long   01334dddH
 	.word   04000H
 	.long   robo_p
 grunt_xdf2:
-	.word   52,56,31,22
-	.long   033a3e48H
+	.word   49,56,31,22
+	.long   01335c35H
 	.word   04000H
 	.long   robo_p
 grunt_xdf3:
-	.word   72,78,44,33
-	.long   033a6bc8H
+	.word   71,78,44,33
+	.long   01338715H
 	.word   04000H
 	.long   robo_p
 grunt_xdf4:
-	.word   96,100,57,44
-	.long   033ac388H
+	.word   93,100,57,44
+	.long   0133dd9dH
 	.word   04000H
 	.long   robo_p
 star_1:
-	.word   12,9,0,0
-	.long   033b5988H
+	.word   9,9,0,0
+	.long   01346eedH
 	.word   04000H
 	.long   robo_p
 star_2:
-	.word   8,7,-1,-1
-	.long   033b5b38H
+	.word   7,7,-1,-1
+	.long   01347031H
 	.word   04000H
 	.long   robo_p
 star_3:
-	.word   4,3,-3,-3
-	.long   033b5c18H
+	.word   3,3,-3,-3
+	.long   013470f5H
 	.word   04000H
 	.long   robo_p
 crystal_1:
-	.word   12,9,0,0
-	.long   033b5c48H
+	.word   9,9,0,0
+	.long   01347119H
 	.word   04000H
 	.long   robo_p
 crystal_2:
-	.word   8,7,-1,-1
-	.long   033b5df8H
+	.word   7,7,-1,-1
+	.long   0134725dH
 	.word   04000H
 	.long   robo_p
 crystal_3:
-	.word   4,3,-3,-3
-	.long   033b5ed8H
+	.word   3,3,-3,-3
+	.long   01347321H
 	.word   04000H
 	.long   robo_p
 diamond_1:
-	.word   12,9,0,0
-	.long   033b5f08H
+	.word   9,9,0,0
+	.long   01347345H
 	.word   04000H
 	.long   robo_p
 diamond_2:
-	.word   8,7,-1,-1
-	.long   033b60b8H
+	.word   7,7,-1,-1
+	.long   01347489H
 	.word   04000H
 	.long   robo_p
 diamond_3:
-	.word   4,3,-3,-3
-	.long   033b6198H
+	.word   3,3,-3,-3
+	.long   0134754dH
 	.word   04000H
 	.long   robo_p
 R2084_1:
-	.word   20,7,0,0
-	.long   033b61c8H
+	.word   17,7,0,0
+	.long   01347571H
 	.word   04000H
 	.long   robo_p
 R2084_2:
-	.word   16,5,-1,-1
-	.long   033b63f8H
+	.word   15,5,-1,-1
+	.long   0134774dH
 	.word   04000H
 	.long   robo_p
 R2084_3:
-	.word   12,1,-3,-3
-	.long   033b6538H
+	.word   11,1,-3,-3
+	.long   01347879H
 	.word   04000H
 	.long   robo_p
 pcube_1:
-	.word   12,9,0,0
-	.long   033b6568H
+	.word   9,9,0,0
+	.long   013478a5H
 	.word   04000H
 	.long   robo_p
 pcube_2:
-	.word   8,7,-1,-1
-	.long   033b6718H
+	.word   7,7,-1,-1
+	.long   013479e9H
 	.word   04000H
 	.long   robo_p
 pcube_3:
-	.word   8,5,-2,-2
-	.long   033b67f8H
+	.word   5,5,-2,-2
+	.long   01347aadH
 	.word   04000H
 	.long   robo_p
 spiral_1:
-	.word   12,10,0,0
-	.long   033b6898H
+	.word   9,10,0,0
+	.long   01347b11H
 	.word   04000H
 	.long   robo_p
 spiral_2:
-	.word   8,6,0,-2
-	.long   033b6a78H
+	.word   7,6,0,-2
+	.long   01347c79H
 	.word   04000H
 	.long   robo_p
 spiral_3:
-	.word   8,4,-2,-2
-	.long   033b6b38H
+	.word   5,4,-2,-2
+	.long   01347d21H
 	.word   04000H
 	.long   robo_p
 square_1:
-	.word   12,9,0,0
-	.long   033b6bb8H
+	.word   9,9,0,0
+	.long   01347d71H
 	.word   04000H
 	.long   robo_p
 square_2:
-	.word   8,7,-1,-1
-	.long   033b6d68H
+	.word   7,7,-1,-1
+	.long   01347eb5H
 	.word   04000H
 	.long   robo_p
 square_3:
-	.word   4,3,-3,-3
-	.long   033b6e48H
+	.word   3,3,-3,-3
+	.long   01347f79H
 	.word   04000H
 	.long   robo_p
 triangle_1:
-	.word   12,9,0,0
-	.long   033b6e78H
+	.word   9,9,0,0
+	.long   01347f9dH
 	.word   04000H
 	.long   robo_p
 triangle_2:
-	.word   8,6,-2,-2
-	.long   033b7028H
+	.word   6,6,-2,-2
+	.long   013480e1H
 	.word   04000H
 	.long   robo_p
 triangle_3:
-	.word   4,3,-4,-4
-	.long   033b70e8H
+	.word   3,3,-4,-4
+	.long   01348171H
 	.word   04000H
 	.long   robo_p
 rectangle_1:
-	.word   8,9,0,0
-	.long   033b7118H
+	.word   5,9,0,0
+	.long   01348195H
 	.word   04000H
 	.long   robo_p
 rectangle_2:
-	.word   4,7,-1,-1
-	.long   033b7238H
+	.word   3,7,-1,-1
+	.long   01348249H
 	.word   04000H
 	.long   robo_p
 rectangle_3:
-	.word   4,5,-2,-2
-	.long   033b72a8H
+	.word   3,5,-2,-2
+	.long   0134829dH
 	.word   04000H
 	.long   robo_p
 enf_xv1:
-	.word   12,31,0,10
-	.long   033b72f8H
+	.word   9,31,0,10
+	.long   013482d9H
 	.word   04000H
 	.long   robo_p
 enf_xv2:
-	.word   12,51,0,20
-	.long   033b78c8H
+	.word   9,51,0,20
+	.long   01348735H
 	.word   04000H
 	.long   robo_p
 enf_xv3:
-	.word   12,71,0,30
-	.long   033b8258H
+	.word   9,71,0,30
+	.long   01348e61H
 	.word   04000H
 	.long   robo_p
 enf_xv4:
-	.word   12,91,0,40
-	.long   033b8fa8H
+	.word   9,91,0,40
+	.long   0134985dH
 	.word   04000H
 	.long   robo_p
 enf_xv5:
-	.word   12,111,0,50
-	.long   033ba0b8H
+	.word   9,111,0,50
+	.long   0134a529H
 	.word   04000H
 	.long   robo_p
 enf_xb1:
 	.word   24,31,6,10
-	.long   033bb588H
+	.long   0134b4c5H
 	.word   04000H
 	.long   robo_p
 enf_xb2:
 	.word   44,51,16,20
-	.long   033bc128H
+	.long   0134c065H
 	.word   04000H
 	.long   robo_p
 enf_xb3:
 	.word   64,71,26,30
-	.long   033be438H
+	.long   0134e375H
 	.word   04000H
 	.long   robo_p
 enf_xb4:
 	.word   84,91,36,40
-	.long   033c2b38H
+	.long   01352a75H
 	.word   04000H
 	.long   robo_p
 enf_xh1:
-	.word   36,11,12,0
-	.long   033ca2a8H
+	.word   33,11,12,0
+	.long   0135a1e5H
 	.word   04000H
 	.long   robo_p
 enf_xh2:
-	.word   68,11,28,0
-	.long   033ca8d8H
+	.word   65,11,28,0
+	.long   0135a791H
 	.word   04000H
 	.long   robo_p
 enf_xh3:
-	.word   100,11,44,0
-	.long   033cb488H
+	.word   97,11,44,0
+	.long   0135b2bdH
 	.word   04000H
 	.long   robo_p
 enf_xh4:
-	.word   132,12,60,0
-	.long   033cc5b8H
+	.word   129,12,60,0
+	.long   0135c369H
 	.word   04000H
 	.long   robo_p
 enf_xf1:
 	.word   24,31,18,10
-	.long   033cde78H
+	.long   0135db99H
 	.word   04000H
 	.long   robo_p
 enf_xf2:
 	.word   44,51,28,20
-	.long   033cea18H
+	.long   0135e739H
 	.word   04000H
 	.long   robo_p
 enf_xf3:
 	.word   64,71,38,30
-	.long   033d0d28H
+	.long   01360a49H
 	.word   04000H
 	.long   robo_p
 enf_xf4:
 	.word   84,91,48,40
-	.long   033d5428H
+	.long   01365149H
 	.word   04000H
 	.long   robo_p
 tank_g1:
-	.word   4,4,-5,-6
-	.long   033dcb98H
+	.word   3,4,-5,-6
+	.long   0136c8b9H
 	.word   04000H
 	.long   robo_p
 tank_g2:
-	.word   8,7,-4,-5
-	.long   033dcbd8H
+	.word   6,7,-4,-5
+	.long   0136c8e9H
 	.word   04000H
 	.long   robo_p
 tank_g3:
-	.word   8,8,-3,-4
-	.long   033dccb8H
+	.word   7,8,-3,-4
+	.long   0136c991H
 	.word   04000H
 	.long   robo_p
 tank_g4:
-	.word   12,12,-1,-2
-	.long   033dcdb8H
+	.word   10,12,-1,-2
+	.long   0136ca71H
 	.word   04000H
 	.long   robo_p
 quark_1:
-	.word   4,3,-6,-6
-	.long   033dcff8H
+	.word   3,3,-6,-6
+	.long   0136cc51H
 	.word   04000H
 	.long   robo_p
 quark_2:
-	.word   8,5,-5,-5
-	.long   033dd028H
+	.word   5,5,-5,-5
+	.long   0136cc75H
 	.word   04000H
 	.long   robo_p
 quark_3:
-	.word   8,7,-4,-4
-	.long   033dd0c8H
+	.word   7,7,-4,-4
+	.long   0136ccd9H
 	.word   04000H
 	.long   robo_p
 quark_4:
-	.word   12,9,-3,-3
-	.long   033dd1a8H
+	.word   9,9,-3,-3
+	.long   0136cd9dH
 	.word   04000H
 	.long   robo_p
 quark_5:
-	.word   12,11,-2,-2
-	.long   033dd358H
+	.word   11,11,-2,-2
+	.long   0136cee1H
 	.word   04000H
 	.long   robo_p
 quark_6:
-	.word   16,13,-1,-1
-	.long   033dd568H
+	.word   13,13,-1,-1
+	.long   0136d0c5H
 	.word   04000H
 	.long   robo_p
 quark_7:
-	.word   16,15,0,0
-	.long   033dd8a8H
+	.word   15,15,0,0
+	.long   0136d369H
 	.word   04000H
 	.long   robo_p
 quark_8:
-	.word   16,15,0,0
-	.long   033ddc68H
+	.word   15,15,0,0
+	.long   0136d6edH
 	.word   04000H
 	.long   robo_p
 tank_1:
-	.word   16,16,0,0
-	.long   033de028H
+	.word   13,16,0,0
+	.long   0136da71H
 	.word   04000H
 	.long   robo_p
 tank_2:
-	.word   16,16,0,0
-	.long   033de428H
+	.word   13,16,0,0
+	.long   0136ddb1H
 	.word   04000H
 	.long   robo_p
 tank_3:
-	.word   16,16,0,0
-	.long   033de828H
+	.word   13,16,0,0
+	.long   0136e0f1H
 	.word   04000H
 	.long   robo_p
 tank_4:
-	.word   16,16,0,0
-	.long   033dec28H
+	.word   13,16,0,0
+	.long   0136e431H
 	.word   04000H
 	.long   robo_p
 shell:
-	.word   8,7,0,0
-	.long   033df028H
+	.word   7,7,0,0
+	.long   0136e771H
 	.word   04000H
 	.long   robo_p
 	.TEXT

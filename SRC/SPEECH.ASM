@@ -49,7 +49,7 @@
 	.ref	game_time
 	.ref	gmqrtr,scores
 	.ref	ballptsforshot		;Point value for current shot (1-3)
-	.ref	team1,team2
+	.ref	team1,team2         ;!!AM!! both def and refd error, renamed team1 routine.
 	.ref	ballpnumscored		;Last plyr who scored (0-3) or neg
 	.ref	ballnumscored		;# times last plyr scored
 	.ref	plyr_onfire		;plyr who is on fire
@@ -1830,15 +1830,15 @@ scn_1	calla	snd_play1
 	.long	#desperationa
 	.long	#long_rangea
 	.long	#x2_points
-	.long	#3_pointsa
+	.long	#x3_pointsa
 	.long	#hook_shota
-	.long	#lay_up
-	.long	#finger_roll
-	.long	#dunk_short
-	.long	#dunk_med
-	.long	#dunk_long
-	.long	#fade_away
-	.long	#fade_in
+	.long	#lay_upa
+	.long	#finger_rolla
+	.long	#dunk_shorta
+	.long	#dunk_meda
+	.long	#dunk_longa
+	.long	#fade_awaya
+	.long	#fade_ina
 
 ****************
 #desperationa
@@ -1909,7 +1909,7 @@ scn_1	calla	snd_play1
 ;	callr	wideopen_speech
 ;	jrnc	x2pts
 
-	movi	#2ptab_near,a2
+	movi	#x2ptab_near,a2
 
 	move	@shot_distance,a0	;distance from hoop
 
@@ -1920,10 +1920,10 @@ scn_1	calla	snd_play1
 	jrhi	#med			;br=below lower-post line
 	cmpi	155,a0			;beyond free-throw line ?
 	jrls	#spch			;br=nope, near
-	movi	#2ptab_far,a2
+	movi	#x2ptab_far,a2
 	jruc	spch
 #med
-	movi	#2ptab_med,a2
+	movi	#x2ptab_med,a2
 #spch	movk	12,a0
 	calla	rndrng0
 	sll	5,a0
@@ -1939,7 +1939,7 @@ scn_1	calla	snd_play1
 
 
 
-#2ptab_near
+#x2ptab_near
 	.long	frm_paint_sp
 	.long	shrt_rng_sp
 	.long	for_two_sp
@@ -1954,7 +1954,7 @@ scn_1	calla	snd_play1
 	.long	shoots2_sp
 	.long	for_two_sp
 
-#2ptab_med
+#x2ptab_med
 	.long	from_15_sp
 	.long	for_two_sp
 	.long	fires_jumpr
@@ -1969,7 +1969,7 @@ scn_1	calla	snd_play1
 	.long	shoots2_sp
 	.long	0
 
-#2ptab_far
+#x2ptab_far
 	.long	top_key_sp
 	.long	from_18_sp
 	.long	fires_jumpr
@@ -1986,7 +1986,7 @@ scn_1	calla	snd_play1
 
 
 ****************
-#3_pointsa
+#x3_pointsa
 
 	callr	ugly_shot
 	jrnc	x3pts
@@ -2013,13 +2013,13 @@ scn_1	calla	snd_play1
 ;DJT End
 	calla	rndrng0
 	sll	5,a0
-	addi	#3ptaba,a0
+	addi	#x3ptaba,a0
 	move	*a0,a0,L
 	calla	snd_play1
 #x3pts
 	rets
 
-#3ptaba
+#x3ptaba
 	.long	frm_dwntn_sp
 	.long	frm_3_arc_sp
 	.long	for_thre1_sp
@@ -2101,7 +2101,7 @@ scn_1	calla	snd_play1
 	.long	hook_shot_sp
 
 ****************
-#lay_up
+#lay_upa
 	
 	move	@ballshotinair,a14
 	move	*a13(plyr_num),a0
@@ -2129,7 +2129,7 @@ scn_1	calla	snd_play1
 
 
 ****************
-#finger_roll
+#finger_rolla
 
 	movk	8,a0
 	calla	rndrng0
@@ -2158,7 +2158,7 @@ scn_1	calla	snd_play1
 
 
 ****************
-#dunk_short
+#dunk_shorta
 
 	move	@plyr_shot,a0
 	callr	call_player_name
@@ -2166,14 +2166,14 @@ scn_1	calla	snd_play1
 
 
 ****************
-#dunk_med
+#dunk_meda
 
 	move	@plyr_shot,a0
 	callr	call_player_name
 	rets
 
 ****************
-#dunk_long
+#dunk_longa
 
 	move	@plyr_shot,a0
 	callr	call_player_name
@@ -2181,11 +2181,11 @@ scn_1	calla	snd_play1
 
 
 ****************
-#fade_away
+#fade_awaya
 	rets
 
 ****************
-#fade_in
+#fade_ina
 	rets
 
 
@@ -2237,15 +2237,15 @@ scn_1	calla	snd_play1
 	.long	#desperationb
 	.long	#long_rangeb
 	.long	#y2_points
-	.long	#3_pointsb
+	.long	#x3_pointsb
 	.long	#hook_shot
-	.long	#lay_up
-	.long	#finger_roll
-	.long	#dunk_short
-	.long	#dunk_med
-	.long	#dunk_long
-	.long	#fade_away
-	.long	#fade_in
+	.long	#lay_upb
+	.long	#finger_rollb
+	.long	#dunk_shortb
+	.long	#dunk_medb
+	.long	#dunk_longb
+	.long	#fade_awayb
+	.long	#fade_inb
 
 ****************
 #desperationb
@@ -2329,8 +2329,8 @@ hotscored
 ;DJT End
 	calla	rndrng0
 	sll	5,a0
-	addi	#2bkbdhit_tab,a0
-	jruc	2snd
+	addi	#x2bkbdhit_tab,a0
+	jruc	x2snd
 
 #nobkbd
 ;	movi	800,a0		;call scores 20% time
@@ -2342,15 +2342,15 @@ hotscored
 ;DJT End
 	calla	rndrng0
 	sll	5,a0
-	addi	#2tab,a0
-#2snd
+	addi	#x2tab,a0
+#x2snd
 	move	*a0,a0,L
 	calla	snd_play1
 #x2ptsb
 	rets
 
 
-#2bkbdhit_tab
+#x2bkbdhit_tab
 	.long	banked_it_sp
 	.long	off_glass_sp
 	.long	off_bkbrd_sp
@@ -2360,7 +2360,7 @@ hotscored
 	.long	scores2_sp
 ;DJT End
 
-#2tab
+#x2tab
 	.long	it_falls_sp
 	.long	scores_sp
 	.long	hits_jmpr_sp
@@ -2390,7 +2390,7 @@ hotscored
 
 
 ****************
-#3_pointsb
+#x3_pointsb
 
 	callr	itsgood
 	jrnc	x3p
@@ -2404,14 +2404,14 @@ hotscored
 ;DJT End
 	calla	rndrng0
 	sll	5,a0
-	addi	#3ptabb,a0
+	addi	#x3ptabb,a0
 	move	*a0,a0,L
 	jrz	x3p
 	calla	snd_play1
 #x3p
 	rets
 
-#3ptabb
+#x3ptabb
 	.long	its_good_sp
 	.long	drains_it_sp
 	.long	goooood2_sp
@@ -2461,7 +2461,7 @@ hotscored
 
 
 ****************
-#lay_up
+#lay_upb
 
 	movk	3,a0
 	calla	rndrng0
@@ -2478,7 +2478,7 @@ hotscored
 	.long	incredble_sp
 
 ****************
-#finger_roll
+#finger_rollb
 
 	movk	4,a0
 	calla	rndrng0
@@ -2497,9 +2497,9 @@ hotscored
 
 
 ****************
-#dunk_short
-#dunk_med
-#dunk_long
+#dunk_shortb
+#dunk_medb
+#dunk_longb
 
 	movi	300,a0			;call name 30% time
 	calla	RNDPER
@@ -2686,8 +2686,8 @@ hotscored
 
 
 ****************
-#fade_away
-#fade_in
+#fade_awayb
+#fade_inb
 	rets
 
 
@@ -2712,13 +2712,13 @@ hotscored
 
 	move	@last_name_time,a1	;# ticks since name called
 	cmpi	TSEC*2,a1
-	jrhs	#playit
+	jrhs	#playita
 
 	move	@last_name,a1		;if name called in last 3 secs
 	cmp	a0,a1			;then don't call it again
 	jreq	snd_fail
 
-#playit
+#playita
 	PUSH	a0
 
 	move	a0,a1
@@ -2862,7 +2862,7 @@ hotscored
 #no_freakout
 	move	@gmqrtr,a0
 	cmpi	3,a0
-	jrlt	not_last_qtr
+	jrlt	not_last_qtra
 
 	move	@game_time,a0,L
 	cmpi	MAX_TIME,a0
@@ -2930,13 +2930,13 @@ hotscored
 	movi	needshot_sp,a0
 	move	@HCOUNT,a14
 	btst	1,a14
-	jrnz	playit
+	jrnz	playitb
 	movi	just_secs_sp,a0
 	btst	2,a14
-	jrnz	playit
+	jrnz	playitb
 	movi	run_out_sp,a0
 ;DJT End
-#playit
+#playitb
 	calla	snd_play1
 	movk	1,a0
 	move	a0,@needshot_called
@@ -2949,9 +2949,9 @@ hotscored
 	movi	blowout_sp,a0		;it's a blowout
 	move	@HCOUNT,a14
 	btst	1,a14
-	jrnz	blowout
+	jrnz	blowouta
 	movi	debacle_sp,a0
-	jruc	blowout
+	jruc	blowouta
 #notblow
 ;DJT End
 	movk	4,a0
@@ -2959,7 +2959,7 @@ hotscored
 	sll	5,a0
 	addi	#no_chnce_win_sp_tbl,a0
 	move	*a0,a0,L
-#blowout
+#blowouta
 	calla	snd_play1
 
 	movk	1,a0
@@ -2967,7 +2967,7 @@ hotscored
 	clrc
 	rets
 
-#not_last_qtr
+#not_last_qtra
 	clr	a0
 	move	a0,@blowout_called
 	move	a0,@needshot_called
@@ -3005,7 +3005,7 @@ hotscored
 
 	move	@gmqrtr,a0
 	cmpi	3,a0			;last quarter?
-	jrlt	not_last_qtr
+	jrlt	not_last_qtrb
 
 	move	@score_diff,a0
 	jrp	#in_front		;already in front
@@ -3035,7 +3035,7 @@ hotscored
 
 #behind
 #in_front
-#not_last_qtr
+#not_last_qtrb
 #check_buzzer
 	move	@game_time,a0,L
 	cmpi	200h,a0
@@ -3197,9 +3197,9 @@ calc_score_diff
 	move	@scores+10h,a2
 	sub	a2,a1
 	srl	1,a0
-	jrz	team1
+	jrz	xteam1
 	neg	a1			;team2, so negate
-#team1
+#xteam1
 	move	a1,@score_diff
 	PULL	a0,a1,a2
 	rets
@@ -3249,10 +3249,10 @@ calc_score_diff
 	move	*a1(OYPOS),a0
 	cmpi	-38,a0		;if below HOOP - dont call!
 ;	cmpi	-28,a0
-	jrgt	#yes		;Br=near ground
+	jrgt	#yesa		;Br=near ground
 
 	move	@must_rebound,a0
-	jrnz	yes
+	jrnz	yesa
 
 	movk	8,a0
 	calla	rndrng0
@@ -3260,7 +3260,7 @@ calc_score_diff
 	addi	#regtab,a0
 	move	*a0,a0,L
 	calla	snd_play1
-#yes
+#yesa
 	PULL	a0,a1,a14
 	rets
 
@@ -3311,7 +3311,7 @@ calc_score_diff
 	move	@ballobj_p,a1,L
 	move	*a1(OYPOS),a0
 	cmpi	-75,a0
-	jrgt	#yes		;Br=near ground
+	jrgt	#yesb		;Br=near ground
 
 	movk	4,a0
 	calla	rndrng0
@@ -3320,7 +3320,7 @@ calc_score_diff
 	move	*a0,a0,L
 	calla	snd_play1
 	jruc	dne
-#yes	
+#yesb	
 	SOUND1	stolen_sp
 #dne
 	PULL	a0,a1,a14
@@ -3342,7 +3342,7 @@ calc_score_diff
 	PUSH	a0,a1,a14
 
 	move	@must_rebound,a0
-	jrnz	yes
+	jrnz	yesc
 
 
 	movk	6,a0
@@ -3351,7 +3351,7 @@ calc_score_diff
 	addi	#deflt_spch_tab,a0
 	move	*a0,a0,L
 	calla	snd_play1
-#yes	
+#yesc	
 	PULL	a0,a1,a14
 	rets
 
@@ -3794,7 +3794,7 @@ calc_score_diff
 	calla	RNDPER
 	jrls	#snd_fail
 
-#doit
+#doit2
 	movk	6,a0
 	calla	rndrng0
 	sll	5,a0		;x 32 bits

@@ -41,9 +41,9 @@ TEXT.OBJ		/* fixed file, had to comment stuff to avoid mem error! font tables */
 TEXT2.OBJ		/* added file, memory issues when compiling. the tables are needed! */
 ATTRACT.OBJ		/* fixed file. attract mode */
 STRING.OBJ		/* fixed file. string printing stuff */
-RECORD.OBJ		/* fixed file CMOS records etc */
-SPEECH.OBJ		/* announcer speech etc... */
-SELECT.OBJ		/* name & team selection */
+RECORD.OBJ		/* fixed file. CMOS records etc */
+SPEECH.OBJ		/* fixed file. announcer speech etc... */
+SELECT.OBJ		/* fixed file. name & team selection */
 SELECT2.OBJ		/* name & team selection */
 ADJUST.OBJ		/* fixed file. TEST MENUS ADJUSTMENT CODE */
 AUDIT.OBJ		/* audits and adjustments handling */
