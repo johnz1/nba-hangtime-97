@@ -1,0 +1,1008 @@
+	.DATA
+SCOTT:
+	.word   34,9,16,0
+	.long   0a000000H
+	.word   03000H
+	.long   BAST_Y_P
+ROBERTSON:
+	.word   61,9,30,0
+	.long   0a000396H
+	.word   03000H
+	.long   BAST_Y_P
+CHAPMAN:
+	.word   53,9,26,0
+	.long   0a000a05H
+	.word   03000H
+	.long   BAST_Y_P
+WEBB:
+	.word   30,9,14,0
+	.long   0a000f9cH
+	.word   03000H
+	.long   BAST_Y_P
+LANG:
+	.word   28,9,13,0
+	.long   0a0012c6H
+	.word   03000H
+	.long   BAST_Y_P
+RUFFIN:
+	.word   36,9,17,0
+	.long   0a0015baH
+	.word   03000H
+	.long   BAST_Y_P
+MARCI2:
+	.word   74,9,36,0
+	.long   0a001986H
+	.word   03000H
+	.long   BAST_Y_P
+WEATHSPN:
+	.word   71,9,35,0
+	.long   0a002154H
+	.word   03000H
+	.long   BAST_Y_P
+AMRICH:
+	.word   41,9,20,0
+	.long   0a0028d1H
+	.word   03000H
+	.long   BAST_Y_P
+ANZALONE:
+	.word   55,9,27,0
+	.long   0a002d24H
+	.word   03000H
+	.long   BAST_Y_P
+BENSON:
+	.word   41,9,20,0
+	.long   0a0032f1H
+	.word   03000H
+	.long   BAST_Y_P
+BUTATA:
+	.word   41,9,20,0
+	.long   0a003744H
+	.word   03000H
+	.long   BAST_Y_P
+FUNK:
+	.word   28,9,13,0
+	.long   0a003b97H
+	.word   03000H
+	.long   BAST_Y_P
+HAEGERJR:
+	.word   42,9,20,0
+	.long   0a003e8bH
+	.word   03000H
+	.long   BAST_Y_P
+JIGGETTS:
+	.word   50,9,24,0
+	.long   0a0042f9H
+	.word   03000H
+	.long   BAST_Y_P
+KELLER:
+	.word   40,9,19,0
+	.long   0a00483fH
+	.word   03000H
+	.long   BAST_Y_P
+LAWMAN:
+	.word   47,9,23,0
+	.long   0a004c77H
+	.word   03000H
+	.long   BAST_Y_P
+LEE:
+	.word   18,9,8,0
+	.long   0a00516cH
+	.word   02000H
+	.long   BAST_Y_P
+MDOC:
+	.word   34,9,16,0
+	.long   0a0052b0H
+	.word   03000H
+	.long   BAST_Y_P
+MIKE:
+	.word   26,9,12,0
+	.long   0a005646H
+	.word   03000H
+	.long   BAST_Y_P
+MUNDAY:
+	.word   44,9,21,0
+	.long   0a005904H
+	.word   03000H
+	.long   BAST_Y_P
+NORTH:
+	.word   35,9,17,0
+	.long   0a005da8H
+	.word   03000H
+	.long   BAST_Y_P
+PERRY:
+	.word   34,9,16,0
+	.long   0a006159H
+	.word   03000H
+	.long   BAST_Y_P
+RIVETT:
+	.word   38,9,18,0
+	.long   0a0064efH
+	.word   03000H
+	.long   BAST_Y_P
+SEAN:
+	.word   28,9,13,0
+	.long   0a0068f1H
+	.word   03000H
+	.long   BAST_Y_P
+ZIRIN:
+	.word   26,9,12,0
+	.long   0a006be5H
+	.word   03000H
+	.long   BAST_Y_P
+HBETT:
+	.word   63,9,31,0
+	.long   0a006ea3H
+	.word   03000H
+	.long   BAST_Y_P
+MBETT:
+	.word   63,9,31,0
+	.long   0a006ea3H
+	.word   03000H
+	.long   BAST_Y_P
+GUGLI2:
+	.word   58,9,29,0
+	.long   0a007548H
+	.word   03000H
+	.long   BAST_Y_P
+MCKEE2:
+	.word   36,9,18,0
+	.long   0a007b66H
+	.word   03000H
+	.long   BAST_Y_P
+ELLIOT2:
+	.word   42,9,21,0
+	.long   0a007f32H
+	.word   03000H
+	.long   BAST_Y_P
+TURMELL:
+	.word   48,9,23,0
+	.long   0a0083a0H
+	.word   03000H
+	.long   BAST_Y_P
+CARLTON:
+	.word   47,9,23,0
+	.long   0a0088b0H
+	.word   03000H
+	.long   BAST_Y_P
+HEY:
+	.word   20,9,9,0
+	.long   0a008da5H
+	.word   03000H
+	.long   BAST_Y_P
+FITZ:
+	.word   63,9,31,0
+	.long   0a008fc1H
+	.word   03000H
+	.long   BAST_Y_P
+AIRMOR:
+	.word   63,9,31,0
+	.long   0a009666H
+	.word   03000H
+	.long   BAST_Y_P
+BARDO:
+	.word   36,9,17,0
+	.long   0a009d0bH
+	.word   03000H
+	.long   BAST_Y_P
+HEDRICK:
+	.word   45,9,22,0
+	.long   0a00a0d7H
+	.word   03000H
+	.long   BAST_Y_P
+MINIFE:
+	.word   40,9,19,0
+	.long   0a00a596H
+	.word   03000H
+	.long   BAST_Y_P
+MARTIN:
+	.word   54,9,26,0
+	.long   0a00a9ceH
+	.word   03000H
+	.long   BAST_Y_P
+PESINA:
+	.word   38,9,18,0
+	.long   0a00af80H
+	.word   03000H
+	.long   BAST_Y_P
+THOMPS:
+	.word   58,9,28,0
+	.long   0a00b382H
+	.word   03000H
+	.long   BAST_Y_P
+GEER:
+	.word   27,9,13,0
+	.long   0a00b9a0H
+	.word   03000H
+	.long   BAST_Y_P
+JAPPLE:
+	.word   40,9,19,0
+	.long   0a00bc79H
+	.word   03000H
+	.long   BAST_Y_P
+FERRIER:
+	.word   43,9,21,0
+	.long   0a00c0b1H
+	.word   03000H
+	.long   BAST_Y_P
+VINIK:
+	.word   50,9,24,0
+	.long   0a00c53aH
+	.word   03000H
+	.long   BAST_Y_P
+EHRLICH:
+	.word   43,9,21,0
+	.long   0a00ca80H
+	.word   03000H
+	.long   BAST_Y_P
+LIPTAK:
+	.word   38,9,18,0
+	.long   0a00cf09H
+	.word   03000H
+	.long   BAST_Y_P
+ROOT:
+	.word   28,9,13,0
+	.long   0a00d30bH
+	.word   03000H
+	.long   BAST_Y_P
+MEDNICK:
+	.word   47,9,23,0
+	.long   0a00d5ffH
+	.word   03000H
+	.long   BAST_Y_P
+ROAN:
+	.word   29,9,14,0
+	.long   0a00daf4H
+	.word   03000H
+	.long   BAST_Y_P
+OURSLER:
+	.word   48,9,23,0
+	.long   0a00de03H
+	.word   03000H
+	.long   BAST_Y_P
+QUINN:
+	.word   31,10,15,0
+	.long   0a00e313H
+	.word   03000H
+	.long   BAST_Y_P
+TOBIAS:
+	.word   39,9,19,0
+	.long   0a00e6b5H
+	.word   03000H
+	.long   BAST_Y_P
+BOON:
+	.word   28,9,13,0
+	.long   0a00ead2H
+	.word   03000H
+	.long   BAST_Y_P
+ATLNAUG:
+	.word   184,22,0,11
+	.long   0a00edc6H
+	.word   02000H
+	.long   PNAME_W_P
+ATLNBLA:
+	.word   211,20,0,9
+	.long   0a010d66H
+	.word   02000H
+	.long   PNAME_W_P
+ATLNSMI:
+	.word   148,22,0,11
+	.long   0a012e5eH
+	.word   02000H
+	.long   PNAME_W_P
+ATLNLAE:
+	.word   236,21,0,9
+	.long   0a0147ceH
+	.word   02000H
+	.long   PNAME_W_P
+ATLNNOR:
+	.word   149,20,0,9
+	.long   0a016e86H
+	.word   02000H
+	.long   PNAME_W_P
+BOSNBRO:
+	.word   135,20,0,9
+	.long   0a0185ceH
+	.word   02000H
+	.long   PNAME_W_P
+BOSNBAR:
+	.word   163,21,0,9
+	.long   0a019ae6H
+	.word   02000H
+	.long   PNAME_W_P
+BOSNMON:
+	.word   185,21,0,9
+	.long   0a01b5a4H
+	.word   02000H
+	.long   PNAME_W_P
+BOSNRAD:
+	.word   137,20,0,9
+	.long   0a01d3feH
+	.word   02000H
+	.long   PNAME_W_P
+BOSNFOX:
+	.word   105,20,0,9
+	.long   0a01e966H
+	.word   02000H
+	.long   PNAME_W_P
+CHANAND:
+	.word   203,21,0,9
+	.long   0a01f9ceH
+	.word   02000H
+	.long   PNAME_W_P
+CHANJOH:
+	.word   188,21,0,9
+	.long   0a021b1cH
+	.word   02000H
+	.long   PNAME_W_P
+CHANRIC:
+	.word   118,21,0,10
+	.long   0a0239f4H
+	.word   02000H
+	.long   PNAME_W_P
+CHANZID:
+	.word   166,21,0,10
+	.long   0a024d50H
+	.word   02000H
+	.long   PNAME_W_P
+CHANCUR:
+	.word   141,20,0,9
+	.long   0a02688cH
+	.word   02000H
+	.long   PNAME_W_P
+CHINPIP:
+	.word   181,22,0,11
+	.long   0a027e94H
+	.word   02000H
+	.long   PNAME_W_P
+CHINROD:
+	.word   186,21,0,9
+	.long   0a029db0H
+	.word   02000H
+	.long   PNAME_W_P
+CHINKUK:
+	.word   134,20,0,9
+	.long   0a02bc34H
+	.word   02000H
+	.long   PNAME_W_P
+CHINLON:
+	.word   153,20,0,9
+	.long   0a02d124H
+	.word   02000H
+	.long   PNAME_W_P
+CHINKER:
+	.word   142,22,0,11
+	.long   0a02e90cH
+	.word   02000H
+	.long   PNAME_W_P
+CLENHIL:
+	.word   145,20,0,9
+	.long   0a030174H
+	.word   02000H
+	.long   PNAME_W_P
+CLENMIL:
+	.word   145,21,0,9
+	.long   0a03181cH
+	.word   02000H
+	.long   PNAME_W_P
+CLENPHI:
+	.word   164,21,0,9
+	.long   0a032fe6H
+	.word   02000H
+	.long   PNAME_W_P
+CLENBRA:
+	.word   214,20,0,9
+	.long   0a034aceH
+	.word   02000H
+	.long   PNAME_W_P
+CLENFER:
+	.word   156,20,0,9
+	.long   0a036c3eH
+	.word   02000H
+	.long   PNAME_W_P
+DALNJAC:
+	.word   153,21,0,9
+	.long   0a03849eH
+	.word   02000H
+	.long   PNAME_W_P
+DALNKID:
+	.word   138,21,0,9
+	.long   0a039db8H
+	.word   02000H
+	.long   PNAME_W_P
+DALNMAS:
+	.word   207,21,0,9
+	.long   0a03b45cH
+	.word   02000H
+	.long   PNAME_W_P
+DALNJON:
+	.word   167,21,0,9
+	.long   0a03d652H
+	.word   02000H
+	.long   PNAME_W_P
+DALNMcC:
+	.word   206,21,0,10
+	.long   0a03f1b8H
+	.word   02000H
+	.long   PNAME_W_P
+DENNRAU:
+	.word   264,20,0,9
+	.long   0a041384H
+	.word   02000H
+	.long   PNAME_W_P
+DENNMUT:
+	.word   218,20,0,9
+	.long   0a043cc4H
+	.word   02000H
+	.long   PNAME_W_P
+DENNMcD:
+	.word   216,21,0,9
+	.long   0a045ed4H
+	.word   02000H
+	.long   PNAME_W_P
+DENNROS:
+	.word   139,21,0,9
+	.long   0a048244H
+	.word   02000H
+	.long   PNAME_W_P
+DENNELL:
+	.word   130,21,0,9
+	.long   0a049912H
+	.word   02000H
+	.long   PNAME_W_P
+DETNDUM:
+	.word   147,21,0,9
+	.long   0a04ae66H
+	.word   02000H
+	.long   PNAME_W_P
+DETNHIL:
+	.word   133,21,0,10
+	.long   0a04c684H
+	.word   02000H
+	.long   PNAME_W_P
+DETNMIL:
+	.word   149,21,0,9
+	.long   0a04dc56H
+	.word   02000H
+	.long   PNAME_W_P
+DETNTHO:
+	.word   151,21,0,9
+	.long   0a04f4c8H
+	.word   02000H
+	.long   PNAME_W_P
+DETNHOU:
+	.word   189,21,0,9
+	.long   0a050d8eH
+	.word   02000H
+	.long   PNAME_W_P
+GOLNWIL:
+	.word   159,21,0,9
+	.long   0a052c90H
+	.word   02000H
+	.long   PNAME_W_P
+GOLNSPR:
+	.word   224,22,0,11
+	.long   0a0546a6H
+	.word   02000H
+	.long   PNAME_W_P
+GOLNSEI:
+	.word   164,22,0,11
+	.long   0a056d26H
+	.word   02000H
+	.long   PNAME_W_P
+GOLNSMI:
+	.word   121,22,0,11
+	.long   0a058956H
+	.word   02000H
+	.long   PNAME_W_P
+GOLNMUL:
+	.word   160,21,0,9
+	.long   0a059e22H
+	.word   02000H
+	.long   PNAME_W_P
+HOUNOLA:
+	.word   224,20,0,9
+	.long   0a05b862H
+	.word   02000H
+	.long   PNAME_W_P
+HOUNDRE:
+	.word   181,20,0,9
+	.long   0a05db62H
+	.word   02000H
+	.long   PNAME_W_P
+HOUNHOR:
+	.word   172,20,0,9
+	.long   0a05f7aaH
+	.word   02000H
+	.long   PNAME_W_P
+HOUNCAS:
+	.word   160,23,0,11
+	.long   0a06128aH
+	.word   02000H
+	.long   PNAME_W_P
+HOUNSMI:
+	.word   154,22,0,11
+	.long   0a062f4aH
+	.word   02000H
+	.long   PNAME_W_P
+INDNMIL:
+	.word   168,20,0,9
+	.long   0a0649c2H
+	.word   02000H
+	.long   PNAME_W_P
+INDNDAV:
+	.word   136,21,0,9
+	.long   0a066402H
+	.word   02000H
+	.long   PNAME_W_P
+INDNSMI:
+	.word   118,23,0,11
+	.long   0a067a52H
+	.word   02000H
+	.long   PNAME_W_P
+INDNMcK:
+	.word   160,20,0,9
+	.long   0a068f86H
+	.word   02000H
+	.long   PNAME_W_P
+INDNJAC:
+	.word   179,21,0,9
+	.long   0a06a886H
+	.word   02000H
+	.long   PNAME_W_P
+LACNVAU:
+	.word   144,20,0,9
+	.long   0a06c5e4H
+	.word   02000H
+	.long   PNAME_W_P
+LACNROG:
+	.word   190,21,0,9
+	.long   0a06dc64H
+	.word   02000H
+	.long   PNAME_W_P
+LACNMUR:
+	.word   192,20,0,9
+	.long   0a06fb90H
+	.word   02000H
+	.long   PNAME_W_P
+LACNRIC:
+	.word   214,21,0,9
+	.long   0a071990H
+	.word   02000H
+	.long   PNAME_W_P
+LACNBAR:
+	.word   158,20,0,9
+	.long   0a073cacH
+	.word   02000H
+	.long   PNAME_W_P
+LALNEXE:
+	.word   175,20,0,9
+	.long   0a07555cH
+	.word   02000H
+	.long   PNAME_W_P
+LALNDIV:
+	.word   152,20,0,9
+	.long   0a0770b4H
+	.word   02000H
+	.long   PNAME_W_P
+LALNCEB:
+	.word   208,21,0,9
+	.long   0a078874H
+	.word   02000H
+	.long   PNAME_W_P
+LALNCAM:
+	.word   197,20,0,9
+	.long   0a07aa94H
+	.word   02000H
+	.long   PNAME_W_P
+LALNJON:
+	.word   146,21,0,9
+	.long   0a07c95cH
+	.word   02000H
+	.long   PNAME_W_P
+MIANMOU:
+	.word   217,20,0,9
+	.long   0a07e150H
+	.word   02000H
+	.long   PNAME_W_P
+MIANWIL:
+	.word   187,21,0,9
+	.long   0a080338H
+	.word   02000H
+	.long   PNAME_W_P
+MIANCHA:
+	.word   162,20,0,9
+	.long   0a0821e6H
+	.word   02000H
+	.long   PNAME_W_P
+MIANHAR:
+	.word   173,20,0,9
+	.long   0a083b36H
+	.word   02000H
+	.long   PNAME_W_P
+MIANDAN:
+	.word   233,20,0,9
+	.long   0a08563eH
+	.word   02000H
+	.long   PNAME_W_P
+MILNBAK:
+	.word   124,20,0,9
+	.long   0a087aa6H
+	.word   02000H
+	.long   PNAME_W_P
+MILNROB:
+	.word   198,22,0,10
+	.long   0a088e06H
+	.word   02000H
+	.long   PNAME_W_P
+MILNRES:
+	.word   189,23,0,11
+	.long   0a08b00eH
+	.word   02000H
+	.long   PNAME_W_P
+MILNBEN:
+	.word   202,20,0,9
+	.long   0a08d204H
+	.word   02000H
+	.long   PNAME_W_P
+MILNDOU:
+	.word   223,23,0,11
+	.long   0a08f194H
+	.word   02000H
+	.long   PNAME_W_P
+MINNRID:
+	.word   150,21,0,9
+	.long   0a0919a6H
+	.word   02000H
+	.long   PNAME_W_P
+MINNLAN:
+	.word   166,20,0,9
+	.long   0a093242H
+	.word   02000H
+	.long   PNAME_W_P
+MINNWEB:
+	.word   137,22,0,11
+	.long   0a094c32H
+	.word   02000H
+	.long   PNAME_W_P
+MINNGUG:
+	.word   183,21,0,10
+	.long   0a0963beH
+	.word   02000H
+	.long   PNAME_W_P
+MINNGAR:
+	.word   180,21,0,10
+	.long   0a0981c4H
+	.word   02000H
+	.long   PNAME_W_P
+NWJNGIL:
+	.word   181,21,0,10
+	.long   0a099f4cH
+	.word   02000H
+	.long   PNAME_W_P
+NWJNBRA:
+	.word   193,22,0,11
+	.long   0a09bcfeH
+	.word   02000H
+	.long   PNAME_W_P
+NWJNOBA:
+	.word   158,20,0,9
+	.long   0a09de2aH
+	.word   02000H
+	.long   PNAME_W_P
+NWJNEDW:
+	.word   188,21,0,9
+	.long   0a09f6daH
+	.word   02000H
+	.long   PNAME_W_P
+NWYNEWI:
+	.word   179,20,0,9
+	.long   0a0a15b2H
+	.word   02000H
+	.long   PNAME_W_P
+NWYNMAS:
+	.word   196,21,0,9
+	.long   0a0a31aaH
+	.word   02000H
+	.long   PNAME_W_P
+NWYNHAR:
+	.word   170,20,0,9
+	.long   0a0a51d2H
+	.word   02000H
+	.long   PNAME_W_P
+NWYNOAK:
+	.word   202,21,0,9
+	.long   0a0a6c62H
+	.word   02000H
+	.long   PNAME_W_P
+NWYNSTA:
+	.word   159,23,0,11
+	.long   0a0a8d86H
+	.word   02000H
+	.long   PNAME_W_P
+ORLNHAR:
+	.word   244,20,0,9
+	.long   0a0aaa18H
+	.word   02000H
+	.long   PNAME_W_P
+ORLNGRA:
+	.word   174,21,0,10
+	.long   0a0ad038H
+	.word   02000H
+	.long   PNAME_W_P
+ORLNAND:
+	.word   185,21,0,9
+	.long   0a0aecc4H
+	.word   02000H
+	.long   PNAME_W_P
+ORLNSCO:
+	.word   165,23,0,11
+	.long   0a0b0b1eH
+	.word   02000H
+	.long   PNAME_W_P
+ORLNKON:
+	.word   147,20,0,9
+	.long   0a0b28c4H
+	.word   02000H
+	.long   PNAME_W_P
+PHINSTA:
+	.word   230,23,0,11
+	.long   0a0b3fbcH
+	.word   02000H
+	.long   PNAME_W_P
+PHINCOL:
+	.word   213,20,0,9
+	.long   0a0b6910H
+	.word   02000H
+	.long   PNAME_W_P
+PHINWEA:
+	.word   310,21,0,9
+	.long   0a0b8a58H
+	.word   02000H
+	.long   PNAME_W_P
+PHINRUF:
+	.word   177,20,0,9
+	.long   0a0bbd34H
+	.word   02000H
+	.long   PNAME_W_P
+PHINMAX:
+	.word   211,20,0,9
+	.long   0a0bd8dcH
+	.word   02000H
+	.long   PNAME_W_P
+PHONJOH:
+	.word   185,21,0,9
+	.long   0a0bf9d4H
+	.word   02000H
+	.long   PNAME_W_P
+PHONTIS:
+	.word   203,21,0,9
+	.long   0a0c182eH
+	.word   02000H
+	.long   PNAME_W_P
+PHONMAN:
+	.word   187,20,0,9
+	.long   0a0c397cH
+	.word   02000H
+	.long   PNAME_W_P
+PHONPER:
+	.word   193,21,0,9
+	.long   0a0c56b4H
+	.word   02000H
+	.long   PNAME_W_P
+PHONFIN:
+	.word   182,20,0,9
+	.long   0a0c765eH
+	.word   02000H
+	.long   PNAME_W_P
+PORNSTR:
+	.word   195,22,0,11
+	.long   0a0c92ceH
+	.word   02000H
+	.long   PNAME_W_P
+PORNROB:
+	.word   231,21,0,9
+	.long   0a0cb452H
+	.word   02000H
+	.long   PNAME_W_P
+PORNSAB:
+	.word   220,23,0,11
+	.long   0a0cda38H
+	.word   02000H
+	.long   PNAME_W_P
+PORNWIL:
+	.word   185,21,0,9
+	.long   0a0d01c0H
+	.word   02000H
+	.long   PNAME_W_P
+PORNCHI:
+	.word   253,21,0,9
+	.long   0a0d201aH
+	.word   02000H
+	.long   PNAME_W_P
+SACNOWE:
+	.word   155,21,0,9
+	.long   0a0d499cH
+	.word   02000H
+	.long   PNAME_W_P
+SACNRIT:
+	.word   193,20,0,9
+	.long   0a0d630aH
+	.word   02000H
+	.long   PNAME_W_P
+SACNGRA:
+	.word   153,21,0,10
+	.long   0a0d8132H
+	.word   02000H
+	.long   PNAME_W_P
+SACNMAR:
+	.word   275,23,0,11
+	.long   0a0d9a4cH
+	.word   02000H
+	.long   PNAME_W_P
+SACNEDN:
+	.word   140,21,0,9
+	.long   0a0dcbb6H
+	.word   02000H
+	.long   PNAME_W_P
+SANNELL:
+	.word   156,22,0,11
+	.long   0a0de2aeH
+	.word   02000H
+	.long   PNAME_W_P
+SANNROB:
+	.word   193,21,0,9
+	.long   0a0dfd7eH
+	.word   02000H
+	.long   PNAME_W_P
+SANNJOH:
+	.word   191,21,0,9
+	.long   0a0e1d28H
+	.word   02000H
+	.long   PNAME_W_P
+SANNPER:
+	.word   177,21,0,9
+	.long   0a0e3c7eH
+	.word   02000H
+	.long   PNAME_W_P
+SANNNEG:
+	.word   205,20,0,9
+	.long   0a0e5988H
+	.word   02000H
+	.long   PNAME_W_P
+SEANKEM:
+	.word   153,22,0,11
+	.long   0a0e7990H
+	.word   02000H
+	.long   PNAME_W_P
+SEANPAY:
+	.word   157,21,0,10
+	.long   0a0e93dcH
+	.word   02000H
+	.long   PNAME_W_P
+SEANSCH:
+	.word   207,22,0,11
+	.long   0a0ead9eH
+	.word   02000H
+	.long   PNAME_W_P
+SEANHAW:
+	.word   200,21,0,9
+	.long   0a0ed132H
+	.word   02000H
+	.long   PNAME_W_P
+SEANFOR:
+	.word   167,22,0,11
+	.long   0a0ef202H
+	.word   02000H
+	.long   PNAME_W_P
+TORNROG:
+	.word   190,21,0,9
+	.long   0a0f0eb6H
+	.word   02000H
+	.long   PNAME_W_P
+TORNSTO:
+	.word   233,22,0,11
+	.long   0a0f2de2H
+	.word   02000H
+	.long   PNAME_W_P
+TORNROB:
+	.word   211,21,0,9
+	.long   0a0f55eeH
+	.word   02000H
+	.long   PNAME_W_P
+TORNMIL:
+	.word   171,20,0,9
+	.long   0a0f788cH
+	.word   02000H
+	.long   PNAME_W_P
+TORNMUR:
+	.word   187,20,0,9
+	.long   0a0f9344H
+	.word   02000H
+	.long   PNAME_W_P
+UTANSTO:
+	.word   186,22,0,11
+	.long   0a0fb07cH
+	.word   02000H
+	.long   PNAME_W_P
+UTANMAL:
+	.word   159,20,0,9
+	.long   0a0fd074H
+	.word   02000H
+	.long   PNAME_W_P
+UTANHOR:
+	.word   180,20,0,9
+	.long   0a0fe94cH
+	.word   02000H
+	.long   PNAME_W_P
+UTANBEN:
+	.word   158,20,0,9
+	.long   0a10056cH
+	.word   02000H
+	.long   PNAME_W_P
+UTANMOR:
+	.word   166,21,0,9
+	.long   0a101e1cH
+	.word   02000H
+	.long   PNAME_W_P
+VANNANT:
+	.word   176,21,0,10
+	.long   0a103958H
+	.word   02000H
+	.long   PNAME_W_P
+VANNEDW:
+	.word   175,21,0,9
+	.long   0a105638H
+	.word   02000H
+	.long   PNAME_W_P
+VANNSCO:
+	.word   160,22,0,11
+	.long   0a1072eeH
+	.word   02000H
+	.long   PNAME_W_P
+VANNREE:
+	.word   182,21,0,9
+	.long   0a108e6eH
+	.word   02000H
+	.long   PNAME_W_P
+VANNMUR:
+	.word   171,20,0,9
+	.long   0a10ac4aH
+	.word   02000H
+	.long   PNAME_W_P
+WASNHOW:
+	.word   183,20,0,9
+	.long   0a10c702H
+	.word   02000H
+	.long   PNAME_W_P
+WASNWEB:
+	.word   174,21,0,9
+	.long   0a10e39aH
+	.word   02000H
+	.long   PNAME_W_P
+WASNCHE:
+	.word   211,20,0,9
+	.long   0a110026H
+	.word   02000H
+	.long   PNAME_W_P
+WASNPAC:
+	.word   157,20,0,9
+	.long   0a11211eH
+	.word   02000H
+	.long   PNAME_W_P
+WASNMUR:
+	.word   236,22,0,10
+	.long   0a1139a6H
+	.word   02000H
+	.long   PNAME_W_P
+GAINED_TXT:
+	.word   90,90,-5,-7
+	.long   0a116236H
+	.word   02000H
+	.long   GAINED_P
+IDIOTS_TXT:
+	.word   90,92,-5,-5
+	.long   0a11a17eH
+	.word   03000H
+	.long   IDIOTS_P
+	.TEXT
+

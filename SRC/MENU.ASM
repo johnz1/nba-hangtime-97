@@ -2314,23 +2314,23 @@ vol_loop_done
 
 	move	a0,a1
 	move	@bar_height2,a0
-#adjust_loop
+#adjust_loop1
 	cmp	a1,a0
-	jreq	done
-	jrlt	grow_bar
+	jreq	done1
+	jrlt	grow_bar1
 
 	movi	ROBO_BLACK,a2
 	callr	vol_bar_line
 	dec	a0
-	jruc	adjust_loop
+	jruc	adjust_loop1
 
-#grow_bar	
+#grow_bar1
 	inc	a0
 	movi	ROBO_RED,a2
 	callr	vol_bar_line
-	jruc	adjust_loop
+	jruc	adjust_loop1
 
-#done
+#done1
 	move	a0,@bar_height2
 	rets
 
@@ -2343,23 +2343,23 @@ vol_loop_done
 
 	move	a0,a1
 	move	@bar_height,a0
-#adjust_loop
+#adjust_loop2
 	cmp	a1,a0
-	jreq	done
-	jrlt	grow_bar
+	jreq	done2
+	jrlt	grow_bar2
 
 	movi	ROBO_BLACK,a2
 	callr	vol_bar_line
 	dec	a0
-	jruc	adjust_loop
+	jruc	adjust_loop2
 
-#grow_bar	
+#grow_bar2	
 	inc	a0
 	movi	ROBO_RED,a2
 	callr	vol_bar_line
-	jruc	adjust_loop
+	jruc	adjust_loop2
 
-#done
+#done2
 	move	a0,@bar_height
 	rets
 

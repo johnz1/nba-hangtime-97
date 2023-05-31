@@ -96,6 +96,8 @@
 
 	.ref	pal_getf
 
+    .ref    PSTATUS2
+
 	.ref	PCNT
 	.ref	HALT
 	.ref	gndx
@@ -1080,10 +1082,10 @@ church
 
 	move	@shot_distance,a14
 	cmpi	0150H*DIST_ADDITION,a14	;!!!Close or far shot?
-	jrlt	ok
+	jrlt	ok1
 
 	move	@ballscorezhit,a0	;Far, but have we hit 1st score zone?
-	jrp	#ok1			; br=yes, continue score detect
+	jrp	    #ok1			; br=yes, continue score detect
 
 	movi	200,a0			;!!!Far. Set long odds
 	cmpi	01c0H*DIST_ADDITION,a14	;!!!How far?
@@ -1160,16 +1162,16 @@ church
 	.asg	5,MAX_RNG		;!!!
 
 	cmpi	DX_RNG,a2
-	jrgt	#nxt
+	jrgt	#nxt6
 	cmpi	DY_RNG,a3
-	jrgt	#nxt
+	jrgt	#nxt6
 	cmpi	DZ_RNG,a4
-	jrgt	#nxt
+	jrgt	#nxt6
 
 	cmp	a3,a2			;Sort A10,A12,A13 to most,mid,least
-	jrge	#20
+	jrge	#x20
 	SWAP	a2,a3
-#20
+#x20
 	cmp	a4,a3
 	jrge	#sorted
 	SWAP	a3,a4
@@ -1183,7 +1185,7 @@ church
 	add	a3,a2			;Sum the deltas
 	add	a4,a2
 	subk	MAX_RNG,a2		;Too far? Yes if >
-	jrgt	#nxt
+	jrgt	#nxt6
 
 	move	@sc_proc,a0,L		;No. Any shot clock going?
 	jrz	no24clock
@@ -1366,9 +1368,9 @@ church
 	jrgt	#velset
 
 	cmp	a13,a12			;Sort A12,A13,A14 to most,mid,least
-	jrge	#30
+	jrge	#q30
 	SWAP	a12,a13
-#30
+#q30
 	cmp	a14,a13
 	jrge	#velsort
 	SWAP	a13,a14
@@ -1420,9 +1422,9 @@ church
 	jrn	limvels		; br=yes
 
 #chkpts
-#nxt
+#nxt6
 	move	*a10+,a2		;Rim X
-	jrnz	lp			;End of table? No if !0
+	jrnz	lp2			;End of table? No if !0
 
 ;----------
 ; Do velocity limits
@@ -1498,7 +1500,7 @@ church
 ;;	sra	1,a5			; bbrd ctr to retard/advance X detect
 ;;	sub	a5,a6
 	cmpi	BBRD_X << BBRD_X_BC,a6
-	jrlt	x
+	jrlt	x1
 
 	movi	-1,a0			;Detect
 	move	a0,@ballshotinair	;Shooter # if shot in air, else -1
@@ -1533,7 +1535,7 @@ church
 	move	a0,@ballbbhitcnt
 
 	subk	7,a0			;!!! Stuck on bbrd? No if <
-	jrlt	x
+	jrlt	x1
 	movi	020000H,a0		;!!! ZVEL(!) to kick it from bbrd
 	move	*a8(OZPOS),a1
 	cmpi	CZMID,a1		;Kick it which way? Out if >
@@ -1905,7 +1907,7 @@ rim_snds
 
 	movk	1,a0			;Upper zone hit
 	move	a0,@ballscorezhit
-	jruc	x
+	jruc	x2
 
 #low
 	move	@ballscorezhit,a0
@@ -1918,7 +1920,7 @@ rim_snds
 	calla	KIL1C
 
 	move	@ballptsforshot,a1
-	jrz	x			;Goaltending?
+	jrz	    x2			;Goaltending?
 
 	clr	a10
 
@@ -1942,9 +1944,9 @@ rim_snds
 
 	movk	PS_2PTS_MADE,a0		;>Inc made shot stat
 	subk	2,a3
-	jrz	2ptr
+	jrz	x2ptr
 	movk	PS_3PTS_MADE,a0
-#2ptr
+#x2ptr
 	move	@ballpnumshot,a1
 	calla	inc_player_stat
 
@@ -2520,11 +2522,11 @@ cos_t
 	move	*a2(PAT_DEFSKILL),a2
 	sll	    4,a2
 	subk	18,a10
-	jrz	t   bl1
+	jrz	    tbl1
 	addi	tbl2,a2
 	jruc	tbo
 #tbl1	
-	addi	tbl1,a2
+	addi	tbl1a,a2
 #tbo	
     move	*a2,a10
 
@@ -2532,7 +2534,7 @@ cos_t
 	sub	    a6,a2
 	abs	    a2
 	sub	    a10,a2
-	jrge	#nxt
+	jrge	#nxt5
 
 	move	*a11(OXPOS),a1		;0CHhk box X
 	move	*a11(OXANI+16),a14
@@ -2547,7 +2549,7 @@ cos_t
 
 	sub	a14,a1
 	cmp	a1,a4
-	jrle	#nxt			;Center X <= lft?
+	jrle	#nxt5			;Center X <= lft?
 
 	sll	1,a14
 
@@ -2557,7 +2559,7 @@ cos_t
 
 	add	a14,a1
 	cmp	a1,a4
-	jrge	#nxt			;Center X >= rgt?
+	jrge	#nxt5			;Center X >= rgt?
 
 	move	*a11(OYPOS),a1
 	move	*a8(OYPOS),a0
@@ -2603,14 +2605,14 @@ cos_t
 
 
 #handhi	cmp	a1,a0
-	jrlt	nxt			;Too hi?
+	jrlt	nxt5		;Too hi?
 
 	move	*a11(OPLINK),a3,L
 	move	*a3(plyr_shtdly),a14
 	jrgt	#nxt5			;Can't touch?
 
 	move	@ballpnum,b0	;a14
-	jrn	ok
+	jrn	    ok0             ;!!AM!! really check me..
 
 ;Ball is owned by someone
 
@@ -2628,7 +2630,7 @@ cos_t
 #skpz
 	move	*a14(plyr_seq),a14
 	cmpi	SHOOT_SEQ,a14
-	jrnz	ok
+	jrnz	ok0             ;!!AM!! really check me..
 	jruc	nxt5
 
 ;	.word	0,0,0,0,0,0,0,0,0,0,0,50/2,100/2,150/2,300/2,400/2
@@ -2692,7 +2694,7 @@ tkdnk_t	.word	200
 	jrls	#ok0
 #nxt0z						;3 power can't take ball!
 	PULL	a0,a1,a2
-	jruc	nxt				;To big, don't lose ball!
+	jruc	nxt5				;To big, don't lose ball!
 #ok0
 	PULL	a0,a1,a2
 ;DJT End
@@ -2749,12 +2751,12 @@ tkdnk_t	.word	200
 	jrn	noow			;No owner?
 	move	*a3(plyr_num),a14
 	cmp	a1,a14
-	jreq	nxt			;I own?
+	jreq	nxt5		;I own?
 
 	srl	1,a1
 	srl	1,a14
 	cmp	a1,a14
-	jreq	nxt			;Teammate owns?
+	jreq	nxt5			;Teammate owns?
 
 
 	move	*a3(plyr_num),a0
@@ -2771,7 +2773,7 @@ tkdnk_t	.word	200
 	addi	tbl5,a14
 	move	*a14,a0
 	calla	RNDPER
-	jrhi	#nxt
+	jrhi	#nxt5
 
 ;	movk	1,a0
 ;	callr	rnd
@@ -2797,7 +2799,7 @@ tkdnk_t	.word	200
 	srl	1,a1
 	srl	1,a14
 	cmp	a1,a14
-	jreq	nxt			;Same team?
+	jreq	nxt5			;Same team?
 
 ;Turmell, allow ball to be blocked at peak of arc
 	move	*a8(OYVEL),a0,L
@@ -2843,7 +2845,7 @@ tkdnk_t	.word	200
 ;	movk	6,a0
 	movk	5,a0
 	calla	rnd
-	jrnz	nxt
+	jrnz	nxt5
 
 #do_gt
 
@@ -2910,13 +2912,13 @@ tkdnk_t	.word	200
 
 ;call rebound speech here
 	move	@ballpnum,a0
-	jrn	ballfree
+	jrn	ballfreea
 
 	SOUND1	stealsb
 ;	calla	stolen_speech
 
 	jruc	skiprbnd
-#ballfree
+#ballfreea
 	move	@ballgoaltcnt,a0	;0CHhk goaltending
 	jrgt	#skiprbnd
 	move	@ballprcv_p,a0,L
@@ -3091,7 +3093,7 @@ fix_airb
 	move	a2,*a8(OXVEL),L
 #noxf
 	btst	1,a0
-	jrz	nxt
+	jrz	    nxt5
 	move	*a8(OZVEL),a2,L
 	neg	a2
 	move	a2,*a8(OZVEL),L
@@ -3099,7 +3101,7 @@ fix_airb
 ;	clr	a0
 ;	move	a0,@ballgoaltcnt
 
-	jruc	nxt
+	jruc	nxt5
 
 #rej
 	move	@must_rebound,a0
@@ -3147,21 +3149,21 @@ fix_airb
 
 	clr	a0
 	move	a0,@ballgoaltcnt
-	jruc	nxt
+	jruc	nxt5
 
 #nobr
 	move	@ballpnum,a2
 	jrlt	giveball		;No owner?
 	move	*a3(plyr_num),a14
 	cmp	a2,a14
-	jreq	nxt			;I already have it?
+	jreq	nxt5		;I already have it?
 
 	move	*a3(plyr_seq),a0
 
 ;	cmpi	STEALUP_SEQ,a0
 ;	jreq	doit
 	subi	STEAL_SEQ,a0
-	jrne	nxt
+	jrne	nxt5
 ;#doit
 
 
@@ -3177,7 +3179,7 @@ fix_airb
 ;	movi	190,a0			;120
 
 	calla	RNDPER
-	jrls	#nxt			;No steal?
+	jrls	#nxt5			;No steal?
 
 	sll	5,a2			;*32
 	addi	plyrproc_t,a2
@@ -3185,11 +3187,11 @@ fix_airb
 
 	move	*a2(plyr_seqflgs),a0
 	btst	NOSTEAL_B,a0
-	jrnz	nxt			;Ball can't be stolen?
+	jrnz	nxt5			;Ball can't be stolen?
 
 
 	move	@steals_off,a0
-	jrnz	nxt
+	jrnz	nxt5
 
 	movk	PS_STEALS,a0
 	move	*a3(plyr_num),a1
@@ -3220,7 +3222,7 @@ fix_airb
 	callr	loose_ball
 	SOUND1	swat_snd
 ;	callr	get_swat
-	jruc	nxt
+	jruc	nxt5
 
  SUBR	loose_ball
 
@@ -3379,7 +3381,7 @@ stl2	.word	160,170,180,195,200
 	add	a14,a1
 	addk	1,a1			;1% to 100%
 	cmp	a1,a0
-	jrge	#nxt			;% failed?
+	jrge	#nxt5			;% failed?
 
 ;Still too many steals
 
@@ -3392,7 +3394,7 @@ stl2	.word	160,170,180,195,200
 #nxtck1
 ;DJT End
 	calla	RNDPER
-	jrhi	#nxt			;br=yes skip it
+	jrhi	#nxt5			;br=yes skip it
 
 	PUSH	a2,a8
 
@@ -3636,13 +3638,14 @@ stl2	.word	160,170,180,195,200
 	nop
 
 
-nxt	dsj	a7,lp
+nxt8
+	dsj	a7,lp3 ;!!AM!! pretty sure lp3 it's meant to go there.
 
 
 #x3	PULL	a2,a3,a4,a5,a6,a7,a10,a11
 	rets
 
-tbl1	.word	16+2,17+2,18+2,18+2,18+2,18+2,18+2,19+2,20+2,21+2,22+2,23+2
+tbl1a	.word	16+2,17+2,18+2,18+2,18+2,18+2,18+2,19+2,20+2,21+2,22+2,23+2
 ;tbl1	.word	18,18,18,18,18,18,18,18,18,18,18,18
 tbl2	.word	32,33,34,35,35,35,35,36,37,38,39,40
 ;tbl2	.word	35,35,35,35,35,35,35,35,35,35,35,35
@@ -3899,11 +3902,12 @@ ball_flash
 	LOCKUP
 	.else
 	cmpi	NUMPLYRS-1,a3
-	jrne	nxt
+	jrne	nxt7
 	neg	a4
 	.endif
 
-nxt	dsj	a3,lp4
+nxt7
+	dsj	a3,lp4
 
 	PULL	a2,a3,a4,a5,a6
 	rets
@@ -4244,10 +4248,10 @@ stnd1
 	jrlt	stnd0
 	move	*a13(plyr_o2dist),a14
 	cmpi	155*DIST_REDUCTION,a14
-	jrgt	#stnd1
+	jrgt	#stnd1a
 #stnd0
 	movk	STND_SEQ,a0
-#stnd1
+#stnd1a
 
 
 	move	*a13(plyr_ownball),a1
@@ -5561,18 +5565,18 @@ plyr_cflsh
 	callr	rndrng0
 	move	@WORLDTLX+16,a14
 	subi	02000H-200,a14
-	add	a14,a0
-	sll	16,a0			;X
+	add	    a14,a0
+	sll	    16,a0			;X
 
 	move	a2,a1
-	sll	16,a1			;Y
+	sll	    16,a1			;Y
 
 	movi	nflash1,a2
 	movi	290,a3
 	movi	DMAWNZ|M_3DQ|M_NOCOLL|M_NOSCALE,a4
 	movi	CLSDEAD,a5
-	clr	a6
-	clr	a7
+	clr	    a6
+	clr	    a7
 	calla	BEGINOBJ2
 	movi	gndpos_t,a1
 	move	a1,*a8(ODATA_p),L
@@ -5580,9 +5584,9 @@ plyr_cflsh
 	movi	#f_l,a9
 	movk	1,a0
 	callr	rnd
-	jrnz	1
+	jrnz	qf1
 	movi	#f2_l,a9
-#1
+#qf1
 	SLEEPK	2
 	jauc	FRQDELDIE
 
@@ -5611,7 +5615,7 @@ plyr_cflsh
 	move	@ballpnum,a0
 	move	*a13(plyr_num),a1
 	cmp	a0,a1
-	jrne	x			;I don't have it?
+	jrne	x10			;I don't have it? !!AM CHECK ME!!
 
 	movk	1,a0
 	move	a0,@slamming
@@ -5928,12 +5932,12 @@ plyr_cflsh
 	move	*a13(plyr_num),a14
 	move	@PSTATUS2,a0
 	btst	a14,a0
-	jrz	x			;I am a stupid drone?  Drones never
-					;push human teammate!
+	jrz	    x11			;I am a stupid drone?  Drones never
+					    ;push human teammate!
 
 	move	*a13(plyr_tmdist),a14
 	subi	50*DIST_REDUCTION,a14
-	jrgt	#x			;Too far?
+	jrgt	#x11			;Too far?
 	movi	-1,a5
 	move	*a13(plyr_tmdir),a2
 	sub	a3,a2
@@ -5941,10 +5945,10 @@ plyr_cflsh
 	cmpi	040H,a2
 	jrle	#tmdsml
 	subi	080H,a2
-	abs	a2
-#tmdsml	subk	16,a2
+	abs	    a2
+#tmdsml	    subk	16,a2
 	jrlt	push
-	jruc	x
+	jruc	#x11
 
 ;Make it harder to push team who is down by 5 or more pnts
 ;The CMOS game difficulty setting should also check this.
@@ -5974,7 +5978,7 @@ plyr_cflsh
 
 #push
 	move	@inbound,a0
-	jrnn	x
+	jrnn	xz                  ;;!!AM!! need to check what this is intended to do..!!
 
 	move	*a13(plyr_num),a0	;>Nail him
 
@@ -6012,11 +6016,11 @@ plyr_cflsh
 	movi	500,a0
 	btst	LAYUP_B,a14
 ;DJT Start
-	jrz	xz2n
+	jrz	    xz2n
 	move	*a5(plyr_num),a14
 	move	@PSTATUS2,a1
 	btst	a14,a1			;Is pushee a human doing a layup?
-	jrz	xz2			; br=no, do normal
+	jrz	    xz2			; br=no, do normal
 	move	*a13(plyr_num),a14
 	btst	a14,a1			;Is pusher a drone?
 	jrz	skpck			; br=yes, always succeed with push!
@@ -6025,13 +6029,13 @@ plyr_cflsh
 ;DJT End
 	move	*a5(plyr_seq),a14
 	cmpi	SPIN_MOVE_SEQ,a14
-	jrz	xz			;br=push SPINNING dude 15% of time
+	jrz	    xz			;br=push SPINNING dude 15% of time
 	cmpi	ELBO_SEQ,a14
-	jrz	xz
+	jrz	    xz
 	cmpi	ELBO2_SEQ,a14
-	jrz	xz
+	jrz	    xz
 	cmpi	REBOUND_SEQ,a14
-	jrz	xz
+	jrz	    xz
 	cmpi	REBOUNDA_SEQ,a14
 	jrnz	skpck
 
@@ -6271,7 +6275,7 @@ plyr_cflsh
 	move	*a2(ply_meter_imgs+32),a0,L
 	move	*a1(0),*a0(OSAG),L
 
-#x11	PULL	a11
+#x11	PULL	a11     ;this is the don't push fail exit. 
 	rets
 
 ;	subk	7,a1
@@ -6328,7 +6332,7 @@ plyr_cflsh
 
 	move	@HCOUNT,a14
 	btst	0,a14
-	jrz	x			;Skip? (50%)
+	jrz	    x12			;Skip? (50%)
 
 	addk	32,a4
 	move	*a4,a5,L		;A5=*O proc

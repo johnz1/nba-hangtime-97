@@ -1,0 +1,19 @@
+	.DATA
+BST_DEFred:
+	.word   88,49,0,0
+	.long   05f140b0H
+	.word   06000H
+BST_STKred:
+	.word   88,49,0,0
+	.long   05f1a5c0H
+	.word   06000H
+BST_RNKred:
+	.word   88,49,0,0
+	.long   05f20ad0H
+	.word   06000H
+BST_OFFred:
+	.word   88,49,0,0
+	.long   05f26fe0H
+	.word   06000H
+	.TEXT
+

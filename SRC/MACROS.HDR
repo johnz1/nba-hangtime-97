@@ -742,7 +742,8 @@ CALLERR	.macro	NUM,REGS
 	mmfm	sp,a1,a2
 	.endm
 
-WAITSWITCH_DWN	.macro	SWITCHES,MASK,FAILADDR
+;WAITSWITCH_DWN	.macro	SWITCHES,MASK,FAILADDR !!AM how the hell could this compile? it's the other way around!!
+WAITSWITCH_DWN	.macro	SWITCHES,FAILADDR,MASK
 
 lp?
 	SLEEPK	1

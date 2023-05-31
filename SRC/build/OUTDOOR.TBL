@@ -1,0 +1,304 @@
+	.DATA
+OUTDOOR	.set	0398e1f0h
+sidebot:
+	.word   86,154,0,0
+	.long   05b7daf0H
+	.word   06c80H
+	.long   side_p
+sidetop:
+	.word   91,237,0,237
+	.long   05b89ee8H
+	.word   06880H
+	.long   side_p
+lamp1:
+	.word   82,168,0,0
+	.long   05ba6712H
+	.word   05f80H
+	.long   lamp_p
+lamp2:
+	.word   160,168,0,0
+	.long   05ba98b2H
+	.word   05f80H
+	.long   lamp_p
+hang_logo:
+	.word   65,65,0,0
+	.long   05baf022H
+	.word   06580H
+	.long   icon_p
+moon:
+	.word   56,55,0,0
+	.long   05bb2668H
+	.word   06480H
+	.long   moon_p
+BKg1:
+	.word   200,16,0,0
+	.long   05bb6312H
+	.word   07000H
+	.long   RCRT_p
+BKg2:
+	.word   200,16,0,0
+	.long   05bbba92H
+	.word   07000H
+	.long   RCRT_p
+bkwall:
+	.word   186,16,0,0
+	.long   05bc1212H
+	.word   06000H
+	.long   fence_p
+city1:
+	.word   200,200,0,0
+	.long   05bc57d2H
+	.word   06000H
+	.long   city1_p
+city2:
+	.word   200,200,0,0
+	.long   05c00152H
+	.word   06000H
+	.long   city2_p
+city3:
+	.word   200,200,0,0
+	.long   05c3aad2H
+	.word   06000H
+	.long   city3_p
+outdr1:
+	.word   5,7,0,0
+	.long   05c75452H
+	.word   00H
+	.long   gry_gry_p
+outdr2:
+	.word   5,7,0,0
+	.long   05c75452H
+	.word   00H
+	.long   grn_no_p
+outdr3:
+	.word   5,7,0,0
+	.long   05c75452H
+	.word   00H
+	.long   purp_no_p
+outdr4:
+	.word   5,7,0,0
+	.long   05c75452H
+	.word   00H
+	.long   gold_yl_p
+outdr5:
+	.word   5,7,0,0
+	.long   05c75452H
+	.word   00H
+	.long   red_no_p
+outdr6:
+	.word   5,7,0,0
+	.long   05c75452H
+	.word   00H
+	.long   blu_no_p
+outdr7:
+	.word   5,7,0,0
+	.long   05c75452H
+	.word   00H
+	.long   yel_no_p
+outdr8:
+	.word   5,7,0,0
+	.long   05c75452H
+	.word   00H
+	.long   nopaint_p
+outdr9:
+	.word   5,7,0,0
+	.long   05c75452H
+	.word   00H
+	.long   grn_yel_p
+outdr10:
+	.word   5,7,0,0
+	.long   05c75452H
+	.word   00H
+	.long   red_yel_p
+outdr11:
+	.word   5,7,0,0
+	.long   05c75452H
+	.word   00H
+	.long   grn_red_p
+outdr12:
+	.word   5,7,0,0
+	.long   05c75452H
+	.word   00H
+	.long   org_blk_p
+PAPER1:
+	.word   22,14,10,13
+	.long   05c7556aH
+	.word   06000H
+	.long   PAPER_P
+PAPER2:
+	.word   22,14,9,13
+	.long   05c75ca2H
+	.word   06000H
+	.long   PAPER_P
+PAPER3:
+	.word   22,14,9,13
+	.long   05c763daH
+	.word   06000H
+	.long   PAPER_P
+PAPER4:
+	.word   23,13,9,12
+	.long   05c76b12H
+	.word   06000H
+	.long   PAPER_P
+PAPER5:
+	.word   23,12,9,11
+	.long   05c77214H
+	.word   06000H
+	.long   PAPER_P
+PAPER6:
+	.word   24,12,9,11
+	.long   05c7788cH
+	.word   06000H
+	.long   PAPER_P
+PAPER7:
+	.word   25,14,9,13
+	.long   05c77f4cH
+	.word   06000H
+	.long   PAPER_P
+PAPER8:
+	.word   24,17,11,16
+	.long   05c78780H
+	.word   06000H
+	.long   PAPER_P
+PAPER9:
+	.word   25,18,12,17
+	.long   05c79110H
+	.word   06000H
+	.long   PAPER_P
+LGSHEET1:
+	.word   11,20,5,9
+	.long   05c79b9cH
+	.word   06000H
+	.long   PAPER_P
+LGSHEET2:
+	.word   15,14,4,5
+	.long   05c7a0c4H
+	.word   06000H
+	.long   PAPER_P
+LGSHEET3:
+	.word   18,13,3,3
+	.long   05c7a5b0H
+	.word   06000H
+	.long   PAPER_P
+LGSHEET4:
+	.word   14,15,3,4
+	.long   05c7ab2cH
+	.word   06000H
+	.long   PAPER_P
+LGSHEET5:
+	.word   6,17,0,5
+	.long   05c7b018H
+	.word   06000H
+	.long   PAPER_P
+LGSHEET6:
+	.word   14,15,6,3
+	.long   05c7b27cH
+	.word   06000H
+	.long   PAPER_P
+LGSHEET7:
+	.word   18,17,8,4
+	.long   05c7b768H
+	.word   06000H
+	.long   PAPER_P
+LGSHEET8:
+	.word   14,16,4,5
+	.long   05c7be94H
+	.word   06000H
+	.long   PAPER_P
+LGSHEET9:
+	.word   11,16,4,7
+	.long   05c7c3d4H
+	.word   06000H
+	.long   PAPER_P
+SMSHEET1:
+	.word   9,16,4,8
+	.long   05c7c7f4H
+	.word   06000H
+	.long   PAPER_P
+SMSHEET2:
+	.word   10,10,3,5
+	.long   05c7cb54H
+	.word   06000H
+	.long   PAPER_P
+SMSHEET3:
+	.word   13,10,3,3
+	.long   05c7cdacH
+	.word   06000H
+	.long   PAPER_P
+SMSHEET4:
+	.word   10,12,0,4
+	.long   05c7d0b8H
+	.word   06000H
+	.long   PAPER_P
+SMSHEET5:
+	.word   4,13,-1,5
+	.long   05c7d388H
+	.word   06000H
+	.long   PAPER_P
+SMSHEET6:
+	.word   11,11,5,4
+	.long   05c7d4c0H
+	.word   06000H
+	.long   PAPER_P
+SMSHEET7:
+	.word   12,13,7,5
+	.long   05c7d796H
+	.word   06000H
+	.long   PAPER_P
+SMSHEET8:
+	.word   11,13,5,6
+	.long   05c7db3eH
+	.word   06000H
+	.long   PAPER_P
+SMSHEET9:
+	.word   8,12,5,6
+	.long   05c7de98H
+	.word   06000H
+	.long   PAPER_P
+LEAF1:
+	.word   6,3,4,1
+	.long   05c7e0d8H
+	.word   05000H
+	.long   PAPER_P
+LEAF2:
+	.word   4,4,2,2
+	.long   05c7e132H
+	.word   05000H
+	.long   PAPER_P
+LEAF3:
+	.word   4,4,1,2
+	.long   05c7e182H
+	.word   05000H
+	.long   PAPER_P
+LEAF4:
+	.word   5,3,1,1
+	.long   05c7e1d2H
+	.word   05000H
+	.long   PAPER_P
+LEAF5:
+	.word   3,5,-1,2
+	.long   05c7e21dH
+	.word   05000H
+	.long   PAPER_P
+LEAF6:
+	.word   3,3,0,0
+	.long   05c7e268H
+	.word   05000H
+	.long   PAPER_P
+LEAF7:
+	.word   4,1,2,-2
+	.long   05c7e295H
+	.word   05000H
+	.long   PAPER_P
+LEAF8:
+	.word   4,1,3,-1
+	.long   05c7e295H
+	.word   05000H
+	.long   PAPER_P
+STORM01:
+	.word   206,61,-20,-12
+	.long   05c7e2a9H
+	.word   05000H
+	.long   NUSTORM_P
+	.TEXT
+

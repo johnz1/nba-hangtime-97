@@ -21,12 +21,16 @@ BB2.OBJ			/* fixed file. Basketball game program */
 BB3.OBJ			/* fixed file. Basketball game program */
 BB4.OBJ			/* fixed file. Basketball game program */
 DRONE.OBJ		/* fixed file. needs doublecheck. basketball drone code */
-PLYR.OBJ		/* fixed file. basketball player code */
-PLYR2.OBJ		/* fixed file. basketball player code */
+/* PLYR.OBJ		fixed file. basketball player code. Out of memory. Split */
+PLYR_1.OBJ		/* These are just PLYR.ASM split up. */
+PLYR_2.OBJ              /* These are just PLYR.ASM split up. */
+PLYR2.OBJ		/* TODO. basketball player code !!AM check me someday!! */
 PLYR3.OBJ		/* fixed file. basketball player code */
 PLYRAT.OBJ		/* no changes. basketball player code */
 PLYRAT2.OBJ		/* fixed file. basketball player code */
-PLYRSEQ.OBJ		/* fixed file. basketball plyr sequence code */
+/* PLYRSEQ.OBJ		fixed file. basketball plyr sequence code. Out of memory. Split */
+PLYRSEQA.OBJ		/* These are just PLYRSEQ.ASM split up. */
+PLYRSEQB.OBJ            /* These are just PLYRSEQ.ASM split up. */
 PLYRRSEQ.OBJ		/* fixed file. basketball plyr run sequence code */
 PLYRSEQ2.OBJ		/* fixed file. basketball plyr sequence code */
 PLYRDSEQ.OBJ		/* nightmare, but done fixin. basketball plyr dunk sequence code */
@@ -40,22 +44,24 @@ PATCH.OBJ		/* file OK. TV PATCH/BREAKPOINT HOOK */
 TEXT.OBJ		/* fixed file, had to comment stuff to avoid mem error! font tables */
 TEXT2.OBJ		/* added file, memory issues when compiling. the tables are needed! */
 ATTRACT.OBJ		/* fixed file. attract mode */
-STRING.OBJ		/* fixed file. string printing stuff */
-RECORD.OBJ		/* fixed file. CMOS records etc */
+STRING.OBJ		/* fixed file. string printing stuff !!AM!! check for # symbol !! */
+RECORD.OBJ		/* fixed file. CMOS records etc !!AM!! check for # symbol !! */
 SPEECH.OBJ		/* fixed file. announcer speech etc... */
 SELECT.OBJ		/* fixed file. name & team selection */
-SELECT2.OBJ		/* name & team selection */
+/* SELECT2.OBJ		fixed file. split to sel2_1 and sel2_2. name & team selection */
+SEL2_1.OBJ
+SEL2_2.OBJ
 ADJUST.OBJ		/* fixed file. TEST MENUS ADJUSTMENT CODE */
-AUDIT.OBJ		/* audits and adjustments handling */
+AUDIT.OBJ		/* fixed file. audits and adjustments handling */
 TEST.OBJ		/* fixed file. test program */
-DIAG.OBJ		/* SYSTEM DIAGNOSTICS CODE */
-MENU.OBJ		/* test menus */
+DIAG.OBJ		/* no fixes needed. SYSTEM DIAGNOSTICS CODE */
+MENU.OBJ		/* fixed file. test menus */
 HSTD.OBJ		/* fixed file. robo high-score-to-date management */
-MAKEPLR.OBJ		/* create player logic */
-MAKEPLR2.OBJ		/* create player logic */
+MAKEPLR.OBJ		/* no fixes needed. create player logic */
+MAKEPLR2.OBJ		/* no fixes needed. create player logic */
 SCREEN.OBJ		/* fixed file. */
-SELECT3.OBJ
-SELECT4.OBJ
+SELECT3.OBJ		/* fixed file. */
+SELECT4.OBJ		/* fixed file. */
 PLYRAT3.OBJ		/* fixed file. basketball player code */
 UNZIP.OBJ               /* fixed file. Unzip gfx routines. */
 

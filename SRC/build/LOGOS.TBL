@@ -1,0 +1,173 @@
+	.DATA
+BALLBAK1:
+	.word   85,77,42,38
+	.long   05594773H
+	.word   0580H
+	.long   BALLBAK_P
+T_HAWKS:
+	.word   85,51,42,21
+	.long   0559ec73H
+	.word   0580H
+	.long   LOG_ATLP
+T_CELTS:
+	.word   77,72,38,35
+	.long   055a51b3H
+	.word   0580H
+	.long   LOG_BOSP
+T_HORS:
+	.word   78,59,37,28
+	.long   055adae3H
+	.word   0580H
+	.long   LOG_CHAP
+T_BULLS:
+	.word   67,61,33,30
+	.long   055b4febH
+	.word   0580H
+	.long   LOG_CHIP
+T_CAVS:
+	.word   76,62,38,31
+	.long   055ba8bbH
+	.word   0880H
+	.long   LOG_CLEP
+T_MAVS:
+	.word   76,69,36,35
+	.long   055c1d7bH
+	.word   0580H
+	.long   LOG_DALP
+T_NUGS:
+	.word   77,54,39,30
+	.long   055c9a83H
+	.word   0680H
+	.long   LOG_DENP
+T_PISS:
+	.word   80,71,40,34
+	.long   055cfef3H
+	.word   0580H
+	.long   LOG_DETP
+T_PISS_N:
+	.word   84,66,41,32
+	.long   055d8d0bH
+	.word   0580H
+	.long   LOG_DETNP
+T_WARS:
+	.word   78,66,40,32
+	.long   055e0dfbH
+	.word   0580H
+	.long   LOG_GOLP
+T_ROCKS:
+	.word   79,58,39,28
+	.long   055e8cabH
+	.word   0580H
+	.long   LOG_HOUP
+T_PACER:
+	.word   71,65,34,32
+	.long   055f027bH
+	.word   0880H
+	.long   LOG_INDP
+T_LAKS:
+	.word   77,53,38,26
+	.long   055f759bH
+	.word   0680H
+	.long   LOG_LACP
+T_CLIPS:
+	.word   83,55,40,26
+	.long   055fde7bH
+	.word   0580H
+	.long   LOG_LALP
+T_HEAT:
+	.word   72,69,35,34
+	.long   056045dbH
+	.word   0680H
+	.long   LOG_MIAP
+T_BUCKS:
+	.word   73,73,36,36
+	.long   0560aa93H
+	.word   0580H
+	.long   LOG_MILP
+T_TWOLV:
+	.word   77,71,38,33
+	.long   05611f63H
+	.word   0580H
+	.long   LOG_MINP
+T_TWOLV_N:
+	.word   81,62,40,31
+	.long   0561a883H
+	.word   0580H
+	.long   LOG_MINNP
+T_NETS:
+	.word   75,67,37,29
+	.long   05622413H
+	.word   0580H
+	.long   LOG_NEJP
+T_KNIKS:
+	.word   76,64,37,29
+	.long   0562a363H
+	.word   0580H
+	.long   LOG_NEYP
+T_MAGIC:
+	.word   77,56,40,27
+	.long   05631013H
+	.word   0580H
+	.long   LOG_ORLP
+T_76RS:
+	.word   75,67,37,32
+	.long   05637ec3H
+	.word   0580H
+	.long   LOG_PHIP
+T_SUNS:
+	.word   70,60,35,29
+	.long   0563fb53H
+	.word   0980H
+	.long   LOG_PHXP
+T_BLAZ:
+	.word   67,69,33,34
+	.long   05645843H
+	.word   0580H
+	.long   LOG_PORP
+T_KINGS:
+	.word   73,69,36,35
+	.long   0564c7a3H
+	.word   0580H
+	.long   LOG_SACP
+T_SPURS:
+	.word   77,42,37,20
+	.long   05654763H
+	.word   0480H
+	.long   LOG_SANP
+T_SONICS:
+	.word   72,63,35,33
+	.long   05659f8bH
+	.word   0980H
+	.long   LOG_SEAP
+T_RAPT:
+	.word   82,67,38,34
+	.long   05660cb3H
+	.word   0580H
+	.long   LOG_TORP
+T_JAZZ:
+	.word   79,42,41,22
+	.long   0566925bH
+	.word   0180H
+	.long   LOG_UTAP
+T_JAZZ_N:
+	.word   81,61,40,31
+	.long   0566ecc3H
+	.word   0580H
+	.long   LOG_UTANP
+T_GRIZZ:
+	.word   75,59,37,29
+	.long   05675ee3H
+	.word   0580H
+	.long   LOG_VANP
+T_BULTS:
+	.word   81,38,40,26
+	.long   0567d273H
+	.word   0680H
+	.long   LOG_WASP
+DCSRUM1:
+	.word   186,88,0,0
+	.long   05680ef3H
+	.word   06000H
+	.long   DCSLIQ_P
+	.TEXT
+

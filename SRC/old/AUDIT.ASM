@@ -1387,13 +1387,13 @@ credits_string
 	dec	a3
 
 	move	@TWOPLAYERS,a0		;0 = NO, 1 = YES 2 players
-	jrz	#4_plyrs
+	jrz	#x4_plyrs
 
 	cmpi	2,a3
 	jrlo	#not_max
 	movi	1,a3
 
-#4_plyrs
+#x4_plyrs
 	cmpi	4,a3
 	jrlo	#not_max
 	movi	3,a3

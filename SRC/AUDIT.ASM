@@ -283,14 +283,14 @@ CK_OCTO
 	jrgt	#p2			;Got part one?
 
 	cmpi	07171H,a0		;P1&P2 all buts down & both sticks up
-	jrne	x			;Wrong?
+	jrne	x2       		;Wrong?
 	movi	TSEC,a1			;One sec to get part two
 #p2
 	subk	1,a1
 	move	a1,@OCT_FLG
-	jrgt	#x			;Still counting?
+	jrgt	#x2			;Still counting?
 	cmpi	0202H,a0
-	jrne	x			;Wrong?
+	jrne	x2			;Wrong?
 
 	movi	ACTIVE,a13
 	movi	HID_P,a7		;Start the process!
@@ -301,7 +301,7 @@ CK_OCTO
 ;	movi	MAW,A0
 ;	calla	snd_play1
 
-x	jruc	douptime
+x2	jruc	douptime
 
 
 ;MAW	.WORD	0F9F7H,050H,0814AH,0		;OH MAW
@@ -312,11 +312,11 @@ x	jruc	douptime
 
 SERVICE
 	move	@GAMSTATE,a0
-	jrn	x 			;In diagnostics?
+	jrn	x1			;In diagnostics?
 	move	@_coin_addr,a0,L	;Get COIN inputs
 	move	*a0,a0
 	btst	CDI_BIT,a0		;Coin Door Closed ?
-	jrz	x			;Yes - Then NO Service Credits Allowed
+	jrz	x1			;Yes - Then NO Service Credits Allowed
 
 	callr	CCCC			;MAKE SURE THINGS ARE IN TACT
 
@@ -346,7 +346,7 @@ SERVICE
 
 	jruc	CREDSP
 
-#x	DIE
+#x1	DIE
 
 
 ********************************
@@ -1342,9 +1342,9 @@ credits_string
 	movi	#crd_2start,a4
 	PULL	a0
 	dec	a0
-	jrz	1credit
+	jrz	x1credit
 	movi	#crd_2starts,a4
-#1credit
+#x1credit
 	calla	concat_rom_string
 	calla	print_string_C
 
@@ -1364,9 +1364,9 @@ credits_string
 	movi	#crd_2cont,a4
 	PULL	a0
 	dec	a0
-	jrz	1_creditb
+	jrz	x1_creditb
 	movi	#crd_2conts,a4
-#1_creditb
+#x1_creditb
 	calla	concat_rom_string
 	calla	print_string_C
 
@@ -1387,13 +1387,13 @@ credits_string
 	dec	a3
 
 	move	@TWOPLAYERS,a0		;0 = NO, 1 = YES 2 players
-	jrz	4_plyrs
+	jrz	x4_plyrs
 
 	cmpi	2,a3
 	jrlo	#not_max
 	movi	1,a3
 
-#4_plyrs
+#x4_plyrs
 	cmpi	4,a3
 	jrlo	#not_max
 	movi	3,a3

@@ -1,0 +1,193 @@
+	.DATA
+PASSWORD:
+	.word   75,12,0,0
+	.long   0b1fa483H
+	.word   03000H
+	.long   BAST_Y_P
+stx_avgallow:
+	.word   66,19,0,0
+	.long   0b1faf0fH
+	.word   03000H
+	.long   BAST_Y_P
+stx_avgscore:
+	.word   53,19,0,0
+	.long   0b1fbdc1H
+	.word   03000H
+	.long   BAST_Y_P
+NN_ACE:
+	.word   21,9,0,0
+	.long   0b1fc98eH
+	.word   03000H
+	.long   BAST_Y_P
+NN_BERTHA:
+	.word   42,9,0,0
+	.long   0b1fcbc5H
+	.word   03000H
+	.long   BAST_Y_P
+NN_BIGDAD:
+	.word   57,9,0,0
+	.long   0b1fd033H
+	.word   03000H
+	.long   BAST_Y_P
+NN_BIGFOOT:
+	.word   44,9,0,0
+	.long   0b1fd636H
+	.word   03000H
+	.long   BAST_Y_P
+NN_BOOGY:
+	.word   59,9,0,0
+	.long   0b1fdadaH
+	.word   03000H
+	.long   BAST_Y_P
+NN_BUBBA:
+	.word   36,9,0,0
+	.long   0b1fe113H
+	.word   03000H
+	.long   BAST_Y_P
+NN_CHILLY:
+	.word   35,9,0,0
+	.long   0b1fe4dfH
+	.word   03000H
+	.long   BAST_Y_P
+NN_CORNEL:
+	.word   57,9,0,0
+	.long   0b1fe890H
+	.word   03000H
+	.long   BAST_Y_P
+NN_CUCKOO:
+	.word   43,9,0,0
+	.long   0b1fee93H
+	.word   03000H
+	.long   BAST_Y_P
+NN_DINGBAT:
+	.word   45,9,0,0
+	.long   0b1ff31cH
+	.word   03000H
+	.long   BAST_Y_P
+NN_FATBOY:
+	.word   40,9,0,0
+	.long   0b1ff7dbH
+	.word   03000H
+	.long   BAST_Y_P
+NN_FLASH:
+	.word   34,9,0,0
+	.long   0b1ffc13H
+	.word   03000H
+	.long   BAST_Y_P
+NN_FRANKIE:
+	.word   45,9,0,0
+	.long   0b1fffa9H
+	.word   03000H
+	.long   BAST_Y_P
+NN_FRNKCOW:
+	.word   73,9,0,0
+	.long   0b200468H
+	.word   03000H
+	.long   BAST_Y_P
+NN_GATOR:
+	.word   36,9,0,0
+	.long   0b200c1bH
+	.word   03000H
+	.long   BAST_Y_P
+NN_GRANDPA:
+	.word   50,9,0,0
+	.long   0b200fe7H
+	.word   03000H
+	.long   BAST_Y_P
+NN_HAMMER:
+	.word   47,9,0,0
+	.long   0b20152dH
+	.word   03000H
+	.long   BAST_Y_P
+NN_HAWKEYE:
+	.word   52,9,0,0
+	.long   0b201a22H
+	.word   03000H
+	.long   BAST_Y_P
+NN_HOMEBOY:
+	.word   50,9,0,0
+	.long   0b201f9eH
+	.word   03000H
+	.long   BAST_Y_P
+NN_JOKER:
+	.word   35,9,0,0
+	.long   0b2024e4H
+	.word   03000H
+	.long   BAST_Y_P
+NN_LOVER:
+	.word   54,9,0,0
+	.long   0b202895H
+	.word   03000H
+	.long   BAST_Y_P
+NN_MADDOG:
+	.word   49,9,0,0
+	.long   0b202e47H
+	.word   03000H
+	.long   BAST_Y_P
+NN_MARGE:
+	.word   76,9,0,0
+	.long   0b203372H
+	.word   03000H
+	.long   BAST_Y_P
+NN_MERLIN:
+	.word   38,9,0,0
+	.long   0b203b76H
+	.word   03000H
+	.long   BAST_Y_P
+NN_PONGO:
+	.word   35,9,0,0
+	.long   0b203f78H
+	.word   03000H
+	.long   BAST_Y_P
+NN_SHADOW:
+	.word   46,9,0,0
+	.long   0b204329H
+	.word   03000H
+	.long   BAST_Y_P
+NN_SLIM:
+	.word   25,9,0,0
+	.long   0b204803H
+	.word   03000H
+	.long   BAST_Y_P
+NN_SNAKE:
+	.word   36,9,0,0
+	.long   0b204aa6H
+	.word   03000H
+	.long   BAST_Y_P
+NN_SPANKY:
+	.word   42,9,0,0
+	.long   0b204e72H
+	.word   03000H
+	.long   BAST_Y_P
+NN_SPIDER:
+	.word   38,9,0,0
+	.long   0b2052e0H
+	.word   03000H
+	.long   BAST_Y_P
+NN_SPIKE:
+	.word   31,9,0,0
+	.long   0b2056e2H
+	.word   03000H
+	.long   BAST_Y_P
+NN_TOPGUN:
+	.word   46,9,0,0
+	.long   0b205a27H
+	.word   03000H
+	.long   BAST_Y_P
+NN_TREXX:
+	.word   42,9,0,0
+	.long   0b205f01H
+	.word   03000H
+	.long   BAST_Y_P
+NN_VIPER:
+	.word   31,9,0,0
+	.long   0b20636fH
+	.word   03000H
+	.long   BAST_Y_P
+NN_ZIPPY:
+	.word   30,9,0,0
+	.long   0b2066b4H
+	.word   03000H
+	.long   BAST_Y_P
+	.TEXT
+

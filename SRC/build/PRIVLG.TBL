@@ -1,0 +1,38 @@
+	.DATA
+TEX_SR:
+	.word   112,12,41,-2
+	.long   0b2069deH
+	.word   07000H
+	.long   PRIV_W_P
+HIDEAT:
+	.word   88,49,0,0
+	.long   0b208e9eH
+	.word   06000H
+	.long   HIDER1_P
+OVRTME:
+	.word   75,22,37,0
+	.long   0b20f3aeH
+	.word   03000H
+	.long   OVERW_P
+TEX_NTA:
+	.word   112,12,41,-2
+	.long   0b210704H
+	.word   07000H
+	.long   PRIV_W_P
+TEX_DBH:
+	.word   112,12,41,-2
+	.long   0b212bc4H
+	.word   07000H
+	.long   PRIV_W_P
+SENDTO:
+	.word   79,150,38,0
+	.long   0b215084H
+	.word   02000H
+	.long   SENDTO_P
+ENTRIES:
+	.word   77,118,38,0
+	.long   0b21ad18H
+	.word   02000H
+	.long   SENDTO_P
+	.TEXT
+

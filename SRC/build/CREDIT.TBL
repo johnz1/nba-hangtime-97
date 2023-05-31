@@ -1,0 +1,607 @@
+	.DATA
+CRED_00:
+	.word   5,6,5,0
+	.long   056a9973H
+	.word   02000H
+	.long   cred_p
+CRED_01:
+	.word   3,6,3,0
+	.long   056a99afH
+	.word   02000H
+	.long   cred_p
+CRED_02:
+	.word   5,6,5,0
+	.long   056a99d3H
+	.word   02000H
+	.long   cred_p
+CRED_03:
+	.word   5,6,5,0
+	.long   056a9a0fH
+	.word   02000H
+	.long   cred_p
+CRED_04:
+	.word   5,6,5,0
+	.long   056a9a4bH
+	.word   02000H
+	.long   cred_p
+CRED_05:
+	.word   5,6,5,0
+	.long   056a9a87H
+	.word   02000H
+	.long   cred_p
+CRED_06:
+	.word   5,6,5,0
+	.long   056a9ac3H
+	.word   02000H
+	.long   cred_p
+CRED_07:
+	.word   5,6,5,0
+	.long   056a9affH
+	.word   02000H
+	.long   cred_p
+CRED_08:
+	.word   5,6,5,0
+	.long   056a9b3bH
+	.word   02000H
+	.long   cred_p
+CRED_09:
+	.word   5,6,5,0
+	.long   056a9b77H
+	.word   02000H
+	.long   cred_p
+CRED_10:
+	.word   7,6,7,0
+	.long   056a9bb3H
+	.word   02000H
+	.long   cred_p
+CRED_11:
+	.word   7,6,7,0
+	.long   056a9c07H
+	.word   02000H
+	.long   cred_p
+CRED_12:
+	.word   7,6,7,0
+	.long   056a9c5bH
+	.word   02000H
+	.long   cred_p
+CRED_13:
+	.word   7,6,7,0
+	.long   056a9cafH
+	.word   02000H
+	.long   cred_p
+CRED_14:
+	.word   7,6,7,0
+	.long   056a9d03H
+	.word   02000H
+	.long   cred_p
+CRED_15:
+	.word   7,6,7,0
+	.long   056a9d57H
+	.word   02000H
+	.long   cred_p
+CRED_16:
+	.word   7,6,7,0
+	.long   056a9dabH
+	.word   02000H
+	.long   cred_p
+CRED_17:
+	.word   7,6,7,0
+	.long   056a9dffH
+	.word   02000H
+	.long   cred_p
+CRED_18:
+	.word   7,6,7,0
+	.long   056a9e53H
+	.word   02000H
+	.long   cred_p
+CRED_19:
+	.word   7,6,7,0
+	.long   056a9ea7H
+	.word   02000H
+	.long   cred_p
+CRED_20:
+	.word   10,6,10,0
+	.long   056a9efbH
+	.word   02000H
+	.long   cred_p
+CRED_21:
+	.word   10,6,10,0
+	.long   056a9f73H
+	.word   02000H
+	.long   cred_p
+CRED_22:
+	.word   10,6,10,0
+	.long   056a9febH
+	.word   02000H
+	.long   cred_p
+CRED_23:
+	.word   10,6,10,0
+	.long   056aa063H
+	.word   02000H
+	.long   cred_p
+CRED_24:
+	.word   10,6,10,0
+	.long   056aa0dbH
+	.word   02000H
+	.long   cred_p
+CRED_25:
+	.word   10,6,10,0
+	.long   056aa153H
+	.word   02000H
+	.long   cred_p
+CRED_26:
+	.word   10,6,10,0
+	.long   056aa1cbH
+	.word   02000H
+	.long   cred_p
+CRED_27:
+	.word   10,6,10,0
+	.long   056aa243H
+	.word   02000H
+	.long   cred_p
+CRED_28:
+	.word   10,6,10,0
+	.long   056aa2bbH
+	.word   02000H
+	.long   cred_p
+CRED_29:
+	.word   10,6,10,0
+	.long   056aa333H
+	.word   02000H
+	.long   cred_p
+CRED_30:
+	.word   10,6,10,0
+	.long   056aa3abH
+	.word   02000H
+	.long   cred_p
+CRED_31:
+	.word   10,6,10,0
+	.long   056aa423H
+	.word   02000H
+	.long   cred_p
+CRED_32:
+	.word   10,6,10,0
+	.long   056aa49bH
+	.word   02000H
+	.long   cred_p
+CRED_33:
+	.word   10,6,10,0
+	.long   056aa513H
+	.word   02000H
+	.long   cred_p
+CRED_34:
+	.word   10,6,10,0
+	.long   056aa58bH
+	.word   02000H
+	.long   cred_p
+CRED_35:
+	.word   10,6,10,0
+	.long   056aa603H
+	.word   02000H
+	.long   cred_p
+CRED_36:
+	.word   10,6,10,0
+	.long   056aa67bH
+	.word   02000H
+	.long   cred_p
+CRED_37:
+	.word   10,6,10,0
+	.long   056aa6f3H
+	.word   02000H
+	.long   cred_p
+CRED_38:
+	.word   10,6,10,0
+	.long   056aa76bH
+	.word   02000H
+	.long   cred_p
+CRED_39:
+	.word   10,6,10,0
+	.long   056aa7e3H
+	.word   02000H
+	.long   cred_p
+CRED_40:
+	.word   10,6,10,0
+	.long   056aa85bH
+	.word   02000H
+	.long   cred_p
+CRED_41:
+	.word   10,6,10,0
+	.long   056aa8d3H
+	.word   02000H
+	.long   cred_p
+CRED_42:
+	.word   10,6,10,0
+	.long   056aa94bH
+	.word   02000H
+	.long   cred_p
+CRED_43:
+	.word   10,6,10,0
+	.long   056aa9c3H
+	.word   02000H
+	.long   cred_p
+CRED_44:
+	.word   10,6,10,0
+	.long   056aaa3bH
+	.word   02000H
+	.long   cred_p
+CRED_45:
+	.word   10,6,10,0
+	.long   056aaab3H
+	.word   02000H
+	.long   cred_p
+CRED_46:
+	.word   10,6,10,0
+	.long   056aab2bH
+	.word   02000H
+	.long   cred_p
+CRED_47:
+	.word   10,6,10,0
+	.long   056aaba3H
+	.word   02000H
+	.long   cred_p
+CRED_48:
+	.word   10,6,10,0
+	.long   056aac1bH
+	.word   02000H
+	.long   cred_p
+CRED_49:
+	.word   10,6,10,0
+	.long   056aac93H
+	.word   02000H
+	.long   cred_p
+CRED_50:
+	.word   10,6,10,0
+	.long   056aad0bH
+	.word   02000H
+	.long   cred_p
+CRED_51:
+	.word   10,6,10,0
+	.long   056aad83H
+	.word   02000H
+	.long   cred_p
+CRED_52:
+	.word   10,6,10,0
+	.long   056aadfbH
+	.word   02000H
+	.long   cred_p
+CRED_53:
+	.word   10,6,10,0
+	.long   056aae73H
+	.word   02000H
+	.long   cred_p
+CRED_54:
+	.word   10,6,10,0
+	.long   056aaeebH
+	.word   02000H
+	.long   cred_p
+CRED_55:
+	.word   10,6,10,0
+	.long   056aaf63H
+	.word   02000H
+	.long   cred_p
+CRED_56:
+	.word   10,6,10,0
+	.long   056aafdbH
+	.word   02000H
+	.long   cred_p
+CRED_57:
+	.word   10,6,10,0
+	.long   056ab053H
+	.word   02000H
+	.long   cred_p
+CRED_58:
+	.word   10,6,10,0
+	.long   056ab0cbH
+	.word   02000H
+	.long   cred_p
+CRED_59:
+	.word   10,6,10,0
+	.long   056ab143H
+	.word   02000H
+	.long   cred_p
+CRED_60:
+	.word   10,6,10,0
+	.long   056ab1bbH
+	.word   02000H
+	.long   cred_p
+CRED_61:
+	.word   10,6,10,0
+	.long   056ab233H
+	.word   02000H
+	.long   cred_p
+CRED_62:
+	.word   10,6,10,0
+	.long   056ab2abH
+	.word   02000H
+	.long   cred_p
+CRED_63:
+	.word   10,6,10,0
+	.long   056ab323H
+	.word   02000H
+	.long   cred_p
+CRED_64:
+	.word   10,6,10,0
+	.long   056ab39bH
+	.word   02000H
+	.long   cred_p
+CRED_65:
+	.word   10,6,10,0
+	.long   056ab413H
+	.word   02000H
+	.long   cred_p
+CRED_66:
+	.word   10,6,10,0
+	.long   056ab48bH
+	.word   02000H
+	.long   cred_p
+CRED_67:
+	.word   10,6,10,0
+	.long   056ab503H
+	.word   02000H
+	.long   cred_p
+CRED_68:
+	.word   10,6,10,0
+	.long   056ab57bH
+	.word   02000H
+	.long   cred_p
+CRED_69:
+	.word   10,6,10,0
+	.long   056ab5f3H
+	.word   02000H
+	.long   cred_p
+CRED_70:
+	.word   10,6,10,0
+	.long   056ab66bH
+	.word   02000H
+	.long   cred_p
+CRED_71:
+	.word   10,6,10,0
+	.long   056ab6e3H
+	.word   02000H
+	.long   cred_p
+CRED_72:
+	.word   10,6,10,0
+	.long   056ab75bH
+	.word   02000H
+	.long   cred_p
+CRED_73:
+	.word   10,6,10,0
+	.long   056ab7d3H
+	.word   02000H
+	.long   cred_p
+CRED_74:
+	.word   10,6,10,0
+	.long   056ab84bH
+	.word   02000H
+	.long   cred_p
+CRED_75:
+	.word   10,6,10,0
+	.long   056ab8c3H
+	.word   02000H
+	.long   cred_p
+CRED_76:
+	.word   10,6,10,0
+	.long   056ab93bH
+	.word   02000H
+	.long   cred_p
+CRED_77:
+	.word   10,6,10,0
+	.long   056ab9b3H
+	.word   02000H
+	.long   cred_p
+CRED_78:
+	.word   10,6,10,0
+	.long   056aba2bH
+	.word   02000H
+	.long   cred_p
+CRED_79:
+	.word   10,6,10,0
+	.long   056abaa3H
+	.word   02000H
+	.long   cred_p
+CRED_80:
+	.word   10,6,10,0
+	.long   056abb1bH
+	.word   02000H
+	.long   cred_p
+CRED_81:
+	.word   10,6,10,0
+	.long   056abb93H
+	.word   02000H
+	.long   cred_p
+CRED_82:
+	.word   10,6,10,0
+	.long   056abc0bH
+	.word   02000H
+	.long   cred_p
+CRED_83:
+	.word   10,6,10,0
+	.long   056abc83H
+	.word   02000H
+	.long   cred_p
+CRED_84:
+	.word   10,6,10,0
+	.long   056abcfbH
+	.word   02000H
+	.long   cred_p
+CRED_85:
+	.word   10,6,10,0
+	.long   056abd73H
+	.word   02000H
+	.long   cred_p
+CRED_86:
+	.word   10,6,10,0
+	.long   056abdebH
+	.word   02000H
+	.long   cred_p
+CRED_87:
+	.word   10,6,10,0
+	.long   056abe63H
+	.word   02000H
+	.long   cred_p
+CRED_88:
+	.word   10,6,10,0
+	.long   056abedbH
+	.word   02000H
+	.long   cred_p
+CRED_89:
+	.word   10,6,10,0
+	.long   056abf53H
+	.word   02000H
+	.long   cred_p
+CRED_90:
+	.word   10,6,10,0
+	.long   056abfcbH
+	.word   02000H
+	.long   cred_p
+CRED_91:
+	.word   10,6,10,0
+	.long   056ac043H
+	.word   02000H
+	.long   cred_p
+CRED_92:
+	.word   10,6,10,0
+	.long   056ac0bbH
+	.word   02000H
+	.long   cred_p
+CRED_93:
+	.word   10,6,10,0
+	.long   056ac133H
+	.word   02000H
+	.long   cred_p
+CRED_94:
+	.word   10,6,10,0
+	.long   056ac1abH
+	.word   02000H
+	.long   cred_p
+CRED_95:
+	.word   10,6,10,0
+	.long   056ac223H
+	.word   02000H
+	.long   cred_p
+CRED_96:
+	.word   10,6,10,0
+	.long   056ac29bH
+	.word   02000H
+	.long   cred_p
+CRED_97:
+	.word   10,6,10,0
+	.long   056ac313H
+	.word   02000H
+	.long   cred_p
+CRED_98:
+	.word   10,6,10,0
+	.long   056ac38bH
+	.word   02000H
+	.long   cred_p
+CRED_99:
+	.word   10,6,10,0
+	.long   056ac403H
+	.word   02000H
+	.long   cred_p
+TURBO_52:
+	.long   056ac47bH
+TURBO_51:
+	.long   056acbddH
+TURBO_50:
+	.long   056ad33fH
+TURBO_49:
+	.long   056adaa1H
+TURBO_48:
+	.long   056ae203H
+TURBO_47:
+	.long   056ae965H
+TURBO_46:
+	.long   056af0c7H
+TURBO_45:
+	.long   056af829H
+TURBO_44:
+	.long   056aff8bH
+TURBO_43:
+	.long   056b06edH
+TURBO_42:
+	.long   056b0e4fH
+TURBO_41:
+	.long   056b15b1H
+TURBO_40:
+	.long   056b1d13H
+TURBO_39:
+	.long   056b2475H
+TURBO_38:
+	.long   056b2bd7H
+TURBO_37:
+	.long   056b3339H
+TURBO_36:
+	.long   056b3a9bH
+TURBO_35:
+	.long   056b41fdH
+TURBO_34:
+	.long   056b495fH
+TURBO_33:
+	.long   056b50c1H
+TURBO_32:
+	.long   056b5823H
+TURBO_31:
+	.long   056b5f85H
+TURBO_30:
+	.long   056b66e7H
+TURBO_29:
+	.long   056b6e49H
+TURBO_28:
+	.long   056b75abH
+TURBO_27:
+	.long   056b7d0dH
+TURBO_26:
+	.long   056b846fH
+TURBO_25:
+	.long   056b8bd1H
+TURBO_24:
+	.long   056b9333H
+TURBO_23:
+	.long   056b9a95H
+TURBO_22:
+	.long   056ba1f7H
+TURBO_21:
+	.long   056ba959H
+TURBO_20:
+	.long   056bb0bbH
+TURBO_19:
+	.long   056bb81dH
+TURBO_18:
+	.long   056bbf7fH
+TURBO_17:
+	.long   056bc6e1H
+TURBO_16:
+	.long   056bce43H
+TURBO_15:
+	.long   056bd5a5H
+TURBO_14:
+	.long   056bdd07H
+TURBO_13:
+	.long   056be469H
+TURBO_12:
+	.long   056bebcbH
+TURBO_11:
+	.long   056bf32dH
+TURBO_10:
+	.long   056bfa8fH
+TURBO_09:
+	.long   056c01f1H
+TURBO_08:
+	.long   056c0953H
+TURBO_07:
+	.long   056c10b5H
+TURBO_06:
+	.long   056c1817H
+TURBO_05:
+	.long   056c1f79H
+TURBO_04:
+	.long   056c26dbH
+TURBO_03:
+	.long   056c2e3dH
+TURBO_02:
+	.long   056c359fH
+TURBO_01:
+	.long   056c3d01H
+	.TEXT
+

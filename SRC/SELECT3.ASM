@@ -585,11 +585,11 @@ best_plq_pals
 	addi	plaque_snds,a0
 	move	*a0,a0,L
 	calla	snd_play1
-#waitf
+#waitf1
 	SLEEPK	1
 	move	*a8(OYPOS),a0
 	cmpi	PLAQUE_Y,a0
-	jrlt	waitf
+	jrlt	waitf1
 	clr	a0
 	move	a0,*a8(OYVEL),L
 
@@ -719,11 +719,11 @@ nosecret_imgs
 	move	*a0,a0,L
 	calla	snd_play1
 ;;	SOUND1	plaque_fall1
-#waitf
+#waitf2
 	SLEEP	1
 	move	*a8(OYPOS),a0
 	cmpi	PLAQUE_Y,a0
-	jrlt	waitf
+	jrlt	waitf2
 	movi	PLAQUE_Y,a0
 	move	a0,*a8(OYPOS)
 	clr	a0
@@ -1209,7 +1209,7 @@ pts_0b	movi	message_buffer,a3		;* string dest
 	move	a0,*a1
 #restuff
 	sll	5,a0
-	addi	#rod_tbl,a0
+	addi	#rod_tbla,a0
 	move	*a0,a0,L
 	move	a14,a2
 	calla	pal_getf
@@ -1222,23 +1222,23 @@ pts_1	rets
 ;Mugshot
 
 	cmpi	ROD_CHI,a2
-	jrnz	ex
+	jrnz	exa
 
 	movi	rodman_colors,a1
 
 	move	a14,a14
-	jrz	tm1
+	jrz	tm1a
 
 	movi	rodman_colors+16,a1
-#tm1
+#tm1a
 	move	*a1,a0
 	sll	5,a0
-	addi	#rod_tbl,a0
+	addi	#rod_tbla,a0
 	move	*a0,a0,L
 
-#ex	rets
+#exa	rets
 
-#rod_tbl
+#rod_tbla
 	.ref	CHI_RODBP
 	.ref	CHI_RODOP
 	.ref	CHI_RODPP
@@ -1263,23 +1263,23 @@ pts_1	rets
 
 	.ref	RODMAN1
 	cmpi	RODMAN1+240h,a2
-	jrnz	ex
+	jrnz	exb
 
 	movi	rodman_colors,a1
 
 	move	a14,a14
-	jrz	tm1
+	jrz	tm1b
 
 	movi	rodman_colors+16,a1
-#tm1
+#tm1b
 	move	*a1,a0
 	sll	5,a0
-	addi	#rod_tbl,a0
+	addi	#rod_tblb,a0
 	move	*a0,a0,L
 
-#ex	rets
+#exb	rets
 
-#rod_tbl
+#rod_tblb
 	.ref	RODMANBP
 	.ref	RODMANKP
 	.ref	RODMANOP
@@ -1319,10 +1319,10 @@ str_100		.string	"100%",0
 #keep_looking
 	move	*a5+,a0,L
 	cmp	a0,a9
-	jreq	no_change
+	jreq	no_changea
 	move	a0,a9			;new count
 	move	a8,a10			;new rank
-#no_change
+#no_changea
 	inc	a8
 	cmpi	NUM_TEAMS,a8			;safety
 	jrhs	#last
@@ -2150,12 +2150,12 @@ sppr1
 ;
 	movi	combination_tbl,a2,L
 	movi	NBR_CODE_COMBOS,a3
-#lp
+#lpa
 	move	*a2(TBL_COMBO),a14		;get count from table
 	cmp	a14,a1				;plyrs and tbl count the same?
 	jreq	cvc_00				;br=yes !!!
 	addi	16+32,a2		;next line in combination table
-	dsj	a3,lp
+	dsj	a3,lpa
 	jruc	cvc_x				;br=no match found
 
 ;found match
@@ -2859,11 +2859,12 @@ stat_title_tbl_end
 
 	movi	player_names,a10
 	move	@team1,a2
-#lp	cmpi	0,a2
+#lpb
+    cmpi	0,a2
 	jrz	out
 	addi	NEXT_TEAM_NAMES,a10		;compute offset into table
 	dec	a2
-	jruc	lp	
+	jruc	lpb	
 #out
 	move	@team1,a0
 	sll	4,a0
@@ -3409,7 +3410,7 @@ dnb_1
 
 	calla	del_create_spotlight
 	calla	update_bball_palettes
-	jruc	timeout
+	jruc	timeouta
 
 #no_timeout
 	calla	get_all_buttons_down
@@ -3417,7 +3418,7 @@ dnb_1
 ;
 ; Player hit a button...or timer expired
 ;
-#timeout
+#timeouta
 	SOUND1	opt_scr_sel
 
 	move	@cur_pos,a0
