@@ -1,0 +1,2755 @@
+	.file	"plyrdseq.asm"
+	.title	"basketball plyr sequence code"
+	.width	132
+	.option	b,d,l,t
+	.mnolist
+
+
+	.include	"mproc.equ"
+	.include	"disp.equ"
+	.include	"world.equ"
+	.include	"sys.equ"
+	.include	"macros.hdr"
+	.asg		0,SEQT
+	.include	"plyr.equ"
+	.include	"plyrdseq.tbl"
+	.include	"dunks.glo"
+	.include	"dunks2.glo"
+
+	.def	zwilpal,PLYRFX2_P,PLYRFX3_P,XEWILPAL
+	.def	PLYRFIX_P
+	.def	NEWILFIX
+	.def	NEWILPAL
+
+
+
+	.ref	plyr_shoot
+	.ref	plyr_pass
+	.ref	seq_newdir
+	.ref	seq_slamball
+	.ref	seq_strtdunk
+	.ref	seq_jump
+	.ref	seq_resetseq
+	.ref	seq_stand
+	.ref	seq_snd
+	.ref	seq_offset
+
+	.ref	seq_high_dnk_spch
+	.ref	seq_low_dnk_spch
+	.ref	seq_jam_speech
+	.ref	goes_up_sp
+	.ref	tks2_hoop_sp
+	.ref	raises_up_sp
+	.ref	sumrslts_sp
+	.ref	shot_type
+
+
+
+JAM_NONE	equ	0
+JAM_EASY	equ	1
+JAM_MED		equ	2
+JAM_GOOD	equ	3
+JAM_GREAT	equ	4
+JAM_ALLEYOOP	equ	5
+
+
+M_YF	.equ	08000H	;Y free (OFLAGS)
+
+
+	.text
+
+ SUBR	seq_goto_line
+ 	
+	move	*b4+,b4,L			;get line addr
+	rets
+
+
+
+	.asg	M_WRNONZ,F
+	.asg	M_WRNONZ|M_FLIPH,FF
+	.asg	DUNK_M|NOJUMP_M|NOJOY_M|NOCOLLP_M,DFLGS
+
+
+
+alley_oop1_t
+	.word	DFLGS				;Flags for sequence
+	.long	seq_stand			;Code for end of sequence
+	.long	nugr1,nugr2,nugr3,nugr4
+	.long	nugr5,nugr4,nugr3,nugr2
+nugr2
+nugr3
+nugr4
+nugr1
+nugr5
+	WLW	2,M1SPDU1,F
+	WLLW	-1,seq_strtdunk,M1SPDU17,73	;Next frame begins elevation
+	WLW	-1,seq_jam_speech,JAM_ALLEYOOP
+	WLL	-1,seq_snd,goes_up_sp
+	WLW	3,M1SPDU2,F
+	WLW	3,M1SPDU3,F
+	WLW	3,M1SPDU4,F
+	WLW	3,M1SPDU5,F
+	WLW	3,M1SPDU6,F
+	WLW	3,M1SPDU7,F
+	WLW	3,M1SPDU8,F
+	WLW	3,M1SPDU9,F
+	WLW	35,M1SPDU10,F
+	WLW	3,M1SPDU11,F
+	WLW	3,M1SPDU12,F
+	WLW	3,M1SPDU13,F
+	WLW	3,M1SPDU14,F
+	WLW	3,M1SPDU15,F
+	WLW	1,M1SPDU16,F
+	WLW	-1,seq_slamball,2		;Ball centers in hoop at
+	WLW	2,M1SPDU16,F
+	WLW	500,M1SPDU17,F
+	WLW	3,M1SPDU18,F			;Lands on ground
+	WLW	3,M1SPDU19,F
+	WLW	3,M1SPDU20,F
+	WLW	-1,seq_newdir,0*16
+	W0
+
+alley_oop2_t
+	.word	DFLGS				;Flags for sequence
+	.long	seq_stand			;Code for end of sequence
+	.long	smjf1,smjf2,smjf3,smjf4
+	.long	smjf5,smjf4,smjf3,smjf2
+smjf2
+smjf3
+smjf4
+smjf1
+smjf5
+	WLW	2,W3FLDU1,F
+	WLLW	-1,seq_strtdunk,W3FLDU12,70
+	WLW	-1,seq_jam_speech,JAM_ALLEYOOP
+	WLL	-1,seq_snd,raises_up_sp
+	WLW	3,W3FLDU1,F
+	WLW	39,W3FLDU2,F
+	WLW	3,W3FLDU3,F
+	WLW	3,W3FLDU4,F
+	WLW	3,W3FLDU5,F
+	WLW	3,W3FLDU6,F
+	WLW	3,W3FLDU7,F
+	WLW	3,W3FLDU8,F
+	WLW	3,W3FLDU9,F
+	WLW	3,W3FLDU10,F
+	WLW	1,W3FLDU11,F
+	WLW	-1,seq_slamball,4
+	WLW	14,W3FLDU11,F
+	WLW	500,W3FLDU12,F
+	WLW	3,W3FLDU12,F
+	WLW	3,W3FLDU13,F
+	WLW	-1,seq_newdir,0*16
+	W0
+
+
+alley_oop3_t
+	.word	DFLGS				;Flags for sequence
+	.long	seq_stand			;Code for end of sequence
+	.long	rdpn1,rdpn2,rdpn3,rdpn4
+	.long	rdpn5,rdpn4,rdpn3,rdpn2
+rdpn2
+rdpn3
+rdpn4
+rdpn1
+rdpn5
+	WLW	2,W3CRZDU2,F
+	WLLW	-1,seq_strtdunk,W3CRZDU18,75
+	WLW	-1,seq_jam_speech,JAM_ALLEYOOP
+	WLL	-1,seq_snd,goes_up_sp
+	WLW	3,W3CRZDU2,F
+	WLW	3,W3CRZDU3,F
+	WLW	3,W3CRZDU4,F
+	WLW	3,W3CRZDU5,F
+	WLW	3,W3CRZDU6,F
+	WLW	3,W3CRZDU7,F
+	WLW	29,W3CRZDU8,F
+	WLW	3,W3CRZDU9,F
+	WLW	3,W3CRZDU10,F
+	WLW	3,W3CRZDU11,F
+	WLW	3,W3CRZDU12,F
+	WLW	3,W3CRZDU13,F
+	WLW	3,W3CRZDU14,F
+	WLW	3,W3CRZDU15,F
+	WLW	2,W3CRZDU16,F
+	WLW	1,W3CRZDU17,F
+	WLW	-1,seq_slamball,4
+	WLW	15,W3CRZDU17,F
+	WLW	500,W3CRZDU18,F
+	WLW	3,W3CRZDU19,F
+	WLW	3,W3CRZDU20,F
+	WLW	-1,seq_newdir,0*16
+	W0
+
+
+alley_oop4_t
+	.word	DFLGS				;Flags for sequence
+	.long	seq_stand			;Code for end of sequence
+	.long	vevk1,vevk2,vevk3,vevk4
+	.long	vevk5,vevk4,vevk3,vevk2
+vevk2
+vevk3
+vevk4
+vevk1
+vevk5
+	WLW	3,S3BKDU1,F
+	WLLW	-1,seq_strtdunk,S3BKDU14,70
+	WLW	-1,seq_jam_speech,JAM_ALLEYOOP
+	WLL	-1,seq_snd,raises_up_sp
+	WLW	3,S3BKDU2,F
+	WLW	3,S3BKDU2,F
+	WLW	3,S3BKDU3,F
+	WLW	3,S3BKDU4,F
+	WLW	3,S3BKDU5,F
+	WLW	39,S3BKDU6,F
+	WLW	3,S3BKDU7,F
+	WLW	3,S3BKDU8,F
+	WLW	3,S3BKDU9,F
+	WLW	3,S3BKDU10,F
+	WLW	2,S3BKDU10,F
+	WLW	2,S3BKDU11,F
+	WLW	1,S3BKDU12,F
+	WLW	-1,seq_slamball,3
+	WLW	8,S3BKDU12,F
+	WLWWW	-1,seq_offset,-8,0,0
+	WLW	500,S3BKDU14,F
+	WLW	3,S3BKDU15,F
+	WLW	3,S3BKDU16,F
+	WLW	-1,seq_newdir,2*16
+	W0
+
+
+alley_oop5_t
+	.word	DFLGS				;Flags for sequence
+	.long	seq_stand			;Code for end of sequence
+	.long	fjgt1,fjgt2,fjgt3,fjgt4
+	.long	fjgt5,fjgt4,fjgt3,fjgt2
+fjgt1
+fjgt2
+fjgt3
+fjgt4
+fjgt5
+	WLW	3,S8ALY401,F
+	WLLW	-1,seq_strtdunk,S8ALY414,70
+	WLW	-1,seq_jam_speech,JAM_ALLEYOOP
+	WLL	-1,seq_snd,goes_up_sp
+	WLW	3,S8ALY402,F
+	WLW	3,S8ALY403,F
+	WLW	3,S8ALY404,F
+	WLW	3,S8ALY405,F
+	WLW	41,S8ALY406,F
+	WLW	3,S8ALY407,F
+	WLW	3,S8ALY408,F
+	WLW	3,S8ALY409,F
+	WLW	2,S8ALY410,F
+	WLW	2,S8ALY411,F
+	WLW	2,S8ALY412,F
+	WLW	1,S8ALY413,F
+	WLW	-1,seq_slamball,15
+	WLW	10,S8ALY413,F
+	WLW	500,S8ALY414,F
+	WLW	-1,seq_newdir,3*16
+	W0
+
+
+
+alley_oop6_t
+	.word	DFLGS				;Flags for sequence
+	.long	seq_stand			;Code for end of sequence
+	.long	neuc1,neuc2,neuc3,neuc4
+	.long	neuc5,neuc4,neuc3,neuc2
+neuc1
+neuc5
+neuc2
+neuc3
+neuc4
+	WLW	3,W3SPNDU1,F
+	WLLW	-1,seq_strtdunk,W3SPNDU19,70
+	WLW	-1,seq_jam_speech,JAM_ALLEYOOP
+	WLL	-1,seq_snd,raises_up_sp
+	WLW	3,W3SPNDU2,F
+	WLW	3,W3SPNDU3,F
+	WLW	3,W3SPNDU4,F
+	WLW	3,W3SPNDU5,F
+	WLW	3,W3SPNDU6,F
+	WLW	3,W3SPNDU7,F
+	WLW	3,W3SPNDU8,F
+	WLW	3,W3SPNDU9,F
+	WLW	3,W3SPNDU10,F
+	WLW	3,W3SPNDU11,F
+	WLW	15,W3SPNDU12,F
+	WLW	3,W3SPNDU13,F
+	WLW	3,W3SPNDU14,F
+	WLW	3,W3SPNDU15,F
+	WLW	3,W3SPNDU16,F
+	WLW	2,W3SPNDU17,F
+	WLW	2,W3SPNDU18,F
+	WLW	2,W3SPNDU19,F
+	WLW	2,W3SPNDU20,F
+	WLW	1,W3SPNDU21,F
+	WLW	-1,seq_slamball,3
+	WLW	11,W3SPNDU21,F
+	WLW	500,W3SWDU10,F
+	WLW	3,W3SWDU11,F
+	WLW	3,W3SWDU12,F
+	WLW	-1,seq_newdir,2*16
+	W0
+
+alley_oop7_t
+	.word	DFLGS				;Flags for sequence
+	.long	seq_stand			;Code for end of sequence
+	.long	nfxu1,nfxu2,nfxu3,nfxu4
+	.long	nfxu5,nfxu4,nfxu3,nfxu2
+nfxu1
+nfxu5
+nfxu2
+nfxu3
+nfxu4
+	WLW	3,S8ALY201,F
+	WLLW	-1,seq_strtdunk,S8ALY212,70
+	WLW	-1,seq_jam_speech,JAM_ALLEYOOP
+	WLL	-1,seq_snd,goes_up_sp
+	WLW	3,S8ALY202,F
+	WLW	3,S8ALY203,F
+	WLW	3,S8ALY204,F
+	WLW	3,S8ALY205,F
+	WLW	3,S8ALY206,F
+	WLW	3,S8ALY207,F
+	WLW	44,S8ALY208,F
+	WLW	3,S8ALY209,F
+	WLW	2,S8ALY210,F
+	WLW	2,S8ALY211,F
+	WLW	2,S8ALY212,F
+	WLW	1,S8ALY213,F
+	WLW	-1,seq_slamball,15
+	WLW	10,S8ALY213,F
+	WLW	500,S8ALY214,F
+	WLW	-1,seq_newdir,0*16
+	W0
+
+
+alley_oop8_t
+	.word	DFLGS				;Flags for sequence
+	.long	seq_stand			;Code for end of sequence
+	.long	gnlq1,gnlq2,gnlq3,gnlq4
+	.long	gnlq5,gnlq4,gnlq3,gnlq2
+gnlq1
+gnlq2
+gnlq3
+gnlq4
+gnlq5
+	WLW	3,M5OHPB1,FF
+	WLLW	-1,seq_strtdunk,M2DKDU14,74
+	WLW	-1,seq_jam_speech,JAM_ALLEYOOP
+	WLL	-1,seq_snd,raises_up_sp
+	WLW	3,M5OHPB2,FF
+	WLW	3,W3SDTUK4,FF
+	WLW	3,W3SDTUK5,FF
+	WLW	36,W3SDTUK6,FF
+	WLW	3,W3SDTUK7,FF
+	WLW	3,W3SDTUK8,FF
+	WLW	3,W3SDTUK9,FF
+	WLW	3,W3SDTUK10,FF
+	WLW	3,W3SDTUK11,FF
+	WLW	3,W3SDTUK12,FF
+	WLW	3,W3SDTUK13,FF
+	WLW	3,W3SDTUK14,FF
+	WLW	3,W3SDTUK15,FF
+	WLW	2,M2DKDU12,FF
+	WLW	-1,seq_slamball,15
+	WLW	15,M2DKDU13,FF
+	WLW	500,M2DKDU14,FF
+	WLW	3,M2DKDU15,FF
+	WLW	3,M2DKDU16,FF
+	WLW	-1,seq_newdir,1*16
+	W0
+	W0
+
+alley_oop9_t
+	.word	DFLGS				;Flags for sequence
+	.long	seq_stand			;Code for end of sequence
+	.long	icxw1,icxw2,icxw3,icxw4
+	.long	icxw5,icxw4,icxw3,icxw2
+icxw1
+icxw2
+icxw3
+icxw4
+icxw5
+	WLW	4,M5REVDU1,F
+	WLLW	-1,seq_strtdunk,M5REVDU14,74
+	WLW	-1,seq_jam_speech,JAM_ALLEYOOP
+	WLL	-1,seq_snd,goes_up_sp
+	WLW	3,M5REVDU2,F
+	WLW	3,M5REVDU3,F
+	WLW	50,M5REVDU4,F
+	WLW	3,M5REVDU5,F
+	WLW	2,M5REVDU6,F
+	WLW	2,M5REVDU7,F
+	WLW	2,M5REVDU8,F
+	WLW	2,M5REVDU9,F
+	WLW	2,M5REVDU10,F
+	WLW	2,M5REVDU11,F
+	WLW	1,M5REVDU12,F
+	WLW	1,M5REVDU13,F
+	WLW	-1,seq_slamball,8
+	WLW	8,M5REVDU13,F
+	WLW	500,M5REVDU14,F
+	WLW	3,M5REVDU15,F
+	WLW	3,M5REVDU16,F
+	WLW	-1,seq_newdir,6*16
+	W0
+
+alley_oop10_t
+	.word	DFLGS|LAYUP_M
+	.long	seq_stand			;Code for end of sequence
+	.long	euid1,euid2,euid3,euid4
+	.long	euid5,euid4,euid3,euid2
+euid1
+euid2
+euid3
+euid4
+euid5
+	WLW	2,S1SETLA1,F
+	WLLW	-1,seq_strtdunk,S1SETLA5,64
+	WLL	-1,seq_snd,raises_up_sp
+	WLW	3,S1SETLA2,F
+	WLW	3,S1SETLA3,F
+	WLW	38,S1SETLA4,F
+	WLW	1,S1SETLA4,F
+	WL	-1,seq_wait_for_pass
+	WLW	5,S1SETLA4,F
+	WLW	2,S1SETLA5,F
+	WLW	1,S1SETLA6,F
+	WL	-1,seq_set_shot_type
+	WL	-1,plyr_shoot
+	WLW	1,S1SETLA6,F
+	WLW	500,S1SETLA7,F
+	WLW	3,S1SETLA8,F
+	WLW	3,S1SETLA9,F
+	WLW	-1,seq_newdir,0*16
+	W0
+
+alley_oop11_t
+	.word	DFLGS|LAYUP_M
+	.long	seq_stand			;Code for end of sequence
+	.long	guem1,guem2,guem3,guem4
+	.long	guem5,guem4,guem3,guem2
+guem1
+guem2
+guem3
+guem4
+guem5
+	WLW	2,S2HBHLA1,F
+	WLLW	-1,seq_strtdunk,S2HBHLA6,76
+	WLL	-1,seq_snd,goes_up_sp
+	WLW	3,S2HBHLA2,F
+	WLW	3,S2HBHLA3,F
+	WLW	43,S2HBHLA4,F
+	WLW	1,S2HBHLA4,F
+	WL	-1,seq_wait_for_pass
+	WLW	5,S2HBHLA4,F
+	WLW	2,S2HBHLA5,F
+	WLW	1,S2HBHLA6,F
+	WL	-1,seq_set_shot_type
+	WL	-1,plyr_shoot
+	WLW	1,S2HBHLA6,F
+	WLW	500,S2HBHLA7,F
+	WLW	3,S2HBHLA8,F
+	WLW	3,S2HBHLA9,F
+	WLW	-1,seq_newdir,1*16
+	W0
+
+alley_oop12_t
+	.word	DFLGS|LAYUP_M
+	.long	seq_stand			;Code for end of sequence
+	.long	hupz1,hupz2,hupz3,hupz4
+	.long	hupz5,hupz4,hupz3,hupz2
+hupz1
+hupz2
+hupz3
+hupz4
+hupz5
+	WLW	3,S3BEHLA1,F
+	WLLW	-1,seq_strtdunk,S3BETLA6,76
+	WLL	-1,seq_snd,raises_up_sp
+	WLW	3,S3BETLA2,F
+	WLW	3,S3BETLA3,F
+	WLW	3,S3BETLA4,F
+	WLW	42,S3BETLA5,F
+	WLW	1,S3BETLA5,F
+	WL	-1,seq_wait_for_pass
+	WLW	5,S3BETLA5,F
+	WLW	2,S3BETLA6,F
+	WLW	2,S3BETLA7,F
+	WLW	1,S3BETLA8,F
+	WL	-1,seq_set_shot_type
+	WL	-1,plyr_shoot
+	WLW	2,S3BETLA8,F
+	WLW	500,S3BETLA9,F
+	WLW	3,S3BETLA10,F
+	WLW	-1,seq_newdir,1*16
+	W0
+
+alley_oop13_t
+	.word	DFLGS|LAYUP_M
+	.long	seq_stand			;Code for end of sequence
+	.long	rcqs1,rcqs2,rcqs3,rcqs4
+	.long	rcqs5,rcqs4,rcqs3,rcqs2
+rcqs1
+rcqs2
+rcqs3
+rcqs4
+rcqs5
+	WLW	3,S4SETLA1,F
+	WLLW	-1,seq_strtdunk,S4SETLA5,76
+	WLL	-1,seq_snd,goes_up_sp
+	WLW	3,S4SETLA2,F
+	WLW	43,S4SETLA3,F
+	WLW	1,S4SETLA3,F
+	WL	-1,seq_wait_for_pass
+	WLW	5,S4SETLA3,F
+	WLW	3,S4SETLA4,F
+	WLW	1,S4SETLA5,F
+	WL	-1,seq_set_shot_type
+	WL	-1,plyr_shoot
+	WLW	1,S4SETLA5,F
+	WLW	500,S4SETLA6,F
+	WLW	3,S4SETLA7,F
+	WLW	3,S4SETLA8,F
+	WLW	3,S4SETLA9,F
+	WLW	-1,seq_newdir,3*16
+	W0
+
+alley_oop14_t
+	.word	DFLGS|LAYUP_M
+	.long	seq_stand			;Code for end of sequence
+	.long	zpja1,zpja2,zpja3,zpja4
+	.long	zpja5,zpja4,zpja3,zpja2
+zpja1
+zpja2
+zpja3
+zpja4
+zpja5
+	WLW	3,S5SETLA1,F
+	WLLW	-1,seq_strtdunk,S5SETLA5,65
+	WLL	-1,seq_snd,raises_up_sp
+	WLW	3,S5SETLA2,F
+	WLW	38,S5SETLA3,F
+	WLW	1,S5SETLA3,F
+	WL	-1,seq_wait_for_pass
+	WLW	5,S5SETLA3,F
+	WLW	2,S5SETLA4,F
+	WLW	1,S5SETLA5,F
+	WL	-1,seq_set_shot_type
+	WL	-1,plyr_shoot
+	WLW	1,S5SETLA5,F
+	WLW	3,S5SETLA6,F
+	WLW	500,S5SETLA7,F
+	WLW	3,S5SETLA8,F
+	WLW	3,S5SETLA9,F
+	WLW	3,S5SETLA10,F
+	WLW	-1,seq_newdir,3*16
+	W0
+
+
+seq_set_shot_type
+	move	*a13(plyr_ownball),a14
+	jrle	ssst_1
+
+	movk	5,a0
+	move	a0,@shot_type
+ssst_1	
+	rets
+
+
+
+
+seq_wait_for_pass
+	move	*a13(plyr_rcvpass),a14
+	jrle	hfp_1					;br=player not recieving pass
+	subi	48+64,b4
+hfp_1	rets
+	
+	
+
+dunka_t 
+	.word	DFLGS				;Flags for sequence
+	.long	seq_stand			;Code for end of sequence
+	.long	bltn1,bltn2,bltn3,bltn4
+	.long	bltn5,bltn4,bltn3,bltn2
+
+
+bltn1
+bltn2
+	WLW	2,M1SPDU1,F
+	WLLW	-1,seq_strtdunk,M1SPDU18,73	;Next frame begins elevation
+	WLW	-1,seq_jam_speech,JAM_EASY	;Anncr excitement level
+	WL	-1,seq_high_dnk_spch
+	WLW	3,M1SPDU2,F
+	WLW	3,M1SPDU3,F
+	WLW	3,M1SPDU4,F
+	WLW	3,M1SPDU5,F
+	WLW	3,M1SPDU6,F
+	WLW	3,M1SPDU7,F
+	WLW	3,M1SPDU8,F
+	WLW	3,M1SPDU9,F
+	WLW	41,M1SPDU10,F
+	WLW	3,M1SPDU11,F
+	WLW	2,M1SPDU12,F
+	WLW	2,M1SPDU13,F
+	WLW	1,M1SPDU14,F
+	WLW	1,M1SPDU15,F
+	WLWWW	-1,seq_offset,0,0,18
+	WLW	1,M1SPDU16,F
+	WLW	-1,seq_slamball,16		;Ball centers in hoop at
+	WLW	15,M1SPDU16,F
+	WLW	500,M1SPDU17,F
+	WLW	3,M1SPDU18,F			;Lands on ground
+	WLW	3,M1SPDU19,F
+	WLW	3,M1SPDU20,F
+	WLW	-1,seq_newdir,0*16
+bltn3
+bltn4
+bltn5
+	W0
+
+dunka2_t
+	.word	DFLGS				;Flags for sequence
+	.long	seq_stand			;Code for end of sequence
+	.long	yrhw1,yrhw2,yrhw3,yrhw4
+	.long	yrhw5,yrhw4,yrhw3,yrhw2
+
+yrhw1
+	WLW	2,M1SPDU1,F
+	WLLW	-1,seq_strtdunk,M1SPDU18,36	;Next frame begins elevation
+	WLL	-1,seq_goto_line,yrhw1a
+	W0
+
+yrhw2
+	WLW	2,M1SPDU1,F
+	WLLW	-1,seq_strtdunk,M1SPDU17,36	;Next frame begins elevation
+yrhw1a	WLW	-1,seq_jam_speech,JAM_EASY	;Anncr excitement level
+	WL	-1,seq_low_dnk_spch
+	WLW	3,M1SPDU2,F
+	WLW	3,M1SPDU3,F
+	WLW	3,M1SPDU4,F
+	WLW	3,M1SPDU5,F
+	WLW	3,M1SPDU6,F
+	WLW	3,M1SPDU7,F
+	WLW	3,M1SPDU8,F
+	WLW	3,M1SPDU9,F
+	WLW	3,M1SPDU10,F
+	WLW	3,M1SPDU11,F
+	WLW	2,M1SPDU12,F
+	WLW	2,M1SPDU13,F
+	WLW	2,M1SPDU14,F
+	WLW	2,M1SPDU15,F
+	WLWWW	-1,seq_offset,0,0,18
+	WLW	1,M1SPDU16,F
+	WLW	-1,seq_slamball,17		;Ball centers in hoop at
+	WLW	16,M1SPDU16,F
+	WLW	500,M1SPDU17,F
+	WLW	3,M1SPDU18,F			;Lands on ground
+	WLW	3,M1SPDU19,F			;Lands on ground
+	WLW	3,M1SPDU20,F			;Lands on ground
+	WLW	-1,seq_newdir,0*16
+yrhw3
+yrhw4
+yrhw5
+	W0
+
+dunka3_t
+	.word	DFLGS				;Flags for sequence
+	.long	seq_stand			;Code for end of sequence
+	.long	vmrc1,vmrc2,vmrc3,vmrc4
+	.long	vmrc5,vmrc4,vmrc3,vmrc2
+
+vmrc1
+	WLW	2,M1SPDU1,F
+	WLLW	-1,seq_strtdunk,M1SPDU18,25	;Next frame begins elevation
+	WLL	-1,seq_goto_line,vmrc1a
+	W0
+vmrc2
+	WLW	2,M1SPDU1,F
+	WLLW	-1,seq_strtdunk,M1SPDU17,25	;Next frame begins elevation
+vmrc1a	WLW	-1,seq_jam_speech,JAM_EASY	;Anncr excitement level
+	WL	-1,seq_low_dnk_spch
+	WLW	2,M1SPDU2,F
+	WLW	1,M1SPDU3,F
+	WLW	2,M1SPDU4,F
+	WLW	1,M1SPDU5,F
+	WLW	2,M1SPDU6,F
+	WLW	1,M1SPDU7,F
+	WLW	2,M1SPDU8,F
+	WLW	1,M1SPDU9,F
+	WLW	1,M1SPDU10,F
+	WLW	1,M1SPDU11,F
+	WLW	1,M1SPDU12,F
+	WLW	1,M1SPDU13,F
+	WLW	1,M1SPDU14,F
+	WLW	1,M1SPDU15,F
+	WLWWW	-1,seq_offset,0,0,18
+	WLW	1,M1SPDU16,F
+	WLW	-1,seq_slamball,8		;Ball centers in hoop at
+	WLW	6,M1SPDU16,F
+	WLW	500,M1SPDU17,F
+	WLW	3,M1SPDU18,F			;Lands on ground
+	WLW	3,M1SPDU19,F			;Lands on ground
+	WLW	3,M1SPDU20,F			;Lands on ground
+	WLW	-1,seq_newdir,0*16
+vmrc3
+vmrc4
+vmrc5
+	W0
+
+
+dunkb_t
+	.word	DFLGS
+	.long	seq_stand
+	.long	tjxu1,tjxu2,tjxu3,tjxu4
+	.long	tjxu5,tjxu4,tjxu3,tjxu2
+tjxu2
+tjxu3
+	WLW	3,M3TUKDU1,F
+	WLLW	-1,seq_strtdunk,M3TUKDU14,70
+	WLW	-1,seq_jam_speech,JAM_EASY
+	WL	-1,seq_high_dnk_spch
+	WLW	3,M3TUKDU2,F
+	WLW	3,M3TUKDU3,F
+	WLW	3,M3TUKDU4,F
+	WLW	3,M3TUKDU5,F
+	WLW	3,M3TUKDU6,F
+	WLW	3,M3TUKDU7,F
+	WLW	3,M3TUKDU8,F
+	WLW	45,M3TUKDU9,F
+	WLW	3,M3TUKDU10,F
+	WLW	2,M3TUKDU11,F
+	WLW	1,M3TUKDU12,F
+	WLW	1,M3TUKDU13,F
+	WLWWW	-1,seq_offset,4,0,0
+	WLW	-1,seq_slamball,9
+	WLW	2,M3TUKDU13,F
+	WLW	7,M3TUKDU14,F
+	WLW	500,M3TUKDU15,F
+	WLW	3,M3TUKDU16,F
+	WLW	3,M3TUKDU17,F
+	WLW	-1,seq_newdir,0*16
+tjxu1
+tjxu4
+tjxu5
+	W0
+
+dunkb2_t
+	.word	DFLGS
+	.long	seq_stand
+	.long	bkwz1,bkwz2,bkwz3,bkwz4
+	.long	bkwz5,bkwz4,bkwz3,bkwz2
+bkwz2
+bkwz3
+	WLW	3,M3TUKDU1,F
+	WLLW	-1,seq_strtdunk,M3TUKDU14,59
+	WLW	-1,seq_jam_speech,JAM_EASY
+	WL	-1,seq_low_dnk_spch
+	WLW	3,M3TUKDU2,F
+	WLW	3,M3TUKDU3,F
+	WLW	3,M3TUKDU4,F
+	WLW	3,M3TUKDU5,F
+	WLW	3,M3TUKDU6,F
+	WLW	3,M3TUKDU7,F
+	WLW	34,M3TUKDU8,F
+	WLW	3,M3TUKDU9,F
+	WLW	3,M3TUKDU10,F
+	WLW	2,M3TUKDU11,F
+	WLW	1,M3TUKDU12,F
+	WLW	1,M3TUKDU13,F
+	WLWWW	-1,seq_offset,4,0,0
+	WLW	-1,seq_slamball,8
+	WLW	5,M3TUKDU13,F
+	WLW	3,M3TUKDU14,F
+	WLW	500,M3TUKDU15,F
+	WLW	3,M3TUKDU16,F
+	WLW	3,M3TUKDU17,F
+	WLW	-1,seq_newdir,0*16
+bkwz1
+bkwz4
+bkwz5
+	W0
+	
+dunkb3_t
+	.word	DFLGS
+	.long	seq_stand
+	.long	tged1,tged2,tged3,tged4
+	.long	tged5,tged4,tged3,tged2
+tged1
+	WLW	3,M2DKDU1,F
+	WLLW	-1,seq_strtdunk,M2DKDU7,85
+	WLW	-1,seq_jam_speech,JAM_MED
+	WL	-1,seq_high_dnk_spch
+	WLW	3,M2DKDU2,F
+	WLW	3,M2DKDU3,F
+	WLW	3,M2DKDU4,F
+	WLW	3,M2DKDU5,F
+	WLW	55,M2DKDU6,F
+	WLW	3,M2DKDU7,F
+	WLW	3,M2DKDU8,F
+	WLW	3,M2DKDU9,F
+	WLW	2,M2DKDU10,F
+	WLW	2,M2DKDU11,F
+	WLW	1,M2DKDU12,F
+	WLW	1,M2DKDU13,F
+	WLW	-1,seq_slamball,15
+	WLW	12,M2DKDU13,F
+	WLW	500,M2DKDU14,F
+	WLW	4,M2DKDU15,F
+	WLW	4,M2DKDU16,F
+	WLW	-1,seq_newdir,1*16
+	W0
+
+tged2
+	WLW	3,M2DKDU1,F
+	WLLW	-1,seq_strtdunk,M2DKDU8,75
+	WLW	-1,seq_jam_speech,JAM_MED
+	WL	-1,seq_high_dnk_spch
+	WLW	3,M2DKDU2,F
+	WLW	3,M2DKDU3,F
+	WLW	3,M2DKDU4,F
+	WLW	3,M2DKDU5,F
+	WLW	3,M2DKDU6,F
+	WLW	3,M2DKDU7,F
+	WLW	3,M2DKDU8,F
+	WLW	3,M2DKDU9,F
+	WLW	43,M2DKDU10,F
+	WLW	2,M2DKDU11,F
+	WLW	1,M2DKDU12,F
+	WLW	1,M2DKDU13,F
+	WLW	-1,seq_slamball,15
+	WLW	12,M2DKDU13,F
+	WLW	500,M2DKDU14,F
+	WLW	3,M2DKDU15,F
+	WLW	3,M2DKDU16,F
+	WLW	-1,seq_newdir,1*16
+tged3
+tged4
+tged5
+	W0
+
+dunkc_t
+	.word	DFLGS
+	.long	seq_stand
+	.long	iove1,iove2,iove3,iove4
+	.long	iove5,iove4,iove3,iove2
+iove1
+	WLW	3,M2DKDU1,F
+	WLLW	-1,seq_strtdunk,M2DKDU7,42
+	WLW	-1,seq_jam_speech,JAM_MED
+	WL	-1,seq_low_dnk_spch
+	WLW	3,M2DKDU2,F
+	WLW	3,M2DKDU3,F
+	WLW	3,M2DKDU4,F
+	WLW	3,M2DKDU5,F
+	WLW	4,M2DKDU6,F
+	WLW	3,M2DKDU7,F
+	WLW	3,M2DKDU8,F
+	WLW	4,M2DKDU9,F
+	WLW	2,M2DKDU10,F
+	WLW	2,M2DKDU11,F
+	WLW	2,M2DKDU12,F
+	WLW	1,M2DKDU13,F
+	WLW	-1,seq_slamball,15
+	WLW	9,M2DKDU13,F
+	WLW	500,M2DKDU14,F
+	WLW	4,M2DKDU15,F
+	WLW	4,M2DKDU16,F
+	WLW	-1,seq_newdir,1*16
+	W0
+
+iove2
+	WLW	3,M2DKDU1,F
+	WLLW	-1,seq_strtdunk,M2DKDU14,75
+	WLW	-1,seq_jam_speech,JAM_MED
+	WL	-1,seq_high_dnk_spch
+	WLW	3,M2DKDU2,F
+	WLW	3,M2DKDU3,F
+	WLW	3,M2DKDU4,F
+	WLW	3,M2DKDU5,F
+	WLW	45,M2DKDU6,F
+	WLW	3,M2DKDU7,F
+	WLW	3,M2DKDU8,F
+	WLW	3,M2DKDU9,F
+	WLW	2,M2DKDU10,F
+	WLW	2,M2DKDU11,F
+	WLW	1,M2DKDU12,F
+	WLW	1,M2DKDU13,F
+	WLWWW	-1,seq_offset,0,0,18
+	WLW	-1,seq_slamball,15
+	WLW	12,M2DKDU13,F
+	WLW	500,M2DKDU14,F
+	WLW	3,M2DKDU15,F
+	WLW	3,M2DKDU16,F
+	WLW	-1,seq_newdir,1*16
+iove3
+iove4
+iove5
+	W0
+
+
+
+dunkd_t
+	.word	DFLGS
+	.long	seq_stand
+	.long	trdb1,trdb2,trdb3,trdb4
+	.long	trdb5,trdb4,trdb3,trdb2
+trdb3
+trdb4
+	WLW	3,M3SPRDU1,F
+	WLLW	-1,seq_strtdunk,M3SPRDU9,74
+	WLW	-1,seq_jam_speech,JAM_GOOD
+	WL	-1,seq_high_dnk_spch
+	WLW	3,M3SPRDU2,F
+	WLW	3,M3SPRDU3,F
+	WLW	3,M3SPRDU4,F
+	WLW	57,M3SPRDU5,F
+	WLW	3,M3SPRDU6,F
+	WLW	3,M3SPRDU7,F
+	WLW	2,M3SPRDU8,F
+	WLW	-1,seq_slamball,15
+	WLW	11,M3SPRDU8,F
+	WLW	500,M3SPRDU9,F
+	WLW	3,M3SPRDU10,F
+	WLW	3,M3SPRDU11,F
+	WLW	-1,seq_newdir,4*16
+trdb1
+trdb2
+trdb5
+	W0
+
+
+dunkd2_t
+	.word	DFLGS
+	.long	seq_stand
+	.long	dczv1,dczv2,dczv3,dczv4
+	.long	dczv5,dczv4,dczv3,dczv2
+dczv3
+dczv4
+	WLW	2,M3SPRDU1,F
+	WLLW	-1,seq_strtdunk,M3SPRDU9,24
+	WLW	-1,seq_jam_speech,JAM_MED
+	WLW	2,M3SPRDU1,F
+	WLW	2,M3SPRDU2,F
+	WLW	2,M3SPRDU3,F
+	WLW	2,M3SPRDU4,F
+	WLW	2,M3SPRDU5,F
+	WLW	2,M3SPRDU6,F
+	WLW	1,M3SPRDU7,F
+	WLW	1,M3SPRDU8,F
+	WLW	-1,seq_slamball,9
+	WLW	15,M3SPRDU8,F
+	WLW	500,M3SPRDU9,F
+	WLW	3,M3SPRDU10,F
+	WLW	3,M3SPRDU11,F
+	WLW	-1,seq_newdir,4*16
+dczv1
+dczv2
+dczv5
+	W0
+
+
+dunke_t
+	.word	DFLGS
+	.long	seq_stand
+	.long	ymut1,ymut2,ymut3,ymut4
+	.long	ymut5,ymut4,ymut3,ymut2
+ymut4
+ymut5
+	WLW	4,M5REVDU1,F
+	WLLW	-1,seq_strtdunk,M5REVDU14,27
+	WLW	-1,seq_jam_speech,JAM_MED
+	WL	-1,seq_low_dnk_spch
+	WLW	2,M5REVDU2,F
+	WLW	2,M5REVDU3,F
+	WLW	4,M5REVDU4,F
+	WLW	2,M5REVDU5,F
+	WLW	2,M5REVDU6,F
+	WLW	1,M5REVDU7,F
+	WLW	1,M5REVDU8,F
+	WLW	1,M5REVDU9,F
+	WLW	1,M5REVDU10,F
+	WLW	1,M5REVDU11,F
+	WLW	1,M5REVDU12,F
+	WLW	1,M5REVDU13,F
+	WLW	-1,seq_slamball,13
+	WLW	10,M5REVDU13,F
+	WLW	500,M5REVDU14,F
+	WLW	3,M5REVDU15,F
+	WLW	3,M5REVDU16,F
+	WLW	-1,seq_newdir,6*16
+ymut1
+ymut2
+ymut3
+	W0
+
+dunke2_t
+	.word	DFLGS
+	.long	seq_stand
+	.long	zbpi1,zbpi2,zbpi3,zbpi4
+	.long	zbpi5,zbpi4,zbpi3,zbpi2
+zbpi4
+zbpi5
+	WLW	4,M5REVDU1,F
+	WLLW	-1,seq_strtdunk,M5REVDU14,76
+	WLW	-1,seq_jam_speech,JAM_GOOD
+	WL	-1,seq_high_dnk_spch
+	WLW	3,M5REVDU2,F
+	WLW	3,M5REVDU3,F
+	WLW	52,M5REVDU4,F
+	WLW	3,M5REVDU5,F
+	WLW	2,M5REVDU6,F
+	WLW	2,M5REVDU7,F
+	WLW	2,M5REVDU8,F
+	WLW	2,M5REVDU9,F
+	WLW	2,M5REVDU10,F
+	WLW	2,M5REVDU11,F
+	WLW	1,M5REVDU12,F
+	WLW	1,M5REVDU13,F
+	WLW	-1,seq_slamball,8
+	WLW	8,M5REVDU13,F
+	WLW	500,M5REVDU14,F
+	WLW	3,M5REVDU15,F
+	WLW	3,M5REVDU16,F
+	WLW	-1,seq_newdir,6*16
+zbpi1
+zbpi2
+zbpi3
+	W0
+
+
+dunkf_t
+	.word	DFLGS
+	.long	seq_stand
+	.long	ovyl1,ovyl2,ovyl3,ovyl4
+	.long	ovyl5,ovyl4,ovyl3,ovyl2
+ovyl1
+ovyl2
+	WLW	3,S1TUKDU1,F
+	WLLW	-1,seq_strtdunk,S1TUKDU8,95
+	WLW	-1,seq_jam_speech,JAM_GOOD
+	WL	-1,seq_high_dnk_spch
+	WLW	3,S1TUKDU2,F
+	WLW	3,S1TUKDU3,F
+	WLW	73,S1TUKDU4,F
+	WLWWW	-1,seq_offset,0,0,-9
+	WLW	12,S1TUKDU4,F
+	WLWWW	-1,seq_offset,0,0,-18
+	WLW	2,S1TUKDU5,F
+	WLWWW	-1,seq_offset,0,0,-10
+	WLW	2,S1TUKDU6,F
+	WLW	1,S1TUKDU7,F
+	WLW	-1,seq_slamball,18
+	WLW	15,S1TUKDU7,F
+	WLW	500,S1TUKDU8,F
+	WLW	3,S1TUKDU9,F
+	WLW	3,S1TUKDU10,F
+	WLW	3,S1TUKDU11,F
+	WLW	-1,seq_newdir,0*16
+ovyl3
+ovyl4
+ovyl5
+	W0
+
+
+dunkg_t
+	.word	DFLGS
+	.long	seq_stand
+	.long	shsz1,shsz2,shsz3,shsz4
+	.long	shsz5,shsz4,shsz3,shsz2
+shsz2
+shsz3
+shsz4
+	WLW	3,S3BKDU1,F
+	WLLW	-1,seq_strtdunk,S3BKDU14,78
+	WLW	-1,seq_jam_speech,JAM_MED
+	WL	-1,seq_high_dnk_spch
+	WLW	3,S3BKDU2,F
+	WLW	3,S3BKDU2,F
+	WLW	3,S3BKDU3,F
+	WLW	3,S3BKDU4,F
+	WLW	3,S3BKDU5,F
+	WLW	49,S3BKDU6,F
+	WLW	3,S3BKDU7,F
+	WLW	3,S3BKDU8,F
+	WLW	3,S3BKDU9,F
+	WLW	3,S3BKDU10,F
+	WLW	2,S3BKDU10,F
+	WLW	1,S3BKDU11,F
+	WLW	1,S3BKDU12,F
+	WLW	-1,seq_slamball,8
+	WLW	8,S3BKDU12,F
+	WLWWW	-1,seq_offset,-8,0,0
+	WLW	500,S3BKDU14,F
+	WLW	3,S3BKDU15,F
+	WLW	3,S3BKDU16,F
+	WLW	-1,seq_newdir,2*16
+shsz1
+shsz5
+	W0
+
+dunkg2_t
+	.word	DFLGS
+	.long	seq_stand
+	.long	nqih1,nqih2,nqih3,nqih4
+	.long	nqih5,nqih4,nqih3,nqih2
+nqih2
+nqih3
+nqih4
+	WLW	3,S3BKDU1,F
+	WLLW	-1,seq_strtdunk,S3BKDU14,89
+	WLW	-1,seq_jam_speech,JAM_GOOD
+	WL	-1,seq_high_dnk_spch
+	WLW	3,S3BKDU2,F
+	WLW	3,S3BKDU2,F
+	WLW	3,S3BKDU3,F
+	WLW	3,S3BKDU4,F
+	WLW	3,S3BKDU5,F
+	WLW	56,S3BKDU6,F
+	WLW	3,S3BKDU7,F
+	WLW	3,S3BKDU8,F
+	WLW	3,S3BKDU9,F
+	WLW	3,S3BKDU10,F
+	WLW	3,S3BKDU10,F
+	WLW	3,S3BKDU11,F
+	WLW	2,S3BKDU12,F
+	WLW	-1,seq_slamball,11
+	WLW	10,S3BKDU12,F
+	WLWWW	-1,seq_offset,-8,0,0
+	WLW	500,S3BKDU14,F
+	WLW	3,S3BKDU15,F
+	WLW	3,S3BKDU16,F
+	WLW	-1,seq_newdir,2*16
+nqih1
+nqih5
+	W0
+
+dunkj_t
+	.word	DFLGS
+	.long	seq_stand
+	.long	mpmc1,mpmc2,mpmc3,mpmc4
+	.long	mpmc5,mpmc4,mpmc3,mpmc2
+mpmc3
+mpmc4
+	WLW	3,W3SPRDU1,F
+	WLLW	-1,seq_strtdunk,W3SPRDU14,87
+	WLW	-1,seq_jam_speech,JAM_GREAT
+	WL	-1,seq_high_dnk_spch
+	WLW	3,W3SPRDU2,F
+	WLW	3,W3SPRDU3,F
+	WLW	3,W3SPRDU4,F
+	WLW	3,W3SPRDU5,F
+	WLW	3,W3SPRDU6,F
+	WLW	58,W3SPRDU7,F
+	WLW	3,W3SPRDU8,F
+	WLW	3,W3SPRDU9,F
+	WLW	3,W3SPRDU10,F
+	WLW	3,W3SPRDU11,F
+	WLW	3,W3SPRDU12,F
+	WLW	1,W3SPRDU13,F
+	WLW	-1,seq_slamball,10
+	WLW	9,W3SPRDU13,F
+	WLW	500,W3SPRDU14,F
+	WLW	4,S3BKDU15,F
+	WLW	4,S3BKDU16,F
+	WLW	-1,seq_newdir,2*16
+mpmc1
+mpmc2
+mpmc5
+	W0
+
+dunkj2_t
+	.word	DFLGS
+	.long	seq_stand
+	.long	seqj1,seqj2,seqj3,seqj4
+	.long	seqj5,seqj4,seqj3,seqj2
+seqj2
+seqj3
+seqj4
+	WLW	3,W3SPRDU1,F
+	WLLW	-1,seq_strtdunk,W3SPRDU14,67
+	WLW	-1,seq_jam_speech,JAM_GOOD
+	WL	-1,seq_low_dnk_spch
+	WLW	3,W3SPRDU2,F
+	WLW	3,W3SPRDU3,F
+	WLW	3,W3SPRDU4,F
+	WLW	3,W3SPRDU5,F
+	WLW	3,W3SPRDU6,F
+	WLW	3,W3SPRDU7,F
+	WLW	3,W3SPRDU8,F
+	WLW	38,W3SPRDU9,F
+	WLW	3,W3SPRDU10,F
+	WLW	3,W3SPRDU11,F
+	WLW	3,W3SPRDU12,F
+	WLW	1,W3SPRDU13,F
+	WLW	-1,seq_slamball,8
+	WLW	8,W3SPRDU13,F
+	WLW	500,W3SPRDU14,F
+	WLW	4,S3BKDU15,F
+	WLW	4,S3BKDU16,F
+	WLW	-1,seq_newdir,2*16
+seqj1
+seqj5
+	W0
+
+
+dunkk_t
+	.word	DFLGS
+	.long	seq_stand
+	.long	iycu1,iycu2,iycu3,iycu4
+	.long	iycu5,iycu4,iycu3,iycu2
+iycu1
+	WLW	3,W3SPNDU1,FF
+	WLLW	-1,seq_strtdunk,W3SPNDU14,50
+	WLW	-1,seq_jam_speech,JAM_GREAT
+	WL	-1,seq_low_dnk_spch
+	WLL	-1,seq_goto_line,iycu1a
+iycu2
+iycu3
+	WLW	3,W3SPNDU1,F
+	WLLW	-1,seq_strtdunk,W3SPNDU19,58
+	WLW	-1,seq_jam_speech,JAM_GREAT
+	WL	-1,seq_low_dnk_spch
+	WLW	3,W3SPNDU2,F
+	WLW	3,W3SPNDU3,F
+	WLW	3,W3SPNDU4,F
+iycu1a	WLW	3,W3SPNDU5,F
+	WLW	3,W3SPNDU6,F
+	WLW	3,W3SPNDU7,F
+	WLW	3,W3SPNDU8,F
+	WLW	3,W3SPNDU9,F
+	WLW	3,W3SPNDU10,F
+	WLW	3,W3SPNDU11,F
+	WLW	3,W3SPNDU12,F
+	WLW	3,W3SPNDU13,F
+	WLW	3,W3SPNDU14,F
+	WLW	3,W3SPNDU15,F
+	WLW	3,W3SPNDU16,F
+	WLW	2,W3SPNDU17,F
+	WLW	2,W3SPNDU18,F
+	WLW	2,W3SPNDU19,F
+	WLW	2,W3SPNDU20,F
+	WLW	1,W3SPNDU21,F
+	WLW	-1,seq_slamball,15
+	WLW	11,W3SPNDU21,F
+	WLW	500,W3SWDU10,F
+	WLW	3,W3SWDU11,F
+	WLW	3,W3SWDU12,F
+	WLW	-1,seq_newdir,2*16
+iycu4
+iycu5
+	W0
+
+
+dunkk2_t
+	.word	DFLGS
+	.long	seq_stand
+	.long	ejhx1,ejhx2,ejhx3,ejhx4
+	.long	ejhx5,ejhx4,ejhx3,ejhx2
+ejhx1
+	WLW	3,W3SPNDU1,FF
+	WLLW	-1,seq_strtdunk,W3SPNDU14,76
+	WLW	-1,seq_jam_speech,JAM_GREAT
+	WL	-1,seq_high_dnk_spch
+	WLL	-1,seq_goto_line,ejhx1a
+
+ejhx2
+ejhx3
+ejhx4
+	WLW	3,W3SPNDU1,F
+	WLLW	-1,seq_strtdunk,W3SPNDU19,84
+	WLW	-1,seq_jam_speech,JAM_GREAT
+	WL	-1,seq_high_dnk_spch
+	WLW	3,W3SPNDU2,F
+	WLW	3,W3SPNDU3,F
+	WLW	3,W3SPNDU4,F
+ejhx1a	WLW	3,W3SPNDU5,F
+	WLW	3,W3SPNDU6,F
+	WLW	3,W3SPNDU7,F
+	WLW	3,W3SPNDU8,F
+	WLW	3,W3SPNDU9,F
+	WLW	3,W3SPNDU10,F
+	WLW	3,W3SPNDU11,F
+	WLW	32,W3SPNDU12,F
+	WLW	3,W3SPNDU13,F
+	WLW	3,W3SPNDU14,F
+	WLW	3,W3SPNDU15,F
+	WLW	2,W3SPNDU16,F
+	WLW	2,W3SPNDU17,F
+	WLW	2,W3SPNDU18,F
+	WLW	1,W3SPNDU19,F
+	WLW	1,W3SPNDU20,F
+	WLW	1,W3SPNDU21,F
+	WLW	-1,seq_slamball,13
+	WLW	11,W3SPNDU21,F
+	WLW	500,W3SWDU10,F
+	WLW	3,W3SWDU11,F
+	WLW	3,W3SWDU12,F
+	WLW	-1,seq_newdir,2*16
+ejhx5
+	W0
+
+
+dunkl_t
+	.word	DFLGS
+	.long	seq_stand
+	.long	cpok1,cpok2,cpok3,cpok4
+	.long	cpok5,cpok4,cpok3,cpok2
+cpok3
+	WLW	3,W3SMDU1,F
+	WLLW	-1,seq_strtdunk,W3SMDU9,86
+	WLW	-1,seq_jam_speech,JAM_GOOD
+	WL	-1,seq_high_dnk_spch
+	WLW	3,W3SMDU2,F
+	WLW	3,W3SMDU3,F
+	WLW	3,W3SMDU4,F
+	WLW	67,W3SMDU5,F
+	WLW	3,W3SMDU6,F
+	WLW	3,W3SMDU7,F
+	WLW	1,W3SMDU8,F
+	WLWWW	-1,seq_offset,0,0,18
+	WLW	-1,seq_slamball,15
+	WLW	15,W3SMDU8,F
+	WLW	500,W3SMDU9,F
+	WLW	4,W3SWDU11,F
+	WLW	4,W3SWDU12,F
+	WLW	-1,seq_newdir,2*16
+cpok1
+cpok2
+cpok4
+cpok5
+	W0
+
+dunkl2_t
+	.word	DFLGS
+	.long	seq_stand
+	.long	vxca1,vxca2,vxca3,vxca4
+	.long	vxca5,vxca4,vxca3,vxca2
+vxca3
+	WLW	3,W3CRZDU1,F
+	WLLW	-1,seq_strtdunk,W3CRZDU18,90
+	WLW	-1,seq_jam_speech,JAM_GREAT
+	WL	-1,seq_high_dnk_spch
+	WLW	2,W3CRZDU2,F
+	WLW	2,W3CRZDU3,F
+	WLW	2,W3CRZDU4,F
+	WLW	2,W3CRZDU5,F
+	WLW	2,W3CRZDU6,F
+	WLW	2,W3CRZDU7,F
+	WLW	2,W3CRZDU8,F
+	WLW	2,W3CRZDU9,F
+
+	WLW	2,S8HLSP08,FF
+	WLW	2,S8HLSP09,FF
+	WLW	2,S8HLSP10,FF
+	WLW	2,S8HLSP11,FF
+	WLW	2,S8HLSP12,FF
+	WLW	2,S8HLSP13,FF
+	WLW	2,S8HLSP14,FF
+	WLW	2,S8HLSP15,FF
+	WLW	2,S8HLSP16,FF
+	WLW	2,S8HLSP01,FF
+	WLW	2,S8HLSP02,FF
+	WLW	2,S8HLSP03,FF
+	WLW	2,S8HLSP04,FF
+	WLW	2,S8HLSP05,FF
+	WLW	2,S8HLSP06,FF
+	WLW	2,S8HLSP07,FF
+	WLW	2,S8HLSP08,FF
+	WLW	1,S8HLSP09,FF
+
+	WLW	2,S8HLSP10,FF
+	WLW	1,S8HLSP11,FF
+	WLW	2,S8HLSP12,FF
+	WLW	1,S8HLSP13,FF
+	WLW	2,S8HLSP14,FF
+	WLW	1,S8HLSP15,FF
+	WLW	2,S8HLSP16,FF
+	WLW	1,S8HLSP01,FF
+	WLW	2,S8HLSP02,FF
+	WLW	1,S8HLSP03,FF
+	WLW	2,S8HLSP04,FF
+	WLW	1,S8HLSP05,FF
+	WLW	2,S8HLSP06,FF
+	WLW	1,S8HLSP07,FF
+	WLW	2,S8HLSP08,FF
+
+	WLW	2,W3CRZDU10,F
+	WLW	2,W3CRZDU11,F
+	WLW	1,W3CRZDU12,F
+	WLW	2,W3CRZDU13,F
+	WLW	1,W3CRZDU14,F
+	WLW	2,W3CRZDU15,F
+	WLW	1,W3CRZDU16,F
+	WLWWW	-1,seq_offset,0,0,18
+	WLW	1,W3CRZDU17,F
+	WLW	-1,seq_slamball,15
+	WLW	15,W3CRZDU17,F
+	WLW	500,W3CRZDU18,F
+	WLW	3,W3CRZDU19,F
+	WLW	3,W3CRZDU20,F
+	WLW	-1,seq_newdir,0*16
+	W0
+vxca1
+vxca2
+vxca4
+vxca5
+	W0
+	
+
+dunkl3_t
+	.word	DFLGS
+	.long	seq_stand
+	.long	zhkl1,zhkl2,zhkl3,zhkl4
+	.long	zhkl5,zhkl4,zhkl3,zhkl2
+zhkl2
+zhkl3
+zhkl4
+	WLW	3,W3FLDU1,F
+	WLLW	-1,seq_strtdunk,W3FLDU12,30
+	WLW	-1,seq_jam_speech,JAM_MED
+	WL	-1,seq_low_dnk_spch
+	WLW	2,W3FLDU2,F
+	WLW	2,W3FLDU3,F
+	WLW	2,W3FLDU4,F
+	WLW	2,W3FLDU5,F
+	WLW	2,W3FLDU6,F
+	WLW	2,W3FLDU7,F
+	WLW	1,W3FLDU8,F
+	WLW	1,W3FLDU9,F
+	WLW	1,W3FLDU10,F
+	WLW	1,W3FLDU11,F
+	WLW	-1,seq_slamball,15
+	WLW	12,W3FLDU11,F
+	WLW	500,W3FLDU12,F
+	WLW	3,W3FLDU13,F
+	WLW	-1,seq_newdir,0*16
+
+zhkl1
+zhkl5
+	W0
+
+
+dunkn_t
+	.word	DFLGS
+	.long	seq_stand
+	.long	ggkp1,ggkp2,ggkp3,ggkp4
+	.long	ggkp5,ggkp4,ggkp3,ggkp2
+ggkp1
+	WLW	2,W3FLDU3,F
+	WLLW	-1,seq_strtdunk,W3FLDU12,80
+	WLW	-1,seq_jam_speech,JAM_GOOD
+	WL	-1,seq_high_dnk_spch
+	WLW	3,W3FLDU3,F
+	WLW	3,W3FLDU4,F
+	WLW	55,W3FLDU5,F
+	WLW	3,W3FLDU6,F
+	WLW	3,W3FLDU7,F
+	WLW	3,W3FLDU8,F
+	WLW	3,W3FLDU9,F
+	WLW	3,W3FLDU10,F
+	WLW	1,W3FLDU11,F
+	WLW	-1,seq_slamball,15
+	WLW	13,W3FLDU11,F
+	WLW	500,W3FLDU12,F
+	WLW	3,W3FLDU12,F
+	WLW	3,W3FLDU13,F
+	WLW	-1,seq_newdir,0*16
+	W0
+
+ggkp2
+ggkp3
+	WLW	2,W3FLDU1,F
+	WLLW	-1,seq_strtdunk,W3FLDU12,90
+	WLW	-1,seq_jam_speech,JAM_GOOD
+	WL	-1,seq_high_dnk_spch
+	WLW	3,W3FLDU1,F
+	WLW	61,W3FLDU2,F
+	WLW	3,W3FLDU3,F
+	WLW	3,W3FLDU4,F
+	WLW	3,W3FLDU5,F
+	WLW	3,W3FLDU6,F
+	WLW	3,W3FLDU7,F
+	WLW	3,W3FLDU8,F
+	WLW	2,W3FLDU9,F
+	WLW	2,W3FLDU10,F
+	WLW	1,W3FLDU11,F
+	WLW	-1,seq_slamball,15
+	WLW	14,W3FLDU11,F
+	WLW	500,W3FLDU12,F
+	WLW	3,W3FLDU12,F
+	WLW	3,W3FLDU13,F
+	WLW	-1,seq_newdir,0*16
+ggkp4
+ggkp5
+	W0
+
+
+dunkn2_t
+	.word	DFLGS
+	.long	seq_stand
+	.long	deym1,deym2,deym3,deym4
+	.long	deym5,deym4,deym3,deym2
+deym1
+	WLW	2,W3FLDU3,F
+	WLLW	-1,seq_strtdunk,W3FLDU12,79
+	WLW	-1,seq_jam_speech,JAM_MED
+	WL	-1,seq_high_dnk_spch
+	WLW	56,W3FLDU3,F
+	WLW	3,W3FLDU4,F
+	WLW	3,W3FLDU5,F
+	WLW	3,W3FLDU6,F
+	WLW	3,W3FLDU7,F
+	WLW	3,W3FLDU8,F
+	WLW	2,W3FLDU9,F
+	WLW	2,W3FLDU10,F
+	WLW	1,W3FLDU11,F
+	WLW	-1,seq_slamball,20
+	WLW	15,W3FLDU11,F
+	WLW	500,W3FLDU12,F
+	WLW	3,W3FLDU13,F
+	WLW	-1,seq_newdir,0*16
+	W0
+
+deym2
+deym3
+	WLW	1,W3FLDU3,F
+	WLLW	-1,seq_strtdunk,W3FLDU12,79
+	WLW	-1,seq_jam_speech,JAM_MED
+	WL	-1,seq_high_dnk_spch
+	WLW	57,W3FLDU3,F
+	WLW	3,W3FLDU4,F
+	WLW	3,W3FLDU5,F
+	WLW	3,W3FLDU6,F
+	WLW	3,W3FLDU7,F
+	WLW	3,W3FLDU8,F
+	WLW	2,W3FLDU9,F
+	WLW	2,W3FLDU10,F
+	WLW	1,W3FLDU11,F
+	WLW	-1,seq_slamball,9
+	WLW	9,W3FLDU11,F
+	WLW	500,W3FLDU12,F
+	WLW	3,W3FLDU13,F
+	WLW	-1,seq_newdir,0*16
+deym4
+deym5
+	W0
+
+dunkn3_t
+	.word	DFLGS
+	.long	seq_stand
+	.long	uwmb1,uwmb2,uwmb3,uwmb4
+	.long	uwmb5,uwmb4,uwmb3,uwmb2
+uwmb1
+	WLW	2,W3FLDU3,F
+	WLLW	-1,seq_strtdunk,W3FLDU12,89
+	WLW	-1,seq_jam_speech,JAM_MED
+	WL	-1,seq_high_dnk_spch
+	WLW	68,W3FLDU3,F
+	WLW	3,W3FLDU4,F
+	WLW	3,W3FLDU5,F
+	WLW	3,W3FLDU6,F
+	WLW	3,W3FLDU7,F
+	WLW	3,W3FLDU8,F
+	WLW	2,W3FLDU9,F
+	WLW	1,W3FLDU10,F
+	WLW	1,W3FLDU11,F
+	WLW	-1,seq_slamball,20
+	WLW	15,W3FLDU11,F
+	WLW	500,W3FLDU12,F
+	WLW	3,W3FLDU13,F
+	WLW	-1,seq_newdir,0*16
+	W0
+
+uwmb2
+uwmb3
+	WLW	1,W3FLDU3,F
+	WLLW	-1,seq_strtdunk,W3FLDU12,95
+	WLW	-1,seq_jam_speech,JAM_MED
+	WL	-1,seq_high_dnk_spch
+	WLW	75,W3FLDU3,F
+	WLW	3,W3FLDU4,F
+	WLW	3,W3FLDU5,F
+	WLW	3,W3FLDU6,F
+	WLW	3,W3FLDU7,F
+	WLW	3,W3FLDU8,F
+	WLW	2,W3FLDU9,F
+	WLW	1,W3FLDU10,F
+	WLW	1,W3FLDU11,F
+	WLW	-1,seq_slamball,9
+	WLW	9,W3FLDU11,F
+	WLW	500,W3FLDU12,F
+	WLW	3,W3FLDU13,F
+	WLW	-1,seq_newdir,0*16
+uwmb4
+uwmb5
+	W0
+
+
+dunko_t
+	.word	DFLGS
+	.long	seq_stand
+	.long	ucrs1,ucrs2,ucrs3,ucrs4
+	.long	ucrs5,ucrs4,ucrs3,ucrs2
+ucrs1
+	WLW	3,W3SPNDU1,F
+	WLLW	-1,seq_strtdunk,W3SPNDU17,90
+	WLW	-1,seq_jam_speech,JAM_GREAT
+	WL	-1,seq_high_dnk_spch
+	WLW	3,W3SPNDU2,F
+	WLW	3,W3SPNDU3,F
+	WLW	3,W3SPNDU4,F
+	WLW	3,W3SPNDU5,F
+	WLW	3,W3SPNDU6,F
+	WLW	3,W3SPNDU7,F
+	WLW	3,W3SPNDU8,F
+	WLW	54,W3SPNDU9,F
+	WLW	3,W3SPNDU8,F
+	WLW	3,W3SPNDU7,F
+	WLW	2,W3SPNDU5,F
+	WLW	2,W3SPNDU4,F
+	WLW	1,W3SPNDU3,F
+	WLWWW	-1,seq_offset,0,0,18
+	WLW	1,W3SPNDU2,F
+	WLW	-1,seq_slamball,8
+	WLW	8,W3SPNDU2,F
+	WLW	500,M2DKDU15,F
+	WLW	3,M2DKDU16,F
+	WLW	-1,seq_newdir,0*16
+	W0
+
+ucrs2
+ucrs3
+	WLW	3,W3SPNDU1,F
+	WLLW	-1,seq_strtdunk,W3SPNDU17,90
+	WLW	-1,seq_jam_speech,JAM_GREAT
+	WL	-1,seq_high_dnk_spch
+	WLW	3,W3SPNDU2,F
+	WLW	3,W3SPNDU3,F
+	WLW	3,W3SPNDU4,F
+	WLW	3,W3SPNDU5,F
+	WLW	3,W3SPNDU6,F
+	WLW	3,W3SPNDU7,F
+	WLW	3,W3SPNDU8,F
+	WLW	54,W3SPNDU9,F
+	WLWWW	-1,seq_offset,0,0,18
+	WLW	3,W3SPNDU8,F
+	WLW	3,W3SPNDU7,F
+	WLW	2,W3SPNDU5,F
+	WLW	2,W3SPNDU4,F
+	WLW	1,W3SPNDU3,F
+	WLW	1,W3SPNDU2,F
+	WLW	-1,seq_slamball,8
+	WLW	8,W3SPNDU2,F
+	WLW	500,M2DKDU15,F
+	WLW	3,M2DKDU16,F
+	WLW	-1,seq_newdir,0*16
+ucrs4
+ucrs5
+	W0
+
+
+dunko2_t
+
+	.word	DFLGS
+	.long	seq_stand
+	.long	cnwy1,cnwy2,cnwy3,cnwy4
+	.long	cnwy5,cnwy4,cnwy3,cnwy2
+cnwy1
+cnwy2
+cnwy4
+cnwy5
+	W0
+
+cnwy3
+	WLW	3,W3CANN02,F
+	WLLW	-1,seq_strtdunk,W3SMDU9,95
+	WLW	-1,seq_jam_speech,JAM_GREAT
+	WLL	-1,seq_snd,sumrslts_sp
+	WLW	2,W3CANN04,F
+	WLW	2,W3CANN06,F
+	WLW	2,W3CANN08,F
+	WLW	2,W3CANN10,F
+	WLW	2,W3CANN12,F
+	WLW	2,W3CANN14,F
+	WLW	2,W3CANN16,F
+	WLW	2,W3CANN18,F
+	WLW	2,W3CANN20,F
+	WLW	2,W3CANN22,F
+	WLW	2,W3CANN24,F
+	WLW	2,W3CANN26,F
+	WLW	2,W3CANN28,F
+	WLW	2,W3CANN30,F
+	WLW	2,W3CANN32,F
+
+	WLW	2,W3CANN14,F
+	WLW	2,W3CANN16,F
+	WLW	2,W3CANN18,F
+	WLW	2,W3CANN20,F
+	WLW	2,W3CANN22,F
+	WLW	2,W3CANN24,F
+	WLW	2,W3CANN26,F
+	WLW	2,W3CANN28,F
+	WLW	2,W3CANN30,F
+	WLW	2,W3CANN32,F
+
+
+	WLW	2,W3CANN14,F
+	WLW	2,W3CANN16,F
+	WLW	2,W3CANN18,F
+	WLW	2,W3CANN20,F
+	WLW	2,W3CANN22,F
+	WLW	2,W3CANN24,F
+	WLW	2,W3CANN26,F
+	WLW	2,W3CANN28,F
+
+	WLW	2,W3CANN06,F
+	WLW	2,W3CANN04,F
+
+	WLW	2,W3SMDU2,F
+	WLW	2,W3SMDU3,F
+	WLW	2,W3SMDU4,F
+	WLW	14,W3SMDU5,F
+	WLW	2,W3SMDU6,F
+	WLW	1,W3SMDU7,F
+	WLW	1,W3SMDU8,F
+	WLW	-1,seq_slamball,15
+	WLW	15,W3SMDU8,F
+	WLW	500,W3SMDU9,F
+	WLW	4,W3SWDU11,F
+	WLW	4,W3SWDU12,F
+	WLW	-1,seq_newdir,2*16
+	W0
+
+
+dunkp_t
+	.word	DFLGS
+	.long	seq_stand
+	.long	luhi1,luhi2,luhi3,luhi4
+	.long	luhi5,luhi4,luhi3,luhi2
+luhi2
+	WLW	3,W2THPW1,F
+	WLLW	-1,seq_strtdunk,W2THPW12,81
+	WLW	-1,seq_jam_speech,JAM_GREAT
+	WL	-1,seq_high_dnk_spch
+	WLW	3,W2THPW2,F
+	WLW	3,W2THPW3,F
+	WLW	3,W2THPW4,F
+	WLW	3,W2THPW5,F
+	WLW	50,W2THPW6,F
+	WLW	3,W2THPW7,F
+	WLW	3,W2THPW8,F
+	WLW	3,W2THPW9,F
+	WLW	3,W2THPW10,F
+	WLWWW	-1,seq_offset,0,0,20		;infront of net
+	WLW	1,W2THPW11,F
+	WLW	-1,seq_slamball,15
+	WLW	15,W2THPW11,F
+	WLW	500,W2THPW12,F
+	WLW	3,M2DKDU15,F
+	WLW	3,M2DKDU16,F
+	WLW	-1,seq_newdir,1*16
+luhi1
+luhi3
+	W0
+
+luhi4
+luhi5
+	WLW	3,W4THPW1,F
+	WLLW	-1,seq_strtdunk,W4THPW10,76
+	WLW	-1,seq_jam_speech,JAM_GREAT
+	WL	-1,seq_high_dnk_spch
+	WLW	3,W4THPW2,F
+	WLW	3,W4THPW3,F
+	WLW	3,W4THPW4,F
+	WLW	56,W4THPW5,F
+	WLW	3,W4THPW6,F
+	WLW	3,W4THPW7,F
+	WLWWW	-1,seq_offset,0,0,-20		;behind net
+	WLW	3,W4THPW8,F
+	WLW	2,W4THPW9,F
+	WLW	-1,seq_slamball,15
+	WLW	5,W4THPW9,F
+	WLW	500,W4THPW10,F
+	WLW	3,W4THPW11,F
+	WLW	3,W4THPW12,F
+	WLW	3,W4THPW13,F
+	WLW	-1,seq_newdir,3*16
+	W0
+
+dunkp2_t
+	.word	DFLGS
+	.long	seq_stand
+	.long	dfzu1,dfzu2,dfzu3,dfzu4
+	.long	dfzu5,dfzu4,dfzu3,dfzu2
+dfzu2
+	WLW	3,W2THPW1,F
+	WLLW	-1,seq_strtdunk,W2THPW12,42
+	WLW	-1,seq_jam_speech,JAM_GOOD
+	WL	-1,seq_low_dnk_spch
+	WLW	2,W2THPW2,F
+	WLW	2,W2THPW3,F
+	WLW	2,W2THPW4,F
+	WLW	2,W2THPW5,F
+	WLW	10,W2THPW6,F
+	WLW	1,W2THPW7,F
+	WLW	1,W2THPW8,F
+	WLW	1,W2THPW9,F
+	WLW	1,W2THPW10,F
+	WLWWW	-1,seq_offset,0,0,20		;infront of net
+	WLW	1,W2THPW11,F
+	WLW	-1,seq_slamball,15
+	WLW	15,W2THPW11,F
+	WLW	500,W2THPW12,F
+	WLW	2,M2DKDU15,F
+	WLW	2,M2DKDU16,F
+	WLW	-1,seq_newdir,1*16
+dfzu1
+dfzu3
+	W0
+
+dfzu4
+dfzu5
+	WLW	3,W4THPW1,F
+	WLLW	-1,seq_strtdunk,W4THPW10,28
+	WLW	-1,seq_jam_speech,JAM_GOOD
+	WL	-1,seq_low_dnk_spch
+	WLW	2,W4THPW2,F
+	WLW	2,W4THPW3,F
+	WLW	2,W4THPW4,F
+	WLW	15,W4THPW5,F
+	WLW	1,W4THPW6,F
+	WLW	1,W4THPW7,F
+	WLWWW	-1,seq_offset,0,0,-20		;behind net
+	WLW	1,W4THPW8,F
+	WLW	1,W4THPW9,F
+	WLW	-1,seq_slamball,15
+	WLW	10,W4THPW9,F
+	WLW	500,W4THPW10,F
+	WLW	2,W4THPW11,F
+	WLW	2,W4THPW12,F
+	WLW	2,W4THPW13,F
+	WLW	-1,seq_newdir,3*16
+	W0
+
+dunkp3_t
+	.word	DFLGS
+	.long	seq_stand
+	.long	aurc1,aurc2,aurc3,aurc4
+	.long	aurc5,aurc4,aurc3,aurc2
+aurc1
+	WLW	3,W3SPNDU1,FF
+	WLLW	-1,seq_strtdunk,M5REVDU11,85
+	WLW	-1,seq_jam_speech,JAM_GREAT
+	WL	-1,seq_high_dnk_spch
+	WLW	3,W3SPNDU2,F
+	WLW	3,W3SPNDU3,F
+	WLW	3,W3SPNDU4,F
+	WLW	3,W3SPNDU5,F
+	WLW	3,W3SPNDU6,F
+	WLW	3,W3SPNDU7,F
+	WLW	3,W3SPNDU8,F
+	WLW	3,W3SPNDU9,F
+	WLW	3,W3SPNDU10,F
+	WLW	31,W3SPNDU11,F
+	WLW	3,M5REVDU5,F
+	WLW	3,M5REVDU6,F
+	WLW	3,M5REVDU7,F
+	WLW	3,M5REVDU8,F
+	WLW	3,M5REVDU9,F
+	WLW	3,M5REVDU10,F
+	WLW	3,M5REVDU11,F
+	WLW	3,M5REVDU12,F
+	WLWWW	-1,seq_offset,3,0,0
+	WLW	1,M5REVDU13,F
+	WLW	-1,seq_slamball,8
+	WLW	8,M5REVDU13,F
+	WLW	500,M5REVDU14,F
+	WLW	3,M5REVDU15,F
+	WLW	3,M5REVDU16,F
+	WLW	-1,seq_newdir,6*16
+	W0
+aurc2
+aurc3
+	WLLW	-1,seq_strtdunk,M5REVDU14,80
+	WLW	-1,seq_jam_speech,JAM_GREAT
+	WL	-1,seq_high_dnk_spch
+	WLW	3,W3SPNDU2,F
+	WLW	3,W3SPNDU3,F
+	WLW	3,W3SPNDU4,F
+	WLW	3,W3SPNDU5,F
+	WLW	3,W3SPNDU6,F
+	WLW	3,W3SPNDU7,F
+	WLW	3,W3SPNDU8,F
+	WLW	3,W3SPNDU9,F
+	WLW	3,W3SPNDU10,F
+	WLW	30,W3SPNDU11,F
+	WLW	3,M5REVDU5,F
+	WLW	3,M5REVDU6,F
+	WLW	3,M5REVDU7,F
+	WLW	3,M5REVDU8,F
+	WLW	3,M5REVDU9,F
+	WLW	3,M5REVDU10,F
+	WLW	3,M5REVDU11,F
+	WLW	3,M5REVDU12,F
+	WLW	1,M5REVDU13,F
+	WLW	-1,seq_slamball,8
+	WLW	8,M5REVDU13,F
+	WLW	500,M5REVDU14,F
+	WLW	3,M5REVDU15,F
+	WLW	3,M5REVDU16,F
+	WLW	-1,seq_newdir,6*16
+aurc4
+aurc5
+	W0
+
+dunkq_t
+	.word	DFLGS
+	.long	seq_stand
+	.long	ohpt1,ohpt2,ohpt3,ohpt4
+	.long	ohpt5,ohpt4,ohpt3,ohpt2
+ohpt3
+ohpt4
+	WLW	3,W3SPRDU1,F
+	WLLW	-1,seq_strtdunk,W3PLDDU15,76
+	WLW	-1,seq_jam_speech,JAM_GREAT
+	WL	-1,seq_high_dnk_spch
+	WLW	3,W3SPRDU2,F
+	WLW	3,W3PLDDU5,F
+	WLW	3,W3PLDDU6,F
+	WLW	3,W3PLDDU7,F
+	WLW	3,W3PLDDU8,F
+	WLW	48,W3PLDDU9,F
+	WLW	3,W3PLDDU10,F
+	WLW	3,W3PLDDU11,F
+	WLW	3,W3PLDDU12,F
+	WLW	3,W3PLDDU13,F
+	WLWWW	-1,seq_offset,0,0,18		;in front of net
+	WLW	1,W3PLDDU14,F
+	WLW	-1,seq_slamball,16
+	WLW	14,W3PLDDU14,F
+	WLW	500,W3PLDDU15,F
+	WLW	-1,seq_newdir,3*16
+ohpt1
+ohpt2
+ohpt5
+	W0
+
+dunkq2_t
+	.word	DFLGS
+	.long	seq_stand
+	.long	ytfl1,ytfl2,ytfl3,ytfl4
+	.long	ytfl5,ytfl4,ytfl3,ytfl2
+ytfl3
+ytfl4
+	WLW	3,W3SPRDU1,F
+	WLLW	-1,seq_strtdunk,W3SPRDU14,85
+	WLW	-1,seq_jam_speech,JAM_GREAT
+	WL	-1,seq_high_dnk_spch
+	WLW	3,W3SPRDU2,F
+	WLW	3,W3PLDDU5,F
+	WLW	3,W3PLDDU6,F
+	WLW	3,W3PLDDU7,F
+	WLW	3,W3PLDDU8,F
+	WLW	28,W3PLDDU9,F
+	WLW	4,W3PLDDU10,F
+	WLW	4,W3PLDDU11,F
+	WLW	4,W3PLDDU12,F
+	WLW	23,W3SPRDU9,F
+	WLW	3,W3SPRDU10,F
+	WLW	3,W3SPRDU11,F
+	WLW	3,W3SPRDU12,F
+	WLW	1,W3SPRDU13,F
+	WLW	-1,seq_slamball,8
+	WLW	8,W3SPRDU13,F
+	WLW	500,W3SPRDU14,F
+	WLW	4,S3BKDU15,F
+	WLW	4,S3BKDU16,F
+	WLW	-1,seq_newdir,2*16
+ytfl1
+ytfl2
+ytfl5
+	W0
+
+
+dunkr_t
+	.word	DFLGS
+	.long	seq_stand
+	.long	ljkb1,ljkb2,ljkb3,ljkb4
+	.long	ljkb5,ljkb4,ljkb3,ljkb2
+ljkb4
+	WLW	3,M5REVDU1,F
+	WLLW	-1,seq_strtdunk,M5OHPB10,65
+	WLW	-1,seq_jam_speech,JAM_GREAT
+	WL	-1,seq_low_dnk_spch
+	WLW	3,M5REVDU2,F
+	WLW	3,M5REVDU3,F
+	WLW	18,M5REVDU4,F
+	WLW	3,W3SPNDU12,F
+	WLW	3,W3SPNDU11,F
+	WLW	3,W3SPNDU10,F
+	WLW	3,W3SPNDU9,F
+	WLW	3,W3SPNDU8,F
+	WLW	3,W3SPNDU7,F
+	WLW	3,W3SPNDU6,F
+	WLW	3,M5OHPB4,F
+	WLWWW	-1,seq_offset,0,0,20
+	WLW	3,M5OHPB5,F
+	WLW	3,M5OHPB6,F
+	WLW	3,M5OHPB7,F
+	WLW	3,M5OHPB8,F
+	WLW	3,M5OHPB9,F
+	WLWWW	-1,seq_offset,0,0,20
+	WLW	-1,seq_slamball,20
+	WLW	20,M5OHPB9,F
+	WLW	500,M5OHPB10,F
+	WLW	3,M5OHPB11,F
+	WLW	3,M5OHPB12,F
+	WLW	-1,seq_newdir,0*16
+ljkb1
+ljkb2
+ljkb3
+ljkb5
+	W0
+
+
+dunkr2_t
+	.word	DFLGS
+	.long	seq_stand
+	.long	hiod1,hiod2,hiod3,hiod4
+	.long	hiod5,hiod4,hiod3,hiod2
+hiod1
+	WLW	3,M5OHPB1,F
+	WLLW	-1,seq_strtdunk,M5OHPB10,66
+	WLW	-1,seq_jam_speech,JAM_GOOD
+	WL	-1,seq_low_dnk_spch
+	WLW	3,M5OHPB2,F
+	WLW	3,M5OHPB3,F
+	WLW	3,M5OHPB4,F
+	WLW	45,M5OHPB5,F
+	WLW	3,M5OHPB6,F
+	WLW	3,M5OHPB7,F
+	WLW	3,M5OHPB8,F
+	WLW	3,M5OHPB9,F
+	WLWWW	-1,seq_offset,0,0,20
+	WLW	-1,seq_slamball,20
+	WLW	20,M5OHPB9,F
+	WLW	500,M5OHPB10,F
+	WLW	3,M5OHPB11,F
+	WLW	3,M5OHPB12,F
+	WLW	-1,seq_newdir,0*16
+	W0
+hiod2
+hiod3
+hiod4
+hiod5
+	W0
+
+
+	.bss	KP_TMPX	,32		;Keep xvel for hook shot
+	.bss	KP_TMPZ	,32		;Keep zvel for hook shot
+
+
+
+hook_t
+hook2_t
+	.word	NOJUMP_M|SHOOT_M|NOJOY_M
+	.long	seq_stand
+	.long	skwo1,skwo2,skwo3,skwo4,skwo5,skwo4,skwo3,skwo2
+
+skwo1
+	WLW	3,w3hks1,F
+	WLW	3,w3hks2,F
+	WL	-1,seq_jump
+	WLW	3,w3hks3,F
+	WLW	3,w3hks4,F
+	WLW	3,w3hks5,F
+	WL	-1,plyr_shoot
+	WLW	50,w3hks6,F
+	WLW	3,w3hks7,F
+	WLW	3,w3hks8,F
+	WLW	3,w3hks9,F
+	WLW	3,w3hks10,F
+	WLW	-1,seq_newdir,2*16
+	W0
+skwo2
+	WL	-1,skwostore_xvel2
+	WLW	3,w4hks1,F
+	WLW	3,w4hks2,F
+	WL	-1,seq_jump
+	WL	-1,skworestore_xvel
+	WLW	3,w4hks3,F
+	WLW	3,w4hks4,F
+	WLW	29,w4hks5,F
+	WL	-1,plyr_shoot
+	WLW	2,w4hks5,F
+	WLW	50,w4hks6,F
+	WLW	3,w4hks7,F
+	WLW	3,w4hks8,F
+	WLW	3,w4hks9,F
+	WLW	3,w4hks10,F
+	WLW	-1,seq_newdir,3*16
+	W0
+
+skwo3
+	WL	-1,skwotop_bot
+	WL	-1,skwostore_xvel
+	WLW	3,w1hks1,F
+	WLW	3,w1hks2,F
+	WL	-1,seq_jump
+	WL	-1,skworestore_xvel
+	WLW	3,w1hks3,F
+	WLW	29,w1hks4,F
+	WL	-1,plyr_shoot
+	WLW	3,w1hks5,F
+	WLW	50,w1hks6,F
+	WLW	3,w1hks7,F
+	WLW	3,w1hks8,F
+	WLW	3,w1hks9,F
+	WLW	3,w1hks10,F
+	WLW	-1,seq_newdir,0*16
+	W0
+
+skwotop_bot
+	move	*a8(OZPOS),a0
+	cmpi	CZMID,a0
+	jrgt	skworet
+	movi	skwo3a,b4
+skworet	rets
+
+skwo3a
+	WL	-1,skwostore_xvel
+	WLW	3,w5hks1,F
+	WLW	3,w5hks2,F
+	WL	-1,seq_jump
+	WL	-1,skworestore_xvel
+	WLW	3,w5hks3,F
+	WLW	3,w5hks4,F
+	WLW	29,w5hks5,F
+	WL	-1,plyr_shoot
+	WLW	2,w5hks6,F
+	WLW	50,w5hks7,F
+	WLW	3,w5hks8,F
+	WLW	3,w5hks9,F
+	WLW	3,w5hks10,F
+	WLW	-1,seq_newdir,4*16
+	W0
+
+
+skwo4
+skwo5
+	WLW	3,w3fhks1,F
+	WLW	3,w3fhks2,F
+	WL	-1,seq_jump
+	WLW	3,w3fhks3,F
+	WLW	3,w3fhks4,F
+	WLW	3,w3fhks5,F
+	WL	-1,plyr_shoot
+	WLW	2,w3fhks5,F
+	WLW	50,w3fhks6,F
+	WLW	3,w3fhks7,F
+	WLW	3,w3fhks8,F
+	WLW	3,w3fhks9,F
+	WLW	-1,seq_newdir,3*16
+	W0
+
+skwostore_xvel
+
+	move	*a8(OXVEL),a0,L
+	sra	2,a0
+	move	a0,@KP_TMPX,L
+	move	*a8(OZVEL),a0,L
+	sra	2,a0
+	move	a0,@KP_TMPZ,L
+	rets
+
+skwostore_xvel2
+
+	move	*a8(OXVEL),a0,L
+	sra	3,a0
+	move	a0,@KP_TMPX,L
+	move	*a8(OZVEL),a0,L
+	sra	3,a0
+	move	a0,@KP_TMPZ,L
+	rets
+skworestore_xvel
+
+	move	@KP_TMPX,a0,L
+	move	a0,*a8(OXVEL),L
+	move	@KP_TMPZ,a0,L
+	move	a0,*a8(OZVEL),L
+	rets
+
+
+
+dunklay_t
+	.word	DFLGS|LAYUP_M
+	.long	seq_stand
+	.long	lbdf1,lbdf2,lbdf3,lbdf4
+	.long	lbdf5,lbdf4,lbdf3,lbdf2
+lbdf1
+lbdf2
+lbdf3
+	WLW	3,W3SPLY1,F
+	WLLW	-1,seq_strtdunk,M3SPRLA7,60
+	WLW	3,W3SPLY2,F
+	WLW	3,W3SPLY3,F
+	WLW	3,W3SPLY4,F
+	WLW	3,W3SPLY5,F
+	WLW	3,W3SPLY6,F
+	WLW	3,W3SPLY7,F
+	WL	-1,lbdfzfloat
+	WLW	3,W3SPLY8,F
+	WLW	3,W3SPLY9,F
+	WLW	3,W3SPLY10,F
+	WLW	3,W3SPLY11,F
+	WLW	3,W3SPLY12,F
+	WLW	3,W3SPLY13,F
+	WLW	3,W3SPLY14,F
+	WLW	3,W3SPLY15,F
+	WLW	3,W3SPLY16,F
+	WLW	3,S5SETLA4,F
+	WLW	1,S5SETLA5,F
+	WL	-1,plyr_shoot
+	WLW	2,S5SETLA5,F
+	WLW	3,S5SETLA6,F
+	WLW	500,S5SETLA7,F
+	WLW	3,S5SETLA8,F
+	WLW	3,S5SETLA9,F
+	WLW	3,S5SETLA10,F
+	WLW	-1,seq_newdir,2*16
+lbdf4
+lbdf5
+	W0
+
+lbdfzfloat
+	move	*a8(OZVEL),a0,L
+	addi	-0a000h,a0
+	move	a0,*a8(OZVEL),L
+	rets
+
+
+
+dunklay2_t
+	.word	DFLGS|LAYUP_M
+	.long	seq_stand
+	.long	eqao1,eqao2,eqao3,eqao4
+	.long	eqao5,eqao4,eqao3,eqao2
+eqao2
+eqao3
+	WLW	3,W3SPLY1,F
+	WLLW	-1,seq_strtdunk,W3SPLY12,65
+	WLW	3,W3SPLY2,F
+	WL	-1,eqaozfloat
+	WLW	3,W3SPLY3,F
+	WLW	3,W3SPLY4,F
+	WLW	3,W3SPLY5,F
+	WLW	3,W3SPLY6,F
+	WLW	3,W3SPLY7,F
+	WLW	3,W3SPLY8,F
+	WLW	3,W3SPLY9,F
+	WLW	3,W3SPLY10,F
+	WLW	3,W3SPLY11,F
+	WLW	3,W3SPLY12,F
+	WLW	3,W3SPLY13,F
+	WLW	3,W3SPLY14,F
+	WLW	3,W3SPLY15,F
+	WLW	3,W3SPLY16,F
+	WLWWW	-1,seq_offset,0,-19,0
+	WLW	3,S5SETLA4,F
+	WLW	1,S5SETLA5,F
+	WL	-1,plyr_shoot
+	WLW	2,S5SETLA5,F
+	WLW	3,S5SETLA6,F
+	WLW	500,S5SETLA7,F
+	WLW	3,S5SETLA8,F
+	WLW	3,S5SETLA9,F
+	WLW	3,S5SETLA10,F
+	WLW	-1,seq_newdir,2*16
+eqao1
+eqao4
+eqao5
+	W0
+
+eqaozfloat
+	move	*a8(OZVEL),a0,L
+	addi	-0e000h,a0
+	move	a0,*a8(OZVEL),L
+	rets
+
+
+dunklay3_t
+	.word	DFLGS|LAYUP_M
+	.long	seq_stand
+	.long	ytzu1,ytzu2,ytzu3,ytzu4
+	.long	ytzu5,ytzu4,ytzu3,ytzu2
+ytzu1
+ytzu2
+ytzu3
+	WLW	3,W3SPLY1,F
+	WLLW	-1,seq_strtdunk,W3SPLY12,55
+	WLW	3,W3SPLY2,F
+	WL	-1,ytzuzfloat
+	WLW	3,W3SPLY3,F
+	WLW	3,W3SPLY4,F
+	WLW	3,S1SETLA1,F
+	WLW	3,S1SETLA2,F
+	WLW	3,S1SETLA3,F
+	WLW	25,S1SETLA4,F
+	WLW	3,S1SETLA5,F
+	WL	-1,plyr_shoot
+	WLW	2,S1SETLA5,F
+	WLW	500,S1SETLA6,F
+	WLW	3,S1SETLA7,F
+	WLW	3,S1SETLA8,F
+	WLW	3,S1SETLA9,F
+	WLW	-1,seq_newdir,0*16
+ytzu4
+ytzu5
+	W0
+	
+ytzuzfloat
+	move	*a8(OZVEL),a0,L
+	addi	0e000h,a0
+	move	a0,*a8(OZVEL),L
+	rets
+
+dunklay3a_t
+	.word	DFLGS|LAYUP_M
+	.long	seq_stand
+	.long	ldbn1,ldbn2,ldbn3,ldbn4
+	.long	ldbn5,ldbn4,ldbn3,ldbn2
+ldbn1
+	WLW	2,W3SPLY1,F
+	WLW	2,W3SPLY2,F
+	WLLW	-1,seq_strtdunk,M3SPRLA7,60
+	WLW	2,W3SPLY3,F
+	WLW	2,W3SPLY4,F
+	WLW	2,W3SPLY5,F
+	WLW	2,W3SPLY6,F
+	WLW	2,W3SPLY7,F
+	WLW	2,W3SPLY8,F
+	WLW	2,W3SPLY9,F
+	WLW	2,W3SPLY10,F
+	WLW	3,W3SPLY11,F
+	WLW	3,W3SPLY12,F
+	WLW	3,W3SPLY13,F
+	WLW	3,W3SPLY14,F
+	WLW	3,W3SPLY15,F
+	WLW	3,W3SPLY16,F
+	WLW	3,W3SPLY17,F
+	WLW	3,W3SPLY18,F
+	WLW	3,W3SPLY19,F
+	WLW	1,W3SPLY20,F
+	WL	-1,plyr_shoot
+	WLW	50,W3SPLY20,F
+	WLW	-1,seq_newdir,3*16
+	W0
+
+ldbn2
+ldbn3
+	WLW	2,W3SPLY1,F
+	WLW	2,W3SPLY2,F
+	WLLW	-1,seq_strtdunk,W3SPLY13,60
+	WLW	1,W3SPLY3,F
+	WLW	2,W3SPLY4,F
+	WLW	1,W3SPLY5,F
+	WLW	2,W3SPLY6,F
+	WLW	1,W3SPLY7,F
+	WLW	1,W3SPLY8,F
+	WLW	1,W3SPLY9,F
+	WLW	1,W3SPLY10,F
+
+	WLW	2,W3SPLY11,F
+	WLW	3,W3SPLY12,F
+	WLW	2,W3SPLY13,F
+	WLW	3,W3SPLY14,F
+	WLW	2,W3SPLY15,F
+
+	WLW	3,W3SPLY14,F
+	WLW	3,W3SPLY13,F
+	WLW	3,W3SPLY12,F
+	WLW	3,W3SPLY11,F
+
+	WLW	3,W3SPLY12,F
+	WLW	3,W3SPLY13,F
+	WLW	3,W3SPLY14,F
+	WLW	3,W3SPLY15,F
+
+	WLW	2,W3SPLY16,F
+	WLW	2,W3SPLY17,F
+	WLW	3,W3SPLY18,F
+	WLW	3,W3SPLY19,F
+	WLW	1,W3SPLY20,F
+	WL	-1,plyr_shoot
+	WLW	50,W3SPLY20,F
+	WLW	-1,seq_newdir,3*16
+ldbn4
+ldbn5
+	W0
+
+
+dunklay3b_t
+	.word	DFLGS|LAYUP_M
+	.long	seq_stand
+	.long	wygl1,wygl2,wygl3,wygl4
+	.long	wygl5,wygl4,wygl3,wygl2
+wygl1
+	WLW	2,W3SPLY1,F
+	WLLW	-1,seq_strtdunk,M3SPRLA7,64
+	WLW	2,W3SPLY2,F
+	WLW	2,W3SPLY3,F
+	WLW	2,W3SPLY4,F
+	WLW	2,W3SPLY5,F
+	WLW	2,W3SPLY6,F
+	WLW	2,W3SPLY7,F
+	WLW	2,W3SPLY8,F
+	WLW	2,W3SPLY9,F
+	WLW	3,W3SPLY10,F
+	WLW	3,W3SPLY11,F
+	WLW	3,W3SPLY12,F
+	WLW	3,W3SPLY13,F
+	WLW	3,W3SPLY14,F
+	WLW	8,W3SPLY15,F
+	WLW	3,W3SPLY16,F
+	WLW	3,W3SPLY17,F
+	WLW	3,W3SPLY18,F
+	WLW	3,W3SPLY19,F
+	WLW	1,W3SPLY20,F
+	WL	-1,plyr_shoot
+	WLW	50,W3SPLY20,F
+	WLW	-1,seq_newdir,3*16
+	W0
+wygl2
+wygl3
+	WLW	2,W3SPLY1,F
+	WLLW	-1,seq_strtdunk,W3SPLY18,64
+	WLW	2,W3SPLY2,F
+	WLW	2,W3SPLY3,F
+	WLW	2,W3SPLY4,F
+	WLW	2,W3SPLY5,F
+	WLW	2,W3SPLY6,F
+	WLW	2,W3SPLY7,F
+	WLW	2,W3SPLY8,F
+	WLW	2,W3SPLY9,F
+	WLW	3,W3SPLY10,F
+	WLW	3,W3SPLY11,F
+	WLW	3,W3SPLY12,F
+	WLW	3,W3SPLY13,F
+	WLW	3,W3SPLY14,F
+	WLW	9,W3SPLY15,F
+	WLW	3,W3SPLY16,F
+	WLW	3,W3SPLY17,F
+	WLW	3,W3SPLY18,F
+	WLW	3,W3SPLY19,F
+	WLW	1,W3SPLY20,F
+	WL	-1,plyr_shoot
+	WLW	50,W3SPLY20,F
+	WLW	-1,seq_newdir,3*16
+wygl4
+wygl5
+	W0
+
+
+dunklay3c_t
+	.word	DFLGS|LAYUP_M
+	.long	seq_stand
+	.long	hixv1,hixv2,hixv3,hixv4
+	.long	hixv5,hixv4,hixv3,hixv2
+hixv1
+	WLW	3,W3SPLY2,F
+	WLLW	-1,seq_strtdunk,W3SPLY18,55
+	WLW	2,W3SPLY3,F
+	WLW	3,W3SPLY4,F
+	WLW	2,W3SPLY5,F
+	WLW	3,W3SPLY6,F
+	WLW	2,W3SPLY7,F
+	WLW	3,W3SPLY8,F
+	WLW	2,W3SPLY9,F
+	WLW	3,W3SPLY10,F
+	WLW	3,W3SPLY11,F
+	WLW	3,W3SPLY12,F
+	WLW	3,W3SPLY13,F
+	WLW	3,W3SPLY14,F
+	WLW	2,W3SPLY15,F
+	WLW	2,W3SPLY16,F
+	WLW	2,W3SPLY17,F
+	WLW	1,W3SPLY18,F
+	WL	-1,plyr_shoot
+	WLW	50,W3SPLY18,F
+	WLW	-1,seq_newdir,3*16
+	W0
+
+hixv2
+hixv3
+	WLW	2,W3SPLY1,F
+	WLLW	-1,seq_strtdunk,W3SPLY18,55
+	WLW	2,W3SPLY1,F
+	WLW	3,W3SPLY2,F
+	WLW	2,W3SPLY3,F
+	WLW	3,W3SPLY4,F
+	WLW	2,W3SPLY5,F
+	WLW	3,W3SPLY6,F
+	WLW	2,W3SPLY7,F
+	WLW	3,W3SPLY8,F
+	WLW	2,W3SPLY9,F
+	WLW	3,W3SPLY10,F
+	WLW	3,W3SPLY11,F
+	WLW	3,W3SPLY12,F
+	WLW	3,W3SPLY13,F
+	WLW	3,W3SPLY14,F
+	WLW	3,W3SPLY15,F
+	WLW	3,W3SPLY16,F
+	WLW	2,W3SPLY17,F
+	WLW	2,W3SPLY18,F
+	WLW	2,W3SPLY19,F
+	WLW	1,W3SPLY20,F
+	WL	-1,plyr_shoot
+	WLW	50,W3SPLY20,F
+	WLW	-1,seq_newdir,3*16
+hixv4
+hixv5
+	W0
+
+
+dunklay4_t
+	.word	DFLGS|LAYUP_M
+	.long	seq_stand
+	.long	govh1,govh2,govh3,govh4
+	.long	govh5,govh4,govh3,govh2
+govh1
+govh2
+govh3
+govh4
+govh5
+	W0
+
+govhzfloat
+	move	*a8(OZVEL),a0,L
+	addi	0a000h,a0
+	move	a0,*a8(OZVEL),L
+	rets
+
+dunklay5_t
+	.word	DFLGS|LAYUP_M
+	.long	seq_stand
+	.long	pojk1,pojk2,pojk3,pojk4
+	.long	pojk5,pojk4,pojk3,pojk2
+pojk1
+	WLW	1,W3SETLA3,FF
+	WLLW	-1,seq_strtdunk,W3PLDDU8,54
+	WLW	3,W3SETLA3,FF
+	WLW	25,W3SETLA4,FF
+	WLW	3,W3SETLA5,FF
+	WLW	2,W3SETLA6,FF
+	WLW	1,W3SETLA7,FF
+	WL	-1,plyr_shoot
+	WLW	500,W3SETLA7,FF
+	WLW	3,W3SETLA8,FF
+	WLW	3,W3SETLA9,FF
+	WLW	-1,seq_newdir,0*16
+	W0
+pojk2
+pojk3
+	WLW	1,W3SETLA1,F
+	WLLW	-1,seq_strtdunk,W3PLDDU8,54
+	WLW	3,W3SETLA2,F
+	WLW	3,W3SETLA3,F
+	WL	-1,pojkzfloat
+	WLW	25,W3SETLA4,F
+	WLW	3,W3SETLA5,F
+	WLW	2,W3SETLA6,F
+	WLW	1,W3SETLA7,F
+	WL	-1,plyr_shoot
+	WLW	500,W3SETLA7,F
+	WLW	3,W3SETLA8,F
+	WLW	3,W3SETLA9,F
+	WLW	-1,seq_newdir,0*16
+pojk4
+pojk5
+	W0
+
+
+pojkzfloat
+	move	*a8(OZVEL),a0,L
+	addi	0a000h,a0
+	move	a0,*a8(OZVEL),L
+	rets
+
+
+dunklay6_t
+	.word	DFLGS|LAYUP_M
+	.long	seq_stand
+	.long	jvoi1,jvoi2,jvoi3,jvoi4
+	.long	jvoi5,jvoi4,jvoi3,jvoi2
+jvoi1
+jvoi2
+	WLW	3,S1SETLA1,F
+	WLLW	-1,seq_strtdunk,S1SETLA2,52
+	WLW	3,S1SETLA2,F
+	WLW	3,S1SETLA3,F
+	WLW	24,S1SETLA4,F
+	WLW	3,S1SETLA5,F
+	WL	-1,plyr_shoot
+	WLW	2,S1SETLA5,F
+	WLW	500,S1SETLA6,F
+	WLW	3,S1SETLA7,F
+	WLW	3,S1SETLA8,F
+	WLW	3,S1SETLA9,F
+	WLW	-1,seq_newdir,0*16
+	W0
+jvoi3
+	WLW	2,M3SPRLA1,F
+	WLLW	-1,seq_strtdunk,S4SETLA2,52
+	WLW	3,M3SPRLA2,F
+	WLW	3,M3SPRLA3,F
+	WLW	3,M3SPRLA4,F
+	WLW	30,M3SPRLA5,F
+	WLW	3,M3SPRLA6,F
+	WL	-1,plyr_shoot
+	WLW	3,M3SPRLA7,F
+	WLW	500,M3SPRLA8,F
+	WLW	3,M3SPRLA9,F
+	WLW	3,M3SPRLA10,F
+	WLW	-1,seq_newdir,1*16
+	W0
+jvoi4
+	WLW	3,S4SETLA1,F
+	WLLW	-1,seq_strtdunk,S4SETLA2,52
+	WLW	3,S4SETLA2,F
+	WLW	3,S4SETLA3,F
+	WLW	30,S4SETLA4,F
+	WL	-1,plyr_shoot
+	WLW	3,S4SETLA5,F
+	WLW	500,S4SETLA6,F
+	WLW	3,S4SETLA7,F
+	WLW	3,S4SETLA8,F
+	WLW	3,S4SETLA9,F
+	WLW	-1,seq_newdir,3*16
+	W0
+
+jvoi5
+	WLW	3,S5SETLA1,F
+	WLLW	-1,seq_strtdunk,S5SETLA2,52
+	WLW	3,S5SETLA2,F
+	WLW	3,S5SETLA3,F
+	WLW	30,S5SETLA4,F
+	WLW	3,S5SETLA5,F
+	WL	-1,plyr_shoot
+	WLW	2,S5SETLA5,F
+	WLW	500,S5SETLA6,F
+	WLW	3,S5SETLA7,F
+	WLW	3,S5SETLA8,F
+	WLW	3,S5SETLA9,F
+	WLW	-1,seq_newdir,3*16
+	W0
+
+
+dunklay7_t
+	.word	DFLGS|LAYUP_M
+	.long	seq_stand
+	.long	ycxz1,ycxz2,ycxz3,ycxz4
+	.long	ycxz5,ycxz4,ycxz3,ycxz2
+ycxz1
+	WLW	3,S3BEHLA1,FF
+	WLLW	-1,seq_strtdunk,M1SPDU10,58
+	WLW	3,S3BEHLA2,FF
+	WLW	32,S3BEHLA3,FF
+	WLW	4,S3BEHLA4,FF
+	WLW	4,S3BEHLA5,FF
+	WLW	3,S3BEHLA6,FF
+	WL	-1,plyr_shoot
+	WLW	500,S3BEHLA6,FF
+	WLW	3,S3BEHLA7,FF
+	WLW	3,S3BEHLA8,FF
+	WLW	3,S3BEHLA9,FF
+	WLW	-1,seq_newdir,1*16
+	W0
+
+ycxz2
+ycxz3
+	WLW	3,S3BEHLA1,F
+	WLLW	-1,seq_strtdunk,S3BEHLA8,58
+	WLW	3,S3BEHLA2,F
+	WLW	32,S3BEHLA3,F
+	WLW	4,S3BEHLA4,F
+	WLW	4,S3BEHLA5,F
+	WLW	3,S3BEHLA6,F
+	WL	-1,plyr_shoot
+	WLW	500,S3BEHLA6,F
+	WLW	3,S3BEHLA7,F
+	WLW	3,S3BEHLA8,F
+	WLW	3,S3BEHLA9,F
+	WLW	-1,seq_newdir,1*16
+ycxz4
+ycxz5
+	W0
+
+dunklay7a_t
+	.word	DFLGS|LAYUP_M
+	.long	seq_stand
+	.long	gqwd1,gqwd2,gqwd3,gqwd4
+	.long	gqwd5,gqwd4,gqwd3,gqwd2
+gqwd2
+gqwd3
+	WLW	3,S3BEHLA1,F
+	WLLW	-1,seq_strtdunk,S3BETLA6,59
+	WLW	3,S3BETLA2,F
+	WLW	35,S3BETLA3,F
+	WLW	4,S3BETLA4,F
+	WLW	4,S3BETLA5,F
+	WLW	4,S3BETLA6,F
+	WLW	4,S3BETLA7,F
+	WLW	2,S3BETLA8,F
+	WL	-1,plyr_shoot
+	WLW	500,S3BETLA8,F
+	WLW	3,S3BETLA9,F
+	WLW	3,S3BETLA10,F
+	WLW	-1,seq_newdir,1*16
+gqwd1
+gqwd4
+gqwd5
+	W0
+
+dunklay8_t
+	.word	DFLGS|LAYUP_M
+	.long	seq_stand
+	.long	uohr1,uohr2,uohr3,uohr4
+	.long	uohr5,uohr4,uohr3,uohr2
+uohr2
+uohr3
+	WLW	2,w4hks1,F
+	WLLW	-1,seq_strtdunk,w4hks6,50
+	WLW	3,w4hks2,F
+	WLW	3,w4hks3,F
+	WLW	26,w4hks4,F
+	WL	-1,plyr_shoot
+	WLW	1,w4hks4,F
+	WLW	3,w4hks5,F
+	WLW	500,w4hks6,F
+	WLW	3,w4hks7,F
+	WLW	3,w4hks8,F
+	WLW	3,w4hks9,F
+	WLW	3,w4hks10,F
+	WLW	-1,seq_newdir,3*16
+uohr1
+uohr4
+uohr5
+	W0
+
+
+
+NEWILPAL:
+PLYRFX2_P:
+PLYRFX3_P:
+XEWILPAL:
+zwilpal:
+PLYRFIX_P
+NEWILFIX
+	.word	0
+	.end

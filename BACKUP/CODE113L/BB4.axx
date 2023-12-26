@@ -1,0 +1,24 @@
+	.file	"bb3.asm"
+	.title	"Basketball game program"
+	.width	132
+	.option	b,d,l,t
+	.mnolist
+
+
+	.include	"mproc.equ"		;Mproc equates
+	.include	"disp.equ"		;Display proc equates
+	.include	"gsp.equ"		;Gsp asm equates
+	.include	"sys.equ"
+	.include	"plyrhd.tbl"
+	.include        "plyrhd.glo"
+	.include	"plyrseq3.tbl"
+	.include        "plyrseq3.glo"
+	.include	"imgtblp.glo"
+	.include	"imgpalp.asm"
+
+	.include	"imgtbl1.glo"
+	.include	"imgpal1.asm"
+
+	.end
+
+

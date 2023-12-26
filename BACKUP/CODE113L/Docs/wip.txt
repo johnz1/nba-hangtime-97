@@ -1,0 +1,154 @@
+This is hangtime 1.3
+--- NOTE ---
+Thing changed now we have 710K conventional in dosbox.
+But some asm files with IMGTBL.GLO are still too big.
+Don't rebuild the .AXX files for now!
+------------------------------------------------------
+
+default imgtbl.asm and imgtbl.glo come from misc it seems.
+
+PAL.AXX
+	.include	"plyrhd6.tbl" bb8
+	.include	"plyrhd6.glo" bb8
+	.include	"imgpal8.asm" bb8 -> bat nukes imgtbl.glo
+	.include	"mugshot.tbl" bb7
+	.include	"mugshot.glo" bb7
+
+BGNDTBL.AXX and several others, from misc..
+
+IMGPAL2.ASM -> from bb2
+IMGPAL7.ASM -> from bb7
+
+
+
+BB.AXX
+	.include	"credturb.tbl" ? from bb7
+	.include	"credturb.glo" ? from bb7
+
+	.include	"hoop.tbl"  ? from bb7
+	.include	"hoop.glo" ? from bb7
+
+	.include	"outdoor.glo"  ? from bb7
+	.include	"imgtbl.glo" which one?
+	.include	"imgtbl2.glo" which one? bat file implies BB2
+	.include	"imgtblp.glo" which one? bat file implies BBPAL
+
+BB3.AXX
+	.include	"crowd.tbl" ? bb2
+	.include	"courtflr.tbl" ? bb7
+
+	.include	"cheer.tbl" ? bb6
+	.include	"court.tbl" ? bbmisc
+	.include	"outdoor.tbl" ? bb7
+	.include	"outdoor.glo" ? bb7
+
+	.include	"imgtbl.glo" the default one from bbmisc i guess
+	.include	"hoop.glo" bb7
+
+PLYR.AXX
+	.include	"imgtbl.glo" the default one from bbmisc i guess
+	.include	"imgtbl7.glo" bb7 
+	.include	"credturb.glo" bb7
+-out-of-memory- Including plyr.glo, hope it works.
+
+PLYR2.axx
+is ok
+
+plyrhd.tbl comes from BB
+
+PLYRAT.AXX - wants a lot.
+	.include	"imgtblp.glo"
+	.include	"imgtbl.glo"
+	.include	"imgtbl1.glo" ? bb
+	.include	"imgtblm.glo" ? bbmug
+	.include	"plyrhd6.glo" ? bb8
+	.include	"plyrhd6a.glo" ? bb6
+
+plyrseq.tbl comes from bb2
+
+PLYRSEQ.AXX
+	.include	"plyrseq.glo" ? bb2
+	.include	"plyrseq3.glo" ? bb5
+	.include	"behind.tbl" ? bb3
+	.include	"plyrdsp.tbl" ? bb5
+	.include	"plyrjsht.tbl" ? bb5
+	.include	"dunks.glo" ? bb5
+-out-of-memory- commented imgtbl.glo, builds
+	
+text.axx: imgtbl.glo too large, commented it.. hrm.
+
+plyr3.axx
+
+attract.axx
+	used 7.* and imgtbl7.glo
+select.axx
+	used imgpalm.asm, edited to imgpalm.glo inc.
+compiled outside of NC
+select2.axx
+ almost builds. imgtbl.glo again. used select2.glo
+
+
+
+
+
+
+===========================================================
+This is where we look at MK2 and NBA JAM TE
+
+IMGTBL.ASM -  	.include imgtbl.glo , 	.include bgndtbl.glo, that's all.
+
+IMGTBL.GLO - 235 globals.
+IMGTBL2 - IMGTBL7.GLO, loose files. All the content is together in IMGTBL.GLO. Nothing references these .glo files at any point.
+
+IMGPAL2.ASM - IMGPAL7.ASM, loose files. All .include IMGTBL.GLO
+
+MK2:
+NO IMAGES ARE IN IMGTBL.GLO
+ONLY PALs are in IMGTBL.GLO
+
+BB.AXX
+
+	.include	"imgtbl.glo"  ? Was included in src. Probably from BB.LOD?
+	.include	"imgtblp.glo" ? from bbpal.lod
+	.include	"imgtbl2.glo" ? from bb2.lod (uncertain)
+	.include	"imgpalp.asm" ? from bbpal.lod
+	.include	"imgpal2.asm" ? from bb2.lod (certain)
+
+PLYR.AXX 
+	.include	"imgtbl.glo"
+	.include	"imgtbl2.glo" ? from bb2.lod (uncertain)
+
+PLYRAT.AXX
+	.include	"imgpalp.asm" ? from bbpal.lod
+	.include	"imgpal3.asm" ? from bb3.lod (guess! YES)
+	.include	"imgtbl4.glo" ? from bb3.lod
+	.include	"plyrhd4.tbl" ? from bb3.lod
+
+PLYR3.AXX
+	.include	"imgtbl.glo"
+	.include	"imgtbl2.glo"
+	.include	"bgndtbl.glo"
+
+	.include	"plyrhd2.tbl"
+	.include	"imgtblm.glo" ? from BBMUG?
+	.include	"imgtbl3.glo" ? from BBMUG?
+	.include	"plyrhd3.tbl"
+
+---
+obj's compiled, symbol ref errors.
+Easy first. DIAGP in TEST.OBJ
+	.include	"imgtbl.glo" does it have DIAGP? Why not?
+- it does not have DIAGP
+- DIAGP: not in BB.LOD. it is in IMGPAL.ASM from BB2.LOD
+- IMGPAL2.ASM is not build as OBJ. Lets do that. And include imgtbl2.glo.
+This solves TEST.OBJ!
+---
+Harder second. SELECT2.OBJ lots. Focus on.. BUTT_P - in IMGTBL.GLO from BB.LOD and in IMGTBL.ASM.
+Needed to replace mostly blank IMGTBL.ASM, see .bak
+lots of bmod. BGNDTBL.ASM was fudged from the start for some reason.
+---
+score.obj
+arwbp
+IMGPAL.ASM from BB.LOD used.
+clean broke BGNDPAL
+replace from BB.LOD

@@ -1,4 +1,4 @@
-**************************************************************
+#**************************************************************
 *
 * Owner:	JOHNSON
 *
@@ -324,7 +324,7 @@ tfire_timer_tbl
 	movk	1,a14
 	move	a14,*a10(plyr_offtime)	;Plyr is offscreen!
 
-	move	@ballpnum,a14		;>Chk if other team owns ball
+	move	@ballpnum,a14		;0CHhk if other team owns ball
 	jrn	#nown_l			;Ball owned? br=no
 	move	*a10(plyr_ownball),a14	;-=Teammate, 0=Neither, +=I have ball
 	jrnz	#nown_l
@@ -365,7 +365,7 @@ tfire_timer_tbl
 	movk	1,a14
 	move	a14,*a10(plyr_offtime)	;Plyr is offscreen!
 
-	move	@ballpnum,a14		;>Chk if other team owns ball
+	move	@ballpnum,a14		;0CHhk if other team owns ball
 	jrn	#nown_r			;Ball owned? br=no
 	move	*a10(plyr_ownball),a14	;-=Teammate, 0=Neither, +=I have ball
 	jrnz	#nown_r
@@ -1641,11 +1641,11 @@ prt_cr
 	addi	timer_table-16,a0
 	move	*a0,a1
 	move	@PSTATUS,a0
-	cmpi	>f,a0			;Is it a 4 plyr game? No if !0
+	cmpi	0fH,a0			;Is it a 4 plyr game? No if !0
 	jrnz	#not4
 	addi	200h,a1			;100h;Yes. Make clk run faster!
 #not4
-;	movi	>ffff,a1		;Debug - make clk super fast!
+;	movi	0ffffH,a1		;Debug - make clk super fast!
 
 	move	@clock_speed,a0		;Add to clk speed frac
 	add	a1,a0
@@ -1747,13 +1747,13 @@ prt_cr
 	calla	obj_aniq
 
 	move	@bclok_imgs+32,a1,L
-	movi	>136-15,a0
+	movi	0136H-15,a0
 	move	a0,*a1(OXPOS)
 	move	@bclok_imgs+64,a1,L
-	movi	>116-10,a0
+	movi	0116H-10,a0
 	move	a0,*a1(OXPOS)
 	move	@bclok_imgs+96,a1,L
-	movi	>120-10,a0
+	movi	0120H-10,a0
 	move	a0,*a1(OXPOS)
 	jruc	#lp1			;Update clk
 
@@ -1792,7 +1792,7 @@ prt_cr
 	move	@_4plyrsingame,a0
 	jrnz	#skip
 	move	@PSTATUS,a0
-	cmpi	>f,a0			;Is it a 4 plyr game? Yes if 0
+	cmpi	0fH,a0			;Is it a 4 plyr game? Yes if 0
 	jrz	#skip
 	movk	1,a0
 	move	a0,@_4plyrsingame
@@ -2090,7 +2090,7 @@ qrtrt_c	.equ	($-qrtrt1)/32
 ;	move	*a11(ply_meter_imgs+40h),a2,L	;LITUP img 
 ;	clr	a1
 ;	move	a1,*a2(OFSET)
-;	movi	>2f,a2	;2f	 		;OSIZEX of litup meter img
+;	movi	02fH,a2	;2f	 		;OSIZEX of litup meter img
 ;	move	a2,*a11(ply_turbo)		;max out turbo meter
 ;	movk	1,a2
 ;	move	a2,*a11(ply_turbo_dl)		;turbo cnt delay
@@ -2207,7 +2207,7 @@ flsh_bgnd
 
 	clr	a1			;Do 3 ptr animation
 	movi	THREPNTS,a2
-	movi	>7590,a3
+	movi	07590H,a3
 	calla	BEGINOBJ2
 
 	SLEEPK	1
@@ -2234,7 +2234,7 @@ flsh_bgnd
 
 	jruc	#fout
 
-;	movi	>0101,a2
+;	movi	00101H,a2
 ;	move	a2,*a8(OCONST)
 ;
 ;	movk	14,a10
@@ -2864,7 +2864,7 @@ flash_red
 #tag4	sll	5,a0
 	addi	numbs,a0
 	move	*a0,a0,L
-	move	@bclok_imgs+>20,a8,L
+	move	@bclok_imgs+020H,a8,L
 	move	*a8(OCTRL),a1
 	calla	obj_aniq
 
@@ -2872,7 +2872,7 @@ flash_red
 	sll	5,a0
 	addi	numbs,a0
 	move	*a0,a0,L
-	move	@bclok_imgs+>40,a8,L
+	move	@bclok_imgs+040H,a8,L
 	move	*a8(OCTRL),a1
 	calla	obj_aniq
 
@@ -2880,7 +2880,7 @@ flash_red
 	sll	5,a0
 	addi	numbs,a0
 	move	*a0,a0,L
-	move	@bclok_imgs+>60,a8,L
+	move	@bclok_imgs+060H,a8,L
 	move	*a8(OCTRL),a1
 	calla	obj_aniq
 	rets
@@ -2899,11 +2899,11 @@ flash_red
 #init_t2
 	.word	2-10,185+46,5010
 	.long	clock2
-	.word	>130-10,230,5020
+	.word	0130H-10,230,5020
 	.long	BRSH12_0
-	.word	>116-10,230,5020
+	.word	0116H-10,230,5020
 	.long	BRSH12_0
-	.word	>120-10,230,5020
+	.word	0120H-10,230,5020
 	.long	BRSH12_0
 	.word	4000
 
@@ -2976,7 +2976,7 @@ tie_eqrtrt
 	addi	tfire_timer_tbl-16,a0
 	move	*a0,a0
 	move	@PSTATUS,a14
-	cmpi	>f,a14			;Is it a 4 plyr game? No if !0
+	cmpi	0fH,a14			;Is it a 4 plyr game? No if !0
 	jrnz	#not4
 	subk	1,a0			;Yes. Make clk run faster!
 #not4
@@ -3324,20 +3324,20 @@ bnumbs
 
 
 #init_t
-	.word	>13d,>e0,5000
+	.word	013dH,0e0H,5000
 	.long	NSHOTCLK
-	.word	>143,>d9,5000
+	.word	0143H,0d9H,5000
 	.long	BRSH20_0		;font90r
-	.word	>158,>d9,5000
+	.word	0158H,0d9H,5000
 	.long	BRSH20_0		;font90r
 	.word	4000
 
 #init_t2
-	.word	>1c,>e0,5000
+	.word	01cH,0e0H,5000
 	.long	NSHOTCLK
-	.word	>22,>d9,5000
+	.word	022H,0d9H,5000
 	.long	BRSH20_0		;font90r
-	.word	>37,>d9,5000
+	.word	037H,0d9H,5000
 	.long	BRSH20_0		;font90r
 	.word	4000
 		
@@ -3950,9 +3950,9 @@ TUBEB10_P:
 	move	*a8(OPLINK),a0,L
 	move	*a0(plyr_headobj_p),a9,L
 
-	movi	>f8f8,a2
+	movi	0f8f8H,a2
 	move	a2,*a8(OCONST)
-	movi	>3f3f,a2
+	movi	03f3fH,a2
 	move	a2,*a9(OCONST)
 
 	movk	7,a10
@@ -4498,7 +4498,7 @@ cpp_1	DIE
 	movk	3,a3
 	cmpi	2,a0
 	jrz	#tag1
-	movk	>c,a3
+	movk	0cH,a3
 #tag1	move	@pup_maxpower,a0
 	or	a3,a0
 	move	a0,@pup_maxpower
@@ -4633,7 +4633,7 @@ cpp_1	DIE
 	movk	3,a3
 	cmpi	2,a0
 	jrz	#tag1
-	movk	>c,a3
+	movk	0cH,a3
 #tag1	move	@pup_maxsteal,a0
 	or	a3,a0
 	move	a0,@pup_maxsteal

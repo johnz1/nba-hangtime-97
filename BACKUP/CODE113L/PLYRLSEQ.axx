@@ -1,0 +1,387 @@
+	.file	"plyrlseq.asm"
+	.title	"basketball plyr sequence code"
+	.width	132
+	.option	b,d,l,t
+	.mnolist
+
+
+	.include	"mproc.equ"
+	.include	"disp.equ"
+	.include	"sys.equ"
+	.include	"gsp.equ"		;Gsp asm equates
+	.include	"imgtbl.glo"
+	.include	"imgtbl2.glo"
+	.include	"dunks.glo"
+	.include	"game.equ"
+	.include	"macros.hdr"
+	.asg		0,SEQT
+	.include	"plyr.equ"
+
+
+
+
+	.ref	XEWILPAL
+
+	.ref	plyr_shoot
+	.ref	plyr_pass
+	.ref	seq_newdir
+	.ref	seq_slamball
+	.ref	seq_strtdunk
+	.ref	seq_jump
+	.ref	seq_resetseq
+	.ref	seq_stand
+	.ref	seq_snd
+
+	.ref	seq_jam_speech
+	.ref	seq_call_name
+	.ref	rndrng0
+
+JAM_NONE	equ	0
+JAM_EASY	equ	1
+JAM_MED		equ	2
+JAM_GOOD	equ	3
+JAM_GREAT	equ	4
+
+
+
+
+
+
+
+M_YF	.equ	08000H	;Y free (OFLAGS)
+
+
+	.text
+
+	.ref	plyr_lob_ball
+
+
+
+	.asg	M_WRNONZ,F
+	.asg	M_WRNONZ|M_FLIPH,FF
+	.asg	DUNK_M|NOJUMP_M|NOJOY_M|NOCOLLP_M,DFLGS
+
+
+quicklay_t
+	.word	NOJUMP_M|SHOOT_M|NOJOY_M
+	.long	seq_stand
+	.long	vsgw1,vsgw2,vsgw3,vsgw4,vsgw5,vsgw4,vsgw3,vsgw2
+	.asg	3,N
+
+vsgw1
+	WLW	2,S1SETLA1,F
+	WL	-1,seq_jump
+	WLW	3,S1SETLA2,F
+	WLW	3,S1SETLA3,F
+	WLW	3,S1SETLA4,F
+	WLW	70,S1SETLA5,F
+	WLW	2,S1SETLA5,F
+	WLW	70,S1SETLA6,F
+	WLW	3,S1SETLA7,F
+	WLW	3,S1SETLA8,F
+	WLW	3,S1SETLA9,F
+	WLW	-1,seq_newdir,0*16
+	W0
+
+vsgw2
+	WL	-1,pick_rand2
+	WLW	2,S2HBHLA1,F
+	WL	-1,seq_jump
+	WLW	3,S2HBHLA2,F
+	WLW	3,S2HBHLA3,F
+	WLW	3,S2HBHLA4,F
+	WLW	3,S2HBHLA5,F
+	WLW	70,S2HBHLA6,F
+	WLW	1,S2HBHLA6,F
+	WLW	3,S2HBHLA7,F
+	WLW	3,S2HBHLA8,F
+	WLW	70,S2HBHLA9,F
+	WLW	-1,seq_newdir,1*16
+	W0
+
+vsgw3
+	WL	-1,pick_rand3
+	WLW	2,M3SPRLA1,F
+	WL	-1,seq_jump
+	WLW	3,M3SPRLA2,F
+	WLW	3,M3SPRLA3,F
+	WLW	3,M3SPRLA4,F
+	WLW	70,M3SPRLA5,F
+	WLW	3,M3SPRLA6,F
+	WLW	3,M3SPRLA7,F
+	WLW	70,M3SPRLA8,F
+	WLW	3,M3SPRLA9,F
+	WLW	3,M3SPRLA10,F
+	WLW	-1,seq_newdir,1*16
+	W0
+
+vsgw3a
+	WLW	2,S3HBHLA1,F
+	WL	-1,seq_jump
+	WLW	3,S3HBHLA2,F
+	WLW	70,S3HBHLA3,F
+	WLW	3,S3HBHLA3,F
+	WLW	70,S3HBHLA4,F
+	WLW	3,S3HBHLA6,F
+	WLW	3,S3HBHLA7,F
+	WLW	3,S3HBHLA8,F
+	WLW	3,S3HBHLA9,F
+	WLW	-1,seq_newdir,1*16
+	W0
+
+vsgw4
+	WLW	3,S4SETLA1,F
+	WL	-1,seq_jump
+	WLW	3,S4SETLA2,F
+	WLW	3,S4SETLA3,F
+	WLW	3,S4SETLA4,F
+	WLW	70,S4SETLA5,F
+	WLW	1,S4SETLA5,F
+	WLW	70,S4SETLA6,F
+	WLW	3,S4SETLA7,F
+	WLW	3,S4SETLA8,F
+	WLW	3,S4SETLA9,F
+	WLW	-1,seq_newdir,3*16
+	W0
+
+vsgw5
+	WLW	3,S5SETLA1,F
+	WL	-1,seq_jump
+	WLW	3,S5SETLA2,F
+	WLW	3,S5SETLA3,F
+	WLW	3,S5SETLA4,F
+	WLW	70,S5SETLA5,F
+	WLW	2,S5SETLA5,F
+	WLW	3,S5SETLA6,F
+	WLW	70,S5SETLA7,F
+	WLW	3,S5SETLA8,F
+	WLW	3,S5SETLA9,F
+	WLW	3,S5SETLA10,F
+	WLW	-1,seq_newdir,3*16
+	W0
+
+pick_rand2
+	movk	6,a0
+	calla	rndrng0
+	sll	5,a0
+	addi	rand2_tbl,a0
+	move	*a0,a0,L
+	jrz	rs2
+	move	a0,b4			;sequence to run
+rs2
+	rets
+
+
+rand2_tbl
+	.long	vsgw3a,0,0,vsgw3a,0,vsgw3a,0
+
+	
+
+pick_rand3
+	movk	6,a0
+	calla	rndrng0
+	sll	5,a0
+	addi	rand3_tbl,a0
+	move	*a0,a0,L
+	jrz	rs3
+	move	a0,b4			;sequence to run
+rs3	rets
+
+
+rand3_tbl
+	.long	vsgw3a,0,vsgw3a,0,0,vsgw3a,0
+
+
+layup_t
+	.word	NOJUMP_M|SHOOT_M|NOJOY_M
+	.long	seq_stand
+	.long	gmpw1,gmpw2,gmpw3,gmpw4,gmpw5,gmpw4,gmpw3,gmpw2
+	.asg	3,N
+
+gmpw1
+	WLW	2,S1SETLA1,F
+	WL	-1,seq_jump
+	WLW	3,S1SETLA2,F
+	WLW	3,S1SETLA3,F
+	WLW	3,S1SETLA4,F
+	WLW	3,S1SETLA5,F
+	WL	-1,plyr_shoot
+	WLW	2,S1SETLA5,F
+	WLW	50,S1SETLA6,F
+	WLW	3,S1SETLA7,F
+	WLW	3,S1SETLA8,F
+	WLW	3,S1SETLA9,F
+	WLW	-1,seq_newdir,0*16
+	W0
+
+gmpw2
+	WLW	2,S2HBHLA1,F
+	WL	-1,seq_jump
+	WLW	3,S2HBHLA2,F
+	WLW	3,S2HBHLA3,F
+	WLW	3,S2HBHLA4,F
+	WLW	3,S2HBHLA5,F
+	WLW	3,S2HBHLA6,F
+	WL	-1,plyr_shoot
+	WLW	1,S2HBHLA6,F
+	WLW	3,S2HBHLA7,F
+	WLW	3,S2HBHLA8,F
+	WLW	50,S2HBHLA9,F
+	WLW	-1,seq_newdir,1*16
+	W0
+
+gmpw3
+	WLW	2,M3SPRLA1,F
+	WL	-1,seq_jump
+	WLW	3,M3SPRLA2,F
+	WLW	3,M3SPRLA3,F
+	WLW	3,M3SPRLA4,F
+	WLW	3,M3SPRLA5,F
+	WL	-1,plyr_shoot
+	WLW	2,M3SPRLA5,F
+	WLW	3,M3SPRLA6,F
+	WLW	3,M3SPRLA7,F
+	WLW	50,M3SPRLA8,F
+	WLW	3,M3SPRLA9,F
+	WLW	3,M3SPRLA10,F
+	WLW	-1,seq_newdir,1*16
+	W0
+
+gmpw3a
+	WLW	1,S3HBHLA1,F
+	WL	-1,seq_jump
+	WLW	3,S3HBHLA1,F
+	WLW	3,S3HBHLA2,F
+	WLW	3,S3HBHLA3,F
+	WL	-1,plyr_shoot
+	WLW	3,S3HBHLA3,F
+	WLW	50,S3HBHLA4,F
+	WLW	3,S3HBHLA6,F
+	WLW	3,S3HBHLA7,F
+	WLW	3,S3HBHLA8,F
+	WLW	3,S3HBHLA9,F
+	WLW	-1,seq_newdir,1*16
+	W0
+
+gmpw4
+	WLW	2,S4SETLA1,F
+	WL	-1,seq_jump
+	WLW	3,S4SETLA2,F
+	WLW	3,S4SETLA3,F
+	WLW	3,S4SETLA4,F
+	WLW	3,S4SETLA5,F
+	WL	-1,plyr_shoot
+	WLW	3,S4SETLA5,F
+	WLW	50,S4SETLA6,F
+	WLW	3,S4SETLA7,F
+	WLW	3,S4SETLA8,F
+	WLW	3,S4SETLA9,F
+	WLW	-1,seq_newdir,3*16
+	W0
+
+gmpw5
+	WLW	3,S5SETLA1,F
+	WL	-1,seq_jump
+	WLW	3,S5SETLA2,F
+	WLW	3,S5SETLA3,F
+	WLW	3,S5SETLA4,F
+	WLW	3,S5SETLA5,F
+	WL	-1,plyr_shoot
+	WLW	2,S5SETLA5,F
+	WLW	3,S5SETLA6,F
+	WLW	50,S5SETLA7,F
+	WLW	3,S5SETLA8,F
+	WLW	3,S5SETLA9,F
+	WLW	3,S5SETLA10,F
+	WLW	-1,seq_newdir,3*16
+	W0
+
+
+layupreb_t
+	.word	NOJUMP_M|SHOOT_M|NOJOY_M
+	.long	seq_stand
+	.long	mbic1,mbic2,mbic3,mbic4,mbic5,mbic4,mbic3,mbic2
+	.asg	3,N
+
+mbic1
+	WLW	2,S1SETLA1,F
+	WLW	3,S1SETLA2,F
+	WLW	3,S1SETLA3,F
+	WLW	3,S1SETLA4,F
+	WLW	1,S1SETLA5,F
+	WL	-1,plyr_shoot
+	WLW	2,S1SETLA5,F
+	WLW	50,S1SETLA6,F
+	WLW	3,S1SETLA7,F
+	WLW	3,S1SETLA8,F
+	WLW	3,S1SETLA9,F
+	WLW	-1,seq_newdir,0*16
+	W0
+
+
+mbic2
+	WLW	2,S2HBHLA1,F
+	WLW	3,S2HBHLA2,F
+	WLW	3,S2HBHLA3,F
+	WLW	3,S2HBHLA4,F
+	WLW	3,S2HBHLA5,F
+	WLW	1,S2HBHLA6,F
+	WL	-1,plyr_shoot
+	WLW	2,S2HBHLA6,F
+	WLW	3,S2HBHLA7,F
+	WLW	3,S2HBHLA8,F
+	WLW	50,S2HBHLA9,F
+	WLW	-1,seq_newdir,1*16
+	W0
+
+mbic3
+	WLW	2,S3HBHLA1,F
+	WLW	3,S3HBHLA2,F
+	WLW	1,S3HBHLA3,F
+	WL	-1,plyr_shoot
+	WLW	3,S3HBHLA3,F
+	WLW	50,S3HBHLA4,F
+	WLW	3,S3HBHLA6,F
+	WLW	3,S3HBHLA7,F
+	WLW	3,S3HBHLA8,F
+	WLW	3,S3HBHLA9,F
+	WLW	-1,seq_newdir,1*16
+	W0
+
+mbic4
+	WLW	3,S4SETLA1,F
+	WLW	3,S4SETLA2,F
+	WLW	3,S4SETLA3,F
+	WLW	3,S4SETLA4,F
+	WLW	1,S4SETLA5,F
+	WL	-1,plyr_shoot
+	WLW	1,S4SETLA5,F
+	WLW	50,S4SETLA6,F
+	WLW	3,S4SETLA7,F
+	WLW	3,S4SETLA8,F
+	WLW	3,S4SETLA9,F
+	WLW	-1,seq_newdir,3*16
+	W0
+mbic5
+	WLW	3,S5SETLA1,F
+	WLW	3,S5SETLA2,F
+	WLW	3,S5SETLA3,F
+	WLW	3,S5SETLA4,F
+	WLW	1,S5SETLA5,F
+	WL	-1,plyr_shoot
+	WLW	2,S5SETLA5,F
+	WLW	3,S5SETLA6,F
+	WLW	50,S5SETLA7,F
+	WLW	3,S5SETLA8,F
+	WLW	3,S5SETLA9,F
+	WLW	3,S5SETLA10,F
+	WLW	-1,seq_newdir,3*16
+	W0
+
+
+	.end
+
+
+
+
+

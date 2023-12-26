@@ -1,4 +1,4 @@
-****************************************************************
+#****************************************************************
 *
 * Owner:	JOHNSON
 *
@@ -110,447 +110,447 @@
 ;    SPEECH
 ;***************
 ;
- SX	cheer_snd,   >1004,110,>1cd
- SX	cheer1_snd,  >1004,110,>1d1
- SX	cheer2_snd,  >1004,110,>1d5
- SX	cheer3_snd,  >1004,110,>1d9
- SX	cheer4_snd,  >1004,110,>1d5
+ SX	cheer_snd,   01004H,110,01cdH
+ SX	cheer1_snd,  01004H,110,01d1H
+ SX	cheer2_snd,  01004H,110,01d5H
+ SX	cheer3_snd,  01004H,110,01d9H
+ SX	cheer4_snd,  01004H,110,01d5H
 
- SX	crwdbed_kill,>7102,25, >dc
- SX	crwdbed_tune,>7002,799,>dd
- SX	crwdbd2_tune,>7002,799,>db
- SX	crwd_arbl_sp,>2404,135,>1ed	;f0
+ SX	crwdbed_kill,07102H,25, 0dcH
+ SX	crwdbed_tune,07002H,799,0ddH
+ SX	crwdbd2_tune,07002H,799,0dbH
+ SX	crwd_arbl_sp,02404H,135,01edH	;f0
 
- SX	midway_sp,   >200D,67, >b00
- SX	nba_hngtm_sp,>200D,99, >b02
- SX	at_hlftme_sp,>150D,61, >adc
- SX	gm_undrwy_sp,>150D,70, >adb
- SX	heres_tip_sp,>150D,61, >b20
- SX	overtime_sp, >200D,60, >add
- SX	showtm,      >250D,75, >a9b
- SX	tst_triva_sp,>100D,76, >afd
+ SX	midway_sp,   0200DH,67, 0b00H
+ SX	nba_hngtm_sp,0200DH,99, 0b02H
+ SX	at_hlftme_sp,0150DH,61, 0adcH
+ SX	gm_undrwy_sp,0150DH,70, 0adbH
+ SX	heres_tip_sp,0150DH,61, 0b20H
+ SX	overtime_sp, 0200DH,60, 0addH
+ SX	showtm,      0250DH,75, 0a9bH
+ SX	tst_triva_sp,0100DH,76, 0afdH
 
 
- SX	has_sp,      >100D,20, >af1
- SX	with_sp,     >100D,18, >aef
- SX	leadng_by_sp,>100D,64, >84e
- SX	leads_by_sp, >100D,58, >84b
- SX	lead_by_sp,  >100D,43, >849
- SX	by_sp,       >100D,19, >851
- SX	have_lead_sp,>100D,57, >84f
- SX	take_lead_sp,>100D,49, >84c
- SX	taks_lead_sp,>100D,56, >84d
+ SX	has_sp,      0100DH,20, 0af1H
+ SX	with_sp,     0100DH,18, 0aefH
+ SX	leadng_by_sp,0100DH,64, 084eH
+ SX	leads_by_sp, 0100DH,58, 084bH
+ SX	lead_by_sp,  0100DH,43, 0849H
+ SX	by_sp,       0100DH,19, 0851H
+ SX	have_lead_sp,0100DH,57, 084fH
+ SX	take_lead_sp,0100DH,49, 084cH
+ SX	taks_lead_sp,0100DH,56, 084dH
 
- SX	downby_sp,   >100D,41, >845
- SX	behind_by_sp,>100D,56, >853
- SX	catchg_up_sp,>100D,41, >873
+ SX	downby_sp,   0100DH,41, 0845H
+ SX	behind_by_sp,0100DH,56, 0853H
+ SX	catchg_up_sp,0100DH,41, 0873H
 
- SX	gme_tied1_sp,>100D,44, >864
- SX	gme_tied2_sp,>100D,49, >864
- SX	tied_at_sp,  >100D,99, >866
- SX	minute_sp,   >100D,59, >ab4
+ SX	gme_tied1_sp,0100DH,44, 0864H
+ SX	gme_tied2_sp,0100DH,49, 0864H
+ SX	tied_at_sp,  0100DH,99, 0866H
+ SX	minute_sp,   0100DH,59, 0ab4H
 
- SX     vs_sp,       >100D,47, >509
- SX	wingame_sp,  >200D,45, >863
- SX	baddec_sp,   >100D,56, >9eb
- SX	ohmy,  	     >100D,62, >96f
- SX	fancy,	     >100D,51, >ae6
- SX	matchup_sp,  >100D,65, >ab1
- SX	wideopen_sp, >100D,41, >939
- SX	no_prsure_sp,>100D,48, >a3d
- SX	opn_for_3_sp,>100D,69, >b0a
- SX	all_alone_sp,>100D,42, >91c
- SX	its_good_sp, >130D,61, >819
- SX	it_is_sp,    >100D,65, >816
- SX	off_in_time, >100D,93, >814
- SX	shrt_rng_sp, >100D,56, >7eb
- SX	finese_it_sp,>100D,47, >80f
- SX	frm_post_sp, >100D,41, >7e4
- SX	baby_hook_sp,>100D,47, >802
- SX	half_hook_sp,>100D,46, >804
- SX	hook_shot_sp,>100D,41, >805
- SX	sky_hook_sp, >100D,74, >83f
- SX	sky_hook2_sp,>100D,72, >b09
- SX	rgt_hndr_sp, >100D,69, >830
- SX	lft_hndr_sp, >100D,67, >831
- SX	for_two_sp,  >100D,40, >b08
- SX	from_15_sp,  >100D,45, >b0d
- SX	from_18_sp,  >100D,45, >b0e
- SX	from_20_sp,  >100D,35, >b0f
- SX	shoots1_sp,  >100D,37, >83c	;**
- SX	shoots2_sp,  >100D,42, >83c
- SX	shoots3_sp,  >100D,33, >83d
- SX	from_arc_sp, >100D,40, >7e1
- SX	tp_circle_sp,>100D,63, >b1c	;7e5
- SX	for_thre1_sp,>100D,47, >7e6
- SX	frm_dwntn_sp,>100D,67, >7e9
- SX	bhd_3_arc_sp,>100D,69, >825
- SX	frm_3_arc_sp,>100D,65, >826
- SX	for_thre2_sp,>100D,45, >82a
- SX	for_thre3_sp,>100D,51, >839
- SX	frm_outsd_sp,>100D,63, >83b
- SX	unlod_one_sp,>100D,68, >7ff
- SX	frm_l_rng_sp,>100D,63, >801
- SX	hail_mary_sp,>100D,59, >a22
- SX	agn_shoot_sp,>100D,55, >80d
- SX	it_culdbe_sp,>100D,60, >80c
- SX	could_tie_sp,>100D,77, >b04
- SX	outof_rng_sp,>100D,84, >9b9
- SX	outof_rg2_sp,>100D,84, >9b9
- SX	out_cntrl_sp,>100D,58, >9bd
- SX	rainbow_sp,  >110D,70, >9f2
- SX	difficult_sp,>100D,56, >9af
+ SX     vs_sp,       0100DH,47, 0509H
+ SX	wingame_sp,  0200DH,45, 0863H
+ SX	baddec_sp,   0100DH,56, 09ebH
+ SX	ohmy,  	     0100DH,62, 096fH
+ SX	fancy,	     0100DH,51, 0ae6H
+ SX	matchup_sp,  0100DH,65, 0ab1H
+ SX	wideopen_sp, 0100DH,41, 0939H
+ SX	no_prsure_sp,0100DH,48, 0a3dH
+ SX	opn_for_3_sp,0100DH,69, 0b0aH
+ SX	all_alone_sp,0100DH,42, 091cH
+ SX	its_good_sp, 0130DH,61, 0819H
+ SX	it_is_sp,    0100DH,65, 0816H
+ SX	off_in_time, 0100DH,93, 0814H
+ SX	shrt_rng_sp, 0100DH,56, 07ebH
+ SX	finese_it_sp,0100DH,47, 080fH
+ SX	frm_post_sp, 0100DH,41, 07e4H
+ SX	baby_hook_sp,0100DH,47, 0802H
+ SX	half_hook_sp,0100DH,46, 0804H
+ SX	hook_shot_sp,0100DH,41, 0805H
+ SX	sky_hook_sp, 0100DH,74, 083fH
+ SX	sky_hook2_sp,0100DH,72, 0b09H
+ SX	rgt_hndr_sp, 0100DH,69, 0830H
+ SX	lft_hndr_sp, 0100DH,67, 0831H
+ SX	for_two_sp,  0100DH,40, 0b08H
+ SX	from_15_sp,  0100DH,45, 0b0dH
+ SX	from_18_sp,  0100DH,45, 0b0eH
+ SX	from_20_sp,  0100DH,35, 0b0fH
+ SX	shoots1_sp,  0100DH,37, 083cH	;**
+ SX	shoots2_sp,  0100DH,42, 083cH
+ SX	shoots3_sp,  0100DH,33, 083dH
+ SX	from_arc_sp, 0100DH,40, 07e1H
+ SX	tp_circle_sp,0100DH,63, 0b1cH	;7e5
+ SX	for_thre1_sp,0100DH,47, 07e6H
+ SX	frm_dwntn_sp,0100DH,67, 07e9H
+ SX	bhd_3_arc_sp,0100DH,69, 0825H
+ SX	frm_3_arc_sp,0100DH,65, 0826H
+ SX	for_thre2_sp,0100DH,45, 082aH
+ SX	for_thre3_sp,0100DH,51, 0839H
+ SX	frm_outsd_sp,0100DH,63, 083bH
+ SX	unlod_one_sp,0100DH,68, 07ffH
+ SX	frm_l_rng_sp,0100DH,63, 0801H
+ SX	hail_mary_sp,0100DH,59, 0a22H
+ SX	agn_shoot_sp,0100DH,55, 080dH
+ SX	it_culdbe_sp,0100DH,60, 080cH
+ SX	could_tie_sp,0100DH,77, 0b04H
+ SX	outof_rng_sp,0100DH,84, 09b9H
+ SX	outof_rg2_sp,0100DH,84, 09b9H
+ SX	out_cntrl_sp,0100DH,58, 09bdH
+ SX	rainbow_sp,  0110DH,70, 09f2H
+ SX	difficult_sp,0100DH,56, 09afH
 
- SX	swith_hnd_sp,>110D,53, >823
- SX	spn_shtup_sp,>110D,56, >7fd
- SX	a_fngr_rl_sp,>110D,55, >902
+ SX	swith_hnd_sp,0110DH,53, 0823H
+ SX	spn_shtup_sp,0110DH,56, 07fdH
+ SX	a_fngr_rl_sp,0110DH,55, 0902H
 
- SX	hnd_face_sp, >100D,67, >b24
- SX	ill_shot_sp, >100D,60, >b25
- SX	frcd_shot_sp,>100D,56, >b2d
- SX	wild_shot_sp,>100D,56, >b2e	;9bb
+ SX	hnd_face_sp, 0100DH,67, 0b24H
+ SX	ill_shot_sp, 0100DH,60, 0b25H
+ SX	frcd_shot_sp,0100DH,56, 0b2dH
+ SX	wild_shot_sp,0100DH,56, 0b2eH	;9bb
 
- SX	alley_oop_sp,>100D,63, >a18
- SX	alyoop_ps_sp,>100D,63, >a1a
- SX	thr_tmwrk_sp,>100D,61, >a9d
- SX	thr_smkn_sp, >100D,57, >af5
- SX	thr_zone_sp, >100D,65, >b05
- SX	whta_show_sp,>100D,57, >958
+ SX	alley_oop_sp,0100DH,63, 0a18H
+ SX	alyoop_ps_sp,0100DH,63, 0a1aH
+ SX	thr_tmwrk_sp,0100DH,61, 0a9dH
+ SX	thr_smkn_sp, 0100DH,57, 0af5H
+ SX	thr_zone_sp, 0100DH,65, 0b05H
+ SX	whta_show_sp,0100DH,57, 0958H
 
- SX	dble_dnk_sp, >120D,55, >b3a
- SX	dble_dnk2_sp,>120D,78, >b38
- SX	lob_pass_sp, >120D,55, >a1c
- SX	scp_tmate_sp,>120D,85, >b3b
- SX	lev_tmate_sp,>120D,83, >b3d
- SX	is_legal_sp ,>100D,65, >b21
+ SX	dble_dnk_sp, 0120DH,55, 0b3aH
+ SX	dble_dnk2_sp,0120DH,78, 0b38H
+ SX	lob_pass_sp, 0120DH,55, 0a1cH
+ SX	scp_tmate_sp,0120DH,85, 0b3bH
+ SX	lev_tmate_sp,0120DH,83, 0b3dH
+ SX	is_legal_sp ,0100DH,65, 0b21H
 
- SX	tm_onfire_sp,>140D,76, >b3e
- SX	bth_onfre_sp,>100D,80, >b3f
+ SX	tm_onfire_sp,0140DH,76, 0b3eH
+ SX	bth_onfre_sp,0100DH,80, 0b3fH
 
- SX	cantbuy_sp,  >100D,68, >9ec
- SX	rtle_arnd_sp,>100D,77, >9d2
- SX	ugly_shot_sp,>100D,71, >9e6
- SX	putup_brk_sp,>100D,66, >9b2
- SX	nogood_sp,   >130D,31, >9d4
- SX	mis_fires_sp,>100D,56, >9d8
- SX	there_brk_sp,>100D,66, >9b5
- SX	dwn_luck_sp, >100D,54, >ac9
- SX	missed_sp,   >100D,30, >9d6
- SX	mised_agn_sp,>100D,59, >9d7
- SX	hita_barn_sp,>100D,124,>a98
- SX	wht_thnk2_sp,>100D,88, >9ed
- SX	wht_distr_sp,>100D,73, >aa8
- SX	at_buzzer_sp,>100D,57, >7e8
- SX	sht_ball_sp, >100D,53, >aad
+ SX	cantbuy_sp,  0100DH,68, 09ecH
+ SX	rtle_arnd_sp,0100DH,77, 09d2H
+ SX	ugly_shot_sp,0100DH,71, 09e6H
+ SX	putup_brk_sp,0100DH,66, 09b2H
+ SX	nogood_sp,   0130DH,31, 09d4H
+ SX	mis_fires_sp,0100DH,56, 09d8H
+ SX	there_brk_sp,0100DH,66, 09b5H
+ SX	dwn_luck_sp, 0100DH,54, 0ac9H
+ SX	missed_sp,   0100DH,30, 09d6H
+ SX	mised_agn_sp,0100DH,59, 09d7H
+ SX	hita_barn_sp,0100DH,124,0a98H
+ SX	wht_thnk2_sp,0100DH,88, 09edH
+ SX	wht_distr_sp,0100DH,73, 0aa8H
+ SX	at_buzzer_sp,0100DH,57, 07e8H
+ SX	sht_ball_sp, 0100DH,53, 0aadH
 
- SX	off_rim_sp,  >100D,46, >9bf
- SX	off_frnt_sp, >100D,54, >9c9
- SX	holes_out_sp,>100D,58, >9ad
- SX	bnce_out_sp, >100D,42, >9d0
- SX	bnce_away_sp,>100D,54, >9d1
- SX	away_side_sp,>100D,56, >9c7
- SX	spins_out_sp,>100D,45, >9cb
- SX	side_rim_sp, >100D,61, >9c5
- SX	off_heel_sp, >100D,54, >9c3
- SX	no_sp,       >100D,30, >9cc
- SX	nicly_dne_sp,>100D,69, >a49
- SX	got_skilz_sp,>100D,67, >a97
+ SX	off_rim_sp,  0100DH,46, 09bfH
+ SX	off_frnt_sp, 0100DH,54, 09c9H
+ SX	holes_out_sp,0100DH,58, 09adH
+ SX	bnce_out_sp, 0100DH,42, 09d0H
+ SX	bnce_away_sp,0100DH,54, 09d1H
+ SX	away_side_sp,0100DH,56, 09c7H
+ SX	spins_out_sp,0100DH,45, 09cbH
+ SX	side_rim_sp, 0100DH,61, 09c5H
+ SX	off_heel_sp, 0100DH,54, 09c3H
+ SX	no_sp,       0100DH,30, 09ccH
+ SX	nicly_dne_sp,0100DH,69, 0a49H
+ SX	got_skilz_sp,0100DH,67, 0a97H
 
- SX	misd_evry_sp,>100D,66, >9e2
- SX	way_shrt_sp, >100D,57, >9df
- SX	misd_mile_sp,>100D,72, >9e3
- SX	teribl_sh_sp,>100D,57, >9ba
- SX	airball_sp,  >100D,56, >9da
+ SX	misd_evry_sp,0100DH,66, 09e2H
+ SX	way_shrt_sp, 0100DH,57, 09dfH
+ SX	misd_mile_sp,0100DH,72, 09e3H
+ SX	teribl_sh_sp,0100DH,57, 09baH
+ SX	airball_sp,  0100DH,56, 09daH
 
- SX	cannonbal_sp,>110D,58, >95b
- SX	sumrslts_sp, >110D,90, >96a
- SX	goes_flyg_sp,>110D,68, >acd
- SX	hiabv_rim_sp,>110D,49, >ad4
- SX	flies_air_sp,>110D,100,>96c
- SX	gldes_air_sp,>110D,99, >96d
- SX	raises_up_sp,>110D,45, >82d
- SX	serious_h_sp,>110D,79, >b03
- SX	learn_tht_sp,>110D,54, >97a
- SX	goes_up_sp,  >0905,37, >951
- SX	goes_hoop_sp,>110D,59, >95f
- SX	tks2_hoop_sp,>110D,51, >a36
- SX	fly_1hdnr_sp,>110D,76, >96e
- SX	didnt_knw_sp,>110D,77, >97f
- SX	haning_sp,   >110D,34, >a0f
- SX	ooooooh_sp,  >110D,65, >af7
- SX	ooooooh2_sp, >110D,40, >af7
- SX	thrgh_air_sp,>110D,50, >96b
- SX	way_upair_sp,>110D,75, >974
- SX	lch_atbkt_sp,>110D,100,>980
- SX	catapults_sp,>110D,49, >9ab
- SX	tomahk_dk_sp,>110D,66, >965
- SX	tomahk_hm_sp,>110D,79, >966
+ SX	cannonbal_sp,0110DH,58, 095bH
+ SX	sumrslts_sp, 0110DH,90, 096aH
+ SX	goes_flyg_sp,0110DH,68, 0acdH
+ SX	hiabv_rim_sp,0110DH,49, 0ad4H
+ SX	flies_air_sp,0110DH,100,096cH
+ SX	gldes_air_sp,0110DH,99, 096dH
+ SX	raises_up_sp,0110DH,45, 082dH
+ SX	serious_h_sp,0110DH,79, 0b03H
+ SX	learn_tht_sp,0110DH,54, 097aH
+ SX	goes_up_sp,  00905H,37, 0951H
+ SX	goes_hoop_sp,0110DH,59, 095fH
+ SX	tks2_hoop_sp,0110DH,51, 0a36H
+ SX	fly_1hdnr_sp,0110DH,76, 096eH
+ SX	didnt_knw_sp,0110DH,77, 097fH
+ SX	haning_sp,   0110DH,34, 0a0fH
+ SX	ooooooh_sp,  0110DH,65, 0af7H
+ SX	ooooooh2_sp, 0110DH,40, 0af7H
+ SX	thrgh_air_sp,0110DH,50, 096bH
+ SX	way_upair_sp,0110DH,75, 0974H
+ SX	lch_atbkt_sp,0110DH,100,0980H
+ SX	catapults_sp,0110DH,49, 09abH
+ SX	tomahk_dk_sp,0110DH,66, 0965H
+ SX	tomahk_hm_sp,0110DH,79, 0966H
 
- SX	shuld_pas_sp,>100D,75, >a6e
- SX	he_lst_bl_sp,>100D,75, >a74
- SX	he_lostit_sp,>100D,75, >a77
- SX	bal_loose_sp,>100D,75, >a7d
+ SX	shuld_pas_sp,0100DH,75, 0a6eH
+ SX	he_lst_bl_sp,0100DH,75, 0a74H
+ SX	he_lostit_sp,0100DH,75, 0a77H
+ SX	bal_loose_sp,0100DH,75, 0a7dH
 
- SX	fades_sp,    >100D,21, >b10
- SX	fadeaway_sp, >100D,80, >b11
- SX	leans_bck_sp,>100D,80, >b17
- SX	leans_sp,    >100D,21, >b14
- SX	leans_in_sp, >100D,80, >b16
- SX	pull_jmpr_sp,>100D,80, >838
- SX	bslne_lnr_sp,>100D,45, >b30
- SX	luky_bnce_sp,>100D,58, >92f
- SX	per_luck_sp, >100D,64, >946
+ SX	fades_sp,    0100DH,21, 0b10H
+ SX	fadeaway_sp, 0100DH,80, 0b11H
+ SX	leans_bck_sp,0100DH,80, 0b17H
+ SX	leans_sp,    0100DH,21, 0b14H
+ SX	leans_in_sp, 0100DH,80, 0b16H
+ SX	pull_jmpr_sp,0100DH,80, 0838H
+ SX	bslne_lnr_sp,0100DH,45, 0b30H
+ SX	luky_bnce_sp,0100DH,58, 092fH
+ SX	per_luck_sp, 0100DH,64, 0946H
 	
- SX	kaboom1_sp,  >100D,38, >b2a	;91a
- SX	kaboom2_sp,  >100D,69, >91b
- SX	isit_shoe_sp,>100D,62, >91e
+ SX	kaboom1_sp,  0100DH,38, 0b2aH	;91a
+ SX	kaboom2_sp,  0100DH,69, 091bH
+ SX	isit_shoe_sp,0100DH,62, 091eH
 
- SX	facial_sp,   >100D,80, >b42
+ SX	facial_sp,   0100DH,80, 0b42H
 
- SX	unbelieve_sp,>100D,53, >931
- SX	u_c_that_sp, >100D,65, >932
- SX	oh_man_sp,   >100D,52, >934
- SX	no_stopng_sp,>100D,75, >942
- SX	postr_jam_sp,>100D,67, >956
- SX	jam_it_in_sp,>100D,83, >95a
- SX	thndr_dnk_sp,>100D,60, >960
- SX	incredble_sp,>100D,49, >970
-; SX	supr_dnk_sp, >100D,61, >971	;**
- SX	mnstr_jam_sp,>100D,70, >971
- SX	amazing_sp,  >100D,57, >912
- SX	he_dnk_it_sp,>100D,33, >961
- SX	dunks_it_sp, >100D,24, >962
- SX	jams_it_sp,  >100D,35, >97c
- SX	spect_dnk_sp,>100D,81, >988
- SX	slam_dunk_sp,>100D,51, >989
- SX	he_slams_sp, >100D,42, >98b
- SX	with_ajam_sp,>100D,49, >998
- SX	powr_jams_sp,>100D,73, >9a6
+ SX	unbelieve_sp,0100DH,53, 0931H
+ SX	u_c_that_sp, 0100DH,65, 0932H
+ SX	oh_man_sp,   0100DH,52, 0934H
+ SX	no_stopng_sp,0100DH,75, 0942H
+ SX	postr_jam_sp,0100DH,67, 0956H
+ SX	jam_it_in_sp,0100DH,83, 095aH
+ SX	thndr_dnk_sp,0100DH,60, 0960H
+ SX	incredble_sp,0100DH,49, 0970H
+; SX	supr_dnk_sp, 0100DH,61, 0971H	;**
+ SX	mnstr_jam_sp,0100DH,70, 0971H
+ SX	amazing_sp,  0100DH,57, 0912H
+ SX	he_dnk_it_sp,0100DH,33, 0961H
+ SX	dunks_it_sp, 0100DH,24, 0962H
+ SX	jams_it_sp,  0100DH,35, 097cH
+ SX	spect_dnk_sp,0100DH,81, 0988H
+ SX	slam_dunk_sp,0100DH,51, 0989H
+ SX	he_slams_sp, 0100DH,42, 098bH
+ SX	with_ajam_sp,0100DH,49, 0998H
+ SX	powr_jams_sp,0100DH,73, 09a6H
 
- SX	head_fake_sp,>050D,24, >a8e
- SX	the_fake_sp, >050D,26, >a8f
- SX	pump_fake_sp,>050D,30, >a91
+ SX	head_fake_sp,0050DH,24, 0a8eH
+ SX	the_fake_sp, 0050DH,26, 0a8fH
+ SX	pump_fake_sp,0050DH,30, 0a91H
 
- SX	hits_jmpr_sp,>100D,25, >906
- SX	good_4two_sp,>100D,50, >90a
- SX	a_trey_sp,   >100D,42, >82b
- SX	he_scores_sp,>100D,56, >93b
- SX	scores_sp,   >100D,37, >7de
- SX	score_agn_sp,>100D,70, >7f3
- SX	good_agn_sp, >100D,47, >7f4
- SX	yes_sp,      >100D,33, >b33
- SX	goooood_sp,  >100D,42, >818
- SX	goooood2_sp, >100D,42, >903
- SX	money_bnk_sp,>100D,33, >b33
- SX	chk_it_up_sp,>100D,56, >93b
- SX	good_4_3_sp, >100D,69, >929
- SX	thats_3_sp,  >100D,58, >92b
- SX	fantastic_sp,>100D,73, >a99
- SX	drains_it_sp,>100D,38, >93f
- SX	it_falls_sp, >100D,42, >90d
- SX	falls_in_sp, >100D,48, >91f
- SX	kncks_dwn_sp,>100D,54, >92c
- SX	dwn_well_sp, >100D,90, >94b
- SX	bomshakalaka,>100D,56, >afc
- SX	rama_dong_sp,>100D,80, >b47
+ SX	hits_jmpr_sp,0100DH,25, 0906H
+ SX	good_4two_sp,0100DH,50, 090aH
+ SX	a_trey_sp,   0100DH,42, 082bH
+ SX	he_scores_sp,0100DH,56, 093bH
+ SX	scores_sp,   0100DH,37, 07deH
+ SX	score_agn_sp,0100DH,70, 07f3H
+ SX	good_agn_sp, 0100DH,47, 07f4H
+ SX	yes_sp,      0100DH,33, 0b33H
+ SX	goooood_sp,  0100DH,42, 0818H
+ SX	goooood2_sp, 0100DH,42, 0903H
+ SX	money_bnk_sp,0100DH,33, 0b33H
+ SX	chk_it_up_sp,0100DH,56, 093bH
+ SX	good_4_3_sp, 0100DH,69, 0929H
+ SX	thats_3_sp,  0100DH,58, 092bH
+ SX	fantastic_sp,0100DH,73, 0a99H
+ SX	drains_it_sp,0100DH,38, 093fH
+ SX	it_falls_sp, 0100DH,42, 090dH
+ SX	falls_in_sp, 0100DH,48, 091fH
+ SX	kncks_dwn_sp,0100DH,54, 092cH
+ SX	dwn_well_sp, 0100DH,90, 094bH
+ SX	bomshakalaka,0100DH,56, 0afcH
+ SX	rama_dong_sp,0100DH,80, 0b47H
 
- SX	hlftm_ldr_sp,>160D,73, >ae9
- SX	gmevr_ldr_sp,>160D,73, >aea
+ SX	hlftm_ldr_sp,0160DH,73, 0ae9H
+ SX	gmevr_ldr_sp,0160DH,73, 0aeaH
 
- SX	spin_mv1_sp, >100D,60, >7f7
- SX	spin_mv2_sp, >100D,60, >991
- SX	spin_mv3_sp, >100D,60, >993
+ SX	spin_mv1_sp, 0100DH,60, 07f7H
+ SX	spin_mv2_sp, 0100DH,60, 0991H
+ SX	spin_mv3_sp, 0100DH,60, 0993H
 
- SX	book_it_sp,  >100D,28, >8ff
- SX	count_it_sp, >100D,39, >90b
- SX	bingo_sp,    >100D,41, >ae2
+ SX	book_it_sp,  0100DH,28, 08ffH
+ SX	count_it_sp, 0100DH,39, 090bH
+ SX	bingo_sp,    0100DH,41, 0ae2H
 
- SX	ever_miss_sp,>100D,77, >a95
- SX	hot_hand_sp, >100D,70, >93d
- SX	on_fire_sp,  >150D,83, >972
- SX	heatup_sp,   >130D,54, >b1e
- SX	lightn_up_sp,>120D,68, >aa4
- SX	smokin_sp,   >100D,40, >af6
+ SX	ever_miss_sp,0100DH,77, 0a95H
+ SX	hot_hand_sp, 0100DH,70, 093dH
+ SX	on_fire_sp,  0150DH,83, 0972H
+ SX	heatup_sp,   0130DH,54, 0b1eH
+ SX	lightn_up_sp,0120DH,68, 0aa4H
+ SX	smokin_sp,   0100DH,40, 0af6H
 
- SX	swish_sp,    >100D,37, >917
- SX	rgt_thrgh_sp,>100D,53, >b4a
- SX	botm_net_sp, >100D,67, >b4c
- SX	ngbut_net_sp,>100D,85, >b4b
- SX	whata_sht_sp,>100D,47, >937
- SX	great_sht_sp,>100D,54, >935
- SX	good_sht_sp, >100D,36, >938
- SX	he_uncon_sp, >100D,61, >914
+ SX	swish_sp,    0100DH,37, 0917H
+ SX	rgt_thrgh_sp,0100DH,53, 0b4aH
+ SX	botm_net_sp, 0100DH,67, 0b4cH
+ SX	ngbut_net_sp,0100DH,85, 0b4bH
+ SX	whata_sht_sp,0100DH,47, 0937H
+ SX	great_sht_sp,0100DH,54, 0935H
+ SX	good_sht_sp, 0100DH,36, 0938H
+ SX	he_uncon_sp, 0100DH,61, 0914H
 
- SX	banked_it_sp,>100D,27, >829
- SX	a_banker_sp, >100D,33, >811
- SX	soft_glas_sp,>100D,95, >810
+ SX	banked_it_sp,0100DH,27, 0829H
+ SX	a_banker_sp, 0100DH,33, 0811H
+ SX	soft_glas_sp,0100DH,95, 0810H
 
- SX	off_bkbrd_sp,>100D,80, >827
- SX	off_glass_sp,>100D,80, >83a
- SX	kild_smne_sp,>100D,110,>9ee
- SX	off_trgt_sp, >100D,80, >9e1
- SX	sht_stunk_sp,>100D,97, >9e8
- SX	wht_thnkg_sp,>100D,88, >9ed
+ SX	off_bkbrd_sp,0100DH,80, 0827H
+ SX	off_glass_sp,0100DH,80, 083aH
+ SX	kild_smne_sp,0100DH,110,09eeH
+ SX	off_trgt_sp, 0100DH,80, 09e1H
+ SX	sht_stunk_sp,0100DH,97, 09e8H
+ SX	wht_thnkg_sp,0100DH,88, 09edH
 
- SX	fr_thw_ln_sp,>100D,65, >837
- SX	top_key_sp,  >100D,70, >807
- SX	frm_paint_sp,>100D,40, >7ed
- SX	frm_wing_sp, >100D,38, >7e7
- SX	lnch_jmpr_sp,>100D,59, >83e
- SX	stp_n_pop_sp,>100D,75, >832
- SX	fires_jumpr, >100D,55, >82e
- SX	ltle_jmpr_sp,>100D,48, >7f2
+ SX	fr_thw_ln_sp,0100DH,65, 0837H
+ SX	top_key_sp,  0100DH,70, 0807H
+ SX	frm_paint_sp,0100DH,40, 07edH
+ SX	frm_wing_sp, 0100DH,38, 07e7H
+ SX	lnch_jmpr_sp,0100DH,59, 083eH
+ SX	stp_n_pop_sp,0100DH,75, 0832H
+ SX	fires_jumpr, 0100DH,55, 082eH
+ SX	ltle_jmpr_sp,0100DH,48, 07f2H
 
- SX	fingr_rol_sp,>100D,46, >80e
- SX	figr_itin_sp,>100D,90, >901
- SX	fingr_rl2_sp,>100D,46, >80e
- SX	lay_it_up_sp,>100D,45, >81b
- SX	layup_sp,    >100D,41, >81c
- SX	he_layup_sp, >100D,58, >81e
- SX	drv_layup_sp,>100D,61, >b19
+ SX	fingr_rol_sp,0100DH,46, 080eH
+ SX	figr_itin_sp,0100DH,90, 0901H
+ SX	fingr_rl2_sp,0100DH,46, 080eH
+ SX	lay_it_up_sp,0100DH,45, 081bH
+ SX	layup_sp,    0100DH,41, 081cH
+ SX	he_layup_sp, 0100DH,58, 081eH
+ SX	drv_layup_sp,0100DH,61, 0b19H
 
- SX	whyyyy_sp,   >100D,41, >ae3
- SX	blowout_sp,  >100D,85, >859		;it's a blowout
- SX	whoomp_sp,   >100D,72, >85a		;Whoomp, there it is
- SX	its_hstry_sp,>100D,47, >861
- SX	fnl_strw_sp, >100D,90, >b4e
- SX	fat_sing_sp, >100D,115,>858
- SX	needshot_sp, >100D,72, >ab2
- SX	run_out_sp,  >100D,55, >876
+ SX	whyyyy_sp,   0100DH,41, 0ae3H
+ SX	blowout_sp,  0100DH,85, 0859H		;it's a blowout
+ SX	whoomp_sp,   0100DH,72, 085aH		;Whoomp, there it is
+ SX	its_hstry_sp,0100DH,47, 0861H
+ SX	fnl_strw_sp, 0100DH,90, 0b4eH
+ SX	fat_sing_sp, 0100DH,115,0858H
+ SX	needshot_sp, 0100DH,72, 0ab2H
+ SX	run_out_sp,  0100DH,55, 0876H
 
- SX	passes_sp,   >070D,33, >9f4
- SX	he_passes_sp,>070D,43, >9f6
- SX	a_pass_sp,   >070D,33, >9fb
- SX	tosses_it_sp,>070D,39, >9fc
- SX	guns_it_sp,  >070D,43, >a13
+ SX	passes_sp,   0070DH,33, 09f4H
+ SX	he_passes_sp,0070DH,43, 09f6H
+ SX	a_pass_sp,   0070DH,33, 09fbH
+ SX	tosses_it_sp,0070DH,39, 09fcH
+ SX	guns_it_sp,  0070DH,43, 0a13H
 
- SX	cros_crt_sp, >070D,37, >a16
- SX	downcourt_sp,>070D,37, >a0a
- SX	hev_dncrt_sp,>070D,69, >a1d
- SX	bnce_pass_sp,>070D,41, >a20
- SX	dumps_it_sp, >070D,27, >9fe
- SX	long_pass_sp,>070D,85, >a0b
- SX	pas_outsd_sp,>070D,58, >9f8
+ SX	cros_crt_sp, 0070DH,37, 0a16H
+ SX	downcourt_sp,0070DH,37, 0a0aH
+ SX	hev_dncrt_sp,0070DH,69, 0a1dH
+ SX	bnce_pass_sp,0070DH,41, 0a20H
+ SX	dumps_it_sp, 0070DH,27, 09feH
+ SX	long_pass_sp,0070DH,85, 0a0bH
+ SX	pas_outsd_sp,0070DH,58, 09f8H
 
- SX	goal_tend_sp,>120D,47, >a4b	;SUX
+ SX	goal_tend_sp,0120DH,47, 0a4bH	;SUX
 
- SX	rebounds_sp, >100D,60, >af3
- SX	tks_rbnd2_sp,>100D,73, >a4f
- SX	tks_rbnd3_sp,>100D,96, >a61
- SX	grab_rock_sp,>100D,61, >a52
- SX	has_rebnd_sp,>100D,64, >a55
- SX	grab_ball_sp,>100D,64, >a56
- SX	tks_rebnd_sp,>100D,81, >a57
- SX	posession_sp,>100D,57, >a58
- SX	off_rebnd_sp,>100D,89, >a5a
- SX	pulls_off_sp,>100D,87, >a5b
- SX	with_bord_sp,>100D,77, >a5c
- SX	grbs_rbnd_sp,>100D,80, >a5d
- SX	ynk_rim_sp,  >100D,80, >a5f
- SX	da_rebnd_sp, >100D,45, >a60
- SX	rip_rebnd_sp,>100D,87, >a50
- SX	rbnd_miss_sp,>100D,97, >a64
+ SX	rebounds_sp, 0100DH,60, 0af3H
+ SX	tks_rbnd2_sp,0100DH,73, 0a4fH
+ SX	tks_rbnd3_sp,0100DH,96, 0a61H
+ SX	grab_rock_sp,0100DH,61, 0a52H
+ SX	has_rebnd_sp,0100DH,64, 0a55H
+ SX	grab_ball_sp,0100DH,64, 0a56H
+ SX	tks_rebnd_sp,0100DH,81, 0a57H
+ SX	posession_sp,0100DH,57, 0a58H
+ SX	off_rebnd_sp,0100DH,89, 0a5aH
+ SX	pulls_off_sp,0100DH,87, 0a5bH
+ SX	with_bord_sp,0100DH,77, 0a5cH
+ SX	grbs_rbnd_sp,0100DH,80, 0a5dH
+ SX	ynk_rim_sp,  0100DH,80, 0a5fH
+ SX	da_rebnd_sp, 0100DH,45, 0a60H
+ SX	rip_rebnd_sp,0100DH,87, 0a50H
+ SX	rbnd_miss_sp,0100DH,97, 0a64H
 
- SX	its_blckd_sp,>130D,47, >a66
- SX	outa_here_sp,>130D,63, >a67
- SX	blckd_it_sp, >130D,29, >a68
- SX	no_way_sp,   >130D,47, >a69
- SX	rejected_sp, >130D,46, >a6a
- SX	deflected_sp,>130D,38, >a6c
- SX	look_out_sp, >130D,41, >a6f
+ SX	its_blckd_sp,0130DH,47, 0a66H
+ SX	outa_here_sp,0130DH,63, 0a67H
+ SX	blckd_it_sp, 0130DH,29, 0a68H
+ SX	no_way_sp,   0130DH,47, 0a69H
+ SX	rejected_sp, 0130DH,46, 0a6aH
+ SX	deflected_sp,0130DH,38, 0a6cH
+ SX	look_out_sp, 0130DH,41, 0a6fH
 
- SX	stolen_sp,   >130D,35, >a72
- SX	the_steal_sp,>130D,39, >a73
- SX	turnover_sp, >130D,48, >a75
- SX	trnd_over_sp,>130D,61, >a76
- SX	quck_hnds_sp,>130D,46, >a79
- SX	intrceptd_sp,>130D,48, >a7f
- SX	stripped_sp, >130D,29, >a84
- SX	clean_pck_sp,>130D,48, >a83
- SX	bad_pass_sp, >130D,56, >a82
+ SX	stolen_sp,   0130DH,35, 0a72H
+ SX	the_steal_sp,0130DH,39, 0a73H
+ SX	turnover_sp, 0130DH,48, 0a75H
+ SX	trnd_over_sp,0130DH,61, 0a76H
+ SX	quck_hnds_sp,0130DH,46, 0a79H
+ SX	intrceptd_sp,0130DH,48, 0a7fH
+ SX	stripped_sp, 0130DH,29, 0a84H
+ SX	clean_pck_sp,0130DH,48, 0a83H
+ SX	bad_pass_sp, 0130DH,56, 0a82H
 
- SX	flagrant_sp, >090D,37, >abb
- SX	to_floor_sp, >090D,43, >ac6
- SX	to_deck_sp,  >090D,37, >ac7
- SX	shvd_asde_sp,>090D,67, >aca
- SX	tookm_out_sp,>090D,48, >abe
- SX	hamerd_hm_sp,>090D,35, >ad1
- SX	into_stnd_sp,>050D,96, >ac4
+ SX	flagrant_sp, 0090DH,37, 0abbH
+ SX	to_floor_sp, 0090DH,43, 0ac6H
+ SX	to_deck_sp,  0090DH,37, 0ac7H
+ SX	shvd_asde_sp,0090DH,67, 0acaH
+ SX	tookm_out_sp,0090DH,48, 0abeH
+ SX	hamerd_hm_sp,0090DH,35, 0ad1H
+ SX	into_stnd_sp,0050DH,96, 0ac4H
 
 
- SX	nick_nme1,   >100D,23, >760
- SX	nick_nme2,   >100D,23, >8c6
- SX	nick_nme3,   >100D,35, >758
- SX	nick_nme4,   >100D,25, >774
- SX	nick_nme5,   >100D,36, >784
- SX	nick_nme6,   >100D,20, >75c
- SX	nick_nme7,   >100D,24, >75e
- SX	nick_nme8,   >100D,37, >8cc
- SX	nick_nme9,   >100D,25, >8d8
- SX	nick_nme10,  >100D,24, >78e
- SX	nick_nme11,  >100D,32, >8b8
- SX	nick_nme12,  >100D,37, >766
- SX	nick_nme13,  >100D,25, >8d4
- SX	nick_nme14,  >100D,46, >8bc
- SX	nick_nme15,  >100D,20, >768
- SX	nick_nme16,  >100D,37, >796
- SX	nick_nme17,  >100D,25, >76a
- SX	nick_nme18,  >100D,31, >76c
- SX	nick_nme19,  >100D,27, >76e
- SX	nick_nme20,  >100D,20, >798
- SX	nick_nme21,  >100D,36, >79a
- SX	nick_nme22,  >100D,40, >776
- SX	nick_nme23,  >100D,46, >8be
- SX	nick_nme24,  >100D,31, >8ca
-; SX	nick_nme25,  >100D,28, >8c0
- SX	nick_nme26,  >100D,28, >8ce
- SX	nick_nme27,  >100D,32, >77c
- SX	nick_nme28,  >100D,28, >77e
- SX	nick_nme29,  >100D,21, >780
- SX	nick_nme30,  >100D,31, >782
- SX	nick_nme31,  >100D,27, >786
- SX	nick_nme32,  >100D,24, >788
- SX	nick_nme33,  >100D,29, >78a
- SX	nick_nme34,  >100D,36, >78c
- SX	nick_nme35,  >100D,21, >790
- SX	nick_nme36,  >100D,23, >792
+ SX	nick_nme1,   0100DH,23, 0760H
+ SX	nick_nme2,   0100DH,23, 08c6H
+ SX	nick_nme3,   0100DH,35, 0758H
+ SX	nick_nme4,   0100DH,25, 0774H
+ SX	nick_nme5,   0100DH,36, 0784H
+ SX	nick_nme6,   0100DH,20, 075cH
+ SX	nick_nme7,   0100DH,24, 075eH
+ SX	nick_nme8,   0100DH,37, 08ccH
+ SX	nick_nme9,   0100DH,25, 08d8H
+ SX	nick_nme10,  0100DH,24, 078eH
+ SX	nick_nme11,  0100DH,32, 08b8H
+ SX	nick_nme12,  0100DH,37, 0766H
+ SX	nick_nme13,  0100DH,25, 08d4H
+ SX	nick_nme14,  0100DH,46, 08bcH
+ SX	nick_nme15,  0100DH,20, 0768H
+ SX	nick_nme16,  0100DH,37, 0796H
+ SX	nick_nme17,  0100DH,25, 076aH
+ SX	nick_nme18,  0100DH,31, 076cH
+ SX	nick_nme19,  0100DH,27, 076eH
+ SX	nick_nme20,  0100DH,20, 0798H
+ SX	nick_nme21,  0100DH,36, 079aH
+ SX	nick_nme22,  0100DH,40, 0776H
+ SX	nick_nme23,  0100DH,46, 08beH
+ SX	nick_nme24,  0100DH,31, 08caH
+; SX	nick_nme25,  0100DH,28, 08c0H
+ SX	nick_nme26,  0100DH,28, 08ceH
+ SX	nick_nme27,  0100DH,32, 077cH
+ SX	nick_nme28,  0100DH,28, 077eH
+ SX	nick_nme29,  0100DH,21, 0780H
+ SX	nick_nme30,  0100DH,31, 0782H
+ SX	nick_nme31,  0100DH,27, 0786H
+ SX	nick_nme32,  0100DH,24, 0788H
+ SX	nick_nme33,  0100DH,29, 078aH
+ SX	nick_nme34,  0100DH,36, 078cH
+ SX	nick_nme35,  0100DH,21, 0790H
+ SX	nick_nme36,  0100DH,23, 0792H
 
- SX	to_nck_nme1, >100D,60, >761
- SX	to_nck_nme2, >100D,60, >8c7
- SX	to_nck_nme3, >100D,60, >759
- SX	to_nck_nme4, >100D,60, >775
- SX	to_nck_nme5, >100D,60, >785
- SX	to_nck_nme6, >100D,60, >75d
- SX	to_nck_nme7, >100D,60, >75f
- SX	to_nck_nme8, >100D,60, >8cd
- SX	to_nck_nme9, >100D,60, >8d9
- SX	to_nck_nme10,>100D,60, >78f
- SX	to_nck_nme11,>100D,60, >8b9
- SX	to_nck_nme12,>100D,60, >767
- SX	to_nck_nme13,>100D,60, >8d5
- SX	to_nck_nme14,>100D,60, >8bd
- SX	to_nck_nme15,>100D,60, >769
- SX	to_nck_nme16,>100D,60, >797
- SX	to_nck_nme17,>100D,60, >76b
- SX	to_nck_nme18,>100D,60, >76d
- SX	to_nck_nme19,>100D,60, >76f
- SX	to_nck_nme20,>100D,60, >799
- SX	to_nck_nme21,>100D,60, >79b
- SX	to_nck_nme22,>100D,60, >777
- SX	to_nck_nme23,>100D,60, >8bf
- SX	to_nck_nme24,>100D,60, >8cb
-; SX	to_nck_nme25,>100D,60, >8c1
- SX	to_nck_nme26,>100D,60, >8cf
- SX	to_nck_nme27,>100D,60, >77d
- SX	to_nck_nme28,>100D,60, >77f
- SX	to_nck_nme29,>100D,60, >781
- SX	to_nck_nme30,>100D,60, >783
- SX	to_nck_nme31,>100D,60, >787
- SX	to_nck_nme32,>100D,60, >789
- SX	to_nck_nme33,>100D,60, >78b
- SX	to_nck_nme34,>100D,60, >78d
- SX	to_nck_nme35,>100D,60, >791
- SX	to_nck_nme36,>100D,60, >793
+ SX	to_nck_nme1, 0100DH,60, 0761H
+ SX	to_nck_nme2, 0100DH,60, 08c7H
+ SX	to_nck_nme3, 0100DH,60, 0759H
+ SX	to_nck_nme4, 0100DH,60, 0775H
+ SX	to_nck_nme5, 0100DH,60, 0785H
+ SX	to_nck_nme6, 0100DH,60, 075dH
+ SX	to_nck_nme7, 0100DH,60, 075fH
+ SX	to_nck_nme8, 0100DH,60, 08cdH
+ SX	to_nck_nme9, 0100DH,60, 08d9H
+ SX	to_nck_nme10,0100DH,60, 078fH
+ SX	to_nck_nme11,0100DH,60, 08b9H
+ SX	to_nck_nme12,0100DH,60, 0767H
+ SX	to_nck_nme13,0100DH,60, 08d5H
+ SX	to_nck_nme14,0100DH,60, 08bdH
+ SX	to_nck_nme15,0100DH,60, 0769H
+ SX	to_nck_nme16,0100DH,60, 0797H
+ SX	to_nck_nme17,0100DH,60, 076bH
+ SX	to_nck_nme18,0100DH,60, 076dH
+ SX	to_nck_nme19,0100DH,60, 076fH
+ SX	to_nck_nme20,0100DH,60, 0799H
+ SX	to_nck_nme21,0100DH,60, 079bH
+ SX	to_nck_nme22,0100DH,60, 0777H
+ SX	to_nck_nme23,0100DH,60, 08bfH
+ SX	to_nck_nme24,0100DH,60, 08cbH
+; SX	to_nck_nme25,0100DH,60, 08c1H
+ SX	to_nck_nme26,0100DH,60, 08cfH
+ SX	to_nck_nme27,0100DH,60, 077dH
+ SX	to_nck_nme28,0100DH,60, 077fH
+ SX	to_nck_nme29,0100DH,60, 0781H
+ SX	to_nck_nme30,0100DH,60, 0783H
+ SX	to_nck_nme31,0100DH,60, 0787H
+ SX	to_nck_nme32,0100DH,60, 0789H
+ SX	to_nck_nme33,0100DH,60, 078bH
+ SX	to_nck_nme34,0100DH,60, 078dH
+ SX	to_nck_nme35,0100DH,60, 0791H
+ SX	to_nck_nme36,0100DH,60, 0793H
 
 ;
 ; Speech scripts
@@ -611,360 +611,360 @@ nickname_spch_tbl
 ****************
 full_name_speech
 
- .word	>100D,77,1300		;AUGMON,   stacey	( ALTANTA HAWKS )
- .word	>100D,83,1304		;BLAYLOCK, mookie
- .word	>100D,64,1308		;SMITH,    steve
- .word	>100D,71,1604		;LAETNER
- .word	>100D,63,1316		;NORMAN,   ken
+ .word	0100DH,77,1300		;AUGMON,   stacey	( ALTANTA HAWKS )
+ .word	0100DH,83,1304		;BLAYLOCK, mookie
+ .word	0100DH,64,1308		;SMITH,    steve
+ .word	0100DH,71,1604		;LAETNER
+ .word	0100DH,63,1316		;NORMAN,   ken
 
- .word	>100D,61,1320		;BROWN,    dee		( BOSTON )
- .word	>100D,66,1324		;BARROS,   dana
- .word	>100D,79,1328		;MONTROSS, eric
- .word	>100D,66,1332		;RADJA,    dino
- .word	>100D,59,1336		;FOX,      rick
+ .word	0100DH,61,1320		;BROWN,    dee		( BOSTON )
+ .word	0100DH,66,1324		;BARROS,   dana
+ .word	0100DH,79,1328		;MONTROSS, eric
+ .word	0100DH,66,1332		;RADJA,    dino
+ .word	0100DH,59,1336		;FOX,      rick
 
- .word	>100D,64,1620		;ANDERSON, kenny	( CHARLOTTE )
- .word	>100D,74,1344		;JOHNSN_L, larry
- .word	>100D,65,1348		;RICE,     glen
- .word	>100D,70,1352		;ZIDEK,    george
- .word	>100D,64,1356		;CURRY,    dell
+ .word	0100DH,64,1620		;ANDERSON, kenny	( CHARLOTTE )
+ .word	0100DH,74,1344		;JOHNSN_L, larry
+ .word	0100DH,65,1348		;RICE,     glen
+ .word	0100DH,70,1352		;ZIDEK,    george
+ .word	0100DH,64,1356		;CURRY,    dell
 
- .word	>100D,72,1360		;PIPPEN.   scottie	( CHICAGO )
- .word	>100D,62,1364		;RODMAN,   dennis
- .word	>100D,70,1368		;KUKOC,    tonic
- .word	>100D,78,1372		;LONGLEY,  luke
- .word	>100D,67,1376		;KERR,     steve
+ .word	0100DH,72,1360		;PIPPEN.   scottie	( CHICAGO )
+ .word	0100DH,62,1364		;RODMAN,   dennis
+ .word	0100DH,70,1368		;KUKOC,    tonic
+ .word	0100DH,78,1372		;LONGLEY,  luke
+ .word	0100DH,67,1376		;KERR,     steve
 
- .word	>100D,75,1380		;HILL,     tyrone	( CLEVELAND )
- .word	>100D,76,1384		;MILLS,    chris
- .word	>100D,70,1388		;PHILLS,   bobby
- .word	>100D,69,1392		;BRANDON,  terrell
- .word	>100D,65,1396		;FERRY,    danny
+ .word	0100DH,75,1380		;HILL,     tyrone	( CLEVELAND )
+ .word	0100DH,76,1384		;MILLS,    chris
+ .word	0100DH,70,1388		;PHILLS,   bobby
+ .word	0100DH,69,1392		;BRANDON,  terrell
+ .word	0100DH,65,1396		;FERRY,    danny
 
- .word	>100D,83,1400		;JACKSON,  jim		( DALLAS )
- .word	>100D,68,1404		;KIDD,     jason
- .word	>100D,88,1408		;MASHBURN, jamal
- .word	>100D,74,1412		;JONES,    popeye
- .word	>100D,84,1416		;McCLOUD,  george
+ .word	0100DH,83,1400		;JACKSON,  jim		( DALLAS )
+ .word	0100DH,68,1404		;KIDD,     jason
+ .word	0100DH,88,1408		;MASHBURN, jamal
+ .word	0100DH,74,1412		;JONES,    popeye
+ .word	0100DH,84,1416		;McCLOUD,  george
 
- .word	>100D,89,1420		;ABDUL-RAUF		( DENVER )
- .word	>100D,103,1424		;MUTUMBO
- .word	>100D,96,1428		;McDYESS
- .word	>100D,71,1432		;ROSE
- .word	>100D,51,1436		;ELLIS
+ .word	0100DH,89,1420		;ABDUL-RAUF		( DENVER )
+ .word	0100DH,103,1424		;MUTUMBO
+ .word	0100DH,96,1428		;McDYESS
+ .word	0100DH,71,1432		;ROSE
+ .word	0100DH,51,1436		;ELLIS
 
- .word	>100D,74,1440		;DUMARS			( DETROIT )
- .word	>100D,63,1444		;HILL,     grant
- .word	>100D,76,1448		;MILLS,    terry
- .word	>100D,65,1452		;THORPE
- .word	>100D,76,1456		;HOUSTON,  allan
+ .word	0100DH,74,1440		;DUMARS			( DETROIT )
+ .word	0100DH,63,1444		;HILL,     grant
+ .word	0100DH,76,1448		;MILLS,    terry
+ .word	0100DH,65,1452		;THORPE
+ .word	0100DH,76,1456		;HOUSTON,  allan
 
- .word	>100D,61,1568		;WILLIS			( GOLDEN STATE )
- .word	>100D,76,1464		;SPREWELL
- .word	>100D,84,1468		;SEIKALY
- .word	>100D,65,1472		;SMITH,    joe
- .word	>100D,77,1476		;MULLIN
+ .word	0100DH,61,1568		;WILLIS			( GOLDEN STATE )
+ .word	0100DH,76,1464		;SPREWELL
+ .word	0100DH,84,1468		;SEIKALY
+ .word	0100DH,65,1472		;SMITH,    joe
+ .word	0100DH,77,1476		;MULLIN
 
- .word	>100D,118,1480		;OLAJUWON		( HOUSTON )
- .word	>100D,76,1484		;DREXLER
- .word	>100D,80,1488		;HORRY
- .word	>100D,70,1492		;CASSELL
- .word	>100D,63,1496		;SMITH,    kenny
+ .word	0100DH,118,1480		;OLAJUWON		( HOUSTON )
+ .word	0100DH,76,1484		;DREXLER
+ .word	0100DH,80,1488		;HORRY
+ .word	0100DH,70,1492		;CASSELL
+ .word	0100DH,63,1496		;SMITH,    kenny
 
- .word	>100D,85,1500		;MILLER			( INDIANA )
- .word	>100D,71,1504		;DAVIS,    dale
- .word	>100D,71,1508		;SMITS
- .word	>100D,77,1512		;McKEE
- .word	>100D,78,1516		;JACKSON,  mark
+ .word	0100DH,85,1500		;MILLER			( INDIANA )
+ .word	0100DH,71,1504		;DAVIS,    dale
+ .word	0100DH,71,1508		;SMITS
+ .word	0100DH,77,1512		;McKEE
+ .word	0100DH,78,1516		;JACKSON,  mark
 
- .word	>100D,51,1520		;VAUGHT			( CLIPPERS )
- .word	>100D,64,1524		;ROGERS,   rodney
- .word	>100D,80,1528		;MURRAY,   lamond
- .word	>100D,75,1532		;RICHARDS
- .word	>100D,72,1536		;BARRY
+ .word	0100DH,51,1520		;VAUGHT			( CLIPPERS )
+ .word	0100DH,64,1524		;ROGERS,   rodney
+ .word	0100DH,80,1528		;MURRAY,   lamond
+ .word	0100DH,75,1532		;RICHARDS
+ .word	0100DH,72,1536		;BARRY
 
- .word	>100D,76,1540		;VAN EXEL		( LAKERS )
- .word	>100D,78,1544		;DIVAC
- .word	>100D,83,1548		;CEBALLOS
- .word	>100D,62,1552		;CAMPBELL
- .word	>100D,65,1556		;MAGIC JOHNSON
-; .word	>100D,36,1701		;MAGIC JOHNSON
+ .word	0100DH,76,1540		;VAN EXEL		( LAKERS )
+ .word	0100DH,78,1544		;DIVAC
+ .word	0100DH,83,1548		;CEBALLOS
+ .word	0100DH,62,1552		;CAMPBELL
+ .word	0100DH,65,1556		;MAGIC JOHNSON
+; .word	0100DH,36,1701		;MAGIC JOHNSON
 
- .word	>100D,97,1560		;MOURNING		( MIAMI )
- .word	>100D,78,1740		;WILLIAMS, walt
- .word	>100D,58,1961		;REX CHAPMAN
- .word	>100D,80,1460		;HARDAWAY, tim		
- .word	>100D,84,1572		;DANILOVIC
+ .word	0100DH,97,1560		;MOURNING		( MIAMI )
+ .word	0100DH,78,1740		;WILLIAMS, walt
+ .word	0100DH,58,1961		;REX CHAPMAN
+ .word	0100DH,80,1460		;HARDAWAY, tim		
+ .word	0100DH,84,1572		;DANILOVIC
 
- .word	>100D,70,1580		;BAKER	   vin		( MILWAUKEE )
- .word	>100D,93,1584		;ROBINSON, glen
- .word	>100D,73,1588		;RESPERT
- .word	>100D,69,1592		;BENJAMIN
- .word	>100D,71,1596		;DOUGLAS
+ .word	0100DH,70,1580		;BAKER	   vin		( MILWAUKEE )
+ .word	0100DH,93,1584		;ROBINSON, glen
+ .word	0100DH,73,1588		;RESPERT
+ .word	0100DH,69,1592		;BENJAMIN
+ .word	0100DH,71,1596		;DOUGLAS
 
- .word	>100D,94,1600		;RIDER			( MINNESOTTA )
- .word	>100D,68,1955		;ANDREW LANG
- .word	>100D,57,1964		;SPUD WEBB
- .word	>100D,73,1612		;GUGLIOTTA
- .word	>100D,72,1616		;GARNETT
+ .word	0100DH,94,1600		;RIDER			( MINNESOTTA )
+ .word	0100DH,68,1955		;ANDREW LANG
+ .word	0100DH,57,1964		;SPUD WEBB
+ .word	0100DH,73,1612		;GUGLIOTTA
+ .word	0100DH,72,1616		;GARNETT
 
- .word	>100D,68,1340		;GILL,     kendall	( NEW JERSEY )
- .word	>100D,81,1624		;BRADLEY
- .word	>100D,54,1628		;GILLIAM
- .word	>100D,61,1632		;O'BANNON
- .word	>100D,61,1636		;EDWARDS,  kevin
+ .word	0100DH,68,1340		;GILL,     kendall	( NEW JERSEY )
+ .word	0100DH,81,1624		;BRADLEY
+ .word	0100DH,54,1628		;GILLIAM
+ .word	0100DH,61,1632		;O'BANNON
+ .word	0100DH,61,1636		;EDWARDS,  kevin
 
- .word	>100D,82,1640		;EWING			( NEW YORK )
- .word	>100D,80,1644		;MASON
- .word	>100D,71,1648		;HARPER,   derek
- .word	>100D,81,1652		;OAKLEY
- .word	>100D,70,1656		;STARKS
+ .word	0100DH,82,1640		;EWING			( NEW YORK )
+ .word	0100DH,80,1644		;MASON
+ .word	0100DH,71,1648		;HARPER,   derek
+ .word	0100DH,81,1652		;OAKLEY
+ .word	0100DH,70,1656		;STARKS
 
- .word	>100D,95,1660		;HARDAWAY, anfernee	( ORLANDO )
- .word	>100D,76,1664		;GRANT,    horace
- .word	>100D,65,1668		;ANDERSON, nick
- .word	>100D,67,1672		;SCOTT,    dennis
- .word	>100D,72,1676		;KONCAK,   jon
+ .word	0100DH,95,1660		;HARDAWAY, anfernee	( ORLANDO )
+ .word	0100DH,76,1664		;GRANT,    horace
+ .word	0100DH,65,1668		;ANDERSON, nick
+ .word	0100DH,67,1672		;SCOTT,    dennis
+ .word	0100DH,72,1676		;KONCAK,   jon
 
- .word	>100D,96,1680		;STACKHOUSE		( PHILADELPHIA )
- .word	>100D,71,1684		;COLEMAN,  derrick
- .word	>100D,110,1688		;WEATHERSPOON
- .word	>100D,60,1967		;RUFFIN,   trevor
- .word	>100D,90,1696		;MAXWELL,  vernon
+ .word	0100DH,96,1680		;STACKHOUSE		( PHILADELPHIA )
+ .word	0100DH,71,1684		;COLEMAN,  derrick
+ .word	0100DH,110,1688		;WEATHERSPOON
+ .word	0100DH,60,1967		;RUFFIN,   trevor
+ .word	0100DH,90,1696		;MAXWELL,  vernon
 
- .word	>100D,69,1700		;JOHNSON,  kevin	( PHOENIX )
- .word	>100D,101,1704		;TISDALE
- .word	>100D,69,1708		;MANNING
- .word	>100D,77,1712		;PERSON,   wesley
- .word	>100D,95,1716		;FINLEY
+ .word	0100DH,69,1700		;JOHNSON,  kevin	( PHOENIX )
+ .word	0100DH,101,1704		;TISDALE
+ .word	0100DH,69,1708		;MANNING
+ .word	0100DH,77,1712		;PERSON,   wesley
+ .word	0100DH,95,1716		;FINLEY
 
- .word	>100D,77,1720		;STRICKLAND		( PORTLAND )
- .word	>100D,94,1724		;ROBINSON, cliff
- .word	>100D,93,1728		;SABONIS
- .word	>100D,73,1732		;WILLIAMS, buck
- .word	>100D,76,1736		;CHILDRESS
+ .word	0100DH,77,1720		;STRICKLAND		( PORTLAND )
+ .word	0100DH,94,1724		;ROBINSON, cliff
+ .word	0100DH,93,1728		;SABONIS
+ .word	0100DH,73,1732		;WILLIAMS, buck
+ .word	0100DH,76,1736		;CHILDRESS
 
- .word	>100D,74,1564		;OWENS	       		( SACRAMENTO )
- .word	>100D,82,1744		;RICHMOND
- .word	>100D,85,1748		;GRANT,    brian
- .word	>100D,100,1752		;MARCIULIONIS
- .word	>100D,55,1756		;EDNEY
+ .word	0100DH,74,1564		;OWENS	       		( SACRAMENTO )
+ .word	0100DH,82,1744		;RICHMOND
+ .word	0100DH,85,1748		;GRANT,    brian
+ .word	0100DH,100,1752		;MARCIULIONIS
+ .word	0100DH,55,1756		;EDNEY
 
- .word	>100D,69,1760		;ELLIOTT		( SAN ANTONIO )
- .word	>100D,91,1764		;ROBINSON, david
- .word	>100D,74,1768		;JOHNSON,  avery
- .word	>100D,71,1772		;PERSON,   chuck
- .word	>100D,82,1776		;DEL NEGRO
+ .word	0100DH,69,1760		;ELLIOTT		( SAN ANTONIO )
+ .word	0100DH,91,1764		;ROBINSON, david
+ .word	0100DH,74,1768		;JOHNSON,  avery
+ .word	0100DH,71,1772		;PERSON,   chuck
+ .word	0100DH,82,1776		;DEL NEGRO
  
- .word	>100D,68,1780		;KEMP			( SEATTLE )
- .word	>100D,74,1784		;PAYTON
- .word	>100D,57,1788		;SCHREMPF
- .word	>100D,59,1792		;HAWKINS,  hersey
- .word	>100D,56,1796		;FORD
+ .word	0100DH,68,1780		;KEMP			( SEATTLE )
+ .word	0100DH,74,1784		;PAYTON
+ .word	0100DH,57,1788		;SCHREMPF
+ .word	0100DH,59,1792		;HAWKINS,  hersey
+ .word	0100DH,56,1796		;FORD
 
- .word	>100D,66,1800		;ROGERS,   carlos	( TORONTO )
- .word	>100D,92,1804		;STOUDAMIRE
- .word	>100D,58,1952		;ALVIN ROBERTSON
- .word	>100D,67,1812		;MILLER
- .word	>100D,53,1816		;MURRAY,   tracy
+ .word	0100DH,66,1800		;ROGERS,   carlos	( TORONTO )
+ .word	0100DH,92,1804		;STOUDAMIRE
+ .word	0100DH,58,1952		;ALVIN ROBERTSON
+ .word	0100DH,67,1812		;MILLER
+ .word	0100DH,53,1816		;MURRAY,   tracy
 
- .word	>100D,79,1820		;STOCKTON		( UTAH )
- .word	>100D,68,1824		;MALONE
- .word	>100D,70,1828		;HORNACEK
- .word	>100D,69,1832		;BENOIT
- .word	>100D,64,1836		;MORRIS
+ .word	0100DH,79,1820		;STOCKTON		( UTAH )
+ .word	0100DH,68,1824		;MALONE
+ .word	0100DH,70,1828		;HORNACEK
+ .word	0100DH,69,1832		;BENOIT
+ .word	0100DH,64,1836		;MORRIS
 
- .word	>100D,78,1840		;ANTHONY		( VANCOUVER )
- .word	>100D,68,1844		;EDWARDS,  blue
- .word	>100D,56,1958		;BYRON SCOTT
- .word	>100D,74,1852		;REEVES
- .word	>100D,63,1856		;MURDOCK
+ .word	0100DH,78,1840		;ANTHONY		( VANCOUVER )
+ .word	0100DH,68,1844		;EDWARDS,  blue
+ .word	0100DH,56,1958		;BYRON SCOTT
+ .word	0100DH,74,1852		;REEVES
+ .word	0100DH,63,1856		;MURDOCK
 
- .word	>100D,75,1860		;HOWARD			( WASHINGTON )
- .word	>100D,75,1864		;WEBBER
- .word	>100D,69,1868		;CHEANEY
- .word	>100D,70,1872		;PACK
- .word	>100D,92,1876		;MURESAN
+ .word	0100DH,75,1860		;HOWARD			( WASHINGTON )
+ .word	0100DH,75,1864		;WEBBER
+ .word	0100DH,69,1868		;CHEANEY
+ .word	0100DH,70,1872		;PACK
+ .word	0100DH,92,1876		;MURESAN
 
 
 ***********
 ***********
 pass_speech		;'TO player name'
 
- .word	>100D,40,1303		;TO AUGMON,   stacey	( ALTANTA HAWKS )
- .word	>100D,40,1307		;TO BLAYLOCK, mookie
- .word	>100D,40,1311		;TO SMITH,    steve
- .word	>100D,40,1607		;TO LAETNER
- .word	>100D,40,1319		;TO NORMAN,   ken
+ .word	0100DH,40,1303		;TO AUGMON,   stacey	( ALTANTA HAWKS )
+ .word	0100DH,40,1307		;TO BLAYLOCK, mookie
+ .word	0100DH,40,1311		;TO SMITH,    steve
+ .word	0100DH,40,1607		;TO LAETNER
+ .word	0100DH,40,1319		;TO NORMAN,   ken
 
- .word	>100D,40,1323		;TO BROWN,    dee	( BOSTON )
- .word	>100D,40,1327		;TO BARROS,   dana
- .word	>100D,40,1331		;TO MONTROSS, eric
- .word	>100D,40,1335		;TO RADJA,    dino
- .word	>100D,40,1339		;TO FOX,      rick
+ .word	0100DH,40,1323		;TO BROWN,    dee	( BOSTON )
+ .word	0100DH,40,1327		;TO BARROS,   dana
+ .word	0100DH,40,1331		;TO MONTROSS, eric
+ .word	0100DH,40,1335		;TO RADJA,    dino
+ .word	0100DH,40,1339		;TO FOX,      rick
 
- .word	>100D,40,1623		;TO ANDERSON, kenny	( CHARLOTTE )
- .word	>100D,40,1347		;TO JOHNSN_L, larry
- .word	>100D,40,1351		;TO RICE,     glen
- .word	>100D,40,1355		;TO ZIDEK,    george
- .word	>100D,40,1359		;TO CURRY,    dell
+ .word	0100DH,40,1623		;TO ANDERSON, kenny	( CHARLOTTE )
+ .word	0100DH,40,1347		;TO JOHNSN_L, larry
+ .word	0100DH,40,1351		;TO RICE,     glen
+ .word	0100DH,40,1355		;TO ZIDEK,    george
+ .word	0100DH,40,1359		;TO CURRY,    dell
 
- .word	>100D,40,1363		;TO PIPPEN.   scottie	( CHICAGO )
- .word	>100D,40,1367		;TO RODMAN,   dennis
- .word	>100D,40,1371		;TO KUKOC,    tonic
- .word	>100D,40,1375		;TO LONGLEY,  luke
- .word	>100D,40,1379		;TO KERR,     steve
+ .word	0100DH,40,1363		;TO PIPPEN.   scottie	( CHICAGO )
+ .word	0100DH,40,1367		;TO RODMAN,   dennis
+ .word	0100DH,40,1371		;TO KUKOC,    tonic
+ .word	0100DH,40,1375		;TO LONGLEY,  luke
+ .word	0100DH,40,1379		;TO KERR,     steve
 
- .word	>100D,40,1383		;TO HILL,     tyrone	( CLEVELAND )
- .word	>100D,40,1387		;TO MILLS,    chris
- .word	>100D,40,1391		;TO PHILLS,   bobby
- .word	>100D,40,1395		;TO BRANDON,  terrell
- .word	>100D,40,1399		;TO FERRY,    danny
+ .word	0100DH,40,1383		;TO HILL,     tyrone	( CLEVELAND )
+ .word	0100DH,40,1387		;TO MILLS,    chris
+ .word	0100DH,40,1391		;TO PHILLS,   bobby
+ .word	0100DH,40,1395		;TO BRANDON,  terrell
+ .word	0100DH,40,1399		;TO FERRY,    danny
 
- .word	>100D,40,1403		;TO JACKSON,  jim	( DALLAS )
- .word	>100D,40,1407		;TO KIDD,     jason
- .word	>100D,40,1411		;TO MASHBURN, jamal
- .word	>100D,40,1415		;TO JONES,    popeye
- .word	>100D,40,1419		;TO McCLOUD,  george
+ .word	0100DH,40,1403		;TO JACKSON,  jim	( DALLAS )
+ .word	0100DH,40,1407		;TO KIDD,     jason
+ .word	0100DH,40,1411		;TO MASHBURN, jamal
+ .word	0100DH,40,1415		;TO JONES,    popeye
+ .word	0100DH,40,1419		;TO McCLOUD,  george
 
- .word	>100D,40,1423		;TO ABDUL-RAUF		( DENVER )
- .word	>100D,40,1427		;TO MUTUMBO
- .word	>100D,40,1431		;TO McDYESS
- .word	>100D,40,1435		;TO ROSE
- .word	>100D,40,1439		;TO ELLIS
+ .word	0100DH,40,1423		;TO ABDUL-RAUF		( DENVER )
+ .word	0100DH,40,1427		;TO MUTUMBO
+ .word	0100DH,40,1431		;TO McDYESS
+ .word	0100DH,40,1435		;TO ROSE
+ .word	0100DH,40,1439		;TO ELLIS
 
- .word	>100D,40,1443		;TO DUMARS		( DETROIT )
- .word	>100D,40,1447		;TO HILL,     grant
- .word	>100D,40,1451		;TO MILLS,    terry
- .word	>100D,40,1455		;TO THORPE
- .word	>100D,40,1459		;TO HOUSTON,  allan
+ .word	0100DH,40,1443		;TO DUMARS		( DETROIT )
+ .word	0100DH,40,1447		;TO HILL,     grant
+ .word	0100DH,40,1451		;TO MILLS,    terry
+ .word	0100DH,40,1455		;TO THORPE
+ .word	0100DH,40,1459		;TO HOUSTON,  allan
 
- .word	>100D,40,1571		;TO WILLIS		( GOLDEN STATE )
- .word	>100D,40,1467		;TO SPREWELL
- .word	>100D,40,1471		;TO SEIKALY
- .word	>100D,40,1475		;TO SMITH,    joe
- .word	>100D,40,1479		;TO MULLIN
+ .word	0100DH,40,1571		;TO WILLIS		( GOLDEN STATE )
+ .word	0100DH,40,1467		;TO SPREWELL
+ .word	0100DH,40,1471		;TO SEIKALY
+ .word	0100DH,40,1475		;TO SMITH,    joe
+ .word	0100DH,40,1479		;TO MULLIN
 
- .word	>100D,40,1483		;TO OLAJUWON		( HOUSTON )
- .word	>100D,40,1487		;TO DREXLER
- .word	>100D,40,1491		;TO HORRY
- .word	>100D,40,1495		;TO CASSELL
- .word	>100D,40,1499		;TO SMITH,    kenny
+ .word	0100DH,40,1483		;TO OLAJUWON		( HOUSTON )
+ .word	0100DH,40,1487		;TO DREXLER
+ .word	0100DH,40,1491		;TO HORRY
+ .word	0100DH,40,1495		;TO CASSELL
+ .word	0100DH,40,1499		;TO SMITH,    kenny
 
- .word	>100D,40,1503		;TO MILLER		( INDIANA )
- .word	>100D,40,1507		;TO DAVIS,    dale
- .word	>100D,40,1511		;TO SMITS
- .word	>100D,40,1515		;TO McKEE
- .word	>100D,40,1519		;TO JACKSON,  mark
+ .word	0100DH,40,1503		;TO MILLER		( INDIANA )
+ .word	0100DH,40,1507		;TO DAVIS,    dale
+ .word	0100DH,40,1511		;TO SMITS
+ .word	0100DH,40,1515		;TO McKEE
+ .word	0100DH,40,1519		;TO JACKSON,  mark
 
- .word	>100D,40,1523		;TO VAUGHT		( CLIPPERS )
- .word	>100D,40,1527		;TO ROGERS,   rodney
- .word	>100D,40,1531		;TO MURRAY,   lamond
- .word	>100D,40,1535		;TO RICHARDS
- .word	>100D,40,1539		;TO BARRY
+ .word	0100DH,40,1523		;TO VAUGHT		( CLIPPERS )
+ .word	0100DH,40,1527		;TO ROGERS,   rodney
+ .word	0100DH,40,1531		;TO MURRAY,   lamond
+ .word	0100DH,40,1535		;TO RICHARDS
+ .word	0100DH,40,1539		;TO BARRY
 
- .word	>100D,40,1543		;TO VAN EXEL		( LAKERS )
- .word	>100D,40,1547		;TO DIVAC
- .word	>100D,40,1551		;TO CEBALLOS
- .word	>100D,40,1555		;TO CAMPBELL
- .word	>100D,40,1559		;TO JONES
-; .word	>100D,40,1703		;TO JOHNSON,  magic
+ .word	0100DH,40,1543		;TO VAN EXEL		( LAKERS )
+ .word	0100DH,40,1547		;TO DIVAC
+ .word	0100DH,40,1551		;TO CEBALLOS
+ .word	0100DH,40,1555		;TO CAMPBELL
+ .word	0100DH,40,1559		;TO JONES
+; .word	0100DH,40,1703		;TO JOHNSON,  magic
 
- .word	>100D,40,1563		;TO MOURNING		( MIAMI )
- .word	>100D,40,1743		;TO WILLIAMS, walt	
- .word	>100D,40,1963		;TO CHAPMAN
- .word	>100D,40,1463		;TO HARDAWAY, tim
- .word	>100D,40,1575		;TO DANILOVIC
+ .word	0100DH,40,1563		;TO MOURNING		( MIAMI )
+ .word	0100DH,40,1743		;TO WILLIAMS, walt	
+ .word	0100DH,40,1963		;TO CHAPMAN
+ .word	0100DH,40,1463		;TO HARDAWAY, tim
+ .word	0100DH,40,1575		;TO DANILOVIC
 
- .word	>100D,40,1583		;TO BAKER     vin	( MILWAUKEE )
- .word	>100D,40,1587		;TO ROBINSON, glen
- .word	>100D,40,1591		;TO RESPERT
- .word	>100D,40,1595		;TO BENJAMIN
- .word	>100D,40,1599		;TO DOUGLAS
+ .word	0100DH,40,1583		;TO BAKER     vin	( MILWAUKEE )
+ .word	0100DH,40,1587		;TO ROBINSON, glen
+ .word	0100DH,40,1591		;TO RESPERT
+ .word	0100DH,40,1595		;TO BENJAMIN
+ .word	0100DH,40,1599		;TO DOUGLAS
 
- .word	>100D,40,1603		;TO RIDER		( MINNESOTTA )
- .word	>100D,40,1957		;TO ANDREW LANG
- .word	>100D,40,1966		;TO SPUD WEBB
- .word	>100D,40,1615		;TO GUGLIOTTA
- .word	>100D,40,1619		;TO GARNETT
+ .word	0100DH,40,1603		;TO RIDER		( MINNESOTTA )
+ .word	0100DH,40,1957		;TO ANDREW LANG
+ .word	0100DH,40,1966		;TO SPUD WEBB
+ .word	0100DH,40,1615		;TO GUGLIOTTA
+ .word	0100DH,40,1619		;TO GARNETT
 
- .word	>100D,40,1343		;TO GILL,     kendall	( NEW JERSEY )
- .word	>100D,40,1627		;TO BRADLEY
- .word	>100D,40,1631		;TO GILLIAM
- .word	>100D,40,1635		;TO O'BANNON
- .word	>100D,40,1639		;TO EDWARDS,  kevin
+ .word	0100DH,40,1343		;TO GILL,     kendall	( NEW JERSEY )
+ .word	0100DH,40,1627		;TO BRADLEY
+ .word	0100DH,40,1631		;TO GILLIAM
+ .word	0100DH,40,1635		;TO O'BANNON
+ .word	0100DH,40,1639		;TO EDWARDS,  kevin
 
- .word	>100D,40,1643		;TO EWING		( NEW YORK )
- .word	>100D,40,1647		;TO MASON
- .word	>100D,40,1651		;TO HARPER,   derek
- .word	>100D,40,1655		;TO OAKLEY
- .word	>100D,40,1659		;TO STARKS
+ .word	0100DH,40,1643		;TO EWING		( NEW YORK )
+ .word	0100DH,40,1647		;TO MASON
+ .word	0100DH,40,1651		;TO HARPER,   derek
+ .word	0100DH,40,1655		;TO OAKLEY
+ .word	0100DH,40,1659		;TO STARKS
 
- .word	>100D,40,1663		;TO HARDAWAY, anfernee	( ORLANDO )
- .word	>100D,40,1667		;TO GRANT,    horace
- .word	>100D,40,1671		;TO ANDERSON, nick
- .word	>100D,40,1675		;TO SCOTT,    dennis
- .word	>100D,40,1679		;TO KONCAK,   jon
+ .word	0100DH,40,1663		;TO HARDAWAY, anfernee	( ORLANDO )
+ .word	0100DH,40,1667		;TO GRANT,    horace
+ .word	0100DH,40,1671		;TO ANDERSON, nick
+ .word	0100DH,40,1675		;TO SCOTT,    dennis
+ .word	0100DH,40,1679		;TO KONCAK,   jon
 
- .word	>100D,40,1683		;TO STACKHOUSE		( PHILADELPHIA )
- .word	>100D,40,1687		;TO COLEMAN,  derrick
- .word	>100D,40,1691		;TO WEATHERSPOON
- .word	>100D,40,1969		;TO RUFFIN
- .word	>100D,40,1699		;TO MAXWELL,  vernon
+ .word	0100DH,40,1683		;TO STACKHOUSE		( PHILADELPHIA )
+ .word	0100DH,40,1687		;TO COLEMAN,  derrick
+ .word	0100DH,40,1691		;TO WEATHERSPOON
+ .word	0100DH,40,1969		;TO RUFFIN
+ .word	0100DH,40,1699		;TO MAXWELL,  vernon
 
- .word	>100D,40,1703		;TO JOHNSON,  kevin	( PHOENIX )
- .word	>100D,40,1707		;TO TISDALE
- .word	>100D,40,1711		;TO MANNING
- .word	>100D,40,1715		;TO PERSON,   wesley
- .word	>100D,40,1719		;TO FINLEY
+ .word	0100DH,40,1703		;TO JOHNSON,  kevin	( PHOENIX )
+ .word	0100DH,40,1707		;TO TISDALE
+ .word	0100DH,40,1711		;TO MANNING
+ .word	0100DH,40,1715		;TO PERSON,   wesley
+ .word	0100DH,40,1719		;TO FINLEY
 
- .word	>100D,40,1723		;TO STRICKLAND		( PORTLAND )
- .word	>100D,40,1727		;TO ROBINSON, cliff
- .word	>100D,40,1731		;TO SABONIS
- .word	>100D,40,1735		;TO WILLIAMS, buck
- .word	>100D,40,1739		;TO CHILDRESS
+ .word	0100DH,40,1723		;TO STRICKLAND		( PORTLAND )
+ .word	0100DH,40,1727		;TO ROBINSON, cliff
+ .word	0100DH,40,1731		;TO SABONIS
+ .word	0100DH,40,1735		;TO WILLIAMS, buck
+ .word	0100DH,40,1739		;TO CHILDRESS
 
- .word	>100D,40,1567		;TO OWENS		( SACRAMENTO )
- .word	>100D,40,1747		;TO RICHMOND
- .word	>100D,40,1751		;TO GRANT,    brian
- .word	>100D,40,1755		;TO MARCIULIONIS
- .word	>100D,40,1759		;TO EDNEY
+ .word	0100DH,40,1567		;TO OWENS		( SACRAMENTO )
+ .word	0100DH,40,1747		;TO RICHMOND
+ .word	0100DH,40,1751		;TO GRANT,    brian
+ .word	0100DH,40,1755		;TO MARCIULIONIS
+ .word	0100DH,40,1759		;TO EDNEY
 
- .word	>100D,40,1763		;TO ELLIOTT		( SAN ANTONIO )
- .word	>100D,40,1767		;TO ROBINSON, david
- .word	>100D,40,1771		;TO JOHNSON,  avery
- .word	>100D,40,1775		;TO PERSON,   chuck
- .word	>100D,40,1779		;TO DEL NEGRO
+ .word	0100DH,40,1763		;TO ELLIOTT		( SAN ANTONIO )
+ .word	0100DH,40,1767		;TO ROBINSON, david
+ .word	0100DH,40,1771		;TO JOHNSON,  avery
+ .word	0100DH,40,1775		;TO PERSON,   chuck
+ .word	0100DH,40,1779		;TO DEL NEGRO
  
- .word	>100D,40,1783		;TO KEMP		( SEATTLE )
- .word	>100D,40,1787		;TO PAYTON
- .word	>100D,40,1791		;TO SCHREMPF
- .word	>100D,40,1795		;TO HAWKINS,  hersey
- .word	>100D,40,1799		;TO FORD
+ .word	0100DH,40,1783		;TO KEMP		( SEATTLE )
+ .word	0100DH,40,1787		;TO PAYTON
+ .word	0100DH,40,1791		;TO SCHREMPF
+ .word	0100DH,40,1795		;TO HAWKINS,  hersey
+ .word	0100DH,40,1799		;TO FORD
 
- .word	>100D,40,1803		;TO ROGERS,   carlos	( TORONTO )
- .word	>100D,40,1807		;TO STOUDAMIRE
- .word	>100D,40,1954		;TO ROBERTSON
- .word	>100D,40,1815		;TO MILLER
- .word	>100D,40,1819		;TO MURRAY,   tracy
+ .word	0100DH,40,1803		;TO ROGERS,   carlos	( TORONTO )
+ .word	0100DH,40,1807		;TO STOUDAMIRE
+ .word	0100DH,40,1954		;TO ROBERTSON
+ .word	0100DH,40,1815		;TO MILLER
+ .word	0100DH,40,1819		;TO MURRAY,   tracy
 
- .word	>100D,40,1823		;TO STOCKTON		( UTAH )
- .word	>100D,40,1827		;TO MALONE
- .word	>100D,40,1831		;TO HORNACEK
- .word	>100D,40,1835		;TO BENOIT
- .word	>100D,40,1839		;TO MORRIS
+ .word	0100DH,40,1823		;TO STOCKTON		( UTAH )
+ .word	0100DH,40,1827		;TO MALONE
+ .word	0100DH,40,1831		;TO HORNACEK
+ .word	0100DH,40,1835		;TO BENOIT
+ .word	0100DH,40,1839		;TO MORRIS
 
- .word	>100D,40,1843		;TO ANTHONY		( VANCOUVER )
- .word	>100D,40,1847		;TO EDWARDS,  blue
- .word	>100D,40,1960		;TO SCOTT
- .word	>100D,40,1855		;TO REEVES
- .word	>100D,40,1859		;TO MURDOCK
+ .word	0100DH,40,1843		;TO ANTHONY		( VANCOUVER )
+ .word	0100DH,40,1847		;TO EDWARDS,  blue
+ .word	0100DH,40,1960		;TO SCOTT
+ .word	0100DH,40,1855		;TO REEVES
+ .word	0100DH,40,1859		;TO MURDOCK
 
- .word	>100D,40,1863		;TO HOWARD		( WASHINGTON )
- .word	>100D,40,1867		;TO WEBBER
- .word	>100D,40,1871		;TO CHEANEY
- .word	>100D,40,1875		;TO PACK
- .word	>100D,40,1879		;TO MURESAN
+ .word	0100DH,40,1863		;TO HOWARD		( WASHINGTON )
+ .word	0100DH,40,1867		;TO WEBBER
+ .word	0100DH,40,1871		;TO CHEANEY
+ .word	0100DH,40,1875		;TO PACK
+ .word	0100DH,40,1879		;TO MURESAN
 
 
 
@@ -973,486 +973,486 @@ pass_speech		;'TO player name'
 name_speech 		;(last name only, excited)
 
 
- .word	>100D,32,1301		;AUGMON,   stacey	( ALTANTA HAWKS )
- .word	>100D,42,1305		;BLAYLOCK, mookie
- .word	>100D,31,1309		;SMITH,    steve
- .word	>100D,31,1605		;LAETNER
- .word	>100D,32,1317		;NORMAN,   ken
+ .word	0100DH,32,1301		;AUGMON,   stacey	( ALTANTA HAWKS )
+ .word	0100DH,42,1305		;BLAYLOCK, mookie
+ .word	0100DH,31,1309		;SMITH,    steve
+ .word	0100DH,31,1605		;LAETNER
+ .word	0100DH,32,1317		;NORMAN,   ken
 
- .word	>100D,35,1321		;BROWN,    dee		( BOSTON )
- .word	>100D,30,1325		;BARROS,   dana
- .word	>100D,51,1329		;MONTROSS, eric
- .word	>100D,33,1333		;RADJA,    dino
- .word	>100D,30,1337		;FOX,      rick
+ .word	0100DH,35,1321		;BROWN,    dee		( BOSTON )
+ .word	0100DH,30,1325		;BARROS,   dana
+ .word	0100DH,51,1329		;MONTROSS, eric
+ .word	0100DH,33,1333		;RADJA,    dino
+ .word	0100DH,30,1337		;FOX,      rick
 
- .word	>100D,31,1621		;ANDERSON, kenny	( CHARLOTTE )
- .word	>100D,36,1345		;JOHNSN_L, larry
- .word	>100D,31,1349		;RICE,     glen
- .word	>100D,30,1353		;ZIDEK,    george
- .word	>100D,31,1357		;CURRY,    dell
+ .word	0100DH,31,1621		;ANDERSON, kenny	( CHARLOTTE )
+ .word	0100DH,36,1345		;JOHNSN_L, larry
+ .word	0100DH,31,1349		;RICE,     glen
+ .word	0100DH,30,1353		;ZIDEK,    george
+ .word	0100DH,31,1357		;CURRY,    dell
 
- .word	>100D,27,1361		;PIPPEN.   scottie	( CHICAGO )
- .word	>100D,29,1365		;RODMAN,   dennis
- .word	>100D,34,1369		;KUKOC,    tonic
- .word	>100D,43,1373		;LONGLEY,  luke
- .word	>100D,32,1377		;KERR,     steve
+ .word	0100DH,27,1361		;PIPPEN.   scottie	( CHICAGO )
+ .word	0100DH,29,1365		;RODMAN,   dennis
+ .word	0100DH,34,1369		;KUKOC,    tonic
+ .word	0100DH,43,1373		;LONGLEY,  luke
+ .word	0100DH,32,1377		;KERR,     steve
 
- .word	>100D,31,1381		;HILL,     tyrone	( CLEVELAND )
- .word	>100D,40,1385		;MILLS,    chris
- .word	>100D,33,1389		;PHILLS,   bobby
- .word	>100D,29,1393		;BRANDON,  terrell
- .word	>100D,26,1397		;FERRY,    danny
+ .word	0100DH,31,1381		;HILL,     tyrone	( CLEVELAND )
+ .word	0100DH,40,1385		;MILLS,    chris
+ .word	0100DH,33,1389		;PHILLS,   bobby
+ .word	0100DH,29,1393		;BRANDON,  terrell
+ .word	0100DH,26,1397		;FERRY,    danny
 
- .word	>100D,46,1401		;JACKSON,  jim		( DALLAS )
- .word	>100D,30,1405		;KIDD,     jason
- .word	>100D,47,1409		;MASHBURN, jamal
- .word	>100D,38,1413		;JONES,    popeye
- .word	>100D,44,1417		;McCLOUD,  george
+ .word	0100DH,46,1401		;JACKSON,  jim		( DALLAS )
+ .word	0100DH,30,1405		;KIDD,     jason
+ .word	0100DH,47,1409		;MASHBURN, jamal
+ .word	0100DH,38,1413		;JONES,    popeye
+ .word	0100DH,44,1417		;McCLOUD,  george
 
- .word	>100D,48,1421		;ABDUL-RAUF		( DENVER )
- .word	>100D,56,1425		;MUTUMBO
- .word	>100D,47,1429		;McDYESS
- .word	>100D,30,1433		;ROSE
- .word	>100D,30,1437		;ELLIS
+ .word	0100DH,48,1421		;ABDUL-RAUF		( DENVER )
+ .word	0100DH,56,1425		;MUTUMBO
+ .word	0100DH,47,1429		;McDYESS
+ .word	0100DH,30,1433		;ROSE
+ .word	0100DH,30,1437		;ELLIS
 
- .word	>100D,44,1441		;DUMARS			( DETROIT )
- .word	>100D,31,1445		;HILL,     grant
- .word	>100D,40,1449		;MILLS,    terry
- .word	>100D,32,1453		;THORPE
- .word	>100D,41,1457		;HOUSTON,  allan
+ .word	0100DH,44,1441		;DUMARS			( DETROIT )
+ .word	0100DH,31,1445		;HILL,     grant
+ .word	0100DH,40,1449		;MILLS,    terry
+ .word	0100DH,32,1453		;THORPE
+ .word	0100DH,41,1457		;HOUSTON,  allan
 
- .word	>100D,29,1569		;WILLIS			( GOLDEN STATE )
- .word	>100D,41,1465		;SPREWELL		
- .word	>100D,42,1469		;SEIKALY
- .word	>100D,31,1473		;SMITH,    joe
- .word	>100D,40,1477		;MULLIN
+ .word	0100DH,29,1569		;WILLIS			( GOLDEN STATE )
+ .word	0100DH,41,1465		;SPREWELL		
+ .word	0100DH,42,1469		;SEIKALY
+ .word	0100DH,31,1473		;SMITH,    joe
+ .word	0100DH,40,1477		;MULLIN
 
- .word	>100D,68,1481		;OLAJUWON		( HOUSTON )
- .word	>100D,34,1485		;DREXLER
- .word	>100D,39,1489		;HORRY
- .word	>100D,35,1493		;CASSELL
- .word	>100D,31,1497		;SMITH,    kenny
+ .word	0100DH,68,1481		;OLAJUWON		( HOUSTON )
+ .word	0100DH,34,1485		;DREXLER
+ .word	0100DH,39,1489		;HORRY
+ .word	0100DH,35,1493		;CASSELL
+ .word	0100DH,31,1497		;SMITH,    kenny
 
- .word	>100D,37,1501		;MILLER			( INDIANA )
- .word	>100D,32,1505		;DAVIS,    dale
- .word	>100D,67,1509		;SMITS
- .word	>100D,41,1513		;McKEE
- .word	>100D,45,1517		;JACKSON,  mark
+ .word	0100DH,37,1501		;MILLER			( INDIANA )
+ .word	0100DH,32,1505		;DAVIS,    dale
+ .word	0100DH,67,1509		;SMITS
+ .word	0100DH,41,1513		;McKEE
+ .word	0100DH,45,1517		;JACKSON,  mark
 
- .word	>100D,31,1521		;VAUGHT			( CLIPPERS )
- .word	>100D,32,1525		;ROGERS,   rodney
- .word	>100D,29,1529		;MURRAY,   lamond
- .word	>100D,42,1533		;RICHARDS
- .word	>100D,31,1537		;BARRY
+ .word	0100DH,31,1521		;VAUGHT			( CLIPPERS )
+ .word	0100DH,32,1525		;ROGERS,   rodney
+ .word	0100DH,29,1529		;MURRAY,   lamond
+ .word	0100DH,42,1533		;RICHARDS
+ .word	0100DH,31,1537		;BARRY
 
- .word	>100D,42,1541		;VAN EXEL		( LAKERS )
- .word	>100D,37,1545		;DIVAC
- .word	>100D,42,1549		;CEBALLOS
- .word	>100D,35,1553		;CAMPBELL
- .word	>100D,36,1557		;JONES
-; .word	>100D,36,1701		;JOHNSON,  magic
+ .word	0100DH,42,1541		;VAN EXEL		( LAKERS )
+ .word	0100DH,37,1545		;DIVAC
+ .word	0100DH,42,1549		;CEBALLOS
+ .word	0100DH,35,1553		;CAMPBELL
+ .word	0100DH,36,1557		;JONES
+; .word	0100DH,36,1701		;JOHNSON,  magic
 
- .word	>100D,33,1561		;MOURNING		( MIAMI )
- .word	>100D,34,1741		;WILLIAMS, walt		
- .word	>100D,33,1962		;CHAPMAN
- .word	>100D,43,1461		;HARDAWAY, tim		
- .word	>100D,46,1573		;DANILOVIC
+ .word	0100DH,33,1561		;MOURNING		( MIAMI )
+ .word	0100DH,34,1741		;WILLIAMS, walt		
+ .word	0100DH,33,1962		;CHAPMAN
+ .word	0100DH,43,1461		;HARDAWAY, tim		
+ .word	0100DH,46,1573		;DANILOVIC
 
- .word	>100D,37,1581		;BAKER	   vin		( MILWAUKEE )
- .word	>100D,56,1585		;ROBINSON, glen
- .word	>100D,35,1589		;RESPERT
- .word	>100D,32,1593		;BENJAMIN
- .word	>100D,29,1597		;DOUGLAS
+ .word	0100DH,37,1581		;BAKER	   vin		( MILWAUKEE )
+ .word	0100DH,56,1585		;ROBINSON, glen
+ .word	0100DH,35,1589		;RESPERT
+ .word	0100DH,32,1593		;BENJAMIN
+ .word	0100DH,29,1597		;DOUGLAS
 
- .word	>100D,41,1601		;RIDER			( MINNESOTTA )
- .word	>100D,33,1956		;ANDREW LANG
- .word	>100D,28,1965		;SPUD WEBB
- .word	>100D,41,1613		;GUGLIOTTA
- .word	>100D,39,1617		;GARNETT
+ .word	0100DH,41,1601		;RIDER			( MINNESOTTA )
+ .word	0100DH,33,1956		;ANDREW LANG
+ .word	0100DH,28,1965		;SPUD WEBB
+ .word	0100DH,41,1613		;GUGLIOTTA
+ .word	0100DH,39,1617		;GARNETT
 
- .word	>100D,30,1341		;GILL,     kendall	( NEW JERSEY )
- .word	>100D,41,1625		;BRADLEY
- .word	>100D,29,1629		;GILLIAM
- .word	>100D,34,1633		;O'BANNON
- .word	>100D,29,1637		;EDWARDS,  kevin
+ .word	0100DH,30,1341		;GILL,     kendall	( NEW JERSEY )
+ .word	0100DH,41,1625		;BRADLEY
+ .word	0100DH,29,1629		;GILLIAM
+ .word	0100DH,34,1633		;O'BANNON
+ .word	0100DH,29,1637		;EDWARDS,  kevin
 
- .word	>100D,40,1641		;EWING			( NEW YORK )
- .word	>100D,49,1645		;MASON
- .word	>100D,35,1649		;HARPER,   derek
- .word	>100D,34,1653		;OAKLEY
- .word	>100D,34,1657		;STARKS
+ .word	0100DH,40,1641		;EWING			( NEW YORK )
+ .word	0100DH,49,1645		;MASON
+ .word	0100DH,35,1649		;HARPER,   derek
+ .word	0100DH,34,1653		;OAKLEY
+ .word	0100DH,34,1657		;STARKS
 
- .word	>100D,45,1661		;HARDAWAY, anfernee	( ORLANDO )
- .word	>100D,32,1665		;GRANT,    horace
- .word	>100D,31,1669		;ANDERSON, nick
- .word	>100D,34,1673		;SCOTT,    dennis
- .word	>100D,35,1677		;KONCAK,   jon
+ .word	0100DH,45,1661		;HARDAWAY, anfernee	( ORLANDO )
+ .word	0100DH,32,1665		;GRANT,    horace
+ .word	0100DH,31,1669		;ANDERSON, nick
+ .word	0100DH,34,1673		;SCOTT,    dennis
+ .word	0100DH,35,1677		;KONCAK,   jon
 
- .word	>100D,55,1681		;STACKHOUSE		( PHILADELPHIA )
- .word	>100D,35,1685		;COLEMAN,  derrick
- .word	>100D,63,1689		;WEATHERSPOON
- .word	>100D,29,1968		;RUFFIN,   trevor
- .word	>100D,54,1697		;MAXWELL,  vernon
+ .word	0100DH,55,1681		;STACKHOUSE		( PHILADELPHIA )
+ .word	0100DH,35,1685		;COLEMAN,  derrick
+ .word	0100DH,63,1689		;WEATHERSPOON
+ .word	0100DH,29,1968		;RUFFIN,   trevor
+ .word	0100DH,54,1697		;MAXWELL,  vernon
 
- .word	>100D,36,1701		;JOHNSON,  kevin	( PHOENIX )
- .word	>100D,48,1705		;TISDALE
- .word	>100D,29,1709		;MANNING
- .word	>100D,34,1713		;PERSON,   wesley
- .word	>100D,40,1717		;FINLEY
+ .word	0100DH,36,1701		;JOHNSON,  kevin	( PHOENIX )
+ .word	0100DH,48,1705		;TISDALE
+ .word	0100DH,29,1709		;MANNING
+ .word	0100DH,34,1713		;PERSON,   wesley
+ .word	0100DH,40,1717		;FINLEY
 
- .word	>100D,40,1721		;STRICKLAND		( PORTLAND )
- .word	>100D,58,1725		;ROBINSON, cliff
- .word	>100D,38,1729		;SABONIS
- .word	>100D,34,1733		;WILLIAMS, buck
- .word	>100D,35,1737		;CHILDRESS
+ .word	0100DH,40,1721		;STRICKLAND		( PORTLAND )
+ .word	0100DH,58,1725		;ROBINSON, cliff
+ .word	0100DH,38,1729		;SABONIS
+ .word	0100DH,34,1733		;WILLIAMS, buck
+ .word	0100DH,35,1737		;CHILDRESS
 
- .word	>100D,39,1565		;OWENS			( SACRAMENTO )
- .word	>100D,38,1745		;RICHMOND
- .word	>100D,32,1749		;GRANT,    brian
- .word	>100D,46,1753		;MARCIULIONIS
- .word	>100D,30,1757		;EDNEY
+ .word	0100DH,39,1565		;OWENS			( SACRAMENTO )
+ .word	0100DH,38,1745		;RICHMOND
+ .word	0100DH,32,1749		;GRANT,    brian
+ .word	0100DH,46,1753		;MARCIULIONIS
+ .word	0100DH,30,1757		;EDNEY
 
- .word	>100D,30,1761		;ELLIOTT		( SAN ANTONIO )
- .word	>100D,58,1765		;ROBINSON, david
- .word	>100D,36,1769		;JOHNSON,  avery
- .word	>100D,34,1773		;PERSON,   chuck
- .word	>100D,42,1777		;DEL NEGRO
+ .word	0100DH,30,1761		;ELLIOTT		( SAN ANTONIO )
+ .word	0100DH,58,1765		;ROBINSON, david
+ .word	0100DH,36,1769		;JOHNSON,  avery
+ .word	0100DH,34,1773		;PERSON,   chuck
+ .word	0100DH,42,1777		;DEL NEGRO
  
- .word	>100D,30,1781		;KEMP			( SEATTLE )
- .word	>100D,31,1785		;PAYTON
- .word	>100D,30,1789		;SCHREMPF
- .word	>100D,33,1793		;HAWKINS,  hersey
- .word	>100D,29,1797		;FORD
+ .word	0100DH,30,1781		;KEMP			( SEATTLE )
+ .word	0100DH,31,1785		;PAYTON
+ .word	0100DH,30,1789		;SCHREMPF
+ .word	0100DH,33,1793		;HAWKINS,  hersey
+ .word	0100DH,29,1797		;FORD
 
- .word	>100D,32,1801		;ROGERS,   carlos	( TORONTO )
- .word	>100D,51,1805		;STOUDAMIRE
- .word	>100D,33,1953		;ROBERTSON
- .word	>100D,37,1813		;MILLER
- .word	>100D,29,1817		;MURRAY,   tracy
+ .word	0100DH,32,1801		;ROGERS,   carlos	( TORONTO )
+ .word	0100DH,51,1805		;STOUDAMIRE
+ .word	0100DH,33,1953		;ROBERTSON
+ .word	0100DH,37,1813		;MILLER
+ .word	0100DH,29,1817		;MURRAY,   tracy
 
- .word	>100D,41,1821		;STOCKTON		( UTAH )
- .word	>100D,40,1825		;MALONE
- .word	>100D,38,1829		;HORNACEK
- .word	>100D,36,1833		;BENOIT
- .word	>100D,29,1837		;MORRIS
+ .word	0100DH,41,1821		;STOCKTON		( UTAH )
+ .word	0100DH,40,1825		;MALONE
+ .word	0100DH,38,1829		;HORNACEK
+ .word	0100DH,36,1833		;BENOIT
+ .word	0100DH,29,1837		;MORRIS
 
- .word	>100D,29,1841		;ANTHONY		( VANCOUVER )
- .word	>100D,29,1845		;EDWARDS,  blue
- .word	>100D,32,1959		;SCOTT
- .word	>100D,36,1853		;REEVES
- .word	>100D,34,1857		;MURDOCK
+ .word	0100DH,29,1841		;ANTHONY		( VANCOUVER )
+ .word	0100DH,29,1845		;EDWARDS,  blue
+ .word	0100DH,32,1959		;SCOTT
+ .word	0100DH,36,1853		;REEVES
+ .word	0100DH,34,1857		;MURDOCK
 
- .word	>100D,32,1861		;HOWARD			( WASHINGTON )
- .word	>100D,38,1865		;WEBBER
- .word	>100D,31,1869		;CHEANEY
- .word	>100D,30,1873		;PACK
- .word	>100D,51,1877		;MURESAN
+ .word	0100DH,32,1861		;HOWARD			( WASHINGTON )
+ .word	0100DH,38,1865		;WEBBER
+ .word	0100DH,31,1869		;CHEANEY
+ .word	0100DH,30,1873		;PACK
+ .word	0100DH,51,1877		;MURESAN
 
 ;FIX!!!
 ;JEFF:	I guess there is no distinction between superstar guests and Special
 ;guests - they will all be treated as one big table throughout the game...
 
 special_name_speech
-	.word	>100D,52,>8f2		;0  JEFF JOHNSON
-	.word	>100D,52,>8e4		;1  SAL DIVITA
-	.word	>100D,52,>8e0		;2  TURMELL
-	.word	>100D,52,>8ee		;3  THOMPSON
-	.word	>100D,52,>8e6		;4  GEER 
-	.word	>100D,52,>8f0		;5  CARLTON
-	.word	>100D,52,>8e8		;6  HEDRICK
-	.word	>100D,52,>8e2		;7  JOHN HEY
-	.word	>100D,52,>8da		;8  AIR MORRIS
-	.word	>100D,52,>8dc		;9  STEVE BARDO
-	.word	>100D,52,>8de		;10 MINIFEE
-	.word	>100D,52,>8ea		;11 MARTINEZ
-	.word	>100D,52,>8ec		;12 PESINA
-	.word	>0105,52,>8ca		;13 LIPTAK
-	.word	>0105,52,>776		;14 EDDIE
-	.word	>0105,52,>75e		;15 MIKE V.
-	.word	>0105,52,>8c0		;16 JAMIE R.
-	.word	>0105,52,>8c0		;17 NICK E.
-	.word	>0105,52,>8c0		;18 J. ROOT
-	.word	>0105,52,>8c0		;19 MEDNICK
-	.word	>0105,52,>8c0		;20 DAN R.
-	.word	>0105,52,>8c0		;21 PAT F.
-	.word	>0105,52,>8c0		;22 ED BOON
-	.word	>0105,52,>8c0		;23 J. TOBIAS
-	.word	>0105,52,>8c0		;24 OURSLER
-	.word	>0105,52,>8c0		;25 JASON S.
-	.word	>0105,52,>8c0		;26 QUINN
-	.word	>0105,52,>8c0		;27 M. PERRY
-	.word	>0105,52,>8c0		;28 N. FUNK
-	.word	>0105,52,>8c0		;29 MDOC
-	.word	>0105,52,>8c0		;30 BUD
-	.word	>0105,52,>754		;31 MARIUS
-	.word	>0105,52,>8c0		;32 MUNDAY
-	.word	>0105,52,>8c0		;33 NORTH
-	.word	>0105,52,>8c0		;34 AMRICH
-	.word	>0105,52,>8c0		;35 JIGGETS
+	.word	0100DH,52,08f2H		;0  JEFF JOHNSON
+	.word	0100DH,52,08e4H		;1  SAL DIVITA
+	.word	0100DH,52,08e0H		;2  TURMELL
+	.word	0100DH,52,08eeH		;3  THOMPSON
+	.word	0100DH,52,08e6H		;4  GEER 
+	.word	0100DH,52,08f0H		;5  CARLTON
+	.word	0100DH,52,08e8H		;6  HEDRICK
+	.word	0100DH,52,08e2H		;7  JOHN HEY
+	.word	0100DH,52,08daH		;8  AIR MORRIS
+	.word	0100DH,52,08dcH		;9  STEVE BARDO
+	.word	0100DH,52,08deH		;10 MINIFEE
+	.word	0100DH,52,08eaH		;11 MARTINEZ
+	.word	0100DH,52,08ecH		;12 PESINA
+	.word	00105H,52,08caH		;13 LIPTAK
+	.word	00105H,52,0776H		;14 EDDIE
+	.word	00105H,52,075eH		;15 MIKE V.
+	.word	00105H,52,08c0H		;16 JAMIE R.
+	.word	00105H,52,08c0H		;17 NICK E.
+	.word	00105H,52,08c0H		;18 J. ROOT
+	.word	00105H,52,08c0H		;19 MEDNICK
+	.word	00105H,52,08c0H		;20 DAN R.
+	.word	00105H,52,08c0H		;21 PAT F.
+	.word	00105H,52,08c0H		;22 ED BOON
+	.word	00105H,52,08c0H		;23 J. TOBIAS
+	.word	00105H,52,08c0H		;24 OURSLER
+	.word	00105H,52,08c0H		;25 JASON S.
+	.word	00105H,52,08c0H		;26 QUINN
+	.word	00105H,52,08c0H		;27 M. PERRY
+	.word	00105H,52,08c0H		;28 N. FUNK
+	.word	00105H,52,08c0H		;29 MDOC
+	.word	00105H,52,08c0H		;30 BUD
+	.word	00105H,52,0754H		;31 MARIUS
+	.word	00105H,52,08c0H		;32 MUNDAY
+	.word	00105H,52,08c0H		;33 NORTH
+	.word	00105H,52,08c0H		;34 AMRICH
+	.word	00105H,52,08c0H		;35 JIGGETS
 
 ;Superstar special guests
-	.word	>100D,52,>551		;PIPPEN
-	.word	>100D,52,>555		;RODMAN
-	.word	>100D,52,>541		;L. JOHNSON
-	.word	>100D,52,>545		;G. RICE
-	.word	>100D,52,>57d		;KIDD
-	.word	>100D,52,>591		;MUTOMBO
-	.word	>100D,52,>5a5		;G. HILL
-	.word	>100D,52,>5c9		;Olajuwan
-	.word	>100D,52,>5dd		;r. miller
-	.word	>100D,52,>5e5		;smits
-	.word	>100D,52,>619		;a. mourning
-	.word	>100D,52,>631		;g. robinson
-	.word	>100D,52,>7ad		;spud webb
-	.word	>100D,52,>669		;ewing
-	.word	>100D,52,>679		;starks
-	.word	>100D,52,>67d		;a. hardaway
-	.word	>100D,52,>681		;h. grant
-	.word	>100D,52,>691		;stackhouse
-	.word	>100D,52,>6bd		;c. robinson
-	.word	>100D,52,>6e5		;d. robinson
-	.word	>100D,52,>6e1		;s. elliot
-	.word	>100D,52,>6f5		;shawn kemp
-	.word	>100D,52,>721		;k. malone
-	.word	>100D,52,>749		;webber
-	.word	>100D,52,>755		;muresan
+	.word	0100DH,52,0551H		;PIPPEN
+	.word	0100DH,52,0555H		;RODMAN
+	.word	0100DH,52,0541H		;L. JOHNSON
+	.word	0100DH,52,0545H		;G. RICE
+	.word	0100DH,52,057dH		;KIDD
+	.word	0100DH,52,0591H		;MUTOMBO
+	.word	0100DH,52,05a5H		;G. HILL
+	.word	0100DH,52,05c9H		;Olajuwan
+	.word	0100DH,52,05ddH		;r. miller
+	.word	0100DH,52,05e5H		;smits
+	.word	0100DH,52,0619H		;a. mourning
+	.word	0100DH,52,0631H		;g. robinson
+	.word	0100DH,52,07adH		;spud webb
+	.word	0100DH,52,0669H		;ewing
+	.word	0100DH,52,0679H		;starks
+	.word	0100DH,52,067dH		;a. hardaway
+	.word	0100DH,52,0681H		;h. grant
+	.word	0100DH,52,0691H		;stackhouse
+	.word	0100DH,52,06bdH		;c. robinson
+	.word	0100DH,52,06e5H		;d. robinson
+	.word	0100DH,52,06e1H		;s. elliot
+	.word	0100DH,52,06f5H		;shawn kemp
+	.word	0100DH,52,0721H		;k. malone
+	.word	0100DH,52,0749H		;webber
+	.word	0100DH,52,0755H		;muresan
 
 
 special_pass_speech
 ;special guests
-	.word	>100D,52,>8f3		;0  JEFF JOHNSON
-	.word	>100D,37,>8e5		;1  SAL DIVITA
-	.word	>100D,37,>8e1		;2  TURMELL
-	.word	>100D,34,>8ef		;3  THOMPSON
-	.word	>100D,27,>8e7		;4  GEER 
-	.word	>100D,37,>8f1		;5  CARLTON
-	.word	>100D,33,>8e9		;6  HEDRICK
-	.word	>100D,27,>8e3		;7  JOHN HEY
-	.word	>100D,48,>8db		;8  AIR MORRIS
-	.word	>100D,35,>8dd		;9  STEVE BARDO
-	.word	>100D,39,>8df		;10 MINIFEE
-	.word	>100D,46,>8eb		;11 MARTINEZ
-	.word	>100D,41,>8ed		;12 PESINA
-	.word	>0105,52,>8cb		;13 LIPTAK
-	.word	>0105,52,>777		;14 EDDIE
-	.word	>0105,52,>75f		;15 MIKE V.
-	.word	>0105,52,>8c1		;16 JAMIE R.
-	.word	>0105,52,>8c1		;17 NICK E.
-	.word	>0105,52,>8c1		;18 J. ROOT
-	.word	>0105,52,>8c1		;19 MEDNICK
-	.word	>0105,52,>8c1		;20 DAN R.
-	.word	>0105,52,>8c1		;21 PAT F.
-	.word	>0105,52,>8c1		;22 ED BOON
-	.word	>0105,52,>8c1		;23 J. TOBIAS
-	.word	>0105,52,>8c1		;24 OURSLER
-	.word	>0105,52,>8c1		;25 JASON S.
-	.word	>0105,52,>8c1		;26 QUINN
-	.word	>0105,52,>8c1		;27 M. PERRY
-	.word	>0105,52,>8c1		;28 N. FUNK
-	.word	>0105,52,>8c1		;29 MDOC
-	.word	>0105,52,>8c1		;30 BUD
-	.word	>0105,52,>757		;31 MARIUS
-	.word	>0105,52,>8c1		;32 MUNDAY
-	.word	>0105,52,>8c1		;33 NORTH
-	.word	>0105,52,>8c1		;34 AMRICH
-	.word	>0105,52,>8c1		;35 JIGGETS
+	.word	0100DH,52,08f3H		;0  JEFF JOHNSON
+	.word	0100DH,37,08e5H		;1  SAL DIVITA
+	.word	0100DH,37,08e1H		;2  TURMELL
+	.word	0100DH,34,08efH		;3  THOMPSON
+	.word	0100DH,27,08e7H		;4  GEER 
+	.word	0100DH,37,08f1H		;5  CARLTON
+	.word	0100DH,33,08e9H		;6  HEDRICK
+	.word	0100DH,27,08e3H		;7  JOHN HEY
+	.word	0100DH,48,08dbH		;8  AIR MORRIS
+	.word	0100DH,35,08ddH		;9  STEVE BARDO
+	.word	0100DH,39,08dfH		;10 MINIFEE
+	.word	0100DH,46,08ebH		;11 MARTINEZ
+	.word	0100DH,41,08edH		;12 PESINA
+	.word	00105H,52,08cbH		;13 LIPTAK
+	.word	00105H,52,0777H		;14 EDDIE
+	.word	00105H,52,075fH		;15 MIKE V.
+	.word	00105H,52,08c1H		;16 JAMIE R.
+	.word	00105H,52,08c1H		;17 NICK E.
+	.word	00105H,52,08c1H		;18 J. ROOT
+	.word	00105H,52,08c1H		;19 MEDNICK
+	.word	00105H,52,08c1H		;20 DAN R.
+	.word	00105H,52,08c1H		;21 PAT F.
+	.word	00105H,52,08c1H		;22 ED BOON
+	.word	00105H,52,08c1H		;23 J. TOBIAS
+	.word	00105H,52,08c1H		;24 OURSLER
+	.word	00105H,52,08c1H		;25 JASON S.
+	.word	00105H,52,08c1H		;26 QUINN
+	.word	00105H,52,08c1H		;27 M. PERRY
+	.word	00105H,52,08c1H		;28 N. FUNK
+	.word	00105H,52,08c1H		;29 MDOC
+	.word	00105H,52,08c1H		;30 BUD
+	.word	00105H,52,0757H		;31 MARIUS
+	.word	00105H,52,08c1H		;32 MUNDAY
+	.word	00105H,52,08c1H		;33 NORTH
+	.word	00105H,52,08c1H		;34 AMRICH
+	.word	00105H,52,08c1H		;35 JIGGETS
 ;Superstar special guests
-	.word	>100D,52,>553		;PIPPEN
-	.word	>100D,52,>557		;RODMAN
-	.word	>100D,52,>543		;L. JOHNSON
-	.word	>100D,52,>547		;G. RICE
-	.word	>100D,52,>57f		;KIDD
-	.word	>100D,52,>593		;MUTOMBO
-	.word	>100D,52,>5a7		;G. HILL
-	.word	>100D,52,>5cb		;Olajuwan
-	.word	>100D,52,>5df		;r. miller
-	.word	>100D,52,>5e7		;smits
-	.word	>100D,52,>61b		;a. mourning
-	.word	>100D,52,>633		;g. robinson
-	.word	>100D,52,>7ae		;spud webb
-	.word	>100D,52,>66b		;ewing
-	.word	>100D,52,>67b		;starks
-	.word	>100D,52,>67f		;a. hardaway
-	.word	>100D,52,>683		;h. grant
-	.word	>100D,52,>693		;stackhouse
-	.word	>100D,52,>6bf		;c. robinson
-	.word	>100D,52,>6e7		;d. robinson
-	.word	>100D,52,>6e3		;s. elliot
-	.word	>100D,52,>6f7		;shawn kemp
-	.word	>100D,52,>723		;k. malone
-	.word	>100D,52,>74b		;webber
-	.word	>100D,52,>757		;muresan
+	.word	0100DH,52,0553H		;PIPPEN
+	.word	0100DH,52,0557H		;RODMAN
+	.word	0100DH,52,0543H		;L. JOHNSON
+	.word	0100DH,52,0547H		;G. RICE
+	.word	0100DH,52,057fH		;KIDD
+	.word	0100DH,52,0593H		;MUTOMBO
+	.word	0100DH,52,05a7H		;G. HILL
+	.word	0100DH,52,05cbH		;Olajuwan
+	.word	0100DH,52,05dfH		;r. miller
+	.word	0100DH,52,05e7H		;smits
+	.word	0100DH,52,061bH		;a. mourning
+	.word	0100DH,52,0633H		;g. robinson
+	.word	0100DH,52,07aeH		;spud webb
+	.word	0100DH,52,066bH		;ewing
+	.word	0100DH,52,067bH		;starks
+	.word	0100DH,52,067fH		;a. hardaway
+	.word	0100DH,52,0683H		;h. grant
+	.word	0100DH,52,0693H		;stackhouse
+	.word	0100DH,52,06bfH		;c. robinson
+	.word	0100DH,52,06e7H		;d. robinson
+	.word	0100DH,52,06e3H		;s. elliot
+	.word	0100DH,52,06f7H		;shawn kemp
+	.word	0100DH,52,0723H		;k. malone
+	.word	0100DH,52,074bH		;webber
+	.word	0100DH,52,0757H		;muresan
 
 
 
 ******************************************************************************
 
 tm_name_spch_tbl
- .word	>100D,35,>4b2		;00 ATLANTA		"Hawks"
- .word	>100D,42,>4b5		;01 BOSTON		"Celtics"
- .word	>100D,34,>4b8		;02 CHARLOTTE		"Hornets"
- .word	>100D,31,>4bb		;03 CHICAGO		"Bulls"
- .word	>100D,45,>4be		;04 CLEVELAND		"Cavaliers"
- .word	>100D,40,>4c1		;05 DALLAS		"Maverick"
- .word	>100D,38,>4c4		;06 DENVER		"Nuggets"
- .word	>100D,46,>4c7		;07 DETROIT		"Pistons"
- .word	>100D,48,>4ca		;08 GOLDEN STATE	"Warriors"
- .word	>100D,39,>4cd		;09 HOUSTON		"Rockets"
- .word	>100D,41,>4d0		;10 INDIANA		"Pacers"
- .word	>100D,32,>4d3		;11 L.A. CLIPPERS	"Clippers"
- .word	>100D,41,>4d6		;12 L.A. LAKERS		"Lakers"
- .word	>100D,28,>4d9		;13 MIAMI		"Heat"
- .word	>100D,34,>4dc		;14 MILWAUKEE		"Bucks"
- .word	>100D,46,>4df		;15 MINNESOTTA		"Timberwolves"
- .word	>100D,33,>4e2		;16 NEW JERSEY		"Nets"
- .word	>100D,34,>4e5		;17 NEW YORK		"Knicks"
- .word	>100D,33,>4e8		;18 ORLANDO		"Magic"
- .word	>100D,68,>4eb		;19 PHILADELPHIA	"Sixers"
- .word	>100D,36,>4ee		;20 PHOENIX		"Suns"
- .word	>100D,54,>4f1		;21 PORTLAND		"Blazers"
- .word	>100D,37,>4f3		;22 SACRAMENTO		"Kings"
- .word	>100D,42,>4f7		;23 SAN ANTONIO		"Spurs"
- .word	>100D,62,>4fa		;24 SEATTLE		"Supersonics"
- .word	>100D,44,>4fd		;26 TORONTO		"Raptors"
- .word	>100D,36,>500		;26 UTAH		"Jazz"
- .word	>100D,45,>503		;27 VANCOUVER		"Grizzlies"
- .word	>100D,28,>506		;28 WASHINGTON		"Bullets"
- .word	>100D,42,>818		;GOOD!!!
- .word	>100D,42,>818		;GOOD!!!
+ .word	0100DH,35,04b2H		;00 ATLANTA		"Hawks"
+ .word	0100DH,42,04b5H		;01 BOSTON		"Celtics"
+ .word	0100DH,34,04b8H		;02 CHARLOTTE		"Hornets"
+ .word	0100DH,31,04bbH		;03 CHICAGO		"Bulls"
+ .word	0100DH,45,04beH		;04 CLEVELAND		"Cavaliers"
+ .word	0100DH,40,04c1H		;05 DALLAS		"Maverick"
+ .word	0100DH,38,04c4H		;06 DENVER		"Nuggets"
+ .word	0100DH,46,04c7H		;07 DETROIT		"Pistons"
+ .word	0100DH,48,04caH		;08 GOLDEN STATE	"Warriors"
+ .word	0100DH,39,04cdH		;09 HOUSTON		"Rockets"
+ .word	0100DH,41,04d0H		;10 INDIANA		"Pacers"
+ .word	0100DH,32,04d3H		;11 L.A. CLIPPERS	"Clippers"
+ .word	0100DH,41,04d6H		;12 L.A. LAKERS		"Lakers"
+ .word	0100DH,28,04d9H		;13 MIAMI		"Heat"
+ .word	0100DH,34,04dcH		;14 MILWAUKEE		"Bucks"
+ .word	0100DH,46,04dfH		;15 MINNESOTTA		"Timberwolves"
+ .word	0100DH,33,04e2H		;16 NEW JERSEY		"Nets"
+ .word	0100DH,34,04e5H		;17 NEW YORK		"Knicks"
+ .word	0100DH,33,04e8H		;18 ORLANDO		"Magic"
+ .word	0100DH,68,04ebH		;19 PHILADELPHIA	"Sixers"
+ .word	0100DH,36,04eeH		;20 PHOENIX		"Suns"
+ .word	0100DH,54,04f1H		;21 PORTLAND		"Blazers"
+ .word	0100DH,37,04f3H		;22 SACRAMENTO		"Kings"
+ .word	0100DH,42,04f7H		;23 SAN ANTONIO		"Spurs"
+ .word	0100DH,62,04faH		;24 SEATTLE		"Supersonics"
+ .word	0100DH,44,04fdH		;26 TORONTO		"Raptors"
+ .word	0100DH,36,0500H		;26 UTAH		"Jazz"
+ .word	0100DH,45,0503H		;27 VANCOUVER		"Grizzlies"
+ .word	0100DH,28,0506H		;28 WASHINGTON		"Bullets"
+ .word	0100DH,42,0818H		;GOOD!!!
+ .word	0100DH,42,0818H		;GOOD!!!
 
 tm_city_spch_tbl
- .word	>100D,47,>4b1		;00 ATLANTA
- .word	>100D,36,>4b4		;01 BOSTON
- .word	>100D,32,>4b7		;02 CHARLOTTE
- .word	>100D,50,>4ba		;03 CHICAGO
- .word	>100D,36,>4bd		;04 CLEVELAND
- .word	>100D,38,>4c0		;05 DALLAS
- .word	>100D,34,>4c3		;06 DENVER
- .word	>100D,44,>4c6		;07 DETROIT
- .word	>100D,59,>4c9		;08 GOLDEN STATE
- .word	>100D,44,>4cc		;09 HOUSTON
- .word	>100D,46,>4cf		;10 INDIANA
- .word	>100D,55,>4d2		;11 L.A. CLIPPERS
- .word	>100D,55,>4d5		;12 L.A. LAKERS
- .word	>100D,44,>4d8		;13 MIAMI
- .word	>100D,39,>4db		;14 MILWAUKEE
- .word	>100D,51,>4de		;15 MINNESOTTA
- .word	>100D,47,>4e1		;16 NEW JERSEY
- .word	>100D,43,>4e4		;17 NEW YORK
- .word	>100D,54,>4e7		;18 ORLANDO
- .word	>100D,55,>4ea		;19 PHILADELPHIA
- .word	>100D,37,>4ed		;20 PHOENIX
- .word	>100D,41,>4f0		;21 PORTLAND
- .word	>100D,54,>4f3		;22 SACRAMENTO
- .word	>100D,67,>4f6		;23 SAN ANTONIO
- .word	>100D,40,>4f9		;24 SEATTLE
- .word	>100D,51,>4fc		;26 TORONTO
- .word	>100D,44,>4ff		;26 UTAH
- .word	>100D,45,>502		;27 VANCOUVER
- .word	>100D,50,>505		;28 WASHINGTON
- .word	>100D,42,>818		;GOOD!!!
- .word	>100D,42,>818		;GOOD!!!
+ .word	0100DH,47,04b1H		;00 ATLANTA
+ .word	0100DH,36,04b4H		;01 BOSTON
+ .word	0100DH,32,04b7H		;02 CHARLOTTE
+ .word	0100DH,50,04baH		;03 CHICAGO
+ .word	0100DH,36,04bdH		;04 CLEVELAND
+ .word	0100DH,38,04c0H		;05 DALLAS
+ .word	0100DH,34,04c3H		;06 DENVER
+ .word	0100DH,44,04c6H		;07 DETROIT
+ .word	0100DH,59,04c9H		;08 GOLDEN STATE
+ .word	0100DH,44,04ccH		;09 HOUSTON
+ .word	0100DH,46,04cfH		;10 INDIANA
+ .word	0100DH,55,04d2H		;11 L.A. CLIPPERS
+ .word	0100DH,55,04d5H		;12 L.A. LAKERS
+ .word	0100DH,44,04d8H		;13 MIAMI
+ .word	0100DH,39,04dbH		;14 MILWAUKEE
+ .word	0100DH,51,04deH		;15 MINNESOTTA
+ .word	0100DH,47,04e1H		;16 NEW JERSEY
+ .word	0100DH,43,04e4H		;17 NEW YORK
+ .word	0100DH,54,04e7H		;18 ORLANDO
+ .word	0100DH,55,04eaH		;19 PHILADELPHIA
+ .word	0100DH,37,04edH		;20 PHOENIX
+ .word	0100DH,41,04f0H		;21 PORTLAND
+ .word	0100DH,54,04f3H		;22 SACRAMENTO
+ .word	0100DH,67,04f6H		;23 SAN ANTONIO
+ .word	0100DH,40,04f9H		;24 SEATTLE
+ .word	0100DH,51,04fcH		;26 TORONTO
+ .word	0100DH,44,04ffH		;26 UTAH
+ .word	0100DH,45,0502H		;27 VANCOUVER
+ .word	0100DH,50,0505H		;28 WASHINGTON
+ .word	0100DH,42,0818H		;GOOD!!!
+ .word	0100DH,42,0818H		;GOOD!!!
 
 
 full_tm_name_spch_tbl
- .word	>100D,71 ,>4b0		;00 ATLANTA		"Altanta Hawks"
- .word	>100D,82 ,>4b3		;01 BOSTON		"Boston Celtics"
- .word	>100D,74 ,>4b6		;02 CHARLOTTE		"Hornets"
- .word	>100D,81 ,>4b9		;03 CHICAGO		"Bulls"
- .word	>100D,93 ,>4bc		;04 CLEVELAND		"Cavaliers"
- .word	>100D,78 ,>4bf		;05 DALLAS		"Maverick"
- .word	>100D,72 ,>4c2		;06 DENVER		"Nuggets"
- .word	>100D,87 ,>4c5		;07 DETROIT		"Pistons"
- .word	>100D,101,>4c8		;08 GOLDEN STATE	"Warriors"
- .word	>100D,82 ,>4cb		;09 HOUSTON		"Rockets"
- .word	>100D,86 ,>4ce		;10 INDIANA		"Pacers"
- .word	>100D,88 ,>4d1		;11 L.A. CLIPPERS	"Clippers"
- .word	>100D,96 ,>4d4		;12 L.A. LAKERS		"Lakers"
- .word	>100D,64 ,>4d7		;13 MIAMI		"Heat"
- .word	>100D,82 ,>4da		;14 MILWAUKEE		"Bucks"
- .word	>100D,94 ,>4dd		;15 MINNESOTTA		"Timberwolves"
- .word	>100D,81 ,>4e0		;16 NEW JERSEY		"Nets"
- .word	>100D,76 ,>4e3		;17 NEW YORK		"Knicks"
- .word	>100D,81 ,>4e6		;18 ORLANDO		"Magic"
- .word	>100D,117,>4e9		;19 PHILADELPHIA	"Sixers"
- .word	>100D,72 ,>4ec		;20 PHOENIX		"Suns"
- .word	>100D,93 ,>4ef		;21 PORTLAND		"Blazers"
- .word	>100D,95 ,>4f2		;22 SACRAMENTO		"Kings"
- .word	>100D,100,>4f5		;23 SAN ANTONIO		"Spurs"
- .word	>100D,100,>4f8		;24 SEATTLE		"Supersonics"
- .word	>100D,93 ,>4fb		;26 TORONTO		"Raptors"
- .word	>100D,82 ,>4fe		;26 UTAH		"Jazz"
- .word	>100D,104,>501		;27 VANCOUVER		"Grizzlies"
- .word	>100D,82 ,>504		;28 WASHINGTON		"Bullets"
- .word	>100D,60 ,>504		;GOOD!!!
- .word	>100D,60 ,>504		;GOOD!!!
+ .word	0100DH,71 ,04b0H		;00 ATLANTA		"Altanta Hawks"
+ .word	0100DH,82 ,04b3H		;01 BOSTON		"Boston Celtics"
+ .word	0100DH,74 ,04b6H		;02 CHARLOTTE		"Hornets"
+ .word	0100DH,81 ,04b9H		;03 CHICAGO		"Bulls"
+ .word	0100DH,93 ,04bcH		;04 CLEVELAND		"Cavaliers"
+ .word	0100DH,78 ,04bfH		;05 DALLAS		"Maverick"
+ .word	0100DH,72 ,04c2H		;06 DENVER		"Nuggets"
+ .word	0100DH,87 ,04c5H		;07 DETROIT		"Pistons"
+ .word	0100DH,101,04c8H		;08 GOLDEN STATE	"Warriors"
+ .word	0100DH,82 ,04cbH		;09 HOUSTON		"Rockets"
+ .word	0100DH,86 ,04ceH		;10 INDIANA		"Pacers"
+ .word	0100DH,88 ,04d1H		;11 L.A. CLIPPERS	"Clippers"
+ .word	0100DH,96 ,04d4H		;12 L.A. LAKERS		"Lakers"
+ .word	0100DH,64 ,04d7H		;13 MIAMI		"Heat"
+ .word	0100DH,82 ,04daH		;14 MILWAUKEE		"Bucks"
+ .word	0100DH,94 ,04ddH		;15 MINNESOTTA		"Timberwolves"
+ .word	0100DH,81 ,04e0H		;16 NEW JERSEY		"Nets"
+ .word	0100DH,76 ,04e3H		;17 NEW YORK		"Knicks"
+ .word	0100DH,81 ,04e6H		;18 ORLANDO		"Magic"
+ .word	0100DH,117,04e9H		;19 PHILADELPHIA	"Sixers"
+ .word	0100DH,72 ,04ecH		;20 PHOENIX		"Suns"
+ .word	0100DH,93 ,04efH		;21 PORTLAND		"Blazers"
+ .word	0100DH,95 ,04f2H		;22 SACRAMENTO		"Kings"
+ .word	0100DH,100,04f5H		;23 SAN ANTONIO		"Spurs"
+ .word	0100DH,100,04f8H		;24 SEATTLE		"Supersonics"
+ .word	0100DH,93 ,04fbH		;26 TORONTO		"Raptors"
+ .word	0100DH,82 ,04feH		;26 UTAH		"Jazz"
+ .word	0100DH,104,0501H		;27 VANCOUVER		"Grizzlies"
+ .word	0100DH,82 ,0504H		;28 WASHINGTON		"Bullets"
+ .word	0100DH,60 ,0504H		;GOOD!!!
+ .word	0100DH,60 ,0504H		;GOOD!!!
 
 
 scr_nbr_tbl
- .word	>110D,23,>87c,0		;0 ;(nothing)
- .word	>110D,16,>87d,0		;1
- .word	>110D,17,>87e,0		;2
- .word	>110D,15,>87f,0		;3
- .word	>110D,20,>880,0		;4
- .word	>110D,22,>881,0		;5
- .word	>110D,21,>882,0		;6
- .word	>110D,20,>883,0		;7
- .word	>110D,20,>884,0		;8
- .word	>110D,24,>885,0		;9
- .word	>110D,22,>886,0		;10
- .word	>110D,25,>887,0		;11
- .word	>110D,25,>888,0		;12
- .word	>110D,26,>889,0		;13
- .word	>110D,29,>88a,0		;14
- .word	>110D,26,>88b,0		;15
- .word	>110D,37,>88c,0		;16
- .word	>110D,32,>88d,0		;17
- .word	>110D,28,>88e,0		;18
- .word	>110D,29,>88f,0		;19
+ .word	0110DH,23,087cH,0		;0 ;(nothing)
+ .word	0110DH,16,087dH,0		;1
+ .word	0110DH,17,087eH,0		;2
+ .word	0110DH,15,087fH,0		;3
+ .word	0110DH,20,0880H,0		;4
+ .word	0110DH,22,0881H,0		;5
+ .word	0110DH,21,0882H,0		;6
+ .word	0110DH,20,0883H,0		;7
+ .word	0110DH,20,0884H,0		;8
+ .word	0110DH,24,0885H,0		;9
+ .word	0110DH,22,0886H,0		;10
+ .word	0110DH,25,0887H,0		;11
+ .word	0110DH,25,0888H,0		;12
+ .word	0110DH,26,0889H,0		;13
+ .word	0110DH,29,088aH,0		;14
+ .word	0110DH,26,088bH,0		;15
+ .word	0110DH,37,088cH,0		;16
+ .word	0110DH,32,088dH,0		;17
+ .word	0110DH,28,088eH,0		;18
+ .word	0110DH,29,088fH,0		;19
 
- .word	>110D,19,>890,0		;20
- .word	>110D,25,>891,0		;21
- .word	>110D,25,>892,0		;22
- .word	>110D,25,>893,0		;23
- .word	>110D,25,>894,0		;24
- .word	>110D,25,>895,0		;25
- .word	>110D,25,>896,0		;26
- .word	>110D,25,>897,0		;27
- .word	>110D,25,>898,0		;28
- .word	>110D,25,>899,0		;29
+ .word	0110DH,19,0890H,0		;20
+ .word	0110DH,25,0891H,0		;21
+ .word	0110DH,25,0892H,0		;22
+ .word	0110DH,25,0893H,0		;23
+ .word	0110DH,25,0894H,0		;24
+ .word	0110DH,25,0895H,0		;25
+ .word	0110DH,25,0896H,0		;26
+ .word	0110DH,25,0897H,0		;27
+ .word	0110DH,25,0898H,0		;28
+ .word	0110DH,25,0899H,0		;29
 
- .word	>110D,37,>89a,0		;30
- .word	>110D,37,>89b,0		;31
- .word	>110D,37,>89c,0		;32
- .word	>110D,37,>89d,0		;33
- .word	>110D,37,>89e,0		;34
- .word	>110D,37,>89f,0		;35
- .word	>110D,37,>8a0,0		;36
- .word	>110D,37,>8a1,0		;37
- .word	>110D,37,>8a2,0		;38
- .word	>110D,37,>8a3,0		;39
+ .word	0110DH,37,089aH,0		;30
+ .word	0110DH,37,089bH,0		;31
+ .word	0110DH,37,089cH,0		;32
+ .word	0110DH,37,089dH,0		;33
+ .word	0110DH,37,089eH,0		;34
+ .word	0110DH,37,089fH,0		;35
+ .word	0110DH,37,08a0H,0		;36
+ .word	0110DH,37,08a1H,0		;37
+ .word	0110DH,37,08a2H,0		;38
+ .word	0110DH,37,08a3H,0		;39
 
- .word	>110D,38,>8a4,0		;40
- .word	>110D,38,>8a5,0		;41
- .word	>110D,38,>8a6,0		;42
- .word	>110D,38,>8a7,0		;43
- .word	>110D,38,>8a8,0		;44
- .word	>110D,38,>8a9,0		;45
- .word	>110D,38,>8aa,0		;46
- .word	>110D,38,>8ab,0		;47
- .word	>110D,38,>8ac,0		;48
- .word	>110D,38,>8ad,0		;49
+ .word	0110DH,38,08a4H,0		;40
+ .word	0110DH,38,08a5H,0		;41
+ .word	0110DH,38,08a6H,0		;42
+ .word	0110DH,38,08a7H,0		;43
+ .word	0110DH,38,08a8H,0		;44
+ .word	0110DH,38,08a9H,0		;45
+ .word	0110DH,38,08aaH,0		;46
+ .word	0110DH,38,08abH,0		;47
+ .word	0110DH,38,08acH,0		;48
+ .word	0110DH,38,08adH,0		;49
 
- .word	>110D,34,>8ae,0		;50
- .word	>110D,34,>8af,0		;51
- .word	>110D,34,>8b0,0		;52
- .word	>110D,34,>8b1,0		;53
- .word	>110D,34,>8b2,0		;54
- .word	>110D,34,>8b3,0		;55
- .word	>110D,34,>8b4,0		;56
- .word	>110D,34,>8b5,0		;57
- .word	>110D,34,>8b6,0		;58
- .word	>110D,34,>8b7,0		;59
+ .word	0110DH,34,08aeH,0		;50
+ .word	0110DH,34,08afH,0		;51
+ .word	0110DH,34,08b0H,0		;52
+ .word	0110DH,34,08b1H,0		;53
+ .word	0110DH,34,08b2H,0		;54
+ .word	0110DH,34,08b3H,0		;55
+ .word	0110DH,34,08b4H,0		;56
+ .word	0110DH,34,08b5H,0		;57
+ .word	0110DH,34,08b6H,0		;58
+ .word	0110DH,34,08b7H,0		;59
 
 	       
 STAB_END
@@ -1556,7 +1556,7 @@ scn_1	calla	snd_play1
 	jrnz	#done
 	move	*a8(OXVEL),a0,L
 	abs	a0			;Should we make a bbrd bounce sound?
-	cmpi	>1fff,a0		;!!! Min XVEL to make sound
+	cmpi	01fffH,a0		;!!! Min XVEL to make sound
 	jrlt	#soft
 
 	SLEEPK	15
@@ -1819,7 +1819,7 @@ scn_1	calla	snd_play1
 	jrls	#x3p_1
 
 	move	@game_time,a0,L		;don't call if clock run down
-	cmpi	>2040906,a0
+	cmpi	02040906H,a0
 	jrge	#x3p_1
 
 	move	@ballnumscored,a0	;# times last plyr scored
@@ -3596,7 +3596,7 @@ calc_score_diff
 	jrnz	#die			;br=outdoor court!
 
 	movk	3,a0
-	calla	rndrng0			;>0-3
+	calla	rndrng0			;00H-3
 	sll	5,a0
 	addi	#organ_script_tbl,a0
 	move	*a0,a0,L
@@ -3767,7 +3767,7 @@ calc_score_diff
 	jrz	#crwd0				;br=indoor court
 
 	movk	10,a0
-	calla	rndrng0				;>0-3
+	calla	rndrng0				;00H-3
 	sll	5,a0
 	addi	#outdr_snd_tbl,a0,L
 	move	*a0,a0,L
@@ -3784,7 +3784,7 @@ calc_score_diff
 	movi	#crowd_chant_tbl2,a8
 #crwdsnd
 	movk	3,a0
-	calla	rndrng0				;>0-3
+	calla	rndrng0				;00H-3
 	sll	5,a0
 	add	a8,a0
 	move	*a0,a0,L

@@ -2,8 +2,8 @@
 /*-e WARMSET*/			/* entry point of program		*/
 -e init_prog			/* entry point of program		*/
 -f 0xFFFF			/* fill unspecified memory with value	*/
--o c:\video\bball\BB.out	/* specify output file			*/
--m c:\video\bball\BB.map	/* map file				*/
+-o BB.out	/* specify output file			*/
+/* -m BB.map	/* map file				*/
 -s				/* kill the symbol table		*/
 
 NDSP1.OBJ		/* GSP display processor */
@@ -36,7 +36,7 @@ PLYRSTND.OBJ		/* basketball plyr sequence code */
 SCORE.OBJ		/* score stuff */
 SCORE2.OBJ		/* score stuff */
 SOUNDS.OBJ		/* sound processor */
-PATCH.OBJ		/* TV PATCH/BREAKPOINT HOOK */
+/* PATCH.OBJ		/* TV PATCH/BREAKPOINT HOOK */
 TEXT.OBJ		/* font tables */
 ATTRACT.OBJ		/* attract mode */
 STRING.OBJ		/* string printing stuff */

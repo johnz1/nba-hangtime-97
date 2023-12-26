@@ -1,0 +1,166 @@
+*****************************************************
+TMS340 COFF Linker           Version 5.01
+*****************************************************
+Mon Dec 25 15:15:00 2023
+
+OUTPUT FILE NAME:   <BB.out>
+ENTRY POINT SYMBOL: "init_prog"  address: ff8b07b0
+
+
+MEMORY CONFIGURATION
+
+           name      origin     length     attributes
+         --------   --------   ---------   ----------
+         SCRATCH    01000000   0003f7300      RWIX
+         SCRATCHT   013f7300   000008d00      RWIX
+         IROM       02000000   000400000      RWIX
+         ROM        ff800000   0007f6f00      RWIX
+         ROMTV      ffff6f00   000008d00      RWIX
+         TRAP31     fffffc00   000000400      RWIX
+
+
+SECTION ALLOCATION MAP
+
+ output                                  attributes/
+section   page    origin      length       input sections
+--------  ----  ----------  ----------   ----------------
+STACK      0    01000000    00002000     UNINITIALIZED
+                  01000000    00002000     MAIN.OBJ (STACK)
+
+PRCBSS     0    01002000    00000040     
+                  01002000    00000040     MPROC.OBJ (PRCBSS)
+
+OBJBSS     0    01002040    00000060     
+                  01002040    00000060     NDSP1.OBJ (OBJBSS)
+
+.bss       0    010020a0    0013f8f0     UNINITIALIZED
+                  010020a0    000710b0     NDSP1.OBJ (.bss)
+                  01073150    000002a0     MAIN.OBJ (.bss)
+                  010733f0    00000ed0     UTIL.OBJ (.bss)
+                  010742c0    00051670     PAL.OBJ (.bss)
+                  010c5930    000672a0     MPROC.OBJ (.bss)
+                  0112cbd0    00002770     BAKGND.OBJ (.bss)
+                  0112f340    00000bd0     BB.OBJ (.bss)
+                  0112ff10    000022e0     BB3.OBJ (.bss)
+                  011321f0    00000040     DRONE.OBJ (.bss)
+                  01132230    00004b20     PLYR.OBJ (.bss)
+                  01136d50    00000370     PLYR2.OBJ (.bss)
+                  011370c0    00000020     PLYR3.OBJ (.bss)
+                  011370e0    000007c0     PLYRAT.OBJ (.bss)
+                  011378a0    00000040     PLYRSEQ.OBJ (.bss)
+                  011378e0    00000010     PLYRSEQ2.OBJ (.bss)
+                  011378f0    00000040     PLYRDSEQ.OBJ (.bss)
+                  01137930    000003e0     SCORE.OBJ (.bss)
+                  01137d10    00000480     SCORE2.OBJ (.bss)
+                  01138190    00000b00     SOUNDS.OBJ (.bss)
+                  01138c90    000000c0     ATTRACT.OBJ (.bss)
+                  01138d50    000005f0     STRING.OBJ (.bss)
+                  01139340    00004af0     RECORD.OBJ (.bss)
+                  0113de30    00000360     SPEECH.OBJ (.bss)
+                  0113e190    000016d0     SELECT.OBJ (.bss)
+                  0113f860    00000100     AUDIT.OBJ (.bss)
+                  0113f960    00000170     TEST.OBJ (.bss)
+                  0113fad0    00000220     DIAG.OBJ (.bss)
+                  0113fcf0    00000430     MENU.OBJ (.bss)
+                  01140120    00000030     HSTD.OBJ (.bss)
+                  01140150    000010b0     MAKEPLR.OBJ (.bss)
+                  01141200    00000560     SCREEN.OBJ (.bss)
+                  01141760    000001c0     SELECT3.OBJ (.bss)
+                  01141920    00000070     SELECT4.OBJ (.bss)
+
+.text      0    ff800000    003de810     
+                  ff800000    0009d8e0     NDSP1.OBJ (.text)
+                  ff89d8e0    00004480     MAIN.OBJ (.text)
+                  ff8a1d60    00008620     UTIL.OBJ (.text)
+                  ff8aa380    00003350     PAL.OBJ (.text)
+                  ff8ad6d0    00001050     MPROC.OBJ (.text)
+                  ff8ae720    00002090     BAKGND.OBJ (.text)
+                  ff8b07b0    0000b450     BB.OBJ (.text)
+                  ff8bbc00    00014500     BB3.OBJ (.text)
+                  ff8d0100    0000a460     DRONE.OBJ (.text)
+                  ff8da560    0002cf20     PLYR.OBJ (.text)
+                  ff907480    00019120     PLYR2.OBJ (.text)
+                  ff9205a0    00019f20     PLYR3.OBJ (.text)
+                  ff93a4c0    0001f2f0     PLYRAT.OBJ (.text)
+                  ff9597b0    00005e40     PLYRAT2.OBJ (.text)
+                  ff95f5f0    0001d890     PLYRSEQ.OBJ (.text)
+                  ff97ce80    00008860     PLYRRSEQ.OBJ (.text)
+                  ff9856e0    00011960     PLYRSEQ2.OBJ (.text)
+                  ff997040    00021320     PLYRDSEQ.OBJ (.text)
+                  ff9b8360    00016a60     PLYRDSQ2.OBJ (.text)
+                  ff9cedc0    00003bd0     PLYRLSEQ.OBJ (.text)
+                  ff9d2990    000021e0     PLYRSTND.OBJ (.text)
+                  ff9d4b70    00018350     SCORE.OBJ (.text)
+                  ff9ecec0    00009400     SCORE2.OBJ (.text)
+                  ff9f62c0    000057a0     SOUNDS.OBJ (.text)
+                  ff9fba60    00002fe0     TEXT.OBJ (.text)
+                  ff9fea40    0003dfb0     ATTRACT.OBJ (.text)
+                  ffa3c9f0    00016da0     STRING.OBJ (.text)
+                  ffa53790    0001ee80     RECORD.OBJ (.text)
+                  ffa72610    0001bb60     SPEECH.OBJ (.text)
+                  ffa8e170    0001ff50     SELECT.OBJ (.text)
+                  ffaae0c0    000206a0     SELECT2.OBJ (.text)
+                  fface760    00005aa0     ADJUST.OBJ (.text)
+                  ffad4200    0000bdc0     AUDIT.OBJ (.text)
+                  ffadffc0    0000e100     TEST.OBJ (.text)
+                  ffaee0c0    00000140     --HOLE-- [fill = 0000ffff]
+                  ffaee200    0001da20     DIAG.OBJ (.text)
+                  ffb0bc20    00013970     MENU.OBJ (.text)
+                  ffb1f590    000041c0     HSTD.OBJ (.text)
+                  ffb23750    000151d0     MAKEPLR.OBJ (.text)
+                  ffb38920    00018700     MAKEPLR2.OBJ (.text)
+                  ffb51020    00007b30     SCREEN.OBJ (.text)
+                  ffb58b50    00020bd0     SELECT3.OBJ (.text)
+                  ffb79720    0004ef50     SELECT4.OBJ (.text)
+                  ffbc8670    00014da0     PLYRAT3.OBJ (.text)
+                  ffbdd410    00001400     UNZIP.OBJ (.text)
+
+.data      0    ffbde810    003aedd0     
+                  ffbde810    000001c0     MAIN.OBJ (.data)
+                  ffbde9d0    0003a1b0     PAL.OBJ (.data)
+                  ffc18b80    00006680     BGNDTBL.OBJ (.data)
+                  ffc1f200    0000a590     BGNDPAL.OBJ (.data)
+                  ffc29790    0002df50     IMGTBL.OBJ (.data)
+                  ffc576e0    00029540     IMGPAL.OBJ (.data)
+                  ffc80c20    000085c0     BB.OBJ (.data)
+                  ffc891e0    000137a0     BB2.OBJ (.data)
+                  ffc9c980    00008b00     BB3.OBJ (.data)
+                  ffca5480    00037e10     BB4.OBJ (.data)
+                  ffcdd290    00017c20     PLYR3.OBJ (.data)
+                  ffcf4eb0    00001d40     PLYRAT2.OBJ (.data)
+                  ffcf6bf0    00009000     PLYRSEQ.OBJ (.data)
+                  ffcffbf0    0000ee80     PLYRRSEQ.OBJ (.data)
+                  ffd0ea70    00015840     PLYRSEQ2.OBJ (.data)
+                  ffd242b0    0001c440     PLYRDSEQ.OBJ (.data)
+                  ffd406f0    00015ba0     PLYRDSQ2.OBJ (.data)
+                  ffd56290    00016890     PLYRSTND.OBJ (.data)
+                  ffd6cb20    00008970     SCORE.OBJ (.data)
+                  ffd75490    000501a0     TEXT.OBJ (.data)
+                  ffdc5630    00016770     ATTRACT.OBJ (.data)
+                  ffddbda0    00131a90     STRING.OBJ (.data)
+                  fff0d830    000492b0     SELECT.OBJ (.data)
+                  fff56ae0    00008940     SELECT2.OBJ (.data)
+                  fff5f420    000105d0     ADJUST.OBJ (.data)
+                  fff6f9f0    00019a10     MENU.OBJ (.data)
+                  fff89400    00000f30     MAKEPLR.OBJ (.data)
+                  fff8a330    00001560     MAKEPLR2.OBJ (.data)
+                  fff8b890    000001c0     SELECT3.OBJ (.data)
+                  fff8ba50    00000870     SELECT4.OBJ (.data)
+                  fff8c2c0    00001320     PLYRAT3.OBJ (.data)
+
+VECTORS    0    fffffc00    00000400     
+                  fffffc00    00000400     MAIN.OBJ (VECTORS)
+
+IMAGES     0    02000000    00000000     UNINITIALIZED
+
+.TEXT      0    ff800000    00000000     UNINITIALIZED
+
+.DATA      0    ff800000    00000000     UNINITIALIZED
+
+img_tbl    0    ff800000    00000000     UNINITIALIZED
+
+shit       0    ffff6f00    00000000     UNINITIALIZED
+
+SHIT       0    ffff6f00    00000000     UNINITIALIZED
+
+.BSS       0    010020a0    00000000     UNINITIALIZED

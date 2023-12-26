@@ -1,0 +1,5396 @@
+	.file	"attract.asm"
+	.title	"attract mode"
+	.width	132
+	.option	b,d,l,t
+	.mnolist
+
+
+	.include	"mproc.equ"
+	.include	"disp.equ"
+	.include	"sys.equ"
+	.include	"gsp.equ"
+	.include	"game.equ"
+	.include	"audit.equ"
+	.include	"macros.hdr"
+	.include	"link.equ"
+
+	.include	"credturb.glo"
+	.include	"imgtbl.glo"
+	.include	"bgndtbl.glo"
+	.include	"bgndtbl7.asm"
+	.include	"bgndpal7.asm"
+	.include	"bgndtbl7.glo"
+
+	.def	COLTAB
+	.def	creditscreen
+
+	.ref	tuneend_snd,bounce_snd
+	.ref	tuneq1_snd,tuneq2_snd,tuneq3_snd,tuneq4_snd
+	.ref	QSNDRST
+
+	.ref	show_prizes
+	.ref	drw_chicks
+	.ref	TWOPLAYERS			;0 = NO, 1 = YES 2 players
+	.ref	COLTAB2
+	.ref	get_all_buttons_down,get_all_buttons_cur2
+	.ref	fade_up,fade_down
+	.ref	bast7t_ascii,bast8_ascii,bast8t_ascii,bast10_ascii
+	.ref	bast7tcyc_ascii
+	.ref	brush20_ascii,inga16_ascii
+	.ref	brush10_ascii
+	.ref	special_heads
+	.ref	our_heads,our_names
+	.ref	get_opponent_team
+	.ref	winningteam
+	.ref	credits2,credits3
+	.ref	show_hiscore,WNDWOFF
+	.ref	player1_data,player2_data,player3_data,player4_data
+	.ref	player_names,player_heads
+	.ref	FRANIMQ
+	.ref	GAMSTATE,HALT,KILBGND
+	.ref	process_init
+	.ref	tvpanelon,gndstat
+	.ref	BAKMODS,BGND_UD1,CLR_SCRN
+	.ref	CR_CONTP,P_CONT,CR_STRTP,P_START,WSPEED
+	.ref	WNDWON,CRD_SCRN2,IRQSKYE
+	.ref	pal_clean,pal_getf,dmaq_wait,display_init,AUD1
+	.ref	GET_ADJ
+	.ref	conttimers
+	.ref	GETHIGH,pal_set,PALFRAM
+	.ref	COLCYC,COLRPRC
+	.ref	anim_script,anim_killall
+	.ref	GET_AUD,DEF_PAGE
+	.ref	PSTATUS,PSTATUS2
+	.ref	dirqtimer,dirq_wait
+	.ref	dpageflip,dpageflip_off
+	.ref	WIPEOUT
+	.ref	demogame_start
+	.ref	system_savegame,system_restoregame
+	.ref	create_stat_titles
+	.ref	do_scrn_transition
+	.ref	wipe_horz_stag_dwn,un_wipe_horz_stag_dwn
+	.ref	wipe_horz_comb
+	.ref	NO_CREATE_DEL_OBJS,CREATE_NO_DEL_OBJS
+	.ref	scores
+	.ref	print_string,print_string2,print_string_C,print_string_C2
+	.ref	message_palette
+	.ref	message_ascii,mess_spacing,mess_objid,mess_cursx,mess_cursy
+	.ref	mess_cursx2,mess_justify,kern_chars,print_string2b
+	.ref	setup_message
+	.ref	message_buffer
+	.ref	dec_to_asc,dec_to_pct
+	.ref	copy_string,copy_rom_string
+	.ref	concat_string,concat_rom_string
+	.ref	print_string_R,print_string_R2
+	.ref	FADERAM,RNDRNG0
+	.ref	player_stats
+	.ref	new_team_select_screen
+	.ref	get_name_string
+	.ref	bast18_ascii,brush12_ascii
+	.ref	create_names,create_plyrs_name
+	.ref	create_name_backplates
+	.ref	create_title_bar
+	.ref	anim_fire_for_best_plyr
+	.ref	kill_fire_anim
+	.ref	create_player_head_backdrops
+	.ref	create_score_backdrop
+	.ref	set_volume_for_amode
+	.ref	team1,team2
+	.ref	tick_snd
+	.ref	best_plyr_speech
+	.ref	un_wipe_horizontal,wipe_horizontal
+	.ref	mess_line_spacing
+	.ref	CYCLE_TABLE,BSTCYCB_P
+	.ref	result_screen
+	.ref	kp_team1,kp_scores,kp_team2
+	.ref	SOUNDSUP
+	.ref	STRCNRMO
+	.ref	ADJ_PAGE,RC_BYTEI
+	.ref	RD7FONT
+	.ref	STRLNRMO_1
+	.ref	STRCNRMO_1
+	.ref	octopus2		
+	.ref	prt_credits
+	.ref	start_msgs
+	.ref	fix_dropout_msgs
+	.ref	sc_proc
+	.ref	buyin_screen
+	.ref	trivia_game
+	.ref	gmqrtr
+	.ref	start_teams
+	.ref	create_heading2
+	.ref	flash_bigtxt2
+	.ref	bast8_2_ascii,hangfnt38_ascii
+	.ref	HANGF_R_P
+	.ref	crwdbed_kill
+	.ref	kill_flsh_txt_proc
+	.ref	change_pal_on_text
+	.ref	plyr_onfire
+	.ref	BASTC_W_P
+	.ref	create_player_nubs
+	.ref	create_player_heads
+	.ref	update_player_heads
+	.ref	award_plr_attrib_pts
+
+	.ref	pup_showshotper,pup_noassistance
+	.ref	pup_court,pup_aba
+	.ref	kp_p1_crtplr,kp_p2_crtplr,kp_p3_crtplr,kp_p4_crtplr
+	.ref	logos,name_sort,player_heads2
+	.ref	plyr_names_img_tbl,BALLBAK1
+	.ref	city_names_str_tbl
+
+	.ref	JEF_MUG
+	.ref	SAL_MUG
+	.ref	TUR_MUG
+	.ref	DAN_MUG
+	.ref	EUG_MUG
+	.ref	JMC_MUG
+	.ref	JEN_MUG
+	.ref	HEY_MUG
+	.ref	WIL_MUG
+	.ref	BAR_MUG
+	.ref	MIN_MUG
+	.ref	KIM_MUG
+	.ref	NEI_MUG
+	.ref	MDOC_MUG
+	.ref	MAR_MUG
+	.ref	JAB_MUG
+
+	BSSX	ENTERON		,16	;INITIALS BEING ENTERD FLAG
+
+	BSSX	hisclong	,16	;!0=Show hiscore table longer
+
+
+
+
+
+	.bss	team_cnts	,32	;left team cnt, +16=rgt team cnt
+	.bss	stick		,32	;stick ram for team selection
+
+	.bss	loop		,16	;Cntr for when to show design team
+	.bss	otdloop		,16	;Cntr for when to show outdoor crt
+	.bss	tmnbr		,16
+	.bss	tmloop		,16
+
+
+
+	.text
+
+
+
+utgtslp	SLEEPK	1
+
+ SUBR	amode_start
+
+
+	.ref	set_game_snd
+	move	@SOUNDSUP,a0
+	clr	a14
+	move	a14,@SOUNDSUP
+	calla	set_game_snd
+	move	a0,@SOUNDSUP
+
+
+
+	movi	ACTIVE,a0		;>Look for indestructables
+	jruc	utgtnxt
+
+utgtilp	move	*a0(PROCID),a14
+	jrn	utgtslp			;Found?
+utgtnxt	move	*a0,a0,L
+	jrnz	utgtilp
+
+	calla	process_init		;Init process list
+
+	move	@FREE,a13,L		;Get 1st free
+	move	*a13,a0,L
+	move	a0,@FREE,L
+	clr	a0
+	move	a0,*a13,L
+	move	a13,@ACTIVE,L		;Put me on active list
+
+	move	a13,a12
+	addi	PRCSIZ,a12
+
+	movi	AMODE_PID,a0
+	move	a0,*a13(PROCID)
+
+	movi	-1,a0
+	move	a0,@winningteam
+
+	movk	1,a0
+	move	a0,@dpageflip
+
+
+	movk	INAMODE,a0
+	move	a0,@GAMSTATE
+	calla	COLRPRC
+	movi	AMODE_PID,a1
+	movi	amode,a7
+	calla	GETPRC
+
+	clr	a0
+	move	a0,@HALT
+	move	a0,@ENTERON
+
+
+
+
+ SUBRP	amode
+
+utgtlp
+	movi	AMODE_PID,a0
+	move	a0,*a13(PROCID)
+
+
+
+
+	JSRP	show_title
+	JSRP	show_hiscore
+
+	JSRP	new_page
+	JSRP	creditscreen
+	JSRP	demogame
+	SOUND1	tuneend_snd
+
+	JSRP	hint_page2
+	JSRP	show_hiscore
+
+	JSRP	show_prizes
+	JSRP	creditscreen
+	JSRP	demogame
+	SOUND1	tuneend_snd
+	JSRP	show_nba_plyrs
+
+	JSRP	result_screen
+	JSRP	new_page
+	JSRP	show_title
+	JSRP	show_copyright
+	JSRP	creditscreen
+	JSRP	demogame
+	SOUND1	tuneend_snd
+	JSRP	show_nba_plyrs
+
+
+	move	@loop,a0
+	inc	a0
+	move	a0,@loop
+	andi	3,a0
+	subk	2,a0			;Show on non-zero loop count
+	jrnz	utgtchknxt
+	JSRP	show_designteam
+utgtchknxt
+	move	@loop,a0
+	andi	03fH,a0
+	jrnz	utgtlp
+	JSRP	trivia_rules
+	jruc	utgtlp
+
+
+	.def	pObj
+	.bss	pObj,32
+
+
+
+
+show_title
+
+	calla	display_blank
+	calla	WIPEOUT
+
+	movk	1,a0
+	move	a0,@dpageflip
+
+	clr	a0
+	move	a0,@dtype		;2D
+
+	movi	SCRNEND,a0		;[256,405]
+	move	a0,@SCRNLR,L
+
+	clr	a0
+	move	a0,@WORLDTLX,L
+	move	a0,@WORLDTLY,L
+	move	a0,@IRQSKYE
+
+	SLEEPK	2
+
+	movi	title_scr_mod,a0
+	move	a0,@BAKMODS,L
+	calla	BGND_UD1
+
+
+	movk	1,a0
+	move	a0,@DISPLAYON
+	calla	display_unblank
+
+
+
+	movi	6*TSEC,a10
+gudxlp	SLEEPK	1
+	calla	get_all_buttons_cur2
+	jrz	gudxnob
+
+      	clr	a0
+	move	a0,@SOUNDSUP		;turn all sounds on
+	SOUND1	bounce_snd
+	movk	1,a0
+	move	a0,@SOUNDSUP		;turn all sounds off
+	jruc	gudxxb
+gudxnob	
+	dsj	a10,gudxlp
+gudxxb
+
+	movi	CYCPID,a0
+	calla	KIL1C
+	SLEEP	40
+
+	calla	WIPEOUT
+	RETP
+
+title_scr_mod
+	.long	hangtimeBMOD
+	.word	0,0
+	.long	0
+
+
+ttl_setscl
+	move	*a8(OIMG),a2,L
+	movi	[0100H,0],a3
+	clr	a14
+	movx	a10,a14
+	divu	a14,a3
+	movi	-106,a1
+	mpys	a3,a1
+	sra	16,a1
+	addi	200,a1			;X base
+	move	a1,*a8(OXPOS)
+	movi	-98,a1
+	mpys	a3,a1
+	sra	16,a1
+	addi	124,a1			;Y base
+	move	a1,*a8(OYPOS)
+	move	a10,*a8(ODATA_p),L	;Set scale value
+	rets
+
+
+
+	.if	0
+
+	STRUCTPD
+	WORD	som_string
+
+
+ SUBR	show_operatormsg
+
+
+	calla	ADJ_PAGE
+	movk	CMESS_LINES,a2		;0CHheck for a message
+	movi	CUSTOM_MESSAGE,a7
+yshucmlp
+	calla	RC_BYTEI
+	jrnz	yshumsg
+	addi	CMESS_LINE_SIZE,a7
+	dsj	a2,yshucmlp
+	jruc	yshux
+yshumsg
+	calla	display_blank
+	calla	WIPEOUT
+
+	movk	1,a0
+	move	a0,@dpageflip
+	move	a0,@DISPLAYON
+	calla	display_2dsclstarmodeon
+
+	movk	10,a0
+	move	a0,@WORLDTLX+16
+	movi	1000,a0
+	move	a0,@WORLDTLY+16
+
+	SLEEPK	2
+
+	calla	display_unblank
+
+	CREATE0	showdt_scl
+
+
+	movk	CMESS_LINES,a2		;0CHheck for a message
+	movi	CUSTOM_MESSAGE,a7
+	movi	[50,200],a9
+yshuprtlp
+	PUSHP	a2,a7
+
+	calla	ADJ_PAGE
+
+	move	a13,a2
+	addi	som_string,a2
+yshugetlp	calla	RC_BYTEI
+	movb	a0,*a2
+	addk	8,a2
+	move	a0,a0
+	jrnz	yshugetlp
+
+
+	movi	INGA_Y_P,a0
+	calla	pal_getf
+	move	a0,a6
+
+	move	a13,a8
+	addi	som_string,a8
+	clr	a0
+	movk	1,a10
+	movi	inga16_asc_tbl,a11
+	PUSHP	a9
+	JSRP	STRCNRMO_1
+	PULLP	a9
+
+	movi	OBJLST,a14
+
+yshuolp	move	*a14,a14,L	;A14=*Next
+	jrz	yshuoend
+	move	*a14(ODATA_p),a0,L
+	jrnz	yshuolp
+	movi	[0320H,0320H],a1
+	move	a1,*a14(ODATA_p),L
+	jruc	yshuolp
+yshuoend
+
+	PUSHP	a6
+	SLEEPK	30
+	PULLP	a6
+	PULLP	a2,a7
+yshunxt
+	addi	[45,0],a9
+
+	addi	CMESS_LINE_SIZE,a7
+	dsj	a2,yshuprtlp
+
+
+
+	SLEEP	TSEC*6
+
+
+	JSRP	scrn_scaleout
+
+	calla	WIPEOUT
+
+yshux	RETP
+	.endif
+
+
+ SUBRP	show_copyright
+
+	calla	display_blank
+	calla	WIPEOUT
+
+	clr	a0
+	move	a0,@dtype		;2D
+
+	movk	1,a0			;page flipping on
+	move	a0,@dpageflip
+
+	movi	SCRNEND,a0		;[256,405]
+	move	a0,@SCRNLR,L
+
+	clr	a0
+	move	a0,@WORLDTLX,L
+	move	a0,@WORLDTLY,L
+	move	a0,@IRQSKYE
+
+	SLEEPK	2
+
+	movi	our_legal_msg_setup,a2
+	calla	setup_message
+	movk	11,a0
+	move	a0,@mess_line_spacing
+	movi	our_legal_msg_str,a4
+	calla	print_string_C2
+
+	movi	[0a8h,0],a0
+	movi	[03bh,0],a1
+	.ref	hang_logo
+	movi	hang_logo,a2			;* image
+	movi	20000,a3
+	movi	DMAWNZ|M_NOCOLL,a4
+	movi	CLSDEAD,a5
+	clr	a6
+	clr	a7
+	calla	BEGINOBJ2
+
+	clr	a10
+	movk	8,a11
+	CREATE0	fade_up
+
+	movk	1,a0
+	move	a0,@DISPLAYON
+
+	SLEEPK	2
+	calla	display_unblank
+
+	SLEEP	1*TSEC
+
+	movi	1*TSEC,a10
+ifsllp0	SLEEPK	1
+	calla	get_all_buttons_cur2
+	jrz	ifslnob0
+      	clr	a0
+	move	a0,@SOUNDSUP		;turn all sounds on
+	SOUND1	bounce_snd
+	movk	1,a0
+	move	a0,@SOUNDSUP		;turn all sounds off
+	jruc	ifslxb0
+ifslnob0
+	dsj	a10,ifsllp0
+ifslxb0
+	clr	a10
+	movk	8,a11
+	CREATE0	fade_down
+
+	SLEEP	40
+
+	movi	CLSDEAD,a0
+	calla	obj_del1c
+	movi	TYPTEXT,a0
+	calla	obj_del1c
+
+	movi	legal_msg_setup,a2
+	calla	setup_message
+	movk	11,a0
+	move	a0,@mess_line_spacing
+	movi	legal_msg_str,a4
+	calla	print_string_C2
+
+	movi	[200,0],a0
+	movi	[107,0],a1
+	.ref	OFFNBA
+	movi	OFFNBA,a2			;* image
+	movi	20000,a3
+	movi	DMAWNZ|M_NOCOLL,a4
+	movi	CLSDEAD,a5
+	clr	a6
+	clr	a7
+	calla	BEGINOBJ2
+
+	clr	a10
+	movk	8,a11
+	CREATE0	fade_up
+
+	movk	1,a0
+	move	a0,@DISPLAYON
+
+	SLEEPK	2
+	calla	display_unblank
+
+	SLEEP	1*TSEC
+
+	movi	4*TSEC,a10
+ifsllp	SLEEPK	1
+	calla	get_all_buttons_cur2
+	jrz	ifslnob
+      	clr	a0
+	move	a0,@SOUNDSUP		;turn all sounds on
+	SOUND1	bounce_snd
+	movk	1,a0
+	move	a0,@SOUNDSUP		;turn all sounds off
+	jruc	ifslxb
+ifslnob	
+	dsj	a10,ifsllp
+ifslxb
+	clr	a10
+	movk	8,a11
+	CREATE0	fade_down
+
+	SLEEP	40
+
+	RETP
+
+our_legal_msg_setup
+	PRINT_STR	bast8t_ascii,4,0,200,140,BAST_W_P,0
+
+
+our_legal_msg_str
+	.string	"(C) 1996 MIDWAY MANUFACTURING COMPANY",1
+	.string	"ALL RIGHTS RESERVED",0
+	.even
+
+legal_msg_setup
+	PRINT_STR	bast8t_ascii,4,0,200,140,BAST_W_P,0
+
+legal_msg_str
+	.string	"THE NBA AND INDIVIDUAL NBA TEAM IDENTIFICATIONS USED",1
+	.string	"ON OR IN THIS PRODUCT ARE TRADEMARKS, COPYRIGHTED",1
+	.string	"DESIGNS AND OTHER FORMS OF INTELLECTUAL PROPERTY OF",1
+	.string	"NBA PROPERTIES, INC. AND THE RESPECTIVE TEAMS AND MAY",1
+	.string	"NOT BE USED, IN WHOLE OR IN PART, WITHOUT THE PRIOR",1
+	.string	"WRITTEN CONSENT OF NBA PROPERTIES, INC.",1
+	.string	"(C) 1996 NBA PROPERTIES, INC.",1
+	.string	"ALL RIGHTS RESERVED",0
+	.even
+
+
+ SUBR	show_designteam
+
+	calla	display_blank
+	calla	WIPEOUT
+
+	movk	1,a0
+	move	a0,@dpageflip
+
+
+	clr	a0
+	move	a0,@WORLDTLX,L
+	move	a0,@WORLDTLY,L
+
+	.ref	READ_DIP
+	calla	READ_DIP		;Read the dipswitches
+	btst	5,a0			;Is octopus bypass switch on?
+	jrnz	mdsnnotocto		; br=don't do audit/volume octopus
+	CREATE0	ck_octopus2
+mdsnnotocto
+
+	movi	design_tm_mod,a0
+	move	a0,@BAKMODS,L
+	calla	BGND_UD1
+
+	SLEEPK	1
+
+	movk	1,a0
+	calla	create_title_bar
+
+	movi	mdsndesign_tm_str_setup,a2,L
+	calla	setup_message
+	movi	mdsndesign_tm_str,a4
+	calla	print_string_C2
+
+	callr	create_mugs_and_names
+
+	movk	1,a0
+	move	a0,@DISPLAYON
+	SLEEPK	2
+	calla	display_unblank
+
+	movi	TSEC*6,a10
+	JSRP	time_delay		;SLEEP	30
+
+	move	*a13(PROCID),a0
+	cmpi	DIAG_PID,a0
+	jreq	mdsnsclout			;Called from octopuss?
+
+
+	clr	a0
+	move	a0,@DISPLAYON
+
+	clr	a0
+	movi	-1,a1
+	calla	obj_delc
+
+	movk	1,a0
+	calla	create_title_bar
+
+	movi	mdsnaddition_desgn_str_setup,a2,L
+	calla	setup_message
+	movi	mdsnaddition_desgn_str,a4
+	calla	print_string_C2
+
+	movi	mdsnaddition_desgn_str_setup2,a2,L
+	calla	setup_message
+	movk	22,a0
+	move	a0,@mess_line_spacing
+	movi	mdsnother_gme_dsgnrs,a4
+	calla	print_string_C2
+
+	movk	1,a0
+	move	a0,@DISPLAYON
+
+	movi	TSEC*4,a10
+	JSRP	time_delay		;SLEEP	30
+
+
+
+
+
+	clr	a0
+	move	a0,@DISPLAYON
+
+	clr	a0
+	movi	-1,a1
+	calla	obj_delc
+
+	movk	1,a0
+	calla	create_title_bar
+
+	movi	mdsnsnd_desgn_str_setup,a2,L
+	calla	setup_message
+	movi	mdsnsnd_desgn_str,a4
+	calla	print_string_C2
+
+	movi	mdsnsnd_desgn_str_setup2,a2,L
+	calla	setup_message
+	movk	22,a0
+	move	a0,@mess_line_spacing
+	movi	mdsnsnd_dudes_str,a4
+	calla	print_string_C2
+
+	movk	1,a0
+	move	a0,@DISPLAYON
+
+	movi	TSEC*4-30,a10
+	JSRP	time_delay		;SLEEP	30
+
+
+
+	clr	a0
+	move	a0,@DISPLAYON
+
+	clr	a0
+	movi	-1,a1
+	calla	obj_delc
+
+	movk	1,a0
+	calla	create_title_bar
+
+	movi	mdsnsnd_desgn_str_setup,a2,L
+	calla	setup_message
+	movi	mdsnsnd_desgn_str2,a4
+	calla	print_string_C2
+
+	movi	mdsnsong_names_str_setup,a2,L
+	calla	setup_message
+	movi	mdsnsong_names_str,a4
+	calla	print_string_C2
+
+	movi	mdsnsnd_desgn_str_setup3,a2,L
+	calla	setup_message
+	movk	17,a0
+	move	a0,@mess_line_spacing
+	movi	mdsnsnd_dudes_str2,a4
+	calla	print_string2
+
+	movk	1,a0
+	move	a0,@DISPLAYON
+
+	movi	TSEC*4,a10
+	JSRP	time_delay		;SLEEP	30
+
+
+
+	clr	a0
+	move	a0,@DISPLAYON
+
+	clr	a0
+	movi	-1,a1
+	calla	obj_delc
+
+	movk	1,a0
+	calla	create_title_bar
+
+	movi	mdsnactors_str_setup,a2,L
+	calla	setup_message
+	movi	mdsnactors_str,a4
+	calla	print_string_C2
+
+	callr	create_actor_mugs_and_names
+
+	movk	1,a0
+	move	a0,@DISPLAYON
+
+	movi	TSEC*4,a10
+	JSRP	time_delay		;SLEEP	30
+	
+	clr	a0
+	move	a0,@DISPLAYON
+
+	clr	a0
+	movi	-1,a1
+	calla	obj_delc
+
+	movk	1,a0
+	calla	create_title_bar
+
+	movi	mdsnhardware_str_setup,a2,L
+	calla	setup_message
+	movi	mdsnhardware_str,a4
+	calla	print_string_C2
+
+	movi	mdsnhardware_str_setup2,a2,L
+	calla	setup_message
+	movk	22,a0
+	move	a0,@mess_line_spacing
+	movi	mdsnhardware_people_str,a4
+	calla	print_string_C2
+
+	movk	1,a0
+	move	a0,@DISPLAYON
+
+	movi	TSEC*4,a10
+	JSRP	time_delay		;SLEEP	30
+
+
+	clr	a0
+	move	a0,@DISPLAYON
+
+	clr	a0
+	movi	-1,a1
+	calla	obj_delc
+
+	movk	1,a0
+	calla	create_title_bar
+
+	movi	mdsnnba_help_str_setup,a2,L
+	calla	setup_message
+	movi	mdsnnba_help_str,a4
+	calla	print_string_C2
+
+	movi	mdsnnba_help_setup2,a2,L
+	calla	setup_message
+	movk	22,a0
+	move	a0,@mess_line_spacing
+	movi	mdsnnba_dudes_strs,a4
+	calla	print_string_C2
+
+	movk	1,a0
+	move	a0,@DISPLAYON
+
+	movi	TSEC*3,a10
+	JSRP	time_delay		;SLEEP	30
+
+
+	clr	a0
+	move	a0,@DISPLAYON
+
+	clr	a0
+	movi	-1,a1
+	calla	obj_delc
+
+	movk	1,a0
+	calla	create_title_bar
+
+	movi	mdsngme_tsters_str_setup,a2,L
+	calla	setup_message
+	movi	mdsngme_tester_str,a4
+	calla	print_string_C2
+
+	movi	mdsngme_tsters_str_setup3,a2,L
+	calla	setup_message
+	movk	22,a0
+	move	a0,@mess_line_spacing
+	movi	mdsngme_tstrs_str,a4
+	calla	print_string_C2
+
+	movk	1,a0
+	move	a0,@DISPLAYON
+
+	movi	TSEC*3,a10
+	JSRP	time_delay		;SLEEP	30
+
+
+	clr	a0
+	move	a0,@DISPLAYON
+
+	clr	a0
+	movi	-1,a1
+	calla	obj_delc
+
+	movk	1,a0
+	calla	create_title_bar
+
+	movi	mdsngme_tsters_str_setup,a2,L
+	calla	setup_message
+	movi	mdsngme_tester_str2,a4
+	calla	print_string_C2
+
+	movi	mdsngme_tsters_str_setup2,a2,L
+	calla	setup_message
+	movk	22,a0
+	move	a0,@mess_line_spacing
+	movi	mdsngme_tstrs_str2,a4
+	calla	print_string_C2
+
+	movk	1,a0
+	move	a0,@DISPLAYON
+
+	movi	TSEC*4,a10
+	JSRP	time_delay		;SLEEP	30
+
+
+
+	clr	a0
+	move	a0,@DISPLAYON
+
+	clr	a0
+	movi	-1,a1
+	calla	obj_delc
+
+	movk	1,a0
+	calla	create_title_bar
+
+	movi	mdsnthanks_str_setup,a2,L
+	calla	setup_message
+	movi	mdsnthanks_str,a4
+	calla	print_string_C2
+
+	movi	mdsnthanks_str_setup2,a2,L
+	calla	setup_message
+	movk	13,a0
+	move	a0,@mess_line_spacing
+	movi	mdsnthanx_you_strs,a4
+	calla	print_string2
+
+	movi	mdsnthanks_str_setup3,a2,L
+	calla	setup_message
+	movk	13,a0
+	move	a0,@mess_line_spacing
+	movi	mdsnthanx_you_strs2,a4
+	calla	print_string2
+
+	movk	1,a0
+	move	a0,@DISPLAYON
+
+	movi	TSEC*6,a10
+	JSRP	time_delay		;SLEEP	30
+
+
+
+	clr	a0
+	move	a0,@DISPLAYON
+
+	clr	a0
+	movi	-1,a1
+	calla	obj_delc
+
+	movk	1,a0
+	calla	create_title_bar
+
+	movi	mdsnexec_producers_str_setup,a2,L
+	calla	setup_message
+	movi	mdsnexec_producers_str,a4
+	calla	print_string_C2
+
+	movi	mdsnexec_producers_str_setup2,a2,L
+	calla	setup_message
+	movk	25,a0
+	move	a0,@mess_line_spacing
+	movi	mdsnproducers_str,a4
+	calla	print_string_C2
+
+	movk	1,a0
+	move	a0,@DISPLAYON
+
+	movi	TSEC*4,a10
+	JSRP	time_delay		;SLEEP	30
+
+	clr	a0
+	movi	-1,a1
+	calla	obj_delc
+
+
+
+
+
+
+
+mdsnsclout
+	RETP
+
+
+
+mdsndesign_tm_str_setup
+	PRINT_STR	brush20_ascii,11,0,200,7,BRSHGYGP,0
+
+mdsndesign_tm_str
+	.string	"DESIGN TEAM:",0
+	.even
+
+
+mdsnactors_str_setup
+	PRINT_STR	brush20_ascii,11,0,200,7,BRSHGYGP,0
+
+mdsnactors_str
+	.string	"ACTORS:",0
+	.even
+
+
+mdsnthanks_str_setup
+	PRINT_STR	brush20_ascii,11,0,200,7,BRSHGYGP,0
+
+mdsnthanks_str_setup2
+	PRINT_STR	bast10_ascii,5,0,35,52,BAST_W_P,0
+
+mdsnthanks_str_setup3
+	PRINT_STR	bast10_ascii,5,0,225,52,BAST_W_P,0
+
+mdsnthanks_str
+	.string	"SPECIAL THANKS:",0
+	.even
+
+mdsnhardware_str_setup
+	PRINT_STR	brush20_ascii,11,0,200,7,BRSHGYGP,0
+
+mdsnhardware_str_setup2
+	PRINT_STR	bast18_ascii,11,0,200,45,BSTGWWOP,0
+
+mdsnhardware_str
+	.string	"HARDWARE SUPPORT:",0
+	.even
+
+
+mdsnexec_producers_str_setup
+	PRINT_STR	brush20_ascii,11,0,200,7,BRSHGYGP,0
+
+mdsnexec_producers_str_setup2
+	PRINT_STR	bast18_ascii,11,0,200,75,BSTGWWOP,0
+
+mdsnexec_producers_str
+	.string	"EXECUTIVE PRODUCERS:",0
+	.even
+
+
+mdsnaddition_desgn_str_setup
+	PRINT_STR	brush20_ascii,11,0,200,7,BRSHGYGP,0
+
+mdsnaddition_desgn_str_setup2
+	PRINT_STR	bast18_ascii,11,0,200,60,BSTGWWOP,0
+
+mdsnaddition_desgn_str
+	.string	"ADDITIONAL DESIGN:",0
+	.even
+
+
+mdsnsnd_desgn_str_setup
+	PRINT_STR	brush20_ascii,11,0,200,7,BRSHGYGP,0
+
+mdsnsnd_desgn_str_setup2
+	PRINT_STR	bast18_ascii,11,0,200,85,BSTGWWOP,0
+
+mdsnsnd_desgn_str_setup3
+	PRINT_STR	bast10_ascii,6,0,30,90,BAST_W_P,0
+
+mdsnsong_names_str_setup
+	PRINT_STR	bast10_ascii,6,0,200,40,BAST_G_P,0
+
+mdsnsnd_desgn_str
+	.string	"SOUND AND MUSIC:",0
+	.even
+
+mdsnsnd_desgn_str2
+	.string	"MUSIC:",0
+	.even
+
+
+mdsngme_tsters_str_setup
+	PRINT_STR	brush20_ascii,11,0,200,7,BRSHGYGP,0
+
+mdsngme_tsters_str_setup2
+	PRINT_STR	bast18_ascii,11,0,200,45,BSTGWWOP,0
+
+mdsngme_tsters_str_setup3
+	PRINT_STR	bast18_ascii,11,0,200,100,BSTGWWOP,0
+
+mdsngme_tester_str
+	.string	"GAME TESTERS:",0
+	.even
+
+mdsngme_tester_str2
+	.string	"ADDITIONAL TESTERS:",0
+	.even
+
+
+mdsnnba_help_str_setup
+	PRINT_STR	brush20_ascii,11,0,200,7,BRSHGYGP,0
+
+mdsnnba_help_setup2
+	PRINT_STR	bast18_ascii,11,0,200,100-30,BSTGWWOP,0
+
+mdsnnba_help_str
+	.string	"NBA SUPPORT:",0
+	.even
+
+
+ SUBRP	create_mugs_and_names
+      
+	movi	mdsnmugs_t,a9,L
+cm_1	
+	move	*a9+,a2,L	
+	move	*a9+,a0,W
+	move	*a9+,a1,W	
+	PUSH	a0,a1
+	sll	16,a0			;X
+	sll	16,a1			;Y
+	movi	500,a3			;Z
+	movi	DMAWNZ|M_NOCOLL|M_SCRNREL,a4
+	movi	CLSDEAD,a5
+	clr	a6
+	clr	a7
+	calla	BEGINOBJ2
+	PULL	a0,a1
+
+	subk	25,a0		;26
+	sll	16,a0			;X
+	subk	10,a1
+	sll	16,a1			;Y
+
+	movi	MUGPLAT,a2
+	movi	400,a3				;z pos
+	calla	BEGINOBJ2
+
+	cmpi	mdsnmugs_t_end,a9
+	jrlo	cm_1
+
+	movi	mdsnname_tm_str_setup,a2,L
+	calla	setup_message
+
+	movk	10,a0
+	move	a0,@mess_line_spacing
+
+	movi	mdsnmugs_names_t,a9
+cm_2	
+	move	*a9+,a0,W
+	move	a0,@mess_cursx
+	move	*a9+,a0,W
+	move	a0,@mess_cursy
+	move	*a9+,a4,L
+	calla	print_string_C2
+	cmpi	mdsnmugs_names_t_end,a9
+	jrlo	cm_2
+
+	rets
+
+
+mdsnmugs_t
+	LWW	JEF_MUG,35,110
+	LWW	TUR_MUG,120,110
+	LWW	SAL_MUG,205,110
+	LWW	DAN_MUG,290,110
+
+	LWW	EUG_MUG,35,220
+	LWW	JEN_MUG,120,220
+	LWW	JMC_MUG,205,220
+	LWW	HEY_MUG,290,220
+mdsnmugs_t_end
+
+mdsnmugs_names_t
+	WWL	 65,113,mdsnjeff_j
+	WWL	153,113,mdsnmark_t
+	WWL	237,113,mdsnsal_d
+	WWL	320,113,mdsndan_t
+
+	WWL	 67,223,mdsneug_g
+	WWL	152,223,mdsnjen_h
+	WWL	235,223,mdsnjohn_c
+	WWL	320,223,mdsnjon_h
+mdsnmugs_names_t_end
+
+
+mdsnname_tm_str_setup
+	PRINT_STR	bast8t_ascii,4,0,200,7,BAST_Y_P,0
+
+
+mdsnmark_t
+	.string	"MARK",1
+	.string	"TURMELL",0
+mdsnsal_d
+	.string	"SAL",1
+	.string	"DIVITA",0
+mdsnjeff_j
+	.string	"JEFF",1
+	.string	"JOHNSON",0
+mdsndan_t	
+	.string	"DAN",1
+	.string	"THOMPSON",0
+mdsneug_g	
+	.string	"EUGENE",1
+	.string	"GEER",0
+mdsnjohn_c	
+	.string	"JOHN",1
+	.string	"CARLTON",0
+mdsnjen_h
+	.string	"JENNIFER",1
+	.string	"HEDRICK",0
+mdsnjon_h
+	.string	"JON",1
+	.string	"HEY",0
+	.even
+
+
+ SUBRP	create_actor_mugs_and_names
+      
+	movi	mdsnactor_mugs_t,a9,L
+acm_1	
+	move	*a9+,a2,L	
+	move	*a9+,a0,W
+	move	*a9+,a1,W	
+	PUSH	a0,a1
+	sll	16,a0			;X
+	sll	16,a1			;Y
+	movi	500,a3			;Z
+	movi	DMAWNZ|M_NOCOLL|M_SCRNREL,a4
+	movi	CLSDEAD,a5
+	clr	a6
+	clr	a7
+	calla	BEGINOBJ2
+	PULL	a0,a1
+
+	subk	25,a0		;26
+	sll	16,a0			;X
+	subk	10,a1
+	sll	16,a1			;Y
+
+	movi	MUGPLAT,a2
+	movi	400,a3				;z pos
+	calla	BEGINOBJ2
+
+	cmpi	mdsnactor_mugs_t_end,a9
+	jrlo	acm_1
+
+	movi	mdsnname_tm_str_setup,a2,L
+	calla	setup_message
+	movk	11,a0
+	move	a0,@mess_line_spacing
+
+	movi	mdsnactor_names_t,a9,L
+acm_2	
+	move	*a9+,a0,W
+	move	a0,@mess_cursx
+	move	*a9+,a0,W
+	move	a0,@mess_cursy
+	move	*a9+,a4,L
+	calla	print_string_C2
+	cmpi	mdsnactor_names_t_end,a9
+	jrlo	acm_2
+	rets
+
+
+mdsnactor_mugs_t
+	LWW	WIL_MUG, 74,110
+	LWW	BAR_MUG,159,110
+	LWW	MIN_MUG,244,110
+
+	LWW	MAR_MUG,120,220
+	LWW	KIM_MUG,205,220
+mdsnactor_mugs_t_end
+
+
+mdsnactor_names_t
+	WWL	104,113,mdsnwilly_m
+	WWL	192,113,mdsnsteve_b
+	WWL	276,113,mdsnminifee
+
+	WWL	152,223,mdsncherldr1
+	WWL	235,223,mdsncherldr2
+mdsnactor_names_t_end
+
+
+mdsnwilly_m
+	.string	"WILLIE",1
+	.string	"MORRIS JR.",0
+mdsnsteve_b
+	.string	"STEVE",1
+	.string	"BARDO",0
+mdsnminifee
+	.string	"MARCUS",1
+	.string	"MINIFEE",0
+mdsnmdoc
+	.string	"M.DOC",0
+mdsnjabbal
+	.string	"JABBAL",0
+mdsnneil_f
+	.string	"NEIL",1
+	.string	"FUNK",0
+mdsncherldr2
+	.string	"KIM",1
+	.string	"KELLER",0
+mdsncherldr1
+	.string	"MARY JANE",1
+	.string	"LEE",0
+	.even
+
+mdsnother_gme_dsgnrs
+	.string	"SHAWN LIPTAK",1
+	.string	"JAMIE RIVETT",1
+	.string	"PAT FITZGERALD",1
+	.string	"JOHN ROOT",1
+	.string	"MARTY MARTINEZ",1
+	.string	"CARLOS PESINA",1
+	.string	"NICK ERHLICH",0
+	.even
+
+
+mdsnsnd_dudes_str
+	.string	"JON HEY",1
+	.string	"KEVIN QUINN",1
+	.string	"NEIL FUNK",0
+	.even
+
+mdsnsong_names_str
+	.string	"'GET UP GET UP'",1
+	.string	"'HANGTIME - WHATCHA GONNA DO'",0
+	.even
+
+mdsnsnd_dudes_str2
+	.string	"MUSIC PRODUCED BY:",1
+	.string	"          M.DOC OF INDASOUL PRODUCTIONS",1
+	.string	"SONGS WRITTEN BY:  RHYME",1
+	.string	"RAP BY:  RHYME",1
+	.string	"BACKGROUNDS BY:  M.DOC AND BELOW ZERO",1
+	.string	"VOX ON DANCE TRACK BY:  M.DOC",1
+	.string	"MIX ENGINEER:  JOEY 'THE DON' DONATELLO",1
+	.string	"INDASOUL CONTACT:  JABBAR STEVENSON",1
+	.string	"                            (312) 280-8449",0
+	.even
+
+mdsngme_tstrs_str
+	.string	"MIKE VINIKOUR",1
+	.string	"EDDIE FERRIER",0
+	.even
+
+mdsngme_tstrs_str2
+	.string	"BUD FLETCHER",1
+	.string	"ERIC C. WARD",1
+	.string	"MIKE MALLARD",1
+	.string	"SEAN JENNINGS",1
+	.string	"ROB GORSKI",1
+	.string	"DIMITRI",1
+	.string	"ALFRED MONTEGUE",1
+	.string	"QUIANA LAHORI",1
+	.string	"MARIUS MATEESCU",0
+	.even
+
+
+mdsnhardware_people_str
+	.string	"MARK LOFFREDO",1
+	.string	"SHERIDAN OURSLER",1
+	.string	"PAT COX",1
+	.string	"AL LASKO",1
+	.string	"JEFF PETERS",1
+	.string	"CARY MEDNICK",1
+	.string	"RAY GAY",1
+	.string	"STEVE CORREL",1
+	.string	"JOHN LOWES",0
+	.even
+
+mdsnproducers_str
+	.string	"NEIL NICASTRO",1
+	.string	"KEN FEDESNA",1
+	.string	"PAUL DUSSAULT",1
+	.string	"ROGER SHARPE",0
+	.even
+
+mdsnnba_dudes_strs
+	.string	"GREG LASSEN",1
+	.string	"JOE AMATI",1
+	.string	" ",1
+	.string	"UNITED CENTER",1
+	.string	"JONATHAN ZIRIN",0
+	.even
+
+mdsnthanx_you_strs
+	.string	"EUGENE JARVIS",1
+	.string	"ED BOON",1
+	.string	"GEORGE PETRO",1
+	.string	"TONY GOSKIE",1
+	.string	"JOHN TOBIAS",1
+	.string	"STEVE BERAN",1
+	.string	"TODD ALLEN",1
+	.string	"WARREN DAVIS",1
+	.string	"RAY KIRKLAND",1
+	.string	"BETTY PURCELL",1
+	.string	"DR. AUSMAN",1
+	.string	"DR. ABOOD",1
+	.string	"JOSH TSUI",0
+	.even
+
+mdsnthanx_you_strs2
+	.string	"MIKE LYNCH",1
+	.string	"JASON SKILES",1
+	.string	"L.E.D.",1
+	.string	"JIM GREENE",1
+	.string	"ART TIANIS",1
+	.string	"JIM TIANIS",1
+	.string	"ANDY LYCKE",1
+	.string	"JOAN FAUX",1
+	.string	"CHRISTA WOSS",1
+	.string	"CLAUDIA RIEDENER",1
+	.string	"FELECIA TURMELL",1
+	.string	"LAURIE THOMPSON",1
+	.string	"CHRISTINE JOHNSON",0
+	.even
+
+
+design_tm_mod
+	.long	BKGDBMOD
+	.word	0,0
+	.long	0
+
+
+
+
+
+	.def	inga16_asc_tbl
+inga16_asc_tbl
+	.long	INGA16EXC,INGA16APO,INGA16NUM,INGA16DOL		;!"#$
+	.long	INGA16PCT,INGA16SPC,INGA16APO,INGA16PRL		;%&'(
+	.long	INGA16PRR,INGA16SPC,INGA16ADD,INGA16COM		;)*+,
+	.long	INGA16SUB,INGA16PER,INGA16SLS			;-./
+	.long	INGA16_0,INGA16_1,INGA16_2,INGA16_3,INGA16_4
+	.long	INGA16_5,INGA16_6,INGA16_7,INGA16_8,INGA16_9
+	.long	INGA16COL,INGA16SPC,INGA16SPC,INGA16SPC		;:;<=
+	.long	INGA16SPC,INGA16QUE,INGA16SPC			;>?@
+	.long	INGA16_A,INGA16_B,INGA16_C,INGA16_D
+	.long	INGA16_E,INGA16_F,INGA16_G,INGA16_H
+	.long	INGA16_I,INGA16_J,INGA16_K,INGA16_L
+	.long	INGA16_M,INGA16_N,INGA16_O,INGA16_P
+	.long	INGA16_Q,INGA16_R,INGA16_S,INGA16_T
+	.long	INGA16_U,INGA16_V,INGA16_W,INGA16_X
+	.long	INGA16_Y,INGA16_Z
+	.long	INGA16SPC,INGA16SPC,INGA16SPC,INGA16END		;[\]^
+	.long	INGA16DEL,INGA16APO,BAST10SPC			;_`
+
+
+
+
+
+ck_octopus2
+
+	clr	a10
+	movi	butn_lst,a9
+
+oocrlp	SLEEPK	1
+
+	move	@SWITCH,a0
+	zext	a0
+	cmpi	0ffffH,a0
+	jrnz	oocrtag1
+	clr	a11
+	jruc	oocrlp
+
+oocrtag1	move	a11,a11
+	jrnz	oocrlp
+
+	inc	a11
+
+	move	*a9,a1,W
+	zext	a1
+	cmp	a0,a1
+	jrz	oocryes
+	movi	butn_lst,a9
+	jruc	oocrlp
+oocryes	addk	16,a9
+	move	*a9,a0
+	jrnz	oocrlp
+	movk	1,a0
+	move	a0,@octopus2		
+
+	DIE
+
+butn_lst
+
+
+	.word	0ffbfH,0ffbfH,0efffH,0efffH,0efffH,0dfffH,0dfffH
+	.word	0ffefH,0ffdfH,0bfffH,0bfffH,0ffbfH,0ffbfH,0ffbfH,0ffbfH,0
+
+
+
+
+
+	.if	0
+
+ SUBRP	drw_love
+
+	calla	display_blank
+	calla	WIPEOUT
+
+	clr	a0
+	move	a0,@dtype		;2D
+
+	movk	1,a0			;page flipping on
+	move	a0,@dpageflip
+
+	movi	SCRNEND,a0		;[256,405]
+	move	a0,@SCRNLR,L
+
+	clr	a0
+	move	a0,@WORLDTLX,L
+	move	a0,@WORLDTLY,L
+	move	a0,@IRQSKYE
+
+	SLEEPK	2
+
+	movi	hueblove_mod,a0
+	move	a0,@BAKMODS,L
+	calla	BGND_UD1
+
+	clr	a10
+	movk	16,a11
+	CREATE0	fade_up
+
+	movk	1,a0
+	move	a0,@DISPLAYON
+
+	SLEEPK	2
+	calla	display_unblank
+
+	SLEEP	1*TSEC+30
+
+	movi	4*TSEC,a10
+hueblp	SLEEPK	1
+	calla	get_all_buttons_cur2
+	jrz	huebnob
+	SOUND1	bounce_snd
+	jruc	huebxb
+huebnob	
+	dsj	a10,hueblp
+huebxb
+
+	clr	a10
+	movk	8,a11
+	CREATE0	fade_down
+
+	SLEEP	40
+
+	RETP
+
+hueblove_mod
+	.long	loveBMOD
+	.word	1ch,14h
+	.long	0
+
+
+
+ SUBRP	drw_school
+
+	calla	display_blank
+	calla	WIPEOUT
+
+	clr	a0
+	move	a0,@dtype		;2D
+
+	movk	1,a0			;page flipping on
+	move	a0,@dpageflip
+
+	movi	SCRNEND,a0		;[256,405]
+	move	a0,@SCRNLR,L
+
+	clr	a0
+	move	a0,@WORLDTLX,L
+	move	a0,@WORLDTLY,L
+	move	a0,@IRQSKYE
+
+	SLEEPK	2
+
+	movi	[200,0],a0
+	movi	[60-26,0],a1
+	movi	stay,a2			;* image
+	movi	19001,a3			;z pos
+	movi	DMAWNZ|M_SCRNREL,a4		;DMA flags
+	movi	0,a5				;object ID
+	clr	a6				;x vel
+	clr	a7				;y vel
+	calla	BEGINOBJ2
+
+	clr	a10
+	movk	16,a11
+	CREATE0	fade_up
+
+	movk	1,a0
+	move	a0,@DISPLAYON
+
+	SLEEPK	2
+
+	calla	display_unblank
+
+	SLEEP	1*TSEC+30
+
+	movi	3*TSEC,a10
+bshqlp	SLEEPK	1
+	calla	get_all_buttons_cur2
+	jrz	bshqnob
+	SOUND1	bounce_snd
+	jruc	bshqxb
+bshqnob	
+	dsj	a10,bshqlp
+bshqxb
+
+	clr	a10
+	movk	8,a11
+	CREATE0	fade_down
+
+	SLEEP	40
+
+	RETP
+
+	.endif
+
+
+
+
+
+
+ SUBRP	demogame
+
+	calla	display_blank
+	calla	WIPEOUT			;CLEAN SYSTEM OUT
+
+	movi	-1,a0
+	move	a0,@special_heads,L
+	move	a0,@special_heads+20h,L
+	clr	a0
+	move	a0,@pup_showshotper
+	move	a0,@pup_noassistance
+
+	movk	NUM_TEAMS-1,a0
+	calla	RNDRNG0
+	move	a0,@team1		;Team controlled by plyrs 1 & 2
+	move	a0,a8
+rvczagn	movk	NUM_TEAMS-1,a0
+	calla	RNDRNG0
+	cmp	a0,a8
+	jreq	rvczagn
+    	move	a0,@team2		;Team controlled by plyrs 3 & 4
+
+	clr	a0
+	move	@otdloop,a14
+	addk	1,a14
+	cmpi	100,a14			;!!!
+	jrlo	rvczotd
+	clr	a14
+	movk	1,a0
+rvczotd
+	move	a14,@otdloop
+	move	a0,@pup_court
+	move	a0,@pup_aba
+
+	SOUND1	tuneend_snd
+
+	movk	1,a0
+	MOVE	A0,@SOUNDSUP,W		;TURN ALL SOUNDS ON
+	ADJUST	ADJMUSIC		;GET MUSIC ON OFF FOR DEMO
+	MOVE	A0,A0
+	JRNZ	NONO1
+	CLR	A0
+	MOVE	A0,@SOUNDSUP,W		;TURN ALL SOUNDS ON
+	CREATE0	sndstrt
+NONO1
+
+	CREATE0	demogame_start
+
+
+	SLEEPK	5
+	calla	update_insert
+
+	SLEEP	3*TSEC
+
+rvczloop
+	movi	27*60,a10
+rvczlp	SLEEPK	2
+	calla	get_all_buttons_cur2
+	jrz	rvcznob
+      	clr	a0
+	move	a0,@SOUNDSUP		;turn all sounds on
+	SOUND1	bounce_snd
+	movk	1,a0
+	move	a0,@SOUNDSUP		;turn all sounds off
+	jruc	rvczxb
+rvcznob	
+	dsj	a10,rvczlp
+rvczxb
+
+	movi	CYCPID,a0
+	calla	KIL1C
+	calla	pal_clean
+	SLEEPK	1
+
+	clr	a10
+	movk	16,a11
+	CREATE0	fade_down
+
+	SLEEPK	24
+
+
+	calla	display_blank
+	calla	WIPEOUT			;CLEAN SYSTEM OUT
+
+	clr	a0
+	move	a0,@HALT
+
+	movk	1,a0
+	move	a0,@dpageflip
+
+	calla	COLRPRC			;Init fixed pal 0 and maybe 2nd pal
+	movi	AMODE_PID,a0
+	move	a0,*a13(PROCID)
+	RETP
+
+
+sndstrt	SLEEP	3*60
+	movk	3,a0
+	calla	RNDRNG0
+	sll	5,a0
+	addi	tunes_t,a0
+	move	*a0,a0,L
+	calla	snd_play1
+	DIE
+
+tunes_t
+	.long	tuneq1_snd
+	.long	tuneq2_snd
+	.long	tuneq3_snd
+	.long	tuneq4_snd
+
+
+
+update_insert
+
+	calla	CR_STRTP		;Credits to start
+	jrlo	gtxix			;No?
+	movi	start,a1
+	movi	OBJLST,a8
+
+gtxilp	move	*a8,a8,L
+	jrz	gtxix		;End?
+	move	*a8(OIMG),a0,L
+	cmpi	insert,a0
+	jrne	gtxilp		;No match?
+  	move	*a8(OFLAGS),a4
+	calla	ANI
+	jruc	gtxilp
+gtxix	rets
+
+
+
+
+ SUBRP	creditscreen
+
+	calla	pal_clean
+
+	movk	1,a10
+	JSRP	CRD_SCRN2
+	movi	AMODE_PID,a0
+	move	a0,*a13(PROCID)
+
+	RETP
+
+
+
+
+ERRORLOG
+	MMTM	SP,A2,A3,A4,A5,A6,A7
+
+	MMFM	SP,A2,A3,A4,A5,A6,A7
+	RETS
+
+
+
+GETAUD4
+	mmtm	sp,a0,a1
+	move	a4,a0
+	calla	GET_AUD
+	calla	DEF_PAGE	     ;POINT AT DEFAULT PAGE.
+	move	a1,a4
+	mmfm	sp,a0,a1
+	rets
+
+	.asg	16,YSPACE
+
+ SUBR	show_create_plyr_info
+
+	movk	INAMODE,a0
+	move	a0,@GAMSTATE
+
+	movi	wipe_horizontal,a0,L
+	movi	CREATE_NO_DEL_OBJS,a14		;dont delete objs. when done
+	JSRP	do_scrn_transition
+
+	SLEEPK	1
+
+	calla	KILBGND			;Kill old background
+	calla	pal_clean
+	clr	a0
+	movi	-1,a1
+	calla	obj_delc		;Kill all objs (Screen mem is clr)
+	clr	a0
+	clr	a1				;kill all processes
+	calla	KILALL
+
+	clr	a0
+	move	a0,@WORLDTLX,L
+	move	a0,@WORLDTLY,L
+
+	SLEEPK	2
+
+	movi	wieqhintpage_mod,a0
+	move	a0,@BAKMODS,L
+	calla	BGND_UD1
+
+	movk	1,a0
+	calla	create_title_bar
+
+	movi	heading_setup,a2
+	calla	setup_message
+	movi	wieqcaplr_heading,a4
+	calla	print_string_C2
+
+	movi	caplr_str_setup,a2
+	calla	setup_message
+	movi	wieqcaplr_info_str,a4
+	calla	print_string_C2
+
+	movi	caplr_str_setup2,a2
+	calla	setup_message
+	movk	13,a0
+	move	a0,@mess_line_spacing
+	movi	wieqcaplr_info_str2,a4
+	calla	print_string2
+
+	SLEEPK	1
+
+	movi	un_wipe_horizontal,a0,L
+	movi	NO_CREATE_DEL_OBJS,a14
+	JSRP	do_scrn_transition
+
+	SLEEP	1*TSEC
+
+	movi	14*TSEC,a10
+wieqcapi1
+	SLEEPK	1
+	calla	get_all_buttons_cur2
+	jrnz	wieqcapi2
+	dsj	a10,wieqcapi1
+wieqcapi2
+	SOUND1	bounce_snd
+ 	
+ 	RETP
+
+
+
+	.asg	16,YSPACE
+
+ SUBR	hint_page2
+
+	calla	display_blank
+	calla	WIPEOUT
+
+	clr	a0
+	move	a0,@dtype		;2D
+
+	movk	1,a0			;page flipping on
+	move	a0,@dpageflip
+
+	clr	a0
+	move	a0,@WORLDTLX,L
+	move	a0,@WORLDTLY,L
+
+	SLEEPK	1
+
+	movi	wieqhintpage_mod,a0
+	move	a0,@BAKMODS,L
+	calla	BGND_UD1
+
+	movi	[1,31],a8		;START AT COLOR 10, CYCLE 7 COLORS
+	movi	BST18B2_P,a9			;PAL NAME
+	movi	BSTCYCB_P,a10
+	movk	2,a11			;RATE OF CYCLE IN TICKS
+	CREATE	CYCPID,CYCLE_TABLE	;START PROCESS TO DO CYCLE
+
+	movk	1,a0
+	calla	create_title_bar
+
+	movi	heading_setup,a2
+	calla	setup_message
+	movi	wieqstr_heading,a4
+	calla	print_string_C2
+
+	movi	YSPACE,a0
+	move	a0,@mess_line_spacing
+
+	movi	heading2_setup,a2
+	calla	setup_message
+
+	movi	44,a0
+	calla	RNDRNG0			;0-7
+	sll	5,a0			;x 32 bits
+	move	a0,a9
+	addi	wieqrandom_hints,a0
+	move	*a0,a4,L
+	calla	print_string_C2
+
+	movi	LN1_setup,a2
+	calla	setup_message
+
+	addi	wieqrandom_hints2,a9
+	move	*a9,a4,L
+	calla	print_string2
+
+	movk	1,a0
+	move	a0,@DISPLAYON
+
+	SLEEPK	2
+	calla	display_unblank
+
+	SLEEP	2*TSEC
+
+	movi	7*TSEC,a10
+wieqbutp
+	SLEEPK	1
+	calla	get_all_buttons_cur2
+	jrz	wieqbutp1
+	SOUND1	bounce_snd
+	jruc	wieqbutp2
+wieqbutp1
+	dsj	a10,wieqbutp
+wieqbutp2
+
+	movi	CYCPID,a0
+	calla	KIL1C
+	RETP
+
+
+
+	.asg	16,YSPACE
+
+ SUBR	hint_page
+
+	movi	4*60,a10
+wieqlp
+	SLEEPK	1
+	dec	a10
+	jrz	wieqtvout
+	move	@tvpanelon,a0,L
+	jrnz	wieqlp
+
+wieqtvout
+	callr	kill_tvpanel
+
+	SOUND1	bounce_snd
+
+	calla	display_blank
+	calla	system_savegame
+
+	clr	a0
+	move	a0,@dtype		;2D
+
+	movk	1,a0			;page flipping on
+	move	a0,@dpageflip
+
+	movk	INPLYRINFO,a0
+	move	a0,@GAMSTATE
+
+	movi	SCRNEND,a0		;[256,405]
+	move	a0,@SCRNLR,L
+
+	clr	a0
+	move	a0,@WORLDTLX,L
+	move	a0,@WORLDTLY,L
+
+	SLEEPK	2
+
+	movi	wieqhintpage_mod,a0
+	move	a0,@BAKMODS,L
+	calla	BGND_UD1
+
+	clr	a0
+	move	a0,@IRQSKYE
+
+	movi	[1,31],a8		;START AT COLOR 10, CYCLE 7 COLORS
+	movi	BST18B2_P,a9			;PAL NAME
+	movi	BSTCYCB_P,a10
+	movk	2,a11			;RATE OF CYCLE IN TICKS
+	CREATE	CYCPID,CYCLE_TABLE	;START PROCESS TO DO CYCLE
+
+	movk	1,a0
+	calla	create_title_bar
+
+	movi	heading_setup,a2
+	calla	setup_message
+	movi	wieqstr_heading,a4
+	calla	print_string_C2
+
+	movi	YSPACE,a0
+	move	a0,@mess_line_spacing
+
+	movi	heading2_setup,a2
+	calla	setup_message
+
+	movi	44,a0
+	calla	RNDRNG0			;0-7
+	sll	5,a0			;x 32 bits
+	move	a0,a9
+	addi	wieqrandom_hints,a0
+	move	*a0,a4,L
+	calla	print_string_C2
+
+	movi	LN1_setup,a2
+	calla	setup_message
+
+	addi	wieqrandom_hints2,a9
+	move	*a9,a4,L
+	calla	print_string2
+
+	movk	1,a0
+	move	a0,@DISPLAYON
+
+	SLEEPK	2
+	calla	display_unblank
+
+	SLEEP	TSEC*2
+
+	movi	7*TSEC,a10
+wieqwhopper_with_cheese
+	SLEEPK	1
+	calla	get_all_buttons_cur2
+	jrnz	wieqexit
+	dsj	a10,wieqwhopper_with_cheese
+wieqexit
+
+	SOUND1	bounce_snd
+
+	JSRP	buyin_screen
+
+	movi	CYCPID,a0
+	calla	KIL1C
+	clr	a0
+	move	a0,@IRQSKYE		;background color
+	move	a0,@DISPLAYON
+ 
+	SLEEPK	1		;2
+
+	calla	system_restoregame
+
+
+	movi	CLSDEAD|creditid,a0
+	calla	obj_del1c		;kill credit/qrtr imgs
+
+	calla	prt_credits
+	CREATE0	start_msgs
+	calla	fix_dropout_msgs
+	RETP
+
+
+kill_tvpanel
+	movi	CLSDEAD|tvid,a0
+	calla	obj_del1c
+	movi	CLSDEAD|tvscrid,a0
+	calla	obj_del1c
+	movi	tvid,a0			;Delete big clock at botm of scrn
+	calla	KIL1C
+	movi	CLSDEAD|bclockid,a0
+	calla	obj_del1c
+
+	movi	clockid,a0
+	calla	KIL1C 			;Kill existing shot clock proc
+	movi	CLSDEAD|clockid,a0
+	calla	obj_del1c		;Delete any 24 second shot clock imgs
+	clr	a0
+	move	a0,@sc_proc,L
+
+	move	@tvpanelon,a0,L
+	jrz	wieqx1
+	calla	KILL
+	clr	a0
+	move	a0,@tvpanelon,L
+wieqx1
+	rets
+
+
+wieqhintpage_mod
+	.long	ATTRACTBMOD
+	.word	0,0
+	.long	0
+
+
+	.asg	20,LN0
+	.asg	120,LN1
+
+heading_setup
+	PRINT_STR	brush20_ascii,8,0,200,7,BRSHGYOP,0
+heading2_setup
+	PRINT_STR	bast18_ascii,8,0,200,LN0+45,BST18B2_P,0
+LN1_setup
+	PRINT_STR	bast10_ascii,6,0,44,LN1-10,BAST_D_P,0
+
+
+wieqstr_heading
+	.string	"coaching tips",0
+	.even
+
+wieqcaplr_heading
+	.string	"created player info",0
+	.even
+
+
+caplr_str_setup
+	PRINT_STR	bast10_ascii,8,0,200,45,BAST_G_P,0
+
+caplr_str_setup2
+	PRINT_STR	bast10_ascii,8,0,20,80,BAST_W_P,0
+
+hve_fun_str_setup
+	PRINT_STR	brush20_ascii,8,0,200,220,BRSHGYGP,0
+
+wieqcaplr_info_str
+	.string	"thank you for creating a character!!",0
+	.even
+
+wieqcaplr_info_str2
+	.string	"1) you can earn extra attribute points",1
+	.string	"   by winning 3 games!",1
+	.string	"",1
+	.string	"2) you can reenter 'create player',",1
+	.string	"   using your players' name and",1
+	.string	"   pin number!",1
+	.string	"",1
+	.string	"3) find the best combination of attributes",1
+	.string	"   and privileges!",1
+	.string	"",1
+	.string	"4) you have special abilities that normal",1
+	.string	"   players don't!",0
+	.even
+
+
+	.asg	1,CR
+
+wieqrandom_hints
+	.long	wieqstr_h0,wieqstr_h1,wieqstr_h2,wieqstr_h3,wieqstr_h4
+	.long	wieqstr_h5,wieqstr_h6,wieqstr_h7,wieqstr_h8
+	.long	wieqstr_h9,wieqstr_h10,wieqstr_h11,wieqstr_h12
+	.long	wieqstr_h13,wieqstr_h14,wieqstr_h15,wieqstr_h16,wieqstr_h17,wieqstr_h18
+	.long	wieqstr_h19,wieqstr_h20,wieqstr_h21,wieqstr_h22,wieqstr_h23,wieqstr_h24
+	.long	wieqstr_h25,wieqstr_h26,wieqstr_h27
+ 
+	.long	wieqstr_h28,wieqstr_h29,wieqstr_h30
+	.long	wieqstr_h31,wieqstr_h32,wieqstr_h33
+	.long	wieqstr_h34,wieqstr_h35,wieqstr_h36
+	.long	wieqstr_h37,wieqstr_h38
+	.long	wieqstr_h39,wieqstr_h40
+	.long	wieqstr_h41
+	.long	wieqstr_h42
+	.long	wieqstr_h43
+	.long	wieqstr_h44
+
+
+wieqrandom_hints2
+	.long	wieqstr_h0a,wieqstr_h1a,wieqstr_h2a,wieqstr_h3a,wieqstr_h4a
+	.long	wieqstr_h5a,wieqstr_h6a,wieqstr_h7a,wieqstr_h8a
+	.long	wieqstr_h9a,wieqstr_h10a,wieqstr_h11a,wieqstr_h12a
+	.long	wieqstr_h13a,wieqstr_h14a,wieqstr_h15a,wieqstr_h16a,wieqstr_h17a,wieqstr_h18a
+	.long	wieqstr_h19a,wieqstr_h20a,wieqstr_h21a,wieqstr_h22a,wieqstr_h23a,wieqstr_h24a
+	.long	wieqstr_h25a,wieqstr_h26a,wieqstr_h27a
+
+	.long	wieqstr_h28a,wieqstr_h29a,wieqstr_h30a
+	.long	wieqstr_h31a,wieqstr_h32a,wieqstr_h33a
+	.long	wieqstr_h34a,wieqstr_h35a,wieqstr_h36a
+	.long	wieqstr_h37a,wieqstr_h38a
+	.long	wieqstr_h39a,wieqstr_h40a
+	.long	wieqstr_h41a
+	.long	wieqstr_h42a
+	.long	wieqstr_h43a
+	.long	wieqstr_h44a
+
+
+wieqstr_h0
+	.string	"hook shots",0
+wieqstr_h0a
+	.string	"When you're running perpendicular,",1
+	.string "near the hoop, press the shoot button.",1
+	.string " ",1
+	.string	"pressing turbo and shoot will give",1
+	.string "the ball a higher arc!",0
+
+wieqstr_h1
+	.string	"super dunks",0
+wieqstr_h1a
+	.string	"press the turbo and Shoot buttons",1
+	.string "while running toward the basket.",1
+	.string	" ",1
+	.string "remember, some players have more",1
+	.string "spectacular dunks than others!",0
+
+wieqstr_h2
+	.string	"head fakes",0
+wieqstr_h2a
+	.string	"tap the Shoot button once.  However,",1
+	.string	"this also causes you to pick up your",1
+	.string	"dribble.",1
+	.string	" ",1
+	.string	"Try faking out CPU Drones!",0
+
+wieqstr_h3
+	.string	"jump shot pass",0
+wieqstr_h3a
+	.string	"Press and hold the shoot button,",1
+	.string	"then press the pass button.  This",1
+	.string	"allows you to dish off to your",1
+	.string	"teammate.",1
+	.string	" ",1
+	.string "this is most effective when you are",1
+	.string	"about to be rejected!",0
+
+wieqstr_h4
+	.string	"accurate jump shots",0
+wieqstr_h4a
+	.string	"increase the chances of a jump",1
+	.string	"shot going in by releasing the Shoot",1
+	.string	"button at the peak of your jump.",1
+	.string	" ",1
+	.string	"Avoid being rejected by holding on",1
+	.string	"to the ball until the defender is",1
+	.string	"out of position.",0
+
+wieqstr_h5
+	.string	"spin move",0
+wieqstr_h5a
+	.string	"When running, quickly tap the",1
+	.string	"turbo button twice. This will cause",1
+	.string	"you to spin around your opponent.",1
+	.string	" ",1
+	.string	"while spinning you're less likely to",1
+	.string	"get cleared out by an opponent!",0
+
+wieqstr_h6
+	.string	"clearing out",0
+wieqstr_h6a
+	.string	"when facing your opponent, press the",1
+	.string	"turbo and pass buttons at the same",1
+	.string	"time. This will clear him out!",1
+	.string	" ",1
+	.string	"remember, small players can't clear",1
+	.string	"out big players!",0
+
+wieqstr_h7
+	.string "protect the ball",0
+wieqstr_h7a
+	.string	"When standing in position with the",1
+	.string	"ball, quickly tap the turbo button.",1
+	.string "this will cause the player to protect",1
+	.string "the ball!",0
+
+wieqstr_h8
+	.string	"turbo pass",0
+wieqstr_h8a
+	.string	"press the turbo and pass buttons at",1
+	.string "the same time for a fast pass.",1
+	.string " ",1
+	.string "Turbo passes are less likely to be",1
+	.string "intercepted by the defense!",0
+
+wieqstr_h9
+	.string	"super jumps",0
+wieqstr_h9a
+	.string	"jump extra high when shooting,",1
+	.string	"blocking, or rebounding by pressing",1
+	.string "the turbo and shoot buttons at the",1
+	.string "same time!",0
+
+wieqstr_h10
+	.string	"dunk pass",0
+wieqstr_h10a
+	.string	"to avoid having your dunk blocked,",1
+	.string "pass off to your teammate.",1
+	.string	" ",1
+	.string "This is most effective when your",1
+	.string "teammate is open for a three point",1
+	.string "shot!",0
+
+wieqstr_h11
+	.string	"layups",0
+wieqstr_h11a
+	.string	"When running at the hoop, quickly",1
+	.string	"press the turbo and shoot buttons!",1
+	.string	" ",1
+	.string	"Holding the shoot button delays",1
+	.string	"the release of the ball. Use this",1
+	.string	"to fake out your opponent!",0
+
+
+wieqstr_h12
+wieqstr_h13
+	.string	"lean-out jumper",0
+wieqstr_h12a
+wieqstr_h13a
+	.string	"If you are facing straight up or",1
+	.string	"down, pull the joystick to the left",1
+	.string	"or right!",1
+	.string	" ",1
+	.string	"holding the shoot button delays the",1
+	.string	"release of the ball!",0
+
+wieqstr_h14
+	.string	"hot streak",0
+wieqstr_h14a
+	.string "When a player scores 3 consecutive",1
+	.string "baskets, he is on fire!",1
+	.string " ",1
+	.string "When a player goes on a hot streak,",1
+	.string	"give him the ball!  he will remain",1
+	.string	"hot for several shots or until the",1
+	.string	"other team scores.",0
+
+wieqstr_h15
+	.string "double-dunks",0
+wieqstr_h15a
+	.string	"When a player is in a dunk, his",1
+	.string	"teammate can also start a dunk.",1
+	.string	"The player with the ball can then",1
+	.string	"press the pass button to lob the",1
+	.string	"the ball to his teammate.",1
+	.string	"",1
+	.string	"Try for 3 in a row!",0
+
+wieqstr_h16
+	.string "drone control",0
+wieqstr_h16a
+	.string	"Cause a teammate controlled by the",1
+	.string	"CPU to shoot or pass by pressing",1
+	.string	"your own shoot or pass buttons.",1
+	.string	" ",1
+	.string	"pass to your drone when he is under",1
+	.string	"the hoop for a quick dunk.",0
+
+wieqstr_h17
+	.string	"fade-away jumper",0
+wieqstr_h17a
+	.string	"Just as you jump up for a shot, pull",1
+	.string	"the joystick in the opposite direction",1
+	.string	"your player is facing.",1
+	.string	" ",1
+	.string	"holding the shoot button delays the",1
+	.string	"release of the ball!",0
+
+wieqstr_h18
+	.string	"Player Attributes",0
+wieqstr_h18a
+	.string	"For maximum success, pay attention",1
+	.string "to your player's strengths and",1
+	.string	"weaknesses.  Play big guys near the",1
+	.string "hoop, and small guys outside.",1
+	.string	" ",1
+	.string "Big guys are poor 3 point shooters!",0
+
+wieqstr_h19
+	.string	"power attribute",0
+wieqstr_h19a
+	.string	"The greater a player's Power rating,",1
+	.string "the harder it is to clear him out",1
+	.string	"or to block his dunks.  Try to avoid",1
+	.string "size mismatches. ",1
+	.string	" ",1
+	.string	"powerful guys tend to hold onto",1
+	.string "the ball when cleared out!",0
+
+wieqstr_h20
+	.string	"alley-oop play",0
+wieqstr_h20a
+	.string	"When your teammate has the ball,",1
+	.string "drive the open lane toward the hoop",1
+	.string	"and press turbo and shoot.",1
+	.string	"Once airborne, your teammate must",1
+	.string	"quickly pass you the ball!",1
+	.string	"",1
+	.string	"Try for 3 in a row!",0
+
+wieqstr_h21
+	.string	"teamwork",0
+wieqstr_h21a
+	.string	"A combination of 3 consecutive",1
+	.string "alley-oops or double-dunks will",1
+	.string	"put your team in the zone!",1
+	.string	" ",1
+	.string	"Don't be a ball hog!",0
+
+wieqstr_h22
+	.string	"steal attribute",0
+wieqstr_h22a
+	.string	"The greater a player's steal rating,",1
+	.string "the more effective his swiping",1
+	.string	"becomes. He will also intercept more",1
+	.string "passes!",1
+	.string	" ",1
+	.string	"Smaller, quicker players are very",1
+	.string "skilled at stealing the ball.",0
+
+wieqstr_h23
+	.string	"dunk attribute",0
+wieqstr_h23a
+	.string	"The greater a player's dunk rating,",1
+	.string "the more spectacular his dunks. a",1
+	.string	"player with a zero dunk rating will",1
+	.string "perform just layups.",1
+	.string	" ",1
+	.string "Layups are generally less successful",1
+	.string "than dunks.",0
+
+wieqstr_h24
+	.string	"speed attribute",0
+wieqstr_h24a
+	.string	"The greater a player's speed rating,",1
+	.string "the faster he moves.  Usually, the",1
+	.string	"faster players are less powerful",1
+	.string "and therefore get cleared out more.",1
+	.string	" ",1
+	.string "Match speed against speed.",0
+
+wieqstr_h25
+	.string	"create player",0
+wieqstr_h25a
+	.string	"At start of a game, choose the",1
+	.string "'create player' option and",1
+	.string "customize a player to fit your",1
+	.string "individual playing style.",1
+	.string " ",1
+	.string "created players can earn extra",1
+	.string "attribute points with 3 wins!",0
+
+wieqstr_h26
+	.string	"power-ups",0
+wieqstr_h26a
+	.string	"On the versus screen, press the",1
+	.string "turbo, shoot and pass buttons to",1
+	.string	"select a combination. In order",1
+	.string	"to activate some power-ups, all",1
+	.string	"players must enter the same",1
+	.string	"combination!",1
+	.string	"",1
+	.string	"enter '111' for tournament mode!",0
+
+wieqstr_h27
+	.string	"lean-in jumper",0
+wieqstr_h27a
+	.string	"Just as you jump up for a shot, push",1
+	.string	"the joystick in the direction your",1
+	.string	"player is facing!",1
+	.string	" ",1
+	.string	"holding the shoot button delays the",1
+	.string	"release of the ball!",0
+
+wieqstr_h28
+	.string	"Smart turbo useage",0
+wieqstr_h28a
+	.string	"The amount of turbo remaining is",1
+	.string	"displayed at the top of the screen.",1
+	.string	" ",1
+	.string	"all turbo actions deplete this",1
+	.string	"amount, so conserve just enough for",1
+	.string	"that all important next move!",0
+
+wieqstr_h29
+	.string	"Substitutions",0
+wieqstr_h29a
+	.string	"Some players may become fatigued",1
+	.string "during the second half!  Try",1
+	.string	"substituting those players with",1
+	.string "fresh players at halftime.",1
+	.string " ",0
+
+wieqstr_h30
+	.string	"Burst of speed",0
+wieqstr_h30a
+	.string	"avoid pesky defenders and increase",1
+	.string	"the speed of your player by holding",1
+	.string	"down the Turbo button.",0
+
+wieqstr_h31
+	.string	"Court awareness",0
+wieqstr_h31a
+	.string	"locate a player's position when he",1
+	.string	"is off screen by watching for his",1
+	.string	"arrow.  Try to anticipate his moves.",1
+	.string	" ",1
+	.string	"When off screen, try to stay away",1
+	.string	"from opposing players.",0
+
+wieqstr_h32
+	.string	"Smart play",0
+wieqstr_h32a
+	.string	"An open player is more likely to",1
+	.string	"make a basket, so pass to your open",1
+	.string	"teammate whenever possible!",1
+	.string	" ",1
+	.string	"Try to anticipate your opponent's next",1
+	.string	"move before he makes it!",0
+
+wieqstr_h33
+	.string	"Secret power-ups",0
+wieqstr_h33a
+	.string "Ball Players can be powered up with",1
+	.string "super human abilities.  Try special",1
+	.string	"joystick/button moves during the",1
+	.string	"team matchup screen!",0
+
+wieqstr_h34
+	.string "Strong defense",0
+wieqstr_h34a
+	.string	"decrease the chance of an opponent's",1
+	.string	"shot going in the basket by getting",1
+	.string	"up real close to him!",1
+	.string	" ",1
+	.string	"clear him out, steal the ball!",0
+
+wieqstr_h35
+	.string	"Hidden Passing attribute",0
+wieqstr_h35a
+	.string	"The greater a player's hidden pass",1
+	.string "rating, the faster he passes.",1
+	.string	" ",1
+	.string	"It is more difficult to intercept a",1
+	.string "quick pass than a slow pass.  You",1
+	.string "should always try a turbo pass.",0
+
+wieqstr_h36
+	.string	"Blocking attribute",0
+wieqstr_h36a
+	.string	"The greater a player's block",1
+	.string "rating, the better he is at blocking",1
+	.string	"dunks and regular jump shots.",1
+	.string	" ",1
+	.string	"It is also harder for someone to",1
+	.string "drive by him for a dunk.",0
+
+wieqstr_h37
+	.string	"Hidden Clutch attribute",0
+wieqstr_h37a
+	.string	"The greater a player's hidden clutch",1
+	.string "rating, the more chance that he will",1
+	.string	"make a great play during the last 10",1
+	.string "seconds of any period.",0
+
+wieqstr_h38
+	.string	"Stats pages",0
+wieqstr_h38a
+	.string	"On the stats page, the steals",1
+	.string "category includes slap aways and",1
+	.string	"clear outs of ball carriers.",1
+	.string	" ",1
+	.string	"The injured category represents how",1
+	.string "many times you were cleared out!",0
+
+wieqstr_h39
+	.string "Layup out of dunks",0
+wieqstr_h39a
+	.string	"When a player is in a dunk, he can",1
+	.string	"press the shoot button to lob the",1
+	.string	"the ball toward the hoop.",1
+	.string	"",1
+	.string	"This is most effective if your dunk",1
+	.string	"is about to get blocked.",0
+
+wieqstr_h40
+	.string "On demand layups",0
+wieqstr_h40a
+	.string "run toward the basket without",1
+	.string	"holding down the turbo button.",1
+	.string "then press the turbo and Shoot",1
+	.string	"buttons.  Release shoot button",1
+	.string "to layup the ball.",0
+
+wieqstr_h41
+	.string	"strengthen created player",0
+wieqstr_h41a
+	.string	"Each time a created player wins",1
+	.string "3 games, he is awarded additional",1
+	.string "attribute points.  As you increase",1
+	.string "your players strength, hidden",1
+	.string "features will become accessible",1
+	.string "for that player!",0
+
+wieqstr_h42
+	.string	"shot swatting",0
+wieqstr_h42a
+	.string	"When swatting at a jump shot, hold",1
+	.string "the block button down until your",1
+	.string "opponent releases the ball, then",1
+	.string "release the block button to follow",1
+	.string "through with the swat.",0
+
+wieqstr_h43
+	.string	"Hidden rebound attribute",0
+wieqstr_h43a
+	.string	"The greater a player's hidden rebound",1
+	.string "rating, the more chance that he will",1
+	.string	"snag the rebound from a crowd of",1
+	.string "players.  He will also jump higher",1
+	.string "when trying to rebound.",0
+
+wieqstr_h44
+	.string	"successful rebounding",0
+wieqstr_h44a
+	.string	"Wait until the ball has hit the rim",1
+	.string "before pressing the block button.",1
+	.string	"",1
+	.string	"Auto rebounding may also occur when",1
+	.string "the ball is directly above your head.",0
+
+	.even
+
+	.asg	17,YSPACE
+
+ SUBR	new_page
+
+	calla	display_blank
+	calla	WIPEOUT
+
+	clr	a0
+	move	a0,@dtype		;2D
+
+	movk	1,a0			;page flipping on
+	move	a0,@dpageflip
+
+	movi	SCRNEND,a0		;[256,405]
+	move	a0,@SCRNLR,L
+
+	clr	a0
+	move	a0,@WORLDTLX,L
+	move	a0,@WORLDTLY,L
+	move	a0,@IRQSKYE
+
+	SLEEPK	1
+
+	movi	lgwpnewpage_mod,a0
+	move	a0,@BAKMODS,L
+	calla	BGND_UD1
+
+	movk	1,a0
+	calla	create_title_bar
+
+	movi	lgwpheading_setup,a2
+	calla	setup_message
+	movi	lgwpstr_heading,a4
+	calla	print_string_C2
+
+	movk	1,a0
+	move	a0,@DISPLAYON
+
+	SLEEPK	2
+
+	calla	display_unblank
+
+	movi	lgwpstr_tbl,a9,L
+lgwplp
+	movi	LN1b_setup,a2
+	calla	setup_message
+	movi	CLSNEUT|TYPTEXT|SUBMES1,a0
+	move	a0,@mess_objid		;OBJ ID's for text
+	move	*a9+,a4,L
+	calla	print_string_C2
+
+	movi	LN2b_setup,a2
+	calla	setup_message
+	movi	CLSNEUT|TYPTEXT|SUBMES1,a0
+	move	a0,@mess_objid		;OBJ ID's for text
+	move	*a9+,a4,L
+	calla	print_string_C2
+
+	CREATE	CYCPID,flash_bigtxt
+
+	move	*a9,a14
+	cmpi	4000,a14
+	jrz	lgwpcont0
+
+	SLEEP	40
+
+	movi	1*TSEC,a10
+lgwpwhopper_with_chees
+	SLEEPK	1
+	calla	get_all_buttons_cur2
+	jrnz	lgwpexi
+	dsj	a10,lgwpwhopper_with_chees
+lgwpexi	move	a10,a10
+      	jrz	lgwpcontz
+
+      	clr	a0
+	move	a0,@SOUNDSUP		;turn all sounds on
+	SOUND1	bounce_snd
+	movk	1,a0
+	move	a0,@SOUNDSUP		;turn all sounds off
+
+	jruc	lgwpcont
+lgwpcontz
+
+	movi	OBJLST,a10
+	jruc	lgwpstart
+lgwpnext_obj
+	move	*a10(OID),a0
+	cmpi	CLSNEUT|TYPTEXT|SUBMES1,a0
+	jrne	lgwpnot_gover
+	movi	[15,0],a0
+	move	a0,*a10(OYVEL),L	;Fall off scrn
+lgwpnot_gover
+lgwpstart
+	move	*a10,a10,L
+	jrnz	lgwpnext_obj
+
+	SLEEPK	17
+     
+	movi	CLSNEUT|TYPTEXT|SUBMES1,a0
+	calla	obj_del1c
+	jruc	lgwplp
+
+lgwpcont0
+	SLEEP	2*TSEC
+lgwpcont
+	movi	CYCPID,A0
+	calla	KIL1C
+
+	clr	a10
+	movk	8,a11
+	CREATE0	fade_down
+
+	SLEEP	40
+
+	RETP
+
+
+lgwpheading_setup
+	PRINT_STR	brush20_ascii,8,0,200,7,BRSHGYOP,0
+LN1b_setup
+	PRINT_STR	brush50_ascii,24,0,200,62,BRSH50R_P,0
+LN2b_setup
+	.ref	brush50_ascii
+	PRINT_STR	brush50_ascii,24,0,200,133,BRSH50R_P,0
+
+lgwpnewpage_mod
+	.long	ATTRACTBMOD
+	.word	0,0
+	.long	0
+
+lgwpstr_tbl
+  .long	lgwpstr_h0
+  .long	lgwpstr_h0a
+  .long	lgwpstr_h1
+  .long	lgwpstr_h1a
+  .long	lgwpstr_h2
+  .long	lgwpstr_h2a
+  .long	lgwpstr_h3
+  .long	lgwpstr_h3a
+  .long	lgwpstr_h4
+  .long	lgwpstr_h4a
+  .long	lgwpstr_h5
+  .long	lgwpstr_h5a
+  .long	lgwpstr_h6
+  .long	lgwpstr_h6a
+  .long	lgwpstr_h7
+  .long	lgwpstr_h7a
+  .long	lgwpstr_h8
+  .long	lgwpstr_h8a
+  .long	lgwpstr_h9
+  .long	lgwpstr_h9a
+  .long	lgwpstr_h10
+  .long	lgwpstr_h10a
+  .long	4000,4000
+
+
+lgwpstr_heading
+	.string	"HANGTIME HIGHLIGHTS",0
+	.asg	1,CR		    
+
+lgwpstr_h0
+	.string	"150 NBA",0
+lgwpstr_h0a
+	.string	"PLAYERS",0
+
+lgwpstr_h1
+	.string	"CREATE",0
+lgwpstr_h1a
+	.string	"PLAYER",0
+
+lgwpstr_h2
+	.string	"ALLEY",0
+lgwpstr_h2a
+	.string	"OOPS",0
+
+lgwpstr_h3
+	.string	"DOUBLE",0
+lgwpstr_h3a
+	.string	"DUNKS",0
+
+lgwpstr_h4
+	.string	"ROOF TOP",0
+lgwpstr_h4a
+	.string	"COURT",0
+
+lgwpstr_h5
+	.string	"SPIN",0
+lgwpstr_h5a
+	.string	"MOVES",0
+
+lgwpstr_h6
+	.string	"DIGITAL",0
+lgwpstr_h6a
+	.string	"SOUND",0
+
+lgwpstr_h7
+	.string	"M DOC",0
+lgwpstr_h7a
+	.string	"RAPS",0
+
+lgwpstr_h8
+	.string	"TRIVIA",0
+lgwpstr_h8a
+	.string	"CONTEST",0
+
+lgwpstr_h9
+	.string	"MEGA",0
+lgwpstr_h9a
+	.string	"SECRETS",0
+
+lgwpstr_h10
+	.string	"AND",0
+lgwpstr_h10a
+	.string	"MORE!",0
+
+	.even
+
+	.ref	fontram
+
+ SUBRP	flash_bigtxt
+  
+	movi	OBJLST,a14
+	movi	fontram,a3
+	clr	a4
+	move	a4,*a3,L
+	
+cjawlp
+	move	*a14,a14,L
+	jrz	cjawx
+	move	*a14(OID),a2
+	cmpi	CLSNEUT|TYPTEXT|SUBMES1,a2
+	jrne	cjawlp
+	move	a14,*a3+,L
+	move	a4,*a3,L
+	jruc	cjawlp
+
+		
+cjawx	movk	3,a10
+	.ref	white_pal
+cjawtop	movi	white_pal,a0
+	calla	pal_getf
+	movi	fontram,a3
+	
+cjawlp2
+	move	*a3+,a1,L
+	jrz	cjawxx
+	move	a0,*a1(OPAL)
+	jruc	cjawlp2
+
+cjawxx	SLEEPK	3
+
+	movi	BRSH50R_P,a0
+	calla	pal_getf
+	movi	fontram,a3
+	
+cjawlp3
+	move	*a3+,a1,L
+	jrz	cjawxxx
+	move	a0,*a1(OPAL)
+	jruc	cjawlp3
+
+cjawxxx	SLEEPK	5
+	dsj	a10,cjawtop
+	DIE
+
+
+
+time_delay
+	SLEEPK	30
+td_1
+	SLEEPK	1
+	move	*a13(PROCID),a0
+	cmpi	DIAG_PID,a0
+	jreq	uvhflpt			;Called from octopuss?
+	calla	get_all_buttons_cur2
+	jrz	uvhflpt
+      	clr	a0
+	move	a0,@SOUNDSUP		;turn all sounds on
+	SOUND1	bounce_snd
+	movk	1,a0
+	move	a0,@SOUNDSUP		;turn all sounds off
+	RETP
+uvhflpt
+	dsj	a10,td_1
+	RETP
+
+
+
+
+
+
+
+	STRUCTPD
+	WORD	HTS_STARTX
+	WORD	HTS_STARTY
+	APTR	HTS_STATSADDR
+	APTR	HTS_PALETTE1		;2 pts
+	APTR	HTS_PALETTE2		;3 pts.
+	APTR	HTS_PALETTE3		;turnovers
+	APTR	HTS_PALETTE4		;points
+	APTR	HTS_PALETTE5		;dunks
+	APTR	HTS_PALETTE6		;assists
+	APTR	HTS_PALETTE7		;steals
+	APTR	HTS_PALETTE8		;blocks
+	APTR	HTS_PALETTE9		;rebounds
+	APTR	HTS_PALETTEa		;injured
+
+
+	.asg	11,STARTX1
+	.asg	90,STARTY1
+	.asg	128,STARTX2
+	.asg	90,STARTY2
+	.asg	205,STARTX3
+	.asg	90,STARTY3
+	.asg	323,STARTX4
+	.asg	90,STARTY4
+	.asg	11,YSPACING1
+
+ SUBR	stats_page2
+
+	PUSHP	a0
+	jruc	ukehtvout
+
+ SUBR	stats_page
+
+	PUSHP	a0
+
+	movi	4*60,a10
+
+ukehstop	SLEEPK	1
+	dec	a10
+	jrz	ukehtvout
+	move	@tvpanelon,a0,L
+	jrnz	ukehstop
+ukehtvout
+	callr	kill_tvpanel
+
+	calla	display_blank
+	calla	system_savegame
+
+	clr	a0
+	move	a0,@dtype		;2D
+
+	clr	a0
+	move	a0,@IRQSKYE		;background color
+
+	movk	INPLYRINFO,a0
+	move	a0,@GAMSTATE
+
+	movi	SCRNEND,a0		;[256,405]
+	move	a0,@SCRNLR,L
+
+	clr	a0
+	move	a0,@WORLDTLX,L
+	move	a0,@WORLDTLY,L
+
+	SLEEPK	2
+
+	movi	ukehhalftime_mod,a0
+	move	@TWOPLAYERS,a1		;0 = NO, 1 = YES 2 players
+	jrz	ukeh4_plyrs
+	movi	ukehhalftime_mod2,a0
+ukeh4_plyrs
+	move	a0,@BAKMODS,L
+	calla	BGND_UD1
+
+	movi	ukehheading_setup,a2
+	calla	setup_message
+	PULLP	a0
+	movi	ukehstr_heading1,a4
+	move	a0,a0
+	jrz	ukeh1st_half
+	movi	ukehstr_heading2,a4
+ukeh1st_half
+	calla	print_string_C2
+
+	move	@special_heads,a1,L
+	PUSH	a0,a1
+
+
+	move	@TWOPLAYERS,a1		;0 = NO, 1 = YES 2 players
+	jrz	ukeh4_plyrsb
+
+	move	@special_heads,a0
+	move	@special_heads+10h,a1
+
+	move	a1,@special_heads
+	move	a0,@special_heads+10h
+
+ukeh4_plyrsb
+	movk	2,a0
+	calla	create_title_bar
+	calla	create_stat_titles
+	clr	a0
+	calla	create_score_backdrop		;for the scores
+	movk	1,a0
+	calla	create_score_backdrop		;for the scores
+
+	movk	4,a0
+	calla	create_player_heads
+	calla	update_player_heads
+
+	clr	a10
+	calla	create_player_nubs
+
+	movi	105,a1				;Y position
+	calla	create_names
+
+	calla	create_plyrs_name
+	calla	create_name_backplates
+	PULL	a0,a1
+	move	a1,@special_heads,L
+
+	callr	print_scores
+
+	movi	[2,14],a8		;START AT COLOR 2, CYCLE 15 COLORS
+	movi	BASTC_G_P,a9		;PAL NAME
+	movi	BASTCYCGP,a10
+	movk	3,a11			;RATE OF CYCLE IN TICKS
+	CREATE	CYCPID,CYCLE_TABLE	;START PROCESS TO DO CYCLE
+
+	movi	[2,14],a8		;START AT COLOR 2, CYCLE 15 COLORS
+	movi	BASTC_R_P,a9		;PAL NAME
+	movi	BASTCYCRP,a10
+	movk	3,a11			;RATE OF CYCLE IN TICKS
+	CREATE	CYCPID,CYCLE_TABLE	;START PROCESS TO DO CYCLE
+
+
+	movi	player_stats+(0*PS_SIZE*10h),a2
+	movi	player_stats+(1*PS_SIZE*10h),a3
+	movi	player_stats+(2*PS_SIZE*10h),a4
+	movi	player_stats+(3*PS_SIZE*10h),a5
+	callr	highlight_best
+
+	movi	player_stats + 0*PS_SIZE*10h,a0
+	move	a0,*a13(HTS_STATSADDR),L
+	movi	STARTX1,a0
+	move	a0,*a13(HTS_STARTX)
+
+	movi	STARTY1+29,a0
+	move	@TWOPLAYERS,a1		;0 = NO, 1 = YES 2 players
+	jrz	ukeh4_plyrs_ps1
+	movi	STARTY1+29,a0
+ukeh4_plyrs_ps1
+	move	a0,*a13(HTS_STARTY)
+	callr	print_pstats
+
+
+	movi	player_stats+(1*PS_SIZE*10h),a2
+	movi	player_stats+(0*PS_SIZE*10h),a3
+	movi	player_stats+(2*PS_SIZE*10h),a4
+	movi	player_stats+(3*PS_SIZE*10h),a5
+	callr	highlight_best
+
+	movi	player_stats + 1*PS_SIZE*10h,a0
+	move	a0,*a13(HTS_STATSADDR),L
+	movi	STARTX2,a0
+	move	a0,*a13(HTS_STARTX)
+
+	movi	STARTY2+29,a0
+	move	@TWOPLAYERS,a1		;0 = NO, 1 = YES 2 players
+	jrz	ukeh4_plyrs_ps2
+	movi	STARTY2+29,a0
+ukeh4_plyrs_ps2
+	move	a0,*a13(HTS_STARTY)
+	callr	print_pstats
+
+
+	movi	player_stats+(2*PS_SIZE*10h),a2
+	movi	player_stats+(0*PS_SIZE*10h),a3
+	movi	player_stats+(1*PS_SIZE*10h),a4
+	movi	player_stats+(3*PS_SIZE*10h),a5
+	callr	highlight_best
+
+	movi	player_stats + 2*PS_SIZE*10h,a0
+	move	a0,*a13(HTS_STATSADDR),L
+	movi	STARTX3,a0
+	move	a0,*a13(HTS_STARTX)
+	movi	STARTY3+29,a0
+	move	a0,*a13(HTS_STARTY)
+	callr	print_pstats
+
+
+	movi	player_stats+(3*PS_SIZE*10h),a2
+	movi	player_stats+(0*PS_SIZE*10h),a3
+	movi	player_stats+(1*PS_SIZE*10h),a4
+	movi	player_stats+(2*PS_SIZE*10h),a5
+	callr	highlight_best
+
+	movi	player_stats + 3*PS_SIZE*10h,a0
+	move	a0,*a13(HTS_STATSADDR),L
+	movi	STARTX4,a0
+	move	a0,*a13(HTS_STARTX)
+	movi	STARTY4+29,a0
+	move	a0,*a13(HTS_STARTY)
+	callr	print_pstats
+
+
+
+	movk	1,a0
+	move	a0,@DISPLAYON
+
+	SLEEPK	2
+	calla	display_unblank
+
+	movi	STAT_TEXT_ID,a10,L
+	CREATE	FLSH_TXT_PID,change_pal_on_text
+
+	move	@plyr_onfire,a10
+	jrz	ukehnofire
+	srl	1,a10
+	jrnc	ukehnop1
+	clr	a11
+	CREATE	FIRE_ANIM_PID,anim_fire_for_best_plyr
+
+ukehnop1	srl	1,a10
+	jrnc	ukehnop2
+	movk	1,a11
+	CREATE	FIRE_ANIM_PID,anim_fire_for_best_plyr
+
+ukehnop2	srl	1,a10
+	jrnc	ukehnop3
+	movk	2,a11
+	CREATE	FIRE_ANIM_PID,anim_fire_for_best_plyr
+
+ukehnop3	srl	1,a10
+	jrnc	ukehnofire
+	movk	3,a11
+	CREATE	FIRE_ANIM_PID,anim_fire_for_best_plyr
+ukehnofire
+
+	SLEEPK	20
+
+	calla	get_best_player
+	calla	best_plyr_speech
+	move	a0,a8
+	.ref	flash_plyrs_mugshot
+	CREATE	CYCPID,flash_plyrs_mugshot
+
+	movi	21*TSEC,a10
+
+ukehwhopper_with_cheese
+	SLEEPK	1
+	calla	get_all_buttons_cur2
+	jrnz	ukehexit
+	dsj	a10,ukehwhopper_with_cheese
+ukehexit
+	SLEEPK	3
+
+	calla	kill_fire_anim
+	calla	kill_flsh_txt_proc
+
+	movi	CYCPID,a0
+	calla	KIL1C
+
+	move	@gmqrtr,a0
+	cmpi	4,a0
+	jrlo	ukehnoat
+	JSRP	award_plr_attrib_pts
+
+ukehnoat
+	SOUND1	bounce_snd
+
+	move	@gmqrtr,a0
+	cmpi	2,a0
+	jrnz	ukehnoth
+	JSRP	plyr_subs
+	clr	a0
+	.ref	in_team_select
+	move	a0,@in_team_select
+ukehnoth
+	JSRP	buyin_screen
+	movk	ADJTRIVIA,a0		;Get difficulty level
+	calla	GET_ADJ
+	move	a0,a0			;if value is NON-ZERO, dont allow
+	jrnz	ukehnotriv
+
+	move	@gmqrtr,a0
+	cmpi	4,a0
+	jrlt	ukehnotriv
+	JSRP	trivia_game
+ukehnotriv
+
+	clr	a0
+	move	a0,@DISPLAYON
+
+
+	SLEEPK	2
+
+	calla	system_restoregame
+
+	movi	JOIN_CYCLE_PID,a0
+	calla	KIL1C
+
+	movi	CLSDEAD|creditid,a0
+	calla	obj_del1c		;kill credit/qrtr imgs
+
+	calla	prt_credits
+
+	CREATE0	start_msgs
+	calla	fix_dropout_msgs
+
+	move	@gmqrtr,a0
+	cmpi	4,a0
+	jrlt	ukehnotn
+	SOUND1	crwdbed_kill
+ukehnotn
+
+	RETP
+
+
+ SUBR	get_best_player
+
+	movi	player_stats+(0*PS_SIZE*10h),a2
+	callr	add_plyr_stats
+	move	a14,a3
+	movi	player_stats+(1*PS_SIZE*10h),a2
+	callr	add_plyr_stats
+	move	a14,a4
+	movi	player_stats+(2*PS_SIZE*10h),a2
+	callr	add_plyr_stats
+	move	a14,a5
+	movi	player_stats+(3*PS_SIZE*10h),a2
+	callr	add_plyr_stats
+	move	a14,a2
+
+	clr	a0
+	cmp	a4,a3
+	jrhi	ukehpl2				;br=plr 2 is better
+	move	a4,a3
+	movk	1,a0
+ukehpl2
+	cmp	a5,a3
+	jrhi	ukehpl3				;br=plr 2 is better
+	move	a5,a3
+	movk	2,a0
+ukehpl3	
+	cmp	a2,a3
+	jrhi	ukehpl4				;br=plr 2 is better
+	move	a2,a3
+	movk	3,a0
+ukehpl4
+	rets
+
+
+ SUBR	add_plyr_stats
+
+	move	*a2(PS_2PTS_MADE*10h),a14
+	move	*a2(PS_3PTS_MADE*10h),a1
+	add	a1,a14
+	sll	1,a14				;x 2
+	add	a1,a14				;3 pts
+
+	move	a14,a1
+	srl	1,a1				;double value
+	add	a1,a14
+
+	move	*a2(PS_ASSISTS*10h),a1
+	add	a1,a14
+	move	*a2(PS_BLOCKS*10h),a1
+	add	a1,a14
+	move	*a2(PS_STEALS*10h),a1
+	add	a1,a14
+	rets
+
+
+BASTC_G_P:
+   .word   16 
+   .word   00000h,00000h,00280h,003e0h,003e0h,003e0h,003c0h,003a0h
+   .word   003a0h,00380h,00360h,00340h,00320h,00300h,002e0h,07fffh
+
+BASTCYCGP:
+   .word   003e0h,003c0h,003a0h,003a0h,00380h,00360h,00340h,00320h
+   .word   00300h,002e0h,00300h,00320h,00340h,00360h,00380h,003a0h
+   .word   003c0h,003c0h,003a0h,00380h,00340h,00320h,00340h,00380h
+   .word   003a0h,003c0h,003a0h,00380h,00360h,00340h,00300h,002e0h
+   .word   00300h,00300h,00320h,00340h,00340h,00360h,00360h,00380h
+   .word   003a0h,003a0h,003c0h,003e0h
+
+   .word   003e0h,003c0h,003a0h,003a0h,00380h,00360h,00340h,00320h
+   .word   00300h,002e0h,00300h,00320h,00340h,00360h,00380h,003a0h
+   .word   003c0h,003c0h,003a0h,00380h,00340h,00320h,00340h,00380h
+   .word   003a0h,003c0h,003a0h,00380h,00360h,00340h,00300h,002e0h
+   .word   00300h,00300h,00320h,00340h,00340h,00360h,00360h,00380h
+   .word   003a0h,003a0h,003c0h,003e0h
+   .word   -1
+   .even
+
+
+BASTC_R_P:
+   .word   16 
+   .word   00000h,00000h,05000h,07c00h,07c00h,07c00h,07c00h,07800h
+   .word   07800h,07400h,07000h,06c00h,06800h,06400h,06000h,07fffh
+
+
+
+BASTCYCRP:
+   .word   07c00h,07800h,07800h,07400h
+   .word   07000h,06c00h,06800h,06400h,06000h,06400h,06800h,06c00h
+   .word   07000h,07400h,07800h
+   .word   07800h,07400h,06c00h,06800h,06c00h,07000h,07400h,07800h
+   .word   07400h,06c00h,06800h,06400h,06000h,06400h,06400h,06800h
+   .word   06c00h,06c00h,07000h,07000h,07400h,07800h,07800h,07c00h
+
+   .word   07c00h,07800h,07800h,07400h
+   .word   07000h,06c00h,06800h,06400h,06000h,06400h,06800h,06c00h
+   .word   07000h,07400h,07800h
+   .word   07800h,07400h,06c00h,06800h,06c00h,07000h,07400h,07800h
+   .word   07400h,06c00h,06800h,06400h,06000h,06400h,06400h,06800h
+   .word   06c00h,06c00h,07000h,07000h,07400h,07800h,07800h,07c00h
+   .word   -1
+   .even
+
+
+ SUBR	plyr_subs
+
+	movi	DMAWNZ,a0
+	movi	OBJLST,a1
+	jruc	so20
+
+so10	move	a0,*a1(OFLAGS)
+so20	move	*a1,a1,L
+	jrnz	so10
+
+
+	JSRP	start_teams
+	RETP
+
+
+
+RGB	.macro	R,G,B
+	.word	(:R:<<10) | (:G:<<5) | :B:
+	.endm
+
+COLTAB
+	.word	07fffh,07bffh,077ffh,073ffh,06fffh
+	.word	06bffh,067deh,063deh,05fdeh,05bdeh,057deh,043bdh,033bdh
+	.word	01f9ch,00f7bh,0037bh,00f7bh,01b9ch,02b9ch,03bbdh,04bbdh
+	.word	05fdeh,063deh,067deh,06bdeh,06fffh,077ffh,07bffh,07fffh
+
+	.word	07fffh,07bffh,077ffh,073ffh,06fffh
+	.word	06bffh,067deh,063deh,05fdeh,05bdeh,057deh,043bdh,033bdh
+	.word	01f9ch,00f7bh,0037bh,00f7bh,01b9ch,02b9ch,03bbdh,04bbdh
+	.word	05fdeh,063deh,067deh,06bdeh,06fffh,077ffh,07bffh,07fffh
+	.word	-1
+
+COLTABRED
+	.word   07d2ah,07d08h,07cc6h,07ca5h,07c63h,07c42h,07c00h
+	.word   07c00h,07c00h,07c42h,07c63h,07c84h,07ca5h,07ce7h,07d08h
+	.word   07d29h,07d4ah,07d8ch,07dadh,07dceh,07e10h,07defh,07dceh
+	.word   07d8ch,07d6bh,07d4ah,07d29h,07d08h,07ce7h,07cc6h,07ca5h
+	.word   07c84h,07c63h,07c42h,07c21h,07c00h,07c00h,07c21h,07c63h
+	.word   07ca5h,07ce7h,07d29h,07d6bh,07dadh,07defh,07e31h,07e73h
+	.word   07eb5h,07ef7h,07f39h,07f7bh,07fbdh,07fffh,07f9ch,07f39h
+	.word   07ef7h,07e94h,07e31h,07defh,07d8ch,07d2ah
+
+	.word   07d2ah,07d08h,07cc6h,07ca5h,07c63h,07c42h,07c00h
+	.word   07c00h,07c00h,07c42h,07c63h,07c84h,07ca5h,07ce7h,07d08h
+	.word   07d29h,07d4ah,07d8ch,07dadh,07dceh,07e10h,07defh,07dceh
+	.word   07d8ch,07d6bh,07d4ah,07d29h,07d08h,07ce7h,07cc6h,07ca5h
+	.word   07c84h,07c63h,07c42h,07c21h,07c00h,07c00h,07c21h,07c63h
+	.word   07ca5h,07ce7h,07d29h,07d6bh,07dadh,07defh,07e31h,07e73h
+	.word   07eb5h,07ef7h,07f39h,07f7bh,07fbdh,07fffh,07f9ch,07f39h
+	.word   07ef7h,07e94h,07e31h,07defh,07d8ch,07d2ah
+	.WORD	-1
+
+ukehhalftime_mod
+	.long	HTSTATSBMOD
+	.word	0,0
+	.long	0
+
+
+ukehhalftime_mod2
+	.long	HTSTATSBMOD
+	.word	0,0
+	.long	0
+
+ukehheading_setup
+	PRINT_STR	brush20_ascii,8,0,200,7,BRSHGYOP,0
+ukehstr_heading1
+	.string	"1st half stats",0
+ukehstr_heading2
+	.string	"end game stats",0
+
+	.even
+
+
+	.asg	 44,SX1
+	.asg	359,SX2
+
+ SUBRP	print_scores
+
+	movi	xdglscore_setup,a2
+	calla	setup_message
+
+	movi	SX1,a0
+	move	a0,@mess_cursx
+	move	@scores,a0
+	movi	999,a1			;max value
+	calla	dec_to_asc
+	calla	copy_string
+	calla	print_string_C
+
+	movi	SX2,a0
+	move	a0,@mess_cursx
+	move	@scores+16,a0
+	movi	999,a1			;max value
+	calla	dec_to_asc
+	calla	copy_string
+	calla	print_string_C
+
+	rets
+
+xdglscore_setup
+	PRINT_STR	brush20_ascii,8,0,200,7,BRSH_Y_P,0
+
+ SUBRP	highlight_best
+
+	movi	BASTC_W_P,a6
+	move	*a2(PS_2PTS_MADE*10h),a0
+	move	*a2(PS_3PTS_MADE*10h),a7
+	add	a7,a0
+	jrz	dcnenot_best1
+
+	move	*a3(PS_2PTS_MADE*10h),a1
+	move	*a3(PS_3PTS_MADE*10h),a7
+	add	a7,a1
+	cmp	a1,a0
+	jrlo	dcnenot_best1
+
+	move	*a4(PS_2PTS_MADE*10h),a1
+	move	*a4(PS_3PTS_MADE*10h),a7
+	add	a7,a1
+	cmp	a1,a0
+	jrlo	dcnenot_best1
+
+	move	*a5(PS_2PTS_MADE*10h),a1
+	move	*a5(PS_3PTS_MADE*10h),a7
+	add	a7,a1
+	cmp	a1,a0
+	jrlo	dcnenot_best1
+	movi	BASTC_G_P,a6
+dcnenot_best1
+	move	a6,*a13(HTS_PALETTE1),L
+
+	movi	BASTC_W_P,a6
+	move	*a2(PS_3PTS_MADE*10h),a0
+	jrz	dcnenot_best2
+	move	*a3(PS_3PTS_MADE*10h),a1
+	cmp	a1,a0
+	jrlo	dcnenot_best2
+	move	*a4(PS_3PTS_MADE*10h),a1
+	cmp	a1,a0
+	jrlo	dcnenot_best2
+	move	*a5(PS_3PTS_MADE*10h),a1
+	cmp	a1,a0
+	jrlo	dcnenot_best2
+	movi	BASTC_G_P,a6
+dcnenot_best2
+	move	a6,*a13(HTS_PALETTE2),L
+
+	movi	BASTC_W_P,a6
+	move	*a2(PS_2PTS_MADE*10h),a0
+	move	*a2(PS_3PTS_MADE*10h),a7
+	add	a7,a0
+	sll	1,a0				;x 2
+	add	a7,a0				;3 pts
+	jrz	dcnenot_best4
+
+	move	*a3(PS_2PTS_MADE*10h),a1
+	move	*a3(PS_3PTS_MADE*10h),a7
+	add	a7,a1
+	sll	1,a1				;x 2
+	add	a7,a1				;3 pts
+	cmp	a1,a0
+	jrlo	dcnenot_best4
+
+	move	*a4(PS_2PTS_MADE*10h),a1
+	move	*a4(PS_3PTS_MADE*10h),a7
+	add	a7,a1
+	sll	1,a1				;x 2
+	add	a7,a1				;3 pts
+	cmp	a1,a0
+	jrlo	dcnenot_best4
+
+	move	*a5(PS_2PTS_MADE*10h),a1
+	move	*a5(PS_3PTS_MADE*10h),a7
+	add	a7,a1
+	sll	1,a1				;x 2
+	add	a7,a1				;3 pts
+	cmp	a1,a0
+	jrlo	dcnenot_best4
+
+	movi	BASTC_G_P,a6
+dcnenot_best4
+	move	a6,*a13(HTS_PALETTE4),L
+
+
+	movi	BASTC_W_P,a6
+	move	*a2(PS_DUNKS_MADE*10h),a0
+	jrz	dcnenot_best5
+	move	*a3(PS_DUNKS_MADE*10h),a1
+	cmp	a1,a0
+	jrlo	dcnenot_best5
+	move	*a4(PS_DUNKS_MADE*10h),a1
+	cmp	a1,a0
+	jrlo	dcnenot_best5
+	move	*a5(PS_DUNKS_MADE*10h),a1
+	cmp	a1,a0
+	jrlo	dcnenot_best5
+	movi	BASTC_G_P,a6
+dcnenot_best5
+	move	a6,*a13(HTS_PALETTE5),L
+
+
+	movi	BASTC_W_P,a6
+	move	*a2(PS_ASSISTS*10h),a0
+	jrz	dcnenot_best6
+	move	*a3(PS_ASSISTS*10h),a1
+	cmp	a1,a0
+	jrlo	dcnenot_best6
+	move	*a4(PS_ASSISTS*10h),a1
+	cmp	a1,a0
+	jrlo	dcnenot_best6
+	move	*a5(PS_ASSISTS*10h),a1
+	cmp	a1,a0
+	jrlo	dcnenot_best6
+	movi	BASTC_G_P,a6
+dcnenot_best6
+	move	a6,*a13(HTS_PALETTE6),L
+
+
+	movi	BASTC_W_P,a6
+	move	*a2(PS_STEALS*10h),a0
+	jrz	dcnenot_best7
+	move	*a3(PS_STEALS*10h),a1
+	cmp	a1,a0
+	jrlo	dcnenot_best7
+	move	*a4(PS_STEALS*10h),a1
+	cmp	a1,a0
+	jrlo	dcnenot_best7
+	move	*a5(PS_STEALS*10h),a1
+	cmp	a1,a0
+	jrlo	dcnenot_best7
+	movi	BASTC_G_P,a6
+dcnenot_best7
+	move	a6,*a13(HTS_PALETTE7),L
+
+
+	movi	BASTC_W_P,a6
+	move	*a2(PS_BLOCKS*10h),a0
+	jrz	dcnenot_best8
+	move	*a3(PS_BLOCKS*10h),a1
+	cmp	a1,a0
+	jrlo	dcnenot_best8
+	move	*a4(PS_BLOCKS*10h),a1
+	cmp	a1,a0
+	jrlo	dcnenot_best8
+	move	*a5(PS_BLOCKS*10h),a1
+	cmp	a1,a0
+	jrlo	dcnenot_best8
+	movi	BASTC_G_P,a6
+dcnenot_best8
+	move	a6,*a13(HTS_PALETTE8),L
+
+
+	movi	BASTC_W_P,a6
+	move	*a2(PS_OFF_REB*10h),a0
+	move	*a2(PS_DEF_REB*10h),a7
+	add	a7,a0
+	jrz	dcnenot_best9
+
+	move	*a3(PS_OFF_REB*10h),a1
+	move	*a3(PS_DEF_REB*10h),a7
+	add	a7,a1
+	cmp	a1,a0
+	jrlo	dcnenot_best9
+	move	*a4(PS_OFF_REB*10h),a1
+	move	*a4(PS_DEF_REB*10h),a7
+	add	a7,a1
+	cmp	a1,a0
+	jrlo	dcnenot_best9
+	move	*a5(PS_OFF_REB*10h),a1
+	move	*a5(PS_DEF_REB*10h),a7
+	add	a7,a1
+	cmp	a1,a0
+	jrlo	dcnenot_best9
+	movi	BASTC_G_P,a6
+dcnenot_best9
+	move	a6,*a13(HTS_PALETTE9),L
+
+
+	movi	BASTC_W_P,a6
+	move	*a2(PS_INJURY*10h),a0
+	jrz	dcnenot_besta
+	move	*a3(PS_INJURY*10h),a1
+	cmp	a1,a0
+	jrlo	dcnenot_besta
+	move	*a4(PS_INJURY*10h),a1
+	cmp	a1,a0
+	jrlo	dcnenot_besta
+	move	*a5(PS_INJURY*10h),a1
+	cmp	a1,a0
+	jrlo	dcnenot_besta
+	movi	BASTC_R_P,a6
+dcnenot_besta
+	move	a6,*a13(HTS_PALETTEa),L
+
+
+	movi	BASTC_W_P,a6
+	move	*a2(PS_TURNOVERS*10h),a0
+	jrz	dcnenot_bestb
+	move	*a3(PS_TURNOVERS*10h),a1
+	cmp	a1,a0
+	jrlo	dcnenot_bestb
+	move	*a4(PS_TURNOVERS*10h),a1
+	cmp	a1,a0
+	jrlo	dcnenot_bestb
+	move	*a5(PS_TURNOVERS*10h),a1
+	cmp	a1,a0
+	jrlo	dcnenot_bestb
+	movi	BASTC_R_P,a6
+dcnenot_bestb
+	move	a6,*a13(HTS_PALETTE3),L
+	rets
+
+
+
+	.asg	18,COLOFF1
+	.asg	67,COLOFF2
+
+ SUBRP	print_pstats
+
+	movi	wbjustats_setup,a2
+	calla	setup_message
+
+	movi	STAT_TEXT_ID,a0
+	move	a0,@mess_objid
+
+
+	move	*a13(HTS_PALETTE1),a0,L
+	move	a0,@message_palette,L
+
+	move	*a13(HTS_STARTY),a0
+	move	a0,@mess_cursy
+
+	move	*a13(HTS_STARTX),a0
+	addi	COLOFF1,a0
+	move	a0,@mess_cursx
+	move	*a13(HTS_STATSADDR),a10,L
+	move	*a10(PS_2PTS_MADE*10h),a0
+	move	*a10(PS_3PTS_MADE*10h),a2
+	add	a2,a0
+	PUSH	a0
+	movi	99,a1			;max value
+	calla	dec_to_asc
+	calla	copy_string
+	calla	print_string_R
+
+	move	*a13(HTS_STARTX),a0
+	addi	COLOFF1,a0
+	move	a0,@mess_cursx
+	movi	wbjustr_slash,a4
+	calla	print_string2
+
+	move	*a13(HTS_STARTX),a0
+	addi	COLOFF1+6,a0
+	move	a0,@mess_cursx
+	move	*a13(HTS_STATSADDR),a10,L
+	move	*a10(PS_2PTS_TRY*10h),a0
+	move	*a10(PS_3PTS_TRY*10h),a3
+	add	a3,a0
+	movi	99,a1			;max value
+	calla	dec_to_asc
+	calla	copy_string
+	calla	print_string
+
+	move	*a13(HTS_STARTX),a0
+	addi	COLOFF2-3,a0
+	move	a0,@mess_cursx
+
+	PULL	a3			;total points scored
+	movi	100,a0
+	mpyu	a0,a3
+	move	*a13(HTS_STATSADDR),a10,L
+	move	*a10(PS_2PTS_TRY*10h),a0
+	move	*a10(PS_3PTS_TRY*10h),a1
+	add	a1,a0
+	jrz	wbjuzippo1
+	divu	a0,a3
+	move	a3,a0
+wbjuzippo1
+	movi	100,a1			;max value
+	calla	dec_to_asc
+	calla	copy_string
+	movi	wbjustr_pct,a4
+	calla	concat_rom_string
+	calla	print_string_R
+
+
+	move	*a13(HTS_PALETTE2),a0,L
+	move	a0,@message_palette,L
+
+	move	*a13(HTS_STARTY),a0
+	addi	1*YSPACING1,a0
+	move	a0,@mess_cursy
+
+	move	*a13(HTS_STARTX),a0
+	addi	COLOFF1,a0
+	move	a0,@mess_cursx
+	move	*a13(HTS_STATSADDR),a10,L
+	move	*a10(PS_3PTS_MADE*10h),a0
+	movi	99,a1			;max value
+	calla	dec_to_asc
+	calla	copy_string
+	calla	print_string_R
+
+	move	*a13(HTS_STARTX),a0
+	addi	COLOFF1,a0
+	move	a0,@mess_cursx
+	movi	wbjustr_slash,a4
+	calla	print_string2
+
+	move	*a13(HTS_STARTX),a0
+	addi	COLOFF1+6,a0
+	move	a0,@mess_cursx
+	move	*a13(HTS_STATSADDR),a10,L
+	move	*a10(PS_3PTS_TRY*10h),a0
+	movi	99,a1			;max value
+	calla	dec_to_asc
+	calla	copy_string
+	calla	print_string
+
+	move	*a13(HTS_STARTX),a0
+	addi	COLOFF2-3,a0
+	move	a0,@mess_cursx
+
+	move	*a13(HTS_STATSADDR),a10,L
+	move	*a10(PS_3PTS_MADE*10h),a3
+	movi	100,a0
+	mpyu	a0,a3
+	move	*a10(PS_3PTS_TRY*10h),a0
+	jrz	wbjuzippo2
+	divu	a0,a3
+	move	a3,a0
+wbjuzippo2
+	movi	100,a1			;max value
+	calla	dec_to_asc
+	calla	copy_string
+	movi	wbjustr_pct,a4
+	calla	concat_rom_string
+	calla	print_string_R
+
+
+	move	*a13(HTS_PALETTE4),a0,L
+	move	a0,@message_palette,L
+
+	move	*a13(HTS_STARTY),a0
+	addi	2*YSPACING1,a0
+	move	a0,@mess_cursy
+
+	move	*a13(HTS_STARTX),a0
+	addi	COLOFF1+8,a0
+	move	a0,@mess_cursx
+
+	move	*a13(HTS_STATSADDR),a10,L
+	clr	a6
+	move	*a10(PS_2PTS_MADE*10h),a0
+	sll	1,a0			;X 2
+	add	a0,a6
+	move	*a10(PS_3PTS_MADE*10h),a0
+	add	a0,a6
+	sll	1,a0			;X 2
+	add	a6,a0
+	movi	999,a1			;max value
+	calla	dec_to_asc
+	calla	copy_string
+	calla	print_string_R
+
+
+	move	*a13(HTS_PALETTE5),a0,L
+	move	a0,@message_palette,L
+
+	move	*a13(HTS_STARTY),a0
+	addi	3*YSPACING1,a0
+	move	a0,@mess_cursy
+
+	move	*a13(HTS_STARTX),a0
+	addi	COLOFF1+8,a0
+	move	a0,@mess_cursx
+
+	move	*a13(HTS_STATSADDR),a10,L
+	move	*a10(PS_DUNKS_MADE*10h),a0
+	movi	99,a1			;max value
+	calla	dec_to_asc
+	calla	copy_string
+	calla	print_string_R
+
+
+	move	*a13(HTS_PALETTE6),a0,L
+	move	a0,@message_palette,L
+
+	move	*a13(HTS_STARTY),a0
+	addi	4*YSPACING1,a0
+	move	a0,@mess_cursy
+
+	move	*a13(HTS_STARTX),a0
+	addi	COLOFF1+8,a0
+	move	a0,@mess_cursx
+
+	move	*a13(HTS_STATSADDR),a10,L
+	move	*a10(PS_ASSISTS*10h),a0
+	movi	99,a1			;max value
+	calla	dec_to_asc
+	calla	copy_string
+	calla	print_string_R
+
+
+	move	*a13(HTS_PALETTE7),a0,L
+	move	a0,@message_palette,L
+
+	move	*a13(HTS_STARTY),a0
+	addi	5*YSPACING1,a0
+	move	a0,@mess_cursy
+
+	move	*a13(HTS_STARTX),a0
+	addi	COLOFF1+8,a0
+	move	a0,@mess_cursx
+
+	move	*a13(HTS_STATSADDR),a10,L
+	move	*a10(PS_STEALS*10h),a0
+	movi	99,a1			;max value
+	calla	dec_to_asc
+	calla	copy_string
+	calla	print_string_R
+
+
+	move	*a13(HTS_PALETTE8),a0,L
+	move	a0,@message_palette,L
+
+	move	*a13(HTS_STARTY),a0
+	addi	6*YSPACING1,a0
+	move	a0,@mess_cursy
+
+	move	*a13(HTS_STARTX),a0
+	addi	COLOFF1+8,a0
+	move	a0,@mess_cursx
+
+	move	*a13(HTS_STATSADDR),a10,L
+	move	*a10(PS_BLOCKS*10h),a0
+	movi	99,a1			;max value
+	calla	dec_to_asc
+	calla	copy_string
+	calla	print_string_R
+
+
+	move	*a13(HTS_PALETTE9),a0,L
+	move	a0,@message_palette,L
+
+	move	*a13(HTS_STARTY),a0
+	addi	7*YSPACING1,a0
+	move	a0,@mess_cursy
+
+	move	*a13(HTS_STARTX),a0
+	addi	COLOFF1,a0
+	move	a0,@mess_cursx
+	move	*a13(HTS_STATSADDR),a10,L
+	move	*a10(PS_OFF_REB*10h),a0
+	movi	99,a1			;max value
+	calla	dec_to_asc
+	calla	copy_string
+	calla	print_string_R
+
+	move	*a13(HTS_STARTX),a0
+	addi	COLOFF1,a0
+	move	a0,@mess_cursx
+	movi	wbjustr_slash,a4
+	calla	print_string2
+
+	move	*a13(HTS_STARTX),a0
+	addi	COLOFF1+6,a0
+	move	a0,@mess_cursx
+	move	*a13(HTS_STATSADDR),a10,L
+	move	*a10(PS_DEF_REB*10h),a0
+	move	*a10(PS_OFF_REB*10h),a1
+	add	a1,a0
+	movi	99,a1			;max value
+	calla	dec_to_asc
+	calla	copy_string
+	calla	print_string
+
+
+	move	*a13(HTS_PALETTEa),a0,L
+	move	a0,@message_palette,L
+
+	move	*a13(HTS_STARTY),a0
+	addi	8*YSPACING1,a0
+	move	a0,@mess_cursy
+
+	move	*a13(HTS_STARTX),a0
+	addi	COLOFF1+8,a0
+	move	a0,@mess_cursx
+
+	move	*a13(HTS_STATSADDR),a10,L
+	move	*a10(PS_INJURY*10h),a0
+	movi	99,a1			;max value
+	calla	dec_to_asc
+	calla	copy_string
+	calla	print_string_R
+
+
+	move	*a13(HTS_PALETTE3),a0,L
+	move	a0,@message_palette,L
+
+	move	*a13(HTS_STARTY),a0
+	addi	9*YSPACING1,a0
+	move	a0,@mess_cursy
+
+	move	*a13(HTS_STARTX),a0
+	addi	COLOFF1+8,a0
+	move	a0,@mess_cursx
+
+	move	*a13(HTS_STATSADDR),a10,L
+	move	*a10(PS_TURNOVERS*10h),a0
+	movi	99,a1			;max value
+	calla	dec_to_asc
+	calla	copy_string
+	calla	print_string_R
+	rets
+
+
+wbjustats_setup
+	PRINT_STR	bast7tcyc_ascii,4,0,200,LN0,BASTC_W_P,0
+
+wbjustr_slash
+	.string	"/",0
+wbjustr_pct
+	.string	"%",0
+	.even
+
+
+
+
+
+	.asg	 15,OBJID
+	.asg	 16,NAME_ID
+	.asg	300,LOGO_X
+	.asg	 80,LOGO_Y
+	.asg	-10,HD1_X
+	.asg	 65,HD2_X
+	.asg	140,HD3_X
+	.asg	215,HD4_X
+	.asg	290,HD5_X
+	.asg	190,HDS_Y
+
+
+ SUBRP	show_nba_plyrs
+
+	calla	display_blank
+	calla	WIPEOUT
+	calla	pal_clean
+
+	movk	1,a0
+	move	a0,@dpageflip
+
+	clr	a0
+	move	a0,@dtype		;2D
+
+	movi	SCRNEND,a0		;[256,405]
+	move	a0,@SCRNLR,L
+
+	clr	a0
+	move	a0,@WORLDTLX,L
+	move	a0,@WORLDTLY,L
+	move	a0,@IRQSKYE
+
+	movi	dthpplayers_mod,a0
+	move	a0,@BAKMODS,L
+	calla	BGND_UD1
+
+	movk	1,a0
+	calla	create_title_bar
+
+	movi	dthpheading_setup,a2
+	calla	setup_message
+
+	movi	kern_chars,a0
+	move	a0,@mess_justify,L	;justification method
+
+	movi	132,a0
+	move	a0,@mess_cursx2
+
+	movi	dthpstr_staring,a4
+	calla	print_string2b
+
+	movk	1,a0
+	move	a0,@DISPLAYON
+	calla	display_unblank
+
+	clr	a0
+	move	a0,@tmloop
+
+
+	movi	[LOGO_X,0],a0,L			;X
+	movi	[LOGO_Y,0],a1,L			;Y
+	movi	BALLBAK1,a2
+	movi	1900,a3				;z pos
+	movi	DMAWNZ|M_SCRNREL,a4		;DMA flags
+	clr	a5
+	clr	a6				;x vel
+	clr	a7				;y vel
+	calla	BEGINOBJ2
+
+dthplp
+	move	@tmnbr,a8
+	cmpi	NUM_TEAMS-1,a8
+	jrle	dthpvok
+	clr	a0
+	move	a0,@tmnbr
+dthpvok
+	sll	6,a8
+	addi	city_names_str_tbl,a8
+	move	*a8+,a4,L
+
+	movi	dthptm_nme_str_setup,a2
+	calla	setup_message
+
+	movk	OBJID,a0
+	move	a0,@mess_objid
+	calla	print_string_C2			;city of team
+		
+	move	@mess_cursy,a0
+	addk	23,a0
+	move	a0,@mess_cursy
+
+	move	*a8,a4,L
+	calla	print_string_C2			;name of team
+
+
+	move	@tmnbr,a2
+	sll	5,a2
+	addi	logos,a2,L
+	move	*a2,a2,L
+
+	movi	DMAWNZ|M_SCRNREL,a4		;DMA flags
+	movk	OBJID,a5
+	movi	[LOGO_X,0],a0,L			;X
+	movi	[LOGO_Y,0],a1,L			;Y
+	movi	1901,a3				;z pos
+	calla	BEGINOBJ2
+
+	movi	[HD1_X,0],a0,L			;X
+	movi	[HDS_Y,0],a1,L			;Y
+	movi	MUGPLAT,a2
+	movi	1900,a3				;z pos
+	calla	BEGINOBJ2
+		 
+	move	@tmnbr,a11
+	movi	5*32,a0
+	mpyu	a0,a11
+	addi	player_heads2,a11,L
+	move	*a11+,a2,L
+
+	movi	[HD1_X+26,0],a0,L			;X
+	movi	[HDS_Y+10,0],a1,L			;Y
+	movi	2000,a3				;z pos
+	calla	BEGINOBJ2
+
+	clr	a1
+	callr	create_plr_name
+
+	SLEEPK	1
+	movk	1,a0
+	move	a0,@DISPLAYON
+	move	a0,@dpageflip
+
+
+	movi	TSEC-20,a8
+dthplp1	SLEEPK	1
+	dsj	a8,dthplp1
+
+	movk	NAME_ID,a0
+	calla	obj_del1c
+
+	movi	[HD2_X,0],a0,L			;X
+	movi	[HDS_Y,0],a1,L			;Y
+	movi	1900,a3				;z pos
+	movi	MUGPLAT,a2
+	movi	1900,a3				;z pos
+	movi	DMAWNZ|M_SCRNREL,a4		;DMA flags
+	clr	a6				;x vel
+	clr	a7				;y vel
+	movk	OBJID,a5
+	calla	BEGINOBJ2
+
+	movi	[HD2_X+26,0],a0,L			;X
+	movi	[HDS_Y+10,0],a1,L			;Y
+	move	*a11+,a2,L
+	movi	2000,a3				;z pos
+	calla	BEGINOBJ2
+
+	movk	1,a1
+	callr	create_plr_name
+
+	movi	TSEC-20,a8
+dthplp2	SLEEPK	1
+	calla	get_all_buttons_cur2
+	jrnz	dthpmksnd
+	dsj	a8,dthplp2
+
+	movk	NAME_ID,a0
+	calla	obj_del1c
+
+	movi	[HD3_X,0],a0,L			;X
+	movi	[HDS_Y,0],a1,L			;Y
+	movi	1900,a3				;z pos
+	movi	MUGPLAT,a2
+	movi	1900,a3				;z pos
+	movi	DMAWNZ|M_SCRNREL,a4		;DMA flags
+	clr	a6				;x vel
+	clr	a7				;y vel
+	movk	OBJID,a5
+	calla	BEGINOBJ2
+
+	movi	[HD3_X+26,0],a0,L			;X
+	movi	[HDS_Y+10,0],a1,L			;Y
+	move	*a11+,a2,L
+	movi	2000,a3				;z pos
+	calla	BEGINOBJ2
+
+	movk	2,a1
+	callr	create_plr_name
+
+	movi	TSEC-20,a8
+dthplp3	SLEEPK	1
+	calla	get_all_buttons_cur2
+	jrnz	dthpmksnd
+	dsj	a8,dthplp3
+
+	movk	NAME_ID,a0
+	calla	obj_del1c
+
+	movi	[HD4_X,0],a0,L			;X
+	movi	[HDS_Y,0],a1,L			;Y
+	movi	1900,a3				;z pos
+	movi	MUGPLAT,a2
+	movi	1900,a3				;z pos
+	movi	DMAWNZ|M_SCRNREL,a4		;DMA flags
+	clr	a6				;x vel
+	clr	a7				;y vel
+	movk	OBJID,a5
+	calla	BEGINOBJ2
+
+	movi	[HD4_X+26,0],a0,L			;X
+	movi	[HDS_Y+10,0],a1,L			;Y
+	move	*a11+,a2,L
+	movi	2000,a3				;z pos
+	calla	BEGINOBJ2
+
+	movk	3,a1
+	callr	create_plr_name
+
+	movi	TSEC-20,a8
+dthplp4	SLEEPK	1
+	calla	get_all_buttons_cur2
+	jrnz	dthpmksnd
+	dsj	a8,dthplp4
+
+	movk	NAME_ID,a0
+	calla	obj_del1c
+
+	movi	[HD5_X,0],a0,L			;X
+	movi	[HDS_Y,0],a1,L			;Y
+	movi	1900,a3				;z pos
+	movi	MUGPLAT,a2
+	movi	1900,a3				;z pos
+	movi	DMAWNZ|M_SCRNREL,a4		;DMA flags
+	clr	a6				;x vel
+	clr	a7				;y vel
+	movk	OBJID,a5
+	calla	BEGINOBJ2
+
+	movi	[HD5_X+26,0],a0,L			;X
+	movi	[HDS_Y+10,0],a1,L			;Y
+	move	*a11+,a2,L
+	movi	2000,a3				;z pos
+	calla	BEGINOBJ2
+
+	movk	4,a1
+	callr	create_plr_name
+
+	movi	TSEC-10,a8
+dthplp5	SLEEPK	1
+	calla	get_all_buttons_cur2
+	jrnz	dthpmksnd
+	dsj	a8,dthplp5
+
+	clr	a0				;Keep this page up while
+	move	a0,@DISPLAYON			; building the next one
+	move	a0,@dpageflip
+
+	movk	NAME_ID,a0
+	calla	obj_del1c
+
+	movk	OBJID,a0
+	calla	obj_del1c
+
+	move	@tmnbr,a0
+	inc	a0
+	move	a0,@tmnbr
+	cmpi	NUM_TEAMS-1,a0
+	jrle	dthpnxt
+	clr	a0
+	move	a0,@tmnbr
+dthpnxt
+	move	@tmloop,a0
+	inc	a0
+	move	a0,@tmloop
+	subk	4,a0
+	jrlt	dthplp
+	jruc	dthpxb
+dthpmksnd
+      	clr	a0
+	move	a0,@SOUNDSUP		;turn all sounds on
+	SOUND1	bounce_snd
+	movk	1,a0
+	move	a0,@SOUNDSUP		;turn all sounds off
+dthpxb
+
+
+	movk	OBJID,a0
+	calla	obj_del1c
+	movk	NAME_ID,a0
+	calla	obj_del1c
+	RETP
+    
+
+dthptm_nme_str_setup
+	PRINT_STR	brush20_ascii,8,0,125,59,BRSHGWKP,0
+	
+
+dthpheading_setup
+	PRINT_STR	brush20_ascii,8,0,200,7,BRSHGYOP,kern_chars
+
+
+dthpstr_staring
+  .string  "ST",1,-4,"ARRING:",0
+  .even
+
+
+dthpplayers_mod
+	.long	ATTRACTBMOD
+	.word	0,0
+	.long	0
+
+
+
+ SUBRP	create_plr_name
+
+	move	@tmnbr,a0
+	sll	7,a0
+	move	@tmnbr,a10
+	sll	5,a10
+	add	a0,a10
+	addi	plyr_names_img_tbl,a10
+	sll	5,a1				;goto player name
+	add	a1,a10
+	move	*a10,a2,L
+
+	movi	200,a0
+	move	*a2(ISIZEX),a1
+	srl	1,a1
+	sub	a1,a0
+	sll	16,a0
+
+	movi	[222,0],a1,L			;Y
+	movk	NAME_ID,a5
+	calla	BEGINOBJ2
+	rets
+
+
+
+	.asg	8,mywiNOINITOFF
+	.asg	21,mywiOFF1
+	.asg	12,mywiSGMDYSPC
+	.asg	33,mywiWLOFF
+	.asg	160,mywiCOL1
+	.asg	210,mywiCOL2
+	.asg	4,mywiROFF1
+
+ SUBR	rank_screen
+
+
+	move	@PSTATUS,a0			;if nobody has entered their
+	btst	0,a0				;initials, then skip this
+	jrz	mywinop1
+	move	@player1_data+PR_NAME1,a0
+	jrgt	mywihave_initials
+mywinop1
+	move	@PSTATUS,a0
+	btst	1,a0
+	jrz	mywinop2
+	move	@player2_data+PR_NAME1,a0
+	jrgt	mywihave_initials
+mywinop2
+	move	@PSTATUS,a0
+	btst	2,a0
+	jrz	mywinop3
+	move	@player3_data+PR_NAME1,a0
+	jrgt	mywihave_initials
+mywinop3
+	move	@PSTATUS,a0
+	btst	3,a0
+	jrz	mywinop4
+	move	@player4_data+PR_NAME1,a0
+	jrgt	mywihave_initials
+mywinop4
+	RETP
+
+
+mywihave_initials
+
+	calla	display_blank
+	calla	WIPEOUT			;CLEAN SYSTEM OUT
+
+	clr	a0
+	move	a0,@IRQSKYE		;background color
+
+	movk	1,a0			;page flipping on
+	move	a0,@dpageflip
+
+	movk	INPLYRINFO,a0
+	move	a0,@GAMSTATE
+
+	movi	SCRNEND,a0		;[256,405]
+	move	a0,@SCRNLR,L
+
+	clr	a0
+	move	a0,@WORLDTLX,L
+	move	a0,@WORLDTLY,L
+
+	SLEEPK	2
+
+	movi	mywirank_mod,a0
+	move	@TWOPLAYERS,a1		;0 = NO, 1 = YES 2 players
+	jrz	mywinot_2a
+	movi	mywirank_kit_mod,a0
+mywinot_2a
+	move	a0,@BAKMODS,L
+	calla	BGND_UD1
+
+
+	CREATE0	credits3
+
+	movk	1,a10
+	callr	print_column
+	movk	2,a10
+	callr	print_column
+
+	move	@TWOPLAYERS,a1		;0 = NO, 1 = YES 2 players
+	jrnz	mywiis_2
+
+	clr	a10
+	callr	print_column
+	movk	3,a10
+	callr	print_column
+mywiis_2
+	SLEEPK	2
+	calla	display_unblank
+
+	SLEEP	TSEC
+	movi	9*TSEC,a10
+mywiwhopper_with_cheese
+	SLEEPK	1
+	calla	get_all_buttons_cur2
+	jrnz	mywiexit
+	dsj	a10,mywiwhopper_with_cheese
+mywiexit
+	SLEEPK	1
+
+	RETP
+
+
+
+
+
+mywirank_mod
+	.long	ENTER4BMOD
+	.word	0,0
+	.long	ATRIBUTEBMOD		;NEW stats box map
+	.word	0,178		;x,y
+	.long	0
+
+
+mywirank_kit_mod
+	.long	ENTERKITBMOD
+	.word	0,0		;x,y
+	.long	ATRBKITBMOD			;option screen background
+	.word	0,178		;x,y
+	.long	0
+
+
+
+
+	.asg	25,RANKY
+	.asg	40,RECY
+	.asg	51,WLY
+	.asg	62,PCTY
+
+	.asg	78,STREAKY1
+	.asg	88,STREAKY2
+
+	.asg	106,HAVDEFY1
+	.asg	116,HAVDEFY2
+	.asg	126,HAVDEFY3
+
+	.asg	144,NEXTY1
+	.asg	154,NEXTY2
+	.asg	164,NEXTY3
+
+	.asg	204,INITY
+
+mywiheading_setup
+	PRINT_STR	bast18_ascii,8,0,200,6,BST18G_P,0
+mywirank_setup1
+	PRINT_STR	bast8t_ascii,3,0,0,RANKY,BAST_W_P,0
+mywiinitials_setup1
+	PRINT_STR	bast8_ascii,5,0,94,6,BAST_W_P,0
+
+stat_title_tbl
+	.long	mywistats_setup1
+	.long	mywistats_setup2
+	.long	mywistats_setup3
+	.long	mywistats_setup4
+
+mywistats_setup1
+	PRINT_STR	bast8_ascii,4,0,344,11,BAST_W_P,0
+mywistats_setup2
+	PRINT_STR	bast8_ascii,4,0,344,11,BAST_W_P,0
+mywistats_setup3
+	PRINT_STR	bast8_ascii,4,0,344,11,BAST_W_P,0
+mywistats_setup4
+	PRINT_STR	bast8_ascii,4,0,344,11,BAST_W_P,0
+
+
+mywistr_cpu
+	.string	"CPU",0
+mywistr_rank
+	.string	"RANK: #",0	;"RANK #"
+mywistr_record
+	.string	"RECORD",0	;"RECORD: "
+mywistr_w	.string "(W) - ",0	;" (W) - "
+mywistr_l	.string	"(L)",0		;"(L)"
+
+mywistr_pct
+	.string	"PCT: .",0	;"PCT: ."
+mywistr_pct100
+	.string	"PCT: 1.000",0	;"PCT: 1.000"
+mywistr_streak
+	.string	"STREAK",0
+mywistr_win
+	.string	" WIN",0
+mywistr_wins
+	.string	" WINS",0
+mywistr_none
+	.string	"NONE",0
+mywistr_next
+	.string	"next cpu",0
+mywistr_vs
+	.string	"opponent",0
+
+mywistr_hd1	.string "DEFEATED ",0	;"DEFEATED XX"
+mywistr_hd2	.string	"OF THE 29",0	;"OF THE 29"
+mywistr_hd3	.string	"NBA TEAMS",0	;"NBA TEAMS"
+mywistr_all	.string	" 29",0		;" ALL"
+mywistr_dash	.string	"-",0
+
+
+	.even
+
+mywipdatas
+	.long	player1_data
+	.long	player2_data
+	.long	player3_data
+	.long	player4_data
+
+mywicenter_xs
+	.word	54,60,	0,0		;player 1
+	.word	150,151,101,0		;player 2
+	.word	248,254,295,0		;player 3
+	.word	344,345,0,0		;player 4
+
+
+print_column
+
+	move	@PSTATUS2,a0
+	btst	a10,a0
+	jrz	mywicpu_player
+
+	move	a10,a0
+	sll	5,a0			;x 32 bits
+	addi	mywipdatas,a0
+	move	*a0,a11,L
+
+	move	*a11(PR_NAME1),a0
+	jrle	mywino_initials
+
+	movi	mywiinitials_setup1,a2
+	calla	setup_message
+
+	move	a10,a0
+	sll	6,a0			;x16x4
+	addi	mywicenter_xs+10h,a0
+	move	@TWOPLAYERS,a1		;0 = NO, 1 = YES 2 players
+	jrz	mywinot_2c
+	addi	10h,a0
+mywinot_2c
+	move	*a0,a0
+	move	a0,@mess_cursx
+
+	movi	INITY,a0
+	move	a0,@mess_cursy
+	movi	message_buffer,a3
+	move	a11,a4
+	addi	PR_NAME1,a4
+	calla	get_name_string
+	calla	print_string_C
+
+	calla	create_heading2
+
+
+	movi	mywirank_setup1,a2
+	calla	setup_message
+
+	move	a10,a0
+	sll	6,a0			;x16x4
+	addi	mywicenter_xs,a0
+	move	@TWOPLAYERS,a1		;0 = NO, 1 = YES 2 players
+	jrz	mywinot_2d
+	addi	20h,a0
+mywinot_2d
+	move	*a0,a0
+	move	a0,@mess_cursx
+
+	movi	BAST_Y_P,a0
+	move	a0,@message_palette,L
+
+	movi	mywistr_rank,a4
+	callr	copy_rom_string
+	move	*a11(PR_RANK),a0	;rank
+	cmpi	10,a0
+	jrgt	mywinotten
+	movi	BAST_W_P,a1		;highlight cycle colour
+	move	a1,@message_palette,L
+mywinotten
+	movi	999,a1			;max value
+	callr	dec_to_asc
+	callr	concat_string
+	callr	print_string_C		;centered
+
+	movi	BAST_Y_P,a0		;highlight cycle colour
+	move	a0,@message_palette,L
+
+	movi	RECY,a0
+	move	a0,@mess_cursy
+	movi	mywistr_record,a4		;"RECORD:"
+	callr	print_string_C2		;centered
+
+	movi	BAST_W_P,a0
+	move	a0,@message_palette,L
+
+	movi	WLY,a0
+	move	a0,@mess_cursy
+	move	*a11(PR_WON),a0		;games won
+	movi	999,a1			;max value
+	callr	dec_to_asc
+	callr	copy_string
+	movi	mywistr_w,a4
+	callr	concat_rom_string
+	move	*a11(PR_LOST),a0	;games lost
+	movi	999,a1			;max value
+	callr	dec_to_asc
+	callr	concat_string
+	movi	mywistr_l,a4
+	callr	concat_rom_string
+	callr	print_string_C		;centered
+
+	movi	BAST_W_P,a0
+	move	a0,@message_palette,L
+
+	movi	PCTY,a0
+	move	a0,@mess_cursy		;message cursor pos Y
+	move	*a11(PR_LOST),a2	;games lost
+	jrz	mywino_losses
+	movi	mywistr_pct,a4		;"PCT: ."
+	callr	copy_rom_string
+	move	*a11(PR_LOST),a2	;games lost
+	move	*a11(PR_WON),a1		;games won
+	add	a1,a2			;total games
+	movi	1000,a0
+	mpys	a0,a1			;games won * 1000
+	divs	a2,a1			;/ total games
+	move	a1,a0
+	callr	dec_to_pct
+	callr	concat_string
+	callr	print_string_C		;centered
+	jruc	mywiskip_loss
+
+mywino_losses
+	movi	mywistr_pct100,a4		;"PCT: 1.000"
+	callr	print_string_C2		;centered
+mywiskip_loss
+
+	movi	BAST_Y_P,a0
+	move	a0,@message_palette,L
+
+	movi	STREAKY1,a0
+	move	a0,@mess_cursy		;message cursor pos Y
+	movi	mywistr_streak,a4
+	callr	print_string_C2
+
+	movi	BAST_W_P,a0
+	move	a0,@message_palette,L
+
+	movi	STREAKY2,a0
+	move	a0,@mess_cursy		;message cursor pos Y
+	move	*a11(PR_WINSTREAK),a0	;no. consecutive wins
+	jrnz	mywinot0
+	movi	mywistr_none,a4
+	callr	print_string_C2
+	jruc	mywicontws
+mywinot0
+	PUSH	a0
+	movi	99,a1			;max value
+	callr	dec_to_asc
+	callr	copy_string
+	PULL	a0
+	movi	mywistr_wins,a4
+	dec	a0
+	jrnz	mywiiswins
+	movi	mywistr_win,a4
+mywiiswins
+	callr	concat_rom_string
+	callr	print_string_C
+mywicontws
+	movi	BAST_Y_P,a0
+	move	a0,@message_palette,L
+
+	movi	HAVDEFY1,a0
+	move	a0,@mess_cursy		;message cursor pos Y
+	movi	mywistr_hd1,a4		;"DEFEATED NN"
+	callr	copy_rom_string
+
+	move	*a11(PR_NUMDEF),a0	;number teams defeated
+	cmpi	NUM_TEAMS,a0
+	jrlo	mywinot_all
+
+	movi	mywistr_all,a4		;" ALL"
+	callr	concat_rom_string
+	jruc	mywiskipit
+mywinot_all
+	movi	NUM_TEAMS,a1			;max value
+	callr	dec_to_asc
+	callr	concat_string
+mywiskipit
+	callr	print_string_C		;centered
+
+	movi	BAST_W_P,a0
+	move	a0,@message_palette,L
+
+	movi	HAVDEFY2,a0
+	move	a0,@mess_cursy		;message cursor pos Y
+	movi	mywistr_hd2,a4		;"OF THE 30"
+	callr	print_string_C2		;centered
+
+	movi	HAVDEFY3,a0
+	move	a0,@mess_cursy		;message cursor pos Y
+	movi	mywistr_hd3,a4		;"NBA TEAMS"
+	callr	print_string_C2		;centered
+
+	move	*a11(PR_NUMDEF),a0	;number teams defeated
+	cmpi	NUM_TEAMS,a0
+	jreq	mywidefeated_all
+
+	movi	BAST_Y_P,a0
+	move	a0,@message_palette,L
+
+	movi	NEXTY1,a0
+	move	a0,@mess_cursy		;message cursor pos Y
+	movi	mywistr_next,a4
+	callr	print_string_C2
+
+	movi	NEXTY2,a0
+	move	a0,@mess_cursy		;message cursor pos Y
+	movi	mywistr_vs,a4
+	callr	print_string_C2
+
+	movi	BAST_W_P,a0
+	move	a0,@message_palette,L
+
+	movi	NEXTY3,a0
+	move	a0,@mess_cursy		;message cursor pos Y
+
+	movi	bast8_ascii,a0
+	move	a0,@message_ascii,L	;* ascii lookup table
+
+	move	*a11(PR_TEAMSDEF),a1,L
+	andi	ALL_TMS_DEFEATD,a1
+	calla	get_opponent_team
+	move	a2,a0
+	addi	90h,a0			;asc table cities start offset
+	movb	a0,@message_buffer+00h
+	clr	a0
+	movb	a0,@message_buffer+08h
+	callr	print_string_C
+
+mywidefeated_all
+mywino_initials
+	rets
+
+
+mywicpu_player
+
+ 	.if 0
+	movi	mywiinitials_setup1,a2
+	calla	setup_message
+
+	move	a10,a0
+	sll	5,a0			;x16x2
+	addi	mywicenter_xs+10h,a0
+	move	*a0,a0
+	move	a0,@mess_cursx
+
+	movi	INITY,a0
+	move	a0,@mess_cursy
+	movi	mywistr_cpu,a4
+	calla	print_string_C2
+	
+	.endif
+	
+	rets
+
+
+stats_str
+	.string	"STATS",0
+	.even
+
+
+
+
+
+ SUBR	winning_msg
+
+	movi	LN0_setup,a2
+	calla	setup_message
+	move	*a2,a0,L
+	move	a0,@mess_justify,L	;justification method
+	movi	CLSDEAD|123,a0
+	move	a0,@mess_objid
+
+	move	@team1,a14
+	move	@scores,a0
+	move	@scores+16,a1
+	cmp	a0,a1
+	jrlt	wifkok
+	move	@team2,a14
+wifkok
+	move	a14,a10
+	sll	5,a14
+	addi	strings,a14
+	move	*a14,a4,L
+	move	*a4+,a0
+	move	a0,@mess_cursx2
+
+	calla	print_string2b
+
+	movi	wifkswin,a4
+	subk	30-1,a10
+	jrnz	wifkok1
+	movi	wifkswina,a4
+wifkok1
+	move	*a4+,a0
+	move	a0,@mess_cursx2
+	movi	114,a0
+	move	a0,@mess_cursy
+
+	calla	print_string2b
+
+	CREATE0	flash_bigtxt2
+	move	a0,a9
+	
+	SLEEP	3*60
+
+	move	a9,a0
+	calla	KILL
+
+	movi	TYPTEXT,a0
+	calla	obj_del1c
+	movi	CLSDEAD|123,a0
+	calla	obj_del1c		;delete text
+
+	DIE
+
+
+LN0_setup
+	PRINT_STR	hangfnt38_ascii,14,0,200,60,HANGF_R_P,kern_chars
+	.even
+
+strings	.long	wifks1,wifks2,wifks3,wifks4,wifks5,wifks6,wifks7,wifks8,wifks9,wifks10
+	.long	wifks11,wifks12,wifks13,wifks14,wifks15,wifks16,wifks17,wifks18,wifks19,wifks20
+	.long	wifks21,wifks22,wifks23,wifks24,wifks25,wifks26,wifks27,wifks28
+	.long	wifks29,wifks30
+
+wifks1	.word	96
+	.string	"H",1,-6,"A",1,4,"W",1,-5,"K",1,-5,"S",0
+wifks2	.word	85
+	.string	"C",1,-4,"E",1,-5,"L",1,6,"T",1,-3,"I",1,-1,"C",1,-2,"S",0
+wifks3	.word	74
+	.string	"H",1,-3,"O",1,-2,"R",1,-3,"N",1,-5,"E",1,1,"T",1,-5,"S",0
+wifks4	.word	113
+	.string	"B",1,-1,"U",1,-5,"L",1,1,"L",1,2,"S",0
+wifks5	.word	49
+	.string	"C",1,-5,"A",1,4,"V",1,-10,"A",1,3,"L",1,3,"I",1,-3,"E",1,-4,"R",1,-2,"S",0
+wifks6	.word	40
+	.string	"M",1,-6,"A",1,4,"V",1,-7,"E",1,-4,"R",1,-1,"I",1,-1,"C",1,-3,"K",1,-5,"S",0
+wifks7	.word	76
+	.string	"N",1,-3,"U",1,-3,"G",1,-1,"G",1,-4,"E",1,1,"T",1,-5,"S",0
+wifks8	.word	80
+	.string	"P",1,-1,"I",1,-1,"S",1,2,"T",1,-4,"O",1,-3,"N",1,-4,"S",0
+wifks9	.word	55
+	.string	"W",1,-8,"A",1,3,"R",1,-3,"R",1,-1,"I",1,-1,"O",1,-2,"R",1,-2,"S",0
+wifks10	.word	75
+	.string	"R",1,-2,"OC",1,-3,"K",1,-6,"E",1,1,"T",1,-5,"S",0
+wifks11	.word	94
+	.string	"P",1,-7,"A",1,3,"C",1,-4,"E",1,-4,"R",1,-2,"S",0
+wifks12	.word	68
+	.string	"C",1,-4,"L",1,3,"I",1,-2,"P",1,-3,"P",1,-4,"E",1,-4,"R",1,-2,"S",0
+wifks13	.word	93
+	.string	"L",1,1,"A",1,2,"K",1,-6,"E",1,-4,"R",1,-2,"S",0
+wifks14	.word	130
+	.string	"H",1,-6,"E",1,-5,"A",1,3,"T",0
+wifks15	.word	108
+	.string	"B",1,-1,"U",1,-3,"C",1,-3,"K",1,-5,"S",0
+wifks16	.word	68
+	.string	"T",1,3,"'",1,1,"W",1,-4,"O",1,-3,"L",1,6,"V",1,-7,"E",1,-3,"S",0
+wifks17	.word	129
+	.string	"N",1,-5,"E",1,1,"T",1,-5,"S",0
+wifks18	.word	92
+	.string	"K",1,-5,"N",1,-3,"I",1,-1,"C",1,-3,"K",1,-5,"S",0
+wifks19	.word	109
+	.string	"M",1,-6,"A",1,2,"G",1,-1,"I",1,-1,"C",0
+wifks20	.word	113
+	.string	"7",1,-3,"6",1,-1,"E",1,-4,"R",1,-2,"S",0
+wifks21	.word	126
+	.string	"S",1,-1,"U",1,-5,"N",1,-4,"S",0
+wifks22	.word	77
+	.string	"B",1,-4,"L",1,1,"A",1,2,"Z",1,-5,"E",1,-4,"R",1,-2,"S",0
+wifks23	.word	112
+	.string	"K",1,-4,"I",1,-4,"N",1,-3,"G",1,-2,"S",0
+wifks24	.word	110
+	.string	"S",1,-3,"P",1,-1,"U",1,-4,"R",1,-2,"S",0
+wifks25	.word	96
+	.string	"SO",1,-3,"N",1,-2,"I",1,-1,"C",1,-2,"S",0
+wifks26	.word	73
+	.string	"R",1,-3,"A",1,2,"P",1,3,"T",1,-4,"O",1,-2,"R",1,-2,"S",0
+wifks27	.word	128
+	.string	"J",1,-7,"A",1,2,"Z",1,-6,"Z",0
+wifks28	.word	58
+	.string	"G",1,-3,"R",1,-1,"I",1,-3,"Z",1,-6,"Z",1,-5,"L",1,3,"I",1,-3,"E",1,-3,"S",0
+wifks29	.word	83
+	.string	"B",1,-1,"U",1,-5,"L",1,1,"L",1,1,"E",1,1,"T",1,-5,"S",0
+wifks30	.word	29
+	.string	"T",1,-6,"H",1,-6,"E C",1,-4,"H",1,-6,"A",1,2,"M",1,-5,"P",1,-2,"S",0
+
+wifkswina	.word	49
+	.string	"W",1,-5,"I",1,-4,"N A",1,2,"G",1,-4,"A",1,3,"I",1,-5,"N",0
+wifkswin	.word	144
+	.string	"W",1,-5,"I",1,-4,"N",0
+	.even
+
+
+ SUBR	trivia_rules
+
+	movk	ADJTRIVIA,a0		;Get difficulty level
+	calla	GET_ADJ
+	move	a0,a0			;if value is NON-ZERO, dont allow
+	jrnz	npapnotriv
+
+	calla	display_blank
+	calla	WIPEOUT
+
+	clr	a0
+	move	a0,@dtype		;2D
+
+	movk	1,a0			;page flipping on
+	move	a0,@dpageflip
+	move	a0,@DISPLAYON
+
+	movi	SCRNEND,a0		;[256,405]
+	move	a0,@SCRNLR,L
+
+	clr	a0
+	move	a0,@WORLDTLX,L
+	move	a0,@WORLDTLY,L
+	move	a0,@IRQSKYE
+
+	calla	display_unblank
+
+	SLEEPK	1			;Make sure page is clear
+
+	movi	npapstrops,a11
+npaplp
+	clr	a0
+	move	a0,@DISPLAYON
+	move	a0,@dpageflip
+	SLEEPK	1
+
+	movi	npaprules_mod,a0
+	move	a0,@BAKMODS,L
+	calla	BGND_UD1
+
+	movk	1,a0
+	calla	create_title_bar
+
+	movk	24,a0
+	move	a0,@mess_line_spacing
+
+	movi	npapheading_setup,a2
+	calla	setup_message
+	movi	npapstr_heading,a4
+	calla	print_string_C2
+
+	movi	npapnopurch_setup,a2
+	calla	setup_message
+	movi	npapstr_nopurch,a4
+	calla	print_string_C2
+
+	movi	npaprules_setup,a2
+	calla	setup_message
+	movk	9,a0
+	move	a0,@mess_line_spacing
+
+	jruc	npapnxt
+
+npapdostr
+	move	*a11+,a0
+	move	*a11+,a1,L
+	move	a0,@mess_cursx
+	move	a1,@message_palette,L
+	calla	print_string_C2
+npapnxt
+	move	*a11+,a4,L
+	jrnz	npapdostr
+
+	movk	1,a0
+	move	a0,@DISPLAYON
+	SLEEPK	1
+	clr	a0
+	move	a0,@DISPLAYON
+
+	clr	a1
+	dec	a1
+	calla	obj_delc
+	calla	KILBGND
+
+	move	*a11+,a4,L
+	jrn	npapdostr
+
+	move	a4,a10
+
+	movk	1,a0
+	move	a0,@dpageflip
+	SLEEPK	1
+	clr	a0
+	move	a0,@dpageflip
+npapbutp
+	SLEEPK	1
+	calla	get_all_buttons_cur2
+	jrz	npapnobutp2
+	SOUND1	bounce_snd
+	jruc	npapbutp2
+npapnobutp2
+	dsj	a10,npapbutp
+
+npapbutp2
+	move	*a11,a4,L
+	jrnz	npaplp
+
+	clr	a10
+	movk	8,a11
+	CREATE0	fade_down
+
+	SLEEP	40
+npapnotriv
+ 	RETP
+
+
+npapstrops
+	LWL	npaprules_str1,  87,npapbas7_alt
+	LWL	npaprules_str1a, 245,npapbas7_white
+	LWL	npaprules_str1b, 200,npapbas7_white
+	.long	0
+	LWL	npaprules_str2,  64,npapbas7_alt
+	LWL	npaprules_str2a, 226,npapbas7_white
+	LWL	npaprules_str2b, 200,npapbas7_white
+	.long	0
+	.long	TSEC*25
+
+	LWL	npaprules_str3,  48,npapbas7_alt
+	LWL	npaprules_str3a, 226,npapbas7_white
+	LWL	npaprules_str3b, 200,npapbas7_white
+	.long	0
+	LWL	npaprules_str4,  121,npapbas7_alt
+	LWL	npaprules_str4a, 273,npapbas7_white
+	LWL	npaprules_str4b, 200,npapbas7_white
+	.long	0
+	LWL	npaprules_str5 , 200,npapbas7_white
+	.long	0
+	.long	TSEC*25
+
+	LWL	npaprules_str6 , 200,npapbas7_white
+	.long	0
+	LWL	npaprules_str7 , 200,npapbas7_white
+	.long	0
+	LWL	npaprules_str8 , 200,npapbas7_white
+	.long	0
+	.long	TSEC*25
+
+	LWL	npaprules_str9 , 200,npapbas7_white
+	.long	0
+	.long	TSEC*15
+
+	LWL	npaprules_str10, 116,npapbas7_alt
+	LWL	npaprules_str10a,284,npapbas7_white
+	LWL	npaprules_str10b,200,npapbas7_white
+	.long	0
+	LWL	npaprules_str11, 200,npapbas7_white
+	.long	0
+	LWL	npaprules_str12, 200,npapbas7_white
+	.long	0
+	.long	TSEC*25
+
+	LWL	npaprules_str13, 200,npapbas7_alt
+	LWL	npaprules_str14,  82,npapbas7_alt
+	LWL	npaprules_str14a,243,npapbas7_white
+	LWL	npaprules_str14b,200,npapbas7_white
+	.long	0
+	LWL	npaprules_str15, 200,npapbas7_white
+	.long	0
+	LWL	npaprules_str16,  80,npapbas7_alt
+	LWL	npaprules_str16a,242,npapbas7_white
+	LWL	npaprules_str16b,200,npapbas7_white
+	.long	0
+	.long	TSEC*20
+
+	LWL	npaprules_str17,  93,npapbas7_alt
+	LWL	npaprules_str17a,250,npapbas7_white
+	LWL	npaprules_str17b,200,npapbas7_white
+	LWL	npaprules_str18, 130,npapbas7_alt
+	LWL	npaprules_str18a,251,npapbas7_white
+	LWL	npaprules_str18b,200,npapbas7_white
+	LWL	npaprules_str19, 170,npapbas7_alt
+	LWL	npaprules_str19a,285,npapbas7_white
+	.long	0
+	LWL	npaprules_str20,  46,npapbas7_alt
+	LWL	npaprules_str20a,217,npapbas7_white
+	LWL	npaprules_str21,  58,npapbas7_alt
+	LWL	npaprules_str21a,230,npapbas7_white
+	LWL	npaprules_str21b,200,npapbas7_white
+	.long	0
+	.long	TSEC*25
+
+	LWL	npaprules_str22,  76,npapbas7_alt
+	LWL	npaprules_str22a,238,npapbas7_white
+	LWL	npaprules_str22b,200,npapbas7_white
+	.long	0
+	LWL	npaprules_str23, 200,npapbas7_white
+	.long	0
+	.long	TSEC*20
+
+	LWL	npaprules_str24, 200,npapbas7_white
+	.long	0
+	LWL	npaprules_str25,  91,npapbas7_alt
+	LWL	npaprules_str25a,239,npapbas7_white
+	LWL	npaprules_str25b,200,npapbas7_white
+	LWL	npaprules_str25c,200,npapbas7_alt
+	LWL	npaprules_str25d,200,npapbas7_white
+	.long	0
+	.long	TSEC*20
+
+	.long	0
+
+npaprules_mod
+	.long	BKGDBMOD
+	.word	0,0
+	.long	0
+
+npapbas7_alt
+	.word	3
+	.word	0,0,(1fh*32+0ch)*32+1fh
+
+npapbas7_white
+	.word	3
+	.word	0,0,(1fh*32+1fh)*32+1fh
+
+npapheading_setup
+	PRINT_STR	bast18_ascii,8,0,200,7,BSTGYO_P,0
+
+npapstr_heading
+	.string	"NBA HANGTIME SWEEPSTAKES",1
+	.string	"OFFICIAL RULES",0
+	.even
+
+npapnopurch_setup
+	PRINT_STR	bast10_ascii,8,0,200,59,BAST_G_P,0
+
+npapstr_nopurch
+	.string	"NO PURCHASE NECESSARY",0
+	.even
+
+npaprules_setup
+	PRINT_STR	bast7t_ascii,5,0,200,76,npapbas7_alt,0
+	
+npaprules_str1
+	.string	"Who May Enter: ",0
+npaprules_str1a
+	.string	"The NBA HANGTIME SWEEPSTAKES is open to",1,0
+npaprules_str1b
+	.string	"all legal residents of the United States, except residents",1
+	.string	"of Arizona, New York, Vermont and Washington, employees",1
+	.string	"of WMS Industries, the National Basketball Association,",1
+	.string	"related parties and their immediate families. All federal,",1
+	.string	"state and local laws apply. Void where prohibited.",1
+	.string	"Contest sponsored by Midway Manufacturing Company,",1
+	.string	"3401 N. California, Chicago, IL 60618.",1,1,0
+
+npaprules_str2
+	.string "Deadline: ",0
+npaprules_str2a
+	.string	"The NBA HANGTIME SWEEPSTAKES begins on April 10,",1,0
+npaprules_str2b
+	.string	"1996. To be eligible, all entries must be received no later",1
+	.string	"than 11:59 p.m. Eastern Standard Time on September 13, 1996.",1
+	.string "Sponsor is not responsible for lost, stolen, late or",1
+	.string	"misdirected mail, mechanical errors, typographical or",1
+	.string	"printing errors, third party interference or electrical,",1
+	.string "network, computer, hardware or software malfunctions.",0
+
+npaprules_str3
+	.string "To Enter: ",0
+npaprules_str3a
+	.string	"Participants may enter the NBA HANGTIME SWEEPSTAKES",1,0
+npaprules_str3b
+	.string	"after answering NBA HANGTIME trivia questions worth 100",1
+	.string	"points. A participant may reach 100 points in two ways:",1,1,0
+
+npaprules_str4
+	.string "(1) GAME METHOD OF ENTRY: ",0
+npaprules_str4a
+	.string	"Each player who purchases a",1,0
+npaprules_str4b
+	.string "full, four-quarter length game of NBA HANGTIME will have",1
+	.string	"the option of establishing a Personal Identification",1
+	.string "Number (PIN).  After each full, four-quarter length game",1
+	.string "of NBA HANGTIME, PLAYED ON ONE SPECIFIC MACHINE, IN ONE",1
+	.string "PARTICULAR LOCATION, in which one or more participants",1
+	.string	"have entered his or her PIN number, the NBA HANGTIME TRIVIA",1
+	.string	"GAME will be activated for those participant(s).",1,1,0
+
+npaprules_str5
+	.string "When activated, the player will see a trivia contest",1
+	.string	"screen that explains the contest rules.",0
+
+npaprules_str6
+	.string	"A second screen will then appear with a multiple choice",1
+	.string	"trivia question. Beside each question will be a point value",1
+	.string	"that can be earned for answering that question correctly.",1
+	.string	"Each question has a constant point value, specific to that",1
+	.string	"question. Each player will have 10 seconds to answer the",1
+	.string	"question. If answered correctly, the point value of that",1
+	.string	"question will be stored in the machine, cross-referenced",1,0
+
+npaprules_str7
+	.string	"with the participant's PIN number. The point value of each",1
+	.string	"subsequent, correctly answered question submitted under",1
+	.string	"that PIN number will be added to the participant's point",1
+	.string "total, and the machine will keep a running score of each",1
+	.string	"player's total points, for each player with a PIN number",1
+	.string	"assigned to that machine. PIN numbers may only be used on",1
+	.string "one, specific machine. A participant's point total will not",1,0
+
+npaprules_str8
+	.string	"include points earned in games played on other NBA HANGTIME",1
+	.string	"machines played at other locations. ",0
+
+npaprules_str9
+	.string "Once a player reaches a total of 100 points, they will be",1
+	.string	"designated an 'NBA Trivia Champion.' A screen will then",1
+	.string	"appear with a password. NBA Trivia Champions must then send",1
+	.string	"their password, along with their name, age, address and",1
+	.string	"phone number, printed or typed legibly, to NBA HANGTIME",1
+	.string	"TRIVIA GAME Entries, P.O. Box 52990, Dept. 7526, Phoenix,",1
+	.string	"Arizona 85072-2990 to be entered in the NBA HANGTIME",1
+	.string "SWEEPSTAKES drawing.",0
+
+npaprules_str10
+	.string "(2) WRITE-IN METHOD OF ENTRY: ",0
+npaprules_str10a
+	.string	"Participants may send a self-",1,0
+npaprules_str10b
+	.string	"addressed, stamped envelope to NBA HANGTIME TRIVIA GAME",1
+	.string	"Winners List/Rules Requests, P.O. Box 52912, Dept. 7527,",1
+	.string	"Phoenix, Arizona 85072-2912. They will then receive, by",1
+	.string	"mail, a complete set of trivia questions identical to the",1
+	.string	"trivia questions that appear in the NBA HANGTIME arcade",1
+	.string	"game, with identical point values, and a complete set of",1,0
+
+npaprules_str11
+	.string	"these Rules. After answering the questions provided to the",1
+	.string	"best of the participant's ability, spending no more time",1
+	.string	"than one minute answering each question, the answers must",1
+	.string	"be sent to NBA HANGTIME TRIVIA GAME Entries, P.O. Box 52990,",1
+	.string	"Dept. 7526, Phoenix, Arizona 85072-2990 for scoring, along",1
+	.string	"with the participant's name, age, address and phone number,",1
+	.string	"printed or typed legibly. Participants who correctly answer",1,0
+
+npaprules_str12
+	.string	"enough of the questions provided to achieve a point total of",1
+	.string	"at least 100 points will be designated 'NBA Trivia Champion'",1
+	.string	"and will be entered in the NBA HANGTIME SWEEPSTAKES drawing.",0
+
+npaprules_str13
+	.string "Prizes:",1,1,0
+
+npaprules_str14
+	.string "Grand prize (1): ",0
+npaprules_str14a
+	.string	"A trip for two to any one regular season",1,0
+npaprules_str14b
+	.string	"NBA game during the 1996-97 NBA season. The winner may",1
+	.string	"choose any regular season game. The prize package includes",1
+	.string	"airfare for two to the city in which the game is played,",1
+	.string	"two tickets to the game, two nights hotel accommodations",1
+	.string	"for two, double occupancy, and $500.00 to cover meals and",1
+	.string	"transportation to and from the airport. The winner will be",1,0
+
+npaprules_str15
+	.string	"provided a schedule of games by October 15, 1996. They",1
+	.string	"must then notify Midway Manufacturing of their choice by",1
+	.string	"October 31, 1996. (Approximate Retail Value: $5,300.00)",1,1,0
+
+npaprules_str16
+	.string "First Prize (1): ",0
+npaprules_str16a
+	.string	"An NBA HANGTIME coin-operated arcade game",1,0
+npaprules_str16b
+	.string	"(Approximate Retail Value: $5,000.00)",0
+
+npaprules_str17
+	.string "Second Prize (25): ",0
+npaprules_str17a
+	.string	"An Official NBA Champion Brand Jersey.",1,0
+npaprules_str17b
+	.string	"Winners will receive either a Scottie Pippen, Anfernee",1
+	.string	"Hardaway, Shawn Kemp, Magic Johnson, Grant Hill or Jason",1
+	.string	"Kidd jersey. Winners will not be able to select which",1
+	.string	"jersey they receive (Approximate Retail Value: $125.00 each)",1,1,0
+
+npaprules_str18
+	.string "Third Prize (1,000): ",0
+npaprules_str18a
+	.string	"An NBA HANGTIME T-shirt",1,0
+npaprules_str18b
+	.string	"(Approximate Retail Value: $10.00)",1,1,0
+
+npaprules_str19
+	.string "Total approximate prize value: ",0
+npaprules_str19a
+	.string	"$23,425.00",1,1,0
+
+npaprules_str20
+	.string "Odds: ",0
+npaprules_str20a
+	.string	"Odds are dependent upon the number of entries received.",1,1,0
+
+npaprules_str21
+	.string "Selection: ",0
+npaprules_str21a
+	.string	"Winners will be randomly selected by Continental",1,0
+npaprules_str21b
+	.string	"Promotion Group Inc., an independent judging and fulfillment",1
+	.string	"agency, on or about September 18, 1996. All decisions of the",1
+	.string "judges are final and binding in all respects.",1,1,0
+
+npaprules_str22
+	.string "Notification: ",0
+npaprules_str22a
+	.string	"Winners will be notified by overnight courier",1,0
+npaprules_str22b
+	.string	"and/or telephone on or about September 22, 1996. ",1
+	.string	1
+	.string "Only one entry per participant. No entries by facsimile",1
+	.string	"or electronic transmission. Winners will be required to",1
+	.string	"complete affidavit of eligibility, waiver of liability and",1
+	.string	"publicity release, which must be returned within 15 days of",1
+	.string	"receipt or any prize award will be void. If winner is under",1,0
+
+npaprules_str23
+	.string "the age of 18, winner must provide signed parental consent,",1
+	.string	"in a form provided by the Sponsor, in order to receive prize.",1
+	.string	"Limit one prize per household.",1
+	.string	1
+	.string	"All prizes will be awarded. No substitution or transfer of",1
+	.string	"prizes. Taxes are the responsibility of winners.",0
+
+npaprules_str24
+	.string	"By participating winners consent to use of their name,",1
+	.string	"address and likeness for advertising, promotional and",1
+	.string	"publicity purposes without additional compensation, except",1
+	.string	"where prohibited by law. All entries become the property",1
+	.string	"of sponsor and will not be returned.",1,1,0
+
+npaprules_str25
+	.string "Winners List: ",0
+npaprules_str25a
+	.string	"For a winners list, please send a self-",1,0
+npaprules_str25b
+	.string	"addressed, stamped envelope by September 22, 1997 to:",1,1,0
+npaprules_str25c
+	.string	"NBA HANGTIME TRIVIA GAME Winners List/Rules Requests",1,0
+npaprules_str25d
+	.string	"P.O. Box 52912, Dept. 7527, Phoenix, Arizona 85072-2912",0
+	.even
+
+
+
+	.if	0
+
+
+
+
+
+	.endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+	.end
+
+

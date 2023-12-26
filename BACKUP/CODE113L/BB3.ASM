@@ -194,7 +194,7 @@
 
 	btst	B_3DQ,a4
 	jrz	#next
-					;>Convert 3D to 3DQ
+					;0CHonvert 3D to 3DQ
 	add	a9,a3			;add Z offset to Z
 	move	a3,a5			;save for later X2Z conv
 	subi	GZBASE,a3

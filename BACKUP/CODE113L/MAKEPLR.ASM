@@ -1,5 +1,5 @@
 ;-----------------------------------------------------------------------------
-*
+#*
 * Owner:	JOHNSON
 *
 ; Software:	Jeff Johnson
@@ -1377,9 +1377,9 @@ upph_1	move	*a9+,a8,L			;ptr. old image
 
 ;update bits per pixel
 	move	*a8(OCTRL),a1
-	andi	>80ff,a1		;DMA flags
+	andi	080ffH,a1		;DMA flags
 	move	*a2(ICTRL),a14
-	andni	>80ff,a14		;DMA flags
+	andni	080ffH,a14		;DMA flags
 	or	a14,a1
 	move	a1,*a8(OCTRL)
 

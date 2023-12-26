@@ -1,4 +1,4 @@
-******************************************************************************
+#******************************************************************************
 *
 * Owner:	JOHNSON
 *
@@ -2832,7 +2832,7 @@ ctor_5
 ;	This routine computes the PLAYERS defensive rank
 ;
 ;INPUT: a0 - players defensive ability
-; >a0 - players defensive rank
+; 0a0H - players defensive rank
 ;-----------------------------------------------------------------------------
  SUBR	compute_plyr_def_rank
 
@@ -2861,7 +2861,7 @@ cpdr_3	PULL	a2,a9,a10
 ;	This routine computes the PLAYERS offensive rank
 ;
 ;INPUT: a0 - players offensive ability
-; >a0 - players offensive rank
+; 0a0H - players offensive rank
 ;-----------------------------------------------------------------------------
  SUBR	compute_plyr_off_rank
 

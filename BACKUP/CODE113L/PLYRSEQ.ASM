@@ -1,5 +1,5 @@
 ;I'm not putting initials in plyrseq files! 
-**************************************************************
+#**************************************************************
 *
 * Owner:	TURMELL
 *
@@ -82,7 +82,7 @@
 
 ;equates for this file
 
-M_YF	.equ	>8000	;Y free (OFLAGS)
+M_YF	.equ	08000H	;Y free (OFLAGS)
 
 	.bss	keep_xvel,32
 	.bss	keep_zvel,32
@@ -931,7 +931,7 @@ rebound_t
 #ck_ball
 ;If ball is near head, and is close enough, no need to jump high!
 	move	*a13(plyr_balldist),a0
-	cmpi	>30,a0
+	cmpi	030H,a0
 	jrgt	#cont
 
 	.ref	ballobj_p
@@ -1054,7 +1054,7 @@ rebounda_t
 #ck_ball
 ;If ball is near head, and is close enough, no need to jump high!
 	move	*a13(plyr_balldist),a0
-	cmpi	>30,a0
+	cmpi	030H,a0
 	jrgt	#cont
 
 	.ref	ballobj_p
@@ -1872,11 +1872,11 @@ lower_jump
 ;	move	a0,*a8(OYVEL),L
 
 ;Give seq a little x drift
-	movi	>10000,a2		;For this desperation shot, we
+	movi	010000H,a2		;For this desperation shot, we
 	move	*a13(plyr_num),a0	;need some x velocity
 	subk	2,a0
 	jrlt	#ok
-	movi	->10000,a2
+	movi	-010000H,a2
 #ok	move	a2,*a8(OXVEL),L
 	rets
 	

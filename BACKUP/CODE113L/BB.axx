@@ -1,0 +1,2563 @@
+	.file	"bb.asm"
+	.title	"NBA JAM Basketball game program"
+	.width	132
+	.option	b,d,l,t
+	.mnolist
+
+
+	.include	"mproc.equ"		;Mproc equates
+	.include	"disp.equ"		;Display proc equates
+	.include	"gsp.equ"		;Gsp asm equates
+	.include	"sys.equ"
+	.include	"world.equ"		;Court-world defs
+	.include	"game.equ"
+	.include	"audit.equ"
+	.include	"macros.hdr"		;Macros
+
+	.include	"credturb.tbl"
+	.include	"credturb.glo"
+
+	.include	"hoop.tbl"
+	.include	"hoop.glo"
+
+	.include	"outdoor.glo"
+	.include	"imgtbl.glo"
+	.include	"imgtbl2.glo"
+	.include	"imgtblp.glo"
+
+	.asg		0,SEQT
+	.include	"plyr.equ"
+
+	.ref	initcrowd_ani
+	.ref	game_initobjs
+
+
+	.ref	snd_update
+	.ref	SOUNDSUP
+	.ref	QSNDRST
+
+	.ref	heres_tip_sp,eat_snd
+	.ref	start_crowd_noise
+
+
+
+
+	.ref	pup_court,pup_aba
+
+	.ref	DBV
+	.ref	VOLBTN_PRESS
+	.ref	pup_tournament
+	.ref	original_names
+
+	.ref	RNDPER
+	.ref	TWOPLAYERS
+	.ref	player1_data
+	.ref	player2_data
+	.ref	player3_data
+	.ref	player4_data
+	.if DRONES_2MORE
+	.ref	player5_data
+	.ref	player6_data
+	.endif
+
+	.ref	team1_control
+	.ref	team2_control
+	.ref	BTIME
+	.ref	plyr_onfire
+
+	.ref	last_name_time
+	.ref	player_names
+	.ref	CYCLE_TABLE
+	.ref	pleasewt
+	.ref	prt_credits
+	.ref	clock_speed
+	.ref	_4plyrsingame
+	.ref	snd_play1ovr
+	.ref	winningteam
+
+	.ref	idiot_bits
+	.ref	cntl_team,cntl_team_last,idiot_box
+	.ref	bracket_drw
+	.ref	sc_proc
+	.ref	ballpnumlast
+	.ref	ballprcv_p
+	.ref	inbound
+	.ref	ballsclastp
+	.ref	ballshotinair		;Shooter # if shot in air, else -1
+
+
+	.ref	QUARTR01
+	.ref	process_dispatch,cntrs_delay
+	.ref	gmqrtr,refill_turbo
+	.ref	plyr_lost
+	.ref	tm1set,tm2set
+
+	.ref	CCOIN,RCOIN,SERVICE,SLAM_SW,XCOIN,LCOIN,DIAG
+
+	.ref	CR_STRTP,CR_CONTP,P_START,P_CONT,GET_ADJ
+	.ref	dpageflip
+	.ref	conttimers
+	.ref	WIPEOUT,cr_cntrs_update
+	.ref	ENTERON
+
+	.ref	LOWZ,BAKBITS
+	.ref	FONT7A,PALFRAM
+	.ref	UNIT_CLR
+	.ref	initials_entry
+	.ref	ISHSTD
+	.ref	hisclong
+
+	.ref	gndstat
+	.ref	STRCNRM
+	.ref	WDOGRAM
+	.ref	BAKMODS
+	.ref	STRLNRMO,HEXTOASC,WRLD,STRCNRMO,RD15FONT
+	.ref	FLASHME,RD7FONT
+	.ref	RNDRNG0
+	.ref	INIT_TAB
+	.ref	IRQSKYE
+	.ref	init_all,GET_AUD
+	.ref	READ_DIP
+	.ref	POWERTST
+	.ref	FRANIM,FRANIMQ
+	.ref	OBJOFF,OBJON,pal_getf
+	.ref	GETCPNT,BGND_UD1
+	.ref	AUD,AUD1,aud_addnumplyrs
+
+	.ref	PSTATUS
+	.ref	P1DATA,P2DATA,P3DATA,P4DATA
+	.if DRONES_2MORE
+	.ref	P5DATA,P6DATA
+	.endif
+	.ref	plyrobj_t,plyrproc_t
+
+	.ref	scores,game_time,prt_top_scores
+	.ref	clock_strt
+	.ref	update_scorebrd
+	.ref	clear_player_stats,inc_player_stat
+
+	.ref	plyr_start
+	.ref	joy_read
+	.ref	ball_main
+	.ref	team1,team2
+	.ref	game_purchased
+	.ref	security_chk
+	.ref	assist_delay,assist_plyr
+
+	.ref	CKDIAG,POWERCMOS,amode_start
+	.ref	dirqtimer
+
+	.ref	system_restoregame,io_init
+	.ref	slide_info_box_on_off
+	.ref	p1_slide_box_flag,p2_slide_box_flag
+	.ref	p3_slide_box_flag,p4_slide_box_flag
+        .ref    creditscreen
+	.ref	dronesmrt
+
+	.if CRTALGN
+	.ref	P1CTRL
+	.ref	P2CTRL
+	.ref	P3CTRL
+	.ref	P4CTRL
+	.endif
+
+
+	.def	init_t1a,init_t2a,init_t3a,init_t4a
+	.def	timertcnt,PSTATUS2,COLRPRC
+	.def	OWINDOW,CWINDOW
+	.def	swstacktop, swstack_p
+
+
+
+	.if	DEBUG
+	BSSX	SLDEBUG		,16	;Shawn's debug
+	BSSX	slowmotion	,16	;!0=Frames of delay for slow motion
+	.endif
+
+	;I changed PCNT to a 32-bit value instead of 16 'cuz I'm tired of
+	; coding checks for the wraparound case, which happens every ten
+	; minutes or so.  Since it's always treated as an unsigned value
+	; anyway, it's perfectly safe to continue using it as a word. - JS
+	.even
+	BSSX	PCNT		,32	;Main loop cnt
+
+	BSSX	swstack_p	,32	;*Stack position
+	BSSX	swstackbot	,16*64	;Bottom of stack
+	.bss	swstacktop	,0	;Top of stack
+
+	BSSX	COLRTEMP	,16*16	;RAM COPY OF CYCLING COLORS
+
+	BSSX	GAMSTATE	,16	;Game state: See game.equ
+
+	BSSX	HALT		,16	;FREEZE ALL OBJECTS (NO VEL UPDATE)
+	BSSX	NO_START	,16	;FLAG 0=OKAY, 1=NOT RIGHT NOW.
+
+	BSSX	PSTATUS2	,16	;Player has started game bits (0-3)
+					;used to decide if this player must
+					;pay 2 credits or just 1 credit to
+					;start!
+
+	BSSX	WSPEED		,16
+	BSSX	WFLG		,16	;0=NOT ON, 1=YES IT IS ON
+	.bss	WNDWFLG		,16	;0=WINDOW SHOULD CLOSE, 1=NO WINDOW
+	BSSX	OBJPTR		,32	;PNTR FOR WINDOW OBJECT
+
+
+	.bss	PALTMP		,13*16*2 ;ALLOCATE 2 X COLOR AREA IN RAM
+
+	
+	BSSX	crplate_ptr	,32	;credit plate ptr
+	BSSX	tm1_turbo	,32	;team turbo *objs
+	BSSX	tm2_turbo	,32
+	BSSX	msg_ram		,32*NUMPLYRS	;temp ram for flopping message/meters
+	BSSX	name_cnt	,16	;Cntr for flopping to player names
+	BSSX	name_flop	,16	;Flop name/buyin message 0 or 1
+	BSSX	names		,32*NUMPLYRS	;pntrs to player imgs
+
+	BSSX	crt_colors	,32	;Random pal for court - NDSP1.ASM
+	BSSX	bkcrt_colors	,32
+	BSSX	steals_off	,16	;!0=ticks until steals can happen
+	BSSX	pushing_delay 	,16	;!0=keep ball if pushed
+	BSSX	pass_off	,16	;!0=Don't allow passing
+	BSSX	rebound_delay	,16	;!0=Give rebound stat
+
+
+	BSSX	timertcnt	,16	;Tick count
+
+	BSSX	qtr_purchased	,16*4	;# game qtrs credit each player has
+
+	BSSX	newptr		,32
+	BSSX	newplyrs	,(32+16)*5
+
+
+
+	.ref	_serial_number
+	.ref	_man_date
+	.ref	InitPIC
+	.ref	RemapIO
+	.ref	SecFuncCheck
+
+	BSSX	_coin_addr,32
+	BSSX	_switch_addr,32
+	BSSX	_switch2_addr,32
+	BSSX	_watchdog_addr,32
+	BSSX	_dipswitch_addr,32
+	BSSX	_sound_addr,32
+	BSSX	_soundirq_addr,32
+	BSSX	_coin_counter_addr,32
+
+
+
+
+	.text
+
+
+
+ SUBR	init_prog
+
+	.if 0
+
+==========================
+=;;; Old startup code ;;;=
+
+	dint
+	setf	16,1,0			;Field0 = Word sign extend
+	setf	32,0,1			;Field1 = Long word
+	movi	STCKST,sp		;Top of stack
+
+	calla	InitPIC
+
+
+
+	move	@WDOGRAM,a0,L
+	cmpi	WDOGNUM,a0
+	jrne	initp50			;Powerup?
+
+	move	@dirqtimer,a0
+	cmpi	400,a0
+	jrhs	elpblockup			;Main loop died?
+
+
+	.if	TUNIT
+	move	@TALKPORT,a0		;Check if watchdog was real
+	btst	B_WDOG,a0		;Bit should be low if dog fired
+	jrnz	elpbcont			;No watchdog?
+	.endif
+
+	movk	AUDLOCK,a0		;Watchdog
+	jruc	elpbaud
+
+elpblockup
+
+	movi	AUD_LOCKUP,a0		;Main loop lockup
+elpbaud	calla	AUD1
+
+elpbcont
+
+
+	movk	AUDSTAT,a0
+	calla	GET_AUD			;0=AMode, 1=Game
+	move	a1,a1
+	jrz	WARMSET			;Attract mode glitch?
+
+initp50
+	calla	READ_DIP		;skip if UJ2 bit 6 set
+	btst	6,a0
+	jrnz	elpbnopt
+	jauc	POWERTST		;board test etc...
+elpbnopt
+
+=;;; End of old startup code ;;;=
+=================================
+
+	.else
+
+	dint				;Interrupts OFF
+	setf	16,1,0			;Word sign extend
+	setf	32,1,1			;Long word sign extend
+	movi	STCKST,sp		;Setup the stack pointer
+
+	clr 	a0			;Initial mode for VMUX chip
+	move	a0,@VMUX_CONTROL,W
+
+	movi	00030h,a0		;Hit sound reset bit
+	move	a0,@COIN_COUNTERS	;This is where reset bit is
+	movi	100,a0			;Wait for it to catch
+	dsjs	a0,$	
+	movi	00020h,a0		;Let it go
+	move	a0,@COIN_COUNTERS
+
+
+	move	@SOUNDIRQ,a0		;Read watchdog status
+	btst	8,a0			;Is this reset from a watchdog?
+	jrnz	elpbcont			; br=no
+
+	movk	AUDLOCK,a0		;Audit a Dog
+	jruc	elpbaud
+elpbcont
+	move	@WDOGRAM,a0,L		;Has machine been initialized?
+	cmpi	WDOGNUM,a0
+	jrne	initp50			; br=no, must be powerup
+
+	move	@dirqtimer,a0		;Did we have a process KO?
+	cmpi	400,a0
+	jrlo	initp50			; br=no, continue regular startup
+
+	movi	AUD_LOCKUP,a0		;Audit a proc KO
+elpbaud
+	calla	AUD1
+
+
+initp50
+	calla	InitPIC			;Init PIC and I/O system
+
+	move	a0,@WATCHDOG		;Kill the dog fer yucks
+	calla	READ_DIP		;Read the dipswitches
+	btst	6,a0			;Is power-up test bypass switch on?
+	jaz	POWERTST		; br=do power-up tests; go to WARMSET
+
+	calla	InitPIC			;Reinit PIC and I/O system
+
+	.endif
+
+
+
+ SUBR	WARMSET
+
+	dint
+	setf	16,1,0			;Field0 = Word sign extend
+	setf	32,0,1			;Field1 = Long zero extend
+	movi	STCKST,sp		;Top of stack
+
+	calla	InitPIC			;Reinit PIC and I/O system
+
+	jauc	POWERCMOS		;Do CMOS power-up chk; go to PCMOSRET
+
+
+ SUBR	PCMOSRET
+
+	calla	init_all		;Init hardware
+
+	move	b5,@_serial_number,L
+	move	b6,@_man_date,L
+	calla	SecFuncCheck		;Make sure security functions haven't
+					; been mucked with
+	calla	INIT_TAB		;Reset todays high score table
+
+
+	.if	DEBUG
+	callr	testcode
+	.endif
+
+
+	calla	CKDIAG
+	jrz	monmmain_go		;No diag switches closed?
+
+	CREATE	DIAG_PID,DIAG		;Fire off the diag process
+	jruc	mainlp
+
+monmmain_go
+	.if	HEADCK
+	.ref	debug_plyr_num
+	clr	a0
+	move	a0,@debug_plyr_num
+	.endif
+
+	CREATE0	amode_start		;Fire up the attract mode
+
+
+
+ SUBR	mainlp
+
+	calla	process_dispatch
+
+	move	a13,a13
+	jrz	mainpok
+	.if	DEBUG
+	LOCKUP
+	eint
+	.else
+	CALLERR	10,0
+	.endif
+mainpok
+
+	move	@RAND,a1,L		;>Randomize
+	rl	a1,a1
+	move	@HCOUNT,a14
+	rl	a14,a1
+	add	sp,a1
+	move	a1,@RAND,L
+
+	calla	cr_cntrs_update		;And blink the top messages
+	callr	switch_unstack
+	calla	snd_update		;Update the sound calls
+	calla	joy_read
+
+
+	move	@steals_off,a0
+	jrle	tcggok
+	subk	1,a0
+	move	a0,@steals_off
+tcggok
+	move	@pushing_delay,a0
+	jrle	tcggok2
+	subk	1,a0
+	move	a0,@pushing_delay
+tcggok2
+	move	@pass_off,a0
+	jrle	tcggok3
+	subk	1,a0
+	move	a0,@pass_off
+tcggok3
+
+	move	@assist_delay,a0
+	jrle	tcggok4
+	subk	1,a0
+	move	a0,@assist_delay
+	jrnz	tcggok4
+	clr	a1
+	move	a1,@assist_plyr
+tcggok4
+	move	@rebound_delay,a0
+	jrle	tcggok5
+	subk	1,a0
+	move	a0,@rebound_delay
+
+tcggok5
+	.ref	in_cylinder
+	move	@in_cylinder,a0
+	jrle	tcggok6
+	subk	1,a0
+	move	a0,@in_cylinder
+tcggok6
+	.ref	must_rebound
+	move	@must_rebound,a0
+	jrle	tcggok7
+	subk	1,a0
+	move	a0,@must_rebound
+tcggok7
+
+
+
+	.if	DEBUG
+	callr	cputime_calcfree
+	.endif
+
+	move	@HALT,a0
+	jrnz	tcggskipit
+	move	@last_name_time,a0
+	inc	a0
+	move	a0,@last_name_time	;# ticks since player name called
+tcggskipit
+
+	;update all 32 bits of PCNT
+	move	@PCNT,a0,L
+	addk	1,a0
+	move	a0,@PCNT,L
+
+
+	movb	@DIPSWITCH-7,a0
+	jrn	mainlp
+
+	movi	ACTIVE,a13		;*Proc list
+	CREATE	DIAG_PID,DIAG
+	jruc	mainlp
+
+
+
+
+
+ SUBRP	switch_unstack
+
+
+cdoqlp	move	@swstack_p,a3,L
+	cmpi	swstacktop,a3		;Stack at start? Yes if =
+	jreq	cdoqx
+	move	@FREE,a0,L		;Any procs left? No if 0
+	jrz	cdoqx
+
+	move	*a3+,a0			;Get entry
+	move	a3,@swstack_p,L		;Update stack ptr
+	sll	32-4,a0			;Clr bits above max (15) value
+	srl	32-4-4,a0		;*16 for look-up calc
+	move	a0,a2
+	add	a0,a2
+	add	a0,a2			;*3 for tbl offset from
+	addi	switch_t,a2		; table start
+	move	*a2+,a1			;Get switch PID; none if 0
+	jrz	cdoqlp
+	move	*a2+,a7,L		;*Switch code
+	movi	ACTIVE,a13		;*Proc list
+	calla	GETPRC
+	jruc	cdoqlp
+
+cdoqx	rets
+
+switch_t	;(Process ID or 0, *Routine)	;Put in audit??
+
+	WL	LC_PID,    LCOIN	;S0  - LEFT COIN (1)
+	WL	RC_PID,    RCOIN	;S1  - RIGHT COIN (2)
+	WL	PSWPID,    plyr_strtb1	;S2  - START 1
+	WL	SLAM_PID,  SLAM_SW	;S3  - SLAM TILT
+	WL	DIAG_PID,  DIAG		;S4  - TEST
+	WL	PSWPID,    plyr_strtb2	;S5  - START 2
+	WL	DIAG_PID,  SERVICE	;S6  - SERVICE CREDIT
+	WL	CC_PID,    CCOIN	;S7  - CENTER COIN (3)
+	WL	CC_PID,    XCOIN	;S8  - COIN 4
+	WL	PSWPID,    plyr_strtb3	;S9  - START 3
+	WL	PSWPID,    plyr_strtb4	;S10 - START 4
+	WL	VOLBTN_PID,VOLBTN_PRESS	;S11 - VOLUME DOWN
+	WL	VOLBTN_PID,VOLBTN_PRESS	;S12 - VOLUME UP
+	WL	0,0			;S13
+	WL	0,0			;S14
+	WL	CC_PID,    DBV		;S15 - DOLLAR BILL VALIDATOR
+
+
+
+
+ SUBR	plyr_strtb1
+
+	move	@TWOPLAYERS,a0		;0 = NO, 1 = YES 2 players
+	jrnz	cdoqstrtb2
+
+	clr	a8			;A8=Player #
+	movi	P1DATA,a11		;A11=*plyr data
+
+	move	@GAMSTATE,a0
+	cmpi	IN_PRE_PLYR_DESIGN,a0
+	jreq	cdoqpsb_x			;br=dont take credits (entering CREATE PLAYER)
+	cmpi	INPLYRDESIGN,a0		;player designing character ?
+	jrne	plyr_strtbut		;br=no
+
+	move	@p1_slide_box_flag,a0
+	jrnz	cdoqpsb_x			;br=process EXISTS...dont allow
+	CREATE	P1_BOX_SLIDE_PID,slide_info_box_on_off	;br=tell player -CREDIT NOT TAKEN
+	jruc	cdoqpsb_x			;dont process further
+
+
+ SUBR	plyr_strtb2
+
+	move	@TWOPLAYERS,a0		;0 = NO, 1 = YES 2 players
+	jrnz	cdoqstrtb3
+cdoqstrtb2
+	movk	1,a8
+	movi	P2DATA,a11
+
+	move	@GAMSTATE,a0
+	cmpi	IN_PRE_PLYR_DESIGN,a0
+	jreq	cdoqpsb_x			;br=dont take credits (entering CREATE PLAYER)
+	cmpi	INPLYRDESIGN,a0		;player designing character ?
+	jrne	plyr_strtbut		;br=no
+
+	move	@p2_slide_box_flag,a0
+	jrnz	cdoqpsb_x			;br=process EXISTS...dont allow
+	CREATE	P2_BOX_SLIDE_PID,slide_info_box_on_off	;br=tell player -CREDIT NOT TAKEN
+	jruc	cdoqpsb_x			;dont process further
+
+
+ SUBR	plyr_strtb3
+
+	move	@TWOPLAYERS,a0		;0 = NO, 1 = YES 2 players
+	jrnz	cdoqpsb_x
+cdoqstrtb3
+	movk	2,a8
+	movi	P3DATA,a11
+
+	move	@GAMSTATE,a0
+	cmpi	IN_PRE_PLYR_DESIGN,a0
+	jreq	cdoqpsb_x			;br=dont take credits (entering CREATE PLAYER)
+	cmpi	INPLYRDESIGN,a0		;player designing character ?
+	jrne	plyr_strtbut		;br=no
+
+	move	@p3_slide_box_flag,a0
+	jrnz	cdoqpsb_x			;br=process EXISTS...dont allow
+	CREATE	P3_BOX_SLIDE_PID,slide_info_box_on_off	;br=tell player -CREDIT NOT TAKEN
+	jruc	cdoqpsb_x			;dont process further
+
+
+ SUBR	plyr_strtb4
+
+	move	@TWOPLAYERS,a0		;0 = NO, 1 = YES 2 players
+	jrnz	cdoqpsb_x
+
+	movk	3,a8
+	movi	P4DATA,a11
+
+	move	@GAMSTATE,a0
+	cmpi	IN_PRE_PLYR_DESIGN,a0
+	jreq	cdoqpsb_x			;br=dont take credits (entering CREATE PLAYER)
+	cmpi	INPLYRDESIGN,a0		;player designing character ?
+	jrne	plyr_strtbut		;br=no
+
+	move	@p4_slide_box_flag,a0
+	jrnz	cdoqpsb_x			;br=process EXISTS...dont allow
+	CREATE	P4_BOX_SLIDE_PID,slide_info_box_on_off	;br=tell player -CREDIT NOT TAKEN
+	jruc	cdoqpsb_x			;dont process further
+
+
+
+plyr_strtbut
+	movk	1,a0
+	move	a0,@BTIME
+
+	move	@GAMSTATE,a1
+	cmpi	INAMODE,a1		;In attract? No if !=
+	jrne	cdoqchkstrt
+	calla	CR_STRTP		;Yes. Have credits to start? Yes if >=
+	jrhs	cdoqchkstrt
+
+	MOVI	CP_PID1,A0
+	MOVI	0FFFFH,A1		;CHECK TO SEE IF CREDIT PAGE IS UP
+	CALLA	EXISTP
+	jrnz	SUCIDE			;br=yes, go die
+
+	JSRP	creditscreen		;No. Show credits screen & restart
+	jauc	amode_start
+
+cdoqchkstrt
+	cmpi	INPLYRINFO,a1		;No start if on plyr info scrn
+	jreq	cdoqpsb_x
+
+	move	@WFLG,a0		;No start if window is growing
+	jrnz	cdoqpsb_x
+	move	@ENTERON,a0		;No start if initials being entered
+	jrnz	cdoqpsb_x
+
+	move	@pleasewt,a0		;No start if plyr should be waiting
+	btst	a8,a0			;(bit #=plyr #)
+	jrnz	cdoqpsb_x
+
+	move	@PSTATUS,a0		;Chk plyr status. Already in game?
+	btst	a8,a0			;(bit #=plyr #)
+	jrz	cdoqstartplyr		;No if 0
+
+	move	@game_purchased,a0	;Yes. Already bought whole game?
+	btst	a8,a0			;(bit #=plyr #)
+	jrz	cdoqchkaddmore
+	DIE
+
+cdoqchkaddmore
+	cmpi	INGAME,a1		;Don't add more during game play
+	jrz	cdoqpsb_x
+
+	calla	CR_CONTP		;Have credits to continue?
+	jrlo	conttimers_cnt		;No if < (do continue timers & die)
+	calla	P_CONT			;Yes. Take credits to continue
+
+	SOUND1	eat_snd
+
+	movk	AUD1CONT,a0		;Audit a continue
+	calla	AUD1
+
+	callr	add_plyr_time		;Add more to this players play time
+
+	movk	ADJCCONT,a0		;Get # credits req'd to continue
+	calla	GET_ADJ
+
+	callr	paidcreds_add		;Update everything & die
+	calla	update_scorebrd
+	jruc	cdoqpsb_x
+
+
+
+cdoqstartplyr
+	move	@GAMSTATE,a1
+	jrn	cdoqpsb_x			;In diagnostics? Yes if - (go die)
+	cmpi	INGAMEOV,a1		;In game over? Yes if = (go die)
+	jreq	cdoqpsb_x
+
+	cmpi	INAMODE,a1		;New start from attract? Yes if =
+	jreq	game_start
+	cmpi	INFREEPRICE,a1		;New start on winners scrn?
+	jreq	game_start2
+
+	cmpi	ININTRO,a1		;New start on stats scrn? Yes if =
+	jreq	cdoqpsbstart
+
+	move	@game_time,a14,L	;Chk game clk. Do start if 0
+	jrnz	cdoqnotz
+	cmpi	INGAME,a1
+	jrnz	cdoqpsbstart
+	.if	DEBUG
+	LOCKUP
+	.endif
+	DIE
+cdoqnotz
+	cmpi	2020000h,a14		;!!!Do start if >= 2:20.0 remain
+	jrge	cdoqpsbstart
+
+	movk	ADJFREPL,a0		;Well into qrtr but do start if in
+	calla	GET_ADJ			; free play (is !0)
+	jrnz	cdoqpsbstart
+
+	move	@PSTATUS2,a0		;Not free. Chk for previous start
+	btst	a8,a0			;(bit #=plyr #)
+	jrz	cdoqisnew			;Player never started? Never if 0
+
+	calla	CR_CONTP		;Has. Have credits to continue?
+	jalo	SUCIDE			;No if < (go die)
+	jruc	cdoqdowaitmes
+cdoqisnew
+	calla	CR_STRTP		;Hasn't. Have credits to start?
+	jalo	SUCIDE			;No if < (go die)
+cdoqdowaitmes
+	movk	1,a0
+	sll	a8,a0
+	move	@pleasewt,a14		;Wants to start but can't. Set
+	or	a0,a14			; is-waiting bit.
+	move	a14,@pleasewt
+
+	callr	plyr_ingame_wait	;Show "please wait" & die
+	DIE
+
+cdoqpsbstart
+	move	a8,a14			;Make team # (0 or 1) from plyr #
+	srl	1,a14
+	move	@winningteam,a0
+	cmp	a14,a0			;Was plyr on winning team?
+	jreq	cdoqpsbfree		;Yes if = (start is free)
+
+	move	@PSTATUS2,a0		;No. Chk for previous start
+	btst	a8,a0			;(bit #=plyr #)
+	jrz	cdoqpsbcred		;Player never started? Never if 0
+
+	calla	CR_CONTP		;Has. Have credits to continue?
+	jrlo	conttimers_cnt		;No if < (do continue timers & die)
+	calla	P_CONT			;Yes. Take credits to continue
+
+	SOUND1	eat_snd
+
+cdoqpsbfree
+	callr	add_plyr_time		;Add more to this players play time
+
+	movk	AUD1CONT,a0		;Audit a continue
+	calla	AUD1
+	jruc	cdoqdostart
+
+cdoqpsbcred
+	calla	CR_STRTP		;Hasn't. Have credits to start?
+	jrlo	conttimers_cnt		;No if < (do continue timers & die)
+	calla	P_START			;Yes. Take credits to start
+
+	SOUND1	eat_snd
+
+	callr	add_plyr_time		;Add more to this players play time
+
+	move	@GAMSTATE,a1
+	subk	ININTRO,a1		;Don't audit a start if in intro?!!!
+	jreq	cdoqdostart
+
+	movk	AUD1STRT,a0		;Audit a start
+	calla	AUD1
+
+cdoqdostart
+	move	@GAMSTATE,a1		;Set common Ks
+	movk	1,a7
+	sll	a8,a7
+
+	cmpi	ININTRO,a1		;If in intro, do regular start
+	jreq	cdoqdo_psb_intro
+
+	movk	ADJFREPL,a0		;If in free play, do free play start
+	calla	GET_ADJ
+	jrnz	cdoqdo_psb_free
+
+	move	@game_time,a14,L	;In-game start. Chk game clk
+	cmpi	2020000h,a14		;!!!Do start if >= 2:20.0 remain
+	jrgt	cdoqdo_psb_free
+
+	movk	ADJCSTRT,a0		;Get # credits req'd to start
+	move	@PSTATUS2,a14		;Want start or continue credits?
+	btst	a8,a14			;(bit #=plyr #)
+	jrz	cdoqpsb1			;New start if 0
+	movk	ADJCCONT,a0		;Get # credits req'd to continue
+cdoqpsb1
+	calla	GET_ADJ
+	callr	paidcreds_add
+
+	move	@pleasewt,a14		;Wants to start but can't. Set
+	or	a7,a14			; is-waiting bit.
+	move	a14,@pleasewt
+
+	callr	plyr_ingame_wait	;Show "please wait" & die
+	DIE
+
+cdoqdo_psb_intro
+	movk	ADJCSTRT,a0		;Get # credits req'd to start
+	move	@PSTATUS2,a14		;Want start or continue credits?
+	btst	a8,a14			;(bit #=plyr #)
+	jrz	cdoqpsb2			;New start if 0
+	movk	ADJCCONT,a0		;Get # credits req'd to continue
+cdoqpsb2
+	calla	GET_ADJ
+	callr	paidcreds_add
+
+	move	@PSTATUS,a14		;Set plyr in-game bit
+	or	a7,a14
+	move	a14,@PSTATUS
+
+	move	@PSTATUS2,a14		;Set plyr has-started bit
+	or	a7,a14
+	move	a14,@PSTATUS2
+
+	move	@gmqrtr,a0
+	jrz	cdoqinintro_x
+
+	move	@newptr,a0,L
+	move	a11,*a0+,L		;Save PnDATA ptr
+	move	a8,*a0+			;Save plyr # (0,1,2,3)
+	clr	a1			;Clr next long
+	move	a1,*a0,L
+	move	a0,@newptr,L
+
+	jruc	cdoqinintro_x
+
+cdoqdo_psb_free
+	movk	ADJCSTRT,a0		;Get # credits req'd to start
+	move	@PSTATUS2,a14		;Want start or continue credits?
+	btst	a8,a14			;(bit #=plyr #)
+	jrz	cdoqpsb3			;New start if 0
+	movk	ADJCCONT,a0		;Get # credits req'd to continue
+cdoqpsb3
+	calla	GET_ADJ
+	callr	paidcreds_add
+
+	move	@PSTATUS,a14		;Set plyr in-game bit
+	or	a7,a14
+	move	a14,@PSTATUS
+
+	move	@PSTATUS2,a14		;Set plyr has-started bit
+	or	a7,a14
+	move	a14,@PSTATUS2
+
+
+
+cdoqfrepl
+	movk	1,a0			;Init flop cntr & state flag
+	move	a0,@name_cnt
+	clr	a0
+	move	a0,@name_flop
+ 
+	move	@GAMSTATE,a14
+	subk	ININTRO,a14		;In intro? No credit imgs to update
+	jrz	cdoqfrp_1			; if so (if 0)
+ 
+	movi	CLSDEAD|creditid,a0
+	calla	obj_del1c		;Kill credit imgs
+	calla	prt_credits		;Do updated credit imgs
+cdoqfrp_1
+	move	*a11(ply_messages),a0,L	;Any insert|press|please msg?
+	jrz	cdoqimgson_x		;Done with setup if not (if 0)
+
+	calla	DELOBJ			;Kill the msg obj
+	clr	a0
+	move	a0,*a11(ply_messages),L
+
+	PUSH	a8,a11
+
+	move	a11,a9
+	addi	ply_meter_imgs,a9
+
+	move	a8,a0
+	sll	5,a0
+	move	@TWOPLAYERS,a14		;0 = NO, 1 = YES 2 players
+	jrz	cdoq4_plyrs
+	addi	4*32,a0
+cdoq4_plyrs
+	addi	cdoqcr_box,a0
+	move	*a0,a11,L
+
+	move	*a11(16),a14
+	move	*a9+,a0,L
+	move	a14,*a0(OYPOS)
+	addi	16+16+16+32,a11
+
+	move	*a9,a0,L
+	jrz	cdoqcv
+	calla	DELOBJ
+cdoqcv
+	callr	prt_status
+
+	PULL	a8,a11
+
+	calla	refill_turbo
+
+
+
+
+cdoqimgson_x
+
+cdoqinintro_x
+
+cdoqpsb_x
+	DIE
+
+
+cdoqcr_box	.long	init_t1,init_t2,init_t3,init_t4
+	.long	init_t1,init_t2kit,init_t3kit,init_t4
+
+sticklst
+	.word	p1stickid,p2stickid,p3stickid,p4stickid
+
+
+
+ SUBR	start_msgs
+
+	movi	newplyrs,a10
+	move	a10,@newptr,L
+	move	a10,a2
+
+	movk	4,a9
+start1
+	move	*a10+,a11,L
+	jrz	cdoqdone
+	move	*a10+,a8
+	CREATE0	cdoqfrepl
+	dsj	a9,start1
+cdoqdone
+	clr	a0
+	movk	5,a14
+cdoqclp
+	move	a0,*a2+,L
+	move	a0,*a2+,W
+	dsjs	a14,cdoqclp
+
+	DIE
+
+
+
+paidcreds_add
+
+	PUSH	a1,a2
+
+	move	a8,a1
+	sll	5,a1
+	addi	paid_t,a1
+	move	*a1,a1,L
+
+	move	a8,a14
+	srl	1,a14
+	move	@winningteam,a2
+	cmp	a14,a2
+	jrnz	cdoqnothalf
+	sll	3,a0			;Double paid credits
+
+cdoqnothalf
+	move	*a1,a2
+	add	a0,a2
+	move	a2,*a1
+
+	move	a8,a1
+	sll	4,a1			;x 16 bits
+	addi	qtr_purchased,a1
+	move	*a1,a14
+	inc	a14
+	move	a14,*a1
+
+	move	@gmqrtr,a1
+	cmpi	3,a1
+	jrge	cdoqfull
+	movk	4,a2
+	sub	a1,a2
+	cmp	a2,a14
+	jrlt	cdoqno
+
+	move	@GAMSTATE,a0
+	cmpi	INAMODE,a0
+	jreq	cdoqno
+	move	@gmqrtr,a14
+	jrnz	cdoqfull
+	.ref	inmatchup
+	move	@inmatchup,a0
+	jrz	cdoqno
+
+cdoqfull
+	move	@game_purchased,a0	;set purchased bit
+	move	a8,a14
+	sll	4,a14
+	addi	or_t,a14
+	move	*a14,a14
+	or	a14,a0			;for player
+	move	a0,@game_purchased
+
+cdoqno
+	PULL	a1,a2
+	rets
+
+
+
+ SUBRP	plyr_ingame_wait
+
+	PUSH	a8
+
+	move	*a11(ply_messages),a8,L
+	movi	please,a0
+	movi	MSGOCTRL,a1
+	calla	obj_aniq_cnoff
+	calla	update_scorebrd
+
+	move	*a11(ply_meter_imgs),a0,L
+	calla	OBJOFF
+	move	*a11(ply_meter_imgs+32),a0,L
+	calla	OBJOFF
+
+	PULL	a8
+	rets
+
+
+
+add_plyr_time
+	
+	movi	3500,a1
+	move	a1,*a11(ply_time)
+
+	movi	110,a0			;Shorter time for player names message
+	move	a0,@name_cnt
+
+	move	@GAMSTATE,a0
+	subk	ININTRO,a0
+	jreq	pyszx
+	move	*a11(ply_meter_imgs),a0,L
+	jrz	pysznxt
+
+	move	*a11(ply_meter_imgs+32),a0,L
+	move	*a0(OIMG),a1,L
+	cmpi	start,a1
+	jrnz	pysznxt
+	movk	9,a1
+	move	a1,*a0(OYPOS)
+pysznxt
+pyszx
+	rets
+
+
+or_t	.word	1,2,4,8
+
+
+
+ SUBRP	conttimers_cnt
+
+	DIE
+
+
+
+game_start2
+	move	a8,a14
+	srl	1,a14
+	move	@winningteam,a0
+	cmp	a14,a0
+	jrz	gs2
+
+
+
+ SUBR	game_start
+
+	calla	CR_STRTP
+	jalo	SUCIDE			;Not enough credits?
+	calla	P_START			;Take credits
+
+	.ref	set_game_snd
+	calla	set_game_snd
+
+gs2
+
+
+	clr	a0
+	movi	P1DATA,a1
+	movi	PDSIZE*4/16,A2
+lufbzlp	move	a0,*a1+
+	dsj	a2,lufbzlp
+
+	clr	a0
+	move	a0,@gmqrtr
+	move	a0,@qtr_purchased,L	;clr 4x16
+	move	a0,@qtr_purchased+20h,L
+	move	a0,@inmatchup
+	move	a0,@pup_tournament
+	move	a0,@pup_court			;default=INDOOR court
+	move	a0,@pup_aba			;default=regular ball
+	move	a0,@dronesmrt
+
+	.ref	clear_secret_powerup_ram
+	calla	clear_secret_powerup_ram
+
+
+	callr	add_plyr_time		;add time to this players play time
+
+	movi	AUDBONE,a0		;+1 games started from amode
+	calla	AUD1
+
+	movi	AUD_TOTPLYS,a0
+	calla	AUD1
+
+	movk	1,a0
+	sll	a8,a0
+	move	a0,@PSTATUS
+	move	a0,@PSTATUS2		;Player has started bit flags
+
+
+	movk	ADJCSTRT,a0		;credits required to start
+	calla	GET_ADJ			;returns 1,2
+
+	callr	paidcreds_add
+
+
+	movi	INTRO_PID,a0		;>Intro state
+	move	a0,*a13(PROCID)
+	movk	ININTRO,a0
+	move	a0,@GAMSTATE
+
+	calla	display_blank
+	calla	WIPEOUT
+
+
+
+	movi	10*60,a0
+	move	a0,@cntrs_delay
+
+	SLEEPK	1
+
+	clr	a0
+	move	a0,@team1
+	move	a0,@team2
+	move	a0,@SOUNDSUP
+
+
+	.ref	special_heads
+
+	movi	-1,a0
+	move	a0,@special_heads,L
+	move	a0,@special_heads+20h,L
+
+	.ref	dtype
+
+	clr	a0
+	move	a0,@dtype
+
+	.ref	monitor_fullgame
+	CREATE0	monitor_fullgame
+
+	move	@winningteam,a1
+	jrnn	lufbskip
+
+	movk	1,a0
+	move	a0,@HALT
+	
+
+	clr	a0
+	move	a0,@HALT
+	move	a0,@gmqrtr
+
+
+
+
+	clr	a0		;team #
+	move	a0,@team1
+	movk	3,a0		;Team #
+	move	a0,@team2
+
+lufbskip
+
+
+	.if	DEBUG
+	.ref	RIM_STEP
+	.ref	CLOCK_OFF
+	.ref	QUICK_TIP
+	.ref	pup_showshotper
+	.ref	get_all_sticks_cur2
+	.ref	get_all_buttons_cur2
+ 	calla	get_all_sticks_cur2
+	move	a0,a2
+ 	calla	get_all_buttons_cur2
+	btst	0,a2
+	jrz	lufbnooutdoor
+	move	a2,@pup_court
+lufbnooutdoor
+	clr	a1
+	move	a1,@RIM_STEP
+	btst	1,a0
+	jrz	lufbnorimstep
+	move	a0,@RIM_STEP
+lufbnorimstep
+	clr	a1
+	move	a1,@CLOCK_OFF
+	btst	2,a0
+	jrz	lufbnoclkoff
+	move	a0,@CLOCK_OFF
+lufbnoclkoff
+	clr	a1
+	move	a1,@QUICK_TIP
+	btst	0,a0
+	jrz	lufbnormal
+	move	a0,@QUICK_TIP
+	move	a0,@pup_showshotper
+
+	move	a8,a8
+	jrz	lufbp1bp
+	CREATE0	plyr_strtb1
+lufbp1bp
+	cmpi	1,a8
+	jrz	lufbp2bp
+	CREATE0	plyr_strtb2
+lufbp2bp
+	cmpi	2,a8
+	jrz	lufbp3bp
+	CREATE0	plyr_strtb3
+lufbp3bp
+	cmpi	3,a8
+	jrz	lufbp4bp
+	CREATE0	plyr_strtb4
+lufbp4bp
+
+	SLEEPK	1
+
+	movk	0fH,a0
+	move	a0,@PSTATUS
+	move	a0,@PSTATUS2		;Player has started bit flags
+	
+	jruc	lufbskip_entry				;Button pressed?
+
+lufbnormal
+	.endif
+
+lufbredo
+	JSRP	initials_entry
+	move	a0,a0			;is plyr coming from CREATE PLAYER ?
+	jrz	lufbok			;br=no
+	jauc	amode_start		;Start attract mode
+
+	.if	DEBUG
+lufbskip_entry
+	.endif
+lufbok
+	move	@team1,a0
+	move	@team2,a1
+	and	a0,a1
+	move	a1,a1
+	jrnn	lufbbomb_out		;restart attract mode etc...
+
+	jauc	amode_start		;Start attract mode
+
+paid_t	.long	P1DATA+crds_paid,P2DATA+crds_paid,P3DATA+crds_paid
+	.long	P4DATA+crds_paid
+
+lufbbomb_out
+
+
+
+
+	clr	a0
+	move	a0,@cntrs_delay
+	.ref	ballnumscored,balltmshotcnt
+	move	a0,@ballnumscored
+	move	a0,@balltmshotcnt
+
+	.ref	start_qrtr_tune
+	calla	start_qrtr_tune
+
+
+
+	calla	WIPEOUT			;CLEAN SYSTEM OUT
+
+
+ SUBR	demogame_start			;Demo mode entry
+
+
+	JSRP	scrn_scaleininit	;Hide display
+
+
+	movk	1,a0
+	move	a0,@dpageflip		;ON
+	move	a0,@dtype		;3D
+
+	calla	COLRPRC			;Init fixed pal 0
+
+
+
+	movi	[WRLDMID-200,0],a0
+	move	a0,@WORLDTLX,L
+	clr	a0
+	move	a0,@WORLDTLY,L
+
+	SLEEPK	2
+
+
+	movk	1,a0			;delay start of a second plyr flag
+	move	a0,@NO_START
+
+	movi	QRTRTIME,a0		;3 minutes, 0 secs, 0 tenths
+	move	a0,@game_time,L
+	clr	a0
+	move	a0,@clock_speed
+
+
+
+	clr	a0
+	move	a0,@BTIME
+	move	a0,@idiot_bits
+	move	a0,@HALT
+	move	a0,@_4plyrsingame
+
+	.ref	_2plyr_competitive
+	move	a0,@_2plyr_competitive
+
+	movi	scores,a1
+	move	a0,*a1+,L		;Team 1
+	move	a0,*a1+,L		;Team 2
+	move	a0,@timertcnt
+	move	a0,@sc_proc,L
+	move	a0,@steals_off
+	move	a0,@pass_off
+	move	a0,@ballprcv_p,L
+	move	a0,@name_flop
+	move	a0,@gmqrtr
+	move	a0,@plyr_onfire
+	.ref	SHK_ON
+	move	a0,@SHK_ON
+	move	a0,@ballnumscored
+	move	a0,@balltmshotcnt
+
+
+	movi	1 ,a0
+	move	a0,@name_cnt
+
+
+
+	movi	-1,a0
+	move	a0,@winningteam
+	move	a0,@ballpnumlast	;last player who had ball
+	move	a0,@inbound
+	move	a0,@cntl_team
+	move	a0,@cntl_team_last
+	move	a0,@ballsclastp
+	move	a0,@ballshotinair	;Shooter # if shot in air, else -1
+
+
+
+
+	move	@pup_court,a14		;Outdoor court?
+	jrz	lufbnootd			; br=no
+	movk	OTD_CNT-1,a0
+	calla	RNDRNG0
+	sll	5,a0
+	addi	otd_pal_objs,a0
+	move	*a0,a2,L
+	move	*a2(ICMAP),a0,L
+	move	a0,@crt_colors,L
+	clr	a0
+	clr	a1
+	clr	a3
+	movi	08000H,a4
+	clr	a5
+	clr	a6
+	clr	a7
+	calla	BEGINOBJ2
+	jruc	lufbcrtpset
+lufbnootd
+	move	@team1,a0
+	sll	6,a0
+	addi	crt_pals,a0
+	move	*a0+,a14,L
+	move	a14,@crt_colors,L
+	move	*a0,a14,L
+	move	a14,@bkcrt_colors,L
+
+lufbcrtpset
+
+
+	.ref	special_heads
+	.ref	our_names
+
+
+	callr	set_names
+
+	move	@names,a0,L
+	move	a0,@original_names,L
+	move	@names+32,a0,L
+	move	a0,@original_names+32,L
+	move	@names+64,a0,L
+	move	a0,@original_names+64,L
+	move	@names+96,a0,L
+	move	a0,@original_names+96,L
+
+
+
+	.ref	setup_speech
+	calla	setup_speech
+
+	movk	1,a0
+	move	a0,@gndstat		;On
+
+
+
+
+	move	@GAMSTATE,a0
+	subk	INAMODE,a0
+	jreq	lufbdemo
+
+	movk	INGAME,a0
+	move	a0,@GAMSTATE
+
+lufbdemo
+	clr	a0
+	move	a0,@NO_START
+	move	a0,@inmatchup
+
+	CREATE	STAT_PID,status_display
+	SLEEPK	1
+
+
+	.if	IMGVIEW
+	.ref	anipts_debug
+	clr	a8
+	CREATE0 anipts_debug
+	movk	3,a8
+	CREATE0 anipts_debug
+	.endif
+
+	calla	game_initobjs
+
+	.if CRTALGN
+	.ref	gnd_aligndots
+	CREATE0	gnd_aligndots
+	.endif
+
+	CREATE0	ball_main
+	CREATE	gclockid,clock_strt	;start clock
+	CREATE0	bracket_drw
+
+
+	CREATE0	close
+
+	calla	clear_player_stats
+
+	.if	DEBUG
+	.ref	sound_watchdog
+	CREATE0	sound_watchdog
+	.endif
+
+	.ref	name_call
+	CREATE0	name_call
+
+	calla	start_crowd_noise
+	CREATE0	check_idiot
+
+	.ref	doflshs
+	CREATE0	doflshs
+
+	MOVI	[62,1],A8		;START AT COLOR 60, CYCLE 1 COLOR
+	MOVI	scorep,A9		;PAL NAME
+	MOVI	COLTAB_RNBW,A10		;TABLE TO CYCLE WITH
+	MOVK	3,A11			;RATE OF CYCLE IN TICKS
+	CREATE	CYCPID,CYCLE_TABLE	;START PROCESS TO DO CYCLE
+
+	callr	start_arws
+
+
+
+
+	jauc	plyr_start
+
+ SUBR	join_cyc
+	.ref	COLTAB
+	movi	[1,1],A8		;START AT COLOR 1, CYCLE 1 COLOR
+	movi	JOININ_P,A9
+	movi	COLTAB,A10		;TABLE TO CYCLE WITH
+	movk	3,A11			;RATE OF CYCLE IN TICKS
+	CREATE	JOIN_CYCLE_PID,CYCLE_TABLE	;START PROCESS TO DO CYCLE
+	rets
+
+
+COLTAB_RNBW
+	.WORD	0380H,1380H,2380H,3380H,4380H,5380H,6380H,7380H,7300H
+	.WORD	7280H,7200H,7180H,7080H,7008H,7008H,7010H,7010H,701CH
+	.WORD	701CH,601CH,501CH,409CH,309CH,209CH,219CH,029CH,039CH
+	.WORD	139CH,239CH,339CH,539CH,739CH,7390H,7380H,6380H,4380H
+	.WORD	0380H,1380H,2380H,3380H,4380H,5380H,6380H,7380H,7300H
+	.WORD	7280H,7200H,7180H,7080H,7008H,7008H,7010H,7010H,701CH
+	.WORD	701CH,601CH,501CH,409CH,309CH,209CH,219CH,029CH,039CH
+	.WORD	139CH,239CH,339CH,539CH,739CH,7390H,7380H,6380H,4380H
+	.word	-1
+
+
+otd_pal_objs
+	.long	outdr1,outdr2,outdr3,outdr4,outdr5,outdr6
+	.long	outdr7,outdr8,outdr9,outdr10,outdr11,outdr12
+OTD_CNT	.equ	($-otd_pal_objs)/32
+
+crt_pals
+	.long	CRT_ATL_p,BK_ATL_P,CRT_BOS_p,BK_BOS_P
+	.long	CRT_CHA_p,BK_CHA_P,CRT_CHI_p,BK_CHI_P
+	.long	CRT_CLE_p,BK_CLE_P,CRT_DAL_p,BK_DAL_P
+	.long	CRT_DEN_p,BK_DEN_P,CRT_DET_p,BK_DET_P
+	.long	CRT_GLD_p,BK_GLD_P,CRT_HOU_p,BK_HOU_P
+	.long	CRT_IND_p,BK_IND_P,CRT_LAC_p,BK_LAC_P
+	.long	CRT_LAL_p,BK_LAL_P,CRT_MIA_p,BK_MIA_P
+	.long	CRT_MIL_p,BK_MIL_P,CRT_MIN_p,BK_MIN_P
+	.long	CRT_NEJ_p,BK_NEJ_P,CRT_NEY_p,BK_NEY_P
+	.long	CRT_ORL_p,BK_ORL_P,CRT_PHI_p,BK_PHI_P
+	.long	CRT_PHO_p,BK_PHO_P,CRT_POR_p,BK_POR_P
+	.long	CRT_SAC_p,BK_SAC_P,CRT_SAN_p,BK_SAN_P
+	.long	CRT_SEA_p,BK_SEA_P,CRT_TOR_p,BK_TOR_P
+	.long	CRT_UTA_p,BK_UTA_P,CRT_VAN_p,BK_VAN_P
+	.long	CRT_WAS_p,BK_WAS_P
+
+
+	.def	crt_pals_z
+crt_pals_z
+	.long	CRT_ATL_p+32,CRT_BOS_p+32,CRT_CHA_p+32,CRT_CHI_p+32
+	.long	CRT_CLE_p+32,CRT_DAL_p+32,CRT_DEN_p+32,CRT_DET_p+32
+	.long	CRT_GLD_p+32,CRT_HOU_p+32,CRT_IND_p+32,CRT_LAC_p+32
+	.long	CRT_LAL_p+32,CRT_MIA_p+32,CRT_MIL_p+32,CRT_MIN_p+32
+	.long	CRT_NEJ_p+32,CRT_NEY_p+32,CRT_ORL_p+32,CRT_PHI_p+32
+	.long	CRT_PHO_p+32,CRT_POR_p+32,CRT_SAC_p+32,CRT_SAN_p+32
+	.long	CRT_SEA_p+32,CRT_TOR_p+32,CRT_UTA_p+32,CRT_VAN_p+32
+	.long	CRT_WAS_p+32
+
+
+
+ SUBR	start_arws
+
+
+	movi	ARWPID,a1			;0DHo init stuff for humans
+	movi	plyr_lost,a7,L
+
+	movk	3,a10				;Pass plyr #
+	calla	GETPRC
+	movk	2,a10
+	calla	GETPRC
+	movk	1,a10
+	calla	GETPRC
+	clr	a10
+	calla	GETPRC
+
+	.ref	stick_numbers
+	movi	stick_numbers,a7,L
+
+	clr	a11
+	movi	P1DATA,a10			;Pass *PnDATA
+	calla	GETPRC
+	movk	1,a11
+	movi	P2DATA,a10
+	calla	GETPRC
+	movk	2,a11
+	movi	P3DATA,a10
+	calla	GETPRC
+	movk	3,a11
+	movi	P4DATA,a10
+	calla	GETPRC
+
+	.ref	stick_cpu
+	movi	stick_cpu,a7,L
+
+	clr	a11
+	movi	P1DATA,a10
+	calla	GETPRC
+	movk	1,a11
+	movi	P2DATA,a10
+	calla	GETPRC
+	movk	2,a11
+	movi	P3DATA,a10
+	calla	GETPRC
+	movk	3,a11
+	movi	P4DATA,a10
+	calla	GETPRC
+
+	.if DRONES_2MORE
+	movk	4,a11
+	movi	P5DATA,a10
+	calla	GETPRC
+	movk	5,a11
+	movi	P6DATA,a10
+	calla	GETPRC
+	.endif
+
+	rets
+
+
+
+
+check_idiot
+
+	movi	60,a10
+
+azuwc1	SLEEP	TSEC
+	move	@HALT,a0
+	 jrnz	azuwc1
+
+	dsj	a10,azuwc1
+
+	movi	30,a2
+
+	move	@P1DATA+ply_idiot_use,a0
+	cmp	a2,a0
+	jrgt	azuwck2
+    	clr	a1
+	callr	try_ib
+azuwck2
+	move	@P2DATA+ply_idiot_use,a0
+	cmp	a2,a0
+	jrgt	azuwck3
+    	movk	1,a1
+	callr	try_ib
+azuwck3
+	move	@P3DATA+ply_idiot_use,a0
+	cmp	a2,a0
+	jrgt	azuwck4
+    	movk	2,a1
+	callr	try_ib
+azuwck4
+	move	@P4DATA+ply_idiot_use,a0
+	cmp	a2,a0
+	jrgt	azuwckx
+    	movk	3,a1
+	callr	try_ib
+
+azuwckx	SLEEP	6*60
+
+
+	DIE
+	
+
+try_ib
+	movk	7,a0			;Use turbo to run
+	jauc	idiot_box
+
+
+
+close	
+	SLEEPK	8
+
+
+
+	movk	1,a0
+	move	a0,@DISPLAYON
+	calla	display_unblank
+
+
+	clr	a0
+	move	a0,@IRQSKYE
+
+
+	movk	1,a0
+	move	a0,@HALT	   ;stop movement until instructions are done
+
+
+	.if	DEBUG
+	move	@CLOCK_OFF,a0
+	jrnz	azuwskip_inst
+	move	@QUICK_TIP,a14
+	jrnz	azuwskip_inst
+	.endif
+	.ref	instructions
+	JSRP	instructions		;TAKE OUT to skip instructions!
+azuwskip_inst
+
+	clr	a0
+	move	a0,@HALT	   ;start movement
+	move	a0,@cntrs_delay
+
+	SLEEP	35
+	SOUND1	heres_tip_sp
+
+
+
+	DIE
+
+
+
+
+
+ SUBRP	status_display
+
+	clr	a0
+	move	a0,@P1DATA+ply_messages,L	;Zero plyr message img ptr
+	move	a0,@P2DATA+ply_messages,L
+	move	a0,@P3DATA+ply_messages,L
+	move	a0,@P4DATA+ply_messages,L
+	move	a0,@P1DATA+ply_idiot_use
+	move	a0,@P2DATA+ply_idiot_use
+	move	a0,@P3DATA+ply_idiot_use
+	move	a0,@P4DATA+ply_idiot_use
+
+	movi	ijydinit_t,a11			;>Setup status images
+	movi	crplate_ptr,a9,L
+	callr	prt_status
+
+
+
+	movi	init_t1,a11
+	movi	P1DATA+ply_meter_imgs,a9
+	callr	prt_status
+	move	@PSTATUS,a0
+	btst	0,a0				;Is plyr 1 in? Yes if !0
+	jrnz	ijydtag1
+	movi	init_t1a,a11			;No. Setup "insert coin"
+	movi	P1DATA+ply_messages,a9
+	callr	prt_status
+	move	@P1DATA+ply_meter_imgs,a0,L	;Turn off time/turbo objs
+	calla	OBJOFF
+	move	@P1DATA+ply_meter_imgs+32,a0,L
+	calla	OBJOFF
+ijydtag1
+	movi	P1DATA,a11
+	calla	refill_turbo
+
+	movi	player1_data,a0,L
+	move	*a0(PR_CREATED_PLYR),a14	;Is this a created plyr?
+	subk	1,a14
+	jrnz	ijydtag1a
+	addi	PR_NAME1,a0			;Yes. Chk validity of name
+	move	*a0,a1
+	jrle	ijydtag1a				;Assume no name if first=0
+	movk	NAME_LETTERS,a14
+ijydtag1lp
+	move	*a0+,a1
+	cmpi	END_CHAR,a1,W			;In range? No if >
+	jrhi	ijydtag1a
+	dsj	a14,ijydtag1lp
+
+	subi	NAME_LETTERS*16,a0		;Reset ptr
+	move	@P1DATA+ply_meter_imgs,a1,L	;Put created *name in ODATA_p
+	move	a0,*a1(ODATA_p),L		; of plyr name obj
+	clr	a14
+	move	a14,*a1(OMISC)			;Clr so char_gen calcs new X
+	move	*a1(OFLAGS),a14			;Set obj type
+	addi	M_CHARGEN,a14,W
+	move	a14,*a1(OFLAGS)
+ijydtag1a
+
+
+	movi	init_t2,a11
+	move	@TWOPLAYERS,a14			;Two plyr kit? No if 0
+	jrz	ijyd2kit2
+	movi	init_t2kit,a11
+ijyd2kit2	movi	P2DATA+ply_meter_imgs,a9
+	callr	prt_status
+	move	@PSTATUS,a0
+	btst	1,a0				;Is plyr 2 in? Yes if !0
+	jrnz	ijydtag2
+	movi	init_t2a,a11			;No. Setup "insert coin"
+	movi	P2DATA+ply_messages,a9
+	callr	prt_status
+	move	@P2DATA+ply_meter_imgs,a0,L	;Turn off time/turbo objs
+	calla	OBJOFF
+	move	@P2DATA+ply_meter_imgs+32,a0,L
+	calla	OBJOFF
+ijydtag2
+	movi	P2DATA,a11
+	calla	refill_turbo
+
+	movi	player2_data,a0,L
+	move	*a0(PR_CREATED_PLYR),a14	;Is this a created plyr?
+	subk	1,a14
+	jrnz	ijydtag2a
+	addi	PR_NAME1,a0			;Yes. Chk validity of name
+	move	*a0,a1
+	jrle	ijydtag2a				;Assume no name if first=0
+	movk	NAME_LETTERS,a14
+ijydtag2lp
+	move	*a0+,a1
+	cmpi	END_CHAR,a1,W			;In range? No if >
+	jrhi	ijydtag2a
+	dsj	a14,ijydtag2lp
+
+	subi	NAME_LETTERS*16,a0		;Reset ptr
+	move	@P2DATA+ply_meter_imgs,a1,L	;Put created *name in ODATA_p
+	move	a0,*a1(ODATA_p),L		; of plyr name obj
+	clr	a14
+	move	a14,*a1(OMISC)			;Clr so char_gen calcs new X
+	move	*a1(OFLAGS),a14			;Set obj type
+	addi	M_CHARGEN,a14,W
+	move	a14,*a1(OFLAGS)
+ijydtag2a
+
+
+	movi	init_t3,a11
+	move	@TWOPLAYERS,a14			;Two plyr kit? No if 0
+	jrz	ijyd2kit3
+	movi	init_t3kit,a11
+ijyd2kit3	movi	P3DATA+ply_meter_imgs,a9
+	callr	prt_status
+	move	@PSTATUS,a0
+	btst	2,a0				;Is plyr 3 in? Yes if !0
+	jrnz	ijydtag3
+	movi	init_t3a,a11			;No. Setup "insert coin"
+	movi	P3DATA+ply_messages,a9
+	callr	prt_status
+	move	@P3DATA+ply_meter_imgs,a0,L	;Turn off time/turbo objs
+	calla	OBJOFF
+	move	@P3DATA+ply_meter_imgs+32,a0,L
+	calla	OBJOFF
+ijydtag3
+	movi	P3DATA,a11
+	calla	refill_turbo
+
+	movi	player3_data,a0,L
+	move	*a0(PR_CREATED_PLYR),a14	;Is this a created plyr?
+	subk	1,a14
+	jrnz	ijydtag3a
+	addi	PR_NAME1,a0			;Yes. Chk validity of name
+	move	*a0,a1
+	jrle	ijydtag3a				;Assume no name if first=0
+	movk	NAME_LETTERS,a14
+ijydtag3lp
+	move	*a0+,a1
+	cmpi	END_CHAR,a1,W			;In range? No if >
+	jrhi	ijydtag3a
+	dsj	a14,ijydtag3lp
+
+	subi	NAME_LETTERS*16,a0		;Reset ptr
+	move	@P3DATA+ply_meter_imgs,a1,L	;Put created *name in ODATA_p
+	move	a0,*a1(ODATA_p),L		; of plyr name obj
+	clr	a14
+	move	a14,*a1(OMISC)			;Clr so char_gen calcs new X
+	move	*a1(OFLAGS),a14			;Set obj type
+	addi	M_CHARGEN,a14,W
+	move	a14,*a1(OFLAGS)
+ijydtag3a
+
+
+	movi	init_t4,a11
+	movi	P4DATA+ply_meter_imgs,a9
+	callr	prt_status
+	move	@PSTATUS,a0
+	btst	3,a0				;Is plyr 4 in? Yes if !0
+	jrnz	ijydtag4
+	movi	init_t4a,a11			;No. Setup "insert coin"
+	movi	P4DATA+ply_messages,a9
+	callr	prt_status
+	move	@P4DATA+ply_meter_imgs,a0,L	;Turn off time/turbo objs
+	calla	OBJOFF
+	move	@P4DATA+ply_meter_imgs+32,a0,L
+	calla	OBJOFF
+ijydtag4
+	movi	P4DATA,a11
+	calla	refill_turbo
+
+	movi	player4_data,a0,L
+	move	*a0(PR_CREATED_PLYR),a14	;Is this a created plyr?
+	subk	1,a14
+	jrnz	ijydtag4a
+	addi	PR_NAME1,a0			;Yes. Chk validity of name
+	move	*a0,a1
+	jrle	ijydtag4a				;Assume no name if first=0
+	movk	NAME_LETTERS,a14
+ijydtag4lp
+	move	*a0+,a1
+	cmpi	END_CHAR,a1,W			;In range? No if >
+	jrhi	ijydtag4a
+	dsj	a14,ijydtag4lp
+
+	subi	NAME_LETTERS*16,a0		;Reset ptr
+	move	@P4DATA+ply_meter_imgs,a1,L	;Put created *name in ODATA_p
+	move	a0,*a1(ODATA_p),L		; of plyr name obj
+	clr	a14
+	move	a14,*a1(OMISC)			;Clr so char_gen calcs new X
+	move	*a1(OFLAGS),a14			;Set obj type
+	addi	M_CHARGEN,a14,W
+	move	a14,*a1(OFLAGS)
+ijydtag4a
+
+
+	calla	prt_top_scores		;Update scores at scrn top
+
+
+	SLEEPK	5
+	calla	update_scorebrd
+
+
+
+	calla	initcrowd_ani
+	DIE
+
+
+
+ijydlp
+	move	*a11+,a1		;Y
+	sll	16,a0
+	sll	16,a1
+	move	*a11+,a3		;Z
+	movi	DMAWNZ|M_NOCOLL|M_SCRNREL,a4
+	move	*a11+,a2,L		;OIMG
+	movi	CLSDEAD,a5
+	clr	a6
+	clr	a7
+	calla	BEGINOBJ2
+	move	a8,*a9+,L		;keep *obj
+
+ SUBR	prt_status
+
+	move	*a11+,a0		;X
+	cmpi	4000,a0
+	jrne	ijydlp			;!End?
+	rets
+
+
+
+ijydx1	.equ	14
+ijydx2	.equ	240
+ijydy	.equ	18
+ijydz	.equ	300
+
+ijydinit_t
+	.word	SCOREBRD_X,SCOREBRD_Y,SCOREBRD_Z
+	.long	QUARTR01
+	.word	4000
+
+init_t1
+	.word	ijydx1+32,ijydy-10,ijydz
+	.long	insert			;LED_00			;timebox
+	.word	ijydx1,ijydy,ijydz
+	.long	TURBO_01b
+	.word	4000
+init_t1a				;not in game, insert coin
+	.word	ijydx1+32,ijydy-10,ijydz
+	.long	insert
+	.word	4000
+
+init_t2
+	.word	ijydx1+80+32,ijydy-10,ijydz
+	.long	insert			;LED_00			;timebox
+	.word	ijydx1+80,ijydy,ijydz
+	.long	TURBO_01g
+	.word	4000
+init_t2kit
+	.word	ijydx1+80+32,ijydy-10,ijydz
+	.long	insert			;LED_00			;timebox
+	.word	ijydx1+80,ijydy,ijydz
+	.long	TURBO_01b
+	.word	4000
+init_t2a				;not in game, insert coin
+	.word	ijydx1+80+32,ijydy-10,ijydz
+	.long	insert
+	.word	4000
+
+init_t3
+	.word	ijydx2+32,ijydy-10,ijydz
+	.long	insert			;LED_00			;timebox
+	.word	ijydx2,ijydy,ijydz
+	.long	TURBO_01y
+	.word	4000
+init_t3kit
+	.word	ijydx2+32,ijydy-10,ijydz
+	.long	insert			;LED_00			;timebox
+	.word	ijydx2,ijydy,ijydz
+	.long	TURBO_01r
+	.word	4000
+init_t3a				;not in game, insert coin
+	.word	ijydx2+32,ijydy-10,ijydz
+	.long	insert
+	.word	4000
+
+init_t4
+	.word	ijydx2+80+32,ijydy-10,ijydz
+	.long	insert			;LED_00			;timebox
+	.word	ijydx2+80,ijydy,ijydz
+	.long	TURBO_01r
+	.word	4000
+init_t4a				;not in game, insert coin
+	.word	ijydx2+80+32,ijydy-10,ijydz
+	.long	insert
+	.word	4000
+
+
+
+COLRPRC
+	movi	COLRPID,a0
+	calla	KIL1C		;KILL ALL COLOR UPDATE PROCESSES
+	clr	a0
+	move	a0,@PALFRAM,L
+	movi	scorep,a0	;Score area palette
+	jauc	pal_getf
+
+
+
+
+
+ SUBRP	security_trashstuff
+
+czwzx	DIE
+
+
+
+
+
+
+
+
+
+
+
+ SUBR	WNDWON
+
+	PUSHP	a8
+	movk	1,a8
+	MOVE	A8,@WFLG
+	MOVI	[254,400],A8
+	MOVI	SCRNMID,A10
+	JSRP	OWINDOW
+	MOVE	A8,@OBJPTR,L
+	PULLP	a8
+	RETP
+
+
+ SUBR	WNDWOFF
+
+	PUSHP	a8
+	MOVE	@OBJPTR,A8,L
+	JSRP	CWINDOW
+	CLR	A0
+	MOVE	A0,@WFLG
+	PULLP	a8
+	RETP
+
+
+
+
+OWINDOW
+	move	a8,a11
+
+	move	a10,a0
+	sll	16,a0
+	clr	a1
+	movy	a10,a1
+	movi	FONT7A,a2
+	movi	20001,a3		;Z
+	movi	DMACAL,a4
+	movi	CLSNEUT|TYPTEXT|SUBWNDW,a5
+	clr	a6
+	clr	a7
+	calla	BEGINOBJ
+
+	move	*a8(OXPOS),a10
+	move	*a8(OYVAL),a0,L
+	movy	a0,a10			;Get new world coords
+	move	a10,a0
+
+	srl	1,a11			;XY/2
+	andi	07fff7fffH,a11
+
+	subxy	a11,a10
+	addxy	a0,a11
+
+	move	@WSPEED,a0		;Window speed
+	JSRP	OBJEXP32
+
+	movi	OWSPD,a0
+	move	a0,@WSPEED
+
+	RETP
+
+
+
+CWINDOW
+	MOVE	*A8(OXPOS),A10
+	MOVE	*A8(OYVAL),A11,L
+	MOVY	A11,A10
+	MOVE	*A8(OSIZE),A11,L
+	MOVY	A11,A1
+	SRL	17,A1
+	SLL	16,A1
+	SLL	16,A11
+	SRL	17,A11
+	MOVY	A1,A11
+	ADDXY	A11,A10
+	MOVE	A10,A11			;CALCULATED CENTER OF OBJECT
+	MOVI	CWSPD,A0			;WINDOW SPEED
+	JSRP	OBJEXP32
+	CALLA	DELOBJA8
+	RETP
+
+DELWNDW
+	MOVE	@OBJPTR,A0,L
+	MOVE	A0,A8
+	jauc	DELOBJ
+
+
+
+OBJEXP32
+	sll	32-8,a0			;0-255
+	srl	32-8,a0
+	ori	1,a0
+
+	MOVE	*A8(OXPOS),A1
+	MOVE	*A8(OYVAL),A14,L
+	MOVX	A1,A14			;A14 = OBJECT UL
+
+	SLL	16,A1
+	CLR	A2
+	MOVY	A14,A2
+	SUBXY	A10,A14
+	MOVX	A14,A5
+	SLL	16,A5
+	DIVS	A0,A5
+	NEG	A5
+	MOVE	A5,A6
+	CLR	A5
+	MOVY	A14,A5
+	DIVS	A0,A5
+	NEG	A5
+	MOVE	A5,A7
+
+	MOVE	*A8(OXPOS),A3
+	MOVE	*A8(OYVAL),A14,L
+	MOVX	A3,A14
+	MOVE	*A8(OSIZE),A3,L
+	ADDXY	A3,A14			;A14 = OBJECT LR
+
+	PUSH	A8
+	MOVX	A14,A3
+	SLL	16,A3
+	CLR	A4
+	MOVY	A14,A4
+	SUBXY	A11,A14
+	MOVX	A14,A5
+	SLL	16,A5
+	DIVS	A0,A5
+	NEG	A5
+	MOVE	A5,A8
+	CLR	A5
+	MOVY	A14,A5
+	DIVS	A0,A5
+	NEG	A5
+	MOVE	A5,A9
+	MOVE	A0,A5
+	PULL	A14
+OBJTIMLP
+	ADD	A6,A1			;ADD THE TLX INCREMENT
+	ADD	A7,A2			;ADD THE TLY INCREMENT
+	ADD	A8,A3			;ADD THE LRX INCREMENT
+	ADD	A9,A4			;ADD THE LRY INCREMENT
+	MMTM	A12,A1,A2,A3,A4,A5,A6,A7,A14
+	MOVE	A1,*A14(OXVAL),L
+	MOVE	A2,*A14(OYVAL),L
+	SUB	A1,A3
+	SUB	A2,A4			;GET A SIZE FOR THE WINDOW
+	SRL	16,A3
+	MOVY	A4,A3
+	callr	fixa3xy
+	MOVE	A3,*A14(OSIZE),L
+	SLEEPK	1
+	MMFM	A12,A1,A2,A3,A4,A5,A6,A7,A14
+	DSJS	A5,OBJTIMLP
+
+	MOVE	A10,*A14(OXPOS)
+	MOVY	A10,A1
+	SRL	16,A1
+	MOVE	A1,*A14(OYPOS)
+	MOVE	A11,A9
+	SUBXY	A10,A11
+	MOVE	A11,A3
+	callr	fixa3xy
+	MOVE	A3,*A14(OSIZE),L	;MATCH WHAT THE CALLER WANTED
+	MOVE	A9,A11			;PRESERVE FOR YUKS
+	MOVE	A14,A8
+	RETP
+
+
+
+fixa3xy
+	move	a3,a3
+	jrgt	czwzyok
+	movk	1,a0
+	sll	16,a0
+	movy	a0,a3
+czwzyok
+	movx	a3,a0
+	sext	a0
+	jrgt	czwzxok
+	movk	1,a0
+	movx	a0,a3
+czwzxok
+	rets
+
+
+
+ SUBRP	rnd
+
+	move	@RAND,a1,L
+	rl	a1,a1
+	move	@HCOUNT,a14
+	rl	a14,a1
+	add	sp,a1
+	move	a1,@RAND,L
+
+	and	a1,a0
+	rets
+
+
+ SUBR	set_names
+
+	movi	player_names,a10
+	move	@team1,a2
+czwzlp	cmpi	0,a2
+	jrz	czwzout
+	addi	NEXT_TEAM_NAMES,a10		;compute offset into table
+	dec	a2
+	jruc	czwzlp	
+czwzout
+	move	@team1,a0
+	sll	4,a0
+	addi	tm1set,a0
+	move	*a0,a14
+	sll	6,a14
+	add	a14,a10
+
+	move	*a10,a1,L		;image addr
+	move	*a10(20h),a2,L		;image addr
+
+	move	@special_heads,a14
+	jrn	czwznot_spec1
+	sll	5,a14				;x 32 bits
+	addi	our_names,a14
+	move	*a14,a1,L
+czwznot_spec1
+	move	a1,@names,L
+
+
+	move	@special_heads+10h,a14
+	jrn	czwznot_spec2
+	sll	5,a14				;x 32 bits
+	addi	our_names,a14
+	move	*a14,a2,L
+czwznot_spec2
+	move	a2,@names+32,L
+
+
+	movi	player_names,a10
+	move	@team2,a2
+czwzlp2	cmpi	0,a2
+	jrz	czwzout2
+	addi	NEXT_TEAM_NAMES,a10		;compute offset into table
+	dec	a2
+	jruc	czwzlp2
+czwzout2
+	move	@team2,a0
+	sll	4,a0
+	addi	tm2set,a0
+	move	*a0,a14
+	sll	6,a14
+	add	a14,a10
+
+	move	*a10,a1,L		;image addr
+	move	*a10(20h),a2,L		;image addr
+
+	move	@special_heads+20h,a14
+	jrn	czwznot_spec3
+	sll	5,a14				;x 32 bits
+	addi	our_names,a14
+	move	*a14,a1,L
+czwznot_spec3
+	move	a1,@names+64,L
+
+
+	move	@special_heads+30h,a14
+	jrn	czwznot_spec4
+	sll	5,a14				;x 32 bits
+	addi	our_names,a14
+	move	*a14,a2,L
+czwznot_spec4
+	move	a2,@names+96,L
+
+	rets
+
+
+
+	.if	DEBUG
+
+ SUBR	show_plyr_pal
+	DIE
+
+	.ref	dirqtimer
+
+	BSSX	CPUAVG		,16
+	BSSX	CPULEFT		,16
+
+
+ SUBRP	cputime_calcfree
+
+	move	@dirqtimer,a0
+	subk	1,a0
+	jrle	nobog
+	clr	a0
+	jruc	gottime
+nobog
+	move	@vcount,a0
+	subi	EOSINT,a0
+	jrnn	skinccnt
+	addi	256,a0
+skinccnt
+	sll	2,a0
+	neg	a0
+	addi	1024,a0
+gottime
+	move	a0,@CPULEFT
+
+	srl	4,a0
+	move	@CPUAVG,a1
+	move	a1,a2
+	srl	4,a2			;/16
+	sub	a2,a1
+	add	a0,a1
+	move	a1,@CPUAVG
+
+	rets
+
+	.endif
+
+
+	
+	.if DEBUG
+
+ SUBRP	testcode
+
+
+
+	.if 0			;Totally commented out!
+
+	dint
+
+	clr	a0
+	move	a0,@DMACTRL
+	move	a0,@DMACTRL
+
+	clr	a1			;0CHlr screen mem
+	movi	0200000H/32,b0
+iuwmclrscr	move	a0,*a1+,L
+	dsj	b0,iuwmclrscr
+
+	clr	a0
+	move	a0,@DMATEST
+
+	movi	0,a0
+	move	a0,@DMAOFFST
+
+	movk	010H,a1
+	move	a1,@DMACONF
+	movi	[350+56,50+56],a1	;L/R
+	move	a1,@DMAWINDOW,L
+
+	movi	030H,a1
+	move	a1,@DMACONF		;Top/Bottom
+	movi	[200,50],a1
+	move	a1,@DMAWINDOW,L
+
+
+	movi	[0100H,0100H],a3		;Y:X scale
+	clr	a4
+	movi	[100,100+56],a8		;Y:X
+	movi	[100,200],a7		;V:H size
+	movi	02000000H,a10		;SAG
+	movi	0900c0000H,a11		;CTRL:OFSET
+
+	movi	20000,b2
+iuwmlp	rl	16,a4
+
+	movi	DMAREGS,a14
+
+iuwmdwt	move	@DMACTRL,a0
+	jrn	iuwmdwt
+
+	mmtm	a14,a3,a4,a7,a8,a10,a11
+
+	rl	16,a4
+
+iuwmxok	addk	1,a4			;Color+1
+	andi	0ffH,a4
+	move	a4,a0
+	sll	8,a0
+	or	a0,a4
+
+	dsj	b2,iuwmlp
+
+	eint
+
+	.endif			;End of totally commented out!
+
+
+	.if 0			;Totally commented out!
+
+	dint
+
+	clr	a0
+	move	a0,@DMACTRL
+	move	a0,@DMACTRL
+
+	clr	a1			;0CHlr screen mem
+	movi	0200000H/32,b0
+ahskclrscr	move	a0,*a1+,L
+	dsj	b0,ahskclrscr
+
+	clr	a0
+	move	a0,@DMATEST
+
+	movi	0,a0
+	move	a0,@DMAOFFST
+
+	movk	010H,a1
+	move	a1,@DMACONF
+	movi	[350,50],a1		;L/R
+	movi	[399,0],a1		;L/R
+	move	a1,@DMAWINDOW,L
+
+	movi	030H,a1
+	move	a1,@DMACONF		;Top/Bottom
+	movi	[200,50],a1
+	movi	[253,0],a1
+	move	a1,@DMAWINDOW,L
+
+
+	movi	[0100H,0100H],a3		;Y:X scale
+	clr	a4
+	clr	a8			;Y:X
+	movi	010001H,a7		;V:H size
+	movi	02000000H,a10		;SAG
+	movi	0900c0000H,a11		;CTRL:OFSET
+
+ahsklp	rl	16,a4
+
+	movi	DMAREGS,a14
+
+ahskdwt	move	@DMACTRL,a0
+	jrn	ahskdwt
+
+	mmtm	a14,a3,a4,a7,a8,a10,a11
+
+	rl	16,a4
+
+	addk	1,a8
+	btst	9,a8
+	jrz	ahskxok
+	addi	010000H,a8		;+1 Y
+	btst	8+16,a8
+	jrz	ahskyok
+	addk	4,a4
+ahskyok	andi	0ff01ffH,a8
+
+ahskxok	addk	1,a4
+	andi	0ffH,a4
+	move	a4,a0
+	sll	8,a0
+	or	a0,a4
+
+	addk	1,a10			;SAG+1
+
+	jruc	ahsklp
+
+	eint
+
+	.endif			;End of totally commented out!
+
+
+	.if 0			;Totally commented out!
+
+	dint
+	movi	02cH,a0			;Enable cache
+	movi	0802cH,a0		;Disable cache
+	move	a0,@CONTROL
+	movi	0f010H,a0
+	move	a0,@DPYCTL
+	move	@HSTCTLH,a0
+	andi	0bfffH,a0
+	move	a0,@HSTCTLH
+
+
+	movi	CPULEFT,a1
+
+
+
+suvjnxt
+	movi	VCOUNT,a7
+	clr	a6
+	movi	SCRATCH,a2
+
+suvjlp	move	*a7,a0
+	jrnz	suvjlp
+suvjlp2	move	*a7,a0
+	jrz	suvjlp2
+
+suvjlp3
+	movi	SCRATCH+01000H,a0
+	movi	SCRATCH+01000H,a1
+	mmfm	a0,a1,a2,a3,a4,a5,a14
+	mmtm	a0,a1,a2,a3,a4,a5,a14
+
+	addk	1,a6			;1,4
+	move	*a7,a0			;3,6
+	jrnz	suvjlp3			;2,5
+
+	movi	16*50000000/8/62,a1
+	divu	a6,a1
+	addk	18,a1			;+Fudge
+	subi	15*16,a1		;-Overhead cycles
+	move	a1,a0			;Round off
+	addk	8,a0
+	srl	4,a0
+
+	trap	29
+	jruc	suvjnxt
+
+	movi	COLRAM,a8
+suvjlp5	move	*a7,a0
+suvjlp6	move	*a7,a1
+	cmp	a1,a0
+	jreq	suvjlp6
+
+	movi	90,a2
+	movk	5,a0
+suvjlp8	move	a0,*a8		;1+(1),5
+	addk	2,a0		;1,4
+	dsj	a2,suvjlp8		;2,5
+	jruc	suvjlp5
+
+	eint
+
+	.endif			;End of totally commented out!
+
+	rets
+
+	.endif	;DEBUG
+
+
+	.end

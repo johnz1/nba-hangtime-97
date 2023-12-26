@@ -1,4 +1,4 @@
-**************************************************************
+#**************************************************************
 *
 * Owner:	none
 *
@@ -443,7 +443,7 @@ CK_2_CRED
 	MOVI	ADJCCONT,A0
 	CALLA	GET_ADJ 	;GET CONTINUE NUMBER
 	cmpi	2,a0		;1 or 2 is what we return
-	jrhi	c2c20		;>2?
+	jrhi	c2c20		;02H?
 	move	a0,a0		;Return NZ (unless its 2/0)
 	rets
 
@@ -2020,8 +2020,8 @@ _sm_done
 ;	movi	ROBO_BLUE,a2
 ;	fcall	RECTANGLE,b6
 ;
-;	movi	bxy+>00030003,a0	;make frame by filling blue with black
-;	movi	bw|bh->00060006,a1
+;	movi	bxy+000030003H,a0	;make frame by filling blue with black
+;	movi	bw|bh-000060006H,a1
 ;	movi	ROBO_BLACK,a2
 ;	fcall	RECTANGLE,b6
 ;
@@ -2162,8 +2162,8 @@ GO_VOL
 	movi	ROBO_BLUE,a2
 	fcall	RECTANGLE,b6
 
-	movi	bxy+>00030003,a0	;make frame by filling blue with black
-	movi	bw|bh->00060006,a1
+	movi	bxy+000030003H,a0	;make frame by filling blue with black
+	movi	bw|bh-000060006H,a1
 	movi	ROBO_BLACK,a2
 	fcall	RECTANGLE,b6
 
@@ -2303,7 +2303,7 @@ vol_loop_done
 
 #***************************************
 * Adjusts the bar height
-* >a0=new height (1-170)
+* 0a0H=new height (1-170)
 
  SUBRP	adjust_bar_height2
 
@@ -2332,7 +2332,7 @@ vol_loop_done
 
 #***************************************
 * Adjusts the bar height
-* >a0=new height (1-170)
+* 0a0H=new height (1-170)
 
  SUBRP	adjust_bar_height
 
@@ -2361,7 +2361,7 @@ vol_loop_done
 
 ****************************************
 * Draws a line on the volume bar, but won't overwrite green pixels (text)
-* >a0=line index (not Ypos) >a2=color
+* 0a0H=line index (not Ypos) 0a2H=color
 
  SUBRP	vol_bar_line
 
@@ -2369,7 +2369,7 @@ vol_loop_done
 	;convert the line index to a linear address
 	sla	16,a0
 	neg	a0
-	addi	bxy+bh->00030000+59,a0	;various fudges here
+	addi	bxy+bh-000030000H+59,a0	;various fudges here
 	cvxyl	a0,a0
 
 	;now write the color value to all non-green pixels
@@ -2389,7 +2389,7 @@ vbl_skip_pixel
 	
 ****************************************
 * Converts a 0-255 volume value to a 1-170 bar height value
-* >a0=volume
+* 0a0H=volume
 * <a0=height
 
  SUBRP	vol_to_ht
@@ -2415,27 +2415,27 @@ vbl_skip_pixel
 	calla	SNDSND
 	movi	1000,a3
 	calla	SNDSND
-	SLEEP	>40
+	SLEEP	040H
 
 bgsnd3	movi	sound_fx_table,a10
 bgsnd6	move	*a10+,a3,W
 	jrz	bgsnd3
 	calla	SNDSND
-	SLEEP	>20
+	SLEEP	020H
 	jruc	bgsnd6
 
 sound_fx_table
-	.word	>7
-	.word	>36f			;!!!LOOK!!!
-	.word	>33b
-	.word	>92f
-	.word	>36b
-	.word	>900
-	.word	>222
-	.word	>f8
-	.word	>f4
-	.word	>4ba
-	.word	>ca
+	.word	07H
+	.word	036fH			;!!!LOOK!!!
+	.word	033bH
+	.word	092fH
+	.word	036bH
+	.word	0900H
+	.word	0222H
+	.word	0f8H
+	.word	0f4H
+	.word	04baH
+	.word	0caH
 	.word	0
 
 pf_volume_2
@@ -2449,24 +2449,24 @@ pf_volume_3
 	.even
 
 pf_volume_4
-	MESS_MAC RD7FONT,SPACING20,201,vb_y+>05,ROBO_BLUE,STRCNRM,0
+	MESS_MAC RD7FONT,SPACING20,201,vb_y+005H,ROBO_BLUE,STRCNRM,0
 	.string	"MAX",0,0
 	.even
 
 pf_volume_5
-	MESS_MAC RD7FONT,SPACING20,201,vb_y+>a0,ROBO_BLUE,STRCNRM,0
+	MESS_MAC RD7FONT,SPACING20,201,vb_y+0a0H,ROBO_BLUE,STRCNRM,0
 	.string	"MIN",0,0
 	.even
 
-vb_y		.set	>2f
+vb_y		.set	02fH
 vb_height	.set	171
-bxy	.set	>002e0000+200->18
+bxy	.set	0002e0000H+200-018H
 
-bh	.set	>b0*>10000
-bw	.set	>30
+bh	.set	0b0H*010000H
+bw	.set	030H
 
 bthickx	.set	3
-bthicky	.set	3*>10000
+bthicky	.set	3*010000H
 
 volume_table
 	.long	bh+3,bxy		; height:width  /  y:x coordinates
@@ -2833,11 +2833,11 @@ SNDTST
 SNDTLP
 	CALLA	SCRCLR
 	MOVI	M_STEST,A0	;SOUND TEST MESSAGE
-	MOVI	>6080,A1
+	MOVI	06080H,A1
 	CLR	A2
 	MOVI	ROBO_WHITE,A3
 	CALLA	STRNEW1
-	MOVI	>B080,A1	;SCREEN ADDRESS
+	MOVI	0B080H,A1	;SCREEN ADDRESS
 	MOVE	A8,A0
 	CALLA	STRNEW1
 	ADDK	8,A0
@@ -2873,13 +2873,13 @@ SNDMES
 	.byte	"TUNE 1 (1)",0
 	.byte	MUSICHAN,1
 	.byte	"NO WAY (E6)",0
-	.byte	1,>e6
+	.byte	1,0e6H
 	.byte	"EXPL1 (30)",0
-	.byte	4,>30
+	.byte	4,030H
 	.byte	"TUNE 2 (9)",0
 	.byte	MUSICHAN,9
 	.byte	"SPIDER BOUNCE (83)",0
-	.byte	4,>83
+	.byte	4,083H
 	.byte	"MUSIC OFF (0)",0
 	.byte	MUSICHAN,0
 	.byte	0		;THE END OF TABLE
@@ -2957,7 +2957,7 @@ diag_message_table
 
 ****************************************
 * Wait for sound board Data AVailable to go active, with timeout.
-* >a0=timeout
+* 0a0H=timeout
 * <a0=time remaining
 
  SUBR	poll_sdav
@@ -3287,7 +3287,7 @@ COIN_OCTO_AUDS
 ;;	AMAC	amst_s,0,AUDBEGIN,ROBO_GREEN	;On parachute
 ;;	AMAC	M_START,STARTS,0,ROBO_GREEN
 ;;	AMAC	M_PAIDC,0,AUDPAIDC,ROBO_WHITE
-;;	AMAC	M_SERV,0,AUDSERV,>1212
+;;	AMAC	M_SERV,0,AUDSERV,01212H
 ;;	AMAC	M_PLAYS,DOPLAYS,0,ROBO_YELLOW
 	.long	0
 
@@ -3320,7 +3320,7 @@ COIN1_AUDS
 COIN2_AUDS
 	.word	AUD_Y_STRT+85,11		;Y start, Y spacing
 	.word	AUD_LM+13,AUD_RM-13		;LFT/RGT margin X
-	AMAC	M_SERV,0,AUDSERV,>1212
+	AMAC	M_SERV,0,AUDSERV,01212H
 	AMAC	M_PLAYS,DOPLAYS,0,ROBO_YELLOW
 	.long	0
 
@@ -4104,7 +4104,7 @@ PERCENT_WORK
 ;;	AMAC	M_P2MIN,DO_P2MIN,0,ROBO_YELLOW
 ;;	AMAC	M_AVGT,DO_AVGT,0,ROBO_YELLOW
 ;;	AMAC	M_ELAPSE,DO_ELAPSE,0,ROBO_YELLOW
-;;	AMAC	adiff_s,diff_prt,0,>1212
+;;	AMAC	adiff_s,diff_prt,0,01212H
 ;;	.LONG	0
 ;;
 ;;adiff_s	TXTLINE	"GAME DIFFICULTY LEVEL"

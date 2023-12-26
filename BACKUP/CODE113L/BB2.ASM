@@ -99,7 +99,7 @@ butn_plus
 #swtop	SLEEPK	1
 	move	*a8,*a9,L		;Writes to ROM
 	move	@SWITCH,a0,L
-	cmpi	>ffefffff,a0
+	cmpi	0ffefffffH,a0
 	jrnz	#sw1
 	clr	a0
 	move	a0,*a13(PDATA)

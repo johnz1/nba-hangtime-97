@@ -1,3 +1,4 @@
+#*
 ;-----------------------------------------------------------------------------
 ;
 * Owner:	JOHNSON
@@ -396,8 +397,8 @@ EXPND_LINEUP_COMBOS	equ	25		;0-25
 
 SCROLL_SPEED	equ	8
 
-XTRA_CRTIME	equ	>7fff		;20*60
-MAX_CRTIME	equ	>7fff		;30*60
+XTRA_CRTIME	equ	07fffH		;20*60
+MAX_CRTIME	equ	07fffH		;30*60
 
 PSEL_START_DELAY	equ	22	;# frames before repeating
 PSEL_REPEAT_DELAY	equ	15 ;10	;# frames delay til next repeat
@@ -2836,10 +2837,10 @@ ATTRIBSYP:
 	move	a0,*a8(OPAL),L		;Set palette & constant
 	move	a2,a0			;* NEW image
 	move	*a8(OFLAGS),a1
-	andi	>80ff,a1		;DMA flags
+	andi	080ffH,a1		;DMA flags
 	move	a1,*a8(OFLAGS)
 	move	*a8(OCTRL),a1
-	andi	>80ff,a1		;DMA flags
+	andi	080ffH,a1		;DMA flags
 	move	a1,*a8(OCTRL)
 	calla	obj_aniq		;change object image
 #spec_head1
@@ -2867,10 +2868,10 @@ ATTRIBSYP:
 	move	a0,*a8(OPAL),L		;Set palette & constant
 	move	a2,a0			;* image
 	move	*a8(OFLAGS),A1
-	andi	>80ff,a1		;DMA flags
+	andi	080ffH,a1		;DMA flags
 	move	a1,*a8(OFLAGS)
 	move	*a8(OCTRL),a1
-	andi	>80ff,a1		;DMA flags
+	andi	080ffH,a1		;DMA flags
 	move	a1,*a8(OCTRL)
 	calla	obj_aniq		;change object image
 #spec_head2
@@ -2947,10 +2948,10 @@ ATTRIBSYP:
 	move	a0,*a8(OPAL),L		;Set palette & constant
 	move	a2,a0			;* image
 	move	*a8(OFLAGS),A1
-	andi	>80ff,a1		;DMA flags
+	andi	080ffH,a1		;DMA flags
 	move	a1,*a8(OFLAGS)
 	move	*a8(OCTRL),a1
-	andi	>80ff,a1		;DMA flags
+	andi	080ffH,a1		;DMA flags
 	move	a1,*a8(OCTRL)
 	calla	obj_aniq		;change object image
 #spec_head3
@@ -2978,10 +2979,10 @@ ATTRIBSYP:
 	move	a0,*a8(OPAL),L		;Set palette & constant
 	move	a2,a0			;* image
 	move	*a8(OFLAGS),A1
-	andi	>80ff,a1		;DMA flags
+	andi	080ffH,a1		;DMA flags
 	move	a1,*a8(OFLAGS)
 	move	*a8(OCTRL),a1
-	andi	>80ff,a1		;DMA flags
+	andi	080ffH,a1		;DMA flags
 	move	a1,*a8(OCTRL)
 	calla	obj_aniq		;change object image
 #spec_head4
@@ -3000,10 +3001,10 @@ ATTRIBSYP:
 ;;;;;;	move	*a8(OCTRL),a1		;DMA flags
 ;;;;;;	move	a2,a14
 ;;	move	*a8(OFLAGS),A1
-;;	andi	>80ff,a1		;DMA flags
+;;	andi	080ffH,a1		;DMA flags
 ;;	move	a1,*a8(OFLAGS)
 ;;	move	*a8(OCTRL),a1
-;;	andi	>80ff,a1		;DMA flags
+;;	andi	080ffH,a1		;DMA flags
 ;;	move	a1,*a8(OCTRL)
 ;;	calla	obj_aniq		;change object image
 ;;#spec_head5
@@ -5477,9 +5478,9 @@ create_cr_timer
 	PULL	a0
 
 	move	*a8(OCTRL),a1
-	andi	>80ff,a1		;DMA flags
+	andi	080ffH,a1		;DMA flags
 	move	*a0(ICTRL),a14
-	andni	>80ff,a14		;DMA flags
+	andni	080ffH,a14		;DMA flags
 	or	a14,a1
 	move	a1,*a8(OCTRL)
 ;	move	*a8(OCTRL),a1

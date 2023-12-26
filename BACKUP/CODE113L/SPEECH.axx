@@ -1,0 +1,4055 @@
+	.file	"speech.asm"
+	.title	"announcer speech"
+	.width	132
+	.option	b,d,l,t
+	.mnolist
+
+
+	.include	"mproc.equ"
+	.include	"disp.equ"
+	.include	"sys.equ"
+	.include	"gsp.equ"
+	.include	"imgtbl.glo"
+	.include	"imgtbl2.glo"
+	.include	"bgndtbl.glo"
+	.include	"game.equ"
+	.include	"audit.equ"
+	.include	"macros.hdr"
+	.include	"world.equ"
+
+	.asg		0,SEQT
+	.include	"plyr.equ"
+
+
+	.def	pass_speech
+	.def	welcome_sc
+
+	.ref	ballobj_p
+	.ref	special_heads			;-1 = normal player head
+
+	.ref	brick_count
+	.ref	plyrproc_t
+	.ref	ballpnum,ballpnumshot
+	.ref	inbound
+	.ref	ballrimhitcnt,ballbbhitcnt
+	.ref	snd_play1
+	.ref	rndrng0,RNDPER
+	.ref	game_time
+	.ref	gmqrtr,scores
+	.ref	ballptsforshot		;Point value for current shot (1-3)
+	.ref	team1,team2
+	.ref	ballpnumscored		;Last plyr who scored (0-3) or neg
+	.ref	ballnumscored		;# times last plyr scored
+	.ref	plyr_onfire		;plyr who is on fire
+	.ref	ballscorezhit
+	.ref	seekdirdist_obxz128
+	.ref	ballobj_p
+	.ref	get_player_stat
+	.ref	error_found
+
+	.ref	SNDSND
+	.ref	script_play1
+	.ref	organ_fx1_sc,organ_fx2_sc
+	.ref	player_names,tm1set,tm2set,name_sort
+	.ref	crwd_blchrs_sc,crwd_goteam_sc,crwd_defnse_sc
+	.ref	player1_data,player2_data,player3_data,player4_data
+	.ref	player_stats
+	.ref	NUM_NICK_NAMES
+	.ref	jet1_snd,jet2_snd,jet3_snd
+	.ref	siren_snd,car_pass_snd
+	.ref	prop_ple_snd,chrch_bel_sp,car_pas2_snd
+	.ref	ambulne_snd,ambulne2_snd,fire_trk_snd
+	.ref	tarzan,jet4_snd
+	.ref	pup_court
+	.ref	swat_snd
+	.ref	must_rebound
+	.ref	ballshotinair
+
+
+
+	BSSX	last_name,	16	;last name called (0-3)
+	BSSX	last_name_time,	16	;# ticks since name called
+	BSSX	shot_type,	16	;dunk, 3ptr etc
+	BSSX	plyr_shot,	16	;player who shot last
+	BSSX	shot_percentage,16	;0-999
+	BSSX	shot_distance,	16	;distance from hoop
+	.bss	ugly_stat,	16	;0=not ugly, 1=ugly called
+	BSSX	score_diff,	16	;+winning by, -losing by
+	.bss	blowout_called,	16	;0=not called, 1=called
+	.bss	needshot_called,16	;0=not called, 1=called
+	.bss	freakout,	16	;0=no freakout
+	BSSX	jam_speech,	16	;speech type to call when jammed
+	.bss	sound_ram,	16*4*4	;queued speech ram
+	.bss	skycalled,	16	;skyhook called (0=no)
+	BSSX	spch_name_ram,	32*8	;last and full names (4 players)
+	BSSX	spch_pass_ram,	32*4	;last and full names (4 players)
+	BSSX	bkbrd_proc_flg,	16	;'to' last name speech (4 players)
+
+	.text
+
+	.asg	16*3,TM_SPCH_TBL_SZ
+	.asg	16*3,NME_SPCH_TBL_SZ
+
+
+ SX	cheer_snd,   01004H,110,01cdH
+ SX	cheer1_snd,  01004H,110,01d1H
+ SX	cheer2_snd,  01004H,110,01d5H
+ SX	cheer3_snd,  01004H,110,01d9H
+ SX	cheer4_snd,  01004H,110,01d5H
+
+ SX	crwdbed_kill,07102H,25, 0dcH
+ SX	crwdbed_tune,07002H,799,0ddH
+ SX	crwdbd2_tune,07002H,799,0dbH
+ SX	crwd_arbl_sp,02404H,135,01edH	;f0
+
+ SX	midway_sp,   0200DH,67, 0b00H
+ SX	nba_hngtm_sp,0200DH,99, 0b02H
+ SX	at_hlftme_sp,0150DH,61, 0adcH
+ SX	gm_undrwy_sp,0150DH,70, 0adbH
+ SX	heres_tip_sp,0150DH,61, 0b20H
+ SX	overtime_sp, 0200DH,60, 0addH
+ SX	showtm,      0250DH,75, 0a9bH
+ SX	tst_triva_sp,0100DH,76, 0afdH
+
+
+ SX	has_sp,      0100DH,20, 0af1H
+ SX	with_sp,     0100DH,18, 0aefH
+ SX	leadng_by_sp,0100DH,64, 084eH
+ SX	leads_by_sp, 0100DH,58, 084bH
+ SX	lead_by_sp,  0100DH,43, 0849H
+ SX	by_sp,       0100DH,19, 0851H
+ SX	have_lead_sp,0100DH,57, 084fH
+ SX	take_lead_sp,0100DH,49, 084cH
+ SX	taks_lead_sp,0100DH,56, 084dH
+
+ SX	downby_sp,   0100DH,41, 0845H
+ SX	behind_by_sp,0100DH,56, 0853H
+ SX	catchg_up_sp,0100DH,41, 0873H
+
+ SX	gme_tied1_sp,0100DH,44, 0864H
+ SX	gme_tied2_sp,0100DH,49, 0864H
+ SX	tied_at_sp,  0100DH,99, 0866H
+ SX	minute_sp,   0100DH,59, 0ab4H
+
+ SX     vs_sp,       0100DH,47, 0509H
+ SX	wingame_sp,  0200DH,45, 0863H
+ SX	baddec_sp,   0100DH,56, 09ebH
+ SX	ohmy,  	     0100DH,62, 096fH
+ SX	fancy,	     0100DH,51, 0ae6H
+ SX	matchup_sp,  0100DH,65, 0ab1H
+ SX	wideopen_sp, 0100DH,41, 0939H
+ SX	no_prsure_sp,0100DH,48, 0a3dH
+ SX	opn_for_3_sp,0100DH,69, 0b0aH
+ SX	all_alone_sp,0100DH,42, 091cH
+ SX	its_good_sp, 0130DH,61, 0819H
+ SX	it_is_sp,    0100DH,65, 0816H
+ SX	off_in_time, 0100DH,93, 0814H
+ SX	shrt_rng_sp, 0100DH,56, 07ebH
+ SX	finese_it_sp,0100DH,47, 080fH
+ SX	frm_post_sp, 0100DH,41, 07e4H
+ SX	baby_hook_sp,0100DH,47, 0802H
+ SX	half_hook_sp,0100DH,46, 0804H
+ SX	hook_shot_sp,0100DH,41, 0805H
+ SX	sky_hook_sp, 0100DH,74, 083fH
+ SX	sky_hook2_sp,0100DH,72, 0b09H
+ SX	rgt_hndr_sp, 0100DH,69, 0830H
+ SX	lft_hndr_sp, 0100DH,67, 0831H
+ SX	for_two_sp,  0100DH,40, 0b08H
+ SX	from_15_sp,  0100DH,45, 0b0dH
+ SX	from_18_sp,  0100DH,45, 0b0eH
+ SX	from_20_sp,  0100DH,35, 0b0fH
+ SX	shoots1_sp,  0100DH,37, 083cH	;**
+ SX	shoots2_sp,  0100DH,42, 083cH
+ SX	shoots3_sp,  0100DH,33, 083dH
+ SX	from_arc_sp, 0100DH,40, 07e1H
+ SX	tp_circle_sp,0100DH,63, 0b1cH	;7e5
+ SX	for_thre1_sp,0100DH,47, 07e6H
+ SX	frm_dwntn_sp,0100DH,67, 07e9H
+ SX	bhd_3_arc_sp,0100DH,69, 0825H
+ SX	frm_3_arc_sp,0100DH,65, 0826H
+ SX	for_thre2_sp,0100DH,45, 082aH
+ SX	for_thre3_sp,0100DH,51, 0839H
+ SX	frm_outsd_sp,0100DH,63, 083bH
+ SX	unlod_one_sp,0100DH,68, 07ffH
+ SX	frm_l_rng_sp,0100DH,63, 0801H
+ SX	hail_mary_sp,0100DH,59, 0a22H
+ SX	agn_shoot_sp,0100DH,55, 080dH
+ SX	it_culdbe_sp,0100DH,60, 080cH
+ SX	could_tie_sp,0100DH,77, 0b04H
+ SX	outof_rng_sp,0100DH,84, 09b9H
+ SX	outof_rg2_sp,0100DH,84, 09b9H
+ SX	out_cntrl_sp,0100DH,58, 09bdH
+ SX	rainbow_sp,  0110DH,70, 09f2H
+ SX	difficult_sp,0100DH,56, 09afH
+
+ SX	swith_hnd_sp,0110DH,53, 0823H
+ SX	spn_shtup_sp,0110DH,56, 07fdH
+ SX	a_fngr_rl_sp,0110DH,55, 0902H
+
+ SX	hnd_face_sp, 0100DH,67, 0b24H
+ SX	ill_shot_sp, 0100DH,60, 0b25H
+ SX	frcd_shot_sp,0100DH,56, 0b2dH
+ SX	wild_shot_sp,0100DH,56, 0b2eH	;9bb
+
+ SX	alley_oop_sp,0100DH,63, 0a18H
+ SX	alyoop_ps_sp,0100DH,63, 0a1aH
+ SX	thr_tmwrk_sp,0100DH,61, 0a9dH
+ SX	thr_smkn_sp, 0100DH,57, 0af5H
+ SX	thr_zone_sp, 0100DH,65, 0b05H
+ SX	whta_show_sp,0100DH,57, 0958H
+
+ SX	dble_dnk_sp, 0120DH,55, 0b3aH
+ SX	dble_dnk2_sp,0120DH,78, 0b38H
+ SX	lob_pass_sp, 0120DH,55, 0a1cH
+ SX	scp_tmate_sp,0120DH,85, 0b3bH
+ SX	lev_tmate_sp,0120DH,83, 0b3dH
+ SX	is_legal_sp ,0100DH,65, 0b21H
+
+ SX	tm_onfire_sp,0140DH,76, 0b3eH
+ SX	bth_onfre_sp,0100DH,80, 0b3fH
+
+ SX	cantbuy_sp,  0100DH,68, 09ecH
+ SX	rtle_arnd_sp,0100DH,77, 09d2H
+ SX	ugly_shot_sp,0100DH,71, 09e6H
+ SX	putup_brk_sp,0100DH,66, 09b2H
+ SX	nogood_sp,   0130DH,31, 09d4H
+ SX	mis_fires_sp,0100DH,56, 09d8H
+ SX	there_brk_sp,0100DH,66, 09b5H
+ SX	dwn_luck_sp, 0100DH,54, 0ac9H
+ SX	missed_sp,   0100DH,30, 09d6H
+ SX	mised_agn_sp,0100DH,59, 09d7H
+ SX	hita_barn_sp,0100DH,124,0a98H
+ SX	wht_thnk2_sp,0100DH,88, 09edH
+ SX	wht_distr_sp,0100DH,73, 0aa8H
+ SX	at_buzzer_sp,0100DH,57, 07e8H
+ SX	sht_ball_sp, 0100DH,53, 0aadH
+
+ SX	off_rim_sp,  0100DH,46, 09bfH
+ SX	off_frnt_sp, 0100DH,54, 09c9H
+ SX	holes_out_sp,0100DH,58, 09adH
+ SX	bnce_out_sp, 0100DH,42, 09d0H
+ SX	bnce_away_sp,0100DH,54, 09d1H
+ SX	away_side_sp,0100DH,56, 09c7H
+ SX	spins_out_sp,0100DH,45, 09cbH
+ SX	side_rim_sp, 0100DH,61, 09c5H
+ SX	off_heel_sp, 0100DH,54, 09c3H
+ SX	no_sp,       0100DH,30, 09ccH
+ SX	nicly_dne_sp,0100DH,69, 0a49H
+ SX	got_skilz_sp,0100DH,67, 0a97H
+
+ SX	misd_evry_sp,0100DH,66, 09e2H
+ SX	way_shrt_sp, 0100DH,57, 09dfH
+ SX	misd_mile_sp,0100DH,72, 09e3H
+ SX	teribl_sh_sp,0100DH,57, 09baH
+ SX	airball_sp,  0100DH,56, 09daH
+
+ SX	cannonbal_sp,0110DH,58, 095bH
+ SX	sumrslts_sp, 0110DH,90, 096aH
+ SX	goes_flyg_sp,0110DH,68, 0acdH
+ SX	hiabv_rim_sp,0110DH,49, 0ad4H
+ SX	flies_air_sp,0110DH,100,096cH
+ SX	gldes_air_sp,0110DH,99, 096dH
+ SX	raises_up_sp,0110DH,45, 082dH
+ SX	serious_h_sp,0110DH,79, 0b03H
+ SX	learn_tht_sp,0110DH,54, 097aH
+ SX	goes_up_sp,  00905H,37, 0951H
+ SX	goes_hoop_sp,0110DH,59, 095fH
+ SX	tks2_hoop_sp,0110DH,51, 0a36H
+ SX	fly_1hdnr_sp,0110DH,76, 096eH
+ SX	didnt_knw_sp,0110DH,77, 097fH
+ SX	haning_sp,   0110DH,34, 0a0fH
+ SX	ooooooh_sp,  0110DH,65, 0af7H
+ SX	ooooooh2_sp, 0110DH,40, 0af7H
+ SX	thrgh_air_sp,0110DH,50, 096bH
+ SX	way_upair_sp,0110DH,75, 0974H
+ SX	lch_atbkt_sp,0110DH,100,0980H
+ SX	catapults_sp,0110DH,49, 09abH
+ SX	tomahk_dk_sp,0110DH,66, 0965H
+ SX	tomahk_hm_sp,0110DH,79, 0966H
+
+ SX	shuld_pas_sp,0100DH,75, 0a6eH
+ SX	he_lst_bl_sp,0100DH,75, 0a74H
+ SX	he_lostit_sp,0100DH,75, 0a77H
+ SX	bal_loose_sp,0100DH,75, 0a7dH
+
+ SX	fades_sp,    0100DH,21, 0b10H
+ SX	fadeaway_sp, 0100DH,80, 0b11H
+ SX	leans_bck_sp,0100DH,80, 0b17H
+ SX	leans_sp,    0100DH,21, 0b14H
+ SX	leans_in_sp, 0100DH,80, 0b16H
+ SX	pull_jmpr_sp,0100DH,80, 0838H
+ SX	bslne_lnr_sp,0100DH,45, 0b30H
+ SX	luky_bnce_sp,0100DH,58, 092fH
+ SX	per_luck_sp, 0100DH,64, 0946H
+	
+ SX	kaboom1_sp,  0100DH,38, 0b2aH	;91a
+ SX	kaboom2_sp,  0100DH,69, 091bH
+ SX	isit_shoe_sp,0100DH,62, 091eH
+
+ SX	facial_sp,   0100DH,80, 0b42H
+
+ SX	unbelieve_sp,0100DH,53, 0931H
+ SX	u_c_that_sp, 0100DH,65, 0932H
+ SX	oh_man_sp,   0100DH,52, 0934H
+ SX	no_stopng_sp,0100DH,75, 0942H
+ SX	postr_jam_sp,0100DH,67, 0956H
+ SX	jam_it_in_sp,0100DH,83, 095aH
+ SX	thndr_dnk_sp,0100DH,60, 0960H
+ SX	incredble_sp,0100DH,49, 0970H
+ SX	mnstr_jam_sp,0100DH,70, 0971H
+ SX	amazing_sp,  0100DH,57, 0912H
+ SX	he_dnk_it_sp,0100DH,33, 0961H
+ SX	dunks_it_sp, 0100DH,24, 0962H
+ SX	jams_it_sp,  0100DH,35, 097cH
+ SX	spect_dnk_sp,0100DH,81, 0988H
+ SX	slam_dunk_sp,0100DH,51, 0989H
+ SX	he_slams_sp, 0100DH,42, 098bH
+ SX	with_ajam_sp,0100DH,49, 0998H
+ SX	powr_jams_sp,0100DH,73, 09a6H
+
+ SX	head_fake_sp,0050DH,24, 0a8eH
+ SX	the_fake_sp, 0050DH,26, 0a8fH
+ SX	pump_fake_sp,0050DH,30, 0a91H
+
+ SX	hits_jmpr_sp,0100DH,25, 0906H
+ SX	good_4two_sp,0100DH,50, 090aH
+ SX	a_trey_sp,   0100DH,42, 082bH
+ SX	he_scores_sp,0100DH,56, 093bH
+ SX	scores_sp,   0100DH,37, 07deH
+ SX	score_agn_sp,0100DH,70, 07f3H
+ SX	good_agn_sp, 0100DH,47, 07f4H
+ SX	yes_sp,      0100DH,33, 0b33H
+ SX	goooood_sp,  0100DH,42, 0818H
+ SX	goooood2_sp, 0100DH,42, 0903H
+ SX	money_bnk_sp,0100DH,33, 0b33H
+ SX	chk_it_up_sp,0100DH,56, 093bH
+ SX	good_4_3_sp, 0100DH,69, 0929H
+ SX	thats_3_sp,  0100DH,58, 092bH
+ SX	fantastic_sp,0100DH,73, 0a99H
+ SX	drains_it_sp,0100DH,38, 093fH
+ SX	it_falls_sp, 0100DH,42, 090dH
+ SX	falls_in_sp, 0100DH,48, 091fH
+ SX	kncks_dwn_sp,0100DH,54, 092cH
+ SX	dwn_well_sp, 0100DH,90, 094bH
+ SX	bomshakalaka,0100DH,56, 0afcH
+ SX	rama_dong_sp,0100DH,80, 0b47H
+
+ SX	hlftm_ldr_sp,0160DH,73, 0ae9H
+ SX	gmevr_ldr_sp,0160DH,73, 0aeaH
+
+ SX	spin_mv1_sp, 0100DH,60, 07f7H
+ SX	spin_mv2_sp, 0100DH,60, 0991H
+ SX	spin_mv3_sp, 0100DH,60, 0993H
+
+ SX	book_it_sp,  0100DH,28, 08ffH
+ SX	count_it_sp, 0100DH,39, 090bH
+ SX	bingo_sp,    0100DH,41, 0ae2H
+
+ SX	ever_miss_sp,0100DH,77, 0a95H
+ SX	hot_hand_sp, 0100DH,70, 093dH
+ SX	on_fire_sp,  0150DH,83, 0972H
+ SX	heatup_sp,   0130DH,54, 0b1eH
+ SX	lightn_up_sp,0120DH,68, 0aa4H
+ SX	smokin_sp,   0100DH,40, 0af6H
+
+ SX	swish_sp,    0100DH,37, 0917H
+ SX	rgt_thrgh_sp,0100DH,53, 0b4aH
+ SX	botm_net_sp, 0100DH,67, 0b4cH
+ SX	ngbut_net_sp,0100DH,85, 0b4bH
+ SX	whata_sht_sp,0100DH,47, 0937H
+ SX	great_sht_sp,0100DH,54, 0935H
+ SX	good_sht_sp, 0100DH,36, 0938H
+ SX	he_uncon_sp, 0100DH,61, 0914H
+
+ SX	banked_it_sp,0100DH,27, 0829H
+ SX	a_banker_sp, 0100DH,33, 0811H
+ SX	soft_glas_sp,0100DH,95, 0810H
+
+ SX	off_bkbrd_sp,0100DH,80, 0827H
+ SX	off_glass_sp,0100DH,80, 083aH
+ SX	kild_smne_sp,0100DH,110,09eeH
+ SX	off_trgt_sp, 0100DH,80, 09e1H
+ SX	sht_stunk_sp,0100DH,97, 09e8H
+ SX	wht_thnkg_sp,0100DH,88, 09edH
+
+ SX	fr_thw_ln_sp,0100DH,65, 0837H
+ SX	top_key_sp,  0100DH,70, 0807H
+ SX	frm_paint_sp,0100DH,40, 07edH
+ SX	frm_wing_sp, 0100DH,38, 07e7H
+ SX	lnch_jmpr_sp,0100DH,59, 083eH
+ SX	stp_n_pop_sp,0100DH,75, 0832H
+ SX	fires_jumpr, 0100DH,55, 082eH
+ SX	ltle_jmpr_sp,0100DH,48, 07f2H
+
+ SX	fingr_rol_sp,0100DH,46, 080eH
+ SX	figr_itin_sp,0100DH,90, 0901H
+ SX	fingr_rl2_sp,0100DH,46, 080eH
+ SX	lay_it_up_sp,0100DH,45, 081bH
+ SX	layup_sp,    0100DH,41, 081cH
+ SX	he_layup_sp, 0100DH,58, 081eH
+ SX	drv_layup_sp,0100DH,61, 0b19H
+
+ SX	whyyyy_sp,   0100DH,41, 0ae3H
+ SX	blowout_sp,  0100DH,85, 0859H		;it's a blowout
+ SX	whoomp_sp,   0100DH,72, 085aH		;Whoomp, there it is
+ SX	its_hstry_sp,0100DH,47, 0861H
+ SX	fnl_strw_sp, 0100DH,90, 0b4eH
+ SX	fat_sing_sp, 0100DH,115,0858H
+ SX	needshot_sp, 0100DH,72, 0ab2H
+ SX	run_out_sp,  0100DH,55, 0876H
+
+ SX	passes_sp,   0070DH,33, 09f4H
+ SX	he_passes_sp,0070DH,43, 09f6H
+ SX	a_pass_sp,   0070DH,33, 09fbH
+ SX	tosses_it_sp,0070DH,39, 09fcH
+ SX	guns_it_sp,  0070DH,43, 0a13H
+
+ SX	cros_crt_sp, 0070DH,37, 0a16H
+ SX	downcourt_sp,0070DH,37, 0a0aH
+ SX	hev_dncrt_sp,0070DH,69, 0a1dH
+ SX	bnce_pass_sp,0070DH,41, 0a20H
+ SX	dumps_it_sp, 0070DH,27, 09feH
+ SX	long_pass_sp,0070DH,85, 0a0bH
+ SX	pas_outsd_sp,0070DH,58, 09f8H
+
+ SX	goal_tend_sp,0120DH,47, 0a4bH	;SUX
+
+ SX	rebounds_sp, 0100DH,60, 0af3H
+ SX	tks_rbnd2_sp,0100DH,73, 0a4fH
+ SX	tks_rbnd3_sp,0100DH,96, 0a61H
+ SX	grab_rock_sp,0100DH,61, 0a52H
+ SX	has_rebnd_sp,0100DH,64, 0a55H
+ SX	grab_ball_sp,0100DH,64, 0a56H
+ SX	tks_rebnd_sp,0100DH,81, 0a57H
+ SX	posession_sp,0100DH,57, 0a58H
+ SX	off_rebnd_sp,0100DH,89, 0a5aH
+ SX	pulls_off_sp,0100DH,87, 0a5bH
+ SX	with_bord_sp,0100DH,77, 0a5cH
+ SX	grbs_rbnd_sp,0100DH,80, 0a5dH
+ SX	ynk_rim_sp,  0100DH,80, 0a5fH
+ SX	da_rebnd_sp, 0100DH,45, 0a60H
+ SX	rip_rebnd_sp,0100DH,87, 0a50H
+ SX	rbnd_miss_sp,0100DH,97, 0a64H
+
+ SX	its_blckd_sp,0130DH,47, 0a66H
+ SX	outa_here_sp,0130DH,63, 0a67H
+ SX	blckd_it_sp, 0130DH,29, 0a68H
+ SX	no_way_sp,   0130DH,47, 0a69H
+ SX	rejected_sp, 0130DH,46, 0a6aH
+ SX	deflected_sp,0130DH,38, 0a6cH
+ SX	look_out_sp, 0130DH,41, 0a6fH
+
+ SX	stolen_sp,   0130DH,35, 0a72H
+ SX	the_steal_sp,0130DH,39, 0a73H
+ SX	turnover_sp, 0130DH,48, 0a75H
+ SX	trnd_over_sp,0130DH,61, 0a76H
+ SX	quck_hnds_sp,0130DH,46, 0a79H
+ SX	intrceptd_sp,0130DH,48, 0a7fH
+ SX	stripped_sp, 0130DH,29, 0a84H
+ SX	clean_pck_sp,0130DH,48, 0a83H
+ SX	bad_pass_sp, 0130DH,56, 0a82H
+
+ SX	flagrant_sp, 0090DH,37, 0abbH
+ SX	to_floor_sp, 0090DH,43, 0ac6H
+ SX	to_deck_sp,  0090DH,37, 0ac7H
+ SX	shvd_asde_sp,0090DH,67, 0acaH
+ SX	tookm_out_sp,0090DH,48, 0abeH
+ SX	hamerd_hm_sp,0090DH,35, 0ad1H
+ SX	into_stnd_sp,0050DH,96, 0ac4H
+
+
+ SX	nick_nme1,   0100DH,23, 0760H
+ SX	nick_nme2,   0100DH,23, 08c6H
+ SX	nick_nme3,   0100DH,35, 0758H
+ SX	nick_nme4,   0100DH,25, 0774H
+ SX	nick_nme5,   0100DH,36, 0784H
+ SX	nick_nme6,   0100DH,20, 075cH
+ SX	nick_nme7,   0100DH,24, 075eH
+ SX	nick_nme8,   0100DH,37, 08ccH
+ SX	nick_nme9,   0100DH,25, 08d8H
+ SX	nick_nme10,  0100DH,24, 078eH
+ SX	nick_nme11,  0100DH,32, 08b8H
+ SX	nick_nme12,  0100DH,37, 0766H
+ SX	nick_nme13,  0100DH,25, 08d4H
+ SX	nick_nme14,  0100DH,46, 08bcH
+ SX	nick_nme15,  0100DH,20, 0768H
+ SX	nick_nme16,  0100DH,37, 0796H
+ SX	nick_nme17,  0100DH,25, 076aH
+ SX	nick_nme18,  0100DH,31, 076cH
+ SX	nick_nme19,  0100DH,27, 076eH
+ SX	nick_nme20,  0100DH,20, 0798H
+ SX	nick_nme21,  0100DH,36, 079aH
+ SX	nick_nme22,  0100DH,40, 0776H
+ SX	nick_nme23,  0100DH,46, 08beH
+ SX	nick_nme24,  0100DH,31, 08caH
+ SX	nick_nme26,  0100DH,28, 08ceH
+ SX	nick_nme27,  0100DH,32, 077cH
+ SX	nick_nme28,  0100DH,28, 077eH
+ SX	nick_nme29,  0100DH,21, 0780H
+ SX	nick_nme30,  0100DH,31, 0782H
+ SX	nick_nme31,  0100DH,27, 0786H
+ SX	nick_nme32,  0100DH,24, 0788H
+ SX	nick_nme33,  0100DH,29, 078aH
+ SX	nick_nme34,  0100DH,36, 078cH
+ SX	nick_nme35,  0100DH,21, 0790H
+ SX	nick_nme36,  0100DH,23, 0792H
+
+ SX	to_nck_nme1, 0100DH,60, 0761H
+ SX	to_nck_nme2, 0100DH,60, 08c7H
+ SX	to_nck_nme3, 0100DH,60, 0759H
+ SX	to_nck_nme4, 0100DH,60, 0775H
+ SX	to_nck_nme5, 0100DH,60, 0785H
+ SX	to_nck_nme6, 0100DH,60, 075dH
+ SX	to_nck_nme7, 0100DH,60, 075fH
+ SX	to_nck_nme8, 0100DH,60, 08cdH
+ SX	to_nck_nme9, 0100DH,60, 08d9H
+ SX	to_nck_nme10,0100DH,60, 078fH
+ SX	to_nck_nme11,0100DH,60, 08b9H
+ SX	to_nck_nme12,0100DH,60, 0767H
+ SX	to_nck_nme13,0100DH,60, 08d5H
+ SX	to_nck_nme14,0100DH,60, 08bdH
+ SX	to_nck_nme15,0100DH,60, 0769H
+ SX	to_nck_nme16,0100DH,60, 0797H
+ SX	to_nck_nme17,0100DH,60, 076bH
+ SX	to_nck_nme18,0100DH,60, 076dH
+ SX	to_nck_nme19,0100DH,60, 076fH
+ SX	to_nck_nme20,0100DH,60, 0799H
+ SX	to_nck_nme21,0100DH,60, 079bH
+ SX	to_nck_nme22,0100DH,60, 0777H
+ SX	to_nck_nme23,0100DH,60, 08bfH
+ SX	to_nck_nme24,0100DH,60, 08cbH
+ SX	to_nck_nme26,0100DH,60, 08cfH
+ SX	to_nck_nme27,0100DH,60, 077dH
+ SX	to_nck_nme28,0100DH,60, 077fH
+ SX	to_nck_nme29,0100DH,60, 0781H
+ SX	to_nck_nme30,0100DH,60, 0783H
+ SX	to_nck_nme31,0100DH,60, 0787H
+ SX	to_nck_nme32,0100DH,60, 0789H
+ SX	to_nck_nme33,0100DH,60, 078bH
+ SX	to_nck_nme34,0100DH,60, 078dH
+ SX	to_nck_nme35,0100DH,60, 0791H
+ SX	to_nck_nme36,0100DH,60, 0793H
+
+welcome_sc   LWLW	 midway_sp,67,nba_hngtm_sp,-1
+
+
+
+STAB_START
+
+nickname_spch_tbl
+	.long	nick_nme1, to_nck_nme1
+	.long	nick_nme2, to_nck_nme2
+	.long	nick_nme3, to_nck_nme3
+	.long	nick_nme4, to_nck_nme4
+	.long	nick_nme5, to_nck_nme5
+	.long	nick_nme6, to_nck_nme6
+	.long	nick_nme7, to_nck_nme7
+	.long	nick_nme8, to_nck_nme8
+	.long	nick_nme9, to_nck_nme9
+	.long	nick_nme10,to_nck_nme10
+	.long	nick_nme11,to_nck_nme11
+	.long	nick_nme12,to_nck_nme12
+	.long	nick_nme13,to_nck_nme13
+	.long	nick_nme14,to_nck_nme14
+	.long	nick_nme15,to_nck_nme15
+	.long	nick_nme16,to_nck_nme16
+	.long	nick_nme17,to_nck_nme17
+	.long	nick_nme18,to_nck_nme18
+	.long	nick_nme19,to_nck_nme19
+	.long	nick_nme20,to_nck_nme20
+	.long	nick_nme21,to_nck_nme21
+	.long	nick_nme22,to_nck_nme22
+	.long	nick_nme23,to_nck_nme23
+	.long	nick_nme24,to_nck_nme24
+	.long	nick_nme26,to_nck_nme26
+	.long	nick_nme27,to_nck_nme27
+	.long	nick_nme28,to_nck_nme28
+	.long	nick_nme29,to_nck_nme29
+	.long	nick_nme30,to_nck_nme30
+	.long	nick_nme31,to_nck_nme31
+	.long	nick_nme32,to_nck_nme32
+	.long	nick_nme33,to_nck_nme33
+	.long	nick_nme34,to_nck_nme34
+	.long	nick_nme35,to_nck_nme35
+	.long	nick_nme36,to_nck_nme36
+	.long	nick_nme36,to_nck_nme36
+	.long	nick_nme36,to_nck_nme36
+
+
+full_name_speech
+
+ .word	0100DH,77,1300		;AUGMON,   stacey	( ALTANTA HAWKS )
+ .word	0100DH,83,1304		;BLAYLOCK, mookie
+ .word	0100DH,64,1308		;SMITH,    steve
+ .word	0100DH,71,1604		;LAETNER
+ .word	0100DH,63,1316		;NORMAN,   ken
+
+ .word	0100DH,61,1320		;BROWN,    dee		( BOSTON )
+ .word	0100DH,66,1324		;BARROS,   dana
+ .word	0100DH,79,1328		;MONTROSS, eric
+ .word	0100DH,66,1332		;RADJA,    dino
+ .word	0100DH,59,1336		;FOX,      rick
+
+ .word	0100DH,64,1620		;ANDERSON, kenny	( CHARLOTTE )
+ .word	0100DH,74,1344		;JOHNSN_L, larry
+ .word	0100DH,65,1348		;RICE,     glen
+ .word	0100DH,70,1352		;ZIDEK,    george
+ .word	0100DH,64,1356		;CURRY,    dell
+
+ .word	0100DH,72,1360		;PIPPEN.   scottie	( CHICAGO )
+ .word	0100DH,62,1364		;RODMAN,   dennis
+ .word	0100DH,70,1368		;KUKOC,    tonic
+ .word	0100DH,78,1372		;LONGLEY,  luke
+ .word	0100DH,67,1376		;KERR,     steve
+
+ .word	0100DH,75,1380		;HILL,     tyrone	( CLEVELAND )
+ .word	0100DH,76,1384		;MILLS,    chris
+ .word	0100DH,70,1388		;PHILLS,   bobby
+ .word	0100DH,69,1392		;BRANDON,  terrell
+ .word	0100DH,65,1396		;FERRY,    danny
+
+ .word	0100DH,83,1400		;JACKSON,  jim		( DALLAS )
+ .word	0100DH,68,1404		;KIDD,     jason
+ .word	0100DH,88,1408		;MASHBURN, jamal
+ .word	0100DH,74,1412		;JONES,    popeye
+ .word	0100DH,84,1416		;McCLOUD,  george
+
+ .word	0100DH,89,1420		;ABDUL-RAUF		( DENVER )
+ .word	0100DH,103,1424		;MUTUMBO
+ .word	0100DH,96,1428		;McDYESS
+ .word	0100DH,71,1432		;ROSE
+ .word	0100DH,51,1436		;ELLIS
+
+ .word	0100DH,74,1440		;DUMARS			( DETROIT )
+ .word	0100DH,63,1444		;HILL,     grant
+ .word	0100DH,76,1448		;MILLS,    terry
+ .word	0100DH,65,1452		;THORPE
+ .word	0100DH,76,1456		;HOUSTON,  allan
+
+ .word	0100DH,61,1568		;WILLIS			( GOLDEN STATE )
+ .word	0100DH,76,1464		;SPREWELL
+ .word	0100DH,84,1468		;SEIKALY
+ .word	0100DH,65,1472		;SMITH,    joe
+ .word	0100DH,77,1476		;MULLIN
+
+ .word	0100DH,118,1480		;OLAJUWON		( HOUSTON )
+ .word	0100DH,76,1484		;DREXLER
+ .word	0100DH,80,1488		;HORRY
+ .word	0100DH,70,1492		;CASSELL
+ .word	0100DH,63,1496		;SMITH,    kenny
+
+ .word	0100DH,85,1500		;MILLER			( INDIANA )
+ .word	0100DH,71,1504		;DAVIS,    dale
+ .word	0100DH,71,1508		;SMITS
+ .word	0100DH,77,1512		;McKEE
+ .word	0100DH,78,1516		;JACKSON,  mark
+
+ .word	0100DH,51,1520		;VAUGHT			( CLIPPERS )
+ .word	0100DH,64,1524		;ROGERS,   rodney
+ .word	0100DH,80,1528		;MURRAY,   lamond
+ .word	0100DH,75,1532		;RICHARDS
+ .word	0100DH,72,1536		;BARRY
+
+ .word	0100DH,76,1540		;VAN EXEL		( LAKERS )
+ .word	0100DH,78,1544		;DIVAC
+ .word	0100DH,83,1548		;CEBALLOS
+ .word	0100DH,62,1552		;CAMPBELL
+ .word	0100DH,65,1556		;MAGIC JOHNSON
+
+ .word	0100DH,97,1560		;MOURNING		( MIAMI )
+ .word	0100DH,78,1740		;WILLIAMS, walt
+ .word	0100DH,58,1961		;REX CHAPMAN
+ .word	0100DH,80,1460		;HARDAWAY, tim		
+ .word	0100DH,84,1572		;DANILOVIC
+
+ .word	0100DH,70,1580		;BAKER	   vin		( MILWAUKEE )
+ .word	0100DH,93,1584		;ROBINSON, glen
+ .word	0100DH,73,1588		;RESPERT
+ .word	0100DH,69,1592		;BENJAMIN
+ .word	0100DH,71,1596		;DOUGLAS
+
+ .word	0100DH,94,1600		;RIDER			( MINNESOTTA )
+ .word	0100DH,68,1955		;ANDREW LANG
+ .word	0100DH,57,1964		;SPUD WEBB
+ .word	0100DH,73,1612		;GUGLIOTTA
+ .word	0100DH,72,1616		;GARNETT
+
+ .word	0100DH,68,1340		;GILL,     kendall	( NEW JERSEY )
+ .word	0100DH,81,1624		;BRADLEY
+ .word	0100DH,54,1628		;GILLIAM
+ .word	0100DH,61,1632		;O'BANNON
+ .word	0100DH,61,1636		;EDWARDS,  kevin
+
+ .word	0100DH,82,1640		;EWING			( NEW YORK )
+ .word	0100DH,80,1644		;MASON
+ .word	0100DH,71,1648		;HARPER,   derek
+ .word	0100DH,81,1652		;OAKLEY
+ .word	0100DH,70,1656		;STARKS
+
+ .word	0100DH,95,1660		;HARDAWAY, anfernee	( ORLANDO )
+ .word	0100DH,76,1664		;GRANT,    horace
+ .word	0100DH,65,1668		;ANDERSON, nick
+ .word	0100DH,67,1672		;SCOTT,    dennis
+ .word	0100DH,72,1676		;KONCAK,   jon
+
+ .word	0100DH,96,1680		;STACKHOUSE		( PHILADELPHIA )
+ .word	0100DH,71,1684		;COLEMAN,  derrick
+ .word	0100DH,110,1688		;WEATHERSPOON
+ .word	0100DH,60,1967		;RUFFIN,   trevor
+ .word	0100DH,90,1696		;MAXWELL,  vernon
+
+ .word	0100DH,69,1700		;JOHNSON,  kevin	( PHOENIX )
+ .word	0100DH,101,1704		;TISDALE
+ .word	0100DH,69,1708		;MANNING
+ .word	0100DH,77,1712		;PERSON,   wesley
+ .word	0100DH,95,1716		;FINLEY
+
+ .word	0100DH,77,1720		;STRICKLAND		( PORTLAND )
+ .word	0100DH,94,1724		;ROBINSON, cliff
+ .word	0100DH,93,1728		;SABONIS
+ .word	0100DH,73,1732		;WILLIAMS, buck
+ .word	0100DH,76,1736		;CHILDRESS
+
+ .word	0100DH,74,1564		;OWENS	       		( SACRAMENTO )
+ .word	0100DH,82,1744		;RICHMOND
+ .word	0100DH,85,1748		;GRANT,    brian
+ .word	0100DH,100,1752		;MARCIULIONIS
+ .word	0100DH,55,1756		;EDNEY
+
+ .word	0100DH,69,1760		;ELLIOTT		( SAN ANTONIO )
+ .word	0100DH,91,1764		;ROBINSON, david
+ .word	0100DH,74,1768		;JOHNSON,  avery
+ .word	0100DH,71,1772		;PERSON,   chuck
+ .word	0100DH,82,1776		;DEL NEGRO
+ 
+ .word	0100DH,68,1780		;KEMP			( SEATTLE )
+ .word	0100DH,74,1784		;PAYTON
+ .word	0100DH,57,1788		;SCHREMPF
+ .word	0100DH,59,1792		;HAWKINS,  hersey
+ .word	0100DH,56,1796		;FORD
+
+ .word	0100DH,66,1800		;ROGERS,   carlos	( TORONTO )
+ .word	0100DH,92,1804		;STOUDAMIRE
+ .word	0100DH,58,1952		;ALVIN ROBERTSON
+ .word	0100DH,67,1812		;MILLER
+ .word	0100DH,53,1816		;MURRAY,   tracy
+
+ .word	0100DH,79,1820		;STOCKTON		( UTAH )
+ .word	0100DH,68,1824		;MALONE
+ .word	0100DH,70,1828		;HORNACEK
+ .word	0100DH,69,1832		;BENOIT
+ .word	0100DH,64,1836		;MORRIS
+
+ .word	0100DH,78,1840		;ANTHONY		( VANCOUVER )
+ .word	0100DH,68,1844		;EDWARDS,  blue
+ .word	0100DH,56,1958		;BYRON SCOTT
+ .word	0100DH,74,1852		;REEVES
+ .word	0100DH,63,1856		;MURDOCK
+
+ .word	0100DH,75,1860		;HOWARD			( WASHINGTON )
+ .word	0100DH,75,1864		;WEBBER
+ .word	0100DH,69,1868		;CHEANEY
+ .word	0100DH,70,1872		;PACK
+ .word	0100DH,92,1876		;MURESAN
+
+
+pass_speech		;'TO player name'
+
+ .word	0100DH,40,1303		;TO AUGMON,   stacey	( ALTANTA HAWKS )
+ .word	0100DH,40,1307		;TO BLAYLOCK, mookie
+ .word	0100DH,40,1311		;TO SMITH,    steve
+ .word	0100DH,40,1607		;TO LAETNER
+ .word	0100DH,40,1319		;TO NORMAN,   ken
+
+ .word	0100DH,40,1323		;TO BROWN,    dee	( BOSTON )
+ .word	0100DH,40,1327		;TO BARROS,   dana
+ .word	0100DH,40,1331		;TO MONTROSS, eric
+ .word	0100DH,40,1335		;TO RADJA,    dino
+ .word	0100DH,40,1339		;TO FOX,      rick
+
+ .word	0100DH,40,1623		;TO ANDERSON, kenny	( CHARLOTTE )
+ .word	0100DH,40,1347		;TO JOHNSN_L, larry
+ .word	0100DH,40,1351		;TO RICE,     glen
+ .word	0100DH,40,1355		;TO ZIDEK,    george
+ .word	0100DH,40,1359		;TO CURRY,    dell
+
+ .word	0100DH,40,1363		;TO PIPPEN.   scottie	( CHICAGO )
+ .word	0100DH,40,1367		;TO RODMAN,   dennis
+ .word	0100DH,40,1371		;TO KUKOC,    tonic
+ .word	0100DH,40,1375		;TO LONGLEY,  luke
+ .word	0100DH,40,1379		;TO KERR,     steve
+
+ .word	0100DH,40,1383		;TO HILL,     tyrone	( CLEVELAND )
+ .word	0100DH,40,1387		;TO MILLS,    chris
+ .word	0100DH,40,1391		;TO PHILLS,   bobby
+ .word	0100DH,40,1395		;TO BRANDON,  terrell
+ .word	0100DH,40,1399		;TO FERRY,    danny
+
+ .word	0100DH,40,1403		;TO JACKSON,  jim	( DALLAS )
+ .word	0100DH,40,1407		;TO KIDD,     jason
+ .word	0100DH,40,1411		;TO MASHBURN, jamal
+ .word	0100DH,40,1415		;TO JONES,    popeye
+ .word	0100DH,40,1419		;TO McCLOUD,  george
+
+ .word	0100DH,40,1423		;TO ABDUL-RAUF		( DENVER )
+ .word	0100DH,40,1427		;TO MUTUMBO
+ .word	0100DH,40,1431		;TO McDYESS
+ .word	0100DH,40,1435		;TO ROSE
+ .word	0100DH,40,1439		;TO ELLIS
+
+ .word	0100DH,40,1443		;TO DUMARS		( DETROIT )
+ .word	0100DH,40,1447		;TO HILL,     grant
+ .word	0100DH,40,1451		;TO MILLS,    terry
+ .word	0100DH,40,1455		;TO THORPE
+ .word	0100DH,40,1459		;TO HOUSTON,  allan
+
+ .word	0100DH,40,1571		;TO WILLIS		( GOLDEN STATE )
+ .word	0100DH,40,1467		;TO SPREWELL
+ .word	0100DH,40,1471		;TO SEIKALY
+ .word	0100DH,40,1475		;TO SMITH,    joe
+ .word	0100DH,40,1479		;TO MULLIN
+
+ .word	0100DH,40,1483		;TO OLAJUWON		( HOUSTON )
+ .word	0100DH,40,1487		;TO DREXLER
+ .word	0100DH,40,1491		;TO HORRY
+ .word	0100DH,40,1495		;TO CASSELL
+ .word	0100DH,40,1499		;TO SMITH,    kenny
+
+ .word	0100DH,40,1503		;TO MILLER		( INDIANA )
+ .word	0100DH,40,1507		;TO DAVIS,    dale
+ .word	0100DH,40,1511		;TO SMITS
+ .word	0100DH,40,1515		;TO McKEE
+ .word	0100DH,40,1519		;TO JACKSON,  mark
+
+ .word	0100DH,40,1523		;TO VAUGHT		( CLIPPERS )
+ .word	0100DH,40,1527		;TO ROGERS,   rodney
+ .word	0100DH,40,1531		;TO MURRAY,   lamond
+ .word	0100DH,40,1535		;TO RICHARDS
+ .word	0100DH,40,1539		;TO BARRY
+
+ .word	0100DH,40,1543		;TO VAN EXEL		( LAKERS )
+ .word	0100DH,40,1547		;TO DIVAC
+ .word	0100DH,40,1551		;TO CEBALLOS
+ .word	0100DH,40,1555		;TO CAMPBELL
+ .word	0100DH,40,1559		;TO JONES
+
+ .word	0100DH,40,1563		;TO MOURNING		( MIAMI )
+ .word	0100DH,40,1743		;TO WILLIAMS, walt	
+ .word	0100DH,40,1963		;TO CHAPMAN
+ .word	0100DH,40,1463		;TO HARDAWAY, tim
+ .word	0100DH,40,1575		;TO DANILOVIC
+
+ .word	0100DH,40,1583		;TO BAKER     vin	( MILWAUKEE )
+ .word	0100DH,40,1587		;TO ROBINSON, glen
+ .word	0100DH,40,1591		;TO RESPERT
+ .word	0100DH,40,1595		;TO BENJAMIN
+ .word	0100DH,40,1599		;TO DOUGLAS
+
+ .word	0100DH,40,1603		;TO RIDER		( MINNESOTTA )
+ .word	0100DH,40,1957		;TO ANDREW LANG
+ .word	0100DH,40,1966		;TO SPUD WEBB
+ .word	0100DH,40,1615		;TO GUGLIOTTA
+ .word	0100DH,40,1619		;TO GARNETT
+
+ .word	0100DH,40,1343		;TO GILL,     kendall	( NEW JERSEY )
+ .word	0100DH,40,1627		;TO BRADLEY
+ .word	0100DH,40,1631		;TO GILLIAM
+ .word	0100DH,40,1635		;TO O'BANNON
+ .word	0100DH,40,1639		;TO EDWARDS,  kevin
+
+ .word	0100DH,40,1643		;TO EWING		( NEW YORK )
+ .word	0100DH,40,1647		;TO MASON
+ .word	0100DH,40,1651		;TO HARPER,   derek
+ .word	0100DH,40,1655		;TO OAKLEY
+ .word	0100DH,40,1659		;TO STARKS
+
+ .word	0100DH,40,1663		;TO HARDAWAY, anfernee	( ORLANDO )
+ .word	0100DH,40,1667		;TO GRANT,    horace
+ .word	0100DH,40,1671		;TO ANDERSON, nick
+ .word	0100DH,40,1675		;TO SCOTT,    dennis
+ .word	0100DH,40,1679		;TO KONCAK,   jon
+
+ .word	0100DH,40,1683		;TO STACKHOUSE		( PHILADELPHIA )
+ .word	0100DH,40,1687		;TO COLEMAN,  derrick
+ .word	0100DH,40,1691		;TO WEATHERSPOON
+ .word	0100DH,40,1969		;TO RUFFIN
+ .word	0100DH,40,1699		;TO MAXWELL,  vernon
+
+ .word	0100DH,40,1703		;TO JOHNSON,  kevin	( PHOENIX )
+ .word	0100DH,40,1707		;TO TISDALE
+ .word	0100DH,40,1711		;TO MANNING
+ .word	0100DH,40,1715		;TO PERSON,   wesley
+ .word	0100DH,40,1719		;TO FINLEY
+
+ .word	0100DH,40,1723		;TO STRICKLAND		( PORTLAND )
+ .word	0100DH,40,1727		;TO ROBINSON, cliff
+ .word	0100DH,40,1731		;TO SABONIS
+ .word	0100DH,40,1735		;TO WILLIAMS, buck
+ .word	0100DH,40,1739		;TO CHILDRESS
+
+ .word	0100DH,40,1567		;TO OWENS		( SACRAMENTO )
+ .word	0100DH,40,1747		;TO RICHMOND
+ .word	0100DH,40,1751		;TO GRANT,    brian
+ .word	0100DH,40,1755		;TO MARCIULIONIS
+ .word	0100DH,40,1759		;TO EDNEY
+
+ .word	0100DH,40,1763		;TO ELLIOTT		( SAN ANTONIO )
+ .word	0100DH,40,1767		;TO ROBINSON, david
+ .word	0100DH,40,1771		;TO JOHNSON,  avery
+ .word	0100DH,40,1775		;TO PERSON,   chuck
+ .word	0100DH,40,1779		;TO DEL NEGRO
+ 
+ .word	0100DH,40,1783		;TO KEMP		( SEATTLE )
+ .word	0100DH,40,1787		;TO PAYTON
+ .word	0100DH,40,1791		;TO SCHREMPF
+ .word	0100DH,40,1795		;TO HAWKINS,  hersey
+ .word	0100DH,40,1799		;TO FORD
+
+ .word	0100DH,40,1803		;TO ROGERS,   carlos	( TORONTO )
+ .word	0100DH,40,1807		;TO STOUDAMIRE
+ .word	0100DH,40,1954		;TO ROBERTSON
+ .word	0100DH,40,1815		;TO MILLER
+ .word	0100DH,40,1819		;TO MURRAY,   tracy
+
+ .word	0100DH,40,1823		;TO STOCKTON		( UTAH )
+ .word	0100DH,40,1827		;TO MALONE
+ .word	0100DH,40,1831		;TO HORNACEK
+ .word	0100DH,40,1835		;TO BENOIT
+ .word	0100DH,40,1839		;TO MORRIS
+
+ .word	0100DH,40,1843		;TO ANTHONY		( VANCOUVER )
+ .word	0100DH,40,1847		;TO EDWARDS,  blue
+ .word	0100DH,40,1960		;TO SCOTT
+ .word	0100DH,40,1855		;TO REEVES
+ .word	0100DH,40,1859		;TO MURDOCK
+
+ .word	0100DH,40,1863		;TO HOWARD		( WASHINGTON )
+ .word	0100DH,40,1867		;TO WEBBER
+ .word	0100DH,40,1871		;TO CHEANEY
+ .word	0100DH,40,1875		;TO PACK
+ .word	0100DH,40,1879		;TO MURESAN
+
+
+
+name_speech 		;(last name only, excited)
+
+
+ .word	0100DH,32,1301		;AUGMON,   stacey	( ALTANTA HAWKS )
+ .word	0100DH,42,1305		;BLAYLOCK, mookie
+ .word	0100DH,31,1309		;SMITH,    steve
+ .word	0100DH,31,1605		;LAETNER
+ .word	0100DH,32,1317		;NORMAN,   ken
+
+ .word	0100DH,35,1321		;BROWN,    dee		( BOSTON )
+ .word	0100DH,30,1325		;BARROS,   dana
+ .word	0100DH,51,1329		;MONTROSS, eric
+ .word	0100DH,33,1333		;RADJA,    dino
+ .word	0100DH,30,1337		;FOX,      rick
+
+ .word	0100DH,31,1621		;ANDERSON, kenny	( CHARLOTTE )
+ .word	0100DH,36,1345		;JOHNSN_L, larry
+ .word	0100DH,31,1349		;RICE,     glen
+ .word	0100DH,30,1353		;ZIDEK,    george
+ .word	0100DH,31,1357		;CURRY,    dell
+
+ .word	0100DH,27,1361		;PIPPEN.   scottie	( CHICAGO )
+ .word	0100DH,29,1365		;RODMAN,   dennis
+ .word	0100DH,34,1369		;KUKOC,    tonic
+ .word	0100DH,43,1373		;LONGLEY,  luke
+ .word	0100DH,32,1377		;KERR,     steve
+
+ .word	0100DH,31,1381		;HILL,     tyrone	( CLEVELAND )
+ .word	0100DH,40,1385		;MILLS,    chris
+ .word	0100DH,33,1389		;PHILLS,   bobby
+ .word	0100DH,29,1393		;BRANDON,  terrell
+ .word	0100DH,26,1397		;FERRY,    danny
+
+ .word	0100DH,46,1401		;JACKSON,  jim		( DALLAS )
+ .word	0100DH,30,1405		;KIDD,     jason
+ .word	0100DH,47,1409		;MASHBURN, jamal
+ .word	0100DH,38,1413		;JONES,    popeye
+ .word	0100DH,44,1417		;McCLOUD,  george
+
+ .word	0100DH,48,1421		;ABDUL-RAUF		( DENVER )
+ .word	0100DH,56,1425		;MUTUMBO
+ .word	0100DH,47,1429		;McDYESS
+ .word	0100DH,30,1433		;ROSE
+ .word	0100DH,30,1437		;ELLIS
+
+ .word	0100DH,44,1441		;DUMARS			( DETROIT )
+ .word	0100DH,31,1445		;HILL,     grant
+ .word	0100DH,40,1449		;MILLS,    terry
+ .word	0100DH,32,1453		;THORPE
+ .word	0100DH,41,1457		;HOUSTON,  allan
+
+ .word	0100DH,29,1569		;WILLIS			( GOLDEN STATE )
+ .word	0100DH,41,1465		;SPREWELL		
+ .word	0100DH,42,1469		;SEIKALY
+ .word	0100DH,31,1473		;SMITH,    joe
+ .word	0100DH,40,1477		;MULLIN
+
+ .word	0100DH,68,1481		;OLAJUWON		( HOUSTON )
+ .word	0100DH,34,1485		;DREXLER
+ .word	0100DH,39,1489		;HORRY
+ .word	0100DH,35,1493		;CASSELL
+ .word	0100DH,31,1497		;SMITH,    kenny
+
+ .word	0100DH,37,1501		;MILLER			( INDIANA )
+ .word	0100DH,32,1505		;DAVIS,    dale
+ .word	0100DH,67,1509		;SMITS
+ .word	0100DH,41,1513		;McKEE
+ .word	0100DH,45,1517		;JACKSON,  mark
+
+ .word	0100DH,31,1521		;VAUGHT			( CLIPPERS )
+ .word	0100DH,32,1525		;ROGERS,   rodney
+ .word	0100DH,29,1529		;MURRAY,   lamond
+ .word	0100DH,42,1533		;RICHARDS
+ .word	0100DH,31,1537		;BARRY
+
+ .word	0100DH,42,1541		;VAN EXEL		( LAKERS )
+ .word	0100DH,37,1545		;DIVAC
+ .word	0100DH,42,1549		;CEBALLOS
+ .word	0100DH,35,1553		;CAMPBELL
+ .word	0100DH,36,1557		;JONES
+
+ .word	0100DH,33,1561		;MOURNING		( MIAMI )
+ .word	0100DH,34,1741		;WILLIAMS, walt		
+ .word	0100DH,33,1962		;CHAPMAN
+ .word	0100DH,43,1461		;HARDAWAY, tim		
+ .word	0100DH,46,1573		;DANILOVIC
+
+ .word	0100DH,37,1581		;BAKER	   vin		( MILWAUKEE )
+ .word	0100DH,56,1585		;ROBINSON, glen
+ .word	0100DH,35,1589		;RESPERT
+ .word	0100DH,32,1593		;BENJAMIN
+ .word	0100DH,29,1597		;DOUGLAS
+
+ .word	0100DH,41,1601		;RIDER			( MINNESOTTA )
+ .word	0100DH,33,1956		;ANDREW LANG
+ .word	0100DH,28,1965		;SPUD WEBB
+ .word	0100DH,41,1613		;GUGLIOTTA
+ .word	0100DH,39,1617		;GARNETT
+
+ .word	0100DH,30,1341		;GILL,     kendall	( NEW JERSEY )
+ .word	0100DH,41,1625		;BRADLEY
+ .word	0100DH,29,1629		;GILLIAM
+ .word	0100DH,34,1633		;O'BANNON
+ .word	0100DH,29,1637		;EDWARDS,  kevin
+
+ .word	0100DH,40,1641		;EWING			( NEW YORK )
+ .word	0100DH,49,1645		;MASON
+ .word	0100DH,35,1649		;HARPER,   derek
+ .word	0100DH,34,1653		;OAKLEY
+ .word	0100DH,34,1657		;STARKS
+
+ .word	0100DH,45,1661		;HARDAWAY, anfernee	( ORLANDO )
+ .word	0100DH,32,1665		;GRANT,    horace
+ .word	0100DH,31,1669		;ANDERSON, nick
+ .word	0100DH,34,1673		;SCOTT,    dennis
+ .word	0100DH,35,1677		;KONCAK,   jon
+
+ .word	0100DH,55,1681		;STACKHOUSE		( PHILADELPHIA )
+ .word	0100DH,35,1685		;COLEMAN,  derrick
+ .word	0100DH,63,1689		;WEATHERSPOON
+ .word	0100DH,29,1968		;RUFFIN,   trevor
+ .word	0100DH,54,1697		;MAXWELL,  vernon
+
+ .word	0100DH,36,1701		;JOHNSON,  kevin	( PHOENIX )
+ .word	0100DH,48,1705		;TISDALE
+ .word	0100DH,29,1709		;MANNING
+ .word	0100DH,34,1713		;PERSON,   wesley
+ .word	0100DH,40,1717		;FINLEY
+
+ .word	0100DH,40,1721		;STRICKLAND		( PORTLAND )
+ .word	0100DH,58,1725		;ROBINSON, cliff
+ .word	0100DH,38,1729		;SABONIS
+ .word	0100DH,34,1733		;WILLIAMS, buck
+ .word	0100DH,35,1737		;CHILDRESS
+
+ .word	0100DH,39,1565		;OWENS			( SACRAMENTO )
+ .word	0100DH,38,1745		;RICHMOND
+ .word	0100DH,32,1749		;GRANT,    brian
+ .word	0100DH,46,1753		;MARCIULIONIS
+ .word	0100DH,30,1757		;EDNEY
+
+ .word	0100DH,30,1761		;ELLIOTT		( SAN ANTONIO )
+ .word	0100DH,58,1765		;ROBINSON, david
+ .word	0100DH,36,1769		;JOHNSON,  avery
+ .word	0100DH,34,1773		;PERSON,   chuck
+ .word	0100DH,42,1777		;DEL NEGRO
+ 
+ .word	0100DH,30,1781		;KEMP			( SEATTLE )
+ .word	0100DH,31,1785		;PAYTON
+ .word	0100DH,30,1789		;SCHREMPF
+ .word	0100DH,33,1793		;HAWKINS,  hersey
+ .word	0100DH,29,1797		;FORD
+
+ .word	0100DH,32,1801		;ROGERS,   carlos	( TORONTO )
+ .word	0100DH,51,1805		;STOUDAMIRE
+ .word	0100DH,33,1953		;ROBERTSON
+ .word	0100DH,37,1813		;MILLER
+ .word	0100DH,29,1817		;MURRAY,   tracy
+
+ .word	0100DH,41,1821		;STOCKTON		( UTAH )
+ .word	0100DH,40,1825		;MALONE
+ .word	0100DH,38,1829		;HORNACEK
+ .word	0100DH,36,1833		;BENOIT
+ .word	0100DH,29,1837		;MORRIS
+
+ .word	0100DH,29,1841		;ANTHONY		( VANCOUVER )
+ .word	0100DH,29,1845		;EDWARDS,  blue
+ .word	0100DH,32,1959		;SCOTT
+ .word	0100DH,36,1853		;REEVES
+ .word	0100DH,34,1857		;MURDOCK
+
+ .word	0100DH,32,1861		;HOWARD			( WASHINGTON )
+ .word	0100DH,38,1865		;WEBBER
+ .word	0100DH,31,1869		;CHEANEY
+ .word	0100DH,30,1873		;PACK
+ .word	0100DH,51,1877		;MURESAN
+
+
+special_name_speech
+	.word	0100DH,52,08f2H		;0  JEFF JOHNSON
+	.word	0100DH,52,08e4H		;1  SAL DIVITA
+	.word	0100DH,52,08e0H		;2  TURMELL
+	.word	0100DH,52,08eeH		;3  THOMPSON
+	.word	0100DH,52,08e6H		;4  GEER 
+	.word	0100DH,52,08f0H		;5  CARLTON
+	.word	0100DH,52,08e8H		;6  HEDRICK
+	.word	0100DH,52,08e2H		;7  JOHN HEY
+	.word	0100DH,52,08daH		;8  AIR MORRIS
+	.word	0100DH,52,08dcH		;9  STEVE BARDO
+	.word	0100DH,52,08deH		;10 MINIFEE
+	.word	0100DH,52,08eaH		;11 MARTINEZ
+	.word	0100DH,52,08ecH		;12 PESINA
+	.word	00105H,52,08caH		;13 LIPTAK
+	.word	00105H,52,0776H		;14 EDDIE
+	.word	00105H,52,075eH		;15 MIKE V.
+	.word	00105H,52,08c0H		;16 JAMIE R.
+	.word	00105H,52,08c0H		;17 NICK E.
+	.word	00105H,52,08c0H		;18 J. ROOT
+	.word	00105H,52,08c0H		;19 MEDNICK
+	.word	00105H,52,08c0H		;20 DAN R.
+	.word	00105H,52,08c0H		;21 PAT F.
+	.word	00105H,52,08c0H		;22 ED BOON
+	.word	00105H,52,08c0H		;23 J. TOBIAS
+	.word	00105H,52,08c0H		;24 OURSLER
+	.word	00105H,52,08c0H		;25 JASON S.
+	.word	00105H,52,08c0H		;26 QUINN
+	.word	00105H,52,08c0H		;27 M. PERRY
+	.word	00105H,52,08c0H		;28 N. FUNK
+	.word	00105H,52,08c0H		;29 MDOC
+	.word	00105H,52,08c0H		;30 BUD
+	.word	00105H,52,0754H		;31 MARIUS
+	.word	00105H,52,08c0H		;32 MUNDAY
+	.word	00105H,52,08c0H		;33 NORTH
+	.word	00105H,52,08c0H		;34 AMRICH
+	.word	00105H,52,08c0H		;35 JIGGETS
+
+	.word	0100DH,52,0551H		;PIPPEN
+	.word	0100DH,52,0555H		;RODMAN
+	.word	0100DH,52,0541H		;L. JOHNSON
+	.word	0100DH,52,0545H		;G. RICE
+	.word	0100DH,52,057dH		;KIDD
+	.word	0100DH,52,0591H		;MUTOMBO
+	.word	0100DH,52,05a5H		;G. HILL
+	.word	0100DH,52,05c9H		;Olajuwan
+	.word	0100DH,52,05ddH		;r. miller
+	.word	0100DH,52,05e5H		;smits
+	.word	0100DH,52,0619H		;a. mourning
+	.word	0100DH,52,0631H		;g. robinson
+	.word	0100DH,52,07adH		;spud webb
+	.word	0100DH,52,0669H		;ewing
+	.word	0100DH,52,0679H		;starks
+	.word	0100DH,52,067dH		;a. hardaway
+	.word	0100DH,52,0681H		;h. grant
+	.word	0100DH,52,0691H		;stackhouse
+	.word	0100DH,52,06bdH		;c. robinson
+	.word	0100DH,52,06e5H		;d. robinson
+	.word	0100DH,52,06e1H		;s. elliot
+	.word	0100DH,52,06f5H		;shawn kemp
+	.word	0100DH,52,0721H		;k. malone
+	.word	0100DH,52,0749H		;webber
+	.word	0100DH,52,0755H		;muresan
+
+
+special_pass_speech
+	.word	0100DH,52,08f3H		;0  JEFF JOHNSON
+	.word	0100DH,37,08e5H		;1  SAL DIVITA
+	.word	0100DH,37,08e1H		;2  TURMELL
+	.word	0100DH,34,08efH		;3  THOMPSON
+	.word	0100DH,27,08e7H		;4  GEER 
+	.word	0100DH,37,08f1H		;5  CARLTON
+	.word	0100DH,33,08e9H		;6  HEDRICK
+	.word	0100DH,27,08e3H		;7  JOHN HEY
+	.word	0100DH,48,08dbH		;8  AIR MORRIS
+	.word	0100DH,35,08ddH		;9  STEVE BARDO
+	.word	0100DH,39,08dfH		;10 MINIFEE
+	.word	0100DH,46,08ebH		;11 MARTINEZ
+	.word	0100DH,41,08edH		;12 PESINA
+	.word	00105H,52,08cbH		;13 LIPTAK
+	.word	00105H,52,0777H		;14 EDDIE
+	.word	00105H,52,075fH		;15 MIKE V.
+	.word	00105H,52,08c1H		;16 JAMIE R.
+	.word	00105H,52,08c1H		;17 NICK E.
+	.word	00105H,52,08c1H		;18 J. ROOT
+	.word	00105H,52,08c1H		;19 MEDNICK
+	.word	00105H,52,08c1H		;20 DAN R.
+	.word	00105H,52,08c1H		;21 PAT F.
+	.word	00105H,52,08c1H		;22 ED BOON
+	.word	00105H,52,08c1H		;23 J. TOBIAS
+	.word	00105H,52,08c1H		;24 OURSLER
+	.word	00105H,52,08c1H		;25 JASON S.
+	.word	00105H,52,08c1H		;26 QUINN
+	.word	00105H,52,08c1H		;27 M. PERRY
+	.word	00105H,52,08c1H		;28 N. FUNK
+	.word	00105H,52,08c1H		;29 MDOC
+	.word	00105H,52,08c1H		;30 BUD
+	.word	00105H,52,0757H		;31 MARIUS
+	.word	00105H,52,08c1H		;32 MUNDAY
+	.word	00105H,52,08c1H		;33 NORTH
+	.word	00105H,52,08c1H		;34 AMRICH
+	.word	00105H,52,08c1H		;35 JIGGETS
+	.word	0100DH,52,0553H		;PIPPEN
+	.word	0100DH,52,0557H		;RODMAN
+	.word	0100DH,52,0543H		;L. JOHNSON
+	.word	0100DH,52,0547H		;G. RICE
+	.word	0100DH,52,057fH		;KIDD
+	.word	0100DH,52,0593H		;MUTOMBO
+	.word	0100DH,52,05a7H		;G. HILL
+	.word	0100DH,52,05cbH		;Olajuwan
+	.word	0100DH,52,05dfH		;r. miller
+	.word	0100DH,52,05e7H		;smits
+	.word	0100DH,52,061bH		;a. mourning
+	.word	0100DH,52,0633H		;g. robinson
+	.word	0100DH,52,07aeH		;spud webb
+	.word	0100DH,52,066bH		;ewing
+	.word	0100DH,52,067bH		;starks
+	.word	0100DH,52,067fH		;a. hardaway
+	.word	0100DH,52,0683H		;h. grant
+	.word	0100DH,52,0693H		;stackhouse
+	.word	0100DH,52,06bfH		;c. robinson
+	.word	0100DH,52,06e7H		;d. robinson
+	.word	0100DH,52,06e3H		;s. elliot
+	.word	0100DH,52,06f7H		;shawn kemp
+	.word	0100DH,52,0723H		;k. malone
+	.word	0100DH,52,074bH		;webber
+	.word	0100DH,52,0757H		;muresan
+
+
+
+
+tm_name_spch_tbl
+ .word	0100DH,35,04b2H		;00 ATLANTA		"Hawks"
+ .word	0100DH,42,04b5H		;01 BOSTON		"Celtics"
+ .word	0100DH,34,04b8H		;02 CHARLOTTE		"Hornets"
+ .word	0100DH,31,04bbH		;03 CHICAGO		"Bulls"
+ .word	0100DH,45,04beH		;04 CLEVELAND		"Cavaliers"
+ .word	0100DH,40,04c1H		;05 DALLAS		"Maverick"
+ .word	0100DH,38,04c4H		;06 DENVER		"Nuggets"
+ .word	0100DH,46,04c7H		;07 DETROIT		"Pistons"
+ .word	0100DH,48,04caH		;08 GOLDEN STATE	"Warriors"
+ .word	0100DH,39,04cdH		;09 HOUSTON		"Rockets"
+ .word	0100DH,41,04d0H		;10 INDIANA		"Pacers"
+ .word	0100DH,32,04d3H		;11 L.A. CLIPPERS	"Clippers"
+ .word	0100DH,41,04d6H		;12 L.A. LAKERS		"Lakers"
+ .word	0100DH,28,04d9H		;13 MIAMI		"Heat"
+ .word	0100DH,34,04dcH		;14 MILWAUKEE		"Bucks"
+ .word	0100DH,46,04dfH		;15 MINNESOTTA		"Timberwolves"
+ .word	0100DH,33,04e2H		;16 NEW JERSEY		"Nets"
+ .word	0100DH,34,04e5H		;17 NEW YORK		"Knicks"
+ .word	0100DH,33,04e8H		;18 ORLANDO		"Magic"
+ .word	0100DH,68,04ebH		;19 PHILADELPHIA	"Sixers"
+ .word	0100DH,36,04eeH		;20 PHOENIX		"Suns"
+ .word	0100DH,54,04f1H		;21 PORTLAND		"Blazers"
+ .word	0100DH,37,04f3H		;22 SACRAMENTO		"Kings"
+ .word	0100DH,42,04f7H		;23 SAN ANTONIO		"Spurs"
+ .word	0100DH,62,04faH		;24 SEATTLE		"Supersonics"
+ .word	0100DH,44,04fdH		;26 TORONTO		"Raptors"
+ .word	0100DH,36,0500H		;26 UTAH		"Jazz"
+ .word	0100DH,45,0503H		;27 VANCOUVER		"Grizzlies"
+ .word	0100DH,28,0506H		;28 WASHINGTON		"Bullets"
+ .word	0100DH,42,0818H		;GOOD!!!
+ .word	0100DH,42,0818H		;GOOD!!!
+
+tm_city_spch_tbl
+ .word	0100DH,47,04b1H		;00 ATLANTA
+ .word	0100DH,36,04b4H		;01 BOSTON
+ .word	0100DH,32,04b7H		;02 CHARLOTTE
+ .word	0100DH,50,04baH		;03 CHICAGO
+ .word	0100DH,36,04bdH		;04 CLEVELAND
+ .word	0100DH,38,04c0H		;05 DALLAS
+ .word	0100DH,34,04c3H		;06 DENVER
+ .word	0100DH,44,04c6H		;07 DETROIT
+ .word	0100DH,59,04c9H		;08 GOLDEN STATE
+ .word	0100DH,44,04ccH		;09 HOUSTON
+ .word	0100DH,46,04cfH		;10 INDIANA
+ .word	0100DH,55,04d2H		;11 L.A. CLIPPERS
+ .word	0100DH,55,04d5H		;12 L.A. LAKERS
+ .word	0100DH,44,04d8H		;13 MIAMI
+ .word	0100DH,39,04dbH		;14 MILWAUKEE
+ .word	0100DH,51,04deH		;15 MINNESOTTA
+ .word	0100DH,47,04e1H		;16 NEW JERSEY
+ .word	0100DH,43,04e4H		;17 NEW YORK
+ .word	0100DH,54,04e7H		;18 ORLANDO
+ .word	0100DH,55,04eaH		;19 PHILADELPHIA
+ .word	0100DH,37,04edH		;20 PHOENIX
+ .word	0100DH,41,04f0H		;21 PORTLAND
+ .word	0100DH,54,04f3H		;22 SACRAMENTO
+ .word	0100DH,67,04f6H		;23 SAN ANTONIO
+ .word	0100DH,40,04f9H		;24 SEATTLE
+ .word	0100DH,51,04fcH		;26 TORONTO
+ .word	0100DH,44,04ffH		;26 UTAH
+ .word	0100DH,45,0502H		;27 VANCOUVER
+ .word	0100DH,50,0505H		;28 WASHINGTON
+ .word	0100DH,42,0818H		;GOOD!!!
+ .word	0100DH,42,0818H		;GOOD!!!
+
+
+full_tm_name_spch_tbl
+ .word	0100DH,71 ,04b0H		;00 ATLANTA		"Altanta Hawks"
+ .word	0100DH,82 ,04b3H		;01 BOSTON		"Boston Celtics"
+ .word	0100DH,74 ,04b6H		;02 CHARLOTTE		"Hornets"
+ .word	0100DH,81 ,04b9H		;03 CHICAGO		"Bulls"
+ .word	0100DH,93 ,04bcH		;04 CLEVELAND		"Cavaliers"
+ .word	0100DH,78 ,04bfH		;05 DALLAS		"Maverick"
+ .word	0100DH,72 ,04c2H		;06 DENVER		"Nuggets"
+ .word	0100DH,87 ,04c5H		;07 DETROIT		"Pistons"
+ .word	0100DH,101,04c8H		;08 GOLDEN STATE	"Warriors"
+ .word	0100DH,82 ,04cbH		;09 HOUSTON		"Rockets"
+ .word	0100DH,86 ,04ceH		;10 INDIANA		"Pacers"
+ .word	0100DH,88 ,04d1H		;11 L.A. CLIPPERS	"Clippers"
+ .word	0100DH,96 ,04d4H		;12 L.A. LAKERS		"Lakers"
+ .word	0100DH,64 ,04d7H		;13 MIAMI		"Heat"
+ .word	0100DH,82 ,04daH		;14 MILWAUKEE		"Bucks"
+ .word	0100DH,94 ,04ddH		;15 MINNESOTTA		"Timberwolves"
+ .word	0100DH,81 ,04e0H		;16 NEW JERSEY		"Nets"
+ .word	0100DH,76 ,04e3H		;17 NEW YORK		"Knicks"
+ .word	0100DH,81 ,04e6H		;18 ORLANDO		"Magic"
+ .word	0100DH,117,04e9H		;19 PHILADELPHIA	"Sixers"
+ .word	0100DH,72 ,04ecH		;20 PHOENIX		"Suns"
+ .word	0100DH,93 ,04efH		;21 PORTLAND		"Blazers"
+ .word	0100DH,95 ,04f2H		;22 SACRAMENTO		"Kings"
+ .word	0100DH,100,04f5H		;23 SAN ANTONIO		"Spurs"
+ .word	0100DH,100,04f8H		;24 SEATTLE		"Supersonics"
+ .word	0100DH,93 ,04fbH		;26 TORONTO		"Raptors"
+ .word	0100DH,82 ,04feH		;26 UTAH		"Jazz"
+ .word	0100DH,104,0501H		;27 VANCOUVER		"Grizzlies"
+ .word	0100DH,82 ,0504H		;28 WASHINGTON		"Bullets"
+ .word	0100DH,60 ,0504H		;GOOD!!!
+ .word	0100DH,60 ,0504H		;GOOD!!!
+
+
+scr_nbr_tbl
+ .word	0110DH,23,087cH,0		;0 ;(nothing)
+ .word	0110DH,16,087dH,0		;1
+ .word	0110DH,17,087eH,0		;2
+ .word	0110DH,15,087fH,0		;3
+ .word	0110DH,20,0880H,0		;4
+ .word	0110DH,22,0881H,0		;5
+ .word	0110DH,21,0882H,0		;6
+ .word	0110DH,20,0883H,0		;7
+ .word	0110DH,20,0884H,0		;8
+ .word	0110DH,24,0885H,0		;9
+ .word	0110DH,22,0886H,0		;10
+ .word	0110DH,25,0887H,0		;11
+ .word	0110DH,25,0888H,0		;12
+ .word	0110DH,26,0889H,0		;13
+ .word	0110DH,29,088aH,0		;14
+ .word	0110DH,26,088bH,0		;15
+ .word	0110DH,37,088cH,0		;16
+ .word	0110DH,32,088dH,0		;17
+ .word	0110DH,28,088eH,0		;18
+ .word	0110DH,29,088fH,0		;19
+
+ .word	0110DH,19,0890H,0		;20
+ .word	0110DH,25,0891H,0		;21
+ .word	0110DH,25,0892H,0		;22
+ .word	0110DH,25,0893H,0		;23
+ .word	0110DH,25,0894H,0		;24
+ .word	0110DH,25,0895H,0		;25
+ .word	0110DH,25,0896H,0		;26
+ .word	0110DH,25,0897H,0		;27
+ .word	0110DH,25,0898H,0		;28
+ .word	0110DH,25,0899H,0		;29
+
+ .word	0110DH,37,089aH,0		;30
+ .word	0110DH,37,089bH,0		;31
+ .word	0110DH,37,089cH,0		;32
+ .word	0110DH,37,089dH,0		;33
+ .word	0110DH,37,089eH,0		;34
+ .word	0110DH,37,089fH,0		;35
+ .word	0110DH,37,08a0H,0		;36
+ .word	0110DH,37,08a1H,0		;37
+ .word	0110DH,37,08a2H,0		;38
+ .word	0110DH,37,08a3H,0		;39
+
+ .word	0110DH,38,08a4H,0		;40
+ .word	0110DH,38,08a5H,0		;41
+ .word	0110DH,38,08a6H,0		;42
+ .word	0110DH,38,08a7H,0		;43
+ .word	0110DH,38,08a8H,0		;44
+ .word	0110DH,38,08a9H,0		;45
+ .word	0110DH,38,08aaH,0		;46
+ .word	0110DH,38,08abH,0		;47
+ .word	0110DH,38,08acH,0		;48
+ .word	0110DH,38,08adH,0		;49
+
+ .word	0110DH,34,08aeH,0		;50
+ .word	0110DH,34,08afH,0		;51
+ .word	0110DH,34,08b0H,0		;52
+ .word	0110DH,34,08b1H,0		;53
+ .word	0110DH,34,08b2H,0		;54
+ .word	0110DH,34,08b3H,0		;55
+ .word	0110DH,34,08b4H,0		;56
+ .word	0110DH,34,08b5H,0		;57
+ .word	0110DH,34,08b6H,0		;58
+ .word	0110DH,34,08b7H,0		;59
+
+	       
+STAB_END
+
+ SUBR	lob_ball_speech
+
+	movk	8,a0
+	calla	rndrng0
+	sll	5,a0
+	addi	tndmlob_spch_tbl,a0
+	move	*a0,a0,L
+tndmsayo
+	calla	snd_play1
+	rets
+
+tndmlob_spch_tbl
+	.long	lev_tmate_sp
+	.long	lob_pass_sp
+	.long	scp_tmate_sp
+	.long	lob_pass_sp
+	.long	tosses_it_sp
+	.long	lob_pass_sp
+	.long	passes_sp
+	.long	dble_dnk_sp
+	.long	dble_dnk2_sp
+
+ SUBR	start_crowd_noise
+ 	
+	movi	crwdbed_tune,a0,L		;indoor snd
+	move	@pup_court,a14
+	jrz	scn_1				;br=indoor court
+	movi	crwdbd2_tune,a0,L		;outdoor snd
+scn_1	calla	snd_play1
+	rets
+		
+
+ SUBR	best_plyr_speech
+
+	PUSH	a0
+	movi	hlftm_ldr_sp,a14,L
+	move	@gmqrtr,a1
+	srl	2,a1
+	jrz	awsibsp_1				;br=halftime
+	movi	gmevr_ldr_sp,a14,L
+
+awsibsp_1	movi	sound_ram,a1,L
+	move	a14,*a1+,L
+	move	*a14(16),a14,W
+	move	a14,*a1+,W
+
+	move	@spch_name_ram+32,a14,L		;plyr 1 is best
+	subk	1,a0
+	jrlt	awsisyp
+	move	@spch_name_ram+96,a14,L		;plyr 2
+	subk	1,a0
+	jrlt	awsisyp
+	move	@spch_name_ram+160,a14,L	;plyr 4
+	subk	1,a0
+	jrlt	awsisyp
+	move	@spch_name_ram+224,a14,L	;plyr 3
+awsisyp
+	move	a14,*a1+,L
+
+	movi	-1,a14
+	move	a14,*a1,W
+
+	movi	sound_ram,a0,L
+	calla	script_play1
+	PULL	a0
+	rets
+
+
+
+ SUBR	backbrd_hit_speech
+
+	move	@bkbrd_proc_flg,a14
+	jrnz	wijkdie
+
+	movk	1,a14
+	move	a14,@bkbrd_proc_flg
+
+	SLEEPK	7
+
+	move	@ballrimhitcnt,a14
+	jrnz	wijkdone
+	move	*a8(OXVEL),a0,L
+	abs	a0			;Should we make a bbrd bounce sound?
+	cmpi	01fffH,a0		;!!! Min XVEL to make sound
+	jrlt	wijksoft
+
+	SLEEPK	15
+
+	move	@ballscorezhit,a0
+	jrnz	wijkdone			;br=ball hit score zone
+	move	@ballrimhitcnt,a14
+	cmpi	4,a14
+	jrhs	wijkdone
+
+	movk	6,a0
+	calla	rndrng0
+	sll	5,a0
+	addi	wijkbckbd_hit_sp_tbl,a0
+	move	*a0,a0,L
+	calla	snd_play1
+	SLEEP	70
+	jruc	wijkdone
+wijksoft
+	movi	250,a0
+	calla	RNDPER
+	jrls	wijkdone
+	SOUND1	soft_glas_sp
+	SLEEP	70
+wijkdone
+	clr	a14
+	move	a14,@bkbrd_proc_flg
+wijkdie
+ 	DIE
+
+
+wijkbckbd_hit_sp_tbl
+	.long	kild_smne_sp
+	.long	off_trgt_sp
+	.long	wht_thnkg_sp
+	.long	off_glass_sp
+	.long	sht_stunk_sp
+	.long	off_bkbrd_sp
+	.long	wht_distr_sp
+
+
+ SUBR	shoots_speech
+
+	PUSH	a1,a2
+
+	move	a0,@plyr_shot
+	callr	calc_score_diff
+
+	clr	a0
+	move	a0,@ugly_stat		;not ugly
+	move	a0,@freakout		;no freakout on score
+
+	callr	at_buzzer
+	jrnc	efkrxshtspeech
+
+	movi	350,a0
+	calla	RNDPER
+	jrls	efkrntinfce
+
+	move	*a13(plyr_o1dist),a14
+	cmpi	40,a14				;this # is OK
+	jrle	efkrinfce
+	move	*a13(plyr_o2dist),a14
+	cmpi	40,a14				;this # is OK
+	jrgt	efkrntinfce
+efkrinfce
+	move	*a13(plyr_seqflgs),a14
+	btst	DUNK_B,a14
+	jrnz	efkrntinfce
+	btst	LAYUP_B,a14
+	jrnz	efkrntinfce
+
+	movk	3,a0
+	calla	rndrng0
+	sll	5,a0
+	addi	efkrinface_sp_tbl,a0
+	move	*a0,a0,L
+	calla	snd_play1
+	jruc	efkrxshtspeech
+
+efkrntinfce	
+	move	@shot_type,a0
+	sll	5,a0			;x 32 bits
+	addi	efkrshoots_table,a0
+	move	*a0,a0,L
+	call	a0
+
+efkrxshtspeech
+	PULL	a1,a2
+	rets
+
+
+
+efkrinface_sp_tbl
+	.long	hnd_face_sp
+	.long	frcd_shot_sp
+	.long	frcd_shot_sp
+	.long	difficult_sp
+	
+
+efkrshoots_table
+	.long	efkrdesperation
+	.long	efkrlong_range
+	.long	efkr2_points
+	.long	efkr3_points
+	.long	efkrhook_shot
+	.long	efkrlay_up
+	.long	efkrfinger_roll
+	.long	efkrdunk_short
+	.long	efkrdunk_med
+	.long	efkrdunk_long
+	.long	efkrfade_away
+	.long	efkrfade_in
+
+efkrdesperation
+
+	movk	10,a0
+	calla	rndrng0
+	sll	5,a0		;x 32 bits
+	addi	efkrdesptab,a0
+	move	*a0,a0,L
+	calla	snd_play1
+	rets
+
+efkrdesptab
+	.long	whyyyy_sp
+	.long	ill_shot_sp
+	.long	whyyyy_sp
+	.long	unlod_one_sp
+	.long	outof_rng_sp
+	.long	wild_shot_sp
+	.long	hail_mary_sp
+	.long	ill_shot_sp
+	.long	outof_rg2_sp
+	.long	out_cntrl_sp
+	.long	difficult_sp
+
+efkrlong_range
+
+	movk	6,a0
+	calla	rndrng0
+	sll	5,a0		;x 32 bits
+	addi	efkrlongtab,a0
+	move	*a0,a0,L
+	calla	snd_play1
+	rets
+
+efkrlongtab
+	.long	frm_l_rng_sp
+	.long	frm_dwntn_sp
+	.long	wild_shot_sp
+	.long	difficult_sp
+	.long	unlod_one_sp
+	.long	frm_dwntn_sp
+	.long	out_cntrl_sp
+
+efkr2_points
+
+	callr	ugly_shot
+	jrnc	efkrx2pts
+
+
+	movi	efkr2ptab_near,a2
+
+	move	@shot_distance,a0	;distance from hoop
+
+	move	*a8(OZPOS),a14
+	cmpi	1068,a14
+	jrlo	efkrmed			;br=above upper-post line
+	cmpi	1226,a14
+	jrhi	efkrmed			;br=below lower-post line
+	cmpi	155,a0			;beyond free-throw line ?
+	jrls	efkrspch			;br=nope, near
+	movi	efkr2ptab_far,a2
+	jruc	efkrspch
+efkrmed
+	movi	efkr2ptab_med,a2
+efkrspch	movk	12,a0
+	calla	rndrng0
+	sll	5,a0
+	add	a2,a0
+	move	*a0,a0,L
+	jrz	efkrcname
+	calla	snd_play1
+	jruc	efkrx2pts
+efkrcname
+	move	@plyr_shot,a0
+	callr	call_player_name
+efkrx2pts	rets
+
+
+
+efkr2ptab_near
+	.long	frm_paint_sp
+	.long	shrt_rng_sp
+	.long	for_two_sp
+	.long	shoots3_sp
+	.long	0
+	.long	shoots1_sp
+	.long	shrt_rng_sp
+	.long	frm_paint_sp
+	.long	for_two_sp
+	.long	ltle_jmpr_sp
+	.long	fires_jumpr
+	.long	shoots2_sp
+	.long	for_two_sp
+
+efkr2ptab_med
+	.long	from_15_sp
+	.long	for_two_sp
+	.long	fires_jumpr
+	.long	frm_wing_sp
+	.long	shoots1_sp
+	.long	frm_post_sp
+	.long	stp_n_pop_sp
+	.long	from_15_sp
+	.long	stp_n_pop_sp
+	.long	shoots3_sp
+	.long	for_two_sp
+	.long	shoots2_sp
+	.long	0
+
+efkr2ptab_far
+	.long	top_key_sp
+	.long	from_18_sp
+	.long	fires_jumpr
+	.long	shoots1_sp
+	.long	stp_n_pop_sp
+	.long	fr_thw_ln_sp
+	.long	lnch_jmpr_sp
+	.long	tp_circle_sp
+	.long	top_key_sp
+	.long	for_two_sp
+	.long	shoots2_sp
+	.long	from_20_sp
+	.long	fr_thw_ln_sp
+
+
+efkr3_points
+
+	callr	ugly_shot
+	jrnc	efkrx3pts
+
+	callr	wideopen_speech
+	jrnc	efkrx3pts
+
+	movi	250,a0
+	calla	RNDPER
+	jrls	efkrx3p_1
+
+	move	@game_time,a0,L		;don't call if clock run down
+	cmpi	02040906H,a0
+	jrge	efkrx3p_1
+
+	move	@ballnumscored,a0	;# times last plyr scored
+	jrz	efkrx3p_1
+	SOUND1	agn_shoot_sp
+	jruc	efkrx3pts
+
+efkrx3p_1
+	movk	14,a0
+	calla	rndrng0
+	sll	5,a0
+	addi	efkr3ptab,a0
+	move	*a0,a0,L
+	calla	snd_play1
+efkrx3pts
+	rets
+
+efkr3ptab
+	.long	frm_dwntn_sp
+	.long	frm_3_arc_sp
+	.long	for_thre1_sp
+	.long	frm_outsd_sp
+	.long	bhd_3_arc_sp
+	.long	frm_dwntn_sp
+	.long	for_thre2_sp
+	.long	shoots2_sp
+	.long	from_arc_sp
+	.long	for_thre3_sp
+	.long	frm_outsd_sp
+	.long	frm_dwntn_sp
+	.long	frm_outsd_sp
+	.long	from_arc_sp
+	.long	frm_l_rng_sp
+
+efkrhook_shot
+
+	clr	a0
+	move	a0,@skycalled
+
+	callr	ugly_shot
+	jrnc	efkrxhook
+
+	movi	efkrhooktab_near,a2
+	move	@shot_distance,a14	;distance from hoop
+	cmpi	120,a14
+	jrlt	efkrclose
+	movi	efkrhooktab_far,a2
+efkrclose
+	movi	11,a0
+	calla	rndrng0
+	sll	5,a0		;x 32 bits
+	add	a2,a0
+	move	*a0,a0,L
+	jrz	efkrhname
+	calla	snd_play1
+
+	movk	1,a0
+	move	a0,@skycalled
+	rets
+efkrhname
+	move	@plyr_shot,a0
+	callr	call_player_name
+efkrxhook
+	rets
+
+
+efkrhooktab_near
+	.long	baby_hook_sp
+	.long	half_hook_sp
+	.long	0
+	.long	shoots1_sp
+	.long	frm_post_sp
+	.long	hook_shot_sp
+	.long	finese_it_sp
+	.long	baby_hook_sp
+	.long	0
+	.long	shrt_rng_sp
+	.long	shoots2_sp
+	.long	shoots3_sp
+
+efkrhooktab_far
+	.long	hook_shot_sp
+	.long	sky_hook_sp
+	.long	shoots1_sp
+	.long	lft_hndr_sp
+	.long	sky_hook2_sp
+	.long	hook_shot_sp
+	.long	sky_hook2_sp
+	.long	rgt_hndr_sp
+	.long	for_two_sp
+	.long	0
+	.long	sky_hook_sp
+	.long	hook_shot_sp
+
+efkrlay_up
+	
+	move	@ballshotinair,a14
+	move	*a13(plyr_num),a0
+	cmp	a0,a14
+	jrne	efkrnolay
+efkrlaysp
+	movk	6,a0
+	calla	rndrng0
+	sll	5,a0
+	addi	efkrlayup_sp_tbl,a0
+	move	*a0,a0,L
+	calla	snd_play1
+efkrnolay
+	rets
+
+
+efkrlayup_sp_tbl
+	.long	lay_it_up_sp
+	.long	layup_sp
+	.long	he_layup_sp
+	.long	finese_it_sp
+	.long	fingr_rl2_sp
+	.long	he_layup_sp
+	.long	lay_it_up_sp
+
+
+efkrfinger_roll
+
+	movk	8,a0
+	calla	rndrng0
+	sll	5,a0
+	addi	efkrfngr_roll_sp_tbl,a0
+	move	*a0,a0,L
+	jrz	efkrfngr
+	calla	snd_play1
+	rets
+efkrfngr
+	move	@plyr_shot,a0
+	callr	call_player_name
+	rets
+
+
+efkrfngr_roll_sp_tbl
+	.long	fires_jumpr
+	.long	shoots3_sp
+	.long	fingr_rl2_sp
+	.long	lay_it_up_sp
+	.long	figr_itin_sp
+	.long	layup_sp
+	.long	finese_it_sp
+	.long	lay_it_up_sp
+	.long	fingr_rol_sp
+
+
+efkrdunk_short
+
+	move	@plyr_shot,a0
+	callr	call_player_name
+	rets
+
+
+efkrdunk_med
+
+	move	@plyr_shot,a0
+	callr	call_player_name
+	rets
+
+efkrdunk_long
+
+	move	@plyr_shot,a0
+	callr	call_player_name
+	rets
+
+
+efkrfade_away
+	rets
+
+efkrfade_in
+	rets
+
+
+
+ SUBR	scored_speech
+
+	PUSH	a1,a2
+
+	callr	blowout
+	jrnc	vdxfscrd2
+
+	callr	onfire_speech
+	jrnc	vdxfscrd2
+
+	callr	lucky_bounce
+	jrnc	vdxfscrd2
+
+	movi	100,a0			;10% of time, say good again
+	calla	RNDPER
+	jrls	vdxfscrd1
+
+	move	@ballnumscored,a0
+	cmpi	2,a0
+	jrls	vdxfscrd1			;br=hasnt scored a basket yet
+
+	movi	score_agn_sp,a0,L
+	move	@HCOUNT,a14
+	btst	1,a14
+	jrnz	vdxfscrd
+	movi	good_agn_sp,a0,L
+vdxfscrd	calla	snd_play1
+	jruc	vdxfscrd2
+
+vdxfscrd1
+	move	@shot_type,a0
+	sll	5,a0			;x 32 bits
+	addi	vdxfscored_table,a0
+	move	*a0,a0,L
+	call	a0
+
+vdxfscrd2
+	PULL	a1,a2
+	rets
+
+
+vdxfscored_table
+	.long	vdxfdesperation
+	.long	vdxflong_range
+	.long	vdxf2_points
+	.long	vdxf3_points
+	.long	vdxfhook_shot
+	.long	vdxflay_up
+	.long	vdxffinger_roll
+	.long	vdxfdunk_short
+	.long	vdxfdunk_med
+	.long	vdxfdunk_long
+	.long	vdxffade_away
+	.long	vdxffade_in
+
+vdxfdesperation
+hotscored
+
+	callr	itsgood
+	jrnc	vdxfxdesp
+
+	movk	5,a0
+	calla	rndrng0
+	sll	5,a0		;x 32 bits
+	addi	vdxfdesptab,a0
+	move	*a0,a0,L
+	calla	snd_play1
+vdxfxdesp
+	rets
+
+vdxfdesptab
+	.long	ohmy
+	.long	per_luck_sp
+	.long	its_good_sp
+	.long	incredble_sp
+	.long	kaboom2_sp
+	.long	unbelieve_sp
+
+vdxflong_range
+
+	callr	itsgood
+	jrnc	vdxfxlong
+
+	movk	8,a0
+	calla	rndrng0
+	sll	5,a0		;x 32 bits
+	addi	vdxflongtab,a0
+	move	*a0,a0,L
+	calla	snd_play1
+vdxfxlong
+	rets
+
+vdxflongtab
+	.long	whata_sht_sp
+	.long	per_luck_sp
+	.long	its_good_sp
+	.long	great_sht_sp
+	.long	its_good_sp
+	.long	scores_sp
+	.long	unbelieve_sp
+	.long	amazing_sp
+	.long	he_scores_sp
+
+vdxf2_points
+
+	movi	400,a0		;call 40% swishes
+	callr	swish_speech
+	jrnc	vdxfx2pts
+
+	movi	400,a0		;call backboard hit 25% time
+	calla	RNDPER
+	jrls	vdxfnobkbd
+	
+	move	@ballbbhitcnt,a14
+	jrz	vdxfnobkbd
+	
+	movk	4,a0
+	calla	rndrng0
+	sll	5,a0
+	addi	vdxf2bkbdhit_tab,a0
+	jruc	vdxf2snd
+
+vdxfnobkbd
+
+	movk	15,a0
+	calla	rndrng0
+	sll	5,a0
+	addi	vdxf2tab,a0
+vdxf2snd
+	move	*a0,a0,L
+	calla	snd_play1
+vdxfx2pts
+	rets
+
+
+vdxf2bkbdhit_tab
+	.long	banked_it_sp
+	.long	off_glass_sp
+	.long	off_bkbrd_sp
+	.long	a_banker_sp
+	.long	scores_sp
+
+vdxf2tab
+	.long	it_falls_sp
+	.long	scores_sp
+	.long	hits_jmpr_sp
+	.long	great_sht_sp
+	.long	bingo_sp
+	.long	good_sht_sp
+	.long	count_it_sp
+	.long	chk_it_up_sp
+	.long	good_4two_sp
+	.long	goooood2_sp
+	.long	yes_sp
+	.long	book_it_sp
+	.long	bingo_sp
+	.long	smokin_sp
+	.long	kncks_dwn_sp
+	.long	dwn_well_sp
+
+
+vdxf3_points
+
+	callr	itsgood
+	jrnc	vdxfx3p
+
+	movi	200,a0			;call 25% swishes
+	callr	swish_speech
+	jrnc	vdxfx3p
+
+	movk	18,a0
+	calla	rndrng0
+	sll	5,a0
+	addi	vdxf3ptab,a0
+	move	*a0,a0,L
+	jrz	vdxfx3p
+	calla	snd_play1
+vdxfx3p
+	rets
+
+vdxf3ptab
+	.long	its_good_sp
+	.long	drains_it_sp
+	.long	goooood2_sp
+	.long	count_it_sp
+	.long	chk_it_up_sp
+	.long	scores_sp
+	.long	money_bnk_sp
+	.long	he_scores_sp
+	.long	chk_it_up_sp
+	.long	goooood_sp
+	.long	bingo_sp
+	.long	whata_sht_sp
+	.long	a_trey_sp
+	.long	thats_3_sp
+	.long	good_4_3_sp
+	.long	amazing_sp
+	.long	smokin_sp
+	.long	yes_sp
+	.long	dwn_well_sp
+
+
+vdxfhook_shot
+
+	callr	itsgood
+	jrnc	vdxfxhook
+
+	move	@skycalled,a0	;sky hook called?
+	jrz	vdxfnosky
+
+	jruc	vdxf2_points	;call like regular 2 pointer
+	calla	snd_play1
+	rets
+
+vdxfnosky
+	movi	great_sht_sp,a0
+	calla	snd_play1
+
+vdxfxhook
+	rets
+
+
+vdxflay_up
+
+	movk	3,a0
+	calla	rndrng0
+	sll	5,a0		;x 32 bits
+	addi	vdxflaytab,a0
+	move	*a0,a0,L
+	calla	snd_play1
+	rets
+
+vdxflaytab
+	.long	nicly_dne_sp
+	.long	fancy
+	.long	got_skilz_sp
+	.long	incredble_sp
+
+vdxffinger_roll
+
+	movk	4,a0
+	calla	rndrng0
+	sll	5,a0		;x 32 bits
+	addi	vdxffingtab,a0
+	move	*a0,a0,L
+	calla	snd_play1
+	rets
+
+vdxffingtab
+	.long	nicly_dne_sp
+	.long	figr_itin_sp
+	.long	nicly_dne_sp
+	.long	figr_itin_sp
+	.long	got_skilz_sp
+
+
+vdxfdunk_short
+vdxfdunk_med
+vdxfdunk_long
+
+	movi	300,a0			;call name 30% time
+	calla	RNDPER
+	jrls	vdxffname
+
+	move	@ballpnumscored,a0
+	callr	call_players_full_name
+	jruc	vdxfno_speech
+vdxffname
+	move	@jam_speech,a0		;speech type to call when jammed
+	jrz	vdxfno_speech
+	sll	5,a0			;x 32 bits
+	addi	vdxfjam_jump,a0
+	move	*a0,a0,L
+	call	a0
+vdxfno_speech
+	rets
+
+
+vdxfjam_jump
+	.long	0
+	.long	vdxfeasy_jam
+	.long	vdxfmed_jam
+	.long	vdxfgood_jam
+	.long	vdxfgreat_jam
+	.long	vdxfalleyoop_jam
+
+vdxfeasy_jam
+
+	movk	7,a0
+	calla	rndrng0
+	sll	5,a0		;x 32 bits
+	addi	vdxfeasy_tab,a0
+	move	*a0,a0,L
+	calla	snd_play1
+	rets
+
+vdxfeasy_tab
+	.long	kaboom1_sp
+	.long	he_dnk_it_sp
+	.long	jams_it_sp
+	.long	jam_it_in_sp
+	.long	dunks_it_sp
+	.long	slam_dunk_sp
+	.long	with_ajam_sp
+	.long	he_slams_sp
+
+
+vdxfmed_jam
+
+	movk	10,a0
+	calla	rndrng0
+	sll	5,a0
+	addi	vdxfmed_tab,a0
+	move	*a0,a0,L
+	calla	snd_play1
+	rets
+
+vdxfmed_tab
+	.long	rama_dong_sp
+	.long	bomshakalaka
+	.long	kaboom1_sp
+	.long	he_dnk_it_sp
+	.long	powr_jams_sp
+	.long	jam_it_in_sp
+	.long	smokin_sp
+	.long	incredble_sp
+	.long	jam_it_in_sp
+	.long	with_ajam_sp
+	.long	he_slams_sp
+
+
+vdxfgood_jam
+
+	movk	14,a0
+	calla	rndrng0
+	sll	5,a0		;x 32 bits
+	addi	vdxfgood_tab,a0
+	move	*a0,a0,L
+	calla	snd_play1
+	rets
+
+vdxfgood_tab
+	.long	fantastic_sp
+	.long	bomshakalaka
+	.long	thndr_dnk_sp
+	.long	kaboom1_sp
+	.long	spect_dnk_sp
+	.long	rama_dong_sp
+	.long	u_c_that_sp
+	.long	jam_it_in_sp
+	.long	postr_jam_sp
+	.long	oh_man_sp
+	.long	no_stopng_sp
+	.long	incredble_sp
+	.long	amazing_sp
+	.long	powr_jams_sp
+	.long	with_ajam_sp
+
+
+vdxfgreat_jam
+
+	movk	12,a0
+	calla	rndrng0
+	sll	5,a0		;x 32 bits
+	addi	vdxfgreat_tab,a0
+	move	*a0,a0,L
+	calla	snd_play1
+	rets
+
+vdxfgreat_tab
+	.long	rama_dong_sp
+	.long	bomshakalaka
+	.long	u_c_that_sp
+	.long	amazing_sp
+	.long	isit_shoe_sp
+	.long	kaboom1_sp
+	.long	rama_dong_sp
+	.long	rama_dong_sp
+	.long	oh_man_sp
+	.long	kaboom2_sp
+	.long	with_ajam_sp
+	.long	powr_jams_sp
+	.long	spect_dnk_sp
+
+
+vdxfalleyoop_jam
+
+	movk	7,a0
+	calla	rndrng0
+	sll	5,a0
+	addi	vdxfalleyoop_tab,a0
+	move	*a0,a0,L
+	calla	snd_play1
+	rets
+
+
+vdxfalleyoop_tab
+	.long	alley_oop_sp
+	.long	bomshakalaka
+	.long	thr_tmwrk_sp
+	.long	alley_oop_sp
+	.long	thr_smkn_sp
+	.long	alley_oop_sp
+	.long	nicly_dne_sp
+	.long	alley_oop_sp
+
+
+
+vdxffade_away
+vdxffade_in
+	rets
+
+
+
+ SUBR	seq_call_name
+
+	move	*a13(plyr_num),a0	;(0-3)
+	callr	call_player_name
+	rets
+
+
+
+ SUBR	call_player_name
+
+	move	@last_name_time,a1	;# ticks since name called
+	cmpi	TSEC*2,a1
+	jrhs	mqxyplayit
+
+	move	@last_name,a1		;if name called in last 3 secs
+	cmp	a0,a1			;then don't call it again
+	jreq	mqxysnd_fail
+
+mqxyplayit
+	PUSH	a0
+
+	move	a0,a1
+	sll	6,a1
+	addi	spch_name_ram,a1
+	move	*a1,a0,L
+	calla	snd_play1
+
+	PULL	a0
+
+	move	a0,@last_name		;last player name called
+	clr	a0
+	move	a0,@last_name_time	;# ticks since name called
+	clrc
+	rets
+
+mqxysnd_fail
+	setc
+	rets
+
+ SUBRP	call_players_full_name
+
+	sll	6,a0
+	addi	spch_name_ram,a0
+	addk	32,a0				;point to full name speech
+	move	*a0,a0,L
+	calla	snd_play1
+	rets
+
+
+
+ SUBR	pass_to_speech
+
+	PUSH	a2
+	move	a1,a2
+
+	movi	300,a0			;call 'to-name' 70% of time
+	calla	RNDPER
+	jrls	ovritoname
+
+	movi	ovripass_spch_near_tbl,a2
+	move	*a13(plyr_tmdist),a14
+	cmpi	570,a14
+	jrls	ovripastos			;br=teammate is close !!
+	movi	ovripass_spch_far_tbl,a2
+ovripastos
+	movk	7,a0
+	calla	rndrng0
+	sll	5,a0
+	add	a2,a0
+	move	*a0,a0,L
+	jrz	ovrifail
+	calla	snd_play1
+	jruc	ovrifail
+ovritoname
+	move	@last_name_time,a0	;# ticks since name called
+	cmpi	TSEC*3,a0
+	jrls	ovrifail
+
+	move	a2,a1
+	sll	5,a1
+	addi	spch_pass_ram,a1
+	move	*a1,a0,L
+	calla	snd_play1
+
+	xori	1,a2
+	move	a2,@last_name		;last player name called
+	clr	a0
+	move	a0,@last_name_time	;# ticks since name called
+ovridone
+	PULL	a2
+	clrc
+	rets
+ovrifail
+	PULL	a2
+	setc
+	rets
+
+
+ovripass_spch_near_tbl
+	.long	passes_sp
+	.long	he_passes_sp
+	.long	0
+	.long	a_pass_sp
+	.long	0
+	.long	he_passes_sp
+	.long	tosses_it_sp
+	.long	guns_it_sp
+
+ovripass_spch_far_tbl
+	.long	cros_crt_sp
+	.long	downcourt_sp
+	.long	hev_dncrt_sp
+	.long	0
+	.long	pas_outsd_sp
+	.long	0
+	.long	he_passes_sp
+	.long	cros_crt_sp
+
+
+
+	.asg	040500h,MAX_TIME	;45 seconds
+	.asg	020500h,MAX_TIME2	;25 seconds
+	.asg	000200h,MIN_TIME	;2 seconds
+
+ SUBRP	blowout
+
+	move	@freakout,a1		;no freakout on score
+	jrz	ehxkno_freakout
+
+	movi	its_good_sp,a0
+	dec	a1
+	jrnz	ehxkok
+	move	@game_time,a0,L
+	cmpi	MAX_TIME,a0
+	jrhi	ehxksnd_fail
+	movi	goooood_sp,a0		;GOOOOD!!!
+ehxkok	calla	snd_play1
+	rets
+
+
+ehxkno_freakout
+	move	@gmqrtr,a0
+	cmpi	3,a0
+	jrlt	ehxknot_last_qtr
+
+	move	@game_time,a0,L
+	cmpi	MAX_TIME,a0
+	jrhi	ehxksnd_fail
+	cmpi	MIN_TIME,a0
+	jrlo	ehxksnd_fail
+
+	move	@blowout_called,a0
+	jrnz	ehxksnd_fail
+
+	move	@ballpnumscored,a0	;Last plyr who scored (0-3) or neg
+	callr	calc_score_diff
+
+	move	@score_diff,a1
+	cmpi	6,a1
+	jrge	ehxkisblow
+
+	cmpi	3,a1
+	jrlt	ehxksnd_fail
+
+	move	@needshot_called,a0
+	jrnz	ehxksnd_fail
+
+	move	@game_time,a0,L
+	cmpi	MAX_TIME2,a0
+	jrhi	ehxksnd_fail
+
+
+	movk	1,a0
+	calla	rndrng0
+	move	a0,a0
+	jrz	ehxkdo_needshot
+
+
+	move	@ballpnumscored,a14	;Last plyr who scored (0-3) or neg
+	jrn	ehxkerror
+
+	movi	sound_ram,a4,L
+
+	move	@team1,a0
+	srl	1,a14			;0-1
+	jrnz	ehxktm1_scored
+	move	@team2,a0
+ehxktm1_scored
+	movi	TM_SPCH_TBL_SZ,a1
+	mpys	a0,a1
+	addi	tm_name_spch_tbl,a1
+	move	a1,*a4+,L			;store ptr. to sound call data
+	move	*a1(16),a14,W			;get sound call length
+	addk	10,a14				;a little silence
+	move	a14,*a4+,W
+	movi	run_out_sp,a14,L
+	move	a14,*a4+,L
+	movi	-1,a14
+	move	a14,*a4,W			;end script
+	movi	sound_ram,a0,L
+	calla	script_play1
+	rets
+
+ehxkerror
+ehxkdo_needshot
+	movi	needshot_sp,a0
+	move	@HCOUNT,a14
+	btst	1,a14
+	jrnz	ehxkplayit
+	movi	run_out_sp,a0
+ehxkplayit
+	calla	snd_play1
+	movk	1,a0
+	move	a0,@needshot_called
+	rets
+
+ehxkisblow
+	movi	blowout_sp,a0		;it's a blowout
+	cmpi	9,a1
+	jrge	ehxkblowout
+
+	movk	4,a0
+	calla	rndrng0
+	sll	5,a0
+	addi	ehxkno_chnce_win_sp_tbl,a0
+	move	*a0,a0,L
+ehxkblowout
+	calla	snd_play1
+
+	movk	1,a0
+	move	a0,@blowout_called
+	clrc
+	rets
+
+ehxknot_last_qtr
+	clr	a0
+	move	a0,@blowout_called
+	move	a0,@needshot_called
+
+ehxksnd_fail
+	setc
+	rets
+
+
+
+ehxkno_chnce_win_sp_tbl
+	.long	whoomp_sp
+	.long	fnl_strw_sp
+	.long	its_hstry_sp
+	.long	fnl_strw_sp
+	.long	fat_sing_sp
+
+
+
+ SUBRP	at_buzzer
+
+	move	@shot_type,a0		;don't call on dunks
+	cmpi	DUNK_SHORT,a0
+	jrhs	akkocheck_buzzer
+
+	move	@game_time,a0,L
+	cmpi	400h,a0			;less than 4 seconds left
+	jrgt	akkosnd_fail
+
+	move	@gmqrtr,a0
+	cmpi	3,a0			;last quarter?
+	jrlt	akkonot_last_qtr
+
+	move	@score_diff,a0
+	jrp	akkoin_front		;already in front
+	move	@ballptsforshot,a1	;Point value for current shot (1-3)
+	add	a1,a0
+	jrz	akkoties_it
+	jrn	akkobehind
+akkowins_it
+	movi	it_is_sp,a0		;IT IS....
+	calla	snd_play1
+	movk	1,a0
+	move	a0,@freakout		;freak out if it scores
+	rets
+
+akkoties_it
+	movi	could_tie_sp,a0
+	move	@HCOUNT,a14
+	btst	1,a14
+	jrnz	akkotsit
+	movi	it_culdbe_sp,a0
+akkotsit
+	calla	snd_play1
+	movk	2,a0
+	move	a0,@freakout		;freak out if it scores
+	rets
+
+
+akkobehind
+akkoin_front
+akkonot_last_qtr
+akkocheck_buzzer
+	move	@game_time,a0,L
+	cmpi	200h,a0
+	jrgt	akkosnd_fail
+
+	movi	off_in_time,a0
+	calla	snd_play1
+	rets
+
+akkosnd_fail
+	setc
+	rets
+
+
+ SUBRP	lucky_bounce
+
+	move	@shot_type,a0
+	cmpi	DUNK_SHORT,a0		;no lucky bounce on dunks!
+	jrge	tnazsnd_fail
+
+	move	@ugly_stat,a0
+	jrz	tnazsnd_fail		;ugly not called
+
+	movk	5,a0
+	calla	rndrng0
+	sll	5,a0
+	addi	tnazlucky_bnce_tbl,a0
+	move	*a0,a0,L
+	calla	snd_play1
+	clrc
+	rets
+
+tnazsnd_fail
+	setc
+	rets
+
+
+tnazlucky_bnce_tbl
+	.long	luky_bnce_sp
+	.long	it_falls_sp
+	.long	luky_bnce_sp
+	.long	falls_in_sp
+	.long	luky_bnce_sp
+	.long	per_luck_sp
+
+
+
+ SUBRP	ugly_shot
+
+	move	@shot_percentage,a0	;0=ugly, 1=ok
+	jrn	tazqdoit
+	jrnz	tazqsnd_fail
+
+	movi	100,a0			;call ugly 20% time
+	calla	RNDPER
+	jrls	tazqsnd_fail
+
+tazqdoit
+	movk	2,a0
+	calla	rndrng0
+	sll	5,a0		;x 32 bits
+	addi	tazquglytab,a0
+	move	*a0,a0,L
+	calla	snd_play1
+
+	movk	1,a0
+	move	a0,@ugly_stat		;ugly called
+
+	clrc
+	rets
+
+tazqsnd_fail
+	setc
+	rets
+
+tazquglytab
+	.long	ugly_shot_sp
+	.long	putup_brk_sp
+	.long	teribl_sh_sp
+
+
+
+ SUBR	call_team_name
+
+ 	SLEEPK	10
+
+	move	a8,a0
+	movi	TM_SPCH_TBL_SZ,a1
+	mpys	a0,a1
+	move	a1,a0
+	addi	tm_name_spch_tbl,a0
+	calla	snd_play1
+	DIE
+
+
+
+ SUBR	call_matchup
+
+
+	movi	sound_ram,a4,L
+
+	move	@team1,a0
+	movi	TM_SPCH_TBL_SZ,a1
+	mpys	a0,a1
+	addi	full_tm_name_spch_tbl,a1
+	move	a1,*a4+,L			;store ptr. to sound call data
+	move	*a1(16),a0,W			;get sound call length
+	move	a0,*a4+,W
+
+	movi	vs_sp,a0,L
+	move	a0,*a4+,L
+	move	*a0(16),a14,W		;get sound call length
+	move	a14,*a4+,W		;store it
+
+	move	@team2,a0
+	movi	TM_SPCH_TBL_SZ,a1
+	mpys	a0,a1
+	addi	full_tm_name_spch_tbl,a1
+	move	a1,*a4+,L			;store ptr. to sound call data
+
+	movi	-1,a14
+	move	a14,*a4,W			;end script
+
+	movi	sound_ram,a0,L
+	calla	script_play1
+	DIE
+
+
+
+calc_score_diff
+
+	PUSH	a0,a1,a2
+
+	move	@scores,a1
+	move	@scores+10h,a2
+	sub	a2,a1
+	srl	1,a0
+	jrz	zlscteam1
+	neg	a1			;team2, so negate
+zlscteam1
+	move	a1,@score_diff
+	PULL	a0,a1,a2
+	rets
+
+
+ SUBR	pushed_speech
+
+	PUSH	a0,a1,a14
+	movk	9,a0
+	calla	rndrng0
+	sll	5,a0
+	addi	qceepushtab,a0
+	move	*a0,a0,L
+	jrz	qceenosnd
+	calla	snd_play1
+qceenosnd
+	PULL	a0,a1,a14
+	setc
+	rets
+
+
+qceepushtab
+	.long	flagrant_sp
+	.long	0
+	.long	to_floor_sp
+	.long	to_deck_sp
+	.long	0
+	.long	shvd_asde_sp
+	.long	tookm_out_sp
+	.long	tookm_out_sp
+	.long	0
+	.long	hamerd_hm_sp
+
+
+
+ SUBR	rejected_speech
+
+	PUSH	a0,a1,a14
+	move	@ballobj_p,a1,L
+	move	*a1(OYPOS),a0
+	cmpi	-38,a0		;if below HOOP - dont call!
+	jrgt	thfayes		;Br=near ground
+
+	move	@must_rebound,a0
+	jrnz	thfayes
+
+	movk	8,a0
+	calla	rndrng0
+	sll	5,a0		;x 32 bits
+	addi	thfaregtab,a0
+	move	*a0,a0,L
+	calla	snd_play1
+thfayes
+	PULL	a0,a1,a14
+	rets
+
+thfaregtab
+	.long	its_blckd_sp
+	.long	rejected_sp
+	.long	deflected_sp
+	.long	outa_here_sp
+	.long	rejected_sp
+	.long	blckd_it_sp
+	.long	outa_here_sp
+	.long	rejected_sp
+	.long	outa_here_sp
+
+
+ SUBR	in_air_steal_speech
+
+	PUSH	a0,a1,a14
+	movk	4,a0
+	calla	rndrng0
+	sll	5,a0
+	addi	cssyinair_spch_tbl,a0
+	move	*a0,a0,L
+	calla	snd_play1
+cssyinar	
+ 	PULL	a0,a1,a14
+	rets
+
+
+cssyinair_spch_tbl
+	.long	outa_here_sp
+	.long	stolen_sp
+	.long	grab_ball_sp
+	.long	outa_here_sp
+	.long	quck_hnds_sp
+
+
+
+ SUBR	rejected_dnk_speech
+
+	PUSH	a0,a1,a14
+	move	@ballobj_p,a1,L
+	move	*a1(OYPOS),a0
+	cmpi	-75,a0
+	jrgt	fvujyes		;Br=near ground
+
+	movk	4,a0
+	calla	rndrng0
+	sll	5,a0		;x 32 bits
+	addi	fvujregdnktab,a0
+	move	*a0,a0,L
+	calla	snd_play1
+	jruc	fvujdne
+fvujyes	
+	SOUND1	stolen_sp
+fvujdne
+	PULL	a0,a1,a14
+	rets
+
+fvujregdnktab
+	.long	rejected_sp
+	.long	no_way_sp
+	.long	outa_here_sp
+	.long	rejected_sp
+	.long	outa_here_sp
+
+
+
+ SUBR	deflected_speech
+
+	PUSH	a0,a1,a14
+
+	move	@must_rebound,a0
+	jrnz	kmiayes
+
+
+	movk	6,a0
+	calla	rndrng0
+	sll	5,a0		;x 32 bits
+	addi	kmiadeflt_spch_tab,a0
+	move	*a0,a0,L
+	calla	snd_play1
+kmiayes	
+	PULL	a0,a1,a14
+	rets
+
+kmiadeflt_spch_tab
+	.long	rejected_sp
+	.long	outa_here_sp
+	.long	deflected_sp
+	.long	its_blckd_sp
+	.long	rejected_sp
+	.long	deflected_sp
+	.long	outa_here_sp
+
+
+
+ SUBR	rebound_speech
+
+	PUSH	a1,a2,a4,a6,a7,a8
+
+	move	@game_time,a0,L		;don't call if clock run down
+	jrz	xujqdone
+
+	move	@ballpnum,a1
+	jrn	xujqdone
+
+	movi	HOOPLX,a6
+	move	*a13(PA8),a14
+	move	*a14(OXPOS),a14
+	subi	WRLDMID,a14
+	jrn	xujqrbs
+	movi	HOOPRX,a6
+xujqrbs
+	movi	CZMID,a7
+	move	@ballobj_p,a8,L
+	calla	seekdirdist_obxz128
+	cmpi	22,a1
+	jrhi	xujqntnear
+	movk	5,a0
+	calla	rndrng0
+	sll	5,a0
+	addi	xujqrebnd_near_hoop_tbl,a0
+	move	*a0,a0,L
+	jrz	xujqdone
+	calla	snd_play1
+	jruc	xujqdone
+
+xujqntnear
+	movi	500,a0			;call name 50% time
+	calla	RNDPER
+	jrls	xujqname
+	move	@last_name_time,a14	;# ticks since name called
+	cmpi	TSEC*2,a14
+	jrhs	xujqname			;br=okay too call name
+xujqnoname
+	movk	6,a0
+	calla	rndrng0
+	sll	5,a0
+	addi	xujqrebnd_no_nme_tbl,a0
+	move	*a0,a0,L
+	jrz	xujqdone
+	calla	snd_play1
+	jruc	xujqdone
+xujqname
+	movi	200,a0			;call name 50% time
+	calla	RNDPER
+	jrls	xujqaname
+
+	movi	sound_ram,a4,L
+
+	move	@team1,a0
+	move	@ballpnum,a14
+	srl	1,a14			;0-1
+	jrz	xujqtm1
+	move	@team2,a0
+xujqtm1	movi	TM_SPCH_TBL_SZ,a1
+	mpys	a0,a1
+	addi	tm_name_spch_tbl,a1
+	move	a1,*a4+,L			;store ptr. to sound call data
+	move	*a1(16),a14,W			;get sound call length
+	move	a14,*a4+,W
+	movi	posession_sp,a14,L
+	move	a14,*a4+,L
+	movi	-1,a14
+	move	a14,*a4,W			;end script
+	movi	sound_ram,a0,L
+	calla	script_play1
+	jruc	xujqdone
+xujqaname
+     	
+	movi	sound_ram,a4,L
+
+	move	@ballpnum,a14
+	sll	6,a14
+	addi	spch_name_ram,a14
+	move	*a14,a14,L		;get snd call ptr.
+	move	a14,*a4+,L		;store it
+	move	*a14(16),a14,W		;get sound call length
+	move	a14,*a4+,W		;store it
+
+	movk	5,a0
+	calla	rndrng0
+	sll	5,a0
+	addi	xujqrebnd_nme_tbl,a0
+	move	*a0,a0,L
+	jrz	xujqdone
+	move	a0,*a4+,L		;store REBOUND speech
+
+	movi	-1,a14
+	move	a14,*a4,W			;end script
+	movi	sound_ram,a0,L
+	calla	script_play1
+
+	move	@ballpnum,a0
+	move	a0,@last_name		;last player name called
+	clr	a0
+	move	a0,@last_name_time	;# ticks since name called
+xujqdone
+	PULL	a1,a2,a4,a6,a7,a8
+	rets
+
+
+
+
+xujqrebnd_near_hoop_tbl
+	.long	pulls_off_sp
+	.long	with_bord_sp
+	.long	tks_rebnd_sp
+	.long	tks_rbnd2_sp
+	.long	ynk_rim_sp
+	.long	tks_rbnd3_sp
+
+xujqrebnd_nme_tbl
+	.long	grab_rock_sp
+	.long	has_rebnd_sp
+	.long	grab_ball_sp
+	.long	tks_rbnd2_sp
+	.long	grab_ball_sp
+	.long	tks_rbnd2_sp
+
+
+xujqrebnd_no_nme_tbl
+	.long	tks_rebnd_sp
+	.long	quck_hnds_sp
+	.long	with_bord_sp
+	.long	grab_rock_sp
+	.long	grbs_rbnd_sp
+	.long	da_rebnd_sp
+	.long	rip_rebnd_sp
+
+
+
+ SUBR	intercepted_speech
+
+	movk	3,a0
+	calla	rndrng0
+	sll	5,a0		;x 32 bits
+	addi	pwdmintcptab,a0
+	move	*a0,a0,L
+	calla	snd_play1
+	rets
+
+pwdmintcptab
+	.long	intrceptd_sp
+	.long	turnover_sp
+	.long	clean_pck_sp
+	.long	bad_pass_sp
+
+
+ SUBR	stolen_speech
+
+	movk	4,a0
+	calla	rndrng0
+	sll	5,a0
+	addi	mxvbstealstab,a0
+	move	*a0,a0,L
+	calla	snd_play1
+	rets
+
+mxvbstealstab
+	.long	turnover_sp
+	.long	stolen_sp
+	.long	stripped_sp
+	.long	the_steal_sp
+	.long	trnd_over_sp
+
+
+ SUBR	call_facial_speech
+	
+	movk	2,a0
+	calla	rndrng0
+	sll	5,a0
+	addi	ktxefacial_sp_tbl,a0
+	move	*a0,a0,L
+	jrz	ktxedone
+	calla	snd_play1
+ktxedone	rets
+
+
+ktxefacial_sp_tbl
+	.long	no_stopng_sp
+	.long	facial_sp
+	.long	no_stopng_sp
+
+
+ SUBR	ball_loose_spch
+
+	SLEEPK	20
+
+	move	@ballpnum,a0
+	jrnn	gbfhdone
+
+	movk	10,a0
+	calla	rndrng0
+	sll	5,a0
+	addi	gbfhball_loose_sp_tbl,a0
+	move	*a0,a0,L
+	jrz	gbfhdone
+	calla	snd_play1
+gbfhdone	DIE
+
+
+gbfhball_loose_sp_tbl
+	.long	0
+	.long	he_lst_bl_sp
+	.long	cheer2_snd
+	.long	he_lostit_sp
+	.long	cheer_snd
+	.long	bal_loose_sp
+	.long	cheer1_snd
+	.long	shuld_pas_sp
+	.long	0
+	.long	bal_loose_sp
+	.long	0
+
+
+
+ SUBR	head_fake_speech
+
+	movk	5,a0
+	calla	rndrng0
+	sll	5,a0
+	addi	xcsyhead_fake_sp_tbl,a0
+	move	*a0,a0,L
+	jrz	xcsydone
+	calla	snd_play1
+xcsydone	rets
+
+
+xcsyhead_fake_sp_tbl
+	.long	0
+	.long	head_fake_sp
+	.long	the_fake_sp
+	.long	0
+	.long	pump_fake_sp
+	.long	0
+
+
+ SUBRP	itsgood
+
+	move	@game_time,a0,L
+	jrnz	ukrhdone
+	SOUND1	its_good_sp
+	rets
+ukrhdone
+	setc
+	rets
+
+ SUBR	seq_alleyoop_speech
+
+	movi	goes_up_sp,a0
+	calla	snd_play1
+	rets
+
+
+
+ SUBR	seq_lay_up_start
+
+	movi	lay_it_up_sp,a0
+	calla	snd_play1
+	rets
+
+
+ SUBR	seq_high_dnk_spch
+
+	movi	400,a0			;20% of tim
+	calla	RNDPER
+	jrls	fhqrnoooh
+
+	SOUND1	ooooooh_sp
+	jruc	fhqrsaidoh
+fhqrnoooh
+	movk	9,a0
+	calla	rndrng0
+	sll	5,a0
+	addi	fhqrdnk_high_sp_tbl,a0
+	move	*a0,a0,L
+	calla	snd_play1
+
+
+	movk	4,a0
+	calla	rndrng0
+	sll	5,a0
+	addi	fhqrdunk_fx_tbl,a0
+	move	*a0,a0,L
+	calla	snd_play1
+fhqrsaidoh
+	rets
+
+
+fhqrdunk_fx_tbl
+	.long	jet1_snd
+	.long	jet3_snd
+	.long	jet4_snd
+	.long	jet2_snd
+	.long	tarzan
+
+fhqrdnk_high_sp_tbl
+	.long	thrgh_air_sp
+	.long	hiabv_rim_sp
+	.long	goes_hoop_sp
+	.long	serious_h_sp
+	.long	flies_air_sp
+	.long	gldes_air_sp
+	.long	goes_flyg_sp
+	.long	serious_h_sp
+	.long	way_upair_sp
+	.long	lch_atbkt_sp
+
+
+
+ SUBR	seq_low_dnk_spch
+
+	movk	7,a0
+	calla	rndrng0
+	sll	5,a0
+	addi	zncpdnk_low_sp_tbl,a0
+	move	*a0,a0,L
+	calla	snd_play1
+	rets
+
+
+zncpdnk_low_sp_tbl
+	.long	goes_up_sp
+	.long	goes_hoop_sp
+	.long	tks2_hoop_sp
+	.long	goes_hoop_sp
+	.long	goes_up_sp
+	.long	tks2_hoop_sp
+	.long	raises_up_sp
+	.long	catapults_sp
+
+
+ SUBR	seq_jam_speech
+
+	move	*b4+,b0
+	move	b0,a0		;jam speech type
+	move	a0,@jam_speech	;speech type to call when jammed
+ 	rets
+
+
+ SUBRP	swish_speech
+
+	move	@ballrimhitcnt,a1
+	jrnz	cadcnoswish
+
+	move	@ballbbhitcnt,a1
+	jrnz	cadcsnd_fail
+
+	calla	RNDPER
+	jrls	cadcsnd_fail
+
+cadcdoit
+	movk	6,a0
+	calla	rndrng0
+	sll	5,a0		;x 32 bits
+	addi	cadcswishtab,a0
+	move	*a0,a0,L
+	calla	snd_play1
+	rets
+cadcsnd_fail
+	setc
+	rets
+
+cadcnoswish
+	cmpi	9,a1
+	jrlt	cadcsnd_fail
+	callr	lucky_bounce
+	rets
+
+
+cadcswishtab
+	.long	swish_sp
+	.long	ngbut_net_sp
+	.long	rgt_thrgh_sp
+	.long	swish_sp
+	.long	scores_sp
+	.long	botm_net_sp
+	.long	swish_sp
+
+
+
+ SUBR	call_scores
+
+	PUSH	a0,a1,a7,a14
+	PUSH	b0,b1
+
+	move	@game_time,a0,L
+	jrz	jtmino_call0		;br=not playing...
+
+	cmpi	010000h,a0		;10 seconds
+	jrlt	jtmino_call0
+	CREATE0	call_scores_proc
+
+jtmino_call0
+	PULL	b0,b1
+	PULL	a0,a1,a7,a14
+	rets
+
+
+
+ SUBRP	call_scores_proc
+
+	SLEEP	TSEC+10
+
+	move	@game_time,a0,L
+	jrz	jtmino_call
+
+
+	movi	99,a0
+	calla	rndrng0
+	cmpi	45,a0
+	jrls	jtmino_call		;br=30% of time, nothing
+	cmpi	60,a0
+	jrls	jtmianc_scr		;br=35% of time, annouce scores
+	cmpi	87,a0
+	jrls	jtmicrwd_fx		;br=15% of time, organ fx
+
+	move	@pup_court,a14
+	jrnz	jtmidie			;br=outdoor court!
+
+	movk	3,a0
+	calla	rndrng0			;00H-3
+	sll	5,a0
+	addi	jtmiorgan_script_tbl,a0
+	move	*a0,a0,L
+	calla	script_play1
+jtmidie
+	DIE	
+
+
+jtmianc_scr
+
+	move	@scores,a1
+	move	@scores+10h,a0
+	sub	a0,a1
+	jrz	jtmitied
+
+	move	a1,a2
+	abs	a2
+	cmpi	59,a2
+	jrhi	jtmino_call		;br=if score diff > 59, ignore
+
+	move	a11,a11
+	jrnz	jtmitm1_scored
+jtmitm2_scored
+	move	@team2,a2
+	neg	a1
+	jruc	jtmicnt
+
+jtmitm1_scored
+	move	@team1,a2
+jtmicnt
+	movi	jtmianc_scr_win_tbl,a0
+	move	a1,a1
+	jrp	jtmipos
+	movi	jtmianc_scr_lose_tbl,a0
+	neg	a1			;make positive
+jtmipos
+	move	a0,a3
+	move	a1,a4
+	movk	5,a0
+	calla	rndrng0
+	sll	6,a0
+	add	a0,a3
+	move	a3,a0
+	move	a4,a1
+
+	movi	sound_ram,a4,L
+
+	move	*a0+,a14,W
+	jrn	jtminofrst				;br=nothing goes here
+	jrz	jtmisaytm
+	movi	tm_city_spch_tbl,a14
+	jruc	jtmisaycty
+jtmisaytm
+	movi	tm_name_spch_tbl,a14
+jtmisaycty
+	movi	TM_SPCH_TBL_SZ,a3
+	mpys	a2,a3
+	add	a14,a3
+	move	a3,*a4+,L		;store ptr. to sound call data
+	move	*a3(16),a14,W		;get sound call length
+	move	a14,*a4+,W		;store it
+jtminofrst
+	move	*a0+,a3,L		;get sound call ptr
+	move	a3,*a4+,L		;store sound ptr
+	move	*a3(16),a3,W		;get sound call length
+
+	move	*a0,a14,W
+	jrn	jtminolst
+
+	move	a3,*a4+,W		;store it
+	sll	6,a1			;x 32 bits
+	addi	scr_nbr_tbl,a1
+	move	a1,*a4+,L		;store sound ptr
+jtminolst
+	movi	-1,a14
+	move	a14,*a4,W			;end script
+
+	movi	sound_ram,a0,L
+	calla	script_play1
+
+
+jtmisnd_fail
+jtmino_call
+	DIE
+
+
+
+jtmianc_scr_win_tbl
+	WLW	1,leadng_by_sp,0
+	WLW	0,leadng_by_sp,0
+	WLW	1,leads_by_sp,0
+	WLW	0,lead_by_sp,0
+	WLW	0,by_sp,0
+	WLW	0,have_lead_sp,-1
+
+
+jtmianc_scr_lose_tbl
+	WLW	1,downby_sp,0
+	WLW	0,downby_sp,0
+	WLW	1,behind_by_sp,0
+	WLW	0,behind_by_sp,0
+	WLW	1,catchg_up_sp,-1
+	WLW	0,catchg_up_sp,-1
+	
+
+
+jtmitied
+
+	movi	800,a0			;call name 25% time
+	calla	RNDPER
+	jrls	jtmitied1
+
+	cmpi	60,a1
+	jrhs	jtmitied1			;br=dont announce..too high
+	movi	sound_ram,a4,L
+	movi	tied_at_sp,a14,L
+	move	a14,*a4+,L
+	move	*a14(16),a14,W		;get sound call length
+	move	a14,*a4+,W		;store it
+
+	sll	6,a1
+	addi	scr_nbr_tbl,a1
+	move	a1,*a4+,L		;store ptr. to sound call data
+
+	movi	-1,a14
+	move	a14,*a4,W		;end script
+
+	movi	sound_ram,a0,L
+	calla	script_play1
+	DIE
+
+
+jtmitied1
+	movi	gme_tied1_sp,a0,L
+	move	@HCOUNT,a14
+	btst	1,a14
+	jrnz	jtmitied2
+	movi	gme_tied2_sp,a0,L
+jtmitied2
+	calla	snd_play1
+jtmitied3
+	DIE
+
+
+
+jtmicrwd_fx
+
+	move	@pup_court,a14
+	jrz	jtmicrwd0				;br=indoor court
+
+	movk	10,a0
+	calla	rndrng0				;00H-3
+	sll	5,a0
+	addi	jtmioutdr_snd_tbl,a0,L
+	move	*a0,a0,L
+	calla	snd_play1
+	DIE
+
+jtmicrwd0
+	move	@scores,a0			;team 1 score
+	move	@scores+10h,a1			;team 2 score
+
+	movi	jtmicrowd_chant_tbl,a8
+	cmp	a1,a0				;team 1 > team 2 ?
+	jrhs	jtmicrwdsnd			;br=yep
+	movi	jtmicrowd_chant_tbl2,a8
+jtmicrwdsnd
+	movk	3,a0
+	calla	rndrng0				;00H-3
+	sll	5,a0
+	add	a8,a0
+	move	*a0,a0,L
+	calla	script_play1
+	DIE
+
+
+jtmiorgan_script_tbl
+	.long	organ_fx1_sc
+	.long	organ_fx2_sc
+	.long	organ_fx1_sc
+	.long	organ_fx2_sc
+
+
+jtmicrowd_chant_tbl
+	.long	crwd_blchrs_sc
+	.long	crwd_goteam_sc
+	.long	crwd_goteam_sc
+	.long	crwd_blchrs_sc
+
+
+jtmicrowd_chant_tbl2
+	.long	crwd_blchrs_sc
+	.long	crwd_goteam_sc
+	.long	crwd_defnse_sc
+	.long	crwd_blchrs_sc
+
+
+jtmioutdr_snd_tbl
+	.long	ambulne2_snd
+	.long	ambulne_snd
+	.long	prop_ple_snd
+	.long	siren_snd
+	.long	car_pas2_snd
+	.long	fire_trk_snd
+	.long	car_pas2_snd
+	.long	prop_ple_snd
+	.long	siren_snd
+	.long	chrch_bel_sp
+	.long	car_pass_snd
+
+
+
+ SUBR	name_call
+
+uvnxrestart
+	movi	TSEC*2,a10
+uvnxloop
+	SLEEPK	1
+
+	move	@game_time,a0,L
+	jrz	uvnxrestart
+
+	move	@inbound,a0
+	jrnn	uvnxrestart
+
+	move	@ballpnum,a0
+	jrn	uvnxrestart		;ball free
+
+	move	a0,a1
+	sll	5,a1			;*32
+	addi	plyrproc_t,a1
+	move	*a1,a1,L
+	move	*a1(plyr_seqflgs),a1
+	btst	DUNK_B,a1
+	jrnz	uvnxrestart
+
+	dsj	a10,uvnxloop
+
+	move	@last_name,a1		;if name called in last 3 secs
+	cmp	a0,a1
+	jrne	uvnxdiff_name
+
+	move	@last_name_time,a1	;# ticks since name called
+	cmpi	TSEC*2,a1
+	jrlt	uvnxrestart
+
+uvnxdiff_name
+	callr	call_player_name
+
+	movi	TSEC*4,a10
+	jruc	uvnxloop
+
+
+
+ SUBRP	onfire_speech
+
+	move	@game_time,a0,L
+	jrz	nehisnd_fail
+
+	move	@ballnumscored,a0	;# times last plyr scored
+	cmpi	3,a0
+	jrge	nehionfire
+	cmpi	2,a0
+	jrne	nehisnd_fail		;is cold
+
+	movi	heatup_sp,a0
+	move	@HCOUNT,a14
+	btst	1,a14
+	jrnz	nehiheatup
+	movi	lightn_up_sp,a0
+	jruc	nehiheatup
+
+nehionfire
+	move	@ballpnumscored,a1	;Last plyr who scored (0-3) or neg
+	move	@plyr_onfire,a0		;plyr who is on fire
+	btst	a1,a0
+	jrz	nehiwas_teammate		;br=not on fire
+
+	move	@shot_type,a0
+	jrnz	nehinot_desp
+
+	movi	400,a0			;call desp speech 40% time
+	calla	RNDPER
+	jrhi	hotscored
+
+nehinot_desp
+	movk	6,a0
+	calla	rndrng0
+	sll	5,a0		;x 32 bits
+	addi	nehionfiretab,a0
+	move	*a0,a0,L
+nehiheatup
+	calla	snd_play1
+	rets
+
+nehiwas_teammate
+nehisnd_fail
+	setc
+	rets
+
+nehionfiretab
+	.long	hot_hand_sp
+	.long	he_uncon_sp
+	.long	hot_hand_sp
+	.long	smokin_sp
+	.long	ever_miss_sp
+	.long	smokin_sp
+	.long	he_uncon_sp
+
+
+	.asg	140,RANGE
+
+ SUBRP	 wideopen_speech
+
+	movi	450,a0			;call wide-open 35% time
+	calla	RNDPER
+	jrls	wzbwnot_open
+
+	move	@plyr_shot,a0		;player who shot last (0-3)
+	sll	5,a0			;*32
+	addi	plyrproc_t,a0
+	move	*a0,a0,L
+	move	*a0(plyr_o1dist),a1	;opponent 1 dist
+	cmpi	RANGE,a1
+	jrlt	wzbwnot_open
+	move	*a0(plyr_o2dist),a1	;opponent 2 dist
+	cmpi	RANGE,a1
+	jrlt	wzbwnot_open
+
+	movk	3,a0
+	calla	rndrng0
+	sll	5,a0
+	addi	wzbwwide_opn_tbl,a0
+	move	*a0,a0,L
+	calla	snd_play1
+	rets
+
+wzbwnot_open
+	setc
+	rets
+
+
+wzbwwide_opn_tbl
+	.long	opn_for_3_sp
+	.long	wideopen_sp
+	.long	all_alone_sp
+	.long	no_prsure_sp
+
+
+
+	.asg	2,BRICK_MAX
+
+ SUBR	nogood_speech
+
+	PUSH	a10
+
+	move	@ballpnumshot,a10
+	sll	4,a10			;x 16
+	addi	brick_count,a10
+	move	*a10,a1			;brick_count
+	cmpi	BRICK_MAX,a1
+	jrlt	ehpdno_good
+
+	move	@ballrimhitcnt,a0
+	cmpi	3,a0
+	jrlo	ehpdngs1
+	movi	rtle_arnd_sp,a0,L
+	move	@HCOUNT,a14
+	btst	1,a14
+	jrnz	ehpdngs0
+	movi	spins_out_sp,a0,L
+ehpdngs0	calla	snd_play1
+	jruc	ehpddone
+ehpdngs1
+	movk	5,a0
+	calla	rndrng0
+	sll	5,a0
+	addi	ehpdbrick_sp_tbl,a0
+	move	*a0,a0,L
+	jrz	ehpddone
+	calla	snd_play1
+
+	clr	a0
+	move	a0,*a10			;played, now clear it
+	jruc	ehpddone
+
+ehpdno_good
+	move	@game_time,a0,L		;always call if clock at zero
+	jrnz	ehpdng2
+	SOUND1	nogood_sp
+	jruc	ehpddone
+
+ehpdng2	movk	17,a0
+	calla	rndrng0
+	sll	5,a0
+	addi	ehpdnogood_sp_tbl,a0
+	move	*a0,a0,L
+	jrz	ehpddone
+	calla	snd_play1
+ehpddone
+	PULL	a10
+	rets
+
+
+
+ehpdnogood_sp_tbl
+	.long	nogood_sp
+	.long	mis_fires_sp
+	.long	missed_sp
+	.long	dwn_luck_sp
+	.long	0
+	.long	hita_barn_sp
+	.long	off_rim_sp
+	.long	off_trgt_sp
+	.long	side_rim_sp
+	.long	missed_sp
+	.long	bnce_out_sp
+	.long	holes_out_sp
+	.long	bnce_away_sp
+	.long	nogood_sp
+	.long	away_side_sp
+	.long	holes_out_sp
+	.long	0
+	.long	off_frnt_sp
+
+
+ehpdbrick_sp_tbl
+	.long	nogood_sp
+	.long	cantbuy_sp
+	.long	there_brk_sp
+	.long	mis_fires_sp
+	.long	missed_sp
+	.long	side_rim_sp
+
+
+
+ SUBR	victory_speech
+
+	move	@team1,a0
+	move	@scores,a1
+	move	@scores+10h,a2
+	cmp	a1,a2
+	jrlt	fpqlt1_wins
+	move	@team2,a0
+fpqlt1_wins
+	movi	TM_SPCH_TBL_SZ,a1
+	mpys	a0,a1
+	addi	full_tm_name_spch_tbl,a1
+
+	movi	sound_ram,a4,L
+	move	a1,*a4+,L		;store sound table ptr
+	move	*a1(16),*a4+,W		;store sound length
+
+	movi	wingame_sp,a0,L
+	move	a0,*a4+,L
+
+	movi	-1,a0
+	move	a0,*a4,W			;end script
+
+	movi	sound_ram,a0,L
+	calla	script_play1
+	rets
+
+
+
+ SUBR	tip_off_speech
+
+	movi	450,a0
+	calla	RNDPER
+	jrls	ohtmdone
+	SOUND1	gm_undrwy_sp
+ohtmdone
+	DIE
+
+
+
+ SUBR	shot_clock_speech
+
+	SOUND1	error_found
+
+	movk	3,a0
+	calla	rndrng0
+	sll	5,a0
+	addi	dzvosht_clck_sp_tbl,a0
+	move	*a0,a0,L
+	jrz	dzvodone
+	calla	snd_play1
+dzvodone	DIE
+
+
+dzvosht_clck_sp_tbl
+	.long	baddec_sp
+	.long	0
+	.long	wht_thnk2_sp
+	.long	0
+
+
+
+ SUBR	setup_speech
+
+	move	@player1_data+PR_COUNT,a14
+	jrn	wrpdplr1				;br=player didn't enter inits
+	move	@player1_data+PR_CREATED_PLYR,a14
+	jrle	wrpdplr1				;br=plyr not created!
+	move	@player1_data+PR_NICKNAME_NBR,a14
+	cmpi	NUM_NICK_NAMES-1,a14		;> than max count ?
+	jrgt	wrpdplr1
+	sll	6,a14
+	addi	nickname_spch_tbl,a14
+	move	*a14+,a1,L			;get 'name' sound call ptr.
+	move	a1,a2				;no full name
+	move	*a14,a0,L			;get 'to-name' sound call ptr.
+	jruc	wrpdtag1
+
+wrpdplr1	movi	player_names,a10
+	move	@team1,a2
+wrpdlp3	cmpi	0,a2
+	jrz	wrpdout3
+	addi	NEXT_TEAM_NAMES,a10		;compute offset into table
+	dec	a2
+	jruc	wrpdlp3
+wrpdout3
+	move	@team1,a0
+	sll	4,a0
+	addi	tm1set,a0
+	move	*a0,a14
+	sll	6,a14
+	add	a14,a10
+
+	callr	get_plr_spch_ptrs
+
+	move	@special_heads,a14
+	jrn	wrpdtag1
+	movi	NME_SPCH_TBL_SZ,a1
+	mpys	a14,a1
+	move	a1,a0
+	addi	special_name_speech,a1
+	addi	special_pass_speech,a0
+	move	a1,a2
+wrpdtag1
+	move	a1,@spch_name_ram,L
+	move	a2,@spch_name_ram+32,L
+	move	a0,@spch_pass_ram+32,L
+	move	@player2_data+PR_COUNT,a14
+	jrn	arxbplr2				;br=player didn't enter inits
+	move	@player2_data+PR_CREATED_PLYR,a14
+	jrle	arxbplr2				;br=plyr not created!
+	move	@player2_data+PR_NICKNAME_NBR,a14
+	cmpi	NUM_NICK_NAMES-1,a14		;> than max count ?
+	jrgt	arxbplr2
+	sll	6,a14
+	addi	nickname_spch_tbl,a14
+	move	*a14+,a1,L			;get 'name' sound call ptr.
+	move	a1,a2				;no full name
+	move	*a14,a0,L			;get 'to-name' sound call ptr.
+	jruc	arxbtag2
+
+arxbplr2	movi	player_names,a10
+	move	@team1,a2
+arxblp3	cmpi	0,a2
+	jrz	arxbout3
+	addi	NEXT_TEAM_NAMES,a10		;compute offset into table
+	dec	a2
+	jruc	arxblp3
+arxbout3
+	move	@team1,a0
+	sll	4,a0
+	addi	tm1set,a0
+	move	*a0,a14
+	sll	6,a14
+	add	a14,a10
+	addk	32,a10				;2nd player on team 1
+
+	callr	get_plr_spch_ptrs
+
+	move	@special_heads+10h,a14
+	jrn	arxbtag2
+	movi	NME_SPCH_TBL_SZ,a1
+	mpys	a14,a1
+	move	a1,a0
+	addi	special_name_speech,a1
+	addi	special_pass_speech,a0
+	move	a1,a2
+arxbtag2
+	move	a1,@spch_name_ram+64,L
+	move	a2,@spch_name_ram+96,L
+	move	a0,@spch_pass_ram,L
+
+
+	move	@player3_data+PR_COUNT,a14
+	jrn	jostplr3				;br=player didn't enter inits
+	move	@player3_data+PR_CREATED_PLYR,a14
+	jrle	jostplr3				;br=plyr not created!
+	move	@player3_data+PR_NICKNAME_NBR,a14
+	cmpi	NUM_NICK_NAMES-1,a14		;> than max count ?
+	jrgt	jostplr3
+	sll	6,a14
+	addi	nickname_spch_tbl,a14
+	move	*a14+,a1,L			;get 'name' sound call ptr.
+	move	a1,a2				;no full name
+	move	*a14,a0,L			;get 'to-name' sound call ptr.
+	jruc	josttag3
+
+jostplr3	movi	player_names,a10
+	move	@team2,a2
+jostlp3	cmpi	0,a2
+	jrz	jostout3
+	addi	NEXT_TEAM_NAMES,a10		;compute offset into table
+	dec	a2
+	jruc	jostlp3
+jostout3
+	move	@team2,a0
+	sll	4,a0
+	addi	tm2set,a0
+	move	*a0,a14
+	sll	6,a14
+	add	a14,a10
+
+	callr	get_plr_spch_ptrs
+
+	move	@special_heads+20h,a14
+	jrn	josttag3
+	movi	NME_SPCH_TBL_SZ,a1
+	mpys	a14,a1
+	move	a1,a0
+	addi	special_name_speech,a1
+	addi	special_pass_speech,a0
+	move	a1,a2
+josttag3
+	move	a1,@spch_name_ram+128,L
+	move	a2,@spch_name_ram+160,L
+	move	a0,@spch_pass_ram+96,L
+
+	move	@player4_data+PR_COUNT,a14
+	jrn	odxrplr4				;br=player didn't enter inits
+	move	@player4_data+PR_CREATED_PLYR,a14
+	jrle	odxrplr4				;br=plyr not created!
+	move	@player4_data+PR_NICKNAME_NBR,a14
+	cmpi	NUM_NICK_NAMES-1,a14		;> than max count ?
+	jrgt	odxrplr4
+	sll	6,a14
+	addi	nickname_spch_tbl,a14
+	move	*a14+,a1,L			;get 'name' sound call ptr.
+	move	a1,a2				;no full name
+	move	*a14,a0,L			;get 'to-name' sound call ptr.
+	jruc	odxrtag4
+
+odxrplr4	movi	player_names,a10
+	move	@team2,a2
+odxrlp3	cmpi	0,a2
+	jrz	odxrout3
+	addi	NEXT_TEAM_NAMES,a10		;compute offset into table
+	dec	a2
+	jruc	odxrlp3
+odxrout3
+	move	@team2,a0
+	sll	4,a0
+	addi	tm2set,a0
+	move	*a0,a14
+	sll	6,a14
+	add	a14,a10
+	addk	32,a10			;player 2 on team 2
+
+	callr	get_plr_spch_ptrs
+
+	move	@special_heads+30h,a14
+	jrn	odxrtag4
+	movi	NME_SPCH_TBL_SZ,a1
+	mpys	a14,a1
+	move	a1,a0
+	addi	special_name_speech,a1
+	addi	special_pass_speech,a0
+	move	a1,a2
+odxrtag4
+	move	a1,@spch_name_ram+192,L
+	move	a2,@spch_name_ram+224,L
+	move	a0,@spch_pass_ram+64,L
+	rets
+
+
+ SUBRP	get_plr_spch_ptrs
+
+	move	*a10,a0,L
+	movi	name_sort,a14
+	movi	-1,a10
+odxrlp4
+	inc	a10
+	move	*a14+,a1,L
+	cmp	a1,a0
+	jrnz	odxrlp4
+
+	movi	NME_SPCH_TBL_SZ,a1
+	mpys	a10,a1
+	move	a1,a0
+	move	a1,a2
+
+	addi	name_speech,a1
+	addi	pass_speech,a0
+	addi	full_name_speech,a2
+	rets
+
+	.end

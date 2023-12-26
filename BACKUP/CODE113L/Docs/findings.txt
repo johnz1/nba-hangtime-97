@@ -1,0 +1,15 @@
+Needs loads of conventional mem to build. Fixed with dosbox-x.
+
+The VIDRAM utility can use upper RAM addresses normally assigned to EGA or VGA 
+graphics to free up an additional 96Kbytes of conventional memory, but graphical 
+applications cannot be used while VIDRAM is turned on.
+
+Code:
+- New code for Hangtime vs. JAM seems very well commented. 
+- Code is 100% an evolution or NBA JAM/TE.
+
+MAKEPLR.ASM
+- The idea is/was SMARTER DRONE requires 60 total points. But this is disabled with a jr.. (cmpi	60,a1)
+
+Code is not lining up at this moment.
+Need dasm dumps.

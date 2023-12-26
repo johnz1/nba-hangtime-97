@@ -1,4 +1,4 @@
-**************************************************************
+#**************************************************************
 *
 * Owner:	TURMELL
 *
@@ -837,7 +837,7 @@ CLIPTEST	.equ	0
 	btst	a14,a0
 	jrnz	#humn				;br=not a drone!
 	move	*a13(plyr_ohpdist),a14
-	cmpi	>ff,a14				;too far from hoop ?
+	cmpi	0ffH,a14				;too far from hoop ?
 	jrgt	#nofadwy			;br=yes
 
 	move	*a13(PA8),a2,L
@@ -1251,7 +1251,7 @@ vels_tbl
 #lp
 	move	*a8(OCTRL),a1
 	move	*a0(ICTRL),a14
-	andi	>8003,a1
+	andi	08003H,a1
 	or	a14,a1
 	move	a1,*a8(OCTRL)
 	calla	obj_aniq_scld
@@ -1281,10 +1281,10 @@ smoke_team_t
 
 smoko_l
 	LW	XPLOD_YEL,2
-	LWL	SMOK1_01,2+>8000,SMOK_O_P
+	LWL	SMOK1_01,2+08000H,SMOK_O_P
 	LW	SMOK1_02,2
 	LW	SMOK1_03,2
-	LWL	SMOK1_04,2+>8000,SMOK_W_P
+	LWL	SMOK1_04,2+08000H,SMOK_W_P
 	LW	SMOK1_05,2
 	LW	SMOK1_06,1	;2
 	LW	SMOK1_07,1	;2
@@ -1295,7 +1295,7 @@ smoko_l
 	LWL0	SMOK1_12,1	;2
 smokw_l
 	LW	XPLOD_BRT,2
-	LWL	SMOK1_02,2+>8000,SMOK_W_P
+	LWL	SMOK1_02,2+08000H,SMOK_W_P
 	LW	SMOK1_03,2
 	LW	SMOK1_04,2
 	LW	SMOK1_05,2
@@ -1308,10 +1308,10 @@ smokw_l
 	LWL0	SMOK1_12,1	;2
 smokb_l
 	LW	XPLOD_BLU,2
-	LWL	SMOK1_01,2+>8000,SMOK_B_P
+	LWL	SMOK1_01,2+08000H,SMOK_B_P
 	LW	SMOK1_02,2
 	LW	SMOK1_03,2
-	LWL	SMOK1_04,2+>8000,SMOK_W_P
+	LWL	SMOK1_04,2+08000H,SMOK_W_P
 	LW	SMOK1_05,2
 	LW	SMOK1_06,2
 	LW	SMOK1_07,1	;2
@@ -1322,10 +1322,10 @@ smokb_l
 	LWL0	SMOK1_12,1	;2
 smokp_l
 	LW	XPLOD_BLU,2
-	LWL	SMOK1_02,2+>8000,SMOK_P_P
+	LWL	SMOK1_02,2+08000H,SMOK_P_P
 	LW	SMOK1_03,2
 	LW	SMOK1_04,2
-	LWL	SMOK1_05,2+>8000,SMOK_W_P
+	LWL	SMOK1_05,2+08000H,SMOK_W_P
 	LW	SMOK1_06,2
 	LW	SMOK1_07,2
 	LW	SMOK1_08,1	;2
@@ -1341,26 +1341,26 @@ SCLT	.macro	sx,sy,sxa,sya
 	.eval	:sxa:*1048,XA
 	.eval	:sya:*1048,YA
 	.loop	10
-	.word	>10000000/X,>10000000/Y
-	.word	>100000/(>10000000/X),>100000/(>10000000/Y)
+	.word	010000000H/X,010000000H/Y
+	.word	0100000H/(010000000H/X),0100000H/(010000000H/Y)
 	.eval	X+XA*1/4,X
 	.eval	Y+YA*1/4,Y
 	.endloop
 	.loop	10
-	.word	>10000000/X,>10000000/Y
-	.word	>100000/(>10000000/X),>100000/(>10000000/Y)
+	.word	010000000H/X,010000000H/Y
+	.word	0100000H/(010000000H/X),0100000H/(010000000H/Y)
 	.eval	X+XA*2/4,X
 	.eval	Y+YA*2/4,Y
 	.endloop
 	.loop	10
-	.word	>10000000/X,>10000000/Y
-	.word	>100000/(>10000000/X),>100000/(>10000000/Y)
+	.word	010000000H/X,010000000H/Y
+	.word	0100000H/(010000000H/X),0100000H/(010000000H/Y)
 	.eval	X+XA*3/4,X
 	.eval	Y+YA*3/4,Y
 	.endloop
 	.loop	10
-	.word	>10000000/X,>10000000/Y
-	.word	>100000/(>10000000/X),>100000/(>10000000/Y)
+	.word	010000000H/X,010000000H/Y
+	.word	0100000H/(010000000H/X),0100000H/(010000000H/Y)
 	.eval	X+XA,X
 	.eval	Y+YA,Y
 	.endloop
@@ -1382,7 +1382,7 @@ scale50_t
 ********************************
 * Get random # with mask
 * A0=Mask
-* >A0=Rnd # (Pass CC)
+* 0A0H=Rnd # (Pass CC)
 * Trashes scratch
 
  SUBRP	rnd
@@ -1400,7 +1400,7 @@ scale50_t
 #*******************************
 *
 * A3 - direction
-* >a0 - dunk seq.
+* 0a0H - dunk seq.
 
  SUBR	getdunkseq
 
@@ -2760,7 +2760,7 @@ OFFSCR_X	equ	221
 ;
 ;	move	*a11(OXVEL),a6,L
 ;	sra	2,a6
-;	movk	>a,a0
+;	movk	0aH,a0
 ;	callr	rnd
 ;	subk	5,a0
 ;	sll	14,a0			;XVel
@@ -2773,7 +2773,7 @@ OFFSCR_X	equ	221
 ;#xnorm
 ;
 ;	move	*a11(OYVEL),a7,L
-;	movk	>3,a0
+;	movk	03H,a0
 ;	callr	rnd
 ;	sll	16,a0			;YVel
 ;	neg	a0
@@ -2782,7 +2782,7 @@ OFFSCR_X	equ	221
 ;
 ;;	move	*a11(OYVEL),a7,L
 ;;	sra	2,a7
-;;	movk	>a,a0
+;;	movk	0aH,a0
 ;;	callr	rnd
 ;;	subk	5,a0
 ;;	sll	15,a0			;YVel
@@ -2820,7 +2820,7 @@ OFFSCR_X	equ	221
 ;
 ;	move	*a11(OZVEL),a2,L
 ;	sra	2,a2			;/4
-;	movk	>f,a0
+;	movk	0fH,a0
 ;	callr	rnd
 ;	subk	7,a0
 ;	sll	14,a0
@@ -2912,7 +2912,7 @@ OFFSCR_X	equ	221
 
 	calla	system_savegame
 
-	movi	>12345678,a0
+	movi	012345678H,a0
 	move	a0,@clipsrunning,L
 
 
@@ -2959,7 +2959,7 @@ OFFSCR_X	equ	221
 	move	*a0+,a10,L		;XY
 
 	move	@clipbits,a2,L
-	cmpi	>3ffff,a2		;18 bits
+	cmpi	03ffffH,a2		;18 bits
 	jrlo	#ok
 	clr	a2
 #ok
@@ -3326,7 +3326,7 @@ mslstxy_t
 	move	*a13(pft_pball),a10	;>Pass with turbo
 	sll	4,a10			;*16
 	addi	P1CTRL,a10
-	movi	>60,a0
+	movi	060H,a0
 	move	a0,*a10
 
 	SLEEPK	10
@@ -3357,12 +3357,12 @@ mslstxy_t
 	clr	a1			;Y
 	movi	CZMIN,a3		;Z
 	movi	#alignimg_t,a2
-	movi	>800c|M_NOCOLL|M_3D|M_NOSCALE,a4
+	movi	0800cH|M_NOCOLL|M_3D|M_NOSCALE,a4
 	movi	CLSDEAD,a5
 	clr	a6
 	clr	a7
 	calla	BEGINOBJ
-	movi	>101,a0
+	movi	0101H,a0
 	move	a0,*a8(OCONST)
 	movi	-300,a0
 	move	a0,*a8(OMISC)		;Z offset
@@ -3460,7 +3460,7 @@ board_glssnd
 	PUSHP	a0
 	move	a9,*a13(shd_ani1st_p),L
 
-	movk	>f,a0
+	movk	0fH,a0
 	callr	rnd
 	subk	5,a0
 	move	a0,a6
@@ -3471,7 +3471,7 @@ board_glssnd
 	jrnz	#xnorm
 	sll	2,a6			;*4
 #xnorm
-	movk	>f,a0
+	movk	0fH,a0
 	callr	rnd
 	subk	6,a0
 	move	a0,a7

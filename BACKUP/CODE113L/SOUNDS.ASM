@@ -1,6 +1,6 @@
 ;;CHECK line 202 and 266 (audits and adj. stuff)
 ;;MUST FIX SOUND WATCHDOG - I COMMENTED IT OUT
-******************************************************************************
+#******************************************************************************
 *
 * Owner:	JOHNSON
 *
@@ -65,12 +65,12 @@
 
 	.asg	6000,SNDBRD_RES_CNT	;Sound board reset-cycle delay cnt
 
-send	.set	>0001			; script command --> send sound code
-setpri	.set	>0002			; script command --> set priority
-endtune	.set	>0003			; script command --> end of tune script
-sleep	.set	>0004			; script command --> sleep next byte
-send2	.set	>0005
-ex	.set	>8000			; flag: extended sound call !!
+send	.set	00001H			; script command --> send sound code
+setpri	.set	00002H			; script command --> set priority
+endtune	.set	00003H			; script command --> end of tune script
+sleep	.set	00004H			; script command --> sleep next byte
+send2	.set	00005H
+ex	.set	08000H			; flag: extended sound call !!
 
 
 ;--------------------
@@ -137,243 +137,243 @@ ex	.set	>8000			; flag: extended sound call !!
 ; sounds
 ;
 ;   sound table ptr. name, priority:channel, duration, snd nbr.
- SX	select_snd1, >0201,05, >310		;select option sound
- SX	select_snd2, >0202,05, >311
- SX	select_snd3, >0203,05, >312
- SX	select_snd4, >0204,05, >313
- SX	cursor_snd1, >0101,09, >30c	;cursor movement
- SX	cursor_snd2, >0102,09, >30d	;
- SX	cursor_snd3, >0103,09, >30e	;
- SX	cursor_snd4, >0104,09, >30f	;
- SX	win_snd,     >2504,75, >172	;Winner snd/Suckup credits
- SX	bounce_snd,  >0001,27, >260	;Ball bounce
- SX	plaque_fall1,>2501,91, >1f6
- SX	plaque_fall2,>2502,91, >1f7
- SX	plaque_fall3,>2503,91, >1f8
- SX	plaque_fall4,>2504,91, >1f9
- SX	plaque_land1,>2601,99, >3a3
- SX	plaque_land2,>2602,99, >3a4
- SX	plaque_land3,>2603,99, >3a5
- SX	plaque_land4,>2604,99, >3a6
- SX	opt_scr_cur, >1501,54, >1bd	;option screen
- SX	opt_scr_sel, >1501,30, >3fd  ;397 (PUT ON TRACK 5)
- SX	combo_lock1, >1101,45, >3fd
- SX	combo_lock2, >1102,45, >3fe
- SX	combo_lock3, >1103,45, >3ff
- SX	combo_lock4, >1104,45, >400
- SX	adv_stats,   >1001,15, >260
- SX	coin_snd,    >ff04,35, >255	;coin in melody snd
- SX	beep2_snd,   >0001,5,  >280	;beep tone for diagnostics
- SX	cntdown_snd, >1505,50, >20a	;buyin cntdwn clang
- SX	horn_snd,    >4001,120,>2fb	;horn
- SX	atrib_snd1,  >0101,10, >3bb
- SX	atrib_snd2,  >0101,10, >3bf
- SX	atrib_snd3,  >0101,10, >3c3
- SX	atrib_snd4,  >0101,10, >3c7
- SX	atrib_snd5,  >0101,10, >3cb
- SX	atrib_snd6,  >0101,10, >3cf
- SX	atrib_snd7,  >0101,10, >3d3
- SX	atrib_snd8,  >0101,10, >3d7
- SX	atrib_snd9,  >0101,10, >3db
- SX	atrib_snd10, >0101,10, >3df
- SX	yes_no_cur1, >1501,15, >33b
- SX	yes_no_cur2, >1502,15, >33c
- SX	yes_no_cur3, >1503,15, >33d
- SX	yes_no_cur4, >1504,15, >33e
- SX	yes_no_sel1, >1501,20, >268
- SX	yes_no_sel2, >1502,20, >269
- SX	yes_no_sel3, >1503,20, >26a
- SX	yes_no_sel4, >1504,20, >26b
- SX	butn_press,  >0103,15, >399
- SX	butn_press2, >0103,15, >399
- SX	cursor_up,   >0101,10, >1bd
- SX	cursor_dwn,  >0101,10, >1be
- SX	cursor_lft,  >0101,10, >33b
- SX	cursor_rgt,  >0101,10, >33b
- SX	chkmrk0_snd, >0103,20, >371
- SX	unchkmrk_snd,>0103,20, >371
- SX	chkmrk_snd,  >1501,20, >36f
- SX	chkmrk_snd2, >1502,20, >370
- SX	chkmrk_snd3, >1503,20, >371
- SX	chkmrk_snd4, >1504,20, >372
- SX	cursor_up2,  >0101,15, >33b
- SX	cursor_dwn2, >0101,15, >33b
- SX	cursor_lft2, >0101,25, >33b
- SX	cursor_rgt2, >0101,25, >33b
- SX	cursor_up3,  >0101,25, >33b
- SX	cursor_dwn3, >0101,25, >33b
- SX	whitsle_snd, >1504,45, >2f3
- SX	diag_cursor, >0101,27, >27c
- SX	diag_select, >0101,27, >280
- SX	bx_slide_snd,>0001,28, >1f6
- SX	update_adj,  >0501,27, >278
- SX	adj_menu_ext,>0501,27, >280
- SX	adj_menu_ent,>0501,27, >280
- SX	error_found, >4001,66, >367
- SX	tm_sel_cur1, >1501,36, >33b
- SX	tm_sel_cur2, >1502,36, >33c
- SX	tm_sel_hd_l1,>1501,47, >32b
- SX	tm_sel_hd_r1,>1501,47, >32b
- SX	tm_sel_hd_l2,>1502,47, >32c
- SX	tm_sel_hd_r2,>1502,47, >32c
- SX	tm_sel_sel1, >3201,65, >3fd   ;397
- SX	tm_sel_sel2, >3202,65, >3fe   ;398
- SX	tm_sel_ran1, >3001,116,>3f9
- SX	tm_sel_ran2, >3002,116,>3fa
- SX	sel_rndmend1,>3101,45, >3a3
- SX	sel_rndmend2,>3102,45, >3a4
- SX	tm_sel_stats,>0001,27, >260
- SX	combo_but1,  >1001,32, >36b
- SX	combo_but2,  >1002,32, >36c
- SX	combo_but3,  >1003,32, >36d
- SX	combo_but4,  >1004,32, >36e
- SX	powrup_awrd1,>2501,45, >222
- SX	powrup_awrd2,>2501,45, >222	;no track two
- SX	powrup_awrd3,>2503,45, >224
- SX	powrup_awrd4,>2504,45, >225
- SX	tick_snd,    >1504,20, >1fd
- SX	warn_snd,    >1504,20, >1fd
- SX	alert_snd,   >2704,50, >15e
- SX	ot_alert_snd,>2504,50, >3b6
- SX	infoex_snd,  >0501,18, >260
- SX	sqk1_snd,    >0103,25, >8b		;Sneaker squeek
- SX	sqk2_snd,    >0103,25, >8d
- SX	sqk3_snd,    >0103,25, >90
- SX	sqk4_snd,    >0103,25, >93
- SX	sqk5_snd,    >0103,25, >97
- SX	sqk6_snd,    >0103,25, >9a
- SX	scuf1_snd,   >0103,25, >b5
- SX	scuf2_snd,   >0103,25, >b6
- SX	scuf3_snd,   >0103,25, >b7
- SX	scuf4_snd,   >0103,25, >b8
+ SX	select_snd1, 00201H,05, 0310H		;select option sound
+ SX	select_snd2, 00202H,05, 0311H
+ SX	select_snd3, 00203H,05, 0312H
+ SX	select_snd4, 00204H,05, 0313H
+ SX	cursor_snd1, 00101H,09, 030cH	;cursor movement
+ SX	cursor_snd2, 00102H,09, 030dH	;
+ SX	cursor_snd3, 00103H,09, 030eH	;
+ SX	cursor_snd4, 00104H,09, 030fH	;
+ SX	win_snd,     02504H,75, 0172H	;Winner snd/Suckup credits
+ SX	bounce_snd,  00001H,27, 0260H	;Ball bounce
+ SX	plaque_fall1,02501H,91, 01f6H
+ SX	plaque_fall2,02502H,91, 01f7H
+ SX	plaque_fall3,02503H,91, 01f8H
+ SX	plaque_fall4,02504H,91, 01f9H
+ SX	plaque_land1,02601H,99, 03a3H
+ SX	plaque_land2,02602H,99, 03a4H
+ SX	plaque_land3,02603H,99, 03a5H
+ SX	plaque_land4,02604H,99, 03a6H
+ SX	opt_scr_cur, 01501H,54, 01bdH	;option screen
+ SX	opt_scr_sel, 01501H,30, 03fdH  ;397 (PUT ON TRACK 5)
+ SX	combo_lock1, 01101H,45, 03fdH
+ SX	combo_lock2, 01102H,45, 03feH
+ SX	combo_lock3, 01103H,45, 03ffH
+ SX	combo_lock4, 01104H,45, 0400H
+ SX	adv_stats,   01001H,15, 0260H
+ SX	coin_snd,    0ff04H,35, 0255H	;coin in melody snd
+ SX	beep2_snd,   00001H,5,  0280H	;beep tone for diagnostics
+ SX	cntdown_snd, 01505H,50, 020aH	;buyin cntdwn clang
+ SX	horn_snd,    04001H,120,02fbH	;horn
+ SX	atrib_snd1,  00101H,10, 03bbH
+ SX	atrib_snd2,  00101H,10, 03bfH
+ SX	atrib_snd3,  00101H,10, 03c3H
+ SX	atrib_snd4,  00101H,10, 03c7H
+ SX	atrib_snd5,  00101H,10, 03cbH
+ SX	atrib_snd6,  00101H,10, 03cfH
+ SX	atrib_snd7,  00101H,10, 03d3H
+ SX	atrib_snd8,  00101H,10, 03d7H
+ SX	atrib_snd9,  00101H,10, 03dbH
+ SX	atrib_snd10, 00101H,10, 03dfH
+ SX	yes_no_cur1, 01501H,15, 033bH
+ SX	yes_no_cur2, 01502H,15, 033cH
+ SX	yes_no_cur3, 01503H,15, 033dH
+ SX	yes_no_cur4, 01504H,15, 033eH
+ SX	yes_no_sel1, 01501H,20, 0268H
+ SX	yes_no_sel2, 01502H,20, 0269H
+ SX	yes_no_sel3, 01503H,20, 026aH
+ SX	yes_no_sel4, 01504H,20, 026bH
+ SX	butn_press,  00103H,15, 0399H
+ SX	butn_press2, 00103H,15, 0399H
+ SX	cursor_up,   00101H,10, 01bdH
+ SX	cursor_dwn,  00101H,10, 01beH
+ SX	cursor_lft,  00101H,10, 033bH
+ SX	cursor_rgt,  00101H,10, 033bH
+ SX	chkmrk0_snd, 00103H,20, 0371H
+ SX	unchkmrk_snd,00103H,20, 0371H
+ SX	chkmrk_snd,  01501H,20, 036fH
+ SX	chkmrk_snd2, 01502H,20, 0370H
+ SX	chkmrk_snd3, 01503H,20, 0371H
+ SX	chkmrk_snd4, 01504H,20, 0372H
+ SX	cursor_up2,  00101H,15, 033bH
+ SX	cursor_dwn2, 00101H,15, 033bH
+ SX	cursor_lft2, 00101H,25, 033bH
+ SX	cursor_rgt2, 00101H,25, 033bH
+ SX	cursor_up3,  00101H,25, 033bH
+ SX	cursor_dwn3, 00101H,25, 033bH
+ SX	whitsle_snd, 01504H,45, 02f3H
+ SX	diag_cursor, 00101H,27, 027cH
+ SX	diag_select, 00101H,27, 0280H
+ SX	bx_slide_snd,00001H,28, 01f6H
+ SX	update_adj,  00501H,27, 0278H
+ SX	adj_menu_ext,00501H,27, 0280H
+ SX	adj_menu_ent,00501H,27, 0280H
+ SX	error_found, 04001H,66, 0367H
+ SX	tm_sel_cur1, 01501H,36, 033bH
+ SX	tm_sel_cur2, 01502H,36, 033cH
+ SX	tm_sel_hd_l1,01501H,47, 032bH
+ SX	tm_sel_hd_r1,01501H,47, 032bH
+ SX	tm_sel_hd_l2,01502H,47, 032cH
+ SX	tm_sel_hd_r2,01502H,47, 032cH
+ SX	tm_sel_sel1, 03201H,65, 03fdH   ;397
+ SX	tm_sel_sel2, 03202H,65, 03feH   ;398
+ SX	tm_sel_ran1, 03001H,116,03f9H
+ SX	tm_sel_ran2, 03002H,116,03faH
+ SX	sel_rndmend1,03101H,45, 03a3H
+ SX	sel_rndmend2,03102H,45, 03a4H
+ SX	tm_sel_stats,00001H,27, 0260H
+ SX	combo_but1,  01001H,32, 036bH
+ SX	combo_but2,  01002H,32, 036cH
+ SX	combo_but3,  01003H,32, 036dH
+ SX	combo_but4,  01004H,32, 036eH
+ SX	powrup_awrd1,02501H,45, 0222H
+ SX	powrup_awrd2,02501H,45, 0222H	;no track two
+ SX	powrup_awrd3,02503H,45, 0224H
+ SX	powrup_awrd4,02504H,45, 0225H
+ SX	tick_snd,    01504H,20, 01fdH
+ SX	warn_snd,    01504H,20, 01fdH
+ SX	alert_snd,   02704H,50, 015eH
+ SX	ot_alert_snd,02504H,50, 03b6H
+ SX	infoex_snd,  00501H,18, 0260H
+ SX	sqk1_snd,    00103H,25, 08bH		;Sneaker squeek
+ SX	sqk2_snd,    00103H,25, 08dH
+ SX	sqk3_snd,    00103H,25, 090H
+ SX	sqk4_snd,    00103H,25, 093H
+ SX	sqk5_snd,    00103H,25, 097H
+ SX	sqk6_snd,    00103H,25, 09aH
+ SX	scuf1_snd,   00103H,25, 0b5H
+ SX	scuf2_snd,   00103H,25, 0b6H
+ SX	scuf3_snd,   00103H,25, 0b7H
+ SX	scuf4_snd,   00103H,25, 0b8H
 
- SX	fball_snd,   >1903,104,>2e2
- SX	fpass_snd,   >1903,85, >c9	;fire ball pass sound
- SX	rim_fire_snd,>350B,90, >cc
- SX	aly_pass_snd,>1903,104,>2e2
+ SX	fball_snd,   01903H,104,02e2H
+ SX	fpass_snd,   01903H,85, 0c9H	;fire ball pass sound
+ SX	rim_fire_snd,0350BH,90, 0ccH
+ SX	aly_pass_snd,01903H,104,02e2H
 
- SX	pass_snd,    >1204,20, >bb    	;147
-; SX	pass_snd,    >1201,20, >b9    	;147
- SX	swipe_snd,   >1401,20, >130
- SX	elbow1_snd,  >1601,35, >180
- SX	elbow2_snd,  >1601,35, >186
- SX	push1_snd,   >1101,30, >183
- SX	flail_snd,   >1501,30, >180
- SX	fall1_snd,   >1501,26, >183
- SX	land_snd,    >1401,15, >a2    ;(a4-tr3)
- SX	yell_snd,    >1201,100,>198
+ SX	pass_snd,    01204H,20, 0bbH    	;147
+; SX	pass_snd,    01201H,20, 0b9H    	;147
+ SX	swipe_snd,   01401H,20, 0130H
+ SX	elbow1_snd,  01601H,35, 0180H
+ SX	elbow2_snd,  01601H,35, 0186H
+ SX	push1_snd,   01101H,30, 0183H
+ SX	flail_snd,   01501H,30, 0180H
+ SX	fall1_snd,   01501H,26, 0183H
+ SX	land_snd,    01401H,15, 0a2H    ;(a4-tr3)
+ SX	yell_snd,    01201H,100,0198H
 
- SX	flsh1_snd,   >0501,19, >177
- SX	flsh3_snd,   >0503,19, >179
- SX	flsh4_snd,   >0504,19, >17a
- SX	boo_snd,     >1204,179,>1dd	;e6
- SX	boo1_snd,    >1204,179,>1dd	;e6
- SX	tip_snd,     >200C,23, >9e	;19f	;9b
- SX	eat_snd,     >8501,10, >37b	;**
+ SX	flsh1_snd,   00501H,19, 0177H
+ SX	flsh3_snd,   00503H,19, 0179H
+ SX	flsh4_snd,   00504H,19, 017aH
+ SX	boo_snd,     01204H,179,01ddH	;e6
+ SX	boo1_snd,    01204H,179,01ddH	;e6
+ SX	tip_snd,     0200CH,23, 09eH	;19f	;9b
+ SX	eat_snd,     08501H,10, 037bH	;**
 
- SX	organ1_snd,  >0504,75, >1a6
- SX	organ2_snd,  >0504,60, >1a8
- SX	organ3_snd,  >0504,50, >1aa
- SX	organ8_snd,  >0504,135,>1b4
- SX	organ9_snd,  >0504,98, >1b6
- SX	organ10_snd, >0504,100,>1b8
+ SX	organ1_snd,  00504H,75, 01a6H
+ SX	organ2_snd,  00504H,60, 01a8H
+ SX	organ3_snd,  00504H,50, 01aaH
+ SX	organ8_snd,  00504H,135,01b4H
+ SX	organ9_snd,  00504H,98, 01b6H
+ SX	organ10_snd, 00504H,100,01b8H
 
- SX	car_pass_snd,>1504,90, >1c7
- SX	siren_snd,   >1504,145,>1c9	;** TURN UP **
- SX	prop_ple_snd,>1504,100,>20c
- SX	chrch_bel_sp,>1504,140,>210
- SX	car_pas2_snd,>1504,130,>212
- SX	ambulne_snd, >1504,120,>214
- SX	ambulne2_snd,>1504,120,>216
- SX	fire_trk_snd,>1504,120,>218
-; SX	train_snd,   >1504,145,>21a
+ SX	car_pass_snd,01504H,90, 01c7H
+ SX	siren_snd,   01504H,145,01c9H	;** TURN UP **
+ SX	prop_ple_snd,01504H,100,020cH
+ SX	chrch_bel_sp,01504H,140,0210H
+ SX	car_pas2_snd,01504H,130,0212H
+ SX	ambulne_snd, 01504H,120,0214H
+ SX	ambulne2_snd,01504H,120,0216H
+ SX	fire_trk_snd,01504H,120,0218H
+; SX	train_snd,   01504H,145,021aH
 
- SX	crwd_blchrs, >1504,182,>1e5	;ed
- SX	crwd_go_team,>1504,101,>1f5	;f4
- SX	crwd_defence,>1504,186,>1e1	;eb
+ SX	crwd_blchrs, 01504H,182,01e5H	;ed
+ SX	crwd_go_team,01504H,101,01f5H	;f4
+ SX	crwd_defence,01504H,186,01e1H	;eb
 
- SX	swish_snd1,  >310B,27, >83	;regular net
- SX	swish_snd2,  >310B,27, >84
- SX	swish_snd3,  >310B,27, >86
- SX	swish_snd4,  >310B,32, >af	;chain net (outdoor court)
- SX	swish_snd5,  >310B,32, >b0
- SX	swish_snd6,  >310B,32, >af
+ SX	swish_snd1,  0310BH,27, 083H	;regular net
+ SX	swish_snd2,  0310BH,27, 084H
+ SX	swish_snd3,  0310BH,27, 086H
+ SX	swish_snd4,  0310BH,32, 0afH	;chain net (outdoor court)
+ SX	swish_snd5,  0310BH,32, 0b0H
+ SX	swish_snd6,  0310BH,32, 0afH
 
- SX	dunk_snd1,   >320B,58, >66
- SX	dunk_snd2,   >320B,54, >66
- SX	dunk_snd3,   >320B,56, >66
- SX	dunk_snd4,   >320B,48, >6c
- SX	dunk_snd5,   >320B,53, >ad	;outdoor court
+ SX	dunk_snd1,   0320BH,58, 066H
+ SX	dunk_snd2,   0320BH,54, 066H
+ SX	dunk_snd3,   0320BH,56, 066H
+ SX	dunk_snd4,   0320BH,48, 06cH
+ SX	dunk_snd5,   0320BH,53, 0adH	;outdoor court
 
- SX	spn_mv_snd,  >1503,30, >10f
+ SX	spn_mv_snd,  01503H,30, 010fH
 
- SX	miss1_snd,   >3103,32, >74
- SX	miss2_snd,   >3103,21, >75
- SX	miss3_snd,   >3103,23, >77
- SX	miss4_snd,   >3103,23, >77
- SX	miss5_snd,   >3103,25, >ae	;outdoor court
- SX	missd1_snd,  >3103,77, >11f
+ SX	miss1_snd,   03103H,32, 074H
+ SX	miss2_snd,   03103H,21, 075H
+ SX	miss3_snd,   03103H,23, 077H
+ SX	miss4_snd,   03103H,23, 077H
+ SX	miss5_snd,   03103H,25, 0aeH	;outdoor court
+ SX	missd1_snd,  03103H,77, 011fH
 
- SX	hitbkbd_snd, >1503,20, >70
- SX	hitbkbd2_snd,>1503,20, >82	;outdoor court
+ SX	hitbkbd_snd, 01503H,20, 070H
+ SX	hitbkbd2_snd,01503H,20, 082H	;outdoor court
 
- SX	stealsb,     >200C,20, >9b
- SX	swat_snd,    >200C,20, >9b	;a3	;slap ball sound
- SX	intercept,   >3003,33, >169 ;16a
- SX	steal_snd,   >3003,33, >169 ;16a	;flash ball sound
+ SX	stealsb,     0200CH,20, 09bH
+ SX	swat_snd,    0200CH,20, 09bH	;a3	;slap ball sound
+ SX	intercept,   03003H,33, 0169H ;16a
+ SX	steal_snd,   03003H,33, 0169H ;16a	;flash ball sound
 
- SX     dribble_snd, >1003,20, >6d ;64
- SX     dribble2_snd,>1004,23, >bf
- SX     dribble3_snd,>1003,20, >6e
+ SX     dribble_snd, 01003H,20, 06dH ;64
+ SX     dribble2_snd,01004H,23, 0bfH
+ SX     dribble3_snd,01003H,20, 06eH
 
- SX	trns1_snd,   >0501,29, >130
- SX	trns2_snd,   >0502,29, >139
- SX	trns3_snd,   >0503,29, >13e
- SX	trns4_snd,   >0504,29, >137
- SX	trnd1_snd,   >0601,30, >397
- SX	trnd2_snd,   >0602,30, >398
- SX	trnd3_snd,   >0603,30, >399
- SX	trnd4_snd,   >0604,30, >39a
- SX	untrns1_snd, >0901,29, >130
- SX	untrns2_snd, >0902,29, >139
- SX	untrns3_snd, >0903,29, >13e
- SX	untrns4_snd, >0904,29, >137
+ SX	trns1_snd,   00501H,29, 0130H
+ SX	trns2_snd,   00502H,29, 0139H
+ SX	trns3_snd,   00503H,29, 013eH
+ SX	trns4_snd,   00504H,29, 0137H
+ SX	trnd1_snd,   00601H,30, 0397H
+ SX	trnd2_snd,   00602H,30, 0398H
+ SX	trnd3_snd,   00603H,30, 0399H
+ SX	trnd4_snd,   00604H,30, 039aH
+ SX	untrns1_snd, 00901H,29, 0130H
+ SX	untrns2_snd, 00902H,29, 0139H
+ SX	untrns3_snd, 00903H,29, 013eH
+ SX	untrns4_snd, 00904H,29, 0137H
 
- SX	robo_1_snd,  >3401,204, >bb0		;End wave snd
- SX	robo_2_snd,  >3403,109, >ba2		;Effect 1 - storm cloud on
- SX	robo_3_snd,  >3401,109, >b90		;flash ABA ball white
+ SX	robo_1_snd,  03401H,204, 0bb0H		;End wave snd
+ SX	robo_2_snd,  03403H,109, 0ba2H		;Effect 1 - storm cloud on
+ SX	robo_3_snd,  03401H,109, 0b90H		;flash ABA ball white
 
 ;dunk sounds
- SX	jet4_snd,    >1603,70, >2f9
- SX	jet1_snd,    >1603,80, >108
- SX	jet2_snd,    >1603,80, >128
- SX	jet3_snd,    >1603,80, >126
- SX	tarzan,      >1603,70, >123
+ SX	jet4_snd,    01603H,70, 02f9H
+ SX	jet1_snd,    01603H,80, 0108H
+ SX	jet2_snd,    01603H,80, 0128H
+ SX	jet3_snd,    01603H,80, 0126H
+ SX	tarzan,      01603H,70, 0123H
 ;
 ;tunes
 ;
- SX	tm_fire_tune,>0100,100,25
- SX	buyin_tune,  >0100,100,11
- SX	pregame_tune,>0100,100,13 ;1
- SX	tunegc_snd,  >0100,100,3  	;Grand champion play tune
- SX	tuneq1_snd,  >0100,100,5
- SX	tuneq1ed_snd,>0100,100,51
- SX	tuneq2_snd,  >0100,100,14
- SX	tuneq2ed_snd,>0100,100,53
- SX	tuneq3_snd,  >0100,100,5
- SX	tuneq3ed_snd,>0100,100,51
- SX	tuneq4_snd,  >0100,100,14
- SX	tuneq4ed_snd,>0100,100,51
- SX	tuneot_snd,  >0100,100,5
- SX	tuneoted_snd,>0100,100,51
+ SX	tm_fire_tune,00100H,100,25
+ SX	buyin_tune,  00100H,100,11
+ SX	pregame_tune,00100H,100,13 ;1
+ SX	tunegc_snd,  00100H,100,3  	;Grand champion play tune
+ SX	tuneq1_snd,  00100H,100,5
+ SX	tuneq1ed_snd,00100H,100,51
+ SX	tuneq2_snd,  00100H,100,14
+ SX	tuneq2ed_snd,00100H,100,53
+ SX	tuneq3_snd,  00100H,100,5
+ SX	tuneq3ed_snd,00100H,100,51
+ SX	tuneq4_snd,  00100H,100,14
+ SX	tuneq4ed_snd,00100H,100,51
+ SX	tuneot_snd,  00100H,100,5
+ SX	tuneoted_snd,00100H,100,51
 
- SX	tune_wingame,>0100,100,24
- SX	tune_gmovr,  >0100,100,18
- SX	hangtime_snd,>0100,100,19
+ SX	tune_wingame,00100H,100,24
+ SX	tune_gmovr,  00100H,100,18
+ SX	hangtime_snd,00100H,100,19
 
- SX	tunehalf_snd,>0100,100,39	;halftime tune
- SX	tune_cap_snd,>0100,100,7	;create-a-player tune
- SX	tuneend_snd, >0100,100,0	;kill any tune
+ SX	tunehalf_snd,00100H,100,39	;halftime tune
+ SX	tune_cap_snd,00100H,100,7	;create-a-player tune
+ SX	tuneend_snd, 00100H,100,0	;kill any tune
 
 
 ;
@@ -488,7 +488,7 @@ wsr_2
 
 #*****************************************************************************
 * Sets the volume of the DCS.
-* >a0=volume (0-255)
+* 0a0H=volume (0-255)
 *
  SUBR	set_game_snd
 
@@ -514,7 +514,7 @@ wsr_2
 
 #*****************************************************************************
 * Sets the volume of the DCS.
-* >a0=volume (0-255)
+* 0a0H=volume (0-255)
 *
 
  SUBR	set_volume
@@ -544,7 +544,7 @@ wsr_2
 
 #*****************************************************************************
 * Sets the volume of the DCS (for attract mode).
-* >a0=volume (0-255)
+* 0a0H=volume (0-255)
 *
 
  SUBR	set_volume_for_amode
@@ -582,7 +582,7 @@ wsr_2
 
 #*****************************************************************************
 * Raw hardware sound call.
-* >a3=sound code
+* 0a3H=sound code
 
  SUBR	SNDSND
 
@@ -726,13 +726,13 @@ sendx	PULL	a0,a1,a2,a3,a4
 
 	.if DEBUG
 	move	*a3,a14,W
-	cmpi	>ff0A,a14			;invalid priority:channel ?
+	cmpi	0ff0AH,a14			;invalid priority:channel ?
 	jrgt	#dbsp2				;br=yep
 	move	*a3(16),a14,W
 	cmpi	314,a14				;invalid duration ?
 	jrhs	#dbsp2				;br=yep
 	move	*a3(32),a14,W
-	cmpi	>c00,a14			;invalid sound call nbr. ?
+	cmpi	0c00H,a14			;invalid sound call nbr. ?
 	jrlo	#dbsp3				;br=no
 #dbsp2
 	LOCKUP
@@ -796,11 +796,11 @@ sendx	PULL	a0,a1,a2,a3,a4
 ;	jrn	#done				;br=cant interupt snd
 
 	.if DEBUG
-	cmpi	>ff0A,a1			;invalid priority:channel ?
+	cmpi	0ff0AH,a1			;invalid priority:channel ?
 	jrgt	#lckup				;br=yep
 	cmpi	800,a2				;invalid duration ?
 	jrhs	#lckup				;br=yep
-	cmpi	>c00,a3				;invalid sound call nbr. ?
+	cmpi	0c00H,a3				;invalid sound call nbr. ?
 	jrlo	#valok				;br=no
 #lckup
 	LOCKUP
@@ -1017,28 +1017,28 @@ nos2
 ;* POPULAR SOUND CALLS
 ;
 ;*HIGH PRIORITY OFF CODES, NOTHING SHOULD BEAT THESE
-;CVSDOFF		.WORD	>F0FF|>800,>01,>8000,0	;CVSD BACKGROUND LOOP OFF
-;CVSDFOFF 	.WORD	>F0FF|>800,>01,>8000,0	;CVSD FOREGROUND LOOP OFF
-;SOUNDOFF 	.WORD	>F0FF|>800,>01,>8000,0	;TURN SOUND SIDE OFF
-;ALLOFF	 	.WORD	>F3FF|>800,>01,>8000,0	;MUSIC AND EFFECTS OFF
-;MUSITOFF	.WORD	>F3FF|>800,>01,>8040,0	;MUSIC TRANSITION OFF
+;CVSDOFF		.WORD	0F0FFH|0800H,001H,08000H,0	;CVSD BACKGROUND LOOP OFF
+;CVSDFOFF 	.WORD	0F0FFH|0800H,001H,08000H,0	;CVSD FOREGROUND LOOP OFF
+;SOUNDOFF 	.WORD	0F0FFH|0800H,001H,08000H,0	;TURN SOUND SIDE OFF
+;ALLOFF	 	.WORD	0F3FFH|0800H,001H,08000H,0	;MUSIC AND EFFECTS OFF
+;MUSITOFF	.WORD	0F3FFH|0800H,001H,08040H,0	;MUSIC TRANSITION OFF
 ;
-;VOLUME0	.WORD	>F3FE,>1,>802F,0
-;VOLUME1	.WORD	>F3FE,>1,>802E,0
-;VOLUME2	.WORD	>F3FE,>1,>802D,0
-;VOLUME3	.WORD	>F3FE,>1,>802C,0
-;VOLUME4	.WORD	>F3FE,>1,>802B,0
-;VOLUME5	.WORD	>F3FE,>1,>802A,0
-;VOLUME6	.WORD	>F3FE,>1,>8029,0
-;VOLUME7	.WORD	>F3FE,>1,>8028,0
-;VOLUME8	.WORD	>F3FE,>1,>8027,0
-;VOLUME9	.WORD	>F3FE,>1,>8026,0
-;VOLUMEA	.WORD	>F3FE,>1,>8025,0
-;VOLUMEB	.WORD	>F3FE,>1,>8024,0
-;VOLUMEC	.WORD	>F3FE,>1,>8023,0
-;VOLUMED	.WORD	>F3FE,>1,>8022,0
-;VOLUMEE	.WORD	>F3FE,>1,>8021,0
-;VOLUMEF	.WORD	>F3FE,>1,>8020,0
+;VOLUME0	.WORD	0F3FEH,01H,0802FH,0
+;VOLUME1	.WORD	0F3FEH,01H,0802EH,0
+;VOLUME2	.WORD	0F3FEH,01H,0802DH,0
+;VOLUME3	.WORD	0F3FEH,01H,0802CH,0
+;VOLUME4	.WORD	0F3FEH,01H,0802BH,0
+;VOLUME5	.WORD	0F3FEH,01H,0802AH,0
+;VOLUME6	.WORD	0F3FEH,01H,08029H,0
+;VOLUME7	.WORD	0F3FEH,01H,08028H,0
+;VOLUME8	.WORD	0F3FEH,01H,08027H,0
+;VOLUME9	.WORD	0F3FEH,01H,08026H,0
+;VOLUMEA	.WORD	0F3FEH,01H,08025H,0
+;VOLUMEB	.WORD	0F3FEH,01H,08024H,0
+;VOLUMEC	.WORD	0F3FEH,01H,08023H,0
+;VOLUMED	.WORD	0F3FEH,01H,08022H,0
+;VOLUMEE	.WORD	0F3FEH,01H,08021H,0
+;VOLUMEF	.WORD	0F3FEH,01H,08020H,0
 
 
 
