@@ -1,4 +1,4 @@
-**************************************************************
+#**************************************************************
 *
 * Owner:	THOMPSON
 *
@@ -326,7 +326,7 @@
 	calla	InitPIC
 
 ;	.if	DEBUG
-;	move	a0,@>1e00000		;Clr FPGA rom protect
+;	move	a0,@01e00000H		;Clr FPGA rom protect
 ;	.endif
 
 ; Moved to PU DIAGS
@@ -363,7 +363,7 @@
 #cont
 
 ;	move	@clipsrunning,a0,L	;>Restore game if clips crashed
-;	cmpi	>12345678,a0
+;	cmpi	012345678H,a0
 ;	jrne	#notclip		;Not a clip reset?
 ;
 ;	calla	io_init			;Initialize the I/O regs
@@ -492,7 +492,7 @@ initp50
 	calla	INIT_TAB		;Reset todays high score table
 
 ;	movk	1,a0
-;	move	a0,@>fff80000,L
+;	move	a0,@0fff80000H,L
 
 	.if	DEBUG
 	callr	testcode
@@ -616,7 +616,7 @@ mainpok
 ;	.bss	last_snd_st,16
 ;	move	@_soundirq_addr,a0
 ;	move	*a0,a0
-;	andi	>400,a0
+;	andi	0400H,a0
 ;	move	@last_snd_st,a14
 ;	cmp	a0,a14
 ;	jrz	wsr_1
@@ -1669,7 +1669,7 @@ gs2
 
 	SLEEPK	1
 
-	movk	>f,a0
+	movk	0fH,a0
 	move	a0,@PSTATUS
 	move	a0,@PSTATUS2		;Player has started bit flags
 	
@@ -1742,7 +1742,7 @@ paid_t	.long	P1DATA+crds_paid,P2DATA+crds_paid,P3DATA+crds_paid
 ;DJT Start
 ;;;;	.ref	security_chk
 ;DJT End
-;;;;	movi	security_chk->1df60,a8
+;;;;	movi	security_chk-01df60H,a8
 
 	movk	1,a0
 	move	a0,@dpageflip		;ON
@@ -1778,10 +1778,10 @@ paid_t	.long	P1DATA+crds_paid,P2DATA+crds_paid,P3DATA+crds_paid
 ;-----------
 ;This is checksummed!
 ;seccall1
-;	move	a8,a1			;>Check security
-;	addi	>1df60,a1
+;	move	a8,a1			;0CHheck security
+;	addi	01df60H,a1
 ;	getpc	a7
-;	addi	>40,a7
+;	addi	040H,a7
 ;	move	a7,-*sp,L
 ;	jump	a1			;Rets: A0=0 if OK!
 ;seccall1end
@@ -1865,7 +1865,7 @@ paid_t	.long	P1DATA+crds_paid,P2DATA+crds_paid,P3DATA+crds_paid
 	clr	a0
 	clr	a1
 	clr	a3
-	movi	>8000,a4
+	movi	08000H,a4
 	clr	a5
 	clr	a6
 	clr	a7
@@ -1986,7 +1986,7 @@ paid_t	.long	P1DATA+crds_paid,P2DATA+crds_paid,P3DATA+crds_paid
 	callr	start_arws
 
 ;	move	@SWITCH,a0
-;	andi	>7072,a0
+;	andi	07072H,a0
 ;	jrnz	#no3d
 ;
 ;	move	@GAMSTATE,a0
@@ -2106,7 +2106,7 @@ crt_pals_z
 ;	movi	ARWPID,a0
 ;	calla	obj_del1c
 
-	movi	ARWPID,a1			;>Do init stuff for humans
+	movi	ARWPID,a1			;0DHo init stuff for humans
 	movi	plyr_lost,a7,L
 
 	movk	3,a10				;Pass plyr #
@@ -2641,17 +2641,17 @@ close
 ;;;;;;;	calla	prt_cr_timers	<- Did nothing!
 
 ; ** JBJ commented out on 4-13-95
-;	movi	seccall1+>3df2,a0	;>Chksum security call code
+;	movi	seccall1+03df2H,a0	;0CHhksum security call code
 ;	movk	(seccall1end-seccall1)/16,b0
-;	movi	->259e0d-2,a8		;1st value
-;#csumlp	move	*a0(->3df2),a1
+;	movi	-0259e0dH-2,a8		;1st value
+;#csumlp	move	*a0(-03df2H),a1
 ;	add	a1,a8
 ;	addk	16,a0
 ;	dsj	b0,#csumlp
-;					;>Chksum security_chk code
-;	movi	security_chk+>4bbb,a0
+;					;0CHhksum security_chk code
+;	movi	security_chk+04bbbH,a0
 ;	movi	68+128*2,b0		;#Words
-;#csmlp	move	*a0(->4bbb),a1
+;#csmlp	move	*a0(-04bbbH),a1
 ;	add	a1,a8
 ;	addk	16,a0
 ;	dsj	b0,#csmlp
@@ -2939,7 +2939,7 @@ COLRPRC
 * A8 =Window size
 * A10=Center point of window (screen relative)
 *
-* >A8 = *Window object or 0 (Z)
+* 0A8H = *Window object or 0 (Z)
 * Trashes A9-A11
 
 OWINDOW
@@ -2963,7 +2963,7 @@ OWINDOW
 	move	a10,a0
 
 	srl	1,a11			;XY/2
-	andi	>7fff7fff,a11
+	andi	07fff7fffH,a11
 
 	subxy	a11,a10
 	addxy	a0,a11
@@ -3121,7 +3121,7 @@ fixa3xy
 ********************************
 * Get random # with mask
 * A0=Mask
-* >A0=Rnd # (Pass CC)
+* 0A0H=Rnd # (Pass CC)
 * Trashes scratch
 
  SUBRP	rnd
@@ -3326,8 +3326,8 @@ gottime
 	move	a0,@DMACTRL
 	move	a0,@DMACTRL
 
-	clr	a1			;>Clr screen mem
-	movi	>200000/32,b0
+	clr	a1			;0CHlr screen mem
+	movi	0200000H/32,b0
 #clrscr	move	a0,*a1+,L
 	dsj	b0,#clrscr
 
@@ -3337,23 +3337,23 @@ gottime
 	movi	0,a0
 	move	a0,@DMAOFFST
 
-	movk	>10,a1
+	movk	010H,a1
 	move	a1,@DMACONF
 	movi	[350+56,50+56],a1	;L/R
 	move	a1,@DMAWINDOW,L
 
-	movi	>30,a1
+	movi	030H,a1
 	move	a1,@DMACONF		;Top/Bottom
 	movi	[200,50],a1
 	move	a1,@DMAWINDOW,L
 
 
-	movi	[>100,>100],a3		;Y:X scale
+	movi	[0100H,0100H],a3		;Y:X scale
 	clr	a4
 	movi	[100,100+56],a8		;Y:X
 	movi	[100,200],a7		;V:H size
-	movi	>2000000,a10		;SAG
-	movi	>900c0000,a11		;CTRL:OFSET
+	movi	02000000H,a10		;SAG
+	movi	0900c0000H,a11		;CTRL:OFSET
 
 	movi	20000,b2
 #lp	rl	16,a4
@@ -3368,7 +3368,7 @@ gottime
 	rl	16,a4
 
 #xok	addk	1,a4			;Color+1
-	andi	>ff,a4
+	andi	0ffH,a4
 	move	a4,a0
 	sll	8,a0
 	or	a0,a4
@@ -3390,8 +3390,8 @@ gottime
 	move	a0,@DMACTRL
 	move	a0,@DMACTRL
 
-	clr	a1			;>Clr screen mem
-	movi	>200000/32,b0
+	clr	a1			;0CHlr screen mem
+	movi	0200000H/32,b0
 #clrscr	move	a0,*a1+,L
 	dsj	b0,#clrscr
 
@@ -3401,25 +3401,25 @@ gottime
 	movi	0,a0
 	move	a0,@DMAOFFST
 
-	movk	>10,a1
+	movk	010H,a1
 	move	a1,@DMACONF
 	movi	[350,50],a1		;L/R
 	movi	[399,0],a1		;L/R
 	move	a1,@DMAWINDOW,L
 
-	movi	>30,a1
+	movi	030H,a1
 	move	a1,@DMACONF		;Top/Bottom
 	movi	[200,50],a1
 	movi	[253,0],a1
 	move	a1,@DMAWINDOW,L
 
 
-	movi	[>100,>100],a3		;Y:X scale
+	movi	[0100H,0100H],a3		;Y:X scale
 	clr	a4
 	clr	a8			;Y:X
-	movi	>10001,a7		;V:H size
-	movi	>2000000,a10		;SAG
-	movi	>900c0000,a11		;CTRL:OFSET
+	movi	010001H,a7		;V:H size
+	movi	02000000H,a10		;SAG
+	movi	0900c0000H,a11		;CTRL:OFSET
 
 #lp	rl	16,a4
 
@@ -3435,14 +3435,14 @@ gottime
 	addk	1,a8
 	btst	9,a8
 	jrz	#xok
-	addi	>10000,a8		;+1 Y
+	addi	010000H,a8		;+1 Y
 	btst	8+16,a8
 	jrz	#yok
 	addk	4,a4
-#yok	andi	>ff01ff,a8
+#yok	andi	0ff01ffH,a8
 
 #xok	addk	1,a4
-	andi	>ff,a4
+	andi	0ffH,a4
 	move	a4,a0
 	sll	8,a0
 	or	a0,a4
@@ -3461,13 +3461,13 @@ gottime
 	.if 0			;Totally commented out!
 
 	dint
-	movi	>2c,a0			;Enable cache
-	movi	>802c,a0		;Disable cache
+	movi	02cH,a0			;Enable cache
+	movi	0802cH,a0		;Disable cache
 	move	a0,@CONTROL
-	movi	>f010,a0
+	movi	0f010H,a0
 	move	a0,@DPYCTL
 	move	@HSTCTLH,a0
-	andi	>bfff,a0
+	andi	0bfffH,a0
 	move	a0,@HSTCTLH
 
 
@@ -3510,7 +3510,7 @@ gottime
 ;#2
 ;	movi	100,a0
 ;	nop
-;	movi	>11111111,a0
+;	movi	011111111H,a0
 ;	move	@SCRATCH,a0
 ;	move	*a2(0),*a2(0)
 ;	move	*a2,a0
@@ -3524,8 +3524,8 @@ gottime
 ;	move	a0,@SCRATCH,L
 ;	move	@SCRATCH,a0,L
 ;	move	@SCRATCH,a0,L
-	movi	SCRATCH+>1000,a0
-	movi	SCRATCH+>1000,a1
+	movi	SCRATCH+01000H,a0
+	movi	SCRATCH+01000H,a1
 ;	move	-*a0,-*a1,L
 ;	move	-*a0,-*a1,L
 ;	move	-*a0,-*a1,L

@@ -1,4 +1,4 @@
-**************************************************************
+#**************************************************************
 *
 * Software:		Warren Davis
 * Initiated:		9/3/91
@@ -42,7 +42,7 @@
 	.asg	0,CARYTEST		;1 for Cary's board testing
 	.asg	0,ERRORTEST		;1 for random pixel test
 
-	.asg	>1d01010,DEBUGPORT
+	.asg	01d01010H,DEBUGPORT
 
 
 	.asg	8,IMGBPP			;Zipped img bpp count
@@ -239,11 +239,11 @@ PIXPERFRM	.equ	frmpalptr+32			;32b
 * Get movie info
 * A8=* to compressed data
 *Rets:
-* >A0=!0 if error (CC)
-* >A6=# frames
-* >A7=# colors in palette
-* >A10=X
-* >A11=Y
+* 0A0H=!0 if error (CC)
+* 0A6H=# frames
+* 0A7H=# colors in palette
+* 0A10H=X
+* 0A11H=Y
 * Trashes scratch
 
  SUBRP	movie_parsehdr
@@ -263,7 +263,7 @@ PIXPERFRM	.equ	frmpalptr+32			;32b
 * Get a movie palette
 * A7=# of colors
 * A8=* to color data
-* >A0=Color map allocated (0000-cfcf)
+* 0A0H=Color map allocated (0000-cfcf)
 * Z set if no palette free
 * Trashes scratch
 
@@ -326,17 +326,17 @@ PIXPERFRM	.equ	frmpalptr+32			;32b
 * Uncompress a tree
 * A8=* to compressed data
 * B0=* to tree table
-* >A0=!0 if error (CC)
+* 0A0H=!0 if error (CC)
 
 UncompressTree:
 
-	move	b0,a7		;>Determine how many codes of each bit length
+	move	b0,a7		;0DeHtermine how many codes of each bit length
 	move	a8,a5
 
 	setf	8,0,0
 	move	*a8+,a0		;# compressed bytes to describe tree - 1
 	addk	1,a0
-	movk	>f,a3		;Bit-mask constant
+	movk	0fH,a3		;Bit-mask constant
 	clr	a4		;Clr chksum
 	clr	a6		;Total # of codes in tree
 utr0
@@ -412,7 +412,7 @@ nonewmin
 	move	a3,*a0+,L	; place translation ptr in MinPtrTbl.
 	dsjs	a5,utr2
 
-				;>Compute the codes
+				;0CHompute the codes
 	clr	a4		;Code
 	clr	a1		;CodeInc
 	clr	a2		;LastBitLength
@@ -607,7 +607,7 @@ notmaxs
 	add	b6,b5	    	;Adjust pixel counter for this line
 
 copys
-	move	*a2+,*a10+	;>Copy
+	move	*a2+,*a10+	;0CHopy
 	and	a0,a2
 	and	a0,a10
 	dsj	a7,copys
@@ -620,7 +620,7 @@ copys
 * A5=*Tree table
 * A8=*Compressed data
 * Field 1 = 16 bits
-* >A7=Data
+* 0A7H=Data
 *
 * Trashes: A2-A5,A14,B6
 *
@@ -742,7 +742,7 @@ ReadTree:
 ;	move	a1,*a0(PTIME)
 ;	
 ;	movi	[9,0],a9
-;	movi	[>8c,0],a10
+;	movi	[08cH,0],a10
 ;	movi	(24+83*512)*8,a11	;XY
 ;
 ;	move	@last_score,a0,L
@@ -750,8 +750,8 @@ ReadTree:
 ;	jrz	#tm1
 ;
 ;	movi	[9+216,0],a9
-;	movi	[>8c,0],a10
-;	movi	>53780,a11		;XY
+;	movi	[08cH,0],a10
+;	movi	053780H,a11		;XY
 ;
 ;#tm1	callr	show_edging		;Turn on clip borders
 ;
@@ -763,7 +763,7 @@ ReadTree:
 ;	move	a11,a10
 ;	JSRP	movie_run
 ;
-;	movi	>2001,a0
+;	movi	02001H,a0
 ;	calla	obj_del1c
 ;
 ;	movk	10,a1			;Delay tv score panel
@@ -782,7 +782,7 @@ ReadTree:
 ;	movi	livet,a2
 ;	movi	19989,a3		;z pos - Below buyin box
 ;	movi	DMAWNZ|M_NOCOLL|M_SCRNREL,a4
-;	movi	>2001,a5
+;	movi	02001H,a5
 ;	clr	a6
 ;	clr	a7
 ;	calla	BEGINOBJ2
@@ -879,7 +879,7 @@ ReadTree:
 ;
 ;	move	@SWITCH+16,a1
 ;	not	a1
-;	andi	>624,a1
+;	andi	0624H,a1
 ;	jrz	#lp2
 ;
 ;	move	@SYSCOPY,a0
@@ -1092,7 +1092,7 @@ ReadTree:
 ;
 ;#abort
 ;	callr	movie_waitdma
-;					;>Copy visable frame to other page
+;					;0CHopy visable frame to other page
 ;	move	*a13(PIXPERFRM),a14,L	;# of pixels in a frame
 ;
 ;	move	b4,*b8			;Set pallette
@@ -1151,11 +1151,11 @@ ReadTree:
 * Get movie info
 * A8=* to compressed data
 *Rets:
-* >A0=!0 if error (CC)
-* >A6=# frames
-* >A7=# colors in palette
-* >A10=X
-* >A11=Y
+* 0A0H=!0 if error (CC)
+* 0A6H=# frames
+* 0A7H=# colors in palette
+* 0A10H=X
+* 0A11H=Y
 * Trashes scratch
 
 ;movie_parsehdr

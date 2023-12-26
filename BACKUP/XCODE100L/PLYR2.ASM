@@ -1,4 +1,4 @@
-**************************************************************
+#**************************************************************
 *
 * Owner:	TURMELL
 *
@@ -221,7 +221,7 @@ church
 
  SUBR	ball_main
 
-	move	a13,a1			;>Clr PDATA & PSDATA areas
+	move	a13,a1			;0CHlr PDATA & PSDATA areas
 	addi	PDATA,a1
 	movi	(PRCSIZ-PDATA)/16,a2
 	clr	a0
@@ -250,7 +250,7 @@ church
 	movi	DMAWNZ|M_3D|M_NOSCALE,a4
 	movi	CLSENMY|TYPBALL,a5
 	clr	a6
-	movi	->20000,a7
+	movi	-020000H,a7
 	calla	BEGINOBJ2
 	move	a8,@ballobj_p,L
 	callr	ball_getshadow		;Init ball shadow
@@ -380,7 +380,7 @@ church
 
 	jrnz	#halted
 
-	move	@ballgoaltcnt,a0	;Dec goal tend cnt if >0
+	move	@ballgoaltcnt,a0	;Dec goal tend cnt if 00H
 	jrle	#skipgt
 	subk	1,a0
 	move	a0,@ballgoaltcnt
@@ -490,11 +490,11 @@ church
 	move	a2,a2			;Did someone go on-fire?
 	jrz	#skip			; br=no
 
-	movi	AUD_TM_FIRE,a0		;>Audit team on-fires
+	movi	AUD_TM_FIRE,a0		;0AHudit team on-fires
 	move	@ballnumscored,a14	;Was it a team on-fire?
 	subk	ONFIRE_MINCNT,a14
 	jrn	#aud			; br=yes
-	movi	AUD_NUMHOTSTRK,a0	;>Audit plyr on-fires
+	movi	AUD_NUMHOTSTRK,a0	;0AHudit plyr on-fires
 	movk	ONFIRE_MINCNT+1,a14	;Set for # of on-fire shots to allow
 	move	a14,@ballnumscored
 #aud
@@ -950,7 +950,7 @@ church
 	clr	a0
 	calla	plyr_setshtdly
 
-	cmpi	>7f00,a2		;>4000
+	cmpi	07f00H,a2		;04000H
 	jrlt	#nosnd
 
 	movi	dribble3_snd,a0,L
@@ -976,7 +976,7 @@ church
 	addi	GRAVB,a2
 	move	a2,*a8(OYVEL),L
 
-	move	*a8(OXVAL),*a9(OXVAL),L	;>Align shadow
+	move	*a8(OXVAL),*a9(OXVAL),L	;0AHlign shadow
 	move	*a8(OXANI),*a9(OXANI),L
 	move	*a8(OZPOS),a0
 	subk	10,a0			;Adjust
@@ -996,7 +996,7 @@ church
 ********************************
 * Get shadow obj for ball
 * A8=*Obj
-* >A9=*Shadow obj
+* 0A9H=*Shadow obj
 * Trashes scratch, A2-A7
 
  SUBRP	ball_getshadow
@@ -1079,19 +1079,19 @@ church
 	clr	b2			;B2=Rim collision flag
 
 	move	@shot_distance,a14
-	cmpi	>150*DIST_ADDITION,a14	;!!!Close or far shot?
+	cmpi	0150H*DIST_ADDITION,a14	;!!!Close or far shot?
 	jrlt	#ok
 
 	move	@ballscorezhit,a0	;Far, but have we hit 1st score zone?
 	jrp	#ok			; br=yes, continue score detect
 
 	movi	200,a0			;!!!Far. Set long odds
-	cmpi	>1c0*DIST_ADDITION,a14	;!!!How far?
+	cmpi	01c0H*DIST_ADDITION,a14	;!!!How far?
 	jrlt	#far
 	movi	20,a0			;!!!Very far. Set longer odds
 #far
 	move	@game_time,a1,L
-	cmpi	>400,a1			;!!!Improve odds if qrtr almost over
+	cmpi	0400H,a1			;!!!Improve odds if qrtr almost over
 	jrgt	#nohelp
 	addi	150,a0			;!!!
 #nohelp
@@ -1449,7 +1449,7 @@ church
 	jrge	#sclvlp
 	move	a0,a1
 #sclvlp
-	cmpi	>18000,a1		;>12000;!!!X|Z VEL within max? Yes if <
+	cmpi	018000H,a1		;012000H;!!!X|Z VEL within max? Yes if <
 	jrle	#chkyv
 	srl	1,a1			;Shift down X&Z
 	sra	1,a2
@@ -1460,13 +1460,13 @@ church
 	move	a2,*a8(OXVEL),L		;Store back (new) X&Z vels
 	move	a3,*a8(OZVEL),L
 
-	cmpi	->44000,a4		;!!!Limit max up YVEL
+	cmpi	-044000H,a4		;!!!Limit max up YVEL
 	jrge	#yupok
-	movi	->44000,a4		;!!!
+	movi	-044000H,a4		;!!!
 #yupok
-	cmpi	>30000,a4		;!!!Limit max dn YVEL
+	cmpi	030000H,a4		;!!!Limit max dn YVEL
 	jrle	#ydnok
-	movi	>30000,a4		;!!!
+	movi	030000H,a4		;!!!
 #ydnok
 	move	a4,*a8(OYVEL),L		;Store back (new) Y vel
 
@@ -1518,7 +1518,7 @@ church
 	move	a1,*a8(OXVAL),L
 
 	abs	a0			;Should we make a bbrd bounce sound?
-	cmpi	>1fff,a0		;!!! Min XVEL to make sound
+	cmpi	01fffH,a0		;!!! Min XVEL to make sound
 	jrlt	#softbbhit
 	movi	hitbkbd_snd,a0,L
 	move	@pup_court,a14
@@ -1534,7 +1534,7 @@ church
 
 	subk	7,a0			;!!! Stuck on bbrd? No if <
 	jrlt	#x
-	movi	>20000,a0		;!!! ZVEL(!) to kick it from bbrd
+	movi	020000H,a0		;!!! ZVEL(!) to kick it from bbrd
 	move	*a8(OZPOS),a1
 	cmpi	CZMID,a1		;Kick it which way? Out if >
 	jrgt	#newzv
@@ -1715,14 +1715,14 @@ rim_snds
 
 	PUSH	a2,a3,a6,a7
 
-	move	a6,a0			;>Deflect XZ
+	move	a6,a0			;0DefHlect XZ
 	move	a5,a1
 	move	a2,a6
 	move	a4,a7
 	callr	seekdir_xyxy128
 	move	a0,a14
 	neg	a0
-	addi	>80,a0
+	addi	080H,a0
 	callr	sinecos_get
 
 	move	*a8(OXVEL),a3,L
@@ -1764,14 +1764,14 @@ rim_snds
 
 	PULL	a2,a3,a6,a7
 
-	move	a6,a0			;>Deflect XY
+	move	a6,a0			;0DefHlect XY
 	move	a7,a1
 	move	a2,a6
 	move	a3,a7
 	callr	seekdir_xyxy128
 	move	a0,a14
 	neg	a0
-	addi	>80,a0
+	addi	080H,a0
 	callr	sinecos_get
 
 	move	*a8(OXVEL),a3,L
@@ -2277,7 +2277,7 @@ rim_snds
 	sra	1,a0
 	move	a0,*a8(OZVEL),L
 
-	movi	>14000,a0		;!!!temp(?)
+	movi	014000H,a0		;!!!temp(?)
 	move	a0,*a8(OYVEL),L
 
 	btst	DUNK_B,a6
@@ -2435,8 +2435,8 @@ swish_snd_tbl
 ********************************
 * Get sine and cosine
 * A0=Angle (0-127) (Not neg!)
-* >A0=Sine (0-4096)
-* >A1=Cos (0-4096)
+* 0A0H=Sine (0-4096)
+* 0A1H=Cos (0-4096)
 * Preserves A14
 
  SUBR	sinecos_get
@@ -2509,7 +2509,7 @@ cos_t
 	jrlt	#lp
 	move	*a8(OYVEL),a0,L
 	abs	a0
-	cmpi	>c000,a0
+	cmpi	0c000H,a0
 	jrgt	#lp
 	movi	35,a10			;Larger radius
 
@@ -2527,13 +2527,13 @@ cos_t
 	addi	tbl1,a2
 #tbo	move	*a2,a10
 
-	move	*a11(OZPOS),a2		;>Chk Z
+	move	*a11(OZPOS),a2		;0CHhk Z
 	sub	a6,a2
 	abs	a2
 	sub	a10,a2
 	jrge	#nxt
 
-	move	*a11(OXPOS),a1		;>Chk box X
+	move	*a11(OXPOS),a1		;0CHhk box X
 	move	*a11(OXANI+16),a14
 	add	a14,a1
 	move	*a11(OSIZEX),a14
@@ -2714,7 +2714,7 @@ tkdnk_t	.word	200
 ;TWEAK this z-rng
 	addk	18-12,a2
 	jrge	#nxt2			;Too far from Z?
-					;>Chk box X
+					;0CHhk box X
 	move	*a11(OIMG),a2,L
 	move	*a2(IANI2X),a0
 
@@ -2789,7 +2789,7 @@ tkdnk_t	.word	200
 	jreq	#rcvok			;The receiver is touching it?
 
 
-	move	@ballgoaltcnt,a0	;>Chk goaltending
+	move	@ballgoaltcnt,a0	;0CHhk goaltending
 	jrle	#skipgt
 	move	@ballpnumshot,a1
 	move	*a3(plyr_num),a14
@@ -2916,7 +2916,7 @@ tkdnk_t	.word	200
 
 	jruc	#skiprbnd
 #ballfree
-	move	@ballgoaltcnt,a0	;>Chk goaltending
+	move	@ballgoaltcnt,a0	;0CHhk goaltending
 	jrgt	#skiprbnd
 	move	@ballprcv_p,a0,L
 	jrz	#isreb
@@ -2946,7 +2946,7 @@ tkdnk_t	.word	200
 	move	@gmqrtr,a0
 	jrnz	#okr
 	move	@game_time,a0,L
-	cmpi	>2050400,a0
+	cmpi	02050400H,a0
 	jrgt	#nor
 
 #okr
@@ -3081,7 +3081,7 @@ fix_airb
 	move	a1,*a8(OYVEL),L
 
 
-	movk	>1f,a0
+	movk	01fH,a0
 	callr	rnd
 	btst	0,a0
 	jrz	#noxf
@@ -3230,8 +3230,8 @@ fix_airb
 	move	a0,@ballpnumlast
 	callr	ball_convfmprel		;was rel2
 
-	movi	>1ffff,a2		;>Give rnd velocity
-	movi	>10000,a3
+	movi	01ffffH,a2		;>Give rnd velocity
+	movi	010000H,a3
 	move	a2,a0
 	callr	rnd
 	add	a3,a0
@@ -3878,7 +3878,7 @@ ball_flash
 	move	a0,a1
 	sll	32-2,a0
 	jrz	#set			;Drone team?
-	ANDK	>c,a1
+	ANDK	0cH,a1
 	jrz	#set			;Drone team?
 
 	move	@pup_noassistance,a0
@@ -3910,7 +3910,7 @@ ball_flash
 ********************************
 * Get random # with mask
 * A0=Mask
-* >A0=Rnd # (Pass CC)
+* 0A0H=Rnd # (Pass CC)
 * Trashes scratch
 
  SUBRP	rnd
@@ -3929,7 +3929,7 @@ ball_flash
 ********************************
 * Quickly produce a random # in range 0-X
 * A0=X
-* >A0=Random # (0 to A0) (No CC)
+* 0A0H=Random # (0 to A0) (No CC)
 * Trashes scratch
 
  SUBRP	rndrng0
@@ -4216,7 +4216,7 @@ pt_1
 ********************************
 * Sequence - stand
 * A11=*PxCTRL
-* >B4=*Start of seq list
+* 0B4H=*Start of seq list
 
  SUBR	seq_stand
 ;trying to stop a player in a DISH_OFF seq. receiving pass, dont allow
@@ -4297,7 +4297,7 @@ stnd1
 	jrnz	#stndwb
 
 	move	@game_time,a1,L		;If under 2 secs, no elbow
-	cmpi	>200,a1
+	cmpi	0200H,a1
 	jrle	#stndwb
 
 	movi	ELBO_SEQ,a0
@@ -4355,7 +4355,7 @@ stnd1
 #*******************************
 * Sequence - Set new direction (for dunks)
 * B4=*Next data in seq list
-* >A7=New dir
+* 0A7H=New dir
 
  SUBR	seq_newdir
 
@@ -4594,7 +4594,7 @@ stnd1
 ;No head fake if under 4 secs
 
 	move	@game_time,a0,L
-	cmpi	>400,a0
+	cmpi	0400H,a0
 	jrlt	#jmp
 
 	btst	4,a6			;But1 (Shoot/block)
@@ -4653,11 +4653,11 @@ stnd1
 ;	move	*a13(plyr_seq),a0
 ;	subk	SHOOTDESP3_SEQ,a0
 ;	jrne	#nodesp
-;	movi	>20000,a2		;For this desperation shot, we
+;	movi	020000H,a2		;For this desperation shot, we
 ;	move	*a13(plyr_num),a0	;need some x velocity
 ;	subk	2,a0
 ;	jrlt	#nodesp
-;	movi	->20000,a2
+;	movi	-020000H,a2
 
 
 #nodesp
@@ -4669,18 +4669,18 @@ stnd1
 
 	move	*a8(OZPOS),a14		;894 to 1379 (Z range 486)
 	subi	400,a14
-	movi	->70,a1
+	movi	-070H,a1
 	mpys	a14,a1
-	addi	->24000,a1
+	addi	-024000H,a1
 
 	move	a5,a5
 	jrz	#notur
-	addi	->8000,a1
+	addi	-08000H,a1
 #notur
 	move	*a13(plyr_seq),a0
 	cmpi	LAYUP_SEQ,a0
 	jreq	#noly2
-	addi	->8000,a1
+	addi	-08000H,a1
 #noly2
 	move	*a13(plyr_seqflgs),a0
 	btst	SHOOT_B,a0
@@ -4793,7 +4793,7 @@ stnd1
 	movk	1,a0			;Start jump
 	move	a0,*a13(plyr_jmpcnt)
 
-	move	@ballobj_p,a5,L		;>Calc where ball is headed
+	move	@ballobj_p,a5,L		;0CaHlc where ball is headed
 
 	move	@ballpnum,a14
 	jrn	#binair			;Ball in air?
@@ -4835,7 +4835,7 @@ stnd1
 
 ;If near guy with the ball, just jump straight up in front of him.
 	move	*a13(plyr_balldist),a2
-	cmpi	>40,a2			;About 3 feet away from ball
+	cmpi	040H,a2			;About 3 feet away from ball
 
 	jrgt	#float_at_hp		;this guy wants to jump up and
 					;disrupt the alley oop jumper!
@@ -4854,8 +4854,8 @@ stnd1
 ;If not near ball, jump lower and ignore turbo jump!
 
 	move	*a13(plyr_balldist),a0
-	cmpi	>e0*DIST_REDUCTION,a0	;About 10 feet away from ball
-;	cmpi	>100*DIST_REDUCTION,a0	;About 10 feet away from ball
+	cmpi	0e0H*DIST_REDUCTION,a0	;About 10 feet away from ball
+;	cmpi	0100H*DIST_REDUCTION,a0	;About 10 feet away from ball
 	jrlt	seq_jump2
 
 ;If near my own hoop, I am probably trying to G.T.!  So allow high jump!
@@ -4875,9 +4875,9 @@ stnd1
 ;LOOK!!!
 	move	*a8(OZPOS),a14		;894 to 1379 (Z range 486)
 	subi	400,a14
-	movi	->30,a1			;Smaller vertical jump
+	movi	-030H,a1			;Smaller vertical jump
 	mpys	a14,a1
-	addi	->24000,a1
+	addi	-024000H,a1
 
 	move	a1,*a8(OYVEL),L
 
@@ -5029,7 +5029,7 @@ stnd1
 ;	clr	a5			;no drift toward ball
 ;	move	a3,*a8(OXVEL),L
 ;	move	a5,*a8(OZVEL),L
-;	movi	->33000,a1
+;	movi	-033000H,a1
 ;	move	a1,*a8(OYVEL),L
 ;	jruc	#x
 ;#noput
@@ -5085,18 +5085,18 @@ stnd1
 	cmpi	100,a0
 	jrge	#normin
 
-	cmpi	->3c000,a1
+	cmpi	-03c000H,a1
 	jrlt	#minok
  .if DEBUG
 	LOCKUP
  .endif ;DEBUG
-	movi	->3c000,a1		;Min
+	movi	-03c000H,a1		;Min
 	jruc	#minok
 #normin
 ;DJT End
-	cmpi	->1c000,a1
+	cmpi	-01c000H,a1
 	jrlt	#minok
-	movi	->1c000,a1		;Min
+	movi	-01c000H,a1		;Min
 	jruc	#minok
 #shot
 
@@ -5105,16 +5105,16 @@ stnd1
 	btst	a14,a6
 	jrz	#norm
 ;Guy is on fire, trying to block a shot, make minimum jump go higher!
-	cmpi	->4c000,a1
+	cmpi	-04c000H,a1
 	jrlt	#minok
-	movi	->4c000,a1		;Min
+	movi	-04c000H,a1		;Min
 	jruc	#minok
 #norm
 
 
-	cmpi	->3c000,a1
+	cmpi	-03c000H,a1
 	jrlt	#minok
-	movi	->3c000,a1		;Min
+	movi	-03c000H,a1		;Min
 #minok
 
 	move	*a13(plyr_num),a14
@@ -5125,20 +5125,20 @@ stnd1
 	jrz	#nofire
 
 ;This guy on fire, let him jump higher!
-;	cmpi	->50200,a1		;T.E.
-;	cmpi	->52200,a1		;Old hangtime
-;	cmpi	->58200,a1		;Cool value
-	cmpi	->54200,a1		;Current value
+;	cmpi	-050200H,a1		;T.E.
+;	cmpi	-052200H,a1		;Old hangtime
+;	cmpi	-058200H,a1		;Cool value
+	cmpi	-054200H,a1		;Current value
 	jrgt	#maxok
-	movi	->54200,a1
+	movi	-054200H,a1
 	jruc	#maxok
 
 #nofire
 ;Maximum jumping height!
 ;FIX!!  Should be linked to attribute!
-;	cmpi	->4b200,a1		;4a200
+;	cmpi	-04b200H,a1		;4a200
 ;	jrgt	#maxok
-;	movi	->4b200,a1
+;	movi	-04b200H,a1
 
 	move	*a13(plyr_num),a6
 ;This is tied in with super blocks for create a player or powerup!!
@@ -5150,9 +5150,9 @@ stnd1
 	jruc	#norm1		;Temp!
 
 ;Powerup blocking ability
-	cmpi	->50000,a1		;Let him jump higher
+	cmpi	-050000H,a1		;Let him jump higher
 	jrgt	#maxok
-	movi	->50000,a1
+	movi	-050000H,a1
 	jruc	#maxok
 #norm1
 ;DJT Start
@@ -5167,17 +5167,17 @@ stnd1
 	jrz	#higher
 	cmpi	FASTBLOCKREJ_SEQ,a6
 	jrz	#higher
-	cmpi	->4b200,a1		;Let him jump higher
+	cmpi	-04b200H,a1		;Let him jump higher
 	jrgt	#maxok
-	movi	->4b200,a1
+	movi	-04b200H,a1
 	jruc	#maxok
 #higher
-	cmpi	->50000,a1		;Let him jump higher
+	cmpi	-050000H,a1		;Let him jump higher
 	jrgt	#maxok
-	movi	->50000,a1
+	movi	-050000H,a1
 	jruc	#maxok
 #losing
-;	cmpi	->4b700,a1		;Let him jump higher
+;	cmpi	-04b700H,a1		;Let him jump higher
 
 ;If a block rej seq, allow this higher jump
 ;Do this for winning team also
@@ -5185,14 +5185,14 @@ stnd1
 	jrz	#higher_j
 	cmpi	FASTBLOCKREJ_SEQ,a6
 	jrz	#higher_j
-	cmpi	->4b700,a1		;Let him jump higher
+	cmpi	-04b700H,a1		;Let him jump higher
 	jrgt	#maxok
-	movi	->4b700,a1
+	movi	-04b700H,a1
 	jruc	#maxok
 #higher_j
-	cmpi	->50000,a1		;Let him jump higher
+	cmpi	-050000H,a1		;Let him jump higher
 	jrgt	#maxok
-	movi	->50000,a1
+	movi	-050000H,a1
 ;DJT End
 #maxok
 	move	a1,*a8(OYVEL),L
@@ -5224,7 +5224,7 @@ stnd1
 	move	a0,*a13(plyr_jmpcnt)
 
 
-	move	@ballobj_p,a5,L		;>Calc where ball is headed
+	move	@ballobj_p,a5,L		;0CaHlc where ball is headed
 
 	move	*a5(OXVAL),a6,L
 	move	*a5(OXANI),a0,L
@@ -5319,11 +5319,11 @@ stnd1
 	sub	a9,a3			;- if above
 	divs	a4,a3
 	sub	a3,a1
-	cmpi	->1c000,a1
+	cmpi	-01c000H,a1
 	jrlt	#minok
-	movi	->1c000,a1		;Min
+	movi	-01c000H,a1		;Min
 #minok
-;	cmpi	->4a000,a1
+;	cmpi	-04a000H,a1
 ;	jrgt	#maxok
 
 ;	LOCKUP
@@ -5549,15 +5549,15 @@ flsh_t	.long	flsh1_snd,flsh3_snd,flsh3_snd,flsh4_snd
 
 plyr_cflsh
 ;Give flashes a tall y range
-	movi	>96,a0
+	movi	096H,a0
 	callr	rndrng0
-	subi	>69,a0
+	subi	069H,a0
 	move	a0,a2
 
 	movi	399,a0
 	callr	rndrng0
 	move	@WORLDTLX+16,a14
-	subi	>2000-200,a14
+	subi	02000H-200,a14
 	add	a14,a0
 	sll	16,a0			;X
 
@@ -5615,7 +5615,7 @@ plyr_cflsh
 
 	move	@ballobj_p,a5,L
 
-	move	*a5(OIMG),a1,L		;>Convert ball from player relative
+	move	*a5(OIMG),a1,L		;0CHonvert ball from player relative
 	move	*a1(IANIOFFX),a1
 	sll	16,a1
 	move	a1,*a5(OXANI),L
@@ -5654,7 +5654,7 @@ plyr_cflsh
 	movi	CZMID,a14
 	move	a14,*a5(OZPOS)
 
-;	movk	>1f,a0			;3%
+;	movk	01fH,a0			;3%
 ;	callr	rnd
 ;	jrnz	#dunknorm
 
@@ -5679,13 +5679,13 @@ plyr_cflsh
 ;	SOUND1	boo1_snd
 ;	SOUND1	cheer1_snd
 
-	movi	>3ffff,a0
+	movi	03ffffH,a0
 	callr	rnd
-	subi	>20000,a0
+	subi	020000H,a0
 	move	a0,a2
-	movi	>1ffff,a0
+	movi	01ffffH,a0
 	callr	rnd
-	addi	>4000,a0
+	addi	04000H,a0
 	move	*a13(plyr_num),a1
 	subk	2,a1
 	jrge	#t2
@@ -5771,8 +5771,8 @@ plyr_cflsh
 ;	move	*a8(OXPOS),a1
 ;	move	*a8(OXVEL),a2,L
 ;	jrnn	#fix1
-;	subi	>2e,a1			;2c
-;#fix1	addi	>16,a1
+;	subi	02eH,a1			;2c
+;#fix1	addi	016H,a1
 ;	move	a1,*a8(OXPOS)
 ;	jruc	#fix2
 ;#dck1
@@ -5785,8 +5785,8 @@ plyr_cflsh
 ;	move	*a8(OXPOS),a1
 ;	move	*a8(OXVEL),a2,L
 ;	jrnn	#fix1a
-;	subi	>2e,a1			;2c
-;#fix1a	addi	>18,a1
+;	subi	02eH,a1			;2c
+;#fix1a	addi	018H,a1
 ;	move	a1,*a8(OXPOS)
 ;	jruc	#fix2
 ;#dck2
@@ -5799,8 +5799,8 @@ plyr_cflsh
 ;	move	*a8(OXPOS),a1
 ;	move	*a8(OXVEL),a2,L
 ;	jrnn	#fix1b
-;	subi	>2e,a1			;2c
-;#fix1b	addi	>16,a1
+;	subi	02eH,a1			;2c
+;#fix1b	addi	016H,a1
 ;	move	a1,*a8(OXPOS)
 ;	jruc	#fix2
 #dck3
@@ -5896,9 +5896,9 @@ plyr_cflsh
 	move	*a13(plyr_o1dir),a2
 	sub	a3,a2
 	abs	a2
-	cmpi	>40,a2
+	cmpi	040H,a2
 	jrle	#o1dsml
-	subi	>80,a2
+	subi	080H,a2
 	abs	a2
 #o1dsml	subk	32,a2			;16
 	jrlt	#pusho			;In front of me?
@@ -5912,9 +5912,9 @@ plyr_cflsh
 	move	*a13(plyr_o2dir),a2
 	sub	a3,a2
 	abs	a2
-	cmpi	>40,a2
+	cmpi	040H,a2
 	jrle	#o2dsml
-	subi	>80,a2
+	subi	080H,a2
 	abs	a2
 #o2dsml	subk	32,a2			;16
 	jrlt	#pusho
@@ -5935,9 +5935,9 @@ plyr_cflsh
 	move	*a13(plyr_tmdir),a2
 	sub	a3,a2
 	abs	a2
-	cmpi	>40,a2
+	cmpi	040H,a2
 	jrle	#tmdsml
-	subi	>80,a2
+	subi	080H,a2
 	abs	a2
 #tmdsml	subk	16,a2
 	jrlt	#push
@@ -6044,7 +6044,7 @@ plyr_cflsh
 	move	*a8(OYPOS),a1
 	sub	a0,a1
 
-	cmpi	>54,a1			;>60,5c,58
+	cmpi	054H,a1			;060H,5c,58
 	jrgt	#x			;Too far above me?
 
 ;player pushed speech here
@@ -6065,7 +6065,7 @@ plyr_cflsh
 
 	move	*a13(plyr_dir),a0
 	move	a0,a1
-	addi	>40,a1
+	addi	040H,a1
 	sll	32-7,a1
 	srl	32-7,a1
 	move	a1,*a5(plyr_newdir)
@@ -6191,8 +6191,8 @@ plyr_cflsh
 	callr	flash_ball
 
 	move	@ballobj_p,a4,L
-	movi	>1ffff,a2		;>Give rnd velocity
-	movi	>10000,a3
+	movi	01ffffH,a2		;>Give rnd velocity
+	movi	010000H,a3
 	move	a2,a0
 	callr	rnd
 	sub	a3,a0
@@ -6208,7 +6208,7 @@ plyr_cflsh
 	addi	plyrobj_t,a14
 	move	*a14,a14,L
 	move	*a14(OZPOS),a1
-	cmpi	>410,a1
+	cmpi	0410H,a1
 	jrgt	#not_rear
 
 	movi	40,a0
@@ -6236,7 +6236,7 @@ plyr_cflsh
 	addi	plyrobj_t,a14
 	move	*a14,a14,L
 	move	*a14(OZPOS),a1
-	cmpi	>410,a1
+	cmpi	0410H,a1
 	jrgt	#not_rear2
 
 	move	a11,a11
@@ -6339,7 +6339,7 @@ plyr_cflsh
 	move	*a5(PA8),a2,L		;>Make opponent fly
 
 	move	a0,a1
-	addi	>40,a1
+	addi	040H,a1
 	sll	32-7,a1
 	srl	32-7,a1
 	move	a1,*a5(plyr_newdir)
@@ -6397,7 +6397,7 @@ plyr_cflsh
  	SLEEPK	1
 
 	move	@game_time,a0,L		;If at beginning of qrtr, no speech!
-	cmpi	>2050400,a0		;!!!
+	cmpi	02050400H,a0		;!!!
 	jrgt	#snuffit
 
 	move	@gmqrtr,a0

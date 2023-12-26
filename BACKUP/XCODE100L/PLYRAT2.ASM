@@ -1,4 +1,4 @@
-**************************************************************
+#**************************************************************
 *
 * Owner:	TURMELL
 *
@@ -328,7 +328,7 @@ mpat_9a	PULL	a7
 * Set * to player attribute table
 * A8=Plyr #
 * A13=*Plyr process
-* >A10=*Attribute for uniform (ignores spechds)
+* 0A10H=*Attribute for uniform (ignores spechds)
 * Trashes scratch
 
  SUBR	plyr_getattributes
@@ -434,7 +434,7 @@ a3_tbl	.long	0,32
 
 #********************************
 * A8=plyr # 0-3
-* >A0=*plyr head img
+* 0A0H=*plyr head img
 
  SUBR	getwindowhead
 

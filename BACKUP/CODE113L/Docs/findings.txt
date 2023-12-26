@@ -1,8 +1,9 @@
 Needs loads of conventional mem to build. Fixed with dosbox-x.
+WWF has the line "C:\QEMM\VIDRAM" in the makefile(s) this doesn't...
 
-The VIDRAM utility can use upper RAM addresses normally assigned to EGA or VGA 
+"The VIDRAM utility can use upper RAM addresses normally assigned to EGA or VGA 
 graphics to free up an additional 96Kbytes of conventional memory, but graphical 
-applications cannot be used while VIDRAM is turned on.
+applications cannot be used while VIDRAM is turned on."
 
 Code:
 - New code for Hangtime vs. JAM seems very well commented. 

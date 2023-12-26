@@ -1,4 +1,4 @@
-**************************************************************
+#**************************************************************
 *
 * Owner:	TURMELL
 *
@@ -74,7 +74,7 @@
 
 ;equates for this file
 
-M_YF	.equ	>8000	;Y free (OFLAGS)
+M_YF	.equ	08000H	;Y free (OFLAGS)
 
 
 	.text
@@ -1154,8 +1154,8 @@ spinmove_t
 	.ref	steal_snd
 	SOUND1	steal_snd
 
-	movi	>10000,a2		;>Give rnd velocity
-	movi	>8000,a3
+	movi	010000H,a2		;>Give rnd velocity
+	movi	08000H,a3
 	move	a2,a0
 	callr	rnd
 	add	a3,a0
@@ -1181,7 +1181,7 @@ spinmove_t
 ********************************
 * Get random # with mask
 * A0=Mask
-* >A0=Rnd # (Pass CC)
+* 0A0H=Rnd # (Pass CC)
 * Trashes scratch
 
  SUBRP	rnd
@@ -1464,7 +1464,7 @@ spinmove_t
 
 	movi	spin_mv1_sp,a0
 	move	*a13(plyr_ohpdist),a1
-	cmpi	>174*DIST_ADDITION,a1
+	cmpi	0174H*DIST_ADDITION,a1
 	jrgt	#x
 	movi	spin_mv3_sp,a0
 	move	@HCOUNT,a14

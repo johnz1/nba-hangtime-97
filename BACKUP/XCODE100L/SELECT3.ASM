@@ -1,7 +1,7 @@
 ;-----------------------------------------------------------------------------
 ;
 * Owner:	JOHNSON
-*
+#*
 ; Software:	Jeff Johnson
 ; Initiated:	7-31-95
 ;
@@ -2027,61 +2027,61 @@ combo_symbol_xys
 
 
 ;POWER-UP stuff
-	.asg	>00000001,TOURN	;tournament mode
-	.asg	>00000002,BABYS	;baby mode
-	.asg	>00000004,NOMUS	;no music mode
-	.asg	>00000008,GOALT	;goal tending
-	.asg	>00000010,MXBLK	;block power
-	.asg	>00000020,MXSTL	;steal power; quick hands
-	.asg	>00000040,MXPWR	;max power
-	.asg	>00000080,MXSPD	;max speed
-	.asg	>00000100,HYPER	;hyper speed
-	.asg	>00000200,TBSTL	;stealth turbo
-	.asg	>00000400,TBINF	;unlimited turbo
-	.asg	>00000800,NOPSH	;no pushing
-	.asg	>00001000,FPASS	;fast passing
+	.asg	000000001H,TOURN	;tournament mode
+	.asg	000000002H,BABYS	;baby mode
+	.asg	000000004H,NOMUS	;no music mode
+	.asg	000000008H,GOALT	;goal tending
+	.asg	000000010H,MXBLK	;block power
+	.asg	000000020H,MXSTL	;steal power; quick hands
+	.asg	000000040H,MXPWR	;max power
+	.asg	000000080H,MXSPD	;max speed
+	.asg	000000100H,HYPER	;hyper speed
+	.asg	000000200H,TBSTL	;stealth turbo
+	.asg	000000400H,TBINF	;unlimited turbo
+	.asg	000000800H,NOPSH	;no pushing
+	.asg	000001000H,FPASS	;fast passing
 
 
-;	.asg	>00000000,BIGHD	;big heads
-;	.asg	>00000000,HUGHD	;huge heads
-;	.asg	>00000000,NOTAG	;no tag arrows
-;	.asg	>00000000,SHTPR	;show shot percent
-;	.asg	>00000000,ABALL	;ABA ball in use
-;	.asg	>00000000,COURT	;outside court
-;	.asg	>00000000,NOASS	;no cpu assistance
-;	.asg	>00000000,HOTSP	;show hot spots
+;	.asg	000000000H,BIGHD	;big heads
+;	.asg	000000000H,HUGHD	;huge heads
+;	.asg	000000000H,NOTAG	;no tag arrows
+;	.asg	000000000H,SHTPR	;show shot percent
+;	.asg	000000000H,ABALL	;ABA ball in use
+;	.asg	000000000H,COURT	;outside court
+;	.asg	000000000H,NOASS	;no cpu assistance
+;	.asg	000000000H,HOTSP	;show hot spots
 ;
-;	.asg	>00000000,STRNG	;strong men
+;	.asg	000000000H,STRNG	;strong men
 
 
 combination_tbl
-	WL  >111,TOURN
-	WL  >025,BABYS
-	WL  >048,NOMUS
-	WL  >937,GOALT
-	WL  >616,MXBLK
-	WL  >709,MXSTL
-	WL  >802,MXPWR
-	WL  >284,MXSPD
-	WL  >552,HYPER
-	WL  >273,TBSTL
-	WL  >461,TBINF
-	WL  >390,NOPSH
-	WL  >120,FPASS
+	WL  0111H,TOURN
+	WL  0025H,BABYS
+	WL  0048H,NOMUS
+	WL  0937H,GOALT
+	WL  0616H,MXBLK
+	WL  0709H,MXSTL
+	WL  0802H,MXPWR
+	WL  0284H,MXSPD
+	WL  0552H,HYPER
+	WL  0273H,TBSTL
+	WL  0461H,TBINF
+	WL  0390H,NOPSH
+	WL  0120H,FPASS
 
 ;Joystick/butn powerups:
 
-;	WL  >001,BIGHD
-;	WL  >011,HUGHD
-;	WL  >040,NOTAG
-;	WL  >100,SHTPR
-;	WL  >999,COURT
-;	WL  >030,HOTSP
-;	WL  >222,NOASS
+;	WL  0001H,BIGHD
+;	WL  0011H,HUGHD
+;	WL  0040H,NOTAG
+;	WL  0100H,SHTPR
+;	WL  0999H,COURT
+;	WL  0030H,HOTSP
+;	WL  0222H,NOASS
 
-;	WL  >121,GOALT|STLPW
-;	WL  >191,HUGHD|BABYS
-;	WL  >666,NOTAG|GOALT|NOPSH
+;	WL  0121H,GOALT|STLPW
+;	WL  0191H,HUGHD|BABYS
+;	WL  0666H,NOTAG|GOALT|NOPSH
 
 combination_tbl_end
 
@@ -2110,16 +2110,16 @@ NBR_CODE_COMBOS	equ	(combination_tbl_end-combination_tbl)/(16+32)
 	movi	pup_baby,a0		;!!!
 
 	move	@PSTATUS,a1		;Is it a plyr-v-plyr game?
-	movi	>eee0,a14
+	movi	0eee0H,a14
 	btst	a1,a14			;Do team agreement test if so
 	jrnz	sppr0			; br=yes
-	movi	>fffe,a14		;Share any powerups that are set
+	movi	0fffeH,a14		;Share any powerups that are set
 sppr0
 	move	*a0,a1
 	clr	a2
 	btst	a1,a14
 	jrz	sppr1
-	movk	>f,a2
+	movk	0fH,a2
 sppr1
 	move	a2,*a0+
 	cmpi	pup_fastpass,a0		;!!!
@@ -2164,7 +2164,7 @@ cvc_00
 	srl	1,a14
 	jrnc	cvc_01				;br=not this power up
 	move	@PSTATUS,a2
-	movi	>116,a3
+	movi	0116H,a3
 	btst	a2,a3				;No tmode if only 1 plyr
 	jrz	dotmd
 	PUSH	a0,a14
@@ -3929,9 +3929,9 @@ hd_bkdrp_tbl
 	move	a0,*a8(OPAL)
 
 	move	*a8(OCTRL),a1
-	andi	>80ff,a1		;DMA flags
+	andi	080ffH,a1		;DMA flags
 	move	*a9(ICTRL),a14
-	andni	>80ff,a14		;DMA flags
+	andni	080ffH,a14		;DMA flags
 	or	a14,a1
 	move	a1,*a8(OCTRL)
 
@@ -3974,7 +3974,7 @@ ayn_0
  	SLEEPK	1
 
 ;
-; during option screen, if >1 player buys in while the other player was
+; during option screen, if 01H player buys in while the other player was
 ;  answering the yes/no question...stop all yes/no processing and return
 ;
 	calla	check_for_buyins

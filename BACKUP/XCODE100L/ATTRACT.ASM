@@ -1,4 +1,4 @@
-****************************************************************
+#****************************************************************
 *
 * Owner:	JOHNSON
 *
@@ -377,7 +377,7 @@
 #chknxt
 	.if	TRIVCON
 	move	@amodeloop,a0
-	andi	>3f,a0
+	andi	03fH,a0
 	jrnz	#lp
 	JSRP	trivia_rules
 	.endif	;TRIVCON
@@ -753,7 +753,7 @@ title_scr_mod
 
 ttl_setscl
 	move	*a8(OIMG),a2,L
-	movi	[>100,0],a3
+	movi	[0100H,0],a3
 	clr	a14
 	movx	a10,a14
 	divu	a14,a3
@@ -789,7 +789,7 @@ ttl_setscl
 
 
 	calla	ADJ_PAGE
-	movk	CMESS_LINES,a2		;>Check for a message
+	movk	CMESS_LINES,a2		;0CHheck for a message
 	movi	CUSTOM_MESSAGE,a7
 #cmlp
 	calla	RC_BYTEI
@@ -818,7 +818,7 @@ ttl_setscl
 	CREATE0	showdt_scl
 
 
-	movk	CMESS_LINES,a2		;>Check for a message
+	movk	CMESS_LINES,a2		;0CHheck for a message
 	movi	CUSTOM_MESSAGE,a7
 	movi	[50,200],a9
 #prtlp
@@ -854,7 +854,7 @@ ttl_setscl
 	jrz	#oend
 	move	*a14(ODATA_p),a0,L
 	jrnz	#olp
-	movi	[>320,>320],a1
+	movi	[0320H,0320H],a1
 	move	a1,*a14(ODATA_p),L
 	jruc	#olp
 #oend
@@ -2040,7 +2040,7 @@ design_tm_mod
 ;	cmpi	-1,a0
 ;	jrne	#nopal
 ;
-;	move	*a8+,a0,L	;>Change pal
+;	move	*a8+,a0,L	;0CHhange pal
 ;	calla	pal_getf
 ;	move	a0,a6
 ;	jruc	#nxt
@@ -2111,7 +2111,7 @@ design_tm_mod
 ;;	jrz	#oend
 ;;	move	*a14(ODATA_p),a0,L
 ;;	jrnz	#olp
-;;	movi	[>320,>320],a1
+;;	movi	[0320H,0320H],a1
 ;;	move	a1,*a14(ODATA_p),L
 ;;	jruc	#olp
 ;;#oend
@@ -2135,7 +2135,7 @@ design_tm_mod
 ;	cmpi	-1,a0
 ;	jrne	#nopal
 ;
-;	move	*a8+,a0,L	;>Change pal
+;	move	*a8+,a0,L	;0CHhange pal
 ;	calla	pal_getf
 ;	move	a0,a6
 ;	jruc	#nxt
@@ -2188,7 +2188,7 @@ design_tm_mod
 ;;	jrz	#oend
 ;;	move	*a14(ODATA_p),a0,L
 ;;	jrnz	#olp
-;;	movi	[>320,>320],a1
+;;	movi	[0320H,0320H],a1
 ;;	move	a1,*a14(ODATA_p),L
 ;;	jruc	#olp
 ;;#oend
@@ -2244,7 +2244,7 @@ ck_octopus2
 
 	move	@SWITCH,a0
 	zext	a0
-	cmpi	>ffff,a0
+	cmpi	0ffffH,a0
 	jrnz	#tag1
 	clr	a11
 	jruc	#lp
@@ -2274,8 +2274,8 @@ butn_lst
 ;p1turbo,p1turbo,p2shoot,p2shoot,p2shoot,p2pass,p2pass,p1shoot,p1pass,p2turbo
 ;p2turbo,p1turbo,p1turbo,p1turbo,p1turbo
 
-	.word	>ffbf,>ffbf,>efff,>efff,>efff,>dfff,>dfff
-	.word	>ffef,>ffdf,>bfff,>bfff,>ffbf,>ffbf,>ffbf,>ffbf,0
+	.word	0ffbfH,0ffbfH,0efffH,0efffH,0efffH,0dfffH,0dfffH
+	.word	0ffefH,0ffdfH,0bfffH,0bfffH,0ffbfH,0ffbfH,0ffbfH,0ffbfH,0
 
 
 ;#*******************************
@@ -2287,9 +2287,9 @@ butn_lst
 ;#olp	move	*a14,a14,L	;A14=*Next
 ;	jrz	#oend
 ;	move	*a14(ODATA_p),a0,L
-;	cmpi	[>100,>100],a0
+;	cmpi	[0100H,0100H],a0
 ;	jrle	#olp
-;	subi	[>10,>10],a0
+;	subi	[010H,010H],a0
 ;	move	a0,*a14(ODATA_p),L
 ;	jruc	#olp
 ;#oend
@@ -2732,7 +2732,7 @@ ERRORLOG
 ********************************
 * Get an audit
 * A4=Audit #
-* >A4=Audit
+* 0A4H=Audit
 
 GETAUD4
 	mmtm	sp,a0,a1
@@ -7044,7 +7044,7 @@ strings	.long	#s1,#s2,#s3,#s4,#s5,#s6,#s7,#s8,#s9,#s10
 ;
 ;	CREATE0	drwnbalogoUP
 ;
-;	movi	>772-4,a10
+;	movi	0772H-4,a10
 ;#lp	SLEEPK	1
 ;	move	@WORLDTLY,a0,L
 ;	subi	[2,8000h],a0
@@ -7133,7 +7133,7 @@ strings	.long	#s1,#s2,#s3,#s4,#s5,#s6,#s7,#s8,#s9,#s10
 ;
 ;	move	a11,a0
 ;	movi	[248+48,0],a1
-;	movi	>7591,a3				;Z
+;	movi	07591H,a3				;Z
 ;	movi	DMAWNZ|M_NOCOLL,a4
 ;	move	a9,a2
 ;	movi	CLSDEAD,a5
@@ -7249,7 +7249,7 @@ strings	.long	#s1,#s2,#s3,#s4,#s5,#s6,#s7,#s8,#s9,#s10
 
 ;#ladder_mod
 ;	.long	dabullBMOD
-;	.word	>ff4b+5,>ffa1+3
+;	.word	0ff4bH+5,0ffa1H+3
 ;	.long	ladderBMOD
 ;	.word	0+5,-92+360
 ;	.long	ladderBMOD

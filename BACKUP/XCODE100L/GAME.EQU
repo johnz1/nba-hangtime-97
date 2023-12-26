@@ -193,8 +193,8 @@ COLORA	.EQU	3E3Eh		;COLOR CYCLE IN SCOREPAL
 
 ******************************************************************************
 
-;LEDOCTRL	.equ	DMAWNZ|>3000	;3 bits per pixel (In BB.asm)
-;MSGOCTRL	.equ	DMAWNZ|>6000
+;LEDOCTRL	.equ	DMAWNZ|03000H	;3 bits per pixel (In BB.asm)
+;MSGOCTRL	.equ	DMAWNZ|06000H
 ;LEDOCTRL	.equ	DMAWNZ|5000h	;3 bits per pixel (In BB.asm)
 MSGOCTRL	.equ	DMAWNZ|3000h	;5000h
 

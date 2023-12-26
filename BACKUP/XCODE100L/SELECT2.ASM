@@ -1,4 +1,4 @@
-****************************************************************
+#****************************************************************
 *
 * Owner:	JOHNSON
 *
@@ -236,16 +236,16 @@ IDIOTS_P:
 ********************************
 #*
 
-MAX_CRTIME	equ	>7fff		;30*60
+MAX_CRTIME	equ	07fffH		;30*60
 ;TEAMSEL_PAGE	equ	0*256
 ;NAMENT_PAGE	equ	1*256
 
-	.asg	>5e+5,x1
-	.asg	>a1+5,x1a
-	.asg	>e4+5,x2a
-	.asg	>ad+5,x1b
-	.asg	>12f5+2,y1
-	.asg	>131f,y1a
+	.asg	05eH+5,x1
+	.asg	0a1H+5,x1a
+	.asg	0e4H+5,x2a
+	.asg	0adH+5,x1b
+	.asg	012f5H+2,y1
+	.asg	0131fH,y1a
 
 
 	.def	ladder_imgs0
@@ -268,162 +268,162 @@ ladder_imgs6
 ;	.long	MAS_DAL,x2a,y1
 ;	.long	T_MAVS,x1b,y1a
 ;
-;	.long	THM_DET,x1,y1->b3
-;	.long	DUM_DET,x1a,y1->b3
+;	.long	THM_DET,x1,y1-0b3H
+;	.long	DUM_DET,x1a,y1-0b3H
 ;
-;	.long	ELL_DET,x2a,y1->b3
-;;	.long	HOR_HOU,x2a,y1->b3
-;	.long	T_PISS,x1b,y1a->b3
+;	.long	ELL_DET,x2a,y1-0b3H
+;;	.long	HOR_HOU,x2a,y1-0b3H
+;	.long	T_PISS,x1b,y1a-0b3H
 ;
 ;	.long	0
 ;
 ;ladder_imgs1
 ;;4
-;	.long	BAK_MLW,x1,y1->b3*2-2
-;	.long	EDW_MLW,x1a,y1->b3*2-2
-;	.long	DAY_MLW,x2a,y1->b3*2-2
-;	.long	T_BUCKS,x1b,y1a->b3*2-2
+;	.long	BAK_MLW,x1,y1-0b3H*2-2
+;	.long	EDW_MLW,x1a,y1-0b3H*2-2
+;	.long	DAY_MLW,x2a,y1-0b3H*2-2
+;	.long	T_BUCKS,x1b,y1a-0b3H*2-2
 ;
-;	.long	GUG_WAS,x1,y1->b3*3-2
-;	.long	ELL_WAS,x1a,y1->b3*3-2
-;	.long	CHE_WAS,x2a,y1->b3*3-2
-;	.long	T_BULTS,x1b,y1a->b3*3-2
+;	.long	GUG_WAS,x1,y1-0b3H*3-2
+;	.long	ELL_WAS,x1a,y1-0b3H*3-2
+;	.long	CHE_WAS,x2a,y1-0b3H*3-2
+;	.long	T_BULTS,x1b,y1a-0b3H*3-2
 ;
-;	.long	SIM_SAC,x1,y1->b3*4-4
-;	.long	HUR_SAC,x1a,y1->b3*4-4
-;	.long	RIC_SAC,x2a,y1->b3*4-4
-;	.long	T_KINGS,x1b,y1a->b3*4-4
+;	.long	SIM_SAC,x1,y1-0b3H*4-4
+;	.long	HUR_SAC,x1a,y1-0b3H*4-4
+;	.long	RIC_SAC,x2a,y1-0b3H*4-4
+;	.long	T_KINGS,x1b,y1a-0b3H*4-4
 ;
-;	.long	LTN_MIN,x1,y1->b3*5-4
-;	.long	PRS_MIN,x1a,y1->b3*5-4
-;	.long	RID_MIN,x2a,y1->b3*5-4
-;	.long	T_TWOLV,x1b,y1a->b3*5-4
+;	.long	LTN_MIN,x1,y1-0b3H*5-4
+;	.long	PRS_MIN,x1a,y1-0b3H*5-4
+;	.long	RID_MIN,x2a,y1-0b3H*5-4
+;	.long	T_TWOLV,x1b,y1a-0b3H*5-4
 ;
 ;	.long	0
 ;
 ;ladder_imgs2
 ;;4
-;	.long	PEE_LAK,x1,y1->b3*6-6
-;	.long	DIV_LAK,x1a,y1->b3*6-6
-;	.long	CAM_LAK,x2a,y1->b3*6-6
-;	.long	T_LAKS,x1b,y1a->b3*6-6
+;	.long	PEE_LAK,x1,y1-0b3H*6-6
+;	.long	DIV_LAK,x1a,y1-0b3H*6-6
+;	.long	CAM_LAK,x2a,y1-0b3H*6-6
+;	.long	T_LAKS,x1b,y1a-0b3H*6-6
 ;
-;	.long	WLK_ATL,x1,y1->b3*7-6
-;;	.long	MAN_CLP,x1,y1->b3*7-6
-;	.long	HRP_CLP,x1a,y1->b3*7-6
-;	.long	ROB_CLP,x2a,y1->b3*7-6
-;	.long	T_CLIPS,x1b,y1a->b3*7-6
+;	.long	WLK_ATL,x1,y1-0b3H*7-6
+;;	.long	MAN_CLP,x1,y1-0b3H*7-6
+;	.long	HRP_CLP,x1a,y1-0b3H*7-6
+;	.long	ROB_CLP,x2a,y1-0b3H*7-6
+;	.long	T_CLIPS,x1b,y1a-0b3H*7-6
 ;
-;	.long	MCD_BOS,x1,y1->b3*8-8
-;	.long	BRO_BOS,x1a,y1->b3*8-8
-;	.long	GAM_BOS,x2a,y1->b3*8-8
-;	.long	T_CELTS,x1b,y1a->b3*8-8
+;	.long	MCD_BOS,x1,y1-0b3H*8-8
+;	.long	BRO_BOS,x1a,y1-0b3H*8-8
+;	.long	GAM_BOS,x2a,y1-0b3H*8-8
+;	.long	T_CELTS,x1b,y1a-0b3H*8-8
 ;
-;	.long	WEA_PHL,x1,y1->b3*9-8
-;;	.long	BRA_PHL,x1a,y1->b3*9-8
-;	.long	BRA_PHL,x2a,y1->b3*9-8
-;	.long	HRN_PHL,x2a+400,y1->b3*9-8
-;	.long	T_76RS,x1b,y1a->b3*9-8
+;	.long	WEA_PHL,x1,y1-0b3H*9-8
+;;	.long	BRA_PHL,x1a,y1-0b3H*9-8
+;	.long	BRA_PHL,x2a,y1-0b3H*9-8
+;	.long	HRN_PHL,x2a+400,y1-0b3H*9-8
+;	.long	T_76RS,x1b,y1a-0b3H*9-8
 ;
 ;	.long	0
 ;
 ;ladder_imgs3
 ;;4
-;	.long	MIL_IND,x1,y1->b3*10-10
-;	.long	SMI_IND,x1a,y1->b3*10-10
-;	.long	SEL_IND,x2a,y1->b3*10-10
-;	.long	T_PACER,x1b,y1a->b3*10-10
+;	.long	MIL_IND,x1,y1-0b3H*10-10
+;	.long	SMI_IND,x1a,y1-0b3H*10-10
+;	.long	SEL_IND,x2a,y1-0b3H*10-10
+;	.long	T_PACER,x1b,y1a-0b3H*10-10
 ;
-;	.long	COL_NEJ,x1,y1->b3*11-10
-;	.long	AND_NEJ,x1a,y1->b3*11-10
-;	.long	MOR_NEJ,x2a,y1->b3*11-10
-;	.long	T_NETS,x1b,y1a->b3*11-10
+;	.long	COL_NEJ,x1,y1-0b3H*11-10
+;	.long	AND_NEJ,x1a,y1-0b3H*11-10
+;	.long	MOR_NEJ,x2a,y1-0b3H*11-10
+;	.long	T_NETS,x1b,y1a-0b3H*11-10
 ;
-;	.long	PRC_CLE,x1,y1->b3*12-12
-;	.long	DAU_CLE,x1a,y1->b3*12-12
-;	.long	NAN_CLE,x2a,y1->b3*12-12
-;	.long	T_CAVS,x1b,y1a->b3*12-12
+;	.long	PRC_CLE,x1,y1-0b3H*12-12
+;	.long	DAU_CLE,x1a,y1-0b3H*12-12
+;	.long	NAN_CLE,x2a,y1-0b3H*12-12
+;	.long	T_CAVS,x1b,y1a-0b3H*12-12
 ;
-;	.long	MUT_DEN,x1,y1->b3*13-12
-;	.long	ELL_DEN,x1a,y1->b3*13-12
-;	.long	ROG_DEN,x2a,y1->b3*13-12
-;	.long	T_NUGS,x1b,y1a->b3*13-12
+;	.long	MUT_DEN,x1,y1-0b3H*13-12
+;	.long	ELL_DEN,x1a,y1-0b3H*13-12
+;	.long	ROG_DEN,x2a,y1-0b3H*13-12
+;	.long	T_NUGS,x1b,y1a-0b3H*13-12
 ;
 ;	.long	0
 ;
 ;ladder_imgs4
 ;;4
-;	.long	HRD_GLD,x1,y1->b3*14-14
-;	.long	MUL_GLD,x1a,y1->b3*14-14
-;	.long	WEB_GLD,x2a,y1->b3*14-14
-;	.long	T_WARS,x1b,y1a->b3*14-14
+;	.long	HRD_GLD,x1,y1-0b3H*14-14
+;	.long	MUL_GLD,x1a,y1-0b3H*14-14
+;	.long	WEB_GLD,x2a,y1-0b3H*14-14
+;	.long	T_WARS,x1b,y1a-0b3H*14-14
 ;
-;	.long	DRX_PRT,x1,y1->b3*15-14
-;	.long	POR_PRT,x1a,y1->b3*15-14
-;	.long	ROB_PRT,x2a,y1->b3*15-14
-;	.long	T_BLAZ,x1b,y1a->b3*15-14
+;	.long	DRX_PRT,x1,y1-0b3H*15-14
+;	.long	POR_PRT,x1a,y1-0b3H*15-14
+;	.long	ROB_PRT,x2a,y1-0b3H*15-14
+;	.long	T_BLAZ,x1b,y1a-0b3H*15-14
 ;
-;	.long	RCE_MIA,x1,y1->b3*16-16
-;	.long	SKL_MIA,x1a,y1->b3*16-16
-;	.long	MIN_MIA,x2a,y1->b3*16-16
-;	.long	T_HEAT,x1b,y1a->b3*16-16
+;	.long	RCE_MIA,x1,y1-0b3H*16-16
+;	.long	SKL_MIA,x1a,y1-0b3H*16-16
+;	.long	MIN_MIA,x2a,y1-0b3H*16-16
+;	.long	T_HEAT,x1b,y1a-0b3H*16-16
 ;
-;	.long	JON_CHA,x1,y1->b3*17-16
-;	.long	HWK_CHA,x1a,y1->b3*17-16
-;	.long	MOU_CHA,x2a,y1->b3*17-16
-;	.long	T_HORS,x1b,y1a->b3*17-16
+;	.long	JON_CHA,x1,y1-0b3H*17-16
+;	.long	HWK_CHA,x1a,y1-0b3H*17-16
+;	.long	MOU_CHA,x2a,y1-0b3H*17-16
+;	.long	T_HORS,x1b,y1a-0b3H*17-16
 ;
 ;	.long	0
 ;
 ;ladder_imgs5
 ;;4
-;	.long	SKL_ORL,x1,y1->b3*18-18
-;	.long	HAR_ORL,x1a,y1->b3*18-18
-;	.long	AND_ORL,x2a,y1->b3*18-18
-;	.long	T_MAGIC,x1b,y1a->b3*18-18
+;	.long	SKL_ORL,x1,y1-0b3H*18-18
+;	.long	HAR_ORL,x1a,y1-0b3H*18-18
+;	.long	AND_ORL,x2a,y1-0b3H*18-18
+;	.long	T_MAGIC,x1b,y1a-0b3H*18-18
 ;
-;	.long	ROB_SAN,x1,y1->b3*19-18
-;	.long	ROD_SAN,x1a,y1->b3*19-18
-;	.long	ELS_SAN,x2a,y1->b3*19-18
-;	.long	T_SPURS,x1b,y1a->b3*19-18
+;	.long	ROB_SAN,x1,y1-0b3H*19-18
+;	.long	ROD_SAN,x1a,y1-0b3H*19-18
+;	.long	ELS_SAN,x2a,y1-0b3H*19-18
+;	.long	T_SPURS,x1b,y1a-0b3H*19-18
 ;
-;	.long	MLN_UTA,x1,y1->b3*20-20
-;	.long	STK_UTA,x1a,y1->b3*20-20
-;	.long	BEN_UTA,x2a,y1->b3*20-20
-;	.long	T_JAZZ,x1b,y1a->b3*20-20
+;	.long	MLN_UTA,x1,y1-0b3H*20-20
+;	.long	STK_UTA,x1a,y1-0b3H*20-20
+;	.long	BEN_UTA,x2a,y1-0b3H*20-20
+;	.long	T_JAZZ,x1b,y1a-0b3H*20-20
 ;
-;	.long	EWG_NEY,x1,y1->b3*21-20
-;	.long	MAS_NEY,x1a,y1->b3*21-20
-;	.long	STA_NEY,x2a,y1->b3*21-20
-;	.long	T_KNIKS,x1b,y1a->b3*21-20
+;	.long	EWG_NEY,x1,y1-0b3H*21-20
+;	.long	MAS_NEY,x1a,y1-0b3H*21-20
+;	.long	STA_NEY,x2a,y1-0b3H*21-20
+;	.long	T_KNIKS,x1b,y1a-0b3H*21-20
 ;
 ;	.long	0
 ;
 ;ladder_imgs6
 ;;4
-;	.long	MAN_CLP,x1,y1->b3*22-22
-;;	.long	WLK_ATL,x1,y1->b3*22-22
-;	.long	AUG_ATL,x1a,y1->b3*22-22
-;	.long	WLS_ATL,x2a,y1->b3*22-22
-;	.long	T_HAWKS,x1b,y1a->b3*22-22
+;	.long	MAN_CLP,x1,y1-0b3H*22-22
+;;	.long	WLK_ATL,x1,y1-0b3H*22-22
+;	.long	AUG_ATL,x1a,y1-0b3H*22-22
+;	.long	WLS_ATL,x2a,y1-0b3H*22-22
+;	.long	T_HAWKS,x1b,y1a-0b3H*22-22
 ;
-;;	.long	BRK_PHX,x1,y1->b3*23-22
-;;	.long	MAJ_PHX,x1,y1->b3*23-22
-;	.long	MAJ_PHX,x1a,y1->b3*23-22
-;	.long	JOH_PHX,x2a,y1->b3*23-22
-;	.long	T_SUNS,x1b,y1a->b3*23-22
+;;	.long	BRK_PHX,x1,y1-0b3H*23-22
+;;	.long	MAJ_PHX,x1,y1-0b3H*23-22
+;	.long	MAJ_PHX,x1a,y1-0b3H*23-22
+;	.long	JOH_PHX,x2a,y1-0b3H*23-22
+;	.long	T_SUNS,x1b,y1a-0b3H*23-22
 ;
-;	.long	OLA_HOU,x1,y1->b3*24-24
-;	.long	MAX_HOU,x1a,y1->b3*24-24
-;;	.long	ELL_DET,x2a,y1->b3
-;;	.long	ELL_DET,x2a,y1->b3*24-24
-;	.long	HOR_HOU,x2a,y1->b3*24-24
-;	.long	T_ROCKS,x1b,y1a->b3*24-24
+;	.long	OLA_HOU,x1,y1-0b3H*24-24
+;	.long	MAX_HOU,x1a,y1-0b3H*24-24
+;;	.long	ELL_DET,x2a,y1-0b3H
+;;	.long	ELL_DET,x2a,y1-0b3H*24-24
+;	.long	HOR_HOU,x2a,y1-0b3H*24-24
+;	.long	T_ROCKS,x1b,y1a-0b3H*24-24
 ;
-;	.long	KMP_SEA,x1,y1->b3*25-24
-;	.long	PAY_SEA,x1a,y1->b3*25-24
-;	.long	GIL_SEA,x2a,y1->b3*25-24
-;	.long	T_SONICS,x1b,y1a->b3*25-24
+;	.long	KMP_SEA,x1,y1-0b3H*25-24
+;	.long	PAY_SEA,x1a,y1-0b3H*25-24
+;	.long	GIL_SEA,x2a,y1-0b3H*25-24
+;	.long	T_SONICS,x1b,y1a-0b3H*25-24
 ;
 ;
 ;	.long	0
@@ -2858,96 +2858,96 @@ NUM_MEMBRS	.equ	(#team_data1_end-#team_data)/NXT_TM_MEMBR
 
 	
 #team_snds
-	.word	>3505,32,2290		;0  JEFF JOHNSON
-	.word	>3505,31,2276		;1  SAL DIVITA
-	.word	>3505,32,2272		;2  TURMELL
-	.word	>3505,28,2286		;3  THOMPSON
-	.word	>3505,22,2278		;4  GEER 
-	.word	>3505,33,2288		;5  CARLTON
-	.word	>3505,28,2280		;6  HEDRICK
-	.word	>3505,23,2274		;7  JOHN HEY
-	.word	>3505,43,2266		;8  AIR MORRIS
-	.word	>3505,30,2268		;9  STEVE BARDO
-	.word	>3505,35,2270		;10 MINIFEE
-	.word	>3505,41,2282		;11 MARTINEZ
-	.word	>3505,36,2284		;12 PESINA
-	.word	>3505,36,2250		;13 LIPTAK
-	.word	>3505,46,1910		;14 EDDIE
-	.word	>3505,26,1920		;15 MIKE V
-	.word	>3505,37,2867		;16 JAMIE R.
-	.word	>3505,37,2867		;17 NICK E.
-	.word	>3505,37,2867		;18 J. ROOT
-	.word	>3505,37,2867		;19 MEDNICK
-	.word	>3505,37,2867		;20 DAN R.
-	.word	>3505,37,2867		;21 PAT F.
-	.word	>3505,37,2867		;22 ED BOON
-	.word	>3505,37,2867		;23 J. TOBIAS
-	.word	>3505,37,2867		;24 OURSLER
-	.word	>3505,37,2867		;25 JASON S.
-	.word	>3505,37,2867		;26 QUINN
-	.word	>3505,37,2867		;27 M. PERRY
-	.word	>3505,37,2867		;28 N. FUNK
-	.word	>3505,37,2867		;29 MDOC
-	.word	>3505,37,2867		;30 BUD
-	.word	>3505,54,1877		;31 MARIUS
-	.word	>3505,37,2867		;32 MUNDAY
-	.word	>3505,37,2867		;33 NORTH
-	.word	>3505,37,2867		;34 AMRICH 
-	.word	>3505,37,2867		;35 JIGGETS
-	.word	>3505,37,2867		;36 ZIRIN
-	.word	>3505,37,2867		;37 HEITH BETTLEMAN
-	.word	>3505,37,2867		;38 MATT BETTLEMAN
-	.word	>3505,43,2787		;39 KEVIN DAY
+	.word	03505H,32,2290		;0  JEFF JOHNSON
+	.word	03505H,31,2276		;1  SAL DIVITA
+	.word	03505H,32,2272		;2  TURMELL
+	.word	03505H,28,2286		;3  THOMPSON
+	.word	03505H,22,2278		;4  GEER 
+	.word	03505H,33,2288		;5  CARLTON
+	.word	03505H,28,2280		;6  HEDRICK
+	.word	03505H,23,2274		;7  JOHN HEY
+	.word	03505H,43,2266		;8  AIR MORRIS
+	.word	03505H,30,2268		;9  STEVE BARDO
+	.word	03505H,35,2270		;10 MINIFEE
+	.word	03505H,41,2282		;11 MARTINEZ
+	.word	03505H,36,2284		;12 PESINA
+	.word	03505H,36,2250		;13 LIPTAK
+	.word	03505H,46,1910		;14 EDDIE
+	.word	03505H,26,1920		;15 MIKE V
+	.word	03505H,37,2867		;16 JAMIE R.
+	.word	03505H,37,2867		;17 NICK E.
+	.word	03505H,37,2867		;18 J. ROOT
+	.word	03505H,37,2867		;19 MEDNICK
+	.word	03505H,37,2867		;20 DAN R.
+	.word	03505H,37,2867		;21 PAT F.
+	.word	03505H,37,2867		;22 ED BOON
+	.word	03505H,37,2867		;23 J. TOBIAS
+	.word	03505H,37,2867		;24 OURSLER
+	.word	03505H,37,2867		;25 JASON S.
+	.word	03505H,37,2867		;26 QUINN
+	.word	03505H,37,2867		;27 M. PERRY
+	.word	03505H,37,2867		;28 N. FUNK
+	.word	03505H,37,2867		;29 MDOC
+	.word	03505H,37,2867		;30 BUD
+	.word	03505H,54,1877		;31 MARIUS
+	.word	03505H,37,2867		;32 MUNDAY
+	.word	03505H,37,2867		;33 NORTH
+	.word	03505H,37,2867		;34 AMRICH 
+	.word	03505H,37,2867		;35 JIGGETS
+	.word	03505H,37,2867		;36 ZIRIN
+	.word	03505H,37,2867		;37 HEITH BETTLEMAN
+	.word	03505H,37,2867		;38 MATT BETTLEMAN
+	.word	03505H,43,2787		;39 KEVIN DAY
 
 ;Superstar special guests
- .word	>100D,72,1360	;PIPPEN,      scottie
- .word	>100D,60,1364	;RODMAN,      dennis
- .word	>100D,74,1344	;JOHNSON,     larry
- .word	>100D,65,1348	;RICE,        glen
- .word	>100D,68,1404	;KIDD,        jason
- .word	>100D,103,1424	;MUTUMBO,     dekembe
- .word	>100D,63,1444	;HILL,        grant
- .word	>100D,118,1480	;OLAJUWAN,    hakeem
- .word	>100D,85,1500	;MILLER,      reggie
- .word	>100D,71,1508	;SMITS,       rik
- .word	>100D,97,1560	;MOURNING,    alonzo
- .word	>100D,93,1584	;ROBINSON,    glen
- .word	>100D,82,1640	;EWING,       patrick
- .word	>100D,70,1656	;STARKS,      john
- .word	>100D,95,1660	;HARDAWAY,    anfernee
- .word	>100D,76,1664	;GRANT,       horace
- .word	>100D,96,1680	;STACKHOUSE,  jerry
- .word	>100D,94,1724	;ROBINSON,    cliff
- .word	>100D,92,1764	;ROBINSON,    david
- .word	>100D,69,1760	;ELLIOTT,     sean
- .word	>100D,64,1780	;KEMP,        shawn
- .word	>100D,68,1824	;MALONE,      karl
- .word	>100D,53,1864	;WEBBER,      chris
- .word	>100D,92,1876	;MURESAN,     gheorge
+ .word	0100DH,72,1360	;PIPPEN,      scottie
+ .word	0100DH,60,1364	;RODMAN,      dennis
+ .word	0100DH,74,1344	;JOHNSON,     larry
+ .word	0100DH,65,1348	;RICE,        glen
+ .word	0100DH,68,1404	;KIDD,        jason
+ .word	0100DH,103,1424	;MUTUMBO,     dekembe
+ .word	0100DH,63,1444	;HILL,        grant
+ .word	0100DH,118,1480	;OLAJUWAN,    hakeem
+ .word	0100DH,85,1500	;MILLER,      reggie
+ .word	0100DH,71,1508	;SMITS,       rik
+ .word	0100DH,97,1560	;MOURNING,    alonzo
+ .word	0100DH,93,1584	;ROBINSON,    glen
+ .word	0100DH,82,1640	;EWING,       patrick
+ .word	0100DH,70,1656	;STARKS,      john
+ .word	0100DH,95,1660	;HARDAWAY,    anfernee
+ .word	0100DH,76,1664	;GRANT,       horace
+ .word	0100DH,96,1680	;STACKHOUSE,  jerry
+ .word	0100DH,94,1724	;ROBINSON,    cliff
+ .word	0100DH,92,1764	;ROBINSON,    david
+ .word	0100DH,69,1760	;ELLIOTT,     sean
+ .word	0100DH,64,1780	;KEMP,        shawn
+ .word	0100DH,68,1824	;MALONE,      karl
+ .word	0100DH,53,1864	;WEBBER,      chris
+ .word	0100DH,92,1876	;MURESAN,     gheorge
 
 ;New Superstar special guests removed from teams
- .word	>100D,84,1416	;McCLOUD,     george
- .word	>100D,76,1448	;MILLS,       terry
- .word	>100D,64,1496	;SMITH,       kenny
- .word	>100D,77,1512	;McKEE,       derek
- .word	>100D,60,1961	;CHAPMAN,     rex
- .word	>100D,69,1592	;BENJAMIN,    benoit
- .word	>100D,69,1596	;DOUGLAS,     sherman
- .word	>100D,61,1964	;WEBB,        spud
- .word	>100D,54,1628	;GILLIAM,     armon
- .word	>100D,60,1636	;EDWARDS,     kevin
- .word	>100D,81,1652	;OAKLEY,      charles
- .word	>100D,64,1967	;RUFFIN,      trevor
- .word	>100D,77,1712	;PERSON,      wesley
- .word	>100D,95,1716	;FINLEY,      michael
- .word	>100D,73,1732	;WILLIAMS,    buck
- .word	>100D,71,1772	;PERSON,      chuck
- .word	>100D,61,1952	;ROBERTSON,   alvin
- .word	>100D,67,1812	;MILLER,      oliver
- .word	>100D,53,1816	;MURRAY,      tracy
- .word	>100D,69,1832	;BENOIT,      david
- .word	>100D,60,1958	;SCOTT,       byron
- .word	>100D,63,1856	;MURDOCK,     eric
+ .word	0100DH,84,1416	;McCLOUD,     george
+ .word	0100DH,76,1448	;MILLS,       terry
+ .word	0100DH,64,1496	;SMITH,       kenny
+ .word	0100DH,77,1512	;McKEE,       derek
+ .word	0100DH,60,1961	;CHAPMAN,     rex
+ .word	0100DH,69,1592	;BENJAMIN,    benoit
+ .word	0100DH,69,1596	;DOUGLAS,     sherman
+ .word	0100DH,61,1964	;WEBB,        spud
+ .word	0100DH,54,1628	;GILLIAM,     armon
+ .word	0100DH,60,1636	;EDWARDS,     kevin
+ .word	0100DH,81,1652	;OAKLEY,      charles
+ .word	0100DH,64,1967	;RUFFIN,      trevor
+ .word	0100DH,77,1712	;PERSON,      wesley
+ .word	0100DH,95,1716	;FINLEY,      michael
+ .word	0100DH,73,1732	;WILLIAMS,    buck
+ .word	0100DH,71,1772	;PERSON,      chuck
+ .word	0100DH,61,1952	;ROBERTSON,   alvin
+ .word	0100DH,67,1812	;MILLER,      oliver
+ .word	0100DH,53,1816	;MURRAY,      tracy
+ .word	0100DH,69,1832	;BENOIT,      david
+ .word	0100DH,60,1958	;SCOTT,       byron
+ .word	0100DH,63,1856	;MURDOCK,     eric
 
 
 ;DJT End
@@ -3578,7 +3578,7 @@ kit_x	.word	0,101,295,0	;kit x vals
 	calla	CR_CONTP		;Credits to continue
 	jrlo	#bx			;No?
    	move	@game_purchased,a0
-	cmpi	>f,a0
+	cmpi	0fH,a0
 	jrnz	#cont
 #bx
 	RETP
@@ -4563,7 +4563,7 @@ update_attribs
 
 	move	*a0(ICTRL),a1		     ;get bits per pixel...(ctrl data)
 	move	*a8(OCTRL),a14			;get current ctrl data
-	andi	>8fff,a14			;clear bits (12-14)
+	andi	08fffH,a14			;clear bits (12-14)
 	or	a1,a14				;set bits (12-14)
 	move	a14,*a8(OCTRL)			;update 'ctrl' data
 
@@ -5901,7 +5901,7 @@ name_sort
 	sll	5,a2
 	addi	name_sort,a2
 	move	*a2,a2,L
-	movi	>7ff0,a3			;z pos
+	movi	07ff0H,a3			;z pos
 	movi	DMAWNZ|M_SCRNREL,a4		;DMA flags
 	clr	a5				;object ID
 	clr	a6				;x vel

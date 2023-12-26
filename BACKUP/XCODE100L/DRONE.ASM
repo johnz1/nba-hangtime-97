@@ -1,4 +1,4 @@
-**************************************************************
+#**************************************************************
 *
 * Owner:		Shawn
 *
@@ -71,7 +71,7 @@
 ;equates for this file
 
 
-BV5	equ	>1040->80+>42*6
+BV5	equ	01040H-080H+042H*6
 
 NOPUSHSTEAL	equ	0	;!0=No push or stealing
 ONLY3		equ	0	;!0=Only shoot 3's
@@ -211,7 +211,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	btst	DUNK_B,a2
 	jrnz	#injmp
 
-;ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ			>Breakaway
+;ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ			0BHreakaway
 
 	move	*a13(plyr_ohpdist),a4	;A4=Hoop distance
 
@@ -219,7 +219,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	jrn	#nodrib
 #inspin
 
-	move	*a13(plyr_num),a14	;>Chk for breakaway
+	move	*a13(plyr_num),a14	;0CHhk for breakaway
 	srl	1,a14
 	movk	1,a0
 	xor	a0,a14
@@ -287,7 +287,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 
 	jruc	#shoot2
 
-;ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ			>Can't dribble
+;ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ			0CaHn't dribble
 
 #nodrib
 	move	*a13(plyr_seq),a0
@@ -306,7 +306,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	callr	drone_pass
 	jrnz	#x			;Pass OK?
 
-	movk	>1f,a0
+	movk	01fH,a0
 	callr	rnd
 	jrnz	#x			;97%?
 	jruc	#shoot2
@@ -338,9 +338,9 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	move	*a13(plyr_o1dir),a2
 	sub	a0,a2
 	abs	a2
-	cmpi	>40,a2
+	cmpi	040H,a2
 	jrle	#o1dsml
-	subi	>80,a2
+	subi	080H,a2
 	abs	a2
 #o1dsml	subk	32,a2
 	jrlt	#goaround		;In front of me?
@@ -353,9 +353,9 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	move	*a13(plyr_o2dir),a2
 	sub	a0,a2
 	abs	a2
-	cmpi	>40,a2
+	cmpi	040H,a2
 	jrle	#o2dsml
-	subi	>80,a2
+	subi	080H,a2
 	abs	a2
 #o2dsml	subk	32,a2
 	jrlt	#goaround		;In front of me?
@@ -553,7 +553,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	cmpi	80,a14
 	jrge	#x			;He's far?
 #fkc
-	movk	>1f,a0
+	movk	01fH,a0
 	callr	rnd
 	jrnz	#x
 
@@ -612,7 +612,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	jrnz	#pss			;Try alleyoop?
 
 
-	move	*a13(plyr_num),a2	;>Chk for close blockers
+	move	*a13(plyr_num),a2	;0CHhk for close blockers
 	srl	1,a2
 	XORK	1,a2
 	sll	6,a2			;*64
@@ -654,12 +654,12 @@ ONLY3		equ	0	;!0=Only shoot 3's
 
 	move	*a13(plyr_ptsdown),a14
 	addk	5,a14
-	jrlt	#pss			;Winning by >5?
+	jrlt	#pss			;Winning by 05H?
 	move	*a13(plyr_seqflgs),a14
 	btst	DUNK_B,a14
 	jrnz	#x			;In a dunk?
 	move	@game_time,a1,L
-	cmpi	>200,a1
+	cmpi	0200H,a1
 	jrlt	#x			;Less than 2 secs?
 #pss
 	callr	drone_pass
@@ -702,7 +702,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 #*******************************
 * Check if this drone needs a 3 ptr
 * A4 = Distance from opponents hoop
-*>A0 = !0 if needed (CC)
+*0A0H = !0 if needed (CC)
 * Trashes scratch
 
  SUBRP	drone_chk3ptr
@@ -735,7 +735,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 
 	movk	6,a1
 	move	@game_time,a0,L
-	cmpi	>1010000,a0
+	cmpi	01010000H,a0
 	jrgt	#hvtime			;Enough time?
 	movk	3,a1
 #hvtime
@@ -743,7 +743,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	cmp	a1,a14
 	jrlt	#x0
 
-	cmpi	>40000,a0
+	cmpi	040000H,a0
 	jrlt	#x1			;Less than 40 secs?
 
 	move	*a13(plyr_o1dist),a14
@@ -825,9 +825,9 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	move	*a13(plyr_o1dir),a2
 	sub	a3,a2
 	abs	a2
-	cmpi	>40,a2
+	cmpi	040H,a2
 	jrle	#o1dsml
-	subi	>80,a2
+	subi	080H,a2
 	abs	a2
 #o1dsml	subk	16,a2
 	jrlt	#pusho				;In front of me?
@@ -838,9 +838,9 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	move	*a13(plyr_o2dir),a2
 	sub	a3,a2
 	abs	a2
-	cmpi	>40,a2
+	cmpi	040H,a2
 	jrle	#o2dsml
-	subi	>80,a2
+	subi	080H,a2
 	abs	a2
 #o2dsml	subk	16,a2
 	jrge	#nopush				;!In front?
@@ -958,7 +958,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 
 ;ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ				>Seek
 
-;	movi	>7f,a0
+;	movi	07fH,a0
 ;	callr	rnd
 ;	jrz	#newseek
 
@@ -1011,7 +1011,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	callr	drone_seek
 	jrnz	#notthere
 
-	movk	>1f,a0				;3%
+	movk	01fH,a0				;3%
 	callr	rnd
 	jrnz	#x
 
@@ -1080,7 +1080,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 * A8  = *Obj
 * A11 = *Ctrl bits
 * A13 = *Plyr process
-*>A0 = !0 if pass OK (CC)
+*0A0H = !0 if pass OK (CC)
 * Trashes scratch
 
  SUBRP	drone_pass
@@ -1096,7 +1096,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	move	*a13(plyr_tmdist),a0
 	addk	30,a0
 
-	move	*a13(plyr_o1dist),a1		;>Chk if o1 in my way
+	move	*a13(plyr_o1dist),a1		;0CHhk if o1 in my way
 	cmp	a1,a0
 	jrlt	#o1ok
 
@@ -1113,7 +1113,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	jrlt	#inway
 #o1ok
 
-	move	*a13(plyr_o2dist),a1		;>Chk if o2 in my way
+	move	*a13(plyr_o2dist),a1		;0CHhk if o2 in my way
 	cmp	a1,a0
 	jrlt	#o2ok
 
@@ -1365,9 +1365,9 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	move	*a3(plyr_hpdir),a0	;Find dir difference
 	sub	a1,a0
 	abs	a0
-	cmpi	>40,a0
+	cmpi	040H,a0
 	jrle	#dsml
-	subi	>80,a0
+	subi	080H,a0
 	abs	a0
 #dsml	subk	28,a0
 	jrle	#gbc			;TM not between op and hoop?
@@ -1547,7 +1547,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 
 #skipsp
 
-;ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ			>Chk if I can block ball
+;ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ			0CHhk if I can block ball
 
 	move	*a13(plyr_balldist),a14
 	cmpi	65,a14
@@ -1871,7 +1871,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	move	@ballobj_p,a5,L
 
 
-	move	*a13(plyr_num),a14	;>Chk for pass
+	move	*a13(plyr_num),a14	;0CHhk for pass
 	srl	1,a14
 	movk	1,a0
 	xor	a0,a14
@@ -1972,7 +1972,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	move	a0,*a11
 #sk0
 
-;ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ			>Chk if I can jump at ball or steal
+;ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ			0CHhk if I can jump at ball or steal
 
 
 	move	*a13(plyr_balldist),a0
@@ -1982,7 +1982,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	move	@ballobj_p,a5,L
 
 
-	move	*a5(OXPOS),a0		;>Calc distance (long+short/2.667)
+	move	*a5(OXPOS),a0		;0CaHlc distance (long+short/2.667)
 	move	*a5(OXANI+16),a14
 	add	a14,a0
 	move	*a5(OXVEL),a14,L
@@ -2129,7 +2129,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 * A1 = Z
 * A8 = *Obj
 * A11= *Ctrl bits
-*>A0 = Joy bits set or 0 (Pass CC)
+*0A0H = Joy bits set or 0 (Pass CC)
 * Trashes scratch
 
  SUBRP	drone_seekxy
@@ -2175,7 +2175,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 
 #*******************************
 * Get the current skill offset
-*>A0 = Offset (0-30) *16
+*0A0H = Offset (0-30) *16
 * Trashes scratch
 
  SUBRP	drone_getcurskillo
@@ -2272,7 +2272,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	move	*a14,a14
 	add	a14,a2			;Modify skill
 
-	move	a5,a14			;>Chk minute minimum
+	move	a5,a14			;0CHhk minute minimum
 	sll	3,a14
 	addi	#min_t,a14
 	movb	*a14,a14
@@ -2289,7 +2289,7 @@ ONLY3		equ	0	;!0=Only shoot 3's
 	jrnz	#done			;Teammate is human?
 
 
-	move	@team1,a1		;>Chk team minimum
+	move	@team1,a1		;0CHhk team minimum
 	cmpi	3,b0
 	jrge	#t1
 	move	@team2,a1
@@ -2411,7 +2411,7 @@ TMDIFF	.macro
 ********************************
 * Get random # with mask
 * A0 = Mask
-*>A0 = Rnd # (Pass CC)
+*0A0H = Rnd # (Pass CC)
 * Trashes scratch
 
  SUBRP	rnd
@@ -2430,7 +2430,7 @@ TMDIFF	.macro
 ********************************
 * Quickly produce a random # in range 0-X
 * A0 = X
-*>A0 = Random # (0 to A0) (No CC)
+*0A0H = Random # (0 to A0) (No CC)
 * Trashes scratch
 
  SUBRP	rndrng0
