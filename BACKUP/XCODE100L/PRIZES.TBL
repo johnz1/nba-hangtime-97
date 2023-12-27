@@ -1,0 +1,23 @@
+	.DATA
+prize1:
+	.word   104,104,52,52
+	.long   05954089H
+	.word   07a80H
+	.long   prize1_p
+prize2:
+	.word   104,104,52,52
+	.long   0595ea5dH
+	.word   07a80H
+	.long   prize2_p
+prize3:
+	.word   69,69,35,35
+	.long   0596975dH
+	.word   06580H
+	.long   prize3_p
+prizeG:
+	.word   109,104,54,52
+	.long   0596d4fbH
+	.word   07a80H
+	.long   prizeg_p
+	.TEXT
+

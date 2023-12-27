@@ -1,0 +1,63 @@
+	.DATA
+W5BGDR1:
+	.word   67,106,41,100
+	.long   03f83e1bH
+	.word   07000H
+	.long   PLYRRCH_P
+	.word   8,33,5,0,38,2,1,5,0
+W5BGDR2:
+	.word   67,106,41,100
+	.long   03f9004dH
+	.word   07000H
+	.long   PLYRRCH_P
+	.word   8,-200,5,0,38,2,1,5,0
+W5BGDR3:
+	.word   67,106,41,100
+	.long   03f9c27fH
+	.word   07000H
+	.long   PLYRRCH_P
+	.word   8,-200,5,0,39,2,1,5,0
+W5BGDR4:
+	.word   67,106,41,100
+	.long   03fa84b1H
+	.word   07000H
+	.long   PLYRRCH_P
+	.word   8,-200,5,0,39,2,1,5,0
+W5BGDR5:
+	.word   67,106,41,100
+	.long   03fb46e3H
+	.word   07000H
+	.long   PLYRRCH_P
+	.word   8,-200,5,0,39,2,1,5,0
+W5BGDR6:
+	.word   67,106,41,100
+	.long   03fc0915H
+	.word   07000H
+	.long   PLYRRCH_P
+	.word   8,-200,5,0,39,2,1,5,0
+W5BGDR7:
+	.word   67,106,41,100
+	.long   03fccb47H
+	.word   07000H
+	.long   PLYRRCH_P
+	.word   8,-200,5,0,39,2,1,5,0
+W5BGDR8:
+	.word   67,106,41,100
+	.long   03fd8d79H
+	.word   07000H
+	.long   PLYRRCH_P
+	.word   8,-200,5,0,39,2,1,5,0
+W5BGDR9:
+	.word   67,106,41,100
+	.long   03fe4fabH
+	.word   07000H
+	.long   PLYRRCH_P
+	.word   8,-200,5,0,38,2,1,5,0
+W5BGDR10:
+	.word   67,106,41,100
+	.long   03ff11ddH
+	.word   07000H
+	.long   PLYRRCH_P
+	.word   8,-200,5,0,38,2,1,5,0
+	.TEXT
+

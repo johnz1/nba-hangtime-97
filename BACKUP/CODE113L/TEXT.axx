@@ -6,7 +6,7 @@
 
 
 	.include	"text.tbl"
-;	.include	"imgtbl.glo"
+;	.include	"imgtbl.glo"			;not used here, memory issue dosbox.
 	.include	"imgtbl2.glo"
 	.include	"plyrhd5.glo"
 	.include	"plyrhd5.tbl"

@@ -2,8 +2,8 @@
 /*-e WARMSET*/			/* entry point of program		*/
 -e init_prog			/* entry point of program		*/
 -f 0xFFFF			/* fill unspecified memory with value	*/
--o c:\video\bball\BB.out	/* specify output file			*/
--m c:\video\bball\BB.map	/* map file				*/
+-o BB.out	/* specify output file			*/
+-m BB.map	/* map file				*/
 -s				/* kill the symbol table		*/
 
 NDSP1.OBJ		/* GSP display processor */

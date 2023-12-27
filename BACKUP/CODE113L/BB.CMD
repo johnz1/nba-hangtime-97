@@ -36,7 +36,7 @@ PLYRSTND.OBJ		/* basketball plyr sequence code */
 SCORE.OBJ		/* score stuff */
 SCORE2.OBJ		/* score stuff */
 SOUNDS.OBJ		/* sound processor */
-/* PATCH.OBJ		/* TV PATCH/BREAKPOINT HOOK */
+PATCH.OBJ		/* TV PATCH/BREAKPOINT HOOK */
 TEXT.OBJ		/* font tables */
 ATTRACT.OBJ		/* attract mode */
 STRING.OBJ		/* string printing stuff */
