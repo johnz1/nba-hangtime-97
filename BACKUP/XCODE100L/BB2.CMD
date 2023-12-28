@@ -87,8 +87,8 @@ SECTIONS			/* linker sections directive */
 	       .bss: {}
 	      } > SCRATCH
 
-	.text:	{}	> ROM
-	.TEXT:	{}	> ROM
+	.text ALIGN(2):	{}	> ROM
+	.TEXT ALIGN(2):	{}	> ROM
 	.data:	{}	> ROM
 	.DATA:	{}	> ROM
         img_tbl: {}	> ROM

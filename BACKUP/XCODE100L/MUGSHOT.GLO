@@ -443,6 +443,7 @@
 	.global	KIT_COL
 	.globl	M_MARBY_P
 	.global	MAR_COL
+	.globl	M_MINOR_P
 	.global	MIN_COL
 	.globl	M_RILY_P
 	.global	RIL_COL

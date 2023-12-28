@@ -1,2 +1,2 @@
 	.globl	PLYRRCH_P
-;	.globl	PLYRFIX_P
+	.globl	PLYRFIX_P

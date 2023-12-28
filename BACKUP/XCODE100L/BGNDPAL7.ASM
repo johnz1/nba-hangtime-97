@@ -1,5 +1,5 @@
 	.OPTION	B,D,L,T
-	.include	"BGNDTBL7.GLO"
+	.include	"BGNDTBL.GLO"
 	.DATA
 HANGT1_P:	;PAL #0
 	.word	233	;pal size

@@ -1,5 +1,5 @@
 	.OPTION	B,D,L,T
-	.include	"BGNDTBL7.GLO"
+	.include	"BGNDTBL.GLO"
 	.DATA
 
 timeHDRS:

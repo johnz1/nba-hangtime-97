@@ -1118,7 +1118,7 @@ MIN_COL:
 	.word   63,64,0,64
 	.long   053e9484H
 	.word   0480H
-	.long   M_MIN_P
+	.long   M_MINOR_P
 RIL_COL:
 	.word   51,64,0,64
 	.long   053eedd4H
