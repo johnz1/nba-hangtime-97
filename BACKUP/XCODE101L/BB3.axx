@@ -783,8 +783,9 @@ whcqinit_otd_t
 	.asg	40-(16*Y2Z),ZOFF	;Z off for gndpos_t element to use
 
 
-	.word	SXO-496,Y,Z,ZOFF,F
-	.long	bkwall
+;	.word	SXO-496,Y-56,Z,ZOFF,F
+	.word	SXO-468,Y-56,Z-1,ZOFF,F
+	.long	fence			;enable the cut fence gfx.
 	.word	SXO-330,Y,Z,ZOFF,F
 	.long	bkwall
 	.word	SXO-165,Y,Z,ZOFF,F
