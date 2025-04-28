@@ -1,0 +1,12 @@
+As stated by some online sources i can't find right now, there was shatter in the proto versions of Hangtime.
+
+In the leaks, there are various development IMG containers with the following:
+
+HOOPO.IMG
+BBORD_1 -> BBORD_10 -> The shattering board anim.
+BTURN_1 -> BTURN_5 -> angles of the shattered board.
+SHARD_1 -> SHARD8 -> Collections of glass shards for when the board shatters.
+SHAT1_* -> Exploding glass
+
+The effect seems a lot more elaborate than in JAM.
+

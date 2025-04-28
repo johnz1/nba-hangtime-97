@@ -1,0 +1,7 @@
+Almost same as normal hang, but with hotspots, 
+
+IMGPAL4.ASM must include handcrafted IMGTBL4.GLO otherwise it won't build text.asm
+
+VS_G_P in select3 is not in normal gfx files for L1.3
+it comes from BBMISC.LOD's IMGPAL.ASM/AXX so that was regenerated. See img*.bat in the IMG folder.
+Also IMGTBL.GLO needs this as a .global instead of VS_Y_P. It's just a palette change. no irw's change from this.

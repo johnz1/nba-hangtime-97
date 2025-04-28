@@ -1,0 +1,5105 @@
+**************************************************************
+*
+* Software:	Jason Skiles
+* Initiated:	4 Oct 93
+*
+* COPYRIGHT (C) 1993 WILLIAMS ELECTRONICS GAMES, INC.
+*
+*.Last mod - 12/8/93 11:15
+**************************************************************
+
+	.file	"robo.asm"
+	.title	"robotron game"
+	.width	132
+	.option	b,d,l,t
+	.mnolist
+
+
+	.include	"mproc.equ"		;Mproc equates
+	.include	"disp.equ"		;Display proc equates
+	.include	"gsp.equ"		;Gsp asm equates
+	.include	"sys.equ"
+	.include	"game.equ"
+	.include	"audit.equ"
+	.include	"macros.h"
+	.include	"link.equ"
+
+;	.include	"roboimg.glo"
+	.include	"roboimg.tbl"
+	.include	"fontsimg.glo"
+
+	;kludge
+	.ref	robo_p
+
+*****************************************************************************
+
+	;from ADJUST.ASM
+	.ref	BINBCD
+
+	;from COLL2.ASM
+	.ref	collisions,CCCCount
+
+	;from DCSSOUND.ASM
+	.ref	nosounds,SNDSND
+
+	;from DISPLAY.ASM
+	.ref	pal_getf,STOPOBJS,fg2bg
+
+	;from MAIN.ASM
+	.ref	dpageflip,IRQSKYE
+
+	;from MPROC.ASM
+	.ref	KIL1C
+
+	;from STRING.ASM
+	.ref	setup_message,print_string_R,mess_objid,copy_string
+	.ref	dec_to_asc
+
+	;from UTIL.ASM
+	.ref	get_all_buttons_cur,get_stick_val_cur,RNDRNG0,get_start_cur
+	.ref	WIPEOUT,CYCLE_TABLE,civani,civanic
+
+	;from WRESTLE.ASM	
+	.if DEBUG
+	.ref	CPULEFT
+	.endif
+	.ref	HALT,PCNT
+
+	;for WRESTLE.ASM
+	.def	RE_DEADPLAYER,RE_WAVEDONE,RE_ABORT,RE_BACKUP
+
+	.ref	_switch_addr,_switch2_addr,ADD_VOICE
+
+*****************************************************************************
+
+	BSSX	robo_end,	16	;reason for wave end
+	BSSX	robotron_score,	32	;UHL score
+	.bss	player_dead,	16
+	.bss	starts_down,	16	;are both starts down?
+	.bss	player_object,	32	;pointer to char1 obj
+	.bss	gun_proc,	32	;gun process address
+	.bss	robo_wave,	16	;which wave to perform?
+	.bss	live_badguys,	16	;wave-preserving badguy count
+	.bss	forward,	16	;skip wave
+	.bss	backward,	16	;drop back a wave
+
+*****************************************************************************
+
+ROBO_DEBUG	equ	0
+WAVE_CONTROL	equ	0
+BOG_MONITOR	equ	0
+
+ROBO_PAGE	equ	0*256
+
+ROBJ_MOM	equ	1
+ROBJ_DAD	equ	2
+ROBJ_KID	equ	3
+
+;termination causes
+RE_DEADPLAYER	equ	1
+RE_WAVEDONE	equ	2
+RE_ABORT	equ	3
+RE_BACKUP	equ	4
+
+
+*****************************************************************************
+******************************************************************************
+******************************************************************************
+	.ref	robo_icon_trigger
+	.ref	p1icon_total
+	.ref	p2icon_total
+
+
+ SUBR	robo_check
+
+	.if DEBUG
+	jruc	dhaqrobo_ok
+	.endif
+	jruc	dhaqrobo_end
+
+	move	@p1icon_total,a0,L
+	move	@robo_icon_trigger,a14
+	cmp	a0,a14
+	jrle	dhaqrobo_ok
+	move	@p2icon_total,a0,L
+	cmp	a0,a14
+	jrgt	dhaqrobo_end
+dhaqrobo_ok
+	sll	1,a14
+	move	a14,@robo_icon_trigger
+	callr	reset_roboscore
+	callr	robo_sound_init
+
+;	movi	-1,a0
+;	calla	ADD_VOICE
+
+	clr	a0
+dhaqrobo_loop
+	JSRP	robo_game
+	move	@robo_end,a14
+	cmpi	RE_DEADPLAYER,a14
+	jreq	dhaqplayer_died
+	cmpi	RE_WAVEDONE,a14
+	jreq	dhaqwave_successful
+	cmpi	RE_ABORT,a14
+	jreq	dhaqwave_aborted
+	cmpi	RE_BACKUP,a14
+	jreq	dhaqback_up
+	jruc	dhaqrobo_end
+
+dhaqplayer_died
+	jruc	dhaqrobo_loop
+
+dhaqwave_successful
+	inc	a0
+	cmpi	16,a0
+	jrne	dhaqrobo_loop
+	jruc	dhaqrobo_end
+
+dhaqwave_aborted
+	jruc	dhaqrobo_end
+
+dhaqback_up
+	dec	a0
+	jrnn	dhaqrobo_loop
+	clr	a0
+	jruc	dhaqrobo_loop
+
+dhaqrobo_end
+	RETP
+
+
+*****************************************************************************
+******************************************************************************
+******************************************************************************
+
+ SUBRP	reset_roboscore
+
+	clr	a14
+	move	a14,@robotron_score,L
+	rets
+
+
+*****************************************************************************
+******************************************************************************
+******************************************************************************
+
+ SUBR	robo_game
+
+	sla	4,a0
+	move	a0,@robo_wave,W
+
+	calla	display_blank
+	calla	WIPEOUT			;CLEAN SYSTEM OUT
+
+	clr	a0
+	move	a0,@HALT
+	move	a0,@dtype		;2d mode
+	move	a0,@IRQSKYE
+	move	a0,@CCCCount
+
+	movk	1,a0			;page flipping on
+	move	a0,@dpageflip
+
+	SLEEPK	1
+
+	movi	SCRNEND,a0		;[256,405]
+	move	a0,@SCRNLR,L
+
+	clr	a0
+	move	a0,@WORLDTLX,L
+	move	a0,@WORLDTLY,L
+
+	SLEEPK	2
+
+	calla	nosounds		;kill the select music
+
+	;draw the frame
+	move	@robo_wave,a0
+	addi	mdwlborder_colors,a0
+	move	*a0,a0,W
+	callr	draw_frame
+
+	movk	1,a0
+	move	a0,@DISPLAYON
+
+	SLEEPK	2
+
+	clr	a14
+	move	a14,@player_dead,W	;clear the done flag
+
+	;initialize the robo palette color cycles
+	callr	robo_pal_cycles
+
+	;initialize the badguy count
+	clr	a14
+	move	a14,@live_badguys,W
+
+	;place the wave count
+	callr	wave_count
+
+	;create the score monitor
+	CREATE	ROBOSCORE_PID,score
+
+	;set up the player object
+	CREATE	ROBOMAN_PID,our_hero		;start the little guy up
+	CREATE	PLYRGUN_PID,player_gun	;give him a weapon
+	move	a0,@gun_proc,L		;save the address
+
+	;set up some grunts
+	move	@robo_wave,a0
+	addi	mdwlwave_grunts,a0
+	move	*a0,a0,W
+	move	@robo_wave,a2
+	addi	mdwlgrunt_speeds,a2
+	move	*a2,a2,W
+	callr	make_grunts
+
+	;make some hulks
+	move	@robo_wave,a0
+	addi	mdwlwave_hulks,a0
+	move	*a0,a0,W
+	callr	make_hulks
+
+	;sphereoids
+	move	@robo_wave,a0
+	addi	mdwlwave_sphereoids,a0
+	move	*a0,a0,W
+	callr	make_sphereoids
+
+	;quarks
+	move	@robo_wave,a0
+	addi	mdwlwave_quarks,a0
+	move	*a0,a0,W
+	callr	make_quarks
+
+	;make a few posts
+	move	@robo_wave,a0
+	addi	mdwlwave_posts,a0
+	move	*a0,a0,W
+
+	move	@robo_wave,a1
+	addi	mdwlpost_types,a1
+	move	*a1,a1,W
+
+	move	@robo_wave,a2
+	addi	mdwlpost_colors,a2
+	move	*a2,a2,W
+
+	callr	make_posts
+
+	;and some people
+	move	@robo_wave,a0
+	move	a0,a1
+	move	a0,a2
+	addi	mdwlwave_moms,a0
+	addi	mdwlwave_dads,a1	
+	addi	mdwlwave_kids,a2
+	move	*a0,a0,W
+	move	*a1,a1,W
+	move	*a2,a2,W
+	callr	make_humans
+
+	;start the collision checker
+	CREATE	COLL_PID,collisions
+
+	;create the both-start-btn watcher
+	clr	a0
+	move	a0,@starts_down,W
+	move	a0,@forward,W
+	move	a0,@backward,W
+	CREATE	MISC_PID,watch_both_starts
+
+	.if	WAVE_CONTROL
+	CREATE	MISC_PID,wave_mover
+	.endif
+
+	.if DEBUG
+	.if BOG_MONITOR
+	CREATE	MISC_PID,bog_o_meter
+	.endif
+	.endif
+
+	calla	display_unblank
+
+mdwlnot_done
+	SLEEPK	1
+	move	@live_badguys,a14
+	jrz	mdwlwave_done
+
+	move	@player_dead,a14
+	jrnz	mdwldead_hero
+
+	move	@starts_down,a14
+	jrnz	mdwlwave_abort
+
+	move	@forward,a14
+	jrnz	mdwlwave_done
+
+	move	@backward,a14
+	jrnz	mdwlback_up
+	jruc	mdwlnot_done
+
+
+mdwlwave_done
+	movi	RE_WAVEDONE,a14
+	jruc	mdwlquit
+mdwldead_hero
+	movi	RE_DEADPLAYER,a14
+	jruc	mdwlquit
+mdwlwave_abort
+	movi	RE_ABORT,a14
+	jruc	mdwlquit
+
+mdwlback_up
+	movi	RE_BACKUP,a14
+	jruc	mdwlquit
+
+mdwlquit
+	move	a14,@robo_end,W
+
+	;put the wave back in a0 just like we found it
+	move	@robo_wave,a0,W
+	sra	4,a0
+	RETP
+
+
+mdwlborder_colors
+	.if	ROBO_DEBUG
+	.word	1
+	.endif
+	.word	01,06,01,14,07,03,02,08
+	.word	00,10,01,06,01,14,07,03
+
+mdwlwave_grunts
+	.if	ROBO_DEBUG
+	.word	4
+	.endif
+;	.word	15,17,22,34,20,30,00,30
+;	.word	30,25,30,00,30,27,25,30
+
+	.word	15,17,22,34,20,32,00,35
+	.word	60,25,35,00,35,27,25,35
+
+mdwlgrunt_speeds
+	.if	ROBO_DEBUG
+	.word	1000
+	.endif
+	.word	20,15,15,15,15,15,15,15
+	.word	15,15,14,14,14,14,14,13
+
+mdwlwave_posts
+	.if	ROBO_DEBUG
+	.word	15
+	.endif
+	.word	05,15,25,25,20,25,00,25
+	.word	00,20,25,00,25,05,20,25
+
+mdwlpost_types
+	.if	ROBO_DEBUG
+	.word	0
+	.endif
+	.word	0,1,3,8,4,2,0,7
+	.word	0,5,0,1,3,8,4,2
+
+mdwlpost_colors
+	.if	ROBO_DEBUG
+	.word	0Fh
+	.endif
+	.word	15,14,11,13,14,15,14,11
+	.word	14,10,15,14,11,13,14,15
+
+mdwlwave_hulks
+	.if	ROBO_DEBUG
+	.word	0
+	.endif
+	.word	00,05,06,07,00,07,12,08
+	.word	04,00,08,13,08,20,02,03
+
+mdwlwave_sphereoids
+	.if	ROBO_DEBUG
+	.word	0
+	.endif
+	.word	00,01,03,04,01,04,00,05
+	.word	05,01,05,00,05,02,01,05
+
+mdwlwave_quarks
+	.if	ROBO_DEBUG
+	.word	0
+	.endif
+	.word	00,00,00,00,00,00,10,00
+	.word	00,00,00,12,00,00,00,00
+
+mdwlwave_moms
+	.if	ROBO_DEBUG
+	.word	2
+	.endif
+	.word	01,01,02,02,15,03,04,03
+	.word	03,00,03,03,03,05,00,03
+
+mdwlwave_dads
+	.if	ROBO_DEBUG
+	.word	2
+	.endif
+	.word	01,01,02,02,00,03,04,03
+	.word	03,22,03,03,03,05,00,03
+
+mdwlwave_kids
+	.if	ROBO_DEBUG
+	.word	2
+	.endif
+	.word	00,01,02,02,01,03,04,03
+	.word	03,00,03,03,03,05,22,03
+
+
+*****************************************************************************
+******************************************************************************
+******************************************************************************
+*
+*	PLAYER SECTION
+*
+
+	;reg use
+	; a4  - current position in animation script
+	; a5  - head of current animation script
+	; a6  - tail of current animation script
+	; a8  - player object
+	; a9  - motion count accumulator
+	; a10 - direction of motion
+
+ SUBRP	our_hero
+
+	;create the player object
+	movi	[almustart_x,0],a0
+	movi	[almustart_y,0],a1
+	movi	man_d1,a2
+	clr	a3
+	movi	DMAWNZ,a4
+	movi	CLSPLYR|TYPPLYR,a5
+	clr	a6
+	clr	a7
+	calla	BEGINOBJW
+
+	;set the global pointer
+	move	a8,@player_object,L
+
+	; initiailize direction of motion
+	clr	a10
+
+almunot_done
+	PUSHP	a4,a5,a6
+	SLEEPK	1
+	PULLP	a4,a5,a6
+
+	; move him first
+	callr	almumove_player
+
+	; change his animation frame, if neccesary
+	callr	almuchange_frame
+
+	jruc	almunot_done
+
+almuplayer_dead
+	;kill the gun process
+	move	@gun_proc,a0,L
+	calla	KILL
+
+	movi	BULLET_PID,a0
+	calla	KIL1C
+
+	movi	GRUNT_PID,a0
+	calla	KIL1C
+
+	movi	HULK_PID,a0
+	calla	KIL1C
+
+	movi	HUMAN_PID,a0
+	calla	KIL1C
+
+	movi	SPHEREOID_PID,a0
+	calla	KIL1C
+
+	movi	ENFORCER_PID,a0
+	calla	KIL1C
+
+	movi	SPARK_PID,a0
+	calla	KIL1C
+
+	movi	QUARK_PID,a0
+	calla	KIL1C
+
+	movi	TANK_PID,a0
+	calla	KIL1C
+
+	movi	SHELL_PID,a0
+	calla	KIL1C
+
+	calla	STOPOBJS
+
+	;switch frames
+	movi	robo_dead,a0,L
+	calla	civanic
+
+	;death sound
+	movi	RS_DIE,a0
+	calla	robo_sound
+
+	SLEEP	120
+	movk	1,a14
+	move	a14,@player_dead,W
+
+	DIE
+
+******************************************************************************
+*
+*	player move routine
+*
+
+ SUBRP	almumove_player
+
+	clr	a0
+	calla	get_stick_val_cur
+	btst	JOYDN,a0
+	jrnz	almumove_down
+	btst	JOYUP,a0
+	jrnz	almumove_up
+	btst	JOYRGT,a0
+	jrnz	almumove_right
+	btst	JOYLFT,a0
+	jrnz	almumove_left
+	jruc	almuno_move
+
+almumove_down
+	btst	JOYRGT,a0
+	jrnz	almumove_downright
+	btst	JOYLFT,a0
+	jrnz	almumove_downleft
+
+	;increment Y
+	move	*a8(OYPOS),a14,W
+	inc	a14
+	move	a14,*a8(OYPOS),W
+	jruc	almumove_done
+
+almumove_up
+	btst	JOYRGT,a0
+	jrnz	almumove_upright
+	btst	JOYLFT,a0
+	jrnz	almumove_upleft
+
+	;decrement Y
+	move	*a8(OYPOS),a14,W
+	dec	a14
+	move	a14,*a8(OYPOS),W
+	jruc	almumove_done
+
+almumove_right
+	;increment X
+	move	*a8(OXPOS),a14,W
+	inc	a14
+	move	a14,*a8(OXPOS),W
+	jruc	almumove_done
+
+almumove_left
+	;decrement X
+	move	*a8(OXPOS),a14,W
+	dec	a14
+	move	a14,*a8(OXPOS),W
+	jruc	almumove_done
+
+almumove_upright
+	; decrement Y and increment X
+	move	*a8(OYPOS),a14,W
+	dec	a14
+	move	a14,*a8(OYPOS),W
+	move	*a8(OXPOS),a14,W
+	inc	a14
+	move	a14,*a8(OXPOS),W
+	jruc	almumove_done
+
+almumove_upleft
+	; decrement Y and decrement X
+	move	*a8(OYPOS),a14,W
+	dec	a14
+	move	a14,*a8(OYPOS),W
+	move	*a8(OXPOS),a14,W
+	dec	a14
+	move	a14,*a8(OXPOS),W
+	jruc	almumove_done
+
+almumove_downright
+	; increment Y and increment X
+	move	*a8(OYPOS),a14,W
+	inc	a14
+	move	a14,*a8(OYPOS),W
+	move	*a8(OXPOS),a14,W
+	inc	a14
+	move	a14,*a8(OXPOS),W
+	jruc	almumove_done
+
+almumove_downleft
+	; increment Y and decrement X
+	move	*a8(OYPOS),a14,W
+	inc	a14
+	move	a14,*a8(OYPOS),W
+	move	*a8(OXPOS),a14,W
+	dec	a14
+	move	a14,*a8(OXPOS),W
+	jruc	almumove_done
+
+almumove_done
+	; check bounds
+	move	*a8(OXPOS),a14,W
+	cmpi	almulow_x,a14,W
+	jrgt	almunot_lowx
+	; too low on x
+	inc	a14
+	move	a14,*a8(OXPOS),W
+
+almunot_lowx
+	cmpi	almuhigh_x,a14,W
+	jrle	almunot_highx
+	; too high on x
+	dec	a14
+	move	a14,*a8(OXPOS),W
+
+almunot_highx
+
+	move	*a8(OYPOS),a14,W
+	cmpi	almulow_y,a14,W
+	jrgt	almunot_lowy
+	; too low on y
+	inc	a14
+	move	a14,*a8(OYPOS),W
+
+almunot_lowy
+	cmpi	almuhigh_y,a14,W
+	jrle	almunot_highy
+	; too high on y
+	dec	a14
+	move	a14,*a8(OYPOS),W
+
+almunot_highy
+almuno_move
+
+almudone_moving
+	rets
+
+******************************************************************************
+*
+*	player animation routine
+*
+
+
+ SUBRP	almuchange_frame
+	;reg use
+	; a0  scratch
+	; a1  sctatch
+	; a3  new direction of motion
+	; a10 old direction of motion - update
+
+	clr	a0
+	clr	a2
+	calla	get_stick_val_cur
+	move	a0,a3
+
+	cmp	a0,a10
+	jreq	almusame_direction
+	jruc	almunew_direction
+
+almunew_direction
+	; start a new script.  first use the joystick bits to compute an
+	; offset into the script table.
+	X32	a0		;multiply by 32
+	addi	almuscript_map,a0	;add the address of the script table
+	move	*a0,a0,L	;get the address of the script
+
+	; get the tail and head of the image list for this script
+	move	*a0+,a6,L
+	move	a0,a5
+
+	;a5 now points to the first image in the script.  change to it.
+	move	*a5,a0,L
+	calla	civanic
+
+	;set the new direction thingie and script pointer
+	move	a3,a10
+	move	a5,a4
+
+	;set the motion count
+	movi	almumotion_count,a9
+	jruc	almudone_changing
+
+almusame_direction
+	;check the motion count
+	dec	a9
+	jrnz	almudone_changing
+
+	;reset the motion count
+	movi	almumotion_count,a9
+
+	;increment the pointer, wrap if neccesary
+	addi	20h,a4
+	cmp	a4,a6
+	jrne	almuno_wrap
+	move	a5,a4
+
+almuno_wrap
+	;a4 is the new image.  change to it.
+	move	*a4,a0,L
+	calla	civanic
+
+	jruc	almudone_changing
+
+almudone_changing
+	rets
+
+
+******************************************************************************
+*
+*	player collision routines
+*
+
+ SUBR	player_die
+	PUSH	a1,a7
+
+	;we hit some kind of bad guy and are dead
+	movi	CLSDEAD,a14
+	move	a14,*a8(OID),W
+	move	*a8(OPLINK),a0,L
+	movi	DEADPLAYER_PID,a1
+	movi	almuplayer_dead,a7
+	calla	XFERPROC
+
+	PULL	a1,a7
+	rets
+
+
+******************************************************************************
+*
+*	player configuration data
+*
+
+;start position
+almustart_x	equ	197
+almustart_y	equ	123
+
+; motion boundaries
+almulow_x		equ	53
+almuhigh_x		equ	347-7
+almulow_y		equ	45
+almuhigh_y		equ	231-12
+
+;motion count - controls animation speed
+almumotion_count	equ	2	;there will be trouble if this is zero
+
+; walking animation scripts
+almuani_holdstill
+	.long	almuani_holdstillx
+	.long	man_d1
+almuani_holdstillx
+
+almuani_walkup
+	.long	almuani_walkupx
+	.long	man_u1
+	.long	man_u2
+	.long	man_u1
+	.long	man_u3
+almuani_walkupx
+
+almuani_walkdown
+	.long	almuani_walkdownx
+	.long	man_d1
+	.long	man_d2
+	.long	man_d1
+	.long	man_d3
+almuani_walkdownx
+
+almuani_walkright
+	.long	almuani_walkrightx
+	.long	man_r1
+	.long	man_r2
+	.long	man_r1
+	.long	man_r3
+almuani_walkrightx
+
+almuani_walkleft
+	.long	almuani_walkleftx
+	.long	man_l1
+	.long	man_l2
+	.long	man_l1
+	.long	man_l3
+almuani_walkleftx
+
+almuani_bad
+	.long	almuani_badx
+	.long	robo_bad
+almuani_badx
+
+; direction - script mappings: use AND combo of joy bits as index
+almuscript_map
+	.long	almuani_holdstill
+	.long	almuani_walkup
+	.long	almuani_walkdown
+	.long	almuani_bad
+	.long	almuani_walkleft
+	.long	almuani_walkleft
+	.long	almuani_walkleft
+	.long	almuani_bad
+	.long	almuani_walkright
+	.long	almuani_walkright
+	.long	almuani_walkright
+	.long	almuani_bad
+	.long	almuani_bad
+	.long	almuani_bad
+	.long	almuani_bad
+	.long	almuani_bad
+almuscript_mapx
+
+
+*****************************************************************************
+*
+*	player gun process
+*
+
+	;reg use
+	;a9  time till next shot is allowed
+
+ SUBRP	player_gun
+
+	clr	a9
+	jruc	ftoqsleep
+
+ftoqcheck_shot
+	movk	1,a0
+	calla	get_stick_val_cur
+	jrz	ftoqsleep			;no shot
+
+	;fire in the indicated direction
+	move	a0,a10
+	CREATE	BULLET_PID,bullet
+	movi	ftoqrate_of_fire,a9
+
+	;shoot sound
+	movi	RS_SHOOT,a0
+	callr	robo_sound
+
+	jruc	ftoqsleep
+	
+ftoqtoo_soon
+	dec	a9
+	jruc	ftoqsleep
+
+ftoqsleep
+	SLEEPK	1
+	move	a9,a9
+	jrnz	ftoqtoo_soon
+	jruc	ftoqcheck_shot
+
+ftoqdone
+	DIE
+
+ftoqrate_of_fire	equ	6	;min ticks between shots
+
+
+*****************************************************************************
+*
+*	player bullet process
+*
+
+	;reg use
+	; a4 velocity accumulator (used to pick the correct bullet)
+	; a5 vert indicator
+	; a8 bullet object
+	;a10 (in) stick bits
+
+ SUBRP	bullet
+
+	;create a bullet object
+	movi	[500,0],a0
+	clr	a1
+	movi	bullet_hrz,a2
+	clr	a3
+	movi	DMAWNZ,a4
+	movi	CLSPLYR|TYPBULLET,a5
+	clr	a6
+	clr	a7
+	calla	BEGINOBJW
+
+	;set the speed and start position
+	move	@player_object,a9,L
+	clr	a4
+	clr	a5
+	move	*a9(OXPOS),a0,W
+	addk	ayabbstart_xoff,a0
+	move	a0,*a8(OXPOS),W
+	move	*a9(OYPOS),a0,W
+	addk	ayabbstart_yoff,a0
+	move	a0,*a8(OYPOS),W
+
+	btst	JOYRGT,a10
+	jrz	ayabnot_right
+	move	*a8(OXPOS),a14,W	;pos
+	addi	ayabbstart_radj,a14
+	move	a14,*a8(OXPOS),W
+	movi	ayabbullet_speed,a0	;speed
+	move	a0,*a8(OXVEL),L
+	inc	a4
+
+ayabnot_right
+
+	btst	JOYLFT,a10
+	jrz	ayabnot_left
+	move	*a8(OXPOS),a14,W	;pos
+	addi	ayabbstart_ladj,a14
+	move	a14,*a8(OXPOS),W
+	movi	-ayabbullet_speed,a0	;speed
+	move	a0,*a8(OXVEL),L
+	dec	a4
+
+ayabnot_left
+
+	btst	JOYUP,a10
+	jrz	ayabnot_up
+	move	*a8(OYPOS),a14,W	;pos
+	addi	ayabbstart_uadj,a14
+	move	a14,*a8(OYPOS),W
+	movi	-ayabbullet_speed,a0	;speed
+	move	a0,*a8(OYVEL),L
+	dec	a4
+	inc	a5
+
+ayabnot_up
+
+	btst	JOYDN,a10
+	jrz	ayabnot_down
+	move	*a8(OYPOS),a14,W	;pos
+	addi	ayabbstart_dadj,a14
+	move	a14,*a8(OYPOS),W
+	movi	ayabbullet_speed,a0	;speed
+	move	a0,*a8(OYVEL),L
+	inc	a4
+	inc	a5
+
+ayabnot_down
+
+	;set the image
+	movi	bullet_hrz,a0
+	move	a5,a5
+	jrz	ayabhoriz
+	movi	bullet_vrt,a0
+ayabhoriz
+
+	;vert/horz is set.  check for diagonal instead
+	cmpi	1,a4
+	jreq	ayabimage_set
+	cmpi	-1,a4
+	jreq	ayabimage_set
+
+	;it's a diagonal.  if a4 is 0, use frontslash
+	move	a4,a4
+	jrz	ayabfront_slash
+	movi	bullet_bck,a0
+	jruc	ayabimage_set
+
+ayabfront_slash
+	movi	bullet_fnt,a0
+
+ayabimage_set
+	calla	civanic
+
+ayabloop
+	callr	bounds_check
+	move	a0,a0
+	jrnz	ayabhit_wall
+	SLEEPK	1
+	jruc	ayabloop
+
+ayabhit_wall
+	;zoinks!  We've hit a wall. back up to be flush against it.
+	; a2 holds the number of pixels we have to back up.
+
+	;well, we can overlap on the wall a LITTLE.  say, 2 pixels.
+	subk	2,a2
+
+	move	*a8(OXVEL),a0,L
+	jrz	ayaby_adjust
+	jrn	ayabneg_xvel
+	move	*a8(OXPOS),a0,W
+	sub	a2,a0
+	move	a0,*a8(OXPOS),W
+	jruc	ayaby_adjust
+ayabneg_xvel
+	move	*a8(OXPOS),a0,W
+	add	a2,a0
+	move	a0,*a8(OXPOS),W
+
+ayaby_adjust
+	move	*a8(OYVEL),a0,L
+	jrz	ayabkill_bullet
+	jrn	ayabneg_yvel
+	move	*a8(OYPOS),a0,W
+	sub	a2,a0
+	move	a0,*a8(OYPOS),W
+	jruc	ayabkill_bullet
+ayabneg_yvel
+	move	*a8(OYPOS),a0,W
+	add	a2,a0
+	move	a0,*a8(OYPOS),W
+
+ayabkill_bullet
+	SLEEPK	1
+	calla	DELOBJA8
+	DIE
+
+
+******************************************************************************
+*
+* player bullet collision routines
+*
+
+ SUBR	bullet_die
+	PUSH	a1,a7,a9,a10,a11
+
+	;we hit some kind of bad guy and are stopped.
+	movi	CLSDEAD,a14
+	move	a14,*A8(OID)
+	move	*a8(OPLINK),a0,L
+	movi	DEADBULLET_PID,a1
+	movi	ayabkill_bullet,a7
+	calla	XFERPROC
+
+	PULL	a1,a7,a9,a10,a11
+	rets
+
+
+ayabbullet_speed	equ	00080000h	;pixels per frame
+
+ayablow_x		equ	53
+ayabhigh_x		equ	346
+ayablow_y		equ	45
+ayabhigh_y		equ	230
+
+;hero anim point is top left.  bullet anim point is center.  use these to
+; adjust the starting position of the bullet.
+; No.  The bullet anim points are gone now.  Unk.
+ayabbstart_xoff	equ	3
+ayabbstart_yoff	equ	5
+
+ayabbstart_radj	equ	7
+ayabbstart_ladj	equ	-13
+ayabbstart_uadj	equ	-14
+ayabbstart_dadj	equ	8
+
+
+*****************************************************************************
+******************************************************************************
+******************************************************************************
+*
+*	GRUNT SECTION
+*
+
+	;reg use
+	; a0 (in) # of grunts
+	; a1 scratch
+	; a2 (in) initial speed
+
+ SUBRP	make_grunts
+
+	move	a0,a0
+	jrz	puovdone
+
+puovanother_grunt
+	PUSHP	a0
+
+puovget_pos
+	movi	puovmax_x-puovmin_x,a0
+	calla	RNDRNG0
+	move	a0,a9
+	movi	puovmax_y-puovmin_y,a0
+	calla	RNDRNG0
+	move	a0,a10
+
+	addi	puovmin_x,a9
+	addi	puovmin_y,a10
+
+	cmpi	puovmid_x1,a9
+	jrle	puovplace_grunt
+	cmpi	puovmid_x2,a9
+	jrge	puovplace_grunt
+	cmpi	puovmid_y1,a10
+	jrle	puovplace_grunt
+	cmpi	puovmid_y2,a10
+	jrge	puovplace_grunt
+	jruc	puovget_pos
+
+puovplace_grunt
+	;assign a random starting position
+	move	a2,a11
+	CREATE	GRUNT_PID,grunt
+	PULLP	a0
+	dsj	a0,puovanother_grunt
+
+puovdone
+	rets
+
+
+puovmin_x	equ	53	;grunt start outer boundaries
+puovmax_x	equ	347-9
+puovmin_y	equ	45
+puovmax_y	equ	231-13
+
+puovmid_x1	equ	200-60	;grunt start inner boundaries
+puovmid_x2	equ	200+60
+puovmid_y1	equ	138-60
+puovmid_y2	equ	138+60
+
+
+*****************************************************************************
+*
+*	grunt process
+*
+
+	STRUCTPD
+	WORD	aksrACCEL_TIMER	;UHW accelerator count
+	LONG	aksrDEATH_SEQUENCE	;UHL anim to use when dying
+				;    (set by coll routines)
+
+	;reg use
+	; a8 object handle
+	; a9 (in)  starting x
+	; a9 (use) ticks between moves
+	;a10 (in)  starting y
+	;a10 (use) ticks until next move
+	;a11 (in)  initial speed
+	;a11 (use) frame count
+
+ SUBRP	grunt
+
+	;increment the badguy count
+	move	@live_badguys,a14,W
+	inc	a14
+	move	a14,@live_badguys,W
+
+	;create a grunt object
+	move	a9,a0
+	sla	16,a0
+	move	a10,a1
+	sla	16,a1
+	movi	grunt_1,a2
+	clr	a3
+	movi	DMAWNZ,a4
+	movi	CLSENMY|TYPGRUNT,a5
+	clr	a6
+	clr	a7
+	calla	BEGINOBJW
+
+	;initialize move timer
+	move	a11,a9
+
+	;initialize time till next move
+	move	a9,a0
+	calla	RNDRNG0
+	add	a11,a0
+	move	a0,a10
+
+	;initialize accel counter
+	movi	aksracceleration,a14
+	move	a14,*a13(aksrACCEL_TIMER),W
+
+	;initialize frame counter
+	clr	a11
+
+aksrloop
+	move	*a13(aksrACCEL_TIMER),a14,W
+	dec	a14
+	jrnz	aksrno_accel
+
+	movi	aksracceleration,a14
+	cmpi	aksrtop_speed,a9
+	jreq	aksrno_accel
+	dec	a9
+
+aksrno_accel
+	move	a14,*a13(aksrACCEL_TIMER),W
+	SLEEPK	1
+
+	dsj	a10,aksrloop
+	callr	aksrmove_grunt
+	move	a9,a10
+	jruc	aksrloop
+
+aksrdie
+	;we've croaked
+	;decrement the badguy count
+	move	@live_badguys,a14,W
+	dec	a14
+	move	a14,@live_badguys,W
+
+	;set up the animation
+	move	*a13(aksrDEATH_SEQUENCE),a9,L
+	move	*a8(OCTRL),a0
+
+aksrdieloop
+	move	*a9+,a0,L
+	jrz	aksrdead_n_buried
+	calla	civanic
+	sleepk	aksrdeath_speed
+	jruc	aksrdieloop
+
+aksrdead_n_buried
+	calla	DELOBJA8
+
+	DIE
+
+******************************************************************************
+*
+*	grunt move routine
+*
+
+ SUBRP	aksrmove_grunt
+	move	@player_object,a14,L
+
+	;move in X
+	move	*a14(OXPOS),a0,W
+	move	*a8(OXPOS),a1,W
+	sub	a1,a0
+	jrz	aksrdone_movex
+	jrn	aksrmove_left
+	jruc	aksrmove_right
+
+aksrmove_left
+	move	*a8(OXPOS),a1,W
+	addi	-aksrxmotion_inc,a1
+	move	a1,*a8(OXPOS),W
+	jruc	aksrdone_movex
+
+aksrmove_right
+	move	*a8(OXPOS),a1,W
+	addi	aksrxmotion_inc,a1
+	move	a1,*a8(OXPOS),W
+	jruc	aksrdone_movex
+
+aksrdone_movex
+
+	move	*a14(OYPOS),a0,W
+	move	*a8(OYPOS),a1,W
+	sub	a1,a0
+	jrz	aksrdone_movey
+	jrn	aksrmove_up
+	jruc	aksrmove_down
+
+aksrmove_up
+	move	*a8(OYPOS),a1,W
+	addi	-aksrymotion_inc,a1
+	move	a1,*a8(OYPOS),W
+	jruc	aksrdone_movey
+
+aksrmove_down
+	move	*a8(OYPOS),a1,W
+	addi	aksrymotion_inc,a1
+	move	a1,*a8(OYPOS),W
+	jruc	aksrdone_movey
+
+aksrdone_movey
+
+	;step through the animation
+	inc	a11
+	cmpi	4,a11
+	jrne	aksrno_wrap
+	clr	a11
+
+aksrno_wrap
+	move	a11,a14
+	X32	a14
+	addi	aksrwalk_script,a14
+	move	*a14,a0,L
+	calla	civanic
+
+	;sound
+	movi	RS_GRUNT,a0
+	callr	robo_sound
+	rets
+
+
+******************************************************************************
+*
+*	grunt collision routines
+*
+
+ SUBR	grunt_shot
+	;hit by player gunfire
+	PUSH	a1,a7
+
+	;jeepers.  we're dead.
+	movi	CLSDEAD,a14
+	move	a14,*a8(OID),W
+
+	move	*a0(OXVEL),a14,L
+	jrz	aksrvert_bullet
+	move	*a0(OYVEL),a1,L
+	jrz	aksrhorz_bullet
+
+	add	a1,a14
+	jrz	aksrdiag_13
+	jruc	aksrdiag_24
+
+aksrhorz_bullet
+	movi	aksrdie_vert,a14
+	jruc	aksrdeath_set
+aksrvert_bullet
+	movi	aksrdie_horz,a14
+	jruc	aksrdeath_set
+aksrdiag_13
+	movi	aksrdie_diag24,a14
+	jruc	aksrdeath_set
+aksrdiag_24
+	movi	aksrdie_diag13,a14
+	jruc	aksrdeath_set
+
+aksrdeath_set
+
+	move	*a8(OPLINK),a0,L
+	move	a14,*a0(aksrDEATH_SEQUENCE),L
+	movi	DEADGRUNT_PID,a1
+	movi	aksrdie,a7
+
+	move	*a0(PA9),a9,L
+	move	*a0(PA10),a10,L
+	calla	XFERPROC
+
+	movi	aksrgrunt_points,a0
+	callr	score_points
+
+	;die sound
+	movi	RS_HIT,a0
+	calla	robo_sound
+
+	PULL	a1,a7
+	rets
+
+
+ SUBR	grunt_die
+	;hit a mine or something
+
+	PUSH	a1,a7
+
+	movi	CLSDEAD,a14
+	move	a14,*a8(OID),W
+	move	*a8(OPLINK),a0,L
+	movi	aksrdie_vert,a14
+	move	a14,*a0(aksrDEATH_SEQUENCE),L
+	movi	DEADGRUNT_PID,a1
+	movi	aksrdie,a7
+	move	*a0(PA9),a9,L
+	move	*a0(PA10),a10,L
+	calla	XFERPROC
+
+	PULL	a1,a7
+	rets
+
+
+******************************************************************************
+*
+*	grunt configuration data
+*
+
+
+aksrwalk_script
+	.long	grunt_1
+	.long	grunt_2
+	.long	grunt_1
+	.long	grunt_3
+aksrwalk_scriptx
+
+aksrdie_vert
+	.long	grunt_xv1
+	.long	grunt_xv2
+	.long	grunt_xv3
+	.long	grunt_xv4
+	.long	0
+aksrdie_vertx
+
+aksrdie_horz
+	.long	grunt_xh1
+	.long	grunt_xh2
+	.long	grunt_xh3
+	.long	grunt_xh4
+	.long	0
+aksrdie_horzx
+
+aksrdie_diag13
+	.long	grunt_xdf1
+	.long	grunt_xdf2
+	.long	grunt_xdf3
+	.long	grunt_xdf4
+	.long	0
+aksrdie_diag13x
+
+aksrdie_diag24
+	.long	grunt_xdb1
+	.long	grunt_xdb2
+	.long	grunt_xdb3
+	.long	grunt_xdb4
+	.long	0
+aksrdie_diag24x
+
+aksrdeath_speed	equ	3		;death seq anim speed
+
+aksracceleration	equ	100		;decrement motion clock every X cycles
+aksrtop_speed	equ	3		;as fast as they get
+aksrxmotion_inc	equ	0004h
+aksrymotion_inc	equ	0004h
+
+aksrgrunt_points	equ	100		;points for killing a grunt
+
+*****************************************************************************
+******************************************************************************
+******************************************************************************
+*
+*	POST SECTION
+*
+	;reg use
+	; a0 - (in) # of posts to create
+	; a1 - (in) type (0-8)
+	; a2 - (in) color (0-F)
+
+ SUBRP	make_posts
+
+	move	a0,a9		;move the inputs to safer spots
+	jrz	oqzhdone
+
+	move	a1,a10		;type
+
+	move	a2,a11		;color
+	sla	8,a11
+	or	a2,a11
+
+oqzhanother_post
+oqzhget_pos
+	movi	oqzhmax_y-oqzhmin_y,a0
+	calla	RNDRNG0
+	move	a0,a2			;hide a0
+	movi	oqzhmax_x-oqzhmin_x,a0
+	calla	RNDRNG0
+	move	a2,a1			;put it back
+
+	addi	oqzhmin_x,a0
+	addi	oqzhmin_y,a1
+
+	cmpi	oqzhmid_x1,a0
+	jrle	oqzhplace_post
+	cmpi	oqzhmid_x2,a0
+	jrge	oqzhplace_post
+	cmpi	oqzhmid_y1,a1
+	jrle	oqzhplace_post
+	cmpi	oqzhmid_y2,a1
+	jrge	oqzhplace_post
+	jruc	oqzhget_pos
+
+oqzhplace_post
+	sla	16,a0			;X pos
+	sla	16,a1			;Y pos
+
+	;create the post object
+	move	a10,a14
+	X32	a14
+	addi	oqzhpost_types,a14
+	move	*a14,a14,L
+	move	*a14,a2,L		;DON'T advance
+
+	clr	a3
+	movi	DMACNZ,a4
+	movi	CLSNEUT|TYPPOST,a5
+	clr	a6
+	clr	a7
+	calla	BEGINOBJW
+
+	move	a10,*a8(OMISC),W	;stuff the type in the object
+
+	move	a11,*a8(OCONST),W
+
+	movi	robo_p,a0
+	calla	pal_getf
+	move	a0,*a8(OPAL),W
+
+	dsj	a9,oqzhanother_post
+
+oqzhdone
+	rets
+
+
+oqzhmin_x	equ	53	;post start outer boundaries
+oqzhmax_x	equ	347-17
+oqzhmin_y	equ	45
+oqzhmax_y	equ	231-10
+
+oqzhmid_x1	equ	200-50	;post start inner boundaries
+oqzhmid_x2	equ	200+50
+oqzhmid_y1	equ	138-50
+oqzhmid_y2	equ	138+50
+
+
+******************************************************************************
+*
+*	post collision routines
+*
+
+ SUBR	post_die
+
+	movi	CLSDEAD,a14
+	move	a14,*a8(OID),W
+	CREATE	DEADPOST_PID,kill_post
+
+	rets
+
+
+	;reg use
+	; a8 - * image
+	; a9 - anim pointer
+
+ SUBR	kill_post
+
+	move	*a8(OMISC),a0,W
+	X32	a0
+	addi	oqzhpost_types,a0
+	move	*a0,a9,L
+	move	*a8(OCTRL),a14,W
+	xori	DMACNZ,a14
+	ori	DMAWNZ,a14
+	move	a14,*a8(OCTRL),W
+oqzhkploop
+	move	*a9+,a0,L
+	jrz	oqzhkpdone
+	calla	civanic
+	SLEEPK	oqzhdie_speed
+	jruc	oqzhkploop
+
+oqzhkpdone
+	calla	DELOBJA8
+	DIE
+
+
+oqzhdie_speed	equ	3
+
+oqzhpost_types
+	.long	oqzhstar		;0
+	.long	oqzhcrystal	;1
+	.long	oqzhdiamond	;2
+	.long	oqzhsquare		;3
+	.long	oqzhrectangle	;4
+	.long	oqzhR2084		;5
+	.long	oqzhpcube		;6
+	.long	oqzhspiral		;7
+	.long	oqzhtriangle	;8
+	.long	0
+oqzhpost_typesx
+
+oqzhstar
+	.long	star_1,star_2,star_3,0
+
+oqzhcrystal
+	.long	crystal_1,crystal_2,crystal_3,0
+
+oqzhdiamond
+	.long	diamond_1,diamond_2,diamond_3,0
+
+oqzhsquare
+	.long	square_1,square_2,square_3,0
+
+oqzhrectangle
+	.long	rectangle_1,rectangle_2,rectangle_3,0
+
+oqzhR2084
+	.long	R2084_1,R2084_2,R2084_3,0
+
+oqzhpcube
+	.long	pcube_1,pcube_2,pcube_3,0
+
+oqzhspiral
+	.long	spiral_1,spiral_2,spiral_3,0
+
+oqzhtriangle
+	.long	triangle_1,triangle_2,triangle_3,0
+
+
+*****************************************************************************
+******************************************************************************
+******************************************************************************
+*
+*	HUMAN SECTION
+*
+
+	.bss	humans_saved,	16
+
+	;reg use
+	; a0 # of moms
+	; a1 # of dads
+	; a2 # of kids 
+
+ SUBRP	make_humans
+
+	;initialize the savecount
+	clr	a14
+	move	a14,@humans_saved,W
+
+	;first make the moms
+	move	a0,a0
+	jrz	ckopskip_moms
+ckopmom_loop
+	PUSHP	a0,a1,a2
+	callr	ckoprand_position
+	movi	ROBJ_MOM,a9
+	CREATE	HUMAN_PID,human
+	PULLP	a0,a1,a2
+	dsj	a0,ckopmom_loop
+
+ckopskip_moms
+
+	;dads
+	move	a1,a1
+	jrz	ckopskip_dads
+ckopdad_loop
+	PUSHP	a1,a2
+	callr	ckoprand_position
+	movi	ROBJ_DAD,a9
+	CREATE	HUMAN_PID,human
+	PULLP	a1,a2
+	dsj	a1,ckopdad_loop
+
+ckopskip_dads
+
+	;kids
+	move	a2,a2
+	jrz	ckopskip_kids
+ckopkid_loop
+	PUSHP	a2
+	callr	ckoprand_position
+	movi	ROBJ_KID,a9
+	CREATE	HUMAN_PID,human
+	PULLP	a2
+	dsj	a2,ckopkid_loop
+
+ckopskip_kids
+	rets
+
+
+	;reg use
+	; no input
+	;a10 - (ret) an X val
+	;a11 - (ret) a Y val
+
+ SUBRP ckoprand_position
+	movi	ckopmax_x-ckopmin_x,a0
+	calla	RNDRNG0
+	move	a0,a10
+	addi	ckopmin_x,a10
+
+	movi	ckopmax_y-ckopmin_y,a0
+	calla	RNDRNG0
+	move	a0,a11
+	addi	ckopmin_y,a11
+
+	rets
+
+
+******************************************************************************
+*
+*	human process
+*
+	STRUCTPD
+	LONG	ckopHITPOST	;UHL post we've hit
+
+	;reg use
+	; a8 - hObject
+	; a9 - (in)  OID
+	; a9 - (use) image table address (ckopmom_table, ckopdad_table...)
+	;a10 - (in)  x
+	;a10 - (use) direction of motion (1-8)
+	;a11 - (in)  y
+	;a11 - (use) frame index (0-3)
+
+
+ SUBRP	human
+
+	cmpi	ROBJ_MOM,a9
+	jreq	ckopinit_mom
+	cmpi	ROBJ_DAD,a9
+	jreq	ckopinit_dad
+	cmpi	ROBJ_KID,a9
+	jreq	ckopinit_kid
+
+	LOCKUP	;bad objid
+
+ckopinit_mom
+	movi	ckopmom_table,a9
+	jruc	ckopmake_obj
+
+ckopinit_dad
+	movi	ckopdad_table,a9
+	jruc	ckopmake_obj
+
+ckopinit_kid
+	movi	ckopkid_table,a9
+	jruc	ckopmake_obj
+
+ckopmake_obj
+	;cweate a widdle people object
+	move	a10,a0
+	sla	16,a0
+	move	a11,a1
+	sla	16,a1
+	move	*a9(ckopwalk_down),a2,L
+	clr	a3
+	movi	DMAWNZ,a4
+	movi	CLSNEUT|TYPHUMAN,a5
+	clr	a6
+	clr	a7
+	calla	BEGINOBJW
+
+	;choose a direction of motion
+	movi	7,a0
+	calla	RNDRNG0
+	inc	a0
+	move	a0,a10
+
+	;set the frame index
+	movi	3,a11
+	callr	ckopadvance_frame
+
+ckopmove_loop
+	SLEEPK	ckopsleep_time
+	callr	ckoprand_dirchange
+	callr	ckopmove_onestep
+	move	a0,a0
+	jrnz	ckophit_wall
+	callr	ckopadvance_frame
+	jruc	ckopmove_loop
+
+ckophit_wall
+	;sleep first because: If you move and bump into both a wall and a
+	; post at the same time (could happen), and then you immediately
+	; reverse direction, you'll then get flipped AGAIN when you hit
+	; the post and get forwarded right through the wall.  yuck.  so
+	; instead when you hit a wall, wait a frame and let the post
+	; collisions sort themselves out, THEN change direction.
+	SLEEPK	1
+	callr	ckopreverse_direction
+	callr	ckopadvance_frame
+	jruc	ckopmove_loop
+
+ckophit_post
+	callr	post_adjust
+	callr	ckopadvance_frame
+	jruc	ckopmove_loop
+
+ckopsaved
+	;sound
+	movi	RS_RESCUE,a0
+	callr	robo_sound
+
+	;increment the save count
+	move	@humans_saved,a14,W
+	inc	a14
+	move	a14,@humans_saved,W
+
+	cmpi	5,a14
+	jrle	ckopno_cap
+	movi	5,a14
+ckopno_cap
+	dec	a14
+
+	PUSH	a14
+	sla	4,a14
+	addi	ckopscore_table,a14
+	move	*a14,a0,W
+	callr	score_points
+	PULL	a14
+
+	X32	a14
+	addi	ckopsaved_table,a14
+	move	*a14,a0,L
+	calla	civanic
+
+	SLEEP	120
+	calla	DELOBJA8
+	jruc	ckopdone
+
+ckopkilled
+	movi	skull,a0
+	calla	civanic
+
+	SLEEP	120
+	calla	DELOBJA8
+;	jruc	ckopdone		;fall through
+
+ckopdone
+	DIE
+
+
+******************************************************************************
+* Human has bounced into or started inside a post.  Make it better.
+* Do this by reversing the direction of the human and moving it forward
+* in the new direction until it's clear of the post.
+*
+
+	;reg use
+	; a0 - X overlap
+	; a1 - Y overlap
+
+ SUBRP	post_adjust
+	PUSH	a0,a1,a2,a3,a7
+
+	move	*a13(ckopHITPOST),a7,L
+
+	callr	ckopreverse_direction
+
+	;calculate degree of X and Y overlap
+	move	a10,a2
+	X32	a2
+	addi	ckopwalk_increments,a2
+	move	*a2+,a3,W	;y vel
+	jrn	ckopyvel_neg
+	jrz	ckopyvel_zero
+
+ckopyvel_pos
+	move	*a7(OYPOS),a1
+	move	*a7(OSIZEY),a14
+	add	a14,a1
+	move	*a8(OYPOS),a14
+	sub	a14,a1
+	jruc	ckopdo_xvel
+ckopyvel_zero
+	movi	100h,a1
+	jruc	ckopdo_xvel
+ckopyvel_neg
+	move	*a8(OYPOS),a1
+	move	*a8(OSIZEY),a14
+	add	a14,a1
+	move	*a7(OYPOS),a14
+	sub	a14,a1
+;	jruc	ckopdo_xvel
+
+ckopdo_xvel
+	move	*a2,a3,W	;x vel
+	jrn	ckopxvel_neg
+	jrz	ckopxvel_zero
+
+ckopxvel_pos
+	move	*a7(OXPOS),a0
+	move	*a7(OSIZEX),a14
+	add	a14,a0
+	move	*a8(OXPOS),a14
+	sub	a14,a0
+	jruc	ckopovlap_done
+ckopxvel_zero
+	movi	100h,a0
+	jruc	ckopovlap_done
+ckopxvel_neg
+	move	*a8(OXPOS),a0
+	move	*a8(OSIZEX),a14
+	add	a14,a0
+	move	*a7(OXPOS),a14
+	sub	a14,a0
+;	jruc	ckopovlap_done
+
+ckopovlap_done
+	;a0 and a1 are the X and Y overlaps, respectively.  We need only
+	; worry about the smallest of the two and move that many steps.  Note
+	; that if velocity in a given direction is zero, the overlap is
+	; set to some outrageously large value so that the other direction
+	; is all that counts.
+	cmp	a1,a0
+	jrle	ckoplow_set
+	move	a1,a0
+ckoplow_set
+	;a0 is now the smallest.
+	move	a0,a1
+	move	a10,a2
+	X32	a2
+	addi	ckopwalk_increments,a2
+	move	*a2+,a3,W	;y vel
+	mpys	a3,a1
+	move	*a2,a3,W	;x vel
+	mpys	a0,a3
+	move	a3,a0
+
+	;a0 and a1 now hold X and Y adjustments, respectively.
+	move	*a8(OXPOS),a14
+	add	a0,a14
+	move	a14,*a8(OXPOS)
+	move	*a8(OYPOS),a14
+	add	a1,a14
+	move	a14,*a8(OYPOS)
+	
+	PULL	a0,a1,a2,a3,a7
+	rets
+
+
+******************************************************************************
+*
+*	human movement/animation routine
+*
+
+	;reg use
+	; a0 - scratch
+	; a0 (out) - walls hit (0-2)
+	; a1 - scratch
+	; a8 - (in)  hObject
+	; a9 - (in)  image table address (ckopmom_table, ckopdad_table...)
+	;a10 - (in)  direction of motion (1-8)
+	;a11 - (in)  frame index (0-3)
+
+ SUBRP	ckopmove_onestep
+
+	;move the object
+	move	a10,a1
+	X32	a1
+	addi	ckopwalk_increments,a1
+	move	*a1+,a14,W
+	move	*a8(OYPOS),a0,W
+	add	a14,a0
+	move	a0,*a8(OYPOS),W
+	move	*a1+,a14,W
+	move	*a8(OXPOS),a0,W
+	add	a14,a0
+	move	a0,*a8(OXPOS),W
+
+	clr	a1
+	move	*a8(OXPOS),a0,W
+
+	cmpi	ckopmin_x,a0
+	jrge	ckopnot_lowx
+
+	;low x
+	inc	a1
+	movi	ckopmin_x,a0
+	move	a0,*a8(OXPOS),W
+
+ckopnot_lowx
+	cmpi	ckopmax_x,a0
+	jrle	ckopnot_highx
+
+	;high x
+	inc	a1
+	movi	ckopmax_x,a0
+	move	a0,*a8(OXPOS),W
+
+ckopnot_highx
+
+	move	*a8(OYPOS),a0,W
+
+	cmpi	ckopmin_y,a0
+	jrge	ckopnot_lowy
+
+	;low y
+	inc	a1
+	movi	ckopmin_y,a0
+	move	a0,*a8(OYPOS),W
+
+ckopnot_lowy
+	cmpi	ckopmax_y,a0
+	jrle	ckopnot_highy
+
+	;high y
+	inc	a1
+	movi	ckopmax_y,a0
+	move	a0,*a8(OYPOS),W
+
+ckopnot_highy
+	move	a1,a0
+	rets
+
+
+******************************************************************************
+* Changes direction one time in ckopdirchange_chance.
+*
+
+ SUBRP	ckoprand_dirchange
+
+	;1 chance in ckopdirchange_chance of spontaneously switching direction
+	movi	ckopdirchange_chance,a0
+	calla	RNDRNG0
+	move	a0,a0
+	jrnz	ckopdirchange_done
+	movi	7,a0
+	calla	RNDRNG0
+	inc	a0
+	move	a0,a10
+
+ckopdirchange_done
+	rets
+
+
+******************************************************************************
+* Reverses direction
+*
+
+ SUBRP	ckopreverse_direction
+
+	;reverse direction of motion
+	subi	4,a10
+	jrp	ckoprd_done
+	addi	8,a10
+ckoprd_done
+	rets
+
+******************************************************************************
+* Advances the frame
+*
+
+ SUBRP	ckopadvance_frame
+
+	;advance the frame and set the new image
+	inc	a11
+	cmpi	4,a11
+	jrne	ckopno_wrap
+	;wraparound.  reset to start
+	clr	a11
+
+ckopno_wrap
+	;calculate the next frame
+	move	a9,a0
+	move	a10,a1
+	sla	4,a1		;mult by 10h
+	addi	ckopmotion_table,a1
+
+	;a1 now points to one of the entries in ckopmotion table
+	move	*a1,a1,W
+	add	a1,a0
+
+	;a0 now points to an entry in ckopxxx_table
+	move	a11,a1
+	X32	a1		;mult by 20h
+	add	a1,a0
+	move	*a0,a0,L
+
+	calla	civanic
+
+	rets
+
+
+******************************************************************************
+*
+*	human collision routines
+*
+
+ SUBR	human_saved
+	PUSH	a1,a7
+
+	;change the obj id
+	movi	CLSDEAD,a14
+	move	a14,*a8(OID),W
+	move	*a8(OPLINK),a0,L
+	movi	SAVEDHUMAN_PID,a1
+	movi	ckopsaved,a7
+	calla	XFERPROC
+
+	PULL	a1,a7
+	rets
+
+ SUBR	human_killed
+	PUSH	a1,a7
+
+	movi	CLSDEAD,a14
+	move	a14,*a8(OID),W
+	move	*a8(OPLINK),a0,L
+	movi	DEADHUMAN_PID,a1
+	movi	ckopkilled,a7
+	calla	XFERPROC
+
+	PULL	a1,a7
+	rets
+
+
+ SUBR	human_hitpost
+	PUSH	a1,a7
+
+	move	a0,a1
+	move	*a8(OPLINK),a0,L
+	move	a1,*a0(ckopHITPOST),L
+	move	*a0(PA8),a8,L
+	move	*a0(PA9),a9,L
+	move	*a0(PA10),a10,L
+	move	*a0(PA11),a11,L
+	movi	HUMAN_PID,a1
+	movi	ckophit_post,a7
+	calla	XFERPROC
+
+	PULL	a1,a7
+	rets
+
+******************************************************************************
+*
+*	human configuration data
+*
+
+
+ckopmin_x	equ	53	;human start/motion outer boundaries
+ckopmax_x	equ	347-11
+ckopmin_y	equ	45
+ckopmax_y	equ	231-13
+
+ckopsleep_time	equ	7
+ckopx_step		equ	1
+ckopy_step		equ	1
+
+ckopdirchange_chance	equ	40
+
+ckopwalk_increments
+	.word	0,0			;because direction is 1-8, not 0-7
+	.word	-ckopy_step,0
+	.word	-ckopy_step,ckopx_step
+	.word	0,ckopx_step
+	.word	ckopy_step,ckopx_step
+	.word	ckopy_step,0
+	.word	ckopy_step,-ckopx_step
+	.word	0,-ckopx_step
+	.word	-ckopy_step,-ckopx_step
+ckopwalk_incrementsx
+
+ckopmotion_table
+	.word	0			;because direction is 1-8, not 0-7
+	.word	ckopwalk_up
+	.word	ckopwalk_right
+	.word	ckopwalk_right
+	.word	ckopwalk_right
+	.word	ckopwalk_down
+	.word	ckopwalk_left
+	.word	ckopwalk_left
+	.word	ckopwalk_left
+ckopmotion_tablex
+
+;image table direction offsets
+ckopwalk_left	equ	0000h
+ckopwalk_right	equ	ckopwalk_left + (4 * 20h)
+ckopwalk_up	equ	ckopwalk_right + (4 * 20h)
+ckopwalk_down	equ	ckopwalk_up + (4 * 20h)
+
+ckopscore_table
+	.word	1000,2000,3000,4000,5000
+ckopscore_tablex
+
+;image tables
+ckopmom_table
+	.long	mom_l1
+	.long	mom_l2
+	.long	mom_l1
+	.long	mom_l3
+
+	.long	mom_r1
+	.long	mom_r2
+	.long	mom_r1
+	.long	mom_r3
+
+	.long	mom_u1
+	.long	mom_u2
+	.long	mom_u1
+	.long	mom_u3
+
+	.long	mom_d1
+	.long	mom_d2
+	.long	mom_d1
+	.long	mom_d3
+ckopmom_tablex
+
+ckopdad_table
+	.long	dad_l1
+	.long	dad_l2
+	.long	dad_l1
+	.long	dad_l3
+
+	.long	dad_r1
+	.long	dad_r2
+	.long	dad_r1
+	.long	dad_r3
+
+	.long	dad_u1
+	.long	dad_u2
+	.long	dad_u1
+	.long	dad_u3
+
+	.long	dad_d1
+	.long	dad_d2
+	.long	dad_d1
+	.long	dad_d3
+ckopdad_tablex
+
+ckopkid_table
+	.long	kid_l1
+	.long	kid_l2
+	.long	kid_l1
+	.long	kid_l3
+
+	.long	kid_r1
+	.long	kid_r2
+	.long	kid_r1
+	.long	kid_r3
+
+	.long	kid_u1
+	.long	kid_u2
+	.long	kid_u1
+	.long	kid_u3
+
+	.long	kid_d1
+	.long	kid_d2
+	.long	kid_d1
+	.long	kid_d3
+ckopkid_tablex
+
+ckopsaved_table
+	.long	one_k
+	.long	two_k
+	.long	three_k
+	.long	four_k
+	.long	five_k
+ckopsaved_tablex
+
+
+*****************************************************************************
+******************************************************************************
+******************************************************************************
+*
+*	HULK SECTION
+*
+
+	;reg use
+	; a0 - (in) # of hulks
+
+ SUBRP	make_hulks
+
+	move	a0,a0
+	jrz	henkdone
+
+henkanother_hulk
+	PUSHP	a0
+
+henkget_pos
+	movi	henkmax_x-henkmin_x,a0
+	calla	RNDRNG0
+	move	a0,a9
+	movi	henkmax_y-henkmin_y,a0
+	calla	RNDRNG0
+	move	a0,a10
+
+	addi	henkmin_x,a9
+	addi	henkmin_y,a10
+
+	cmpi	henkmid_x1,a9
+	jrle	henkplace_hulk
+	cmpi	henkmid_x2,a9
+	jrge	henkplace_hulk
+	cmpi	henkmid_y1,a10
+	jrle	henkplace_hulk
+	cmpi	henkmid_y2,a10
+	jrge	henkplace_hulk
+	jruc	henkget_pos
+
+henkplace_hulk
+	;assign a random starting position
+	CREATE	HULK_PID,hulk
+	PULLP	a0
+	dsj	a0,henkanother_hulk
+
+henkdone
+	rets
+
+
+henkmin_x	equ	53	;hulk start outer boundaries
+henkmax_x	equ	347-13
+henkmin_y	equ	45
+henkmax_y	equ	231-16
+
+henkmid_x1	equ	200-50	;hulk start inner boundaries
+henkmid_x2	equ	200+50
+henkmid_y1	equ	138-50
+henkmid_y2	equ	138+50
+
+
+*****************************************************************************
+*
+*	hulk process
+*
+
+	STRUCTPD
+	LONG	rpggPD_SCRIPT	;UHL script head
+	WORD	rpggPD_FRAME_NDX	;UHW frame index
+
+	;reg use
+	; a8 - object handle
+	; a9 - (in)  starting x
+	; a9 - (use) frame change count
+	;a10 - (in)  starting y
+	;a11 - direction of motion (0-3)
+
+ SUBRP	hulk
+
+	;choose a direction of motion
+	movi	3,a0
+	calla	RNDRNG0
+	move	a0,a11
+
+	X32	a0
+	addi	rpgganim_list,a0
+	move	*a0,a6,L
+	move	a6,*a13(rpggPD_SCRIPT),L
+	clr	a7
+	move	a7,*a13(rpggPD_FRAME_NDX),W
+
+	;create the hulk object
+	move	a9,a0		;x pos
+	sla	16,a0
+	move	a10,a1		;y pos
+	sla	16,a1
+
+	move	a7,a14		;img
+	X32	a14
+	add	a6,a14
+	move	*a14,a2,L
+
+	clr	a3
+	movi	DMAWNZ,a4
+	movi	CLSENMY|TYPHULK,a5
+	clr	a6
+	clr	a7
+	calla	BEGINOBJW
+
+	;set the move counter
+	movi	rpggmove_freq/2,a0
+	calla	RNDRNG0
+	addi	rpggmove_freq,a0
+	move	a0,a9
+
+rpggloop
+	SLEEPK	1
+	dsj	a9,rpggloop
+	callr	rpggmove_hulk
+	movi	rpggmove_freq,a9
+	jruc	rpggloop
+
+
+rpggbeen_shot	;we immediately wake up here if we've been hit and moved
+		; by a player bullet.
+	callr	rpggdo_bounds_check
+	jruc	rpggloop
+
+	DIE
+
+
+******************************************************************************
+*
+*	hulk move routine
+*
+
+	;reg use
+	; a0 scratch
+	; a1 scratch
+	; a8 object handle
+	;a11 direction of motion (0-3)
+
+ SUBRP	rpggmove_hulk
+	;move him
+	move	a11,a14
+	X32	a14
+	addi	rpggmove_table,a14
+	move	*a14+,a0,W
+	move	*a14,a1,W
+	move	*a8(OXPOS),a14,W
+	add	a0,a14
+	move	a14,*a8(OXPOS),W
+	move	*a8(OYPOS),a14,W
+	add	a1,a14
+	move	a14,*a8(OYPOS),W
+
+	;
+	;note the fall-through here
+	;
+
+	;bounds check
+ SUBRP	rpggdo_bounds_check
+	clr	a1
+
+	clr	a0
+	move	*a8(OXPOS),a0,W
+	cmpi	rpgglow_x,a0
+	jrlt	rpggtoo_left
+	cmpi	rpgghigh_x,a0
+	jrgt	rpggtoo_right
+	jruc	rpggvert_check
+
+rpggtoo_left
+	movi	rpgglow_x,a14
+	move	a14,*A8(OXPOS),W
+	ori	M_HIT_LEFT,a1
+	jruc	rpggvert_check
+
+rpggtoo_right
+	movi	rpgghigh_x,a14
+	move	a14,*A8(OXPOS),W
+	ori	M_HIT_RIGHT,a1
+;	jruc	rpggvert_check
+
+rpggvert_check
+	clr	a0
+	move	*a8(OYPOS),a0,W
+	cmpi	rpgglow_y,a0
+	jrlt	rpggtoo_high
+	cmpi	rpgghigh_y,a0
+	jrgt	rpggtoo_low
+	jruc	rpggdone_boundcheck
+
+rpggtoo_high
+	movi	rpgglow_y,a14
+	move	a14,*A8(OYPOS),W
+	ori	M_HIT_TOP,a1
+	jruc	rpggdone_boundcheck
+
+rpggtoo_low
+	movi	rpgghigh_y,a14
+	move	a14,*A8(OYPOS),W
+	ori	M_HIT_BOTTOM,a1
+	jruc	rpggdone_boundcheck
+
+rpggdone_boundcheck
+	move	a1,a1
+	jrnz	rpggchange_direction
+
+rpggno_wallhit
+	movi	rpggturn_prob,a0
+	PUSH	a1
+	calla	RNDRNG0
+	PULL	a1
+	move	a0,a0
+	jrnz	rpggdone_moving
+
+	;spontaneous direction change.  random for now
+;	jruc	rpggchange_direction	;fall through
+
+rpggchange_direction
+	;turn 90 degrees by randomly incrementing or decrementing direction
+	movi	1,a0
+	PUSH	a1
+	calla	RNDRNG0
+	PULL	a1
+	move	a0,a0
+	jrz	rpgginc_direction
+	dec	a11
+	jruc	rpggdir_rangecheck
+	
+rpgginc_direction
+	inc	a11
+
+rpggdir_rangecheck
+	cmpi	-1,a11
+	jrne	rpggdir_notlow
+	movi	3,a11
+
+rpggdir_notlow
+	cmpi	4,a11
+	jrne	rpggdir_changed
+	clr	a11
+
+rpggdir_changed
+
+	;verify that this is a good direction
+	cmpi	0,a11
+	jreq	rpggvalidate_up
+	cmpi	1,a11
+	jreq	rpggvalidate_right
+	cmpi	2,a11
+	jreq	rpggvalidate_down
+	cmpi	3,a11
+	jreq	rpggvalidate_left
+
+rpggvalidate_up
+	andi	M_HIT_TOP,a1
+	jrnz	rpggchange_direction
+	jruc	rpggvalid_dir
+rpggvalidate_right
+	andi	M_HIT_RIGHT,a1
+	jrnz	rpggchange_direction
+	jruc	rpggvalid_dir
+rpggvalidate_down
+	andi	M_HIT_BOTTOM,a1
+	jrnz	rpggchange_direction
+	jruc	rpggvalid_dir
+rpggvalidate_left
+	andi	M_HIT_LEFT,a1
+	jrnz	rpggchange_direction
+	jruc	rpggvalid_dir
+
+rpggvalid_dir
+
+	move	a11,a0
+	X32	a0
+	addi	rpgganim_list,a0
+	move	*a0,a0,L
+	move	a0,*a13(rpggPD_SCRIPT),L
+
+rpggdone_moving
+	
+rpggnew_frame
+	move	*a13(rpggPD_FRAME_NDX),a14,W
+	move	*a13(rpggPD_SCRIPT),a6,L
+	inc	a14
+	cmpi	4,a14
+	jrne	rpggno_wrap
+	clr	a14
+rpggno_wrap
+	move	a14,*a13(rpggPD_FRAME_NDX),W
+	X32	a14
+	add	a6,a14
+	move	*a14,a0,L
+	calla	civanic
+
+	rets
+
+
+******************************************************************************
+*
+*	hulk collision routines
+*
+
+ SUBR	hulk_pushback
+	PUSH	a1,a7,a9,a10,a11,a13
+
+	;immediately move the hulk in the direction of the bullet's motion
+	move	*a0(OXVEL),a14,L
+	sra	17,a14
+	move	*a8(OXPOS),a1,W
+	add	a14,a1
+	move	a1,*a8(OXPOS),W
+
+	move	*a0(OYVEL),a14,L
+	sra	17,a14
+	move	*a8(OYPOS),a1,W
+	add	a14,a1
+	move	a1,*a8(OYPOS),W
+
+	;wake up at the collision check
+	move	*a8(OPLINK),a0,L
+	move	*a0(PA9),a9,L
+	move	*a0(PA10),a10,L
+	move	*a0(PA11),a11,L
+	movi	HULK_PID,a1
+	movi	rpggbeen_shot,a7
+	calla	XFERPROC
+	PULL	a1,a7,a9,a10,a11,a13
+
+	rets
+
+
+******************************************************************************
+*
+*	hulk configuration data
+*
+
+rpggstep_x		equ	4
+rpggstep_y		equ	4
+
+rpgglow_x		equ	53	;hulk move boundaries
+rpgghigh_x		equ	347-13
+rpgglow_y		equ	45
+rpgghigh_y		equ	231-16
+
+rpggmove_freq	equ	8	;frames between moves
+
+rpggturn_prob	equ	30	;chance per frame of spontaneously changing
+				;direction
+rpggmove_table
+	.word	0,-rpggstep_y
+	.word	rpggstep_x,0
+	.word	0,rpggstep_y
+	.word	-rpggstep_x,0
+rpggmove_tablex
+
+rpgganim_list
+	.long	rpgganim_vert
+	.long	rpgganim_right
+	.long	rpgganim_vert
+	.long	rpgganim_left
+rpgganim_listx
+
+rpgganim_vert
+	.long	hulk_ud1
+	.long	hulk_ud2
+	.long	hulk_ud1
+	.long	hulk_ud3
+rpgganim_vertx
+
+rpgganim_left
+	.long	hulk_l1
+	.long	hulk_l2
+	.long	hulk_l1
+	.long	hulk_l3
+rpgganim_leftx
+
+rpgganim_right
+	.long	hulk_r1
+	.long	hulk_r2
+	.long	hulk_r1
+	.long	hulk_r3
+rpgganim_rightx
+
+
+*****************************************************************************
+******************************************************************************
+******************************************************************************
+*
+*	SPHEREOID SECTION
+*
+
+	;reg use
+	; a0 - (in) # of sphereoids
+
+ SUBRP	make_sphereoids
+
+	move	a0,a0
+	jrz	obnsdone
+
+obnsanother_sphereoid
+	PUSHP	a0
+
+obnsget_pos
+	movi	obnsmax_x-obnsmin_x,a0
+	calla	RNDRNG0
+	move	a0,a9
+	movi	obnsmax_y-obnsmin_y,a0
+	calla	RNDRNG0
+	move	a0,a10
+
+	addi	obnsmin_x,a9
+	addi	obnsmin_y,a10
+
+	cmpi	obnsmid_x1,a9
+	jrle	obnsplace_sphereoid
+	cmpi	obnsmid_x2,a9
+	jrge	obnsplace_sphereoid
+	cmpi	obnsmid_y1,a10
+	jrle	obnsplace_sphereoid
+	cmpi	obnsmid_y2,a10
+	jrge	obnsplace_sphereoid
+	jruc	obnsget_pos
+
+obnsplace_sphereoid
+	;assign a random starting position
+	CREATE	SPHEREOID_PID,sphereoid
+	PULLP	a0
+	dsj	a0,obnsanother_sphereoid
+
+obnsdone
+	rets
+
+
+obnsmid_x1	equ	200-80	;sphereoid start inner boundaries
+obnsmid_x2	equ	200+80
+obnsmid_y1	equ	138-80
+obnsmid_y2	equ	138+80
+
+
+*******************************************************************************
+*
+*	sphereoid process
+*
+
+	STRUCTPD
+	LONG	obnsOXACC		;UHL x acceleration
+	LONG	obnsOYACC		;UHL y acceleration
+	WORD	obnsOCHILDREN	;UHW # of children left to spawn
+	WORD	obnsOSTAGE		;UHW stage in life cycle
+
+	;reg use
+	; a7 (use) event timer (related to obnsOSTAGE)
+	; a8 (use) * object
+	; a9 (in)  x pos
+	; a9 (use) anim counter
+	;a10 (in)  y pos
+	;a10 (use) frame pointer
+	;a11 (use) time until next vel change
+
+ SUBRP	sphereoid
+
+	;increment the badguy count
+	move	@live_badguys,a14,W
+	inc	a14
+	move	a14,@live_badguys,W
+
+	;create the sphereoid object
+	move	a9,a0		;x pos
+	sll	16,a0
+	move	a10,a1		;y pos
+	sll	16,a1
+	movi	obnsstandard_script,a10
+	move	*a10+,a2,L	;img
+	clr	a3
+	movi	DMAWNZ,a4
+	movi	CLSENMY|TYPSPHEREOID,a5
+	clr	a6
+	clr	a7
+	calla	BEGINOBJW
+
+	;initialize anim counter
+	movi	obnsanim_speed,a9
+
+	;set initial velocities and accelerations
+	callr	obnsset_va
+
+	;initialize life cycle and event timer
+	movi	obnsSTAGE_YOUTH,a14
+	move	a14,*a13(obnsOSTAGE),W
+	movi	obnsyouth_time/2,a0
+	calla	RNDRNG0
+	addi	obnsyouth_time*3/4,a0
+	move	a0,a7
+
+obnsloop
+	PUSHP	a7
+	SLEEPK	1
+	PULLP	a7
+	dec	a9
+	jrnz	obnsno_anim
+
+	;advance the frame
+	move	*a10+,a0,L
+	jrnz	obnsnewframe
+
+	;reset script.  depends on the stage
+	move	*a13(obnsOSTAGE),a14,W
+	cmpi	obnsSTAGE_PARENT,a14
+	jreq	obnsset_parent_script
+	movi	obnsstandard_script,a10
+	jruc	obnsscript_set
+obnsset_parent_script
+	movi	obnsparent_script,a10
+
+obnsscript_set
+	move	*a10+,a0,L
+
+obnsnewframe
+	calla	civanic
+
+	;reset the counter
+	movi	obnsanim_speed,a9
+
+obnsno_anim
+	;adjust velocities
+	callr	obnsacc_add
+
+	;bounds check
+	callr	obnsin_bounds
+
+	;adjust vel and acc if it's time
+	dec	a11
+	jrnz	obnsno_va_change
+	callr	obnsset_va
+
+obnsno_va_change
+
+	;do event?
+	dec	a7
+	jrnz	obnsno_event
+
+	;event.  depends on the stage in the life cycle
+	move	*a13(obnsOSTAGE),a14,W
+	cmpi	obnsSTAGE_YOUTH,a14
+	jreq	obnsyouth_event
+	cmpi	obnsSTAGE_PARENT,a14
+	jreq	obnsparent_event
+	;default
+	jruc	obnsdotage_event
+
+obnsyouth_event
+	;switch to middle age
+	movi	obnsSTAGE_PARENT,a14
+	move	a14,*a13(obnsOSTAGE),W
+
+	;set the number of kids to be spawned
+	movi	obnsmax_kids-obnsmin_kids,a0
+	calla	RNDRNG0
+	addi	obnsmin_kids,a0
+	move	a0,*a13(obnsOCHILDREN),W
+
+	;set the spawn timer
+	movi	obnsspawn_time/2,a0
+	calla	RNDRNG0
+	addi	obnsspawn_time*3/4,a0
+	move	a0,a7
+	jruc	obnsno_event
+
+obnsparent_event
+	;spawn a brat
+	PUSHP	a10,a11
+	move	*a8(OXVAL),a10,L
+	move	*a8(OYVAL),a11,L
+	CREATE	ENFORCER_PID,enforcer
+	PULLP	a10,a11
+
+	;decrement the kid count
+	move	*a13(obnsOCHILDREN),a14,W
+	dec	a14
+	jrz	obnsbarren
+	move	a14,*a13(obnsOCHILDREN),W
+	movi	obnsspawn_time/2,a0
+	calla	RNDRNG0
+	addi	obnsspawn_time*3/4,a0
+	move	a0,a7
+	jruc	obnsno_event
+
+obnsbarren
+	;that was the last kid.  age
+	movi	obnsSTAGE_DOTAGE,a14
+	move	a14,*a13(obnsOSTAGE),W
+	movi	obnsold_age_time,a7
+	jruc	obnsno_event
+
+obnsdotage_event
+	;nothing fancy.  just die.
+	jruc	obnsdie_peacefully
+	
+obnsno_event
+	jruc	obnsloop
+
+obnsbeen_shot
+	;crud.  we've been shot.  score the points
+	movi	obnssphereoid_points,a0
+	callr	score_points
+
+	;decrement the badguy count
+	move	@live_badguys,a14,W
+	dec	a14
+	move	a14,@live_badguys,W
+
+	;clear the velocity
+	clr	a14
+	move	a14,*a8(OXVEL),L
+	move	a14,*a8(OYVEL),L
+
+	;go through the death routine
+	movi	obnsparent_script,a10,L
+	move	*a8(OCTRL),a14,W
+	xori	DMAWNZ,a14
+	ori	DMACNZ,a14
+	move	a14,*a8(OCTRL),W
+	movi	obnsdiecolor,a14
+	move	a14,*a8(OCONST),W
+	movi	robo_p,a0
+	calla	pal_getf
+	move	a0,*a8(OPAL),W
+
+obnsdie_loop
+	SLEEPK	obnsanim_speed
+	move	*a10+,a0,L
+	jrz	obnsscore_msg
+	calla	civanic
+	jruc	obnsdie_loop
+
+obnsscore_msg
+	movi	obnsscore_image,a0
+	move	*a8(OCTRL),a1,W
+	xori	DMACNZ,a1
+	ori	DMAWNZ,a1
+	calla	civani
+	movi	obnsscore_xoff,a14
+	move	a14,*a8(ODXOFF),W
+	movi	obnsscore_yoff,a14	
+	move	a14,*a8(ODYOFF),W
+	SLEEP	obnsscore_time
+	jruc	obnsexpire
+
+obnsdie_peacefully
+	;decrement the badguy count
+	move	@live_badguys,a14,W
+	dec	a14
+	move	a14,@live_badguys,W
+
+obnsexpire
+	calla	DELOBJA8
+
+	DIE
+
+
+ SUBRP	obnsset_va
+
+	movi	obnshigh_v*2,a0
+	calla	RNDRNG0
+	subi	obnshigh_v,a0
+	move	a0,*a8(OXVEL),L
+
+	movi	obnshigh_v*2,a0
+	calla	RNDRNG0
+	subi	obnshigh_v,a0
+	move	a0,*a8(OYVEL),L
+
+	movi	obnshigh_a*2,a0
+	calla	RNDRNG0
+	subi	obnshigh_a,a0
+	move	a0,*a13(obnsOXACC),L
+
+	movi	obnshigh_a*2,a0
+	calla	RNDRNG0
+	subi	obnshigh_a,a0
+	move	a0,*a13(obnsOYACC),L
+
+	movi	obnsva_change_time,a0
+	calla	RNDRNG0
+	inc	a0
+	move	a0,a11
+
+	rets
+
+
+ SUBRP	obnsacc_add
+	move	*a13(obnsOXACC),a14,L
+	move	*a8(OXVEL),a0,L
+	add	a14,a0
+	move	a0,*a8(OXVEL),L
+
+	move	*a13(obnsOYACC),a14,L
+	move	*a8(OYVEL),a0,L
+	add	a14,a0
+	move	a0,*a8(OYVEL),L
+
+	rets
+
+
+ SUBRP	obnsin_bounds
+
+	move	*a8(OXPOS),a14,W
+	movi	obnsmin_x,a0
+	cmp	a0,a14
+	jrlt	obnsx_adjust
+
+	movi	obnsmax_x,a0
+	cmp	a0,a14
+	jrgt	obnsx_adjust
+	jruc	obnsy_check
+
+obnsx_adjust
+	move	a0,*a8(OXPOS),W
+	clr	a0
+	move	a0,*a8(OXVEL),L
+	move	a0,*a13(obnsOXACC),L
+
+obnsy_check
+	move	*a8(OYPOS),a14,W
+	movi	obnsmin_y,a0
+	cmp	a0,a14
+	jrlt	obnsy_adjust
+
+	movi	obnsmax_y,a0
+	cmp	a0,a14
+	jrgt	obnsy_adjust
+	jruc	obnsdone_check
+
+obnsy_adjust
+	move	a0,*a8(OYPOS),W
+	clr	a0
+	move	a0,*a8(OYVEL),L
+	move	a0,*a13(obnsOYACC),L
+
+obnsdone_check
+	rets
+
+
+******************************************************************************
+*
+*	sphereoid collision routines
+*
+
+ SUBR	sphereoid_die
+	PUSH	a1,a7
+
+	movi	CLSDEAD,a14
+	move	a14,*a8(OID),W
+	move	*a8(OPLINK),a0,L
+	movi	DEADSPHERE_PID,a1
+	movi	obnsbeen_shot,a7
+	calla	XFERPROC
+
+	PULL	a1,a7
+	rets
+
+
+******************************************************************************
+*
+*	sphereoid configuration data
+*
+
+obnsanim_speed	equ	3
+
+obnsva_change_time	equ	180
+
+obnssphereoid_points	equ	1000
+
+obnsyouth_time	equ	180	;time before we have kids
+obnsspawn_time	equ	120	;time between kids
+obnsold_age_time	equ	180	;time between last kid and natural death
+
+obnsmin_kids	equ	3	;lower limit on spawned enforcers
+obnsmax_kids	equ	7	;upper limit
+
+obnshigh_v		equ	00004000h
+obnshigh_a		equ	00000C00h
+
+obnsmin_x	equ	53	;sphereoid move bounds
+obnsmax_x	equ	347-15
+obnsmin_y	equ	45
+obnsmax_y	equ	231-15
+
+obnsscore_image	equ	one_k	;image on being shot
+obnsdiecolor	equ	0909h	;color on being shot
+obnsscore_time	equ	60	;time to display score value
+obnsscore_xoff	equ	-3	;shotimage offset
+obnsscore_yoff	equ	-5
+
+;life cycle stages
+obnsSTAGE_YOUTH 	equ	0000h
+obnsSTAGE_PARENT	equ	0001h
+obnsSTAGE_DOTAGE	equ	0002h
+
+obnsstandard_script
+	.long	circle_1
+	.long	circle_2
+	.long	circle_3
+	.long	circle_4
+	.long	circle_5
+	.long	0
+
+obnsparent_script
+	.long	circle_1
+	.long	circle_2
+	.long	circle_3
+	.long	circle_4
+	.long	circle_5
+	.long	circle_6
+	.long	circle_7
+	.long	circle_8
+	.long	0
+
+
+*****************************************************************************
+******************************************************************************
+******************************************************************************
+*
+*	ENFORCER SECTION
+*
+
+	.bss	num_enforcers,		16	;active enforcers
+	.bss	picket_duty,		32	;*img of picket enforcer
+
+	;reg use
+	;  a8 (use) *img
+	;  a9 (use) next move timer (move/fire phase)
+	;  a9 (use) frame pointer (death phase)
+	; a10 (in)  initial X
+	; a10 (use) frame pointer (grow phase)
+	; a11 (in)  initial Y
+	; a11 (use) next shot timer (move/fire phase)
+
+ SUBRP	enforcer
+
+	;increment the badguy count
+	move	@live_badguys,a14,W
+	inc	a14
+	move	a14,@live_badguys,W
+	move	@num_enforcers,a14,W
+	inc	a14
+	move	a14,@num_enforcers,W
+
+	;create the enforcer object
+	move	a10,a0
+	move	a11,a1
+	movi	uibwgrow_script,a10
+	move	*a10+,a2,L
+	clr	a3
+	movi	DMAWNZ,a4
+	movi	CLSENMY|TYPENFORCER,a5
+	clr	a6
+	clr	a7
+	calla	BEGINOBJW
+
+	;grow phase
+
+uibwgrow_loop
+	SLEEPK	uibwgrow_speed
+	move	*a10+,a0,L
+	jrz	uibwmf_phase
+	calla	civanic
+	jruc	uibwgrow_loop
+
+uibwmf_phase
+	;begin move/fire phase.  set initial course
+	callr	uibwnew_course
+	movi	uibwturn_time,a9
+	movi	uibwfire_time/2,a0
+	calla	RNDRNG0
+	addi	uibwfire_time*3/4,a0
+	move	a0,a11
+
+uibwmain_loop
+	SLEEPK	1
+	dec	a9
+	jrnz	uibwno_turn
+
+
+	;picket phase
+	;two cases: we're on picket duty, or we're not.
+	move	@picket_duty,a14,L
+	cmp	a14,a8
+	jreq	uibwon_picket
+
+	;we're not on picket duty
+	;if we're the only enforcer, quit now.
+	move	@num_enforcers,a14,W
+	cmpi	1,a14
+	jreq	uibwpicket_done
+
+	;there are multiple enforcers.   If there is no picket, see if we
+	; take the job.  If there is, quit.
+	move	@picket_duty,a14,L
+	jrnz	uibwpicket_done
+
+	;there is no picket.
+	movi	uibwpicket_prob,a0
+	calla	RNDRNG0
+	move	a0,a0
+	jrnz	uibwpicket_done
+
+	;we're going to take picket duty
+	move	a8,@picket_duty,L
+	jruc	uibwpicket_done
+
+uibwon_picket
+	;we are on picket duty
+	;if we're the only enforcer, see if we leave picket mode.
+	move	@num_enforcers,a14,W
+	cmpi	1,a14
+	jrne	uibwmultiple_enforcers
+
+	;we're the only enforcer
+	movi	uibwstand_down_prob,a0
+	calla	RNDRNG0
+	move	a0,a0
+	jrnz	uibwpicket_done
+
+	;and we've decided to stand down.
+;	clr	a0	;unneccesary.  it's already 0 from above.
+	move	a0,@picket_duty,L
+	jruc	uibwpicket_done
+
+uibwmultiple_enforcers
+	;we may abandon our post
+	movi	uibwabandon_post_prob,a0
+	calla	RNDRNG0
+	move	a0,a0
+	jrnz	uibwpicket_done
+
+	;yep.  we quit.
+;	clr	a0	;unneccesary.  it's already 0 from above.
+	move	a0,@picket_duty,L
+;	jruc	uibwpicket_done
+
+uibwpicket_done
+
+	;change course
+	callr	uibwnew_course
+	movi	uibwturn_time,a9
+
+uibwno_turn
+
+	dec	a11
+	jrnz	uibwno_shot
+
+	;fire a spark
+	PUSHP	a10
+	move	*a8(OXVAL),a10,L
+	move	*a8(OYVAL),a11,L
+	CREATE	SPARK_PID,spark
+	PULLP	a10
+	movi	uibwfire_time/2,a0
+	calla	RNDRNG0
+	addi	uibwfire_time*3/4,a0
+	move	a0,a11
+
+uibwno_shot
+
+	;bounds check
+	callr	uibwin_bounds
+
+	jruc	uibwmain_loop
+
+uibwdie
+	;decrement the badguy count
+	move	@live_badguys,a14,W
+	dec	a14
+	move	a14,@live_badguys,W
+	move	@num_enforcers,a14,W
+	dec	a14
+	move	a14,@num_enforcers,W
+
+	;zero our velocity
+	clr	a14
+	move	a14,*a8(OXVEL),L
+	move	a14,*a8(OYVEL),L
+
+	;set up the animation
+uibwdieloop
+	move	*a9+,a0,L
+	jrz	uibwdead_n_buried
+	calla	civanic
+	sleepk	uibwdeath_speed
+	jruc	uibwdieloop
+
+uibwdead_n_buried
+	calla	DELOBJA8
+
+	DIE
+
+
+ SUBRP	uibwnew_course
+
+	;two cases.  picket or !picket
+	move	@picket_duty,a14,L
+	cmp	a8,a14
+	jrne	uibwnc_notpicket
+
+uibwnc_picket
+	;we're on picket duty.  if we're not against a wall, move toward the
+	; nearest one.  if we are against a wall but not in a corner, move
+	; toward the nearest corner.  if we're in a corner, sit tight.
+;	jruc	uibwnc_done
+
+uibwnc_notpicket
+	;velocity is the distance between enforcer and player / 64 / 2
+	move	@player_object,a0,L
+	move	*a0(OXVAL),a14,L
+	move	*a8(OXVAL),a1,L
+	sub	a1,a14
+	sra	7,a14
+	
+	move	a14,*a8(OXVEL),L
+
+	move	*a0(OYVAL),a14,L
+	move	*a8(OYVAL),a1,L
+	sub	a1,a14
+	sra	7,a14
+	move	a14,*a8(OYVEL),L
+
+uibwnc_done
+	rets
+
+ SUBRP	uibwin_bounds
+
+	move	*a8(OXPOS),a14,W
+	movi	uibwmin_x,a0
+	cmp	a0,a14
+	jrlt	uibwx_adjust
+
+	movi	uibwmax_x,a0
+	cmp	a0,a14
+	jrgt	uibwx_adjust
+	jruc	uibwy_check
+
+uibwx_adjust
+	move	a0,*a8(OXPOS),W
+	clr	a0
+	move	a0,*a8(OXVEL),L
+
+uibwy_check
+	move	*a8(OYPOS),a14,W
+	movi	uibwmin_y,a0
+	cmp	a0,a14
+	jrlt	uibwy_adjust
+
+	movi	uibwmax_y,a0
+	cmp	a0,a14
+	jrgt	uibwy_adjust
+	jruc	uibwdone_check
+
+uibwy_adjust
+	move	a0,*a8(OYPOS),W
+	clr	a0
+	move	a0,*a8(OYVEL),L
+
+uibwdone_check
+	rets
+
+
+******************************************************************************
+*
+*	enforcer collision routines
+*
+
+ SUBR	enforcer_die
+	;hit by player gunfire
+	PUSH	a1,a7
+
+	;jeepers.  we're dead.
+	movi	CLSDEAD,a14
+	move	a14,*a8(OID),W
+
+	move	*a0(OXVEL),a14,L
+	jrz	uibwvert_bullet
+	move	*a0(OYVEL),a1,L
+	jrz	uibwhorz_bullet
+
+	add	a1,a14
+	jrz	uibwdiag_13
+	jruc	uibwdiag_24
+
+uibwhorz_bullet
+	movi	uibwdie_vert,a9
+	jruc	uibwdeath_set
+uibwvert_bullet
+	movi	uibwdie_horz,a9
+	jruc	uibwdeath_set
+uibwdiag_13
+	movi	uibwdie_diag24,a9
+	jruc	uibwdeath_set
+uibwdiag_24
+	movi	uibwdie_diag13,a9
+	jruc	uibwdeath_set
+
+uibwdeath_set
+	move	*a8(OPLINK),a0,L
+	movi	DEADNFORCER_PID,a1
+	movi	uibwdie,a7
+	move	*a0(PA10),a10,L
+	calla	XFERPROC
+
+	movi	uibwenforcer_points,a0
+	callr	score_points
+
+	PULL	a1,a7
+	rets
+
+
+******************************************************************************
+*
+*	enforcer configuration data
+*
+
+uibwenforcer_points	equ	100
+
+uibwpicket_prob	equ	4	;one chance in X of becoming the picket if
+				; there are multiple enforcers and none is
+				; on the job already.
+
+uibwstand_down_prob equ	4	;one chance in X of leaving picket duty if
+				; we're the only enforcer left.
+
+uibwabandon_post_prob equ	8	;one chance in X of leaving picket duty if
+				; there are other enforcers around.
+
+uibwturn_time	equ	150
+uibwfire_time	equ	90
+
+uibwgrow_speed	equ	6
+
+uibwmin_x	equ	53	;enforcer move bounds
+uibwmax_x	equ	347-9
+uibwmin_y	equ	45
+uibwmax_y	equ	231-11
+
+uibwgrow_script
+	.long	enf_g1
+	.long	enf_g2
+	.long	enf_g3
+	.long	enf_g4
+	.long	enf_g5
+	.long	enf_1
+	.long	0
+uibwgrow_scriptx
+
+uibwdie_vert
+	.long	enf_xv1
+	.long	enf_xv2
+	.long	enf_xv3
+	.long	enf_xv4
+	.long	enf_xv5
+	.long	0
+uibwdie_vertx
+
+uibwdie_horz
+	.long	enf_xh1
+	.long	enf_xh2
+	.long	enf_xh3
+	.long	enf_xh4
+	.long	0
+uibwdie_horzx
+
+uibwdie_diag13
+	.long	enf_xf1
+	.long	enf_xf2
+	.long	enf_xf3
+	.long	enf_xf4
+	.long	0
+uibwdie_diag13x
+
+uibwdie_diag24
+	.long	enf_xb1
+	.long	enf_xb2
+	.long	enf_xb3
+	.long	enf_xb4
+	.long	0
+uibwdie_diag24x
+
+uibwdeath_speed	equ	3		;death seq anim speed
+
+
+*****************************************************************************
+******************************************************************************
+******************************************************************************
+*
+*	SPARK SECTION
+*
+
+	;reg use
+	;  a6 (use) x acc
+	;  a7 (use) y acc
+	;  a8 (use) *image
+	;  a9 (use) anim timer
+	; a10 (in)  initial X
+	; a10 (use) anim pointer
+	; a11 (in)  initial Y
+	; a11 (use) life timer
+
+ SUBRP	spark
+
+	;create a spark object
+	move	a10,a0
+	move	a11,a1
+
+	movi	zsgmscript,a10
+	move	*a10+,a2,L
+	clr	a3
+	movi	DMAWNZ,a4
+	movi	CLSENMY|TYPSPARK,a5
+	clr	a6
+	clr	a7
+	calla	BEGINOBJW
+
+	;set the initial velocity.
+	move	@player_object,a0,L
+	move	*a0(OXVAL),a1,L
+	move	*a8(OXVAL),a2,L
+	sub	a2,a1
+	sra	5,a1
+	move	a1,*a8(OXVEL),L
+
+	move	*a0(OYVAL),a1,L
+	move	*a8(OYVAL),a2,L
+	sub	a2,a1
+	sra	5,a1
+	move	a1,*a8(OYVEL),L
+
+	;and then add a little 'spin' by giving them some acceleration
+	movi	zsgmhigh_acc*2,a0
+	calla	RNDRNG0
+	subi	zsgmhigh_acc,a0
+	move	a0,a6
+	movi	zsgmhigh_acc*2,a0
+	calla	RNDRNG0
+	subi	zsgmhigh_acc,a0
+	move	a0,a7
+
+	movi	zsgmanim_time,a9
+	movi	zsgmlife_time,a11
+
+zsgmloop
+	PUSHP	a6,a7
+	SLEEPK	1
+	PULLP	a6,a7
+
+	;bounds check
+	callr	zsgmin_bounds
+
+	;apply accelerations
+	move	*a8(OXVEL),a14,L
+	add	a6,a14
+	move	a14,*a8(OXVEL),L
+
+	move	*a8(OYVEL),a14,L
+	add	a7,a14
+	move	a14,*a8(OYVEL),L
+
+	dec	a9
+	jrnz	zsgmno_anim
+
+	move	*a10+,a0,L
+	jrnz	zsgmno_wrap
+	movi	zsgmscript,a10
+	move	*a10+,a0,L
+zsgmno_wrap
+	calla	civanic
+	movi	zsgmanim_time,a9
+
+zsgmno_anim
+	dec	a11
+	jrz	zsgmexpire
+	jruc	zsgmloop
+
+zsgmexpire
+	calla	DELOBJA8
+
+	DIE
+
+
+ SUBRP	zsgmin_bounds
+
+	move	*a8(OXPOS),a14,W
+	movi	zsgmmin_x,a0
+	cmp	a0,a14
+	jrlt	zsgmx_adjust
+
+	movi	zsgmmax_x,a0
+	cmp	a0,a14
+	jrgt	zsgmx_adjust
+	jruc	zsgmy_check
+
+zsgmx_adjust
+	move	a0,*a8(OXPOS),W
+	clr	a6
+	move	a6,*a8(OXVEL),L
+
+zsgmy_check
+	move	*a8(OYPOS),a14,W
+	movi	zsgmmin_y,a0
+	cmp	a0,a14
+	jrlt	zsgmy_adjust
+
+	movi	zsgmmax_y,a0
+	cmp	a0,a14
+	jrgt	zsgmy_adjust
+	jruc	zsgmdone_check
+
+zsgmy_adjust
+	move	a0,*a8(OYPOS),W
+	clr	a7
+	move	a7,*a8(OYVEL),L
+
+zsgmdone_check
+	rets
+
+
+******************************************************************************
+*
+*	spark collision routines
+*
+
+ SUBR	spark_die
+	PUSH	a1,a7
+
+	movi	CLSDEAD,a14
+	move	a14,*a8(OID),W
+	move	*a8(OPLINK),a0,L
+	movi	DEADSPARK_PID,a1
+	movi	zsgmexpire,a7
+	calla	XFERPROC
+
+	PULL	a1,a7
+	rets
+
+
+******************************************************************************
+*
+*	spark configuration data
+*
+
+zsgmlife_time	equ	180		;how long they last
+zsgmanim_time	equ	3		;frame rate
+
+zsgmhigh_acc	equ	00000200h	;top acceleration
+
+zsgmmin_x	equ	53	;spark move bounds
+zsgmmax_x	equ	347-7
+zsgmmin_y	equ	45
+zsgmmax_y	equ	231-7
+
+zsgmscript
+	.long	spark_1
+	.long	spark_2
+	.long	spark_3
+	.long	spark_4
+	.long	0
+
+
+*****************************************************************************
+******************************************************************************
+******************************************************************************
+*
+*	QUARK SECTION
+*
+
+	;reg use
+	; a0 - (in) # of quarks
+
+ SUBRP	make_quarks
+
+	move	a0,a0
+	jrz	cexsdone
+
+cexsanother_quark
+	PUSHP	a0
+
+cexsget_pos
+	;assign a random starting position
+	movi	cexsmax_x-cexsmin_x,a0
+	calla	RNDRNG0
+	move	a0,a9
+	movi	cexsmax_y-cexsmin_y,a0
+	calla	RNDRNG0
+	move	a0,a10
+
+	addi	cexsmin_x,a9
+	addi	cexsmin_y,a10
+
+	cmpi	cexsmid_x1,a9
+	jrle	cexsplace_quark
+	cmpi	cexsmid_x2,a9
+	jrge	cexsplace_quark
+	cmpi	cexsmid_y1,a10
+	jrle	cexsplace_quark
+	cmpi	cexsmid_y2,a10
+	jrge	cexsplace_quark
+	jruc	cexsget_pos
+
+cexsplace_quark
+	CREATE	QUARK_PID,quark
+	PULLP	a0
+	dsj	a0,cexsanother_quark
+
+cexsdone
+	rets
+
+
+cexsmid_x1	equ	200-60	;quark start inner boundaries
+cexsmid_x2	equ	200+60
+cexsmid_y1	equ	138-60
+cexsmid_y2	equ	138+60
+
+
+*******************************************************************************
+*
+*	quark process
+*
+
+	STRUCTPD
+	WORD	cexsOCHILDREN	;UHW # of children left to spawn
+	WORD	cexsOSTAGE		;UHW stage in life cycle
+
+	;reg use
+	; a7 (use) event timer (related to cexsOSTAGE)
+	; a8 (use) * object
+	; a9 (in)  x pos
+	; a9 (use) anim counter
+	;a10 (in)  y pos
+	;a10 (use) frame pointer
+	;a11 (use) time until next vel change
+
+ SUBRP	quark
+
+	;increment the badguy count
+	move	@live_badguys,a14,W
+	inc	a14
+	move	a14,@live_badguys,W
+
+	;create the quark object
+	move	a9,a0		;x pos
+	sll	16,a0
+	move	a10,a1		;y pos
+	sll	16,a1
+	movi	cexsstandard_script,a10
+	move	*a10+,a2,L	;img
+	clr	a3
+	movi	DMAWNZ,a4
+	movi	CLSENMY|TYPQUARK,a5
+	clr	a6
+	clr	a7
+	calla	BEGINOBJW
+
+	;initialize anim counter
+	movi	cexsanim_speed,a9
+
+	;set initial velocities and accelerations
+	callr	cexsset_v
+
+	;initialize life cycle and event timer
+	movi	cexsSTAGE_YOUTH,a14
+	move	a14,*a13(cexsOSTAGE),W
+	movi	cexsyouth_time,a7
+
+cexsloop
+	PUSHP	a7
+	SLEEPK	1
+	PULLP	a7
+	dec	a9
+	jrnz	cexsno_anim
+
+	;advance the frame
+	move	*a10+,a0,L
+	jrnz	cexsnewframe
+
+	;reset script.  depends on the stage
+	move	*a13(cexsOSTAGE),a14,W
+	cmpi	cexsSTAGE_PARENT,a14
+	jreq	cexsset_parent_script
+	movi	cexsstandard_script,a10
+	jruc	cexsscript_set
+cexsset_parent_script
+	movi	cexsparent_script,a10
+
+cexsscript_set
+	move	*a10+,a0,L
+
+cexsnewframe
+	calla	civanic
+
+	;reset the counter
+	movi	cexsanim_speed,a9
+
+cexsno_anim
+	;bounds check
+	callr	cexsin_bounds
+
+	;adjust vel if it's time
+	dec	a11
+	jrnz	cexsno_v_change
+	callr	cexsset_v
+
+cexsno_v_change
+
+	;do event?
+	dec	a7
+	jrnz	cexsno_event
+
+	;event.  depends on the stage in the life cycle
+	move	*a13(cexsOSTAGE),a14
+	cmpi	cexsSTAGE_YOUTH,a14
+	jreq	cexsyouth_event
+	cmpi	cexsSTAGE_PARENT,a14
+	jreq	cexsparent_event
+	;default
+	jruc	cexsdotage_event
+
+cexsyouth_event
+	;switch to middle age
+	movi	cexsSTAGE_PARENT,a14
+	move	a14,*a13(cexsOSTAGE),W
+
+	;set the number of kids to be spawned
+	movi	cexsmax_kids-cexsmin_kids,a0
+	calla	RNDRNG0
+	addi	cexsmin_kids,a0
+	move	a0,*a13(cexsOCHILDREN),W
+
+	;set the spawn timer
+	movi	cexsspawn_time,a7
+	jruc	cexsno_event
+
+cexsparent_event
+	;spawn a brat
+	PUSHP	a10,a11
+	move	*a8(OXVAL),a10,L
+	move	*a8(OYVAL),a11,L
+	CREATE	TANK_PID,tank
+	PULLP	a10,a11
+
+	;decrement the kid count
+	move	*a13(cexsOCHILDREN),a14,W
+	dec	a14
+	jrz	cexsbarren
+	move	a14,*a13(cexsOCHILDREN),W
+	movi	cexsspawn_time,a7
+	jruc	cexsno_event
+
+cexsbarren
+	;that was the last kid.  age
+	movi	cexsSTAGE_DOTAGE,a14
+	move	a14,*a13(cexsOSTAGE),W
+	movi	cexsold_age_time,a7
+	jruc	cexsno_event
+
+cexsdotage_event
+	;nothing fancy.  just die.
+	jruc	cexsdie_peacefully
+	
+cexsno_event
+	jruc	cexsloop
+
+
+cexsbeen_shot
+	;crud.  we've been shot
+
+cexsdie_peacefully
+
+	;decrement the badguy count
+	move	@live_badguys,a14,W
+	dec	a14
+	move	a14,@live_badguys,W
+
+	calla	DELOBJA8
+
+	DIE
+
+
+ SUBRP	cexsset_v
+
+	movi	cexshigh_v,a0
+	calla	RNDRNG0
+	cmpi	cexshigh_v/2,a0
+	jrgt	cexspositive_x
+
+	subi	cexshigh_v,a0
+
+cexspositive_x
+	move	a0,*a8(OXVEL),L
+
+	movi	cexshigh_v,a0
+	calla	RNDRNG0
+	cmpi	cexshigh_v/2,a0
+	jrgt	cexspositive_y
+
+	subi	cexshigh_v,a0
+
+cexspositive_y
+	move	a0,*a8(OYVEL),L
+
+	movi	cexsv_change_time/2,a0
+	calla	RNDRNG0
+	addi	cexsv_change_time/2,a0
+	move	a0,a11
+
+	rets
+
+
+ SUBRP	cexsin_bounds
+
+	move	*a8(OXPOS),a1,W
+	movi	cexsmin_x,a0
+	move	*a8(ODXOFF),a14,W
+	add	a14,a0
+	cmp	a0,a1
+	jrlt	cexsx_adjust
+
+	move	*a8(OSIZEX),a0,W
+	neg	a0
+	move	*a8(ODXOFF),a14,W
+	add	a14,a0
+	addi	cexsmax_x,a0
+	cmp	a0,a1
+	jrgt	cexsx_adjust
+	jruc	cexsy_check
+
+cexsx_adjust
+	move	a0,*a8(OXPOS),W
+	move	*a8(OXVEL),a0,L
+	neg	a0
+	move	a0,*a8(OXVEL),L
+
+cexsy_check
+	move	*a8(OYPOS),a1,W
+	movi	cexsmin_y,a0
+	move	*a8(ODYOFF),a14,W
+	add	a14,a0
+	cmp	a0,a1
+	jrlt	cexsy_adjust
+
+	move	*a8(OSIZEY),a0,W
+	neg	a0
+	move	*a8(ODYOFF),a14,W
+	add	a14,a0
+	addi	cexsmax_y,a0
+	cmp	a0,a1
+	jrgt	cexsy_adjust
+	jruc	cexsdone_check
+
+cexsy_adjust
+	move	a0,*a8(OYPOS),W
+	move	*a8(OYVEL),a0,L
+	neg	a0
+	move	a0,*a8(OYVEL),L
+
+cexsdone_check
+	rets
+
+
+******************************************************************************
+*
+*	quark collision routines
+*
+
+ SUBR	quark_die
+	PUSH	a1,a7
+
+	movi	CLSDEAD,a14
+	move	a14,*a8(OID),W
+	move	*a8(OPLINK),a0,L
+	movi	DEADQUARK_PID,a1
+	movi	cexsbeen_shot,a7
+	calla	XFERPROC
+
+	PULL	a1,a7
+	rets
+
+
+******************************************************************************
+*
+*	quark configuration data
+*
+
+cexsanim_speed	equ	3
+
+cexsv_change_time	equ	600	;time between random course changes
+
+cexsyouth_time	equ	90	;time before we have kids
+cexsspawn_time	equ	90	;time between kids
+cexsold_age_time	equ	120	;time between last kid and natural death
+
+cexsmin_kids	equ	3	;lower limit on spawned tanks
+cexsmax_kids	equ	7	;upper limit
+
+cexshigh_v		equ	0001C000h
+
+cexsmin_x	equ	53	;quark move bounds
+cexsmax_x	equ	347-0
+cexsmin_y	equ	45
+cexsmax_y	equ	231-0
+
+;life cycle stages
+cexsSTAGE_YOUTH 	equ	0000h
+cexsSTAGE_PARENT	equ	0001h
+cexsSTAGE_DOTAGE	equ	0002h
+
+cexsstandard_script
+	.long	quark_1
+	.long	quark_1
+	.long	quark_2
+	.long	quark_3
+	.long	quark_4
+	.long	0
+
+cexsparent_script
+	.long	quark_1
+	.long	quark_2
+	.long	quark_3
+	.long	quark_4
+	.long	quark_5
+	.long	quark_6
+	.long	quark_7
+	.long	quark_8
+	.long	0
+
+
+*****************************************************************************
+******************************************************************************
+******************************************************************************
+*
+*	TANK SECTION
+*
+
+	STRUCTPD
+	WORD	loygOSHOTS		;UHW shots left to be fired
+
+	;reg use
+	;  a7 (use) anim timer
+	;  a8 (use) *img
+	;  a9 (use) next move timer (move/fire phase)
+	;  a9 (use) frame pointer (death phase)
+	; a10 (in)  initial X
+	; a10 (use) frame pointer (grow + move/fire phases)
+	; a11 (in)  initial Y
+	; a11 (use) next shot timer (move/fire phase)
+
+ SUBRP	tank
+
+	;increment the badguy count
+	move	@live_badguys,a14,W
+	inc	a14
+	move	a14,@live_badguys,W
+
+	;create the tank object
+	move	a10,a0
+	move	a11,a1
+	movi	loyggrow_script,a10
+	move	*a10+,a2,L
+	clr	a3
+	movi	DMAWNZ,a4
+	movi	CLSENMY|TYPTANK,a5
+	clr	a6
+	clr	a7
+	calla	BEGINOBJW
+
+	;grow phase
+
+loyggrow_loop
+	SLEEPK	loyggrow_speed
+	move	*a10+,a0,L
+	jrz	loygmf_phase
+	calla	civanic
+	jruc	loyggrow_loop
+
+loygmf_phase
+	;begin move/fire phase.  set initial course
+	callr	loygset_v
+	movi	loyganim_time,a7
+	movi	loygright_script,a10
+	movi	loygfire_time/2,a0
+	calla	RNDRNG0
+	addi	loygfire_time*3/4,a0
+	move	a0,a11
+	movi	loygnum_shots,a14
+	move	a14,*a13(loygOSHOTS),W
+
+loygmain_loop
+	PUSHP	a7
+	SLEEPK	1
+	PULLP	a7
+	dec	a9
+	jrnz	loygno_turn
+
+	;change course
+	callr	loygset_v
+
+loygno_turn
+
+	dec	a11
+	jrnz	loygno_shot
+
+	move	*a13(loygOSHOTS),a14,W
+	jrz	loygno_shot
+
+	;fire a shell
+	PUSHP	a7,a10,a11
+	move	*a8(OXVAL),a10,L
+	move	*a8(OYVAL),a11,L
+	create	SHELL_PID,tank_shell
+	PULLP	a7,a10,a11
+	movi	loygfire_time/2,a0
+	calla	RNDRNG0
+	addi	loygfire_time*3/4,a0
+	move	a0,a11
+
+loygno_shot
+
+	;bounds check
+	callr	loygin_bounds
+
+	;animate?
+	dec	a7
+	jrnz	loygno_anim
+	move	*a10+,a0,L
+	jrnz	loygno_wrap
+	movi	loygright_script,a10
+	move	*a10+,a0,L
+
+loygno_wrap
+	calla	civanic
+	movi	loyganim_time,a7
+
+loygno_anim
+	jruc	loygmain_loop
+
+loygdie
+	;decrement the badguy count
+	move	@live_badguys,a14,W
+	dec	a14
+	move	a14,@live_badguys,W
+
+	;zero our velocity
+	clr	a14
+	move	a14,*a8(OXVEL),L
+	move	a14,*a8(OYVEL),L
+
+	;set up the animation
+loygdieloop
+	move	*a9+,a0,L
+	jrz	loygdead_n_buried
+	calla	civanic
+	sleepk	loygdeath_speed
+	jruc	loygdieloop
+
+loygdead_n_buried
+	calla	DELOBJA8
+
+	DIE
+
+
+ SUBRP	loygset_v
+
+	movi	loyghigh_v,a0
+	calla	RNDRNG0
+	cmpi	loyghigh_v/2,a0
+	jrgt	loygpositive_x
+
+	subi	loyghigh_v,a0
+
+loygpositive_x
+	move	a0,*a8(OXVEL),L
+
+	movi	loyghigh_v,a0
+	calla	RNDRNG0
+	cmpi	loyghigh_v/2,a0
+	jrgt	loygpositive_y
+
+	subi	loyghigh_v,a0
+
+loygpositive_y
+	move	a0,*a8(OYVEL),L
+
+	movi	loygv_change_time/2,a0
+	calla	RNDRNG0
+	addi	loygv_change_time/2,a0
+	move	a0,a9
+
+	rets
+
+
+ SUBRP	loygin_bounds
+
+	move	*a8(OXPOS),a14,W
+	movi	loygmin_x,a0
+	cmp	a0,a14
+	jrlt	loygx_adjust
+
+	movi	loygmax_x,a0
+	cmp	a0,a14
+	jrgt	loygx_adjust
+	jruc	loygy_check
+
+loygx_adjust
+	move	a0,*a8(OXPOS),W
+	move	*a8(OXVEL),a0,L
+	neg	a0
+	move	a0,*a8(OXVEL),L
+
+loygy_check
+	move	*a8(OYPOS),a14,W
+	movi	loygmin_y,a0
+	cmp	a0,a14
+	jrlt	loygy_adjust
+
+	movi	loygmax_y,a0
+	cmp	a0,a14
+	jrgt	loygy_adjust
+	jruc	loygdone_check
+
+loygy_adjust
+	move	a0,*a8(OYPOS),W
+	move	*a8(OYVEL),a0,L
+	neg	a0
+	move	a0,*a8(OYVEL),L
+
+loygdone_check
+	rets
+
+
+******************************************************************************
+*
+*	tank collision routines
+*
+
+ SUBR	tank_die
+	;hit by player gunfire
+	PUSH	a1,a7
+
+	;jeepers.  we're dead.
+	movi	CLSDEAD,a14
+	move	a14,*a8(OID),W
+
+	move	*a0(OXVEL),a14,L
+	jrz	loygvert_bullet
+	move	*a0(OYVEL),a1,L
+	jrz	loyghorz_bullet
+
+	add	a1,a14
+	jrz	loygdiag_13
+	jruc	loygdiag_24
+
+loyghorz_bullet
+	movi	loygdie_vert,a9
+	jruc	loygdeath_set
+loygvert_bullet
+	movi	loygdie_horz,a9
+	jruc	loygdeath_set
+loygdiag_13
+	movi	loygdie_diag24,a9
+	jruc	loygdeath_set
+loygdiag_24
+	movi	loygdie_diag13,a9
+	jruc	loygdeath_set
+
+loygdeath_set
+	move	*a8(OPLINK),a0,L
+	movi	DEADTANK_PID,a1
+	movi	loygdie,a7
+	move	*a0(PA10),a10,L
+	calla	XFERPROC
+
+	movi	loygtank_points,a0
+	callr	score_points
+
+	PULL	a1,a7
+	rets
+
+
+******************************************************************************
+*
+*	tank configuration data
+*
+
+loygtank_points	equ	200
+
+loygnum_shots	equ	21
+
+loygv_change_time	equ	250
+loygfire_time	equ	90
+
+loyghigh_v		equ	00010000h
+
+loyggrow_speed	equ	6
+loyganim_time	equ	2
+
+loygmin_x	equ	53	;tank move bounds
+loygmax_x	equ	347-13
+loygmin_y	equ	45
+loygmax_y	equ	231-16
+
+loyggrow_script
+	.long	tank_g1
+	.long	tank_g2
+	.long	tank_g3
+	.long	tank_g4
+	.long	tank_1
+	.long	0
+
+loygright_script
+	.long	tank_1
+	.long	tank_2
+	.long	tank_3
+	.long	tank_4
+	.long	0
+
+loygdie_vert
+	.long	enf_xv1
+	.long	enf_xv2
+	.long	enf_xv3
+	.long	enf_xv4
+	.long	enf_xv5
+	.long	0
+
+loygdie_horz
+	.long	enf_xh1
+	.long	enf_xh2
+	.long	enf_xh3
+	.long	enf_xh4
+	.long	0
+
+loygdie_diag13
+	.long	enf_xf1
+	.long	enf_xf2
+	.long	enf_xf3
+	.long	enf_xf4
+	.long	0
+
+loygdie_diag24
+	.long	enf_xb1
+	.long	enf_xb2
+	.long	enf_xb3
+	.long	enf_xb4
+	.long	0
+
+loygdeath_speed	equ	3		;death seq anim speed
+
+
+*****************************************************************************
+******************************************************************************
+******************************************************************************
+*
+*	SHELL SECTION
+*
+
+	;reg use
+	;  a8 (use) *image
+	; a10 (in)  initial X
+	; a11 (in)  initial Y
+	; a11 (use) life timer
+
+ SUBRP	tank_shell
+
+	;create a shell object
+	move	a10,a0
+	move	a11,a1
+	movi	shell,a2
+	clr	a3
+	movi	DMAWNZ,a4
+	movi	CLSENMY|TYPSHELL,a5
+	clr	a6
+	clr	a7
+	calla	BEGINOBJW
+
+	;set the initial velocity.
+	move	@player_object,a0,L
+	move	*a0(OXVAL),a1,L
+	move	*a8(OXVAL),a2,L
+	sub	a2,a1
+	sra	5,a1
+	move	a1,*a8(OXVEL),L
+
+	move	*a0(OYVAL),a1,L
+	move	*a8(OYVAL),a2,L
+	sub	a2,a1
+	sra	5,a1
+	move	a1,*a8(OYVEL),L
+
+	movi	dqcclife_time,a11
+
+dqccloop
+	PUSHP	a6,a7
+	SLEEPK	1
+	PULLP	a6,a7
+
+	;bounds check
+	callr	dqccin_bounds
+
+	dsj	a11,dqccloop
+
+dqccexpire
+	calla	DELOBJA8
+
+	DIE
+
+
+ SUBRP	dqccin_bounds
+
+	move	*a8(OXPOS),a14,W
+	movi	dqccmin_x,a0
+	cmp	a0,a14
+	jrlt	dqccx_adjust
+
+	movi	dqccmax_x,a0
+	cmp	a0,a14
+	jrgt	dqccx_adjust
+	jruc	dqccy_check
+
+dqccx_adjust
+	move	a0,*a8(OXPOS),W
+	move	*a8(OXVEL),a0,L
+	neg	a0
+	move	a0,*a8(OXVEL),L
+
+dqccy_check
+	move	*a8(OYPOS),a14
+	movi	dqccmin_y,a0
+	cmp	a0,a14
+	jrlt	dqccy_adjust
+
+	movi	dqccmax_y,a0
+	cmp	a0,a14
+	jrgt	dqccy_adjust
+	jruc	dqccdone_check
+
+dqccy_adjust
+	move	a0,*a8(OYPOS),W
+	move	*a8(OYVEL),a0,L
+	neg	a0
+	move	a0,*a8(OYVEL),L
+
+dqccdone_check
+	rets
+
+
+******************************************************************************
+*
+*	shell collision routines
+*
+
+ SUBR	shell_die
+	PUSH	a1,a7
+
+	movi	CLSDEAD,a14
+	move	a14,*a8(OID),W
+	move	*a8(OPLINK),a0,L
+	movi	DEADSHELL_PID,a1
+	movi	dqccexpire,a7
+	calla	XFERPROC
+
+	PULL	a1,a7
+	rets
+
+
+******************************************************************************
+*
+*	shell configuration data
+*
+
+dqcclife_time	equ	240		;how long they last
+
+dqccmin_x	equ	53	;shell move bounds
+dqccmax_x	equ	347-7
+dqccmin_y	equ	45
+dqccmax_y	equ	231-7
+
+
+*****************************************************************************
+******************************************************************************
+******************************************************************************
+*
+*	color cycling processes
+*
+
+ SUBRP	robo_pal_cycles
+
+	;laser flash cycle
+	movi	[0Ah,1],a8		;cycle color A
+	movi	robo_p,a9		;pal name
+	movi	COLTAB_LFLASH,a10	;use the LFLASH table
+	movk	1,a11			;cycle speed
+	CREATE	CYCPID,CYCLE_TABLE
+
+	;rgb cycle
+	movi	[0Bh,1],a8		;cycle color B
+	movi	robo_p,a9		;pal name
+	movi	COLTAB_RGB,a10		;use the RGB table
+	movk	8,a11			;cycle speed
+	CREATE	CYCPID,CYCLE_TABLE
+
+	;decay cycle
+	movi	[0Ch,1],a8		;cycle color C
+	movi	robo_p,a9		;pal name
+	movi	COLTAB_DECAY,a10	;use the DECAY table
+	movk	2,a11			;cycle speed
+	CREATE	CYCPID,CYCLE_TABLE
+
+	;laser cycle
+	movi	[0Dh,1],a8		;cycle color D
+	movi	robo_p,a9		;pal name
+	movi	COLTAB_LASER,a10	;use the LASER table
+	movk	20,a11			;cycle speed
+	CREATE	CYCPID,CYCLE_TABLE
+
+	;blue-purple-red cycle
+	movi	[0Eh,1],a8		;cycle color E
+	movi	robo_p,a9		;pal name
+	movi	COLTAB_BLUPURRED,a10	;use the BPR table
+	movk	1,a11			;cycle speed
+	CREATE	CYCPID,CYCLE_TABLE
+
+	;red-gold cycle
+	movi	[0Fh,1],a8		;cycle color F
+	movi	robo_p,a9		;pal name
+	movi	COLTAB_REDGOLD,a10	;use the RED-GOLD table
+	movk	10,a11			;cycle speed
+	CREATE	CYCPID,CYCLE_TABLE
+
+	rets
+
+
+COLTAB_LFLASH
+	.WORD	0380H,1380H,2380H,3380H,4380H,5380H,6380H,7380H,7300H
+	.WORD	7280H,7200H,7180H,7080H,7008H,7008H,7010H,7010H,701CH
+	.WORD	701CH,601CH,501CH,409CH,309CH,209CH,219CH,029CH,039CH
+	.WORD	139CH,239CH,339CH,539CH,739CH,7390H,7380H,6380H,4380H
+	.word	-1
+
+;	.word	7C00h,7FFFh,7FFFh,03E0h,7FFFh,7FFFh,001Fh,7FFFh,7FFFh
+
+COLTAB_RGB
+	.WORD	07C00H,001FH,77A0h,741Ah
+	.word	-1
+
+;	.word	7C00h,03E0h,001Fh
+
+COLTAB_DECAY
+	.WORD	001CH,001CH,011CH,021CH,031CH,039CH,239CH,2390H,2388H
+	.WORD	2380H,4300H,5280H,7180H,6180H,7080H,7000H,6000H,5000H
+	.WORD	4000H,3000H,2000H,1000H
+	.word	-1
+
+;	.word	7FFFh,6F7Bh,5EF7h,4E73h,3DEFh,2D6Bh,1CE7h,0C63h,0000h
+
+COLTAB_LASER
+	.word	7C1Fh,7FFFh,7F00h
+	.word	-1
+
+COLTAB_BLUPURRED
+	.WORD	001CH,101CH,201CH,301CH,401CH,501CH,601CH,701CH,7010H
+	.WORD	7010H,7008H,7008H,7000H,7000H,7008H,7008H,7010H,7010H
+	.WORD	701CH,701CH,601CH,501CH,401CH,301CH,201CH,101CH
+;	.word	001Fh,7C1Fh,7C00h
+	.word	-1
+
+COLTAB_REDGOLD
+	.word	7C00h,7F00h
+	.word	-1
+
+
+*****************************************************************************
+******************************************************************************
+******************************************************************************
+*
+*	score stuff
+*
+
+	;reg use
+	; a11 score
+
+ SUBRP	score
+
+	;initialize score
+	move	@robotron_score,a11,L
+	callr	azmzprint_score
+
+azmzloop
+	SLEEPK	1
+	move	@robotron_score,a14,L
+	cmp	a11,a14
+	jrne	azmzscore_change
+	jruc	azmzloop
+
+azmzscore_change
+	move	a14,a11
+	callr	azmzzorch_score
+	callr	azmzprint_score
+	jruc	azmzloop
+
+	DIE
+
+
+ SUBRP	azmzzorch_score
+	movi	TYPTEXT|SUBSCOR,a0
+	calla	obj_del1c
+
+	rets
+
+
+ SUBRP	azmzprint_score
+
+	movi	azmzscore_setup,a2
+	calla	setup_message
+	movi	TYPTEXT|SUBSCOR,a14
+	move	a14,@mess_objid
+	move	@robotron_score,a0,L
+	movi	azmzmax_score,a1
+	calla	dec_to_asc
+	calla	copy_string
+	calla	print_string_R
+
+	rets
+
+
+azmzscore_setup
+	JAM_STR	robotron_ascii,3,1,azmzscore_xpos,azmzscore_ypos,robo_p,0
+	.even
+
+azmzmax_score	.equ	9999999		;that's all dec_to_asc can handle
+
+******************************************************************************
+* adds to score
+* 0a0H amount to add
+
+ SUBRP	score_points
+
+	move	@robotron_score,a14,L
+	add	a0,a14
+	move	a14,@robotron_score,L
+	rets
+
+
+azmzscore_ypos	.equ	36
+azmzscore_xpos	.equ	130
+
+*****************************************************************************
+******************************************************************************
+******************************************************************************
+*
+*	miscellaneous functions / processes
+*
+
+******************************************************************************
+* Draws the frame
+* 0a0H=color value
+*
+
+ SUBRP	draw_frame
+
+
+	move	a0,a9
+	sla	8,a9
+	or	a0,a9
+
+	movi	robo_p,a0
+	calla	pal_getf
+	move	a0,a10
+
+	movi	frcpframe_data,a11
+
+frcploop
+	move	*a11+,a0,L
+	jrz	frcpdone
+	move	*a11+,a1,L
+	movi	frcpframe_image,a2
+	movi	100,a3				;z pos
+	movi	DMACAL,a4			;DMA flags
+	movi	CLSDEAD,a5			;object ID
+	clr	a6				;x vel
+	clr	a7				;y vel
+	calla	BEGINOBJ
+
+	move	a8,a0
+	calla	fg2bg
+
+	move	*a11+,a14,W
+	move	a14,*a8(OSIZEX),W
+	move	*a11+,a14,W
+	move	a14,*a8(OSIZEY),W
+
+	move	a9,*a8(OCONST),W
+	move	a10,*a8(OPAL),W
+
+	jruc	frcploop
+frcpdone
+	rets
+
+
+frcpframe_image	equ	man_d1
+
+frcpframe_data
+	.long	[53,0],[43,0]	;position X,Y
+	.word	294,2		;size X,Y
+
+	.long	[53,0],[231,0]	;position X,Y
+	.word	294,2		;size X,Y
+
+	.long	[50,0],[43,0]	;position X,Y
+	.word	3,190		;size X,Y
+
+	.long	[347,0],[43,0]	;position X,Y
+	.word	3,190		;size X,Y
+
+	.long	0
+
+frcpframe_datax
+
+
+*****************************************************************************
+* Draws the wave indicator
+*
+
+ SUBRP	wave_count
+
+	;wave text
+	movi	[kqrqwave_x,0],a0			;x pos
+	movi	[kqrqwave_y,0],a1			;y pos
+	movi	wave_text,a2			;* image
+	clr	a3				;z pos
+	movi	DMAWNZ,a4			;DMA flags
+	clr	a5				;object ID
+	clr	a6				;x vel
+	clr	a7				;y vel
+	calla	BEGINOBJ
+
+	;ones digit
+;	move	@robo_wave,a2,W
+;	addi	HEXTODEC+0010h,a2		;extra 10 cuz we count from 0
+;	move	*a2,a2,W
+;	andi	00FFh,a2
+	move	@robo_wave,a0,W
+	sra	4,a0
+	inc	a0
+	calla	BINBCD
+	move	a0,a2
+	andi	0Fh,a2
+	X32	a2
+	addi	kqrqwave_font,a2
+
+	movi	[kqrqwave_onesx,0],a0		;x pos
+	movi	[kqrqwave_y,0],a1			;y pos
+	move	*a2,a2,L			;* image
+	clr	a3				;z pos
+	movi	DMAWNZ,a4			;DMA flags
+	clr	a5				;object ID
+	clr	a6				;x vel
+	clr	a7				;y vel
+	calla	BEGINOBJ
+
+	;tens digit
+	move	@robo_wave,a0,W
+	sra	4,a0
+	inc	a0
+	calla	BINBCD
+	move	a0,a2
+	srl	4,a2
+	andi	0Fh,a2
+	jrz	kqrqdone
+	X32	a2
+	addi	kqrqwave_font,a2
+	movi	[kqrqwave_tensx,0],a0		;x pos
+	movi	[kqrqwave_y,0],a1			;y pos
+	move	*a2,a2,L			;* image
+	clr	a3				;z pos
+	movi	DMAWNZ,a4			;DMA flags
+	clr	a5				;object ID
+	clr	a6				;x vel
+	clr	a7				;y vel
+	calla	BEGINOBJ
+
+kqrqdone
+	rets
+
+kqrqwave_y		.equ	234
+kqrqwave_x		.equ	198
+kqrqwave_tensx	.equ	184
+kqrqwave_onesx	.equ	188
+
+kqrqwave_font
+	.long	rsmall_0
+	.long	rsmall_1
+	.long	rsmall_2
+	.long	rsmall_3
+	.long	rsmall_4
+	.long	rsmall_5
+	.long	rsmall_6
+	.long	rsmall_7
+	.long	rsmall_8
+	.long	rsmall_9
+kqrqwave_fontx
+
+*****************************************************************************
+* Check to see if an object is completely on the playfield
+* a8=OBJ
+* 0a0H=walls hit (bit 0=top, 1=right, 2=bottom, 3=left)
+* 0a2H=degree of overlap (in pixels)
+* Trashes scratch
+
+ SUBRP	bounds_check
+	PUSH	a1,a3
+	clr	a0
+	clr	a2
+	clr	a3
+
+	;check for hit top
+	move	*a8(OYPOS),a1
+	move	*a8(ODYOFF),a14
+	sub	a14,a1
+	cmpi	mdlglow_y,a1
+	jrgt	mdlgnot_high
+	movi	mdlglow_y,a2
+	sub	a1,a2
+	ori	M_HIT_TOP,a0
+	jruc	mdlgnot_low		;assume won't be both high and low
+
+mdlgnot_high
+	;check for hit bottom
+	move	*a8(ODYOFF),a14		;subtract the offset AGAIN because
+	sub	a14,a1			; we assume the anim point is there
+	move	*a8(OSIZEY),a14		; to center the object.
+	add	a14,a1
+	cmpi	mdlghigh_y,a1
+	jrlt	mdlgnot_low
+	move	a1,a2
+	subi	mdlghigh_y,a2
+	ori	M_HIT_BOTTOM,a0
+
+mdlgnot_low
+	;check for hit left
+	move	*a8(OXPOS),a1
+	move	*a8(ODXOFF),a14
+	sub	a14,a1
+	cmpi	mdlglow_x,a1
+	jrgt	mdlgnot_left
+	movi	mdlglow_x,a3
+	sub	a1,a3
+	ori	M_HIT_LEFT,a0
+	jruc	mdlgdone			;assume won't be both right and left
+
+mdlgnot_left
+	move	*a8(ODXOFF),a14
+	sub	a14,a1
+	move	*a8(OSIZEX),a14
+	add	a14,a1
+	cmpi	mdlghigh_x,a1
+	jrlt	mdlgdone
+	move	a1,a3
+	subi	mdlghigh_x,a3
+	ori	M_HIT_RIGHT,a0
+
+mdlgdone
+	;a2 is y overlap, a3 is x overlap.  a2 should be greatest of the two.
+	cmp	a2,a3
+	jrn	mdlgretval_set
+	move	a3,a2
+mdlgretval_set
+	PULL	a1,a3
+	rets
+
+
+;boundaries
+mdlglow_x	equ	53
+mdlghigh_x	equ	346
+mdlglow_y	equ	45
+mdlghigh_y	equ	230
+
+;ret values
+B_HIT_TOP	equ	0
+B_HIT_BOTTOM	equ	2
+B_HIT_LEFT	equ	3
+B_HIT_RIGHT	equ	1
+
+M_HIT_TOP	equ	0001h
+M_HIT_BOTTOM	equ	0004h
+M_HIT_LEFT	equ	0008h
+M_HIT_RIGHT	equ	0002h
+
+
+*****************************************************************************
+* If ever both start buttons are down, this proc sets the robo_done flag
+* and dies.
+*
+
+ SUBRP	watch_both_starts
+
+bqedloop
+	SLEEPK	4		;no need to check EVERY frame
+	clr	a0
+	calla	get_start_cur
+	jrz	bqedloop
+	movk	1,a0
+	calla	get_start_cur
+	jrz	bqedloop
+
+	;both starts are down.
+	movk	1,a0
+	move	a0,@starts_down
+
+	DIE
+
+*****************************************************************************
+* Watches for wave advance/back up key combo.
+*
+
+ SUBRP	wave_mover
+
+qpeuloop
+	SLEEPK	4
+	calla	get_all_buttons_cur
+	jrz	qpeuloop
+
+	cmpi	1,a0
+	jreq	qpeuback
+	cmpi	2,a0
+	jreq	qpeufwd
+	jruc	qpeuloop
+
+qpeuback
+	move	a0,@backward
+	jruc	qpeudone
+qpeufwd
+	move	a0,@forward
+
+qpeudone
+	DIE
+
+
+	.if DEBUG
+
+*****************************************************************************
+* Makes bog meters
+*
+
+ SUBRP	bog_o_meter
+
+	movi	robo_p,a0
+	calla	pal_getf
+	move	a0,a9
+
+	;create the background
+	movi	[360,0],a0
+	movi	[192,0],a1
+	movi	man_d1,a2
+	clr	a3
+	movi	DMACAL|M_FLIPV,a4
+	movi	CLSDEAD,a5
+	clr	a6
+	clr	a7
+	calla	BEGINOBJW
+
+	move	a9,*a8(OPAL)
+	movi	0707h,a14
+	move	a14,*a8(OCONST)
+
+	movi	8,a0
+	move	a0,*a8(OSIZEX)
+	movi	128,a0
+	move	a0,*a8(OSIZEY)
+	move	a8,a10
+
+	;create the foreground
+	movi	[360,0],a0
+	movi	[65,0],a1
+	movi	man_d1,a2
+	movi	1,a3
+	movi	DMACAL,a4
+	movi	CLSDEAD,a5
+	clr	a6
+	clr	a7
+	calla	BEGINOBJW
+
+	move	a9,*a8(OPAL)
+	movi	0808h,a14
+	move	a14,*a8(OCONST)
+	
+	movi	8,a0
+	move	a0,*a8(OSIZEX)
+
+	movi	xfvrscale,a9
+
+xfvrloop
+	SLEEPK	2
+	move	@CPULEFT,a1
+	jrnz	xfvrnobog
+
+	;BOG!!
+	nop
+xfvrnobog
+	mpyu	a9,a1
+	srl	16,a1
+	move	a1,*a8(OSIZEY)
+	cmpi	10h,a1
+	jrle	xfvrred
+
+	movi	0707h,a0
+	move	a0,*a10(OCONST)
+	jruc	xfvrloop
+xfvrred
+	movi	0101h,a0
+	move	a0,*a10(OCONST)
+	jruc	xfvrloop
+
+	DIE
+
+xfvrscale	equ	800000h/03DCh
+
+	.endif
+
+*****************************************************************************
+
+robotron_ascii
+ .long 0,0,0,0,0,0,0,0								;$00
+ .long 0,0,0,0,0,0,0,0								;$08
+ .long 0,0,0,0,0,0,0,0								;$10
+ .long 0,0,0,0,0,0,0,0								;$18
+ .long 0,rfont_exc,0,0,0,0,0,0								;$20	SP! " # $ % & '
+ .long rfont_lparens,rfont_rparens,0,0,rfont_comma,0,rfont_period,rfont_fslash	;$28	( ) * + , - . /
+ .long rfont_0,rfont_1,rfont_2,rfont_3,rfont_4,rfont_5,rfont_6,rfont_7		;$30	0 1 2 3 4 5 6 7
+ .long rfont_8,rfont_9,0,0,0,0,0,0						;$38	8 9 : ; < - > ?
+ .long 0,rfont_a,rfont_b,rfont_c,rfont_d,rfont_e,rfont_f,rfont_g		;$40	@ A B C D E F G
+ .long rfont_h,rfont_i,rfont_j,rfont_k,rfont_l,rfont_m,rfont_n,rfont_o		;$48	H I J K L M N O
+ .long rfont_p,rfont_q,rfont_r,rfont_s,rfont_t,rfont_u,rfont_v,rfont_w		;$50	P Q R S T U V W
+ .long rfont_x,rfont_y,rfont_z,0,0,0,0,0					;$58	X Y Z [ \ ] ^ _
+ .long 0,rfont_a,rfont_b,rfont_c,rfont_d,rfont_e,rfont_f,rfont_g		;$60	` a b c d e f g
+ .long rfont_h,rfont_i,rfont_j,rfont_k,rfont_l,rfont_m,rfont_n,rfont_o		;$68	h i j k l m n o
+ .long rfont_p,rfont_q,rfont_r,rfont_s,rfont_t,rfont_u,rfont_v,rfont_w		;$70	p q r s t u v w
+ .long rfont_x,rfont_y,rfont_z,0,0,0,0,0					;$78	x y z { | } ~
+
+*****************************************************************************
+*
+* Sound section
+* 0a0H = snd call
+
+RS_GRUNT	.equ	0
+RS_DIE		.equ	1
+RS_RESCUE	.equ	2
+RS_SHOOT	.equ	3
+RS_HIT		.equ	4
+
+sp_grunt	.equ	1<<8
+sp_shoot	.equ	2<<8
+sp_hit		.equ	3<<8
+sp_rescue	.equ	4<<8
+sp_die		.equ	5<<8
+
+robosnd_tbl
+	;	duration, call#
+	.word	sp_grunt|6,96		;0 = grunt footstep
+	.word	sp_die|96,98		;1 = die
+	.word	sp_rescue|39,99		;2 = rescue
+	.word	sp_shoot|17,102		;3 = shoot
+	.word	sp_hit|23,100		;4 = hit
+robosnd_end
+
+	.bss	rs_snd,16		;current sound call (0-3)
+	.bss	rs_time,32		;timeout on current call (long)PCNT
+	.bss	rs_pri,16		;priority on current call
+	.bss	last_grunt_snd,32	;PCNT of last grunt footstep
+
+
+ SUBRP	robo_sound_init
+
+	clr	a14
+	move	a14,@rs_snd
+	move	a14,@rs_time,L
+	move	a14,@last_grunt_snd,L
+	rets
+
+
+ SUBRP	robo_sound
+
+	PUSH	a2,a3,a4
+
+	;reggies:
+	;a0 = call index
+	;a1 = priority
+	;a2 = duration
+	;a3 = call #
+
+	;decode table index
+	move	a0,a14
+	X32	a14
+	addi	robosnd_tbl,a14
+	move	*a14,a1,W
+	srl	8,a1
+	move	*a14+,a2,W
+	andi	0FFh,a2
+	move	*a14,a3,W
+
+	;check old duration - if there's nothing going on, do the sound.
+	move	@rs_time,a4
+	move	@PCNT,a14,L
+	cmp	a4,a14
+	jrgt	bfsrdosnd
+
+	;old sound still going.  check for an override
+	TEST	a0
+	jrnz	bfsrng
+	move	@rs_snd,a14
+	jrz	bfsrgrxgr		;special grunt-overriding-grunt case
+
+bfsrng	move	@rs_pri,a14
+	cmp	a14,a1
+	jrge	bfsrdosnd
+	jruc	bfsrdone
+
+bfsrgrxgr	;do new call if old one has 3 or fewer ticks to live
+	move	@rs_time,a14,L
+	move	@PCNT,a4,L
+	sub	a4,a14
+	cmpi	3,a4
+	jrle	bfsrdosnd
+	jruc	bfsrdone
+
+bfsrdosnd	calla	SNDSND
+	move	a0,@rs_snd
+	move	@PCNT,a14,L
+	add	a2,a14
+	move	a14,@rs_time,L
+	move	a1,@rs_pri
+
+bfsrdone	PULL	a2,a3,a4
+	rets
+
+
+******************************************************************************
+
+	.end
+

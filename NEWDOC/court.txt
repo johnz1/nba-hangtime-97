@@ -1,0 +1,30 @@
+The court is stored from left to right in 8 images in OUTDOOR and CRTFLR
+
+For NBA JAM this was 1546x138:
+
+CRT1 274x138
+CRT2 364x138
+CRT3 365x138
+CRT4 274x138
+
+For Hangtime this is changed to 1762x144
+
+RCRT01 131x144
+RCRT02 250x144
+RCRT03 250x144
+RCRT04 250x144
+RCRT05 250x144
+RCRT06 250x144
+RCRT07 250x144
+RCRT08 131x144
+
+
+To get the COURT.BIN so we can use it in FRM> for LOD files:
+
+1. In IT Mark the images with spacebar. (for example in COURTZ.IMG you would mark CRT1 CRT2 CRT3 CRT4)
+2. Go to the main menu of IT and select "MAIN -> RAW SAVE" to output the data as raw pixels in one file.
+3. Use the FRM command to load this raw data in a LOD FRM> COURT.BIN
+4. Note that this raw data does not include a palette
+
+The court PAL is RCRT_p and is loaded using BB.LOD? as part of a set of dummy images that have the
+PAL attached to them. (OUTDR*)
