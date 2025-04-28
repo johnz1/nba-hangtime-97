@@ -164,10 +164,10 @@ T_BULTS:
 	.long   0567d273H
 	.word   0680H
 	.long   LOG_WASP
-DCSRUM1:
-	.word   186,88,0,0
-	.long   05680ef3H
-	.word   06000H
-	.long   DCSLIQ_P
+;DCSRUM1:
+;	.word   186,88,0,0
+;	.long   05680ef3H
+;	.word   06000H
+;	.long   DCSLIQ_P
 	.TEXT
 

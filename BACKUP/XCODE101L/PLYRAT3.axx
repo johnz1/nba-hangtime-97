@@ -147,8 +147,8 @@
 	.def	harr_h
 	.def	iversn_h
 	.def	kit_h
-	.def	minr_h
-	.def	rily_h
+;	.def	minr_h		;removed by Midway
+;	.def	rily_h		;removed by Midway
 	.def	wal_h
 
 ;DJT End
@@ -332,10 +332,10 @@ iversn_h
 	HDMAC	IVER01
 kit_h
 	HDMAC	KIT01
-minr_h
-	HDMAC	MINR01
-rily_h
-	HDMAC	RILY01
+;minr_h
+;	HDMAC	MINR01
+;rily_h
+;	HDMAC	RILY01
 wal_h
 	HDMAC	WAL01
 

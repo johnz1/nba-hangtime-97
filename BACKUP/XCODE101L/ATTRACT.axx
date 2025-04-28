@@ -1407,7 +1407,7 @@ spxsnotgc
 	JSRP	time_delay		;SLEEP	30
 
 ;sweepstakes
-
+	.if	TRIVCON
 	clr	a0
 	move	a0,@DISPLAYON
 
@@ -1449,6 +1449,7 @@ spxsnotgc
 
 	movi	TSEC*3+11,a10
 	JSRP	time_delay		;SLEEP	30
+	.endif	;TRIVCON
 
 ;testers
 
@@ -1604,11 +1605,11 @@ spxshardware_str_setup2
 spxsnba_help_setup2
 	PRINT_STR	bast18_ascii,11,0,200,100-30,BSTGWWOP,0
 
-spxssponsor_str_setup
-	PRINT_STR	bast18_ascii,11,0,200,65,BST18T_P,0
+;spxssponsor_str_setup
+;	PRINT_STR	bast18_ascii,11,0,200,65,BST18T_P,0
 
-spxssponsor_str_setup2
-	PRINT_STR	bast10_ascii,11,0,284,152,BAST_Y_P,0
+;spxssponsor_str_setup2
+;	PRINT_STR	bast10_ascii,11,0,284,152,BAST_Y_P,0
 
 spxsgme_tsters_str_setup2
 	PRINT_STR	bast18_ascii,11,0,200,45,BSTGWWOP,0
@@ -1646,9 +1647,10 @@ spxshardware_str
 
 spxsnba_help_str
 	.string	"NBA SUPPORT:",0
-
+	.if	TRIVCON
 spxssweepstks_str
 	.string	"MAXIMUM SWEEPSTAKES:",0
+	.endif	;TRIVCON
 
 spxsgme_tester_str
 	.string	"GAME TESTERS:",0
@@ -1935,14 +1937,14 @@ spxsnba_dudes_strs
 	.string	"UNITED CENTER",1
 	.string	"JONATHAN ZIRIN",0
 
-spxssponsor_str
-	.string	"MAXIMUM",1,0
-	.string	"NBA HANGTIME",1,0
-	.string	"SWEEPSTAKES",1
-	.string	"IS CO-SPONSORED BY",1
-	.string	"AND",0
-	.string	"EGM      EGM",0
-	.string	"2",0
+;spxssponsor_str
+;	.string	"MAXIMUM",1,0
+;	.string	"NBA HANGTIME",1,0
+;	.string	"SWEEPSTAKES",1
+;	.string	"IS CO-SPONSORED BY",1
+;	.string	"AND",0
+;	.string	"EGM      EGM",0
+;	.string	"2",0
 
 spxsgme_tstrs_str
 	.string	"MIKE VINIKOUR",1

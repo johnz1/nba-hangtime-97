@@ -81,8 +81,8 @@
 	.ref	harr_h
 	.ref	iversn_h
 	.ref	kit_h
-	.ref	minr_h
-	.ref	rily_h
+;	.ref	minr_h
+;	.ref	rily_h
 	.ref	wal_h
 
 ;DJT End

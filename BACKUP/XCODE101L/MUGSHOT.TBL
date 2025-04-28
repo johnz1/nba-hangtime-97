@@ -1114,16 +1114,16 @@ MAR_COL:
 	.long   053e4124H
 	.word   080H
 	.long   M_MARBY_P
-MIN_COL:
-	.word   63,64,0,64
-	.long   053e9484H
-	.word   0480H
-	.long   M_MINOR_P
-RIL_COL:
-	.word   51,64,0,64
-	.long   053eedd4H
-	.word   080H
-	.long   M_RILY_P
+;MIN_COL:
+;	.word   63,64,0,64
+;	.long   053e9484H
+;	.word   0480H
+;	.long   M_MINOR_P
+;RIL_COL:
+;	.word   51,64,0,64
+;	.long   053eedd4H
+;	.word   080H
+;	.long   M_RILY_P
 WAL_COL:
 	.word   57,64,0,64
 	.long   053f3cbcH

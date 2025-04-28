@@ -28,8 +28,9 @@
 ;	.include	"imgtblm.glo"
 	.include	"names2.glo"		;New names from pnames2.img
 	.include	"mugshot8.tbl"		;New names from pnames2.img
-
+	.if	TRIVCON
 	.include	"prizes.tbl"
+	.endif	;TRIVCON
 
 
 	.def	OUR_MUG,TOB_MUG,JAS_MUG,QUI_MUG,BOO_MUG,MARTY_MUG,CARL_MUG
@@ -50,7 +51,9 @@
 	.ref	get_all_buttons_cur2
 	.ref	GET_ADJ,GAMSTATE
 	.ref	BKGDBMOD,KILBGND
+	.if	TRIVCON
 	.ref	prizeg_p,prize1_p,prize2_p,prize3_p
+	.endif	;TRIVCON
 
 	.ref	force_selection
 	.ref	IRQSKYE,TWOPLAYERS

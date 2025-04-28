@@ -2954,46 +2954,46 @@ Top10Ored:
 	.long   0fe888cH
 	.word   06000H
 	.long   PLAT_R_P
-CORECTblu:
-	.word   88,49,0,0
-	.long   0feed9cH
-	.word   06000H
-	.long   PLAT_B_P
-CORECTgrn:
-	.word   88,49,0,0
-	.long   0ff52acH
-	.word   06000H
-	.long   PLAT_G_P
-CORECTyel:
-	.word   88,49,0,0
-	.long   0ffb7bcH
-	.word   06000H
-	.long   PLAT_Y_P
-CORECTred:
-	.word   88,49,0,0
-	.long   01001cccH
-	.word   06000H
-	.long   PLAT_R_P
-INCRECTblu:
-	.word   88,49,0,0
-	.long   010081dcH
-	.word   06000H
-	.long   PLAT_B_P
-INCRECTgrn:
-	.word   88,49,0,0
-	.long   0100e6ecH
-	.word   06000H
-	.long   PLAT_G_P
-INCRECTyel:
-	.word   88,49,0,0
-	.long   01014bfcH
-	.word   06000H
-	.long   PLAT_Y_P
-INCRECTred:
-	.word   88,49,0,0
-	.long   0101b10cH
-	.word   06000H
-	.long   PLAT_R_P
+;CORECTblu:
+;	.word   88,49,0,0
+;	.long   0feed9cH
+;	.word   06000H
+;	.long   PLAT_B_P
+;CORECTgrn:
+;	.word   88,49,0,0
+;	.long   0ff52acH
+;	.word   06000H
+;	.long   PLAT_G_P
+;CORECTyel:
+;	.word   88,49,0,0
+;	.long   0ffb7bcH
+;	.word   06000H
+;	.long   PLAT_Y_P
+;CORECTred:
+;	.word   88,49,0,0
+;	.long   01001cccH
+;	.word   06000H
+;	.long   PLAT_R_P
+;INCRECTblu:
+;	.word   88,49,0,0
+;	.long   010081dcH
+;	.word   06000H
+;	.long   PLAT_B_P
+;INCRECTgrn:
+;	.word   88,49,0,0
+;	.long   0100e6ecH
+;	.word   06000H
+;	.long   PLAT_G_P
+;INCRECTyel:
+;	.word   88,49,0,0
+;	.long   01014bfcH
+;	.word   06000H
+;	.long   PLAT_Y_P
+;INCRECTred:
+;	.word   88,49,0,0
+;	.long   0101b10cH
+;	.word   06000H
+;	.long   PLAT_R_P
 InvaldNMblu:
 	.word   88,49,0,0
 	.long   0102161cH
@@ -3014,46 +3014,46 @@ InvaldNMred:
 	.long   0103454cH
 	.word   06000H
 	.long   PLAT_R_P
-TRIVIA1:
-	.word   94,14,93,0
-	.long   0103aa5cH
-	.word   06000H
-	.long   PLAT_B_P
-TRIVIA2:
-	.word   79,14,78,0
-	.long   0103c934H
-	.word   06000H
-	.long   PLAT_G_P
-TRIVIA3:
-	.word   61,14,60,0
-	.long   0103e320H
-	.word   06000H
-	.long   PLAT_Y_P
-TRIVIA4:
-	.word   43,14,42,0
-	.long   0103f724H
-	.word   06000H
-	.long   PLAT_R_P
-QUALIFYblu:
-	.word   88,49,0,0
-	.long   01040540H
-	.word   06000H
-	.long   PLAT_B_P
-QUALIFYgrn:
-	.word   88,49,0,0
-	.long   01046a50H
-	.word   06000H
-	.long   PLAT_G_P
-QUALIFYyel:
-	.word   88,49,0,0
-	.long   0104cf60H
-	.word   06000H
-	.long   PLAT_Y_P
-QUALIFYred:
-	.word   88,49,0,0
-	.long   01053470H
-	.word   06000H
-	.long   PLAT_R_P
+;TRIVIA1:
+;	.word   94,14,93,0
+;	.long   0103aa5cH
+;	.word   06000H
+;	.long   PLAT_B_P
+;TRIVIA2:
+;	.word   79,14,78,0
+;	.long   0103c934H
+;	.word   06000H
+;	.long   PLAT_G_P
+;TRIVIA3:
+;	.word   61,14,60,0
+;	.long   0103e320H
+;	.word   06000H
+;	.long   PLAT_Y_P
+;TRIVIA4:
+;	.word   43,14,42,0
+;	.long   0103f724H
+;	.word   06000H
+;	.long   PLAT_R_P
+;QUALIFYblu:
+;	.word   88,49,0,0
+;	.long   01040540H
+;	.word   06000H
+;	.long   PLAT_B_P
+;QUALIFYgrn:
+;	.word   88,49,0,0
+;	.long   01046a50H
+;	.word   06000H
+;	.long   PLAT_G_P
+;QUALIFYyel:
+;	.word   88,49,0,0
+;	.long   0104cf60H
+;	.word   06000H
+;	.long   PLAT_Y_P
+;QUALIFYred:
+;	.word   88,49,0,0
+;	.long   01053470H
+;	.word   06000H
+;	.long   PLAT_R_P
 GrtWnSblu:
 	.word   88,49,0,0
 	.long   01059980H

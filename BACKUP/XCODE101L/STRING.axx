@@ -73,7 +73,9 @@
 	.def	HOTC_B_P,HOTC_G_P,HOTC_B_P,HOTC_G_P
 
 ;DJT End
+	.if	TRIVCON
 	.def	prizeg_p,prize1_p,prize2_p,prize3_p
+	.endif	;TRIVCON
 	.def	print_string2b,kern_chars,mess_justify,mess_cursx2
 	.def	print_teams_defeated
 	.def	clear_buffers
