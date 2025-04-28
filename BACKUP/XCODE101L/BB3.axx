@@ -34,6 +34,7 @@
 	.include	"court.tbl"
 	.include	"outdoor.tbl"
 	.include	"outdoor.glo"
+	.include	"storm.tbl"
 
 	.include	"imgtbl.glo"
 	.include	"hoop.glo"
@@ -873,7 +874,7 @@ whcqinit_otd_t
 	.long	moon
 	WL	4002,moonobj
 
-	.word	SXO-28+200-74h+8,-140,Z+1,0,0
+	.word	SXO-28+360-74h+8,-140,Z+1,0,0 	;Adjusted 200 to 320
 	.long	STORM01
 	WL	4002,stormobj
 
@@ -1108,6 +1109,7 @@ whcqbbp5	move	*a1+,*a2+
 icxlok
 	.ref	robo_2_snd
 	SOUND1	robo_2_snd
+	CREATE0 animate_storm
 icxlok2
 
 	move	*a9(OXPOS),*a13(PDATA)
@@ -1152,7 +1154,7 @@ icxllp
 	move	*a13(PDATA+96),a1
 	add	a0,a1
 	move	@stormobj,a14,L
-	move	a1,*a14(OXPOS)
+;	move	a1,*a14(OXPOS)		;Storm - let's treat it like the moon.. Don't update pos!
 
 	move	@WORLDTLY+16,a0
 	move	a0,a14
@@ -1172,10 +1174,50 @@ icxllp
 
 	move	@stormobj,a14,L
 	addi	34h,a1
-	move	a1,*a14(OYPOS)
+;	move	a1,*a14(OYPOS)		;let's treat it like the moon.. Don't update pos!
 
 	jruc	icxllp
 
+
+*******************************
+*
+* AMM: MK3 Vortex for outdoor court
+
+ SUBRP	animate_storm
+
+	movi	storm_frame_table,a10,L		;get first image in the table as .long
+	move	@stormobj,a8,L			;get OLD obj. ptr as a .long
+anstrm_1
+	cmpi	storm_frame_table_end,a10	;still in range ?
+	jrlo	anstrm_2			;yep
+	movi	storm_frame_table,a10,L		;get first image in the table as .long again. Loops frames.
+anstrm_2
+	move	*a10+,a0,L			;get img. ptr into A10 as long. And increase +1 long.
+
+	movi	DMAWNZ|M_SCRNREL,a1		;DMA flags
+	calla	obj_aniq			;This draws the frame 
+	SLEEPK	6				;wait a bit.
+	jruc	anstrm_1			;back to loop.
+	calla	DELOBJA8			;if we get here, del the obj.
+	DIE					;and this process dies.
+
+;
+; This table contains the frames for the storm
+;
+storm_frame_table
+	.long	STORM01				;This one comes from OUTDOOR.TBL
+	.long	STORM02				;The res comes from STORM.TBL
+	.long	STORM03
+	.long	STORM04
+	.long	STORM05
+	.long	STORM06
+	.long	STORM07
+	.long	STORM08
+	.long	STORM09
+	.long	STORM10
+	.long	STORM11
+	.long	STORM12
+storm_frame_table_end
 
 *******************************
 *

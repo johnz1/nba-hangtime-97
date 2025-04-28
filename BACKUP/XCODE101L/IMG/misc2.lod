@@ -1,0 +1,16 @@
+IHDR SIZX:W,SIZY:W,ANIX:W,ANIY:W,SAG:L,CTRL:W,PAL:L
+;use loadr misc.bin,1200000,0,:gfxrom in mame debug
+***> 7000000,1
+ASM> storm.tbl
+GLO> storm.glo
+PPP> 0
+CON>
+POF>
+ZON>
+XON>
+;PAL for these is already in imgpal7, so we don't output it.
+;We can use compression on these images so those are all turned on.
+OUTDOOR.IMG
+---> STORM02,STORM03,STORM04,STORM05,STORM06,STORM07,STORM08,STORM09,STORM10,STORM11,STORM12
+---> fence
+PON>

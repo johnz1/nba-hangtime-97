@@ -1,0 +1,9 @@
+
+*.OBJ
+*.LST
+*.OUT
+*.MAP
+*.BIN
+*.OLD
+*.IRW
+M*.LCK
