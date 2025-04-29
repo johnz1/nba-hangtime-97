@@ -73,6 +73,12 @@
 	.def	COLCYC,CYCLE_TABLE
 ;DJT End
 
+;AMM Start
+	.if	ROBOG
+	.def	civani,civanic
+	.endif
+;AMM End
+
 
 
 	BSSX	RAND		,32		;Last random #
@@ -2155,6 +2161,51 @@ frq80	move	*a9+,a1,L		;Get frame
 	jrnz	taovlp
 
 taovx	RETP
+
+	.if	ROBOG
+*****************************************************************************
+* Change an objects image (Doesn't check VFLIP)
+* A0=*New image
+* A1=New flip flags & const
+* A8=*Obj
+* Trashes scratch
+
+ SUBR	civanic
+
+	move	*a8(OCTRL),a1,W
+
+ SUBR	civani
+
+;	cmpi	ROM,a0
+;	jrlo	mtnlanierr
+
+	;set new anim points
+	move	*a0(IANIOFFX),*a8(ODXOFF),W
+	move	*a0(IANIOFFY),*a8(ODYOFF),W
+
+	move	a0,*a8(OIMG),L
+	move	*a0(0),*a8(OSIZE),L
+	move	*a0(ISAG),*a8(OSAG),L
+
+	setf	5,0,0
+	move	*a0(ICTRL+7),*a8(OCTRL+7) ;Write 5 z comp bits
+	setf	6,0,0
+	move	a1,*a8(OCTRL)		;Write 6 low bits
+	setf	16,1,0
+
+mtnlx	rets
+
+mtnlanierr 
+	.if	DEBUG
+	LOCKUP
+	eint
+	.else
+	CALLERR	2,2
+	.endif
+	jruc	mtnlx
+
+	.endif	;ROBOG
+
 
 
 

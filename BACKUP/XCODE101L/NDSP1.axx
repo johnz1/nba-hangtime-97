@@ -3440,5 +3440,45 @@ scale77ef_t_sm	SCLT Sk_Xb*Ks*KF*910/800,Sk_Yb*Ks*910/800,Sk_Xe*Ks*KF*910/800,Sk_
 
 scalebaby_t_sm	SCLT Sk_Xb*Ks*420/800,Sk_Yb*Ks*420/800,Sk_Xe*Ks*420/800,Sk_Ye*Ks*420/800
 
+	.if 	ROBOG
+*****************************************************************************
+* Remove an object from OBJLST and move it to BAKLST
+* a0=*obj
+* Trashes a1,a14
+
+ SUBR	fg2bg
+
+	movi	OBJLST,a1
+
+gursloop
+	move	a1,a14
+	move	*a1,a1,L
+	jrz	gursnot_found
+	cmp	a0,a1
+	jrne	gursloop
+
+	;found it
+	move	*a0,*a14,L		;remove from OBJLST
+	callr	INSBOBJ			;add to BAKLST
+
+	move	*a0(ODXOFF),a1		;adjust X and Y pos.  BGND objects
+	move	*a0(OXPOS),a14		; don't use anim points.
+	sub	a1,a14
+	move	a14,*a0(OXPOS)
+	clr	a14
+	move	a14,*a0(ODXOFF)
+
+	move	*a0(ODYOFF),a1
+	move	*a0(OYPOS),a14
+	sub	a1,a14
+	move	a14,*a0(OYPOS)
+	clr	a14
+	move	a14,*a0(ODYOFF)
+
+gursnot_found
+	rets
+	.endif 	;ROBOG
+
+
 
 	.end
