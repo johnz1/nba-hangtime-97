@@ -330,7 +330,7 @@ bguplp
 ;	calla	get_all_records
 
 	JSRP	new_page
-	JSRP	amode_design
+;	JSRP	amode_design
 	JSRP	show_nba_plyrs
 	JSRP	show_hiscore
 	.if	OPERMES
@@ -396,7 +396,7 @@ bgupchknxt
 	.ref	design_player_proc_amode,done_creating
 	.ref	get_all_records,sort_wins
 	BSSX	stick_amode_mkplr,16
-
+        .if PLYRDEM
 amode_design
 
 	calla	WIPEOUT
@@ -620,6 +620,7 @@ xqcvstick_t
 	.word	80, 0000010b
 
 	.word	-1
+	.endif
 
 ;DJT End
 

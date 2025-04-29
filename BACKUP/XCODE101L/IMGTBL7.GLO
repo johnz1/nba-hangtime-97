@@ -281,7 +281,7 @@
 	.globl	LOG_UTANP
 	.globl	LOG_VANP
 	.globl	LOG_WASP
-	.globl	DCSLIQ_P
+;	.globl	DCSLIQ_P
 	.globl	NSHOTCLKP
 	.globl	MUGPLAT_P
 	.globl	ledw
@@ -368,10 +368,10 @@
 	.globl	NUB_Y_P
 	.globl	NUB_R_P
 	.globl	BAST_W_P2
-	.globl	prize1_p
-	.globl	prize2_p
-	.globl	prize3_p
-	.globl	prizeg_p
+;	.globl	prize1_p
+;	.globl	prize2_p
+;	.globl	prize3_p
+;	.globl	prizeg_p
 	.globl	MESSP_D_P
 	.globl	MESSP_Y_P
 	.globl	side_p

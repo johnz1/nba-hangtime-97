@@ -100,6 +100,7 @@ M_NOCOLL 	.equ	800h	;Collisions off
 M_NOSCALE	.equ	1000h	;3D scaling off
 M_SCRNREL	.equ	2000h	;Screen relative XY on
 M_CHARGEN	.equ	4000h	;Character generator type
+M_NODISP        .equ     80H     ;DONT DISPLAY THIS OBJ
 
 ;OFLAGS/OCTRL bits
 B_WRZERO	.equ	0
