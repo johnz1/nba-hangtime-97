@@ -19,7 +19,7 @@
 	.include	"disp.equ"		;Display proc equates
 	.include	"gsp.equ"		;Gsp asm equates
 	.include	"sys.equ"
-	.include	"robogame.equ"		;Special version for Robotron
+	.include	"robogame.equ"
 	.include	"audit.equ"
 	.include	"macros.hdr"
 	.include	"link.equ"
@@ -67,10 +67,8 @@
 
 	;for WRESTLE.ASM
 	.def	RE_DEADPLAYER,RE_WAVEDONE,RE_ABORT,RE_BACKUP
-	;for NBA Attract
-	.def	robo_check, robo_game
 
-	.ref	_switch_addr,_switch2_addr; ,ADD_VOICE
+	.ref	_switch_addr,_switch2_addr;,ADD_VOICE
 
 *****************************************************************************
 
@@ -87,7 +85,7 @@
 
 *****************************************************************************
 
-ROBO_DEBUG	equ	1
+ROBO_DEBUG	equ	0
 WAVE_CONTROL	equ	0
 BOG_MONITOR	equ	0
 
@@ -115,30 +113,25 @@ RE_BACKUP	equ	4
  SUBR	robo_check
 
 ;	.if DEBUG
-;	jruc	dhaqrobo_ok
+	jruc	dhaqrobo_ok
 ;	.endif
 ;	jruc	dhaqrobo_end
 
-	jruc	dhaqrobo_ok
-
 ;	move	@p1icon_total,a0,L
 ;	move	@robo_icon_trigger,a14
-	cmp	a0,a14
-	jrle	dhaqrobo_ok
+;	cmp	a0,a14
+;	jrle	dhaqrobo_ok
 ;	move	@p2icon_total,a0,L
-	cmp	a0,a14
-	jrgt	dhaqrobo_end
+;	cmp	a0,a14
+;	jrgt	dhaqrobo_end
 dhaqrobo_ok
 	sll	1,a14
 ;	move	a14,@robo_icon_trigger
 	callr	reset_roboscore
-;	callr	robo_sound_init
+	callr	robo_sound_init
 
 ;	movi	-1,a0
 ;	calla	ADD_VOICE
-
-	.ref	robo_2_snd
-	SOUND1	robo_2_snd
 
 	clr	a0
 dhaqrobo_loop
@@ -219,10 +212,10 @@ dhaqrobo_end
 
 	SLEEPK	2
 
-;	calla	nosounds		;kill the select music
+	calla	nosounds		;kill the select music
 
 	;draw the frame
-	move	@robo_wave,a0
+;	move	@robo_wave,a0
 	addi	mdwlborder_colors,a0
 	move	*a0,a0,W
 	callr	draw_frame
@@ -231,8 +224,6 @@ dhaqrobo_end
 	move	a0,@DISPLAYON
 
 	SLEEPK	2
-
-
 
 	clr	a14
 	move	a14,@player_dead,W	;clear the done flag
@@ -1835,6 +1826,8 @@ ckopno_cap
 	jruc	ckopdone
 
 ckopkilled
+	movi	RS_HUMAN,a0
+	callr	robo_sound
 	movi	skull,a0
 	calla	civanic
 
@@ -4653,11 +4646,11 @@ frcploop
 	movi	CLSDEAD,a5			;object ID
 	clr	a6				;x vel
 	clr	a7				;y vel
-
 	calla	BEGINOBJ
 
 	move	a8,a0
-	calla	fg2bg
+;AMM This call does not work.
+;	calla	fg2bg
 
 	move	*a11+,a14,W
 	move	a14,*a8(OSIZEX),W
@@ -5022,32 +5015,35 @@ RS_DIE		.equ	1
 RS_RESCUE	.equ	2
 RS_SHOOT	.equ	3
 RS_HIT		.equ	4
+RS_HUMAN	.equ	5
 
 sp_grunt	.equ	1<<8
 sp_shoot	.equ	2<<8
 sp_hit		.equ	3<<8
 sp_rescue	.equ	4<<8
 sp_die		.equ	5<<8
+sp_human	.equ	6<<8
 
 robosnd_tbl
 	;	duration, call#
 	.word	sp_grunt|6,2972		;0 = grunt footstep	
-	.word	sp_die|96,2976		;1 = die		
+	.word	sp_die|96,2980		;1 = die		
 	.word	sp_rescue|39,2984	;2 = rescue
 	.word	sp_shoot|17,2960	;3 = shoot		
-	.word	sp_hit|23,2988		;4 = hit
+	.word	sp_hit|23,2988		;4 = grunt dies
+	.word	sp_human|212,2964	;5 = dead human
 
 	.if	0	;table from WWF
-	.word	sp_robo|71,1600		;290 = ROBOTRON shot			;0640h - 0b90
-	.word	sp_robo|212,1604	;291 = ROBOTRON human dies		;0644h - 0b94
-	.word	sp_robo|58,1608		;292 = ROBOTRON spawn enforcer		;0648h - 0b98
-	.word	sp_robo|6,1612		;293 = ROBOTRON robot footstep		;064ch - 0b9c
-	.word	sp_robo|96,1616		;294 = ROBOTRON effect (?)		;0650 - 0ba0
-	.word	sp_robo|164,1620	;295 = ROBOTRON player dies		;0654 - 0ba4
-	.word	sp_robo|39,1624		;296 = ROBOTRON rescue			;0658 - 0ba8
-	.word	sp_robo|23,1628		;297 = ROBOTRON grunt dies		;065c - 0bac
-	.word	sp_robo|178,1632	;298 = ROBOTRON wave start/end 		;0660 - 0bb0
-	.word	sp_robo|17,1636		;299 = ROBOTRON hit hulk		;0664 - 0bb4
+	.word	sp_robo|71,1600		;290 = ROBOTRON shot			;0640h - 0b90 2960
+	.word	sp_robo|212,1604	;291 = ROBOTRON human dies		;0644h - 0b94 2964
+	.word	sp_robo|58,1608		;292 = ROBOTRON spawn enforcer		;0648h - 0b98 2968
+	.word	sp_robo|6,1612		;293 = ROBOTRON robot footstep		;064ch - 0b9c 2972
+	.word	sp_robo|96,1616		;294 = ROBOTRON effect (?)		;0650 - 0ba0 2976
+	.word	sp_robo|164,1620	;295 = ROBOTRON player dies		;0654 - 0ba4 2980
+	.word	sp_robo|39,1624		;296 = ROBOTRON rescue			;0658 - 0ba8 2984
+	.word	sp_robo|23,1628		;297 = ROBOTRON grunt dies		;065c - 0bac 2988
+	.word	sp_robo|178,1632	;298 = ROBOTRON wave start/end 		;0660 - 0bb0 2992
+	.word	sp_robo|17,1636		;299 = ROBOTRON hit hulk		;0664 - 0bb4 2996
 	.endif
 
 robosnd_end
