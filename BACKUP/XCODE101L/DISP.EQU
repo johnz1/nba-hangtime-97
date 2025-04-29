@@ -75,6 +75,9 @@ OXANI	.equ	1e0h	;SHL X scaled animation pt 16:16
 OMISC	.equ	210h	;UHW Misc data (3D mode Z offset)
 OSCALE	.equ	220H	;UHL scale this object (set to 100% in BEGINOBJ)
 OBSIZ	.equ	240h
+;ROBOTRON
+ODXOFF		equ	220h	;SDW display x offset
+ODYOFF		equ	230h	;SDW display y offset
 *ENDSTRUCT
 
 NOBJ	.equ	450	;Total # objects

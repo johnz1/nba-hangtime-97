@@ -21,12 +21,12 @@
 	.include	"sys.equ"
 	.include	"game.equ"
 	.include	"audit.equ"
-	.include	"macros.h"
+	.include	"macros.hdr"
 	.include	"link.equ"
 
 ;	.include	"roboimg.glo"
 	.include	"roboimg.tbl"
-	.include	"fontsimg.glo"
+;	.include	"fontsimg.glo"
 
 	;kludge
 	.ref	robo_p
@@ -478,7 +478,7 @@ mdwlwave_kids
 	movi	CLSPLYR|TYPPLYR,a5
 	clr	a6
 	clr	a7
-	calla	BEGINOBJW
+	calla	BEGINOBJ
 
 	;set the global pointer
 	move	a8,@player_object,L
@@ -924,7 +924,7 @@ ftoqrate_of_fire	equ	6	;min ticks between shots
 	movi	CLSPLYR|TYPBULLET,a5
 	clr	a6
 	clr	a7
-	calla	BEGINOBJW
+	calla	BEGINOBJ
 
 	;set the speed and start position
 	move	@player_object,a9,L
@@ -1192,7 +1192,7 @@ puovmid_y2	equ	138+60
 	movi	CLSENMY|TYPGRUNT,a5
 	clr	a6
 	clr	a7
-	calla	BEGINOBJW
+	calla	BEGINOBJ
 
 	;initialize move timer
 	move	a11,a9
@@ -1513,7 +1513,7 @@ oqzhplace_post
 	movi	CLSNEUT|TYPPOST,a5
 	clr	a6
 	clr	a7
-	calla	BEGINOBJW
+	calla	BEGINOBJ
 
 	move	a10,*a8(OMISC),W	;stuff the type in the object
 
@@ -1755,7 +1755,7 @@ ckopmake_obj
 	movi	CLSNEUT|TYPHUMAN,a5
 	clr	a6
 	clr	a7
-	calla	BEGINOBJW
+	calla	BEGINOBJ
 
 	;choose a direction of motion
 	movi	7,a0
@@ -2362,7 +2362,7 @@ henkmid_y2	equ	138+50
 	movi	CLSENMY|TYPHULK,a5
 	clr	a6
 	clr	a7
-	calla	BEGINOBJW
+	calla	BEGINOBJ
 
 	;set the move counter
 	movi	rpggmove_freq/2,a0
@@ -2736,7 +2736,7 @@ obnsmid_y2	equ	138+80
 	movi	CLSENMY|TYPSPHEREOID,a5
 	clr	a6
 	clr	a7
-	calla	BEGINOBJW
+	calla	BEGINOBJ
 
 	;initialize anim counter
 	movi	obnsanim_speed,a9
@@ -3116,7 +3116,7 @@ obnsparent_script
 	movi	CLSENMY|TYPENFORCER,a5
 	clr	a6
 	clr	a7
-	calla	BEGINOBJW
+	calla	BEGINOBJ
 
 	;grow phase
 
@@ -3477,7 +3477,7 @@ uibwdeath_speed	equ	3		;death seq anim speed
 	movi	CLSENMY|TYPSPARK,a5
 	clr	a6
 	clr	a7
-	calla	BEGINOBJW
+	calla	BEGINOBJ
 
 	;set the initial velocity.
 	move	@player_object,a0,L
@@ -3716,7 +3716,7 @@ cexsmid_y2	equ	138+60
 	movi	CLSENMY|TYPQUARK,a5
 	clr	a6
 	clr	a7
-	calla	BEGINOBJW
+	calla	BEGINOBJ
 
 	;initialize anim counter
 	movi	cexsanim_speed,a9
@@ -4028,7 +4028,7 @@ cexsparent_script
 	movi	CLSENMY|TYPTANK,a5
 	clr	a6
 	clr	a7
-	calla	BEGINOBJW
+	calla	BEGINOBJ
 
 	;grow phase
 
@@ -4336,7 +4336,7 @@ loygdeath_speed	equ	3		;death seq anim speed
 	movi	CLSENMY|TYPSHELL,a5
 	clr	a6
 	clr	a7
-	calla	BEGINOBJW
+	calla	BEGINOBJ
 
 	;set the initial velocity.
 	move	@player_object,a0,L
@@ -4922,7 +4922,7 @@ qpeudone
 	movi	CLSDEAD,a5
 	clr	a6
 	clr	a7
-	calla	BEGINOBJW
+	calla	BEGINOBJ
 
 	move	a9,*a8(OPAL)
 	movi	0707h,a14
@@ -4943,7 +4943,7 @@ qpeudone
 	movi	CLSDEAD,a5
 	clr	a6
 	clr	a7
-	calla	BEGINOBJW
+	calla	BEGINOBJ
 
 	move	a9,*a8(OPAL)
 	movi	0808h,a14

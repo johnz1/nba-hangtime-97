@@ -763,3 +763,23 @@ lp?
 	.endm
 ;DJT End
 
+
+;AMM For Robotron
+******************************************************************************
+X32		.macro	a
+	sll	5,:a:
+	.endm
+******************************************************************************
+
+JAM_STR	.macro	FONT,SPACING,CSPACE,X,Y,PALETTE,PR_METHOD
+	.long	:FONT:
+	.word   :SPACING:
+	.word	:CSPACE:
+	.word	:X:
+	.word	:Y:
+	.long   :PALETTE:
+	.long   :PR_METHOD:
+	.endm
+
+******************************************************************************
+

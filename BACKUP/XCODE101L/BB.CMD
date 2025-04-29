@@ -56,6 +56,7 @@ SCREEN.OBJ
 SELECT3.OBJ
 SELECT4.OBJ
 PLYRAT3.OBJ		/* basketball player code */
+/*ROBO.OBJ		/* Robotron hidden game */
 UNZIP.OBJ
 
 MEMORY				/* set up memory for sdb board */
