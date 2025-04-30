@@ -1,0 +1,473 @@
+	.DATA
+shard1_1:
+	.word   4,2,0,0
+	.long   07a4a0d7H
+	.word   06000H
+	.long   HOOP_p3
+shard1_2:
+	.word   4,3,0,0
+	.long   07a4a107H
+	.word   06000H
+	.long   HOOP_p3
+shard1_3:
+	.word   4,3,0,0
+	.long   07a4a14fH
+	.word   06000H
+	.long   HOOP_p3
+shard1_4:
+	.word   4,3,0,0
+	.long   07a4a197H
+	.word   06000H
+	.long   HOOP_p3
+shard1_5:
+	.word   4,2,0,0
+	.long   07a4a1dfH
+	.word   06000H
+	.long   HOOP_p3
+shard1_6:
+	.word   4,3,0,0
+	.long   07a4a20fH
+	.word   06000H
+	.long   HOOP_p3
+shard1_7:
+	.word   4,3,0,0
+	.long   07a4a257H
+	.word   06000H
+	.long   HOOP_p3
+shard1_8:
+	.word   4,3,0,0
+	.long   07a4a29fH
+	.word   06000H
+	.long   HOOP_p3
+shard2_1:
+	.word   4,3,1,0
+	.long   07a4a2e7H
+	.word   06000H
+	.long   HOOP_p3
+shard2_2:
+	.word   4,4,1,1
+	.long   07a4a32fH
+	.word   06000H
+	.long   HOOP_p3
+shard2_3:
+	.word   4,4,0,1
+	.long   07a4a38fH
+	.word   06000H
+	.long   HOOP_p3
+shard2_4:
+	.word   4,4,1,1
+	.long   07a4a3efH
+	.word   06000H
+	.long   HOOP_p3
+shard2_5:
+	.word   4,3,1,0
+	.long   07a4a44fH
+	.word   06000H
+	.long   HOOP_p3
+shard2_6:
+	.word   4,4,0,1
+	.long   07a4a497H
+	.word   06000H
+	.long   HOOP_p3
+shard2_7:
+	.word   4,4,0,1
+	.long   07a4a4f7H
+	.word   06000H
+	.long   HOOP_p3
+shard2_8:
+	.word   4,4,1,1
+	.long   07a4a38fH
+	.word   06000H
+	.long   HOOP_p3
+shard3_1:
+	.word   5,5,1,1
+	.long   07a4a557H
+	.word   06000H
+	.long   HOOP_p3
+shard3_2:
+	.word   5,5,1,1
+	.long   07a4a557H
+	.word   06000H
+	.long   HOOP_p3
+shard3_3:
+	.word   5,5,1,1
+	.long   07a4a5edH
+	.word   06000H
+	.long   HOOP_p3
+shard3_4:
+	.word   5,3,1,0
+	.long   07a4a683H
+	.word   06000H
+	.long   HOOP_p3
+shard3_5:
+	.word   5,2,1,0
+	.long   07a4a6ddH
+	.word   06000H
+	.long   HOOP_p3
+shard3_6:
+	.word   4,4,1,1
+	.long   07a4a719H
+	.word   06000H
+	.long   HOOP_p3
+shard3_7:
+	.word   5,5,1,1
+	.long   07a4a557H
+	.word   06000H
+	.long   HOOP_p3
+shard3_8:
+	.word   5,5,1,1
+	.long   07a4a557H
+	.word   06000H
+	.long   HOOP_p3
+shard3_9:
+	.word   5,5,1,1
+	.long   07a4a557H
+	.word   06000H
+	.long   HOOP_p3
+shard3_10:
+	.word   4,2,1,0
+	.long   07a4a779H
+	.word   06000H
+	.long   HOOP_p3
+shard3_11:
+	.word   5,2,1,0
+	.long   07a4a6ddH
+	.word   06000H
+	.long   HOOP_p3
+shard3_12:
+	.word   4,4,1,1
+	.long   07a4a719H
+	.word   06000H
+	.long   HOOP_p3
+shard4_1:
+	.word   7,5,2,1
+	.long   07a4a7a9H
+	.word   06000H
+	.long   HOOP_p3
+shard4_2:
+	.word   8,6,3,2
+	.long   07a4a87bH
+	.word   06000H
+	.long   HOOP_p3
+shard4_3:
+	.word   6,6,2,2
+	.long   07a4a99bH
+	.word   06000H
+	.long   HOOP_p3
+shard4_4:
+	.word   4,5,0,1
+	.long   07a4aa73H
+	.word   06000H
+	.long   HOOP_p3
+shard4_5:
+	.word   4,5,1,1
+	.long   07a4aaebH
+	.word   06000H
+	.long   HOOP_p3
+shard4_6:
+	.word   7,5,2,1
+	.long   07a4ab63H
+	.word   06000H
+	.long   HOOP_p3
+shard4_7:
+	.word   8,6,3,2
+	.long   07a4ac35H
+	.word   06000H
+	.long   HOOP_p3
+shard4_8:
+	.word   6,6,2,2
+	.long   07a4ad55H
+	.word   06000H
+	.long   HOOP_p3
+shard4_9:
+	.word   4,6,0,2
+	.long   07a4ae2dH
+	.word   06000H
+	.long   HOOP_p3
+shard4_10:
+	.word   4,5,1,1
+	.long   07a4aebdH
+	.word   06000H
+	.long   HOOP_p3
+shard5_1:
+	.word   5,5,1,1
+	.long   07a4af35H
+	.word   06000H
+	.long   HOOP_p3
+shard5_2:
+	.word   6,4,2,1
+	.long   07a4afcbH
+	.word   06000H
+	.long   HOOP_p3
+shard5_3:
+	.word   5,5,1,1
+	.long   07a4b05bH
+	.word   06000H
+	.long   HOOP_p3
+shard5_4:
+	.word   4,6,1,2
+	.long   07a4b0f1H
+	.word   06000H
+	.long   HOOP_p3
+shard5_5:
+	.word   5,5,1,1
+	.long   07a4b181H
+	.word   06000H
+	.long   HOOP_p3
+shard5_6:
+	.word   6,4,2,1
+	.long   07a4afcbH
+	.word   06000H
+	.long   HOOP_p3
+shard5_7:
+	.word   5,5,1,1
+	.long   07a4b05bH
+	.word   06000H
+	.long   HOOP_p3
+shard5_8:
+	.word   4,6,1,2
+	.long   07a4b0f1H
+	.word   06000H
+	.long   HOOP_p3
+shard6_1:
+	.word   4,3,0,0
+	.long   07a4b217H
+	.word   06000H
+	.long   HOOP_p3
+shard6_2:
+	.word   4,4,0,1
+	.long   07a4b25fH
+	.word   06000H
+	.long   HOOP_p3
+shard6_3:
+	.word   4,4,0,1
+	.long   07a4b2bfH
+	.word   06000H
+	.long   HOOP_p3
+shard6_4:
+	.word   4,4,0,1
+	.long   07a4b31fH
+	.word   06000H
+	.long   HOOP_p3
+shard6_5:
+	.word   4,4,0,1
+	.long   07a4b37fH
+	.word   06000H
+	.long   HOOP_p3
+shard6_6:
+	.word   4,4,0,1
+	.long   07a4b3dfH
+	.word   06000H
+	.long   HOOP_p3
+shard6_7:
+	.word   4,4,0,1
+	.long   07a4b43fH
+	.word   06000H
+	.long   HOOP_p3
+shard6_8:
+	.word   4,4,0,1
+	.long   07a4b49fH
+	.word   06000H
+	.long   HOOP_p3
+shard7_1:
+	.word   6,6,2,2
+	.long   07a4b4ffH
+	.word   06000H
+	.long   HOOP_p3
+shard7_2:
+	.word   6,6,2,2
+	.long   07a4b5d7H
+	.word   06000H
+	.long   HOOP_p3
+shard7_3:
+	.word   4,5,1,1
+	.long   07a4b6afH
+	.word   06000H
+	.long   HOOP_p3
+shard7_4:
+	.word   4,5,0,1
+	.long   07a4b727H
+	.word   06000H
+	.long   HOOP_p3
+shard7_5:
+	.word   4,6,1,2
+	.long   07a4b79fH
+	.word   06000H
+	.long   HOOP_p3
+shard7_6:
+	.word   6,6,2,2
+	.long   07a4b82fH
+	.word   06000H
+	.long   HOOP_p3
+shard7_7:
+	.word   6,7,2,2
+	.long   07a4b907H
+	.word   06000H
+	.long   HOOP_p3
+shard7_8:
+	.word   4,7,1,2
+	.long   07a4ba03H
+	.word   06000H
+	.long   HOOP_p3
+shard7_9:
+	.word   4,7,0,2
+	.long   07a4baabH
+	.word   06000H
+	.long   HOOP_p3
+shard7_10:
+	.word   4,7,1,2
+	.long   07a4bb53H
+	.word   06000H
+	.long   HOOP_p3
+shard8_1:
+	.word   4,3,0,0
+	.long   07a4bbfbH
+	.word   06000H
+	.long   HOOP_p3
+shard8_2:
+	.word   4,3,0,0
+	.long   07a4bc43H
+	.word   06000H
+	.long   HOOP_p3
+shard8_3:
+	.word   4,2,0,0
+	.long   07a4bc8bH
+	.word   06000H
+	.long   HOOP_p3
+shard8_4:
+	.word   4,2,0,0
+	.long   07a4bcbbH
+	.word   06000H
+	.long   HOOP_p3
+shard8_5:
+	.word   4,2,0,0
+	.long   07a4bcebH
+	.word   06000H
+	.long   HOOP_p3
+shard8_6:
+	.word   4,2,0,0
+	.long   07a4bd1bH
+	.word   06000H
+	.long   HOOP_p3
+shard8_7:
+	.word   4,3,0,0
+	.long   07a4a257H
+	.word   06000H
+	.long   HOOP_p3
+shard8_8:
+	.word   4,3,0,0
+	.long   07a4bd4bH
+	.word   06000H
+	.long   HOOP_p3
+shard8_9:
+	.word   4,3,0,0
+	.long   07a4bd93H
+	.word   06000H
+	.long   HOOP_p3
+shard8_10:
+	.word   4,3,0,0
+	.long   07a4bc43H
+	.word   06000H
+	.long   HOOP_p3
+shat1_1:
+	.word   11,5,4,1
+	.long   07a4bddbH
+	.word   06000H
+	.long   HOOP_p3
+shat1_2:
+	.word   16,6,7,2
+	.long   07a4bf25H
+	.word   06080H
+	.long   HOOP_p3
+shat1_3:
+	.word   21,6,9,2
+	.long   07a4c0c3H
+	.word   06180H
+	.long   HOOP_p3
+shat1_4:
+	.word   31,8,14,3
+	.long   07a4c2a3H
+	.word   06580H
+	.long   HOOP_p3
+shat1_5:
+	.word   42,10,20,4
+	.long   07a4c58fH
+	.word   06680H
+	.long   HOOP_p3
+shat2_1:
+	.word   8,6,3,2
+	.long   07a4c963H
+	.word   06000H
+	.long   HOOP_p3
+shat2_2:
+	.word   11,6,4,2
+	.long   07a4ca83H
+	.word   06000H
+	.long   HOOP_p3
+shat2_3:
+	.word   19,8,8,3
+	.long   07a4cc0fH
+	.word   06180H
+	.long   HOOP_p3
+shat2_4:
+	.word   28,9,13,3
+	.long   07a4ce83H
+	.word   06580H
+	.long   HOOP_p3
+shat2_5:
+	.word   40,10,19,4
+	.long   07a4d177H
+	.word   06a80H
+	.long   HOOP_p3
+shat3_1:
+	.word   4,3,1,0
+	.long   07a4a2e7H
+	.word   06000H
+	.long   HOOP_p3
+shat3_2:
+	.word   5,3,1,0
+	.long   07a4d497H
+	.word   06000H
+	.long   HOOP_p3
+shat3_3:
+	.word   9,3,3,0
+	.long   07a4d4f1H
+	.word   06000H
+	.long   HOOP_p3
+shat3_4:
+	.word   13,5,5,1
+	.long   07a4d593H
+	.word   06080H
+	.long   HOOP_p3
+shat3_5:
+	.word   21,6,9,2
+	.long   07a4d6e7H
+	.word   06580H
+	.long   HOOP_p3
+shat4_1:
+	.word   4,2,0,0
+	.long   07a4a0d7H
+	.word   06000H
+	.long   HOOP_p3
+shat4_2:
+	.word   5,5,1,1
+	.long   07a4d8c7H
+	.word   06000H
+	.long   HOOP_p3
+shat4_3:
+	.word   9,6,3,2
+	.long   07a4d95dH
+	.word   06000H
+	.long   HOOP_p3
+shat4_4:
+	.word   15,6,6,2
+	.long   07a4daa1H
+	.word   06080H
+	.long   HOOP_p3
+shat4_5:
+	.word   13,7,5,2
+	.long   07a4dc39H
+	.word   06080H
+	.long   HOOP_p3
+	.TEXT
+

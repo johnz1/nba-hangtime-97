@@ -1,3 +1,14 @@
+;AMM Add
+	.global	BACK1BR
+	.global	BACK2BR
+	.global	BACK3BR
+	.global	BACK4BR
+	.global	BACK5BR
+	.global	BACK6BR
+	.global	BACK7BR
+	.global	BACK8BR
+	.global	BACK9BR
+;AMM End
 	.globl	HOOP_P
 	.global	hoopbot
 	.global	hooptop

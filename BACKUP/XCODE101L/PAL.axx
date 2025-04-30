@@ -54,6 +54,12 @@
 	.def	M_MAT_P,M_JOS_P,M_HEI_P,M_CRL_P,M_MAR_P
 	.def	M_BOO_P,M_QUI_P,M_TOB_P,M_OUR_P,M_JAS_P
 
+;AMM add
+;These are pals for new stuff in IMGTBL8.ASM
+	.def	HOOP_p3
+;AMM end
+
+
 ;equates
 
 FPALNUM	.equ	8

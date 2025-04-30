@@ -1,63 +1,51 @@
 	.DATA
 STORM02:
 	.word   190,72,-31,-7
-	.long   09000000H
+	.long   079abbf5H
 	.word   05f80H
-	.long   NUSTORM_P
 STORM03:
 	.word   190,73,-20,-6
-	.long   0900c630H
+	.long   079b8225H
 	.word   05f80H
-	.long   NUSTORM_P
 STORM04:
 	.word   192,63,-24,-11
-	.long   0901906eH
+	.long   079c4c63H
 	.word   05b80H
-	.long   NUSTORM_P
 STORM05:
 	.word   217,64,-12,-12
-	.long   0902534aH
+	.long   079d0f3fH
 	.word   05f80H
-	.long   NUSTORM_P
 STORM06:
 	.word   227,61,0,-9
-	.long   09031a2aH
+	.long   079dd61fH
 	.word   05f80H
-	.long   NUSTORM_P
 STORM07:
 	.word   204,61,-9,-11
-	.long   0903dd7dH
+	.long   079e9972H
 	.word   05b80H
-	.long   NUSTORM_P
 STORM08:
 	.word   205,78,-11,0
-	.long   0904a4bdH
+	.long   079f60b2H
 	.word   05f80H
-	.long   NUSTORM_P
 STORM09:
 	.word   195,77,-26,0
-	.long   09057cbbH
+	.long   07a038b0H
 	.word   05f80H
-	.long   NUSTORM_P
 STORM10:
 	.word   192,64,-30,-9
-	.long   0906502eH
+	.long   07a10c23H
 	.word   05a80H
-	.long   NUSTORM_P
 STORM11:
 	.word   222,66,-19,-7
-	.long   09071c22H
+	.long   07a1d817H
 	.word   05f80H
-	.long   NUSTORM_P
 STORM12:
 	.word   226,60,-12,-14
-	.long   0907e5a6H
+	.long   07a2a19bH
 	.word   05f80H
-	.long   NUSTORM_P
 fence:
 	.word   187,73,0,0
-	.long   0908a806H
+	.long   07a363fbH
 	.word   06180H
-	.long   fence_p
 	.TEXT
 

@@ -1,0 +1,24 @@
+subtract 0x2000000 then divide by 0x8 to get the mame loadr address.
+
+4673800 = 2673800 /8 = 4Ce700
+
+59abbf5 = B3 576B = 11.753.323
+
+;use loadr misc.bin,1200000,0,:gfxrom in mame debug
+***> 7000000,1
+
+
+Wolf has bank1 and bank2
+
+7000000,1
+1200000
+
+add 0x2000000
+div 8
+
+
+
+59abbf5,1 should be around 1000000
+add 0x2000000
+div 8
+= F3577E

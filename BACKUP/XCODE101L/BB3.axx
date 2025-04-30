@@ -2299,7 +2299,7 @@ MK3_t
 ;	.long	0
 
 ;--------------------
-
+	.if 0			;AMM: no ads in hangtime. (code leftover!)
  SUBRP	wwf_ad
 
 	movi	wwf_t,a9
@@ -2349,6 +2349,7 @@ mk3_lp
 	move	*a9+,a0,L
 	calla	PRCSLP
 	jruc	mk3_lp
+	.endif
 
 
 ********************************
@@ -2382,12 +2383,14 @@ nikllft
 	sll	5,a0			;Shf up for tbl offset
 	addi	niklani_t,a0
 	move	@pup_court,a14		;Outdoor court?
-;;	jrz	niklnootd			; br=no
+	jrz	niklnootd			; br=no
 	jrz	niklbok			; br=no
-	addi	niklani_otd_t-niklani_t,a0,W	;Set ptr to shattered tbl
+	addi	niklani_otd_t-niklani_t,a0,W	;Set ptr to outdoor
 ;;	jruc	niklbok
-;;niklnootd
-;;	move	*a10,a14		;Is bkbrd shattered? No if 0
+niklnootd
+	move	*a10,a14		;Is bkbrd shattered? No if 0
+	jrz	niklbok
+	addi	niklsani_t-niklani_t,a0,W	;Set ptr to shattered indoor
 ;;;FIX!!!
 ;;	jruc	niklbok		;Skip code for bboard shatter ani
 ;;	jrz	niklbok
@@ -2505,7 +2508,8 @@ niklslp	SLEEPK	1
 
 	jruc	nikllp
 
-niklfixbb	clr	a0			;Hoop off-screen. Make sure it won't
+niklfixbb	
+	clr	a0			;Hoop off-screen. Make sure it won't
 	move	a0,*a10			; be shattered next time we see it
 
 	move	@rimlf,a1,L		;Assume doing lft hoop
@@ -2533,6 +2537,13 @@ niklani_t
 	.long	back2,back3,back4,back5,back6,back7,back8
 	.long	back9,back10,back10,back10,back10
 
+niklsani_t
+;Indoor court shattered backboard
+	.long	BACK2BR			;Fill for BOARD_ANI_MINX -16
+
+	.long	BACK2BR,BACK3BR,BACK4BR,BACK5BR,BACK6BR,BACK7BR,BACK8BR
+	.long	BACK9BR,back10,back10,back10,back10
+
 niklani_otd_t
 ;Outdoor court backboard
 	.long	nback2			;Fill for BOARD_ANI_MINX -16
@@ -2540,7 +2551,7 @@ niklani_otd_t
 	.long	nback2,nback3,nback4,nback5,nback6,nback7,nback8
 	.long	nback9,nback10,nback10,nback10,nback10
 
-niklsani_t
+;niklsani_t
 ;	.long	bturn_5,bturn_4,bturn_3,bturn_2,bturn_1,bbord_10
 ;	.long	bbord_10,bbord_10,bbord_10,bbord_10
 
@@ -2749,6 +2760,7 @@ net14_l
 	.long	RIM0_F_00,RIM0_B_00,0
 
 net15_l
+net16_l					;Recycle gfx here.
 	.long	RIM3_F_01,RIM3_B_01	;Dunk shot rim bend
 	.long	RIM3_F_02,RIM3_B_02
 	.long	RIM3_F_03,RIM3_B_03
@@ -2762,7 +2774,7 @@ net15_l
 	.long	RIM3_F_11,RIM3_B_11
 	.long	RIM0_F_00,RIM0_B_00,0
 
-net16_l
+;net16_l				;We don't have this in Hangtime format.
 ;	.long	rimbndF_1,rimbndB_1	;Shatter backboard
 ;	.long	rimbndF_2,rimbndB_2
 ;	.long	rimbndF_3,rimbndB_3

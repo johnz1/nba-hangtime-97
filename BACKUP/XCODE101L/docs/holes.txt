@@ -1,13 +1,19 @@
+To check: Henderso_h HENDER1 rooks_h coles_h dellis_h -> rooks and coles -> nameplate only remains.
+
 From cleanup of disabled players in Max Hangtime:
 
-MINR heads: 079abbf5H - 78ec7b2?
-RILY heads: 079c2a73H- 79d6a77?
-RILY_P
-MINR_P
-MIN_COL 053e9484H -
-RIL_COL 053eedd4H - 053f3cbcH
+MINR heads: 079abbf5H - 079c2a72H = 
+RILY heads: 079c2a73H - 079d813eH = 0x2C549 total space here. (181.577)
+MINR_P  - PALS nuked from imgpal*
+RILY_P  - PALS nuked from imgpal*
 
-MINR heads
+
+MUG MIN_COL 053e9484H - 053eedd3H
+M_MINOR_P - PAL nuked
+MUG RIL_COL 053eedd4H - 053f3cbcH  - 0xA838 total space here. (43064)
+M_RILY_P - PAL nuked
+
+MINR heads (PLYRHD6)
 MINR00:
 	.long   078ec7b3H <- Used for the flesh pal, it's a 3x2 image
 	.long   079abbf5H

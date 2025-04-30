@@ -119,6 +119,7 @@
 
 	.ref	inc_player_stat
 	.ref	flsh1_snd,flsh3_snd,flsh4_snd
+	.ref 	board_shatter	 		; in plyr3.axx
 
 
 ;symbols defined in this file
@@ -2298,77 +2299,98 @@ zdiknothot
 	move	a2,@inbound	;When testing dunks - TAKE OUT!
 	.endif
 
-	movk	20,a10
-	calla	SHAKER	;2
+****************************
+* Backboard shattering!
 
-;FIXX!!!  TEMP!!!
-;	sll	4,a3			;*16
-;	addi	t1dunkcnt,a3
-;	move	*a3,a0
-;	addk	1,a0
-;	jrnc	zdiknoshat			;No overflow?
-;
-;	move	*a10(plyr_seq),a0
-;	movi	zdikdunk_t,a1
-;zdikdlp	move	*a1+,a14
-;	jrn	zdiknoshat2		;End of table?
-;	cmp	a14,a0
-;	jrne	zdikdlp			;Wimpy dunk?
-;
-;	move	@PSTATUS,a0		;Plyr start bits 0-3
-;	move	@ballpnumshot,a1
-;	btst	a1,a0
-;	jrz	zdiknoshat2		;Drone?
-;
-;
+;	movi	ADJSHATTER,a0		;Get value from CMOS
+;	calla	GET_ADJ			;0-1
+;	jrnz	zdiknoshat2		;Off? Shatter must be disabled in CMOS
+;	clr	A0
+
+
+
+;AMM Are we on the rooftop?
+	move	@pup_court,a0		;Outdoor court(1) or not (0)
+	jrnz	zdiknoshat		;br=yes we are on roof
+
+;AMM disable this loop, any dunk is ok for now
+	move	*a10(plyr_seq),a0		; loads the current dunk seq into a0
+	movi	zdikdunk_t,a1			; loads dunk table below  into a1
+zdikdlp	move	*a1+,a14
+	jrn	zdiknoshat2		;Negative? Table ran out? Go to no Shatter 
+	cmp	a14,a0			;Is the dunk in the table equal to the one being executed?
+	jrne	zdikdlp			;Not equal? Back to the loop. Do the loop
+					;We fall to here if dunk is in the table.
+
+;AMM Is it a Drone dunk? (tested: works in HT)
+	move	@PSTATUS,a0		;Plyr start bits 0-3
+	move	@ballpnumshot,a1	;plyrnum who took the shot?
+	btst	a1,a0			;test if one of the bits match a human that started.
+	jrz	zdiknoshat2		;Zero matches, we must be a drone?
+
+;AMM Multi-shatter if you want. (tested: works in HT)
 ;	move	@bbshatter,a0		;Already happened
 ;	jrnz	zdiknoshat2
+
+;AMM Which quarter are we in? (tested: works in HT)
+	.ref	gmqrtr
+	move	@gmqrtr,a0
+	cmpi	0,a0			;can do in q1-q4 now.
+	jrlt	zdiknoshat2
+
+;AMM what is our dunk skill? (tested: works in HT) (9 or higher, works, 1 too..)
+	move	*a10(plyr_attrib_p),a0,L
+	move	*a0(PAT_DUNKSKILL),a0
+	cmpi	9,a0			;Dunkskill 9 or higher.
+	jrlt	zdiknoshat2
+
+	clr	a0                      ;Reset cnt
+	move	a0,*a3			
+	move	a0,@t1dunkcnt
+	move	a0,@t2dunkcnt
+ 
+	movk	32,a0
+	cmpi	2,a1			;a1 is still holding ballpnumshot (player who took shot.)
+	jrlt	tm1			;if less than 2, plr 3+4 are on the other team etc.
+;Knock down team 1	(works)
+	move	@plyrproc_t,a1,L
+	move	a0,*a1(plyr_stagcnt)
+	move	@plyrproc_t+32,a1,L
+	move	a0,*a1(plyr_stagcnt)
+	jruc	zdikdoit
+; else knock down the other team.
+tm1
+	move	@plyrproc_t+64,a1,L
+	move	a0,*a1(plyr_stagcnt)
+	move	@plyrproc_t+96,a1,L
+	move	a0,*a1(plyr_stagcnt)
+
+;AMM this is the actuall sub routine proc triggered to do the breaking after all the checks
 ;
-;;	jruc	zdiknoshat2		;THE NBA SUCKS!
-;
-;	.ref	gmqrtr
-;	move	@gmqrtr,a0
-;	cmpi	3,a0
-;	jrlt	zdiknoshat2
-;
-;	move	*a10(plyr_attrib_p),a0,L
-;	move	*a0(PAT_DUNKSKILL),a0
-;	cmpi	9,a0
-;	jrlt	zdiknoshat2
-;
-;	clr	a0
-;	move	a0,*a3			;Reset cnt
-;	move	a0,@t1dunkcnt
-;	move	a0,@t2dunkcnt
-;
-;	movk	32,a0
-;	cmpi	2,a1
-;	jrlt	tm1
-;;Knock down team 1
-;	move	@plyrproc_t,a1,L
-;	move	a0,*a1(plyr_stagcnt)
-;	move	@plyrproc_t+32,a1,L
-;	move	a0,*a1(plyr_stagcnt)
-;	jruc	zdikdoit
-;tm1
-;	move	@plyrproc_t+64,a1,L
-;	move	a0,*a1(plyr_stagcnt)
-;	move	@plyrproc_t+96,a1,L
-;	move	a0,*a1(plyr_stagcnt)
-;zdikdoit
-;	CREATE0	board_shatter
-;	movi	HOOP_PID,a0
-;	calla	KIL1C
-;	move	a2,a0
-;	movk	5,a1			;Big rim bend
-;	calla	net_ani
-;	movk	18,a10			;Big shake
-;	jruc	zdikshake
-;zdiknoshat
-;	move	a0,*a3
-;zdiknoshat2
+
+zdikdoit
+
+;Amm sounds later
+;	.ref shatter_snd
+;	SOUND1	ohmy			;Doing the sounds in plyr3.asm doesn't work or they
+;	SOUND1	dunk_snd2		;this doesnt't sound (low prio?)
+;	SOUND1	shatter_snd		;are too late, so we do them here.
+	CREATE0	board_shatter		;in plyr3.axx
+	movi	HOOP_PID,a0
+	calla	KIL1C
+	move	a2,a0
+	movk	18,a1			;Big rim bend 10swsh? 11swsh? 12
+	calla	net_ani
+;	movk	18,a10			;Big shake (JamTE value)
+	movk	24,a10			;Big shake (Hangtime)
+	jruc	zdikshake
+zdiknoshat
+	move	a0,*a3
+zdiknoshat2
 ;	movk	24,a10
-;zdikshake	calla	SHAKER	;2
+	movk	20,a10
+zdikshake	
+	calla	SHAKER	;2
 
 zdiknoshake
 
@@ -2398,7 +2420,33 @@ swish_snd_tbl
 	.long	swish_snd2,swish_snd3,swish_snd1,swish_snd2
 	.long	swish_snd4,swish_snd5,swish_snd6,swish_snd4,swish_snd5
 
-zdikdunk_t	.word	DUNKP_SEQ,DUNKA_SEQ,DUNKB_SEQ,DUNKC_SEQ,DUNKD_SEQ
+;AMM Table of dunks that allow breaking the backboard.
+;This is curated to medium/far / far dunks only for now!.
+;
+;(There was a lot of medium/short range dunks on this "allowed breaking" list.)
+
+zdikdunk_t	
+	; dunks classed as medium/far range
+	.word	DUNKB_SEQ,DUNKB2_SEQ,DUNKB3_SEQ
+	.word	DUNKG_SEQ,DUNKG2_SEQ,DUNKJ_SEQ,DUNKK_SEQ,DUNKK2_SEQ,DUNKL_SEQ
+	.word	DUNKN_SEQ,DUNKN2_SEQ,DUNKN3_SEQ,DUNKO_SEQ,DUNKP_SEQ,DUNKP3_SEQ
+	.word	DUNKQ_SEQ,DUNKQ2_SEQ,DUNKT_SEQ,DUNKT3_SEQ,DUNKT5_SEQ
+	.word	DUNKU_SEQ,DUNKU2_SEQ,DUNKU4_SEQ,DUNKU5_SEQ,DUNKU6_SEQ,DUNKU7_SEQ,DUNKU8_SEQ
+	.word	DUNKV_SEQ,DUNKV2_SEQ,DUNKV3_SEQ ;tomahawks
+	.word	DUNKW_SEQ,DUNKW2_SEQ,DUNKW3_SEQ 
+	.word	DUNKX_SEQ,DUNKX2_SEQ,DUNKX3_SEQ 
+	.word	DUNKY_SEQ,DUNKY2_SEQ
+	.word	DUNKZ_SEQ,DUNKZ2_SEQ,DUNKZ3_SEQ 
+
+	; dunks classed as far range
+	.word	DUNKL2_SEQ,DUNKO2_SEQ,DUNKQ3_SEQ,DUNKT4_SEQ  ;L = helicopter
+
+	; end table
+	.word	-1
+
+	.if 0
+zdikdunk_t	
+	.word	DUNKP_SEQ,DUNKA_SEQ,DUNKB_SEQ,DUNKC_SEQ,DUNKD_SEQ
 	.word	DUNKE_SEQ,DUNKE2_SEQ,DUNKD2_SEQ
 	.word	DUNKL_SEQ,DUNKL2_SEQ,DUNKL3_SEQ
 	.word	DUNKP2_SEQ
@@ -2428,8 +2476,9 @@ zdikdunk_t	.word	DUNKP_SEQ,DUNKA_SEQ,DUNKB_SEQ,DUNKC_SEQ,DUNKD_SEQ
 	.word	DUNKW3_SEQ
 	.word	DUNKW2_SEQ
 	.word	DUNKW_SEQ
-
 	.word	-1
+	.endif
+
 
 
 ********************************

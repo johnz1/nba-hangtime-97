@@ -42,6 +42,10 @@
 	.include	"ballshad.tbl"
 	.include	"ballshad.glo"
 
+;AMM For backboard breakers
+	.include	"shatter.tbl"
+;	.include	"shatpal.asm"
+	
 
 ;sounds external
 
@@ -68,6 +72,9 @@
 	.ref	READ_DIP
 
 	.ref	pal_getf
+
+;AMM shatter, see pal.asm / imgpal8.asm
+	.ref	HOOP_p3 
 
 ;From plyrat3.asm
 	.ref	sd_h
@@ -234,6 +241,8 @@
 	.ref	EDDIE_F
 
 ;symbols defined in this file
+
+	.def	board_shatter
 
 	.def	NBALL101,NBALL601,ABALL101
 
@@ -3854,21 +3863,23 @@ yglxinpos
 
 ;---------------------------------------
 
-	.if 0	;NOP out board shatter, shards
+;	.if 0	;NOP out board shatter, shards
 
 *******************************
 * Shatter backboard (Process)
 
  SUBRP	board_shatter
 
-;FIX!!!
-	DIE
+;refs we need here
+	.ref	ballpnum,ballpnumshot,bbshatter,rndrng0,got_hspot_sp,ohmy
 
-	SOUND1	explode_snd
+;	.if 0
+;	SOUND1	explode_snd
+;	these don't play for some reason.
+;	SOUND1	ohmy
+;	CREATE0	board_glssnd		;fox the sound later.
+;	.endif
 
-	SOUND1	ohmy
-
-	CREATE0	board_glssnd
 	movk	10,a1
 	move	a1,*a0(PTIME)
 
@@ -3888,13 +3899,15 @@ wjfoshlp2	CREATE0	board_shard
 
 	DIE
 
-board_glssnd
+;board_glssnd
 ;Turmell
-	SLEEPK	10
-	SOUND1	explode_snd
-	SLEEPK	20
-	SOUND1	glass_snd
-	DIE
+;	SLEEPK	10
+;	.ref shatter_snd
+;	SOUND1	shatter_snd
+;	SLEEPK 	30
+;	SLEEPK 	30
+;	SLEEPK 	30
+;	DIE
 
 ********************************
 * Flying shard of glass (Process)
@@ -4028,6 +4041,9 @@ wjfostrt2	move	*a9+,a0,L
 
 	jauc	DELOBJDIE
 
+;	.endif 
+
+;---------------------------------------
 
 wjfoshard_t
 	.long	s1_t,s2_t,s3_t,s4_t,s5_t,s6_t,s7_t,s8_t
@@ -4159,7 +4175,7 @@ st4_t	.long	shat4_1
 	.long	shat4_5
 	.long	0
 
-	.endif
+;	.endif
 
 ;---------------------------------------
 
