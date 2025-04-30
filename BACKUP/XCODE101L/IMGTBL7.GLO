@@ -225,8 +225,6 @@
 	.globl	M_IVER_P
 	.globl	M_KITT_P
 	.globl	M_MARBY_P
-	.globl	M_MINOR_P
-	.globl	M_RILY_P
 	.globl	M_WALL_P
 	.globl	FFRAM_O_P
 	.globl	FFRAM_B_P

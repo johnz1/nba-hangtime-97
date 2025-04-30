@@ -34,14 +34,14 @@
 	.global	KIT00
 	.globl	KIT_P
 	.global	KIT01
-	.globl	MINR_F
-	.global	MINR00
-	.globl	MINR_P
-	.global	MINR01
-	.globl	RILY_F
-	.global	RILY00
-	.globl	RILY_P
-	.global	RILY01
+;	.globl	MINR_F
+;	.global	MINR00
+;	.globl	MINR_P
+;	.global	MINR01
+;	.globl	RILY_F
+;	.global	RILY00
+;	.globl	RILY_P
+;	.global	RILY01
 	.globl	WAL_F
 	.global	WAL00
 	.globl	WAL_P

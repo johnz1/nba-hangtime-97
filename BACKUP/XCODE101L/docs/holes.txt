@@ -1,0 +1,67 @@
+From cleanup of disabled players in Max Hangtime:
+
+MINR heads: 079abbf5H - 78ec7b2?
+RILY heads: 079c2a73H- 79d6a77?
+RILY_P
+MINR_P
+MIN_COL 053e9484H -
+RIL_COL 053eedd4H - 053f3cbcH
+
+MINR heads
+MINR00:
+	.long   078ec7b3H <- Used for the flesh pal, it's a 3x2 image
+	.long   079abbf5H
+	.long   079aced9H
+	.long   079ae3bbH
+	.long   079afd41H
+	.long   079b12c5H
+	.long   079b28ebH
+	.long   079b3eabH
+	.long   079b5723H
+	.long   079b765bH
+	.long   079b8e25H
+	.long   079ba475H
+	.long   079bb315H
+	.long   079bca55H
+	.long   079be98dH
+	.long   079bfdcdH
+	.long   079c10edH
+
+RILY
+RILY00:
+	.long   078ec7b3H <- Same flesh pal.
+	.long   079c2a73H
+	.long   079c3d03H
+	.long   079c52f3H
+	.long   079c69bbH
+	.long   079c7dadH
+	.long   079c91edH
+	.long   079ca9edH
+	.long   079cbd6dH
+	.long   079cd945H
+	.long   079cf061H
+	.long   079d01e9H
+	.long   079d1089H
+	.long   079d2439H
+	.long   079d4011H
+	.long   079d5997H
+	.long   079d6a77H
+
+Mugshot:
+MIN_COL:
+	.word   63,64,0,64
+	.long   053e9484H - 053eedd3H
+	.word   0480H
+	.long   M_MINOR_P
+RIL_COL:
+	.word   51,64,0,64
+	.long   053eedd4H - 053f3cbbH
+	.word   080H
+	.long   M_RILY_P
+WAL_COL:
+	.word   57,64,0,64
+	.long   053f3cbcH
+	.word   080H
+	.long   M_WALL_P
+	.TEXT
+
