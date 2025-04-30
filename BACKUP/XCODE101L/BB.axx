@@ -268,7 +268,7 @@
 	BSSX	pass_off	,16	;!0=Don't allow passing
 	BSSX	rebound_delay	,16	;!0=Give rebound stat
 ;;	BSSX	crowd_aniflag	,16	;!0=Allow crowd animations
-;;	BSSX	bench_aniflag	,16	;!0=Allow bench animations
+	BSSX	bench_aniflag	,16	;!0=Allow bench animations
 
 ; Timer variables. Must stay in order!!
 
@@ -1813,7 +1813,7 @@ offpbomb_out
 	move	a0,@pass_off
 	move	a0,@ballprcv_p,L
 ;;	move	a0,@crowd_aniflag
-;;	move	a0,@bench_aniflag
+	move	a0,@bench_aniflag
 	move	a0,@name_flop
 	move	a0,@gmqrtr
 	move	a0,@plyr_onfire

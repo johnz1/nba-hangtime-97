@@ -5,7 +5,10 @@ c:\dosbox-x\dosbox-x.exe -fastlaunch -conf .\dosbox-x\dosbox-x.conf exit -c "c:\
 del misc2.old
 ren misc2.bin misc2.old
 dd if=misc2.irw of=misc2.bin bs=0x44 skip=1
+dd if=misc3.irw of=misc3.bin bs=0x44 skip=1
 rem MAME debug commands to load these from the mame folder:
 rem loadr misc.bin,1200000,0,:gfxrom in mame debug
-copy misc2.bin D:\mame
+copy misc*.bin D:\mame
+del *.irw
+del *.old
 

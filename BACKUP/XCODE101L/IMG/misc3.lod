@@ -1,0 +1,14 @@
+IHDR SIZX:W,SIZY:W,ANIX:W,ANIY:W,SAG:L,CTRL:W,PAL:L
+;If we expand GFX rom: 
+;use loadr misc3.bin,1200000,0,:gfxrom in mame debug
+***> 7000000,1
+ASM> crowd2.tbl
+GLO> crowd2.glo
+POF>
+XOF>
+ZOF>
+;PAL for these is already in imgpal7, so we don't output it.
+;We can use compression on these images so those are all turned on.
+NBACROWD.IMG
+---> COACH02,COACH03,COACH04,COACH05,COACH06
+---> BNCHPL02,BNCHPL03,BNCHPL04,BNCHPL05,BNCHPL06,BNCHPL07

@@ -28,6 +28,7 @@
 	.include	"macros.hdr"		;Macros
 
 	.include	"crowd.tbl"
+	.include	"crowd2.tbl"
 	.include	"courtflr.tbl"
 
 	.include	"cheer.tbl"
@@ -70,7 +71,7 @@
 	.ref	P4CTRL
 	.ref	RNDRNG0
 ;;	.ref	crowd_aniflag	
-;;	.ref	bench_aniflag	
+	.ref	bench_aniflag	
 
 	.ref	pal_set,pal_find,pal_clean
 
@@ -126,7 +127,7 @@
 
 	BSSX	crbox1_p,32*5	;sky box, all
 
-;	.bss	bnch_ram_plist,32*(8+1)		;bench ani *proc
+	.bss	bnch_ram_plist,32*(8+1)		;bench ani *proc
 	.bss	crwd_ram_plist,32*(24+1)	;crowd ani *proc
 	.bss	chldr_ram_plft,32		;cheerleader ani *proc, lft
 	.bss	chldr_ram_prgt,32		;cheerleader ani *proc, rgt
@@ -1395,21 +1396,21 @@ storm_frame_table_end
 
  SUBR	initcrowd_ani
 
-;	movi	bnch_ram_plist,a9
+	movi	bnch_ram_plist,a9
 	movi	crwd_ram_plist,a10
 
 	move	@pup_court,a8			;Outdoor court?
 	jrnz	ytrvx				; br=yes
 
-;	move	@bnchl_p,a8,L
-;	movi	BNCHPL_LST,a11
-;	CREATE0	bnch_ani
-;	move	a0,*a9+,L
-;
-;	move	@bnchr_p,a8,L
-;	movi	BNCHPL_LST,a11
-;	CREATE0	bnch_ani
-;	move	a0,*a9+,L
+	move	@bnchl_p,a8,L
+	movi	BNCHPL_LST,a11
+	CREATE0	bnch_ani
+	move	a0,*a9+,L
+
+	move	@bnchr_p,a8,L
+	movi	BNCHPL_LST,a11
+	CREATE0	bnch_ani
+	move	a0,*a9+,L
 
 ;--------------------
 
@@ -1551,17 +1552,17 @@ ytrvx
 *-------------------
 ; Turn on bench animation, wait a bit, then die
 
-; SUBR	bench_animate
-;
-;	SLEEPK	8
-;	movk	1,a1
-;	movi	bnch_ram_plist,a10
-;jnwzlp
-;	move	*a10+,a0,L
-;	jaz	SUCIDE
-;	move	a1,*a0(PTIME)
-;	addk	1,a1
-;	jruc	jnwzlp
+ SUBR	bench_animate
+
+	SLEEPK	8
+	movk	1,a1
+	movi	bnch_ram_plist,a10
+jnwzlp
+	move	*a10+,a0,L
+	jaz	SUCIDE
+	move	a1,*a0(PTIME)
+	addk	1,a1
+	jruc	jnwzlp
 
 
 *-------------------
@@ -1569,12 +1570,12 @@ ytrvx
 
  SUBR	start_animate
 
-	.ref	RNDPER
+;	.ref	RNDPER
 ;	movi	150,a0			;!!! ;Randomly knock down his %
-; 	calla	RNDPER
+;	calla	RNDPER
 ;	jrls	mphbskp
-;	CREATE0	bench_animate
-;mphbskp
+	CREATE0	bench_animate
+mphbskp
 	movk	1,a1
 	move	@chldr_ram_plft,a0,L
 	jrz	mphbnoc0
@@ -1596,40 +1597,40 @@ mphblp
 *-------------------
 ; Do bench ani seq proc
 
-; SUBRP	bnch_ani
-;
-;	SLEEP	32767
-;
-;	move	a11,a10			;Get *seq list
-;	jruc	dmbclp
-;dmbclptop
-;	move	*a8(OIMG),a3,L		;>Get old & set new *img
-;	move	a1,*a8(OIMG),L
-;	move	*a1,a2,L
-;	move	a2,*a8(OSIZE),L
-;	move	*a1(ISAG),*a8(OSAG),L
-;
-;	move	*a3(IANIOFFY),a14
-;	move	*a1(IANIOFFY),a0
-;	sub	a14,a0			;Newaniy-Oldaniy
-;	move	*a8(OYPOS),a14
-;	sub	a0,a14
-;	move	a14,*a8(OYPOS)
-;
-;	move	*a3(IANIOFFX),a14
-;	move	*a1(IANIOFFX),a0
-;	sub	a14,a0			;Newanix-Oldanix
-;	move	*a8(OXPOS),a14
-;	sub	a0,a14
-;	move	a14,*a8(OXPOS)
-;
-;	move	*a10+,a0
-;	calla	PRCSLP
-;dmbclp
-;	move	*a10+,a1,L		;New *img or is seq complete?
-;	jrnz	dmbclptop			; br=new *img
-;
-;	jruc	bnch_ani
+ SUBRP	bnch_ani
+
+	SLEEP	32767
+
+	move	a11,a10			;Get *seq list
+	jruc	dmbclp
+dmbclptop
+	move	*a8(OIMG),a3,L		;>Get old & set new *img
+	move	a1,*a8(OIMG),L
+	move	*a1,a2,L
+	move	a2,*a8(OSIZE),L
+	move	*a1(ISAG),*a8(OSAG),L
+
+	move	*a3(IANIOFFY),a14
+	move	*a1(IANIOFFY),a0
+	sub	a14,a0			;Newaniy-Oldaniy
+	move	*a8(OYPOS),a14
+	sub	a0,a14
+	move	a14,*a8(OYPOS)
+
+	move	*a3(IANIOFFX),a14
+	move	*a1(IANIOFFX),a0
+	sub	a14,a0			;Newanix-Oldanix
+	move	*a8(OXPOS),a14
+	sub	a0,a14
+	move	a14,*a8(OXPOS)
+
+	move	*a10+,a0
+	calla	PRCSLP
+dmbclp
+	move	*a10+,a1,L		;New *img or is seq complete?
+	jrnz	dmbclptop			; br=new *img
+
+	jruc	bnch_ani
 
 
 *--------------------
@@ -1724,33 +1725,33 @@ ooaplp
 ;--------------------
 ; Bench/crowd ani seq lists
 
-;BNCHPL_LST
-;	LW	BNCHPL02,9
-;	LW	BNCHPL03,8
+BNCHPL_LST
+	LW	BNCHPL02,9
+	LW	BNCHPL03,8
 
-;	LW	BNCHPL04,8
-;	LW	BNCHPL05,7
-;	LW	BNCHPL06,7
-;	LW	BNCHPL07,7
-;	LW	BNCHPL06,7
-;	LW	BNCHPL05,8
-;	LW	BNCHPL04,8
-;	LW	BNCHPL03,9
+	LW	BNCHPL04,8
+	LW	BNCHPL05,7
+	LW	BNCHPL06,7
+	LW	BNCHPL07,7
+	LW	BNCHPL06,7
+	LW	BNCHPL05,8
+	LW	BNCHPL04,8
+	LW	BNCHPL03,9
 
-;	LW	BNCHPL02,9
-;	LWL0	BNCHPL01,3*60
+	LW	BNCHPL02,9
+	LWL0	BNCHPL01,3*60
 
-;COACH_LST
-;	LW	COACH02,9
-;	LW	COACH03,9
-;	LW	COACH04,9
-;	LW	COACH05,9
-;	LW	COACH06,9
-;	LW	COACH05,9
-;	LW	COACH04,9
-;	LW	COACH03,9
-;	LW	COACH02,9
-;	LWL0	COACH01,3*60
+COACH_LST
+	LW	COACH02,9
+	LW	COACH03,9
+	LW	COACH04,9
+	LW	COACH05,9
+	LW	COACH06,9
+	LW	COACH05,9
+	LW	COACH04,9
+	LW	COACH03,9
+	LW	COACH02,9
+	LWL0	COACH01,3*60
 
 
 CR0FST_LST
