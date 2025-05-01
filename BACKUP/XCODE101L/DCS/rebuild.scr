@@ -1,0 +1,55 @@
+Signature "NBA SUPER HANGTIME";
+
+Default encoding parameters (
+Type=*, Subtype=*, BitRate=96000,
+//PowerCut=97, MinRange=5, MaxError=5);
+PowerCut=97.5, MinRange=5, MaxError=5);
+
+//Nuke some unused samples
+//Stream nuke1 "dummy.wav" replaces $31DA0A; 
+
+Stream Raiden "JAM_Raiden.wav"; // Raiden's sample because we use it twice, save 2449 bytes.
+
+// last used call 07BF ?
+
+// To <player> pass speech
+//    SetMixingLevel(level 111);                                      // 0000 07 05 6F
+//    Play(stream $1CC03A);                                           // 0000 01 05 1CC03A 01
+//    Wait(15) Play(stream $3A7A0A);                                  // 000F 01 05 3A7A0A 01
+//    Wait(86) End;  
+
+// Player names & pass speech on chan 5 always!
+
+// Raiden
+Track $0b50 channel 5 {
+    SetMixingLevel(level 111);   // always set the mixing level for a new track
+    Play(Raiden);       // start an audio clip
+    Wait(Stream);          // ...and wait for it to finish before exiting
+};
+// To Raiden
+Track $07b7 channel 5 {
+    SetMixingLevel(level 111);
+    Play(stream $1CC03A);
+    Wait(15) Play(Raiden);
+    Wait(Stream);         
+};
+
+//; SX	max_hngtm_sp,0200DH,93, 07beH "Super Maximum Hangtime"
+//; SX	max_hngtm_sp,0200DH,93, 0b8fH "maximum hangtime"
+//; SX	nba_hngtm_sp,0200DH,99, 0b02H "nba hangtime"
+Track $07be channel 5 {
+    SetMixingLevel(level 112);   	// always set the mixing level for a new track
+    Play("Super.wav");       	// start an audio clip
+    Wait(Stream);          	// ...and wait for it to finish before exiting
+    Play(stream $0A0682); 	// "Maximum Hangtime"  (recycled from original DCS rom)
+    Wait(Stream);          	// ...and wait for it to finish before exiting
+//    Queue($0b8f);		// pretend that the WPC host just send command code $0004
+};
+
+Track $07bd channel 2 {
+    SetMixingLevel(level 100); 	// always set the mixing level for a new track
+    Play("Glass.wav");       	// start an audio clip
+    Wait(Stream);          	// ...and wait for it to finish before exiting
+};
+
+

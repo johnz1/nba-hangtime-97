@@ -124,8 +124,9 @@
 
  SX	midway_sp,   0200DH,67, 0b00H
 ;DJT Start
- SX	max_hngtm_sp,0200DH,93, 0b8fH
-; SX	nba_hngtm_sp,0200DH,99, 0b02H
+ SX	max_hngtm_sp,0200DH,93, 07beH ;"Super Maximum Hangtime"
+; SX	max_hngtm_sp,0200DH,93, 0b8fH ;"maximum hangtime"
+; SX	nba_hngtm_sp,0200DH,99, 0b02H ;"nba hangtime"
 ;DJT End
  SX	at_hlftme_sp,0150DH,61, 0adcH
  SX	gm_undrwy_sp,0150DH,70, 0adbH

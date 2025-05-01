@@ -2371,10 +2371,10 @@ tm1
 zdikdoit
 
 ;Amm sounds later
-;	.ref shatter_snd
-;	SOUND1	ohmy			;Doing the sounds in plyr3.asm doesn't work or they
-;	SOUND1	dunk_snd2		;this doesnt't sound (low prio?)
-;	SOUND1	shatter_snd		;are too late, so we do them here.
+	.ref shatter_snd
+	SOUND1	ohmy			;Doing the sounds in plyr3.asm doesn't work or they
+	SOUND1	dunk_snd2		;this doesnt't sound (low prio?)
+	SOUND1	shatter_snd		;are too late, so we do them here.
 	CREATE0	board_shatter		;in plyr3.axx
 	movi	HOOP_PID,a0
 	calla	KIL1C
