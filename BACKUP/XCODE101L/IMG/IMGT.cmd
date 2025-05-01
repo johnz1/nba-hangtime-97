@@ -11,4 +11,9 @@ rem loadr misc.bin,1200000,0,:gfxrom in mame debug
 copy misc*.bin D:\mame
 del *.irw
 del *.old
+echo Rebuild?
+cd ..
+pause
+rebuild.cmd
+
 

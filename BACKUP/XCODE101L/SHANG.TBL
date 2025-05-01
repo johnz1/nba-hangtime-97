@@ -1,7 +1,22 @@
 	.DATA
 SHANG01:
-	.word   59,116,29,116
+	.word   40,79,-2,74
 	.long   09124e41H
+	.word   06000H
+	.long   SHANGPAL
+SHANG02:
+	.word   40,79,-2,74
+	.long   09129851H
+	.word   06000H
+	.long   SHANGPAL
+SHANG03:
+	.word   40,79,-2,74
+	.long   0912e261H
+	.word   06000H
+	.long   SHANGPAL
+SHANG04:
+	.word   40,79,-2,73
+	.long   09132c71H
 	.word   06000H
 	.long   SHANGPAL
 	.TEXT

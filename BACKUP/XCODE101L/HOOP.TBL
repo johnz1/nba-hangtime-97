@@ -989,97 +989,53 @@ nhoopbot:
 	.long   058deab5H
 	.word   080H
 	.long   NHOOP_p
-BACK1BR:
-	.word   90,73,-28,181
-	.long   0912eea9H
-	.word   00H
-	.long   HOOP_P
-BACK2BR:
-	.word   89,73,-28,181
-	.long   0913bbf9H
-	.word   00H
-	.long   HOOP_P
-BACK3BR:
-	.word   87,73,-28,181
-	.long   09148701H
-	.word   00H
-	.long   HOOP_P
-BACK4BR:
-	.word   86,73,-28,181
-	.long   09154d79H
-	.word   00H
-	.long   HOOP_P
-BACK5BR:
-	.word   85,73,-28,181
-	.long   091611a9H
-	.word   00H
-	.long   HOOP_P
-BACK6BR:
-	.word   83,73,-28,181
-	.long   0916d391H
-	.word   00H
-	.long   HOOP_P
-BACK7BR:
-	.word   82,73,-28,181
-	.long   091790e9H
-	.word   00H
-	.long   HOOP_P
-BACK8BR:
-	.word   79,73,-28,181
-	.long   09184bf9H
-	.word   00H
-	.long   HOOP_P
-BACK9BR:
-	.word   77,73,-28,181
-	.long   09190031H
-	.word   00H
-	.long   HOOP_P
+
 
 	.TEXT
 	.DATA
 BACK1BR:
 	.word   91,74,-28,181
-	.long   091d10d5H
+	.long   091d98adH
 	.word   0780H
 	.long   HOOP_P
 BACK2BR:
 	.word   90,74,-28,181
-	.long   091d8ed5H
+	.long   091e16adH
 	.word   0780H
 	.long   HOOP_P
 BACK3BR:
 	.word   88,74,-28,181
-	.long   091e09b5H
+	.long   091e918dH
 	.word   0680H
 	.long   HOOP_P
 BACK4BR:
 	.word   87,74,-28,181
-	.long   091e8115H
+	.long   091f08edH
 	.word   0280H
 	.long   HOOP_P
 BACK5BR:
 	.word   86,74,-28,181
-	.long   091ef655H
+	.long   091f7e2dH
 	.word   0280H
 	.long   HOOP_P
 BACK6BR:
 	.word   84,74,-28,181
-	.long   091f684dH
+	.long   091ff025H
 	.word   0280H
 	.long   HOOP_P
 BACK7BR:
 	.word   83,74,-28,181
-	.long   091fd7adH
+	.long   09205f85H
 	.word   0280H
 	.long   HOOP_P
 BACK8BR:
 	.word   80,74,-28,181
-	.long   09204585H
+	.long   0920cd5dH
 	.word   0280H
 	.long   HOOP_P
 BACK9BR:
 	.word   78,74,-28,181
-	.long   0920ac5dH
+	.long   09213435H
 	.word   0280H
 	.long   HOOP_P
 	.TEXT

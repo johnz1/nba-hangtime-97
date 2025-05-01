@@ -18,7 +18,7 @@ NBACROWD.IMG
 SHANG\SHANG.IMG
 PON>
 ASM> shang.tbl
----> SHANG01
+---> SHANG01,SHANG02,SHANG03,SHANG04
 ASM> storm.tbl
 GLO> storm.glo
 PPP> 0
@@ -30,7 +30,9 @@ XON>
 ;We can use compression on these images so those are all turned on.
 OUTDOOR.IMG
 ---> STORM02,STORM03,STORM04,STORM05,STORM06,STORM07,STORM08,STORM09,STORM10,STORM11,STORM12
+PON>
 ---> fence
+POF>
 PON>
 ;Let's get the glass shard shatter stuff from Jam TE
 HOOPJAM.IMG

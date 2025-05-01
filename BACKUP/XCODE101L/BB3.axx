@@ -501,17 +501,21 @@ whcqinit_t
 	WL	4002,coachr_p
 	WL	4001,set_coach_colors
 
-
+;Shang attempt
 	.word	-6,Y,Z,ZOFF,F
-	.long	bk_flr
-	WL	4001,set_bkcrt_colors
+	.long	SHANG04
+	WL	4002,SHANGPAL
+
+;bk_flr = 20px high but it prints over shang OBJ for some reason.
+
+;	.word	-6,Y,Z,ZOFF,F
+;	.long	bk_flr
+;	WL	4001,set_bkcrt_colors
 	.word	346,Y,Z,ZOFF,F
 	.long	bk_flr
 	WL	4001,set_bkcrt_colors
-;Shang attempt
-	.word	-6,Y,Z,ZOFF,F
-	.long	SHANG01
-	WL	4002,SHANGPAL
+
+
 
 
 ;--------------------
