@@ -1,0 +1,8 @@
+	.DATA
+RAIDEN:
+	.word   38,8,17,0
+	.long   092744afH
+	.word   03000H
+	.long   BAST_Y_P
+	.TEXT
+

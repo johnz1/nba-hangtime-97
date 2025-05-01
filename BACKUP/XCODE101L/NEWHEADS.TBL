@@ -1,0 +1,83 @@
+	.DATA
+RAIDEN01:
+	.word   57,44,27,39
+	.long   092379cfH
+	.word   06000H
+	.long   RAIDEN_P
+RAIDEN02:
+	.word   57,43,23,38
+	.long   0923b497H
+	.word   06000H
+	.long   RAIDEN_P
+RAIDEN03:
+	.word   57,42,24,37
+	.long   0923ee09H
+	.word   06000H
+	.long   RAIDEN_P
+RAIDEN04:
+	.word   56,45,21,40
+	.long   09242625H
+	.word   06000H
+	.long   RAIDEN_P
+RAIDEN05:
+	.word   56,44,28,40
+	.long   09246135H
+	.word   06000H
+	.long   RAIDEN_P
+RAIDEN06:
+	.word   52,38,39,31
+	.long   09249af5H
+	.word   06000H
+	.long   RAIDEN_P
+RAIDEN07:
+	.word   56,39,20,32
+	.long   0924c945H
+	.word   06000H
+	.long   RAIDEN_P
+RAIDEN08:
+	.word   55,41,13,36
+	.long   0924fc75H
+	.word   06000H
+	.long   RAIDEN_P
+RAIDEN09:
+	.word   58,41,20,35
+	.long   0925314fH
+	.word   06000H
+	.long   RAIDEN_P
+RAIDEN10:
+	.word   58,42,27,34
+	.long   0925690bH
+	.word   06000H
+	.long   RAIDEN_P
+RAIDEN11:
+	.word   59,58,31,39
+	.long   0925a223H
+	.word   06000H
+	.long   RAIDEN_P
+RAIDEN12:
+	.word   50,43,26,37
+	.long   0925f257H
+	.word   06000H
+	.long   RAIDEN_P
+RAIDEN13:
+	.word   39,43,23,35
+	.long   092624bbH
+	.word   06000H
+	.long   RAIDEN_P
+RAIDEN14:
+	.word   52,41,24,36
+	.long   09264c09H
+	.word   06000H
+	.long   RAIDEN_P
+RAIDEN15:
+	.word   55,40,28,34
+	.long   09267e01H
+	.word   06000H
+	.long   RAIDEN_P
+RAIDEN16:
+	.word   46,52,43,31
+	.long   0926b191H
+	.word   06000H
+	.long   RAIDEN_P
+	.TEXT
+

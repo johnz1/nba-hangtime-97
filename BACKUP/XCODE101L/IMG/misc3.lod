@@ -10,15 +10,18 @@ GLO> crowd2.glo
 POF>
 XOF>
 ZOF>
+;test CON
+CON>
 ;PAL for these is already in imgpal7, so we don't output it.
 ;We can use compression on these images so those are all turned on.
 NBACROWD.IMG
 ---> COACH02,COACH03,COACH04,COACH05,COACH06
 ---> BNCHPL02,BNCHPL03,BNCHPL04,BNCHPL05,BNCHPL06,BNCHPL07
-SHANG\SHANG.IMG
+SHANG.IMG
 PON>
 ASM> shang.tbl
----> SHANG01,SHANG02,SHANG03,SHANG04
+---> SHANG01,SHANG02,SHANG03,SHANG04,SHANG05,SHANG06,SHANG07
+---> STCLAP1,STCLAP2,STCLAP3
 ASM> storm.tbl
 GLO> storm.glo
 PPP> 0
@@ -39,6 +42,7 @@ HOOPJAM.IMG
 PPP> 6
 ASM> shatter.tbl
 GLO> shatter.glo
+ZOF>
 ---> shard1_1,shard1_2
 ---> shard1_3,shard1_4,shard1_5,shard1_6,shard1_7,shard1_8,shard2_1,shard2_2
 ---> shard2_3,shard2_4,shard2_5,shard2_6,shard2_7,shard2_8,shard3_1,shard3_2
@@ -54,10 +58,61 @@ GLO> shatter.glo
 ---> shat1_2,shat1_3,shat1_4,shat1_5,shat2_1,shat2_2,shat2_3,shat2_4,shat2_5
 ---> shat3_1,shat3_2,shat3_3,shat3_4,shat3_5,shat4_1,shat4_2,shat4_3,shat4_4
 ---> shat4_5
+ZON>
 ;Redrawn shattered hoop from Ressurecta - Thanks!
 HOOPHT.IMG
 PPP> 6
 ASM> hoop2.tbl
 GLO> hoop2.glo
 ---> BACK1BR,BACK2BR,BACK3BR,BACK4BR,BACK5BR,BACK6BR,BACK7BR,BACK8BR,BACK9BR
-; LOADW says we have used 0x1C42A but there's 0x2C549 total space for things.. 
+;Raiden lightning
+RAIDEN.IMG
+ASM> lighten.tbl
+GLO> lighten.glo
+---> lighten1,lighten2,lighten3,lighten4,lighten5,lighten6,lighten7
+;
+; New heads here
+; The .tbl & glo files are included in plyrat3.axx
+ASM> newheads.tbl
+GLO> newheads.glo
+ourhds3.img
+PPP> 6
+ZOF>
+---> RAIDEN01,RAIDEN02,RAIDEN03,RAIDEN04,RAIDEN05,RAIDEN06
+---> RAIDEN07,RAIDEN08,RAIDEN09,RAIDEN10,RAIDEN11,RAIDEN12
+---> RAIDEN13,RAIDEN14,RAIDEN15,RAIDEN16
+;
+; New mugs here
+; Mugs go into mugshot.glo / mugshot.tbl, so copypaste output there manualy
+; Mugs are used in select2.axx. Our mug pals should go into imgpal8.asm
+; The new imgpal8.asm is created by IMG.BAT in dosbox.
+;
+ASM> newmugs.tbl
+GLO> newmugs.glo
+XOF>
+CON>
+ZON>
+PPP> 0
+smoke.img
+---> RAD_MK2
+;
+PON>
+CON>
+XOF>
+;
+; New nameplates here. 
+; Nameplates go into imgtbl.axx !AND! imgtbl.glo 
+;
+; These need to be 6-color and use BAST_Y pal that is already in!
+ASM> names3.tbl
+GLO> names3.glo
+pnames3.img
+---> RAIDEN
+;
+; 
+;
+
+
+
+
+

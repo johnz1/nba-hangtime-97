@@ -14,6 +14,6 @@ del *.old
 echo Rebuild?
 cd ..
 pause
-rebuild.cmd
+rem rebuild.cmd
 
 

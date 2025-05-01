@@ -445,5 +445,4 @@
 	.global	MAR_COL
 	.globl	M_WALL_P
 	.global	WAL_COL
-;Added:	.globl	RAD_MK2P
-	.global	RAD_MK2
+;Added:

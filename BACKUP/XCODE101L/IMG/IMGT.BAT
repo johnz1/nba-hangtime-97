@@ -1,6 +1,9 @@
 cd myht\backup\xcode1~3\img
 mkdir c:\tmp\htextra
-loadw misc2 /t=c:\tmp\htextra /FI /E >haha
+rem cleanup
+del c:\tmp\htextra\imgpal.asm
+del c:\tmp\htextra\imgpal8.asm
+rem loadw misc2 /t=c:\tmp\htextra /FI /E >haha
 loadw misc3 /t=c:\tmp\htextra /FI /E >haha
 rem shatter imgs
 del c:\myht\backup\xcode1~3\shatter.tbl
@@ -18,5 +21,37 @@ type c:\tmp\htextra\hoop2.tbl >> c:\myht\backup\xcode1~3\hoop.tbl
 rem shang
 del c:\myht\backup\xcode1~3\shang.tbl
 copy c:\tmp\htextra\shang.tbl c:\myht\backup\xcode1~3\shang.tbl
+rem raiden lightning
+del c:\myht\backup\xcode1~3\lighten.tbl
+copy c:\tmp\htextra\shang.tbl c:\myht\backup\xcode1~3\lighten.tbl
+rem mugs
+del c:\myht\backup\xcode1~3\mugshot.tbl
+del c:\myht\backup\xcode1~3\mugshot.glo
+copy c:\myht\backup\xcode1~3\mugs_b.glo C:\myht\backup\xcode1~3\mugshot.glo
+copy c:\myht\backup\xcode1~3\mugs_b.tbl C:\myht\backup\xcode1~3\mugshot.tbl
+type c:\tmp\htextra\newmugs.glo >> c:\myht\backup\xcode1~3\mugshot.glo
+type c:\tmp\htextra\newmugs.tbl >> c:\myht\backup\xcode1~3\mugshot.tbl
+rem new heads
+del c:\myht\backup\xcode1~3\newheads.tbl
+del c:\myht\backup\xcode1~3\newheads.glo
+copy c:\tmp\htextra\newheads.tbl c:\myht\backup\xcode1~3\newheads.tbl
+copy c:\tmp\htextra\newheads.glo c:\myht\backup\xcode1~3\newheads.glo
+rem nameplates
+rem nameplates are included in the IMGTBL.AXX file (bottom)
+del c:\myht\backup\xcode1~3\names3.tbl
+del c:\myht\backup\xcode1~3\names3.glo
+copy c:\tmp\htextra\names3.tbl c:\myht\backup\xcode1~3\names3.tbl
+copy c:\tmp\htextra\names3.glo c:\myht\backup\xcode1~3\names3.glo
+
+rem pals
+ren c:\tmp\htextra\imgpal.asm imgpal8.asm
+del c:\tmp\htextra\l2*.*
+del c:\myht\backup\xcode1~3\imgpal8.asm
+copy c:\myht\backup\xcode1~3\pal8_b.asm C:\myht\backup\xcode1~3\imgpal8.asm 
+type c:\tmp\htextra\imgpal8.asm >> c:\myht\backup\xcode1~3\imgpal8.asm
+
+echo !!! DELETE BAST_Y_P duplicate from IMGPAL8.ASM !!!
+echo !!! DELETE BOTH HOOP_p duplicate from IMGPAL8.ASM !!!
+
 pause
 exit

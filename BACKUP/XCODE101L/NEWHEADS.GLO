@@ -1,0 +1,17 @@
+	.globl	RAIDEN_P
+	.global	RAIDEN01
+	.global	RAIDEN02
+	.global	RAIDEN03
+	.global	RAIDEN04
+	.global	RAIDEN05
+	.global	RAIDEN06
+	.global	RAIDEN07
+	.global	RAIDEN08
+	.global	RAIDEN09
+	.global	RAIDEN10
+	.global	RAIDEN11
+	.global	RAIDEN12
+	.global	RAIDEN13
+	.global	RAIDEN14
+	.global	RAIDEN15
+	.global	RAIDEN16

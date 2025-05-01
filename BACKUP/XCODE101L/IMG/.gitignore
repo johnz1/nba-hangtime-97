@@ -6,5 +6,6 @@
 *.BIN
 *.OLD
 *.IRW
+*.~IMG
 HAHA.*
 M*.LCK

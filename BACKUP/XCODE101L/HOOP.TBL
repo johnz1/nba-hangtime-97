@@ -995,47 +995,47 @@ nhoopbot:
 	.DATA
 BACK1BR:
 	.word   91,74,-28,181
-	.long   091d98adH
+	.long   091f5a89H
 	.word   0780H
 	.long   HOOP_P
 BACK2BR:
 	.word   90,74,-28,181
-	.long   091e16adH
+	.long   091fd889H
 	.word   0780H
 	.long   HOOP_P
 BACK3BR:
 	.word   88,74,-28,181
-	.long   091e918dH
+	.long   09205369H
 	.word   0680H
 	.long   HOOP_P
 BACK4BR:
 	.word   87,74,-28,181
-	.long   091f08edH
+	.long   0920cac9H
 	.word   0280H
 	.long   HOOP_P
 BACK5BR:
 	.word   86,74,-28,181
-	.long   091f7e2dH
+	.long   09214009H
 	.word   0280H
 	.long   HOOP_P
 BACK6BR:
 	.word   84,74,-28,181
-	.long   091ff025H
+	.long   0921b201H
 	.word   0280H
 	.long   HOOP_P
 BACK7BR:
 	.word   83,74,-28,181
-	.long   09205f85H
+	.long   09222161H
 	.word   0280H
 	.long   HOOP_P
 BACK8BR:
 	.word   80,74,-28,181
-	.long   0920cd5dH
+	.long   09228f39H
 	.word   0280H
 	.long   HOOP_P
 BACK9BR:
 	.word   78,74,-28,181
-	.long   09213435H
+	.long   0922f611H
 	.word   0280H
 	.long   HOOP_P
 	.TEXT

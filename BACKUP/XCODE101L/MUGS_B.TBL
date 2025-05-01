@@ -1130,10 +1130,4 @@ WAL_COL:
 	.word   080H
 	.long   M_WALL_P
 ;Added:
-	.DATA
-RAD_MK2:
-	.word   72,63,0,63
-	.long   0926e9a1H
-	.word   07580H
-	.long   RAD_MK2P
-	.TEXT
+
