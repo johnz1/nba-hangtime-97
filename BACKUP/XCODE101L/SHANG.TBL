@@ -1,0 +1,8 @@
+	.DATA
+SHANG01:
+	.word   59,116,29,116
+	.long   09124e41H
+	.word   06000H
+	.long   SHANGPAL
+	.TEXT
+

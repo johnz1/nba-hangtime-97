@@ -37,6 +37,9 @@
 	.include	"outdoor.glo"
 	.include	"storm.tbl"
 
+	.include	"shang.tbl"
+	.include	"shang.pal"
+
 	.include	"imgtbl.glo"
 	.include	"hoop.glo"
 
@@ -505,6 +508,10 @@ whcqinit_t
 	.word	346,Y,Z,ZOFF,F
 	.long	bk_flr
 	WL	4001,set_bkcrt_colors
+;Shang attempt
+	.word	-6,Y,Z,ZOFF,F
+	.long	SHANG01
+	WL	4002,SHANGPAL
 
 
 ;--------------------
@@ -1574,6 +1581,12 @@ jnwzlp
 ;	movi	150,a0			;!!! ;Randomly knock down his %
 ;	calla	RNDPER
 ;	jrls	mphbskp
+********************************
+* Random % routine
+* A0=Probability of event (0-1000) (0=0%, 1000=100%)
+* 0A0H=0-999 (CC) (jrls nope, jrhi happened)
+* Trashes scratch
+
 	CREATE0	bench_animate
 mphbskp
 	movk	1,a1
