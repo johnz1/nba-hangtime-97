@@ -1350,6 +1350,9 @@ special_name_speech
  .word	0100DH,38,1833	;BENOIT,      david
  .word	0100DH,36,1959	;SCOTT,       byron
  .word	0100DH,37,1857	;MURDOCK,     eric
+;; MARKER
+;; Add new player name speech here
+ .word	0100DH,45,0B50h ;Raiden
 
 
 ***********
@@ -1445,6 +1448,9 @@ special_pass_speech
  .word	0100DH,48,1835	;to BENOIT,      david
  .word	0100DH,45,1960	;to SCOTT,       byron
  .word	0100DH,46,1859	;to MURDOCK,     eric
+;; MARKER
+;; Add new player pass speech here
+ .word	0100DH,45,07b7h ;to Raiden
 
 ******************************************************************************
 

@@ -30,6 +30,9 @@
 	.include	"names2.tbl"		;New names from pnames2.img
 	.include	"names2.glo"		;New names from pnames2.img
 
+	.include	"names3.tbl"		;New added player names
+	.include	"names3.glo"		;New added player names
+
 	.include	"mugshot.glo"
 	.include	"imgtbl.glo"
 	.include	"imgtblp.glo"
@@ -2847,6 +2850,10 @@ zpsjteam_data1
 
 	.word	M_,U_,R_,D_,C_,K_
 	.word	ZER,ZER,ZER,ZER 	;MURDOCK,     eric
+;; MARKER
+;; New hiddens go here.
+	.word	R_,A_,I_,D_,E_,N_
+	.word	ZER,ZER,ZER,ZER 	;test,     raiden mk2
 
 zpsjteam_data1_end
 
@@ -2948,6 +2955,9 @@ zpsjteam_snds
  .word	0100DH,69,1832	;BENOIT,      david
  .word	0100DH,60,1958	;SCOTT,       byron
  .word	0100DH,63,1856	;MURDOCK,     eric
+;; MARKER
+;; New select speech goes here
+ .word	0100DH,95,0b50h ;Raiden
 
 
 ;DJT End
@@ -6045,6 +6055,9 @@ our_names
 	.long	BENOIT
 	.long	SCOTT
 	.long	EMURDOCK
+;; MARKER
+;; New nameplates go here
+	.long	RAIDEN
 ;DJT End
 
 
@@ -6146,6 +6159,10 @@ our_heads
 	.long	BEN_UTA
 	.long	SCO_VAN
 	.long	MUR_VAN
+;; MARKER
+;; New mugs go here
+	.long	RAD_MK2		; raiden mug
+
 
 our_heads_end
 	.long	SAL_MUG		;0		;repeat 1st 2 for wrap around

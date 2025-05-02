@@ -57,6 +57,9 @@
 ;AMM add
 ;These are pals for new stuff in IMGTBL8.ASM
 	.def	HOOP_p3
+;; MARKER
+;These are pals for new players
+	.def	RAIDEN_P
 ;AMM end
 
 

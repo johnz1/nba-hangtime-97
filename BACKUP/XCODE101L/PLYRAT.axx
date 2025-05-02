@@ -291,6 +291,9 @@
 	.ref	jigget_h
 	.ref	north_h
 	.ref	mund_h
+;; MARKER
+;; Add new player head collections here
+	.ref	raiden_h
 
 ;symbols refined in this file
 
@@ -2375,6 +2378,17 @@ spechds_t
 	.long	EMURD_F, UN_VANP_P,UN_VANS_P, TR_VANP_P,TR_VANS_P,EMurdock_h
 	.word	6,2,5,17
 	.long	SW_VANP_P,SW_VANS_P,VP_VANP_P,VP_VANS_P		;E. MURDOCK
+
+;; MARKER
+;; Add new player data here
+
+; Raiden in white & black
+	LWWWWWW	scale610_t,BV8,SHT11,DNK10,DEF8,SDEF6,DSKL_5	;Can shatter
+	.long	NFL55_p, UN_BOSS_P,UN_BOSS_P, TR_SANS_P,TR_SANS_P,raiden_h
+	.word	2,3,8,17
+	.long	SW_PORS_P,SW_PORS_P,VP_PORS_P,VP_PORS_P		
+
+
 
 
 ;These are superstar players (Or leftover art) that can be picked with name
