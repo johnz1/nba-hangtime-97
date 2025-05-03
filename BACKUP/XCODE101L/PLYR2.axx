@@ -2300,12 +2300,12 @@ zdiknothot
 	.endif
 
 ****************************
-* Backboard shattering!
+* Backboard shattering via CMOS!
 
-;	movi	ADJSHATTER,a0		;Get value from CMOS
-;	calla	GET_ADJ			;0-1
-;	jrnz	zdiknoshat2		;Off? Shatter must be disabled in CMOS
-;	clr	A0
+	movi	ADJSHATTER,a0		;Get value from CMOS
+	calla	GET_ADJ			;0-1
+	jrnz	zdiknoshat2		;Off? Shatter must be disabled in CMOS
+	clr	A0
 
 
 
