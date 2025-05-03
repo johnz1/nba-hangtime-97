@@ -1,0 +1,59 @@
+SYS.EQU
+DEBUG	.equ 0/1
+================
+
+From BB.ASM:
+
+- If stick held up at start, show outdoor court
+- If pass button is pressed at start, allow rim-detect single-stepping.
+This enables slow-mo dunks to check the dunks/rim alignment etc.
+- If turbo button is pressed at start, turn off clock
+- If shoot button is pressed at start, skip initials & go to game
+
+All of these start a 4-player game w/ powerups.
+
+Tested & Works in Hangtime
+
+SYS.EQU
+IMGVIEW	.equ 0/1
+================
+
+BB.AXX has a CREATE0 anipts_debug which checks the value in a8
+
+From BB2.ASM: 
+
+;Debug
+;Display each frame of our ball player to check 2nd and 3rd ani pnts, etc.
+;Re-insert these lines when tweaking ani points
+
+checks 'butn_minus and butn_plus' for inputs. Looks like older JAM code since it's not using 
+@_switch_addr or @_switch2_addr? (@SWITCH was the old unsecured i/o code from JAM.)	
+Could be wrong, maybe it's unused buttons we don't have in emulation. 
+Could be we need some ani list as well, debug1 and debug2 look pretty empty.
+Probably best to investigate how it functions in JAM if debug works there too.
+
+VOLDN   .equ    11
+VOLUP	.equ	12
+
+butn_minus
+	.long	12,12,12,6
+butn_plus
+	.long	14,14,14,13
+
+Should normally be done like this.
+
+	move	@_coin_addr,a0,L
+	move	*a0,a0
+	btst	VOLDN,a0
+	jrz	drxvvoldn_loop (it's pressed when 0)
+
+There are some imgs in debug_img_list
+
+SYS.EQU
+HEADCK	.equ 0/1
+================		
+Should be used together with DEBUG.
+
+DUNKTST
+=======
+Most of these also trigger with DEBUG = 1

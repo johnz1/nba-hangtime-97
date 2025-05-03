@@ -1401,6 +1401,7 @@ zmnqoffrb
 
 zmnqown_ball
 	movk	1,a2
+zmnqnobl2
 	move	a2,*a13(plyr_ownball)	;Save owner flag (+=plyr)
 ;added this to hopefully fix the ignoring of the pass button after pass
 	move	a2,*a13(plyr_rcvpass)
