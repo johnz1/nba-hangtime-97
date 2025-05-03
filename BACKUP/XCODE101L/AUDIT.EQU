@@ -179,7 +179,9 @@ ADJCTOTMULT	EQU	35
 ADJRTOTMULT	EQU	36
 ADJXTOTMULT	EQU	37
 ADJBTOTMULT	EQU	38
-LAST_ADJUST	equ	38
+ADJSHATTER	EQU	39
+ADJRUBBEROLD	EQU	40
+LAST_ADJUST	equ	40
 
 ******************************************************************************
 ;end
