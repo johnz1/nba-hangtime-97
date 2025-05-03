@@ -1014,11 +1014,17 @@ player_data
 
 fgszslp	SLEEPK	1
 
+;CMOS controlled idiot boxes
+
+	movi	ADJIDIOT,a0		;Get value from CMOS (nukes A0 ofc.)
+	calla	GET_ADJ			;0-1  (0=on, 1=off)
+	jrnz	noidiot			;not zero? 1=Off, so dont show idiot boxes. 
+
 	move	@idiot_bits,a0
 	btst	a11,a0
 	jrnz	fgszslp
 	move	@inbound,a0
-	jann	SUCIDE			;fgszslp
+noidiot	jann	SUCIDE			;fgszslp
 
 	move	a11,a0
 	sll	4,a0

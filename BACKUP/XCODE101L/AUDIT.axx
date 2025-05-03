@@ -3065,9 +3065,10 @@ FACTORY_TABLE
 	.WORD	1	;TOTALIZER CHUTE 3  36
 	.WORD	1	;TOTALIZER CHUTE 4  37
 	.WORD	1	;TOTALIZER DBV	    38
-	.WORD 	1	;SHATTER BB	39
-	.WORD   1	;HANGTIME FIG	40
-	;LAST_ADJUST	equ	40
+	.WORD 	1	;SHATTER BB	39	;Shattering of backboard en/disabled.
+	.WORD   1	;HANGTIME FIG	40	;Rubberbanding type
+	.WORD	1	;ADJIDIOT	41	;Idiot boxes en/disabled.
+	;LAST_ADJUST	equ	41
 
 
 **

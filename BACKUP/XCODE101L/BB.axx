@@ -2342,6 +2342,11 @@ close
 	move	@QUICK_TIP,a14
 	jrnz	hlygskip_inst
 	.endif
+
+	movi	ADJIDIOT,a0		;Get value from CMOS
+	calla	GET_ADJ			;0-1
+	jrnz	hlygskip_inst		;Off? No instructions at game start.
+
 	.ref	instructions
 	JSRP	instructions		;TAKE OUT to skip instructions!
 hlygskip_inst
