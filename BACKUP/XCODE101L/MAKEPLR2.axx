@@ -293,6 +293,9 @@ EX	equ	27
 
 naughty_word_tbl
  .word	FF,CC,KK,-1		;FCK (ie. FCKYOU, FCK IT...etc)
+ .word	-1
+
+	.if 0
  .word	PP,HH,KK,-1		;PHK (ie. FCKYOU, FCK IT...etc)
  .word	VV,AA,GG,II,NN,AA,-1	;vagina
  .word	FF,UU,CC,KK,-1		;fuck
@@ -338,6 +341,7 @@ naughty_word_tbl
  .word	JJ,R2,KK,OO,FF,FF,-1	;jrkoff
  .word	PP,UU,TT,AA,NN,GG,-1	;putang
  .word	-1
+	.endif
 
 
 
