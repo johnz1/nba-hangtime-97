@@ -9,9 +9,26 @@ PowerCut=97.5, MinRange=5, MaxError=5);
 //Stream nuke1 "dummy.wav" replaces $31DA0A; 
 //Stream nuke1 "dummy.wav" replaces $34C778; 				// "A Super Dunk" unused sample.
 
-Stream Raiden "JAM_Raiden.wav"; // Raiden's sample because we use it twice, save 2449 bytes.
+Stream Raiden "JAM_Raiden.wav"; 	// Raiden's sample because we use it twice, save 2449 bytes.
+Stream Reptile "JAM_Reptile.wav";       //
+Stream Scorpion "JAM_Scorpion.wav";	//
+Stream Subzero "JAM_Sub-zero.wav";	//
+Stream Smoke "JAM_Smoke.wav";
 
 // last used call 07BF ?
+
+//; SX	max_hngtm_sp,0200DH,93, 07beH "Super Maximum Hangtime"
+//; SX	max_hngtm_sp,0200DH,93, 0b8fH "maximum hangtime"
+//; SX	nba_hngtm_sp,0200DH,99, 0b02H "nba hangtime"
+Track $07be channel 5 {
+    SetMixingLevel(level 112);   	// always set the mixing level for a new track
+    Play("Super.wav");       	// start an audio clip
+    Wait(Stream);          	// ...and wait for it to finish before exiting
+    Play(stream $0A0682); 	// "Maximum Hangtime"  (recycled from original DCS rom)
+    Wait(Stream);          	// ...and wait for it to finish before exiting
+//    Queue($0b8f);		// pretend that the WPC host just send command code $0004
+};
+
 
 // To <player> pass speech
 //    SetMixingLevel(level 111);                                      // 0000 07 05 6F
@@ -34,23 +51,57 @@ Track $07b7 channel 5 {
     Wait(15) Play(Raiden);
     Wait(Stream);         
 };
-
-//; SX	max_hngtm_sp,0200DH,93, 07beH "Super Maximum Hangtime"
-//; SX	max_hngtm_sp,0200DH,93, 0b8fH "maximum hangtime"
-//; SX	nba_hngtm_sp,0200DH,99, 0b02H "nba hangtime"
-Track $07be channel 5 {
-    SetMixingLevel(level 112);   	// always set the mixing level for a new track
-    Play("Super.wav");       	// start an audio clip
-    Wait(Stream);          	// ...and wait for it to finish before exiting
-    Play(stream $0A0682); 	// "Maximum Hangtime"  (recycled from original DCS rom)
-    Wait(Stream);          	// ...and wait for it to finish before exiting
-//    Queue($0b8f);		// pretend that the WPC host just send command code $0004
+// Reptile
+Track $0b51 channel 5 {
+    SetMixingLevel(level 111);   // always set the mixing level for a new track
+    Play(Reptile);       // start an audio clip
+    Wait(Stream);          // ...and wait for it to finish before exiting
+};
+// To Reptile
+Track $07b8 channel 4 {
+    SetMixingLevel(level 111);
+    Play(stream $1CC03A);
+    Wait(15) Play(Reptile);
+    Wait(Stream);         
+};
+// Scorpion
+Track $0b52 channel 5 {
+    SetMixingLevel(level 111);   // always set the mixing level for a new track
+    Play(Scorpion);       // start an audio clip
+    Wait(Stream);          // ...and wait for it to finish before exiting
+};
+// To Scorpion
+Track $07b9 channel 5 {
+    SetMixingLevel(level 111);
+    Play(stream $1CC03A);
+    Wait(15) Play(Scorpion);
+    Wait(Stream);         
+};
+// Sub-Zero
+Track $0b53 channel 5 {
+    SetMixingLevel(level 111);   // always set the mixing level for a new track
+    Play(Subzero);       // start an audio clip
+    Wait(Stream);          // ...and wait for it to finish before exiting
+};
+// To Subzero
+Track $07ba channel 5 {
+    SetMixingLevel(level 111);
+    Play(stream $1CC03A);
+    Wait(15) Play(Subzero);
+    Wait(Stream);         
 };
 
-Track $07bd channel 2 {
-    SetMixingLevel(level 100); 	// always set the mixing level for a new track
-    Play("Glass.wav");       	// start an audio clip
-    Wait(Stream);          	// ...and wait for it to finish before exiting
+// Smoke
+Track $07bb channel 5 {
+    SetMixingLevel(level 111);   // always set the mixing level for a new track
+    Play(Smoke);       // start an audio clip
+    Wait(Stream);          // ...and wait for it to finish before exiting
+};
+Track $07bc channel 5 {
+    SetMixingLevel(level 111);
+    Play(stream $1CC03A);
+    Wait(15) Play(Smoke);
+    Wait(Stream);         
 };
 
 

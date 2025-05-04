@@ -60,6 +60,11 @@
 ;; MARKER
 ;These are pals for new players
 	.def	RAIDEN_P
+	.def	SCORPI_P
+	.def	REPTIL_P
+	.def	SUBZER_P
+	.def	SMOK_P
+
 ;AMM end
 
 
