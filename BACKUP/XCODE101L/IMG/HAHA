@@ -24,16 +24,16 @@ Image BACK8BR has 178 colors. Can't fit into 6 bits per pixel.
 Image BACK9BR has 178 colors. Can't fit into 6 bits per pixel.
 
 Bytes Loaded...
-	IMAGE RAM               352168 dec	   55FA8 hex
+	IMAGE RAM               350892 dec	   55AAC hex
 
-	TOTAL LOAD              352168 dec	   55FA8 hex
+	TOTAL LOAD              350892 dec	   55AAC hex
 
 Bytes Written to Raw File...
-	In IMAGE RAM records       352168 dec	   55FA8 hex
+	In IMAGE RAM records       350892 dec	   55AAC hex
 
-	TOTAL bytes written        352168 dec	   55FA8 hex, in 2 records.
+	TOTAL bytes written        350892 dec	   55AAC hex, in 2 records.
 
-Bytes Represented in Tables ... 352167 dec 55FA7 hex
+Bytes Represented in Tables ... 350892 dec 55AAC hex
 
 5 images were NOT zero-compressed because they are
 	smaller than 10 pixels wide.
