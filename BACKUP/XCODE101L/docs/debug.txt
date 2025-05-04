@@ -53,6 +53,23 @@ SYS.EQU
 HEADCK	.equ 0/1
 ================		
 Should be used together with DEBUG.
+- Displays player names (select2.asm)
+- Stops the clock (score.asm)
+- Wants "debug_plyr_num" which is set in?? (bb.asm, defined in plyr.asm)
+- I've set it to '91' for now which is CHEANEY on Washington.
+
+I think this symbol could be set with the TODDVIEW debugger.
+Problem is our symbol map doesn't generate. Maybe hardcode a number?
+
+We can
+- Hardcode "debug_plyr_num" in bb.asm
+- Last player in normal tbl is '090h' aka CHEANEY from Washington.
+- PLYRAT.AXX has a table below there with entries for more: search for CUST_1t
+- Add your custom doofus_h heads there and debug with it.
+- DEBUG=1, HEADCK=1. Hold SHOT when pressing 1p start to start a game.
+- Now you can get most of the head angles fixed. :)
+- Probably best to set to 2P cabinet for easy control as you get the ball at start.
+
 
 DUNKTST
 =======

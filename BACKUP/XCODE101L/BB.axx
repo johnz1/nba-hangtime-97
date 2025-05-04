@@ -507,9 +507,13 @@ initp50
 	jruc	mainlp
 
 spgkmain_go
+; If these are set you can debug your player heads using the CUST_1t tables in PLYRAT.ASM!
+; Normally this var would be manipulated by a realtime debugger which we don't have working. (TODDVIEW/TV.EXE)
+
 	.if	HEADCK
 	.ref	debug_plyr_num
 	clr	a0
+	movi	091h,a0
 	move	a0,@debug_plyr_num
 	.endif
 
