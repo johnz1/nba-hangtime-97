@@ -3883,9 +3883,10 @@ fpc_2
  SUBR	hide_plyr_attribs
 
 	move	a10,a0
-	move	@TWOPLAYERS,a1			;0 = NO, 1 = YES 2 players
-	jrz	hpa_1
-	addk	4,a0				;add in offset for 2 PLYR KIT
+;AMM this was not needed for 2-player it.
+;	move	@TWOPLAYERS,a1			;0 = NO, 1 = YES 2 players
+;	jrz	hpa_1
+;	addk	8,a0				;add in offset for 2 PLYR KIT
 hpa_1	move	a0,a9
 	sll	4,a0				;x 16
 	addi	plaque_xs,a0
