@@ -447,3 +447,13 @@
 	.global	WAL_COL
 ;Added:	.globl	RAD_MK2P
 	.global	RAD_MK2
+	.globl	SMK_MUGP
+	.global	SMK_MUG
+	.globl	KOB_MUGP
+	.global	KOB_MUG
+	.globl	SCO_MK2P
+	.global	SCO_MK2
+	.globl	REP_MK2P
+	.global	REP_MK2
+	.globl	SUB_MK2P
+	.global	SUB_MK2

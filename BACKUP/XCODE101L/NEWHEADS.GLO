@@ -15,3 +15,31 @@
 	.global	RAIDEN14
 	.global	RAIDEN15
 	.global	RAIDEN16
+	.globl	SCORPI_P
+	.global	SCORPI01
+	.global	SCORPI02
+	.global	SCORPI03
+	.global	SCORPI04
+	.global	SCORPI05
+	.global	SCORPI16
+	.globl	SUBZER_P
+	.global	SUBZER01
+	.global	SUBZER02
+	.global	SUBZER03
+	.global	SUBZER04
+	.global	SUBZER05
+	.global	SUBZER16
+	.globl	REPTIL_P
+	.global	REPTIL01
+	.global	REPTIL02
+	.global	REPTIL03
+	.global	REPTIL04
+	.global	REPTIL05
+	.global	REPTIL16
+	.globl	SMOK_P
+	.global	SMOKH01
+	.global	SMOKH02
+	.global	SMOKH03
+	.global	SMOKH04
+	.global	SMOKH05
+	.global	SMOKH16

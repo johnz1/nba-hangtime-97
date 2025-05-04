@@ -1,2 +1,6 @@
 	.globl	BAST_Y_P
 	.global	RAIDEN
+	.global	SCORPION
+	.global	SUBZER
+	.global	REPTILE
+	.global	SM0K3

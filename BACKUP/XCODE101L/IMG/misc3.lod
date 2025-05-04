@@ -81,6 +81,13 @@ ZOF>
 ---> RAIDEN01,RAIDEN02,RAIDEN03,RAIDEN04,RAIDEN05,RAIDEN06
 ---> RAIDEN07,RAIDEN08,RAIDEN09,RAIDEN10,RAIDEN11,RAIDEN12
 ---> RAIDEN13,RAIDEN14,RAIDEN15,RAIDEN16
+;Ninjas only have 5 head angles
+ourhds2.img
+---> SCORPI01,SCORPI02,SCORPI03,SCORPI04,SCORPI05,SCORPI16
+---> SUBZER01,SUBZER02,SUBZER03,SUBZER04,SUBZER05,SUBZER16
+---> REPTIL01,REPTIL02,REPTIL03,REPTIL04,REPTIL05,REPTIL16
+ninjas.img
+---> SMOKH01,SMOKH02,SMOKH03,SMOKH04,SMOKH05,SMOKH16
 ;
 ; New mugs here
 ; Mugs go into mugshot.glo / mugshot.tbl, so copypaste output there manualy
@@ -94,11 +101,9 @@ CON>
 ZON>
 PPP> 0
 smoke.img
----> RAD_MK2
-;
-PON>
-CON>
-XOF>
+---> RAD_MK2,SMK_MUG,KOB_MUG
+nmugs.img
+---> SCO_MK2,REP_MK2,SUB_MK2
 ;
 ; New nameplates here. 
 ; Nameplates go into imgtbl.axx !AND! imgtbl.glo 
@@ -107,7 +112,12 @@ XOF>
 ASM> names3.tbl
 GLO> names3.glo
 pnames3.img
----> RAIDEN
+PON>
+CON>
+XON>
+ZOF>
+PPP> 8
+---> RAIDEN,SCORPION,SUBZER,REPTILE,SM0K3
 ;
 ; 
 ;

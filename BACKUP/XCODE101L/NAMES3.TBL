@@ -1,8 +1,28 @@
 	.DATA
 RAIDEN:
-	.word   38,8,17,0
-	.long   092744afH
-	.word   03000H
+	.word   39,9,17,0
+	.long   092abd74H
+	.word   00H
+	.long   BAST_Y_P
+SCORPION:
+	.word   53,10,26,0
+	.long   092ac86cH
+	.word   00H
+	.long   BAST_Y_P
+SUBZER:
+	.word   47,9,23,0
+	.long   092ad8fcH
+	.word   00H
+	.long   BAST_Y_P
+REPTILE:
+	.word   43,10,21,0
+	.long   092ae634H
+	.word   00H
+	.long   BAST_Y_P
+SM0K3:
+	.word   34,9,17,0
+	.long   092af3a4H
+	.word   00H
 	.long   BAST_Y_P
 	.TEXT
 

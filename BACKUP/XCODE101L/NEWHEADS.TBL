@@ -79,5 +79,125 @@ RAIDEN16:
 	.long   0926b191H
 	.word   06000H
 	.long   RAIDEN_P
+SCORPI01:
+	.word   29,39,13,32
+	.long   0926e9a1H
+	.word   06000H
+	.long   SCORPI_P
+SCORPI02:
+	.word   33,40,15,32
+	.long   09270423H
+	.word   06000H
+	.long   SCORPI_P
+SCORPI03:
+	.word   35,43,13,33
+	.long   09272313H
+	.word   06000H
+	.long   SCORPI_P
+SCORPI04:
+	.word   33,44,13,33
+	.long   09274659H
+	.word   06000H
+	.long   SCORPI_P
+SCORPI05:
+	.word   28,44,13,33
+	.long   09276861H
+	.word   06000H
+	.long   SCORPI_P
+SCORPI16:
+	.word   43,33,34,16
+	.long   09278541H
+	.word   06000H
+	.long   SCORPI_P
+SUBZER01:
+	.word   29,39,13,32
+	.long   0927a683H
+	.word   06000H
+	.long   SUBZER_P
+SUBZER02:
+	.word   33,40,15,32
+	.long   0927c105H
+	.word   06000H
+	.long   SUBZER_P
+SUBZER03:
+	.word   35,43,13,33
+	.long   0927dff5H
+	.word   06000H
+	.long   SUBZER_P
+SUBZER04:
+	.word   33,44,13,33
+	.long   0928033bH
+	.word   06000H
+	.long   SUBZER_P
+SUBZER05:
+	.word   28,44,13,33
+	.long   09282543H
+	.word   06000H
+	.long   SUBZER_P
+SUBZER16:
+	.word   43,33,34,16
+	.long   09284223H
+	.word   06000H
+	.long   SUBZER_P
+REPTIL01:
+	.word   29,39,13,32
+	.long   0927a683H
+	.word   06000H
+	.long   REPTIL_P
+REPTIL02:
+	.word   33,40,15,32
+	.long   0927c105H
+	.word   06000H
+	.long   REPTIL_P
+REPTIL03:
+	.word   35,43,13,33
+	.long   0927dff5H
+	.word   06000H
+	.long   REPTIL_P
+REPTIL04:
+	.word   33,44,13,33
+	.long   0928033bH
+	.word   06000H
+	.long   REPTIL_P
+REPTIL05:
+	.word   28,44,13,33
+	.long   09282543H
+	.word   06000H
+	.long   REPTIL_P
+REPTIL16:
+	.word   43,33,34,16
+	.long   09284223H
+	.word   06000H
+	.long   REPTIL_P
+SMOKH01:
+	.word   29,39,13,32
+	.long   09286365H
+	.word   06000H
+	.long   SMOK_P
+SMOKH02:
+	.word   33,40,15,32
+	.long   09287de7H
+	.word   06000H
+	.long   SMOK_P
+SMOKH03:
+	.word   33,43,13,33
+	.long   09289cd7H
+	.word   06000H
+	.long   SMOK_P
+SMOKH04:
+	.word   33,44,13,33
+	.long   0928be19H
+	.word   06000H
+	.long   SMOK_P
+SMOKH05:
+	.word   28,42,13,33
+	.long   0928e021H
+	.word   06000H
+	.long   SMOK_P
+SMOKH16:
+	.word   42,33,34,16
+	.long   0928fbb1H
+	.word   06000H
+	.long   SMOK_P
 	.TEXT
 
