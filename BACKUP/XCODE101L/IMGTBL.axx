@@ -6509,3 +6509,8 @@ arrow2t2p:
 	.include ROBOIMG.GLO
 
 	.include BGNDTBL.GLO
+
+	.include names3.tbl
+
+	.include names3.GLO
+

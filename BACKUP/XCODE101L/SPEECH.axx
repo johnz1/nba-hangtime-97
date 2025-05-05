@@ -1355,8 +1355,8 @@ special_name_speech
  .word	0100DH,45,0B50h ;Raiden
  .word	0100DH,45,0B52h ;Scorpion
  .word	0100DH,45,0B53h ;Subzero
-;.word	0100DH,45,07BBh ;Reptile
-;.word	0100DH,45,0B53h ;Smoke
+ .word	0100DH,45,07BBh ;Reptile
+ .word	0100DH,45,0B53h ;Smoke
 
 
 ***********
@@ -1457,8 +1457,8 @@ special_pass_speech
  .word	0100DH,45,07b7h ;to Raiden
  .word	0100DH,45,07b9h ;to Scorpion
  .word	0100DH,45,07bah ;to Subzero
-;.word	0100DH,45,07b8h ;to Reptile
-; .word	0100DH,45,07bch ;to Smoke
+ .word	0100DH,45,07b8h ;to Reptile
+ .word	0100DH,45,07bch ;to Smoke
  
 ******************************************************************************
 

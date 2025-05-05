@@ -30,8 +30,8 @@
 	.include	"names2.tbl"		;New names from pnames2.img
 	.include	"names2.glo"		;New names from pnames2.img
 
-	.include	"names3.tbl"		;New added player names
-	.include	"names3.glo"		;New added player names
+;	.include	"names3.tbl"		;New added player names   moved inc to imgtbl.axx
+;	.include	"names3.glo"		;New added player names - moved inc to imgtbl.axx
 
 	.include	"mugshot.glo"
 	.include	"imgtbl.glo"
@@ -2861,11 +2861,11 @@ zpsjteam_data1
 	.word	S_,U_,B_,Z_,E_,R_
 	.word	ZER,ZER,ZER,ZER 	;subzero mk2
 	
-;	.word	R_,E_,P_,T_,I_,L_
-;	.word	ZER,ZER,ZER,ZER 	;reptile mk2
-	
-;	.word	S_,M_,O_,K_,E_,0
-;	.word	ZER,ZER,ZER,ZER 	;smoke mk2
+	.word	R_,E_,P_,T_,I_,L_
+	.word	ZER,ZER,ZER,ZER 	;reptile mk2
+
+	.word	S_,M_,O_,K_,E_,0
+	.word	ZER,ZER,ZER,ZER 	;smoke mk2
 	
 zpsjteam_data1_end
 
@@ -2972,8 +2972,8 @@ zpsjteam_snds
  .word	0100DH,95,0b50h ;Raiden
  .word	0100DH,95,0b52h ;Scorpion
  .word	0100DH,95,0b53h ;Subzero
-;.word	0100DH,95,07bbh ;Reptile
-;.word	0100DH,95,0b54h ;Smoke
+ .word	0100DH,95,07bbh ;Reptile
+ .word	0100DH,95,0b54h ;Smoke
 
 
 ;DJT End
@@ -6076,8 +6076,8 @@ our_names
 	.long	RAIDEN
 	.long	SCORPION
 	.long	SUBZER
-;	.long	REPTILE
-;	.long	SM0K3
+	.long	REPTILE
+	.long	SM0K3
 ;DJT End
 
 
@@ -6184,8 +6184,8 @@ our_heads
 	.long	RAD_MK2		; raiden mug
 	.long	SCO_MK2		; scorpion mug
 	.long	SUB_MK2		; subzero mug
-;	.long	REP_MK2		; reptile mug
-;	.long	SMK_MUG		; smoke mug
+	.long	REP_MK2		; reptile mug
+	.long	SMK_MUG		; smoke mug
 
 our_heads_end
 	.long	SAL_MUG		;0		;repeat 1st 2 for wrap around

@@ -1,3 +1,13 @@
+;AMM Start
+;Nameplates need to be added here because selec2 is too big!!
+;This .glo gets included in select2.axx and these below here become .refs then.
+;	.globl scorep
+	.global RAIDEN
+	.global SCORPION
+	.global REPTILE
+	.global SUBZER
+	.global SM0K3
+;
 	.globl	DIAGP
 	.globl	crtwrk_p
 	.globl	tablet_p

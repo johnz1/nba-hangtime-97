@@ -296,8 +296,8 @@
 	.ref	raiden_h
 	.ref	scorpi_h
 	.ref	subzer_h
-;	.ref	reptil_h
-;	.ref	smok_h
+	.ref	reptil_h
+	.ref	smok_h
 
 ;symbols refined in this file
 
@@ -2430,16 +2430,16 @@ spechds_t
     .long    SW_SANS_P,SW_SANS_P,VP_SANS_P,VP_SANS_P	
 
 ; Reptile
-;    LWWWWWW  scale610_t,BV9,SHT11,DNK10,DEF8,SDEF6,DSKL_5    ;Can shatter
-;   .long    NFL55_p, UN_BOSP_P,UN_BOSP_P,TR_SANS_P,TR_SANS_P,reptil_h
-;   .word    2,3,8,17
-;   .long    SW_SANS_P,SW_SANS_P,VP_SANS_P,VP_SANS_P
+    LWWWWWW  scale610_t,BV9,SHT11,DNK10,DEF8,SDEF6,DSKL_5    ;Can shatter
+   .long    NFL55_p, UN_BOSP_P,UN_BOSP_P,TR_SANS_P,TR_SANS_P,reptil_h
+   .word    2,3,8,17
+   .long    SW_SANS_P,SW_SANS_P,VP_SANS_P,VP_SANS_P
 
 ; Smoke
-;    LWWWWWW  scale610_t,BV9,SHT11,DNK10,DEF8,SDEF6,DSKL_5    ;Can shatter
-;    .long    NFL55_p, UN_INDP_P,UN_INDP_P,TR_SANS_P,TR_SANS_P,smok_h
-;    .word    2,3,8,17
-;    .long    SW_SANS_P,SW_SANS_P,VP_SANS_P,VP_SANS_P
+    LWWWWWW  scale610_t,BV9,SHT11,DNK10,DEF8,SDEF6,DSKL_5    ;Can shatter
+    .long    NFL55_p, UN_INDP_P,UN_INDP_P,TR_SANS_P,TR_SANS_P,smok_h
+    .word    2,3,8,17
+    .long    SW_SANS_P,SW_SANS_P,VP_SANS_P,VP_SANS_P
 
 ;These are superstar players (Or leftover art) that can be picked with name
 ;and pin # - allowing them to be 'traded' from team to team
