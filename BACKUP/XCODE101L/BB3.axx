@@ -507,11 +507,13 @@ whcqinit_t
 	WL	4002,SHANGPAL		;pal to use
 	WL	4001,shang_ani		;ani routine
 
+	.word	-6,Y+1,Z-1,ZOFF,F
+	.long	bk_flr
+	WL	4001,set_bkcrt_colors
+
 ;bk_flr = 20px high but it prints over shang OBJ for some reason.
 
-;	.word	-6,Y,Z,ZOFF,F
-;	.long	bk_flr
-;	WL	4001,set_bkcrt_colors
+
 	.word	346,Y,Z,ZOFF,F
 	.long	bk_flr
 	WL	4001,set_bkcrt_colors
