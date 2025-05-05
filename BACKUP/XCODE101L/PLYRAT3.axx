@@ -219,6 +219,10 @@
 ;; Def new head sets here.
 
 	.def	raiden_h
+	.def	scorpi_h
+	.def	subzer_h
+;	.def	reptil_h
+;	.def	smok_h
 	.text
 
 ;; MARKER
@@ -227,7 +231,17 @@
 raiden_h
 	HDMAC	RAIDEN01 ; 16 heads, deluxe
 
+scorpi_h
+	HDMAC2	SCORPI01
 
+subzer_h
+	HDMAC2	SUBZER01
+	
+;reptil_h
+;	HDMAC2	REPTIL01
+
+;smok_h
+;	HDMAC2	SMOKH01
 
 heithb_h
 	HDMAC2	HEITH01

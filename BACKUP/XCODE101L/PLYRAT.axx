@@ -294,6 +294,10 @@
 ;; MARKER
 ;; Add new player head collections here
 	.ref	raiden_h
+	.ref	scorpi_h
+	.ref	subzer_h
+;	.ref	reptil_h
+;	.ref	smok_h
 
 ;symbols refined in this file
 
@@ -1468,25 +1472,44 @@ WASH_t
 ;Pri swipe pal, Alt swipe pal, Pri vertical panel pal, Alt vertical panel pal
 
 DEFAULT_t
-	LWWWWWW	scale67_t,BV8,SHT8,DNK3,DEF4,SDEF7,DSKL5
-	.long	CHEAN_F, UN_WASP_P,UN_WASS_P, TR_WASP_P,TR_WASS_P,raiden_h
-	.word	5,2,8,15
-	.long	SW_WASP_P,SW_WASS_P,VP_WASP_P,VP_WASS_P
+; Scorpion
+    LWWWWWW  scale610_t,BV9,SHT11,DNK10,DEF8,SDEF6,DSKL_5    ;Can shatter
+    .long    NFL55_p, UN_LALS_P,UN_LALS_P,TR_SANS_P,TR_SANS_P,scorpi_h
+    .word    2,3,8,17
+    .long    SW_SANS_P,SW_SANS_P,VP_SANS_P,VP_SANS_P
+	
 CUST_1t
-	LWWWWWW	scale67_t,BV8,SHT8,DNK3,DEF4,SDEF7,DSKL5
-	.long	CHEAN_F, UN_CUST1P,UN_CUST1P, TR_CUST1P,TR_CUST1P,turmel_h
-	.word	5,2,8,9
-	.long	SW_CUST1P,SW_CUST1P,VP_CUST1P,VP_CUST1P
+; Sub Zero
+    LWWWWWW  scale610_t,BV9,SHT11,DNK10,DEF8,SDEF6,DSKL_5    ;Can shatter
+    .long    NFL55_p, UN_DALP_P,UN_DALP_P,TR_SANS_P,TR_SANS_P,subzer_h
+    .word    2,3,8,17
+    .long    SW_SANS_P,SW_SANS_P,VP_SANS_P,VP_SANS_P
+	
 CUST_2t
 	LWWWWWW	scale67_t,BV8,SHT8,DNK3,DEF4,SDEF7,DSKL5
 	.long	CHEAN_F, UN_CUST2P,UN_CUST2P, TR_CUST2P,TR_CUST2P,madball_h
 	.word	5,2,8,4
 	.long	SW_CUST2P,SW_CUST2P,VP_CUST2P,VP_CUST2P
+	
+; Reptile
+;    LWWWWWW  scale610_t,BV9,SHT11,DNK10,DEF8,SDEF6,DSKL_5    ;Can shatter
+;   .long    NFL55_p, UN_BOSP_P,UN_BOSP_P,TR_SANS_P,TR_SANS_P,reptil_h
+;   .word    2,3,8,17
+;   .long    SW_SANS_P,SW_SANS_P,VP_SANS_P,VP_SANS_P
+
 CUST_3t
+
 	LWWWWWW	scale67_t,BV8,SHT8,DNK3,DEF4,SDEF7,DSKL5
 	.long	CHEAN_F, UN_CUST3P,UN_CUST3P, TR_CUST3P,TR_CUST3P,Cheaney_h
 	.word	5,2,8,19
 	.long	SW_CUST3P,SW_CUST3P,VP_CUST3P,VP_CUST3P
+
+; Smoke
+;    LWWWWWW  scale610_t,BV9,SHT11,DNK10,DEF8,SDEF6,DSKL_5    ;Can shatter
+;    .long    NFL55_p, UN_INDP_P,UN_INDP_P,TR_SANS_P,TR_SANS_P,smok_h
+;    .word    2,3,8,17
+;    .long    SW_SANS_P,SW_SANS_P,VP_SANS_P,VP_SANS_P	
+	
 CUST_4t
 	LWWWWWW	scale67_t,BV8,SHT8,DNK3,DEF4,SDEF7,DSKL5
 	.long	CHEAN_F, UN_CUST4P,UN_CUST4P, TR_CUST4P,TR_CUST4P,Cheaney_h
@@ -2382,14 +2405,41 @@ spechds_t
 ;; MARKER
 ;; Add new player data here
 
-; Raiden in white & black
+
+;Size, speed, shot%, dunks, block defense, steals, drone skill
+;Flesh pal, Pri uniform pal, Alt uniform pal, Pri trim pal, Alt trim pal, head
+;Pass ability, power, clutch, hotspot
+;Pri swipe pal, Alt swipe pal, Pri vertical panel pal, Alt vertical panel pal
+
+; Raiden
 	LWWWWWW	scale610_t,BV8,SHT11,DNK10,DEF8,SDEF6,DSKL_5	;Can shatter
-	.long	NFL55_p, UN_BOSS_P,UN_BOSS_P, TR_SANS_P,TR_SANS_P,raiden_h
+	.long	NFL55_p, UN_BOSS_P,UN_BOSS_P,TR_SANS_P,TR_SANS_P,raiden_h
 	.word	2,3,8,17
-	.long	SW_PORS_P,SW_PORS_P,VP_PORS_P,VP_PORS_P		
+	.long	SW_PORS_P,SW_PORS_P,VP_PORS_P,VP_PORS_P
 
+; Scorpion
+    LWWWWWW  scale610_t,BV9,SHT11,DNK10,DEF8,SDEF6,DSKL_5    ;Can shatter
+    .long    NFL55_p, UN_LALS_P,UN_LALS_P,TR_SANS_P,TR_SANS_P,scorpi_h
+    .word    2,3,8,17
+    .long    SW_SANS_P,SW_SANS_P,VP_SANS_P,VP_SANS_P
 
+; Sub Zero
+    LWWWWWW  scale610_t,BV9,SHT11,DNK10,DEF8,SDEF6,DSKL_5    ;Can shatter
+    .long    NFL55_p, UN_DALP_P,UN_DALP_P,TR_SANS_P,TR_SANS_P,subzer_h
+    .word    2,3,8,17
+    .long    SW_SANS_P,SW_SANS_P,VP_SANS_P,VP_SANS_P	
 
+; Reptile
+;    LWWWWWW  scale610_t,BV9,SHT11,DNK10,DEF8,SDEF6,DSKL_5    ;Can shatter
+;   .long    NFL55_p, UN_BOSP_P,UN_BOSP_P,TR_SANS_P,TR_SANS_P,reptil_h
+;   .word    2,3,8,17
+;   .long    SW_SANS_P,SW_SANS_P,VP_SANS_P,VP_SANS_P
+
+; Smoke
+;    LWWWWWW  scale610_t,BV9,SHT11,DNK10,DEF8,SDEF6,DSKL_5    ;Can shatter
+;    .long    NFL55_p, UN_INDP_P,UN_INDP_P,TR_SANS_P,TR_SANS_P,smok_h
+;    .word    2,3,8,17
+;    .long    SW_SANS_P,SW_SANS_P,VP_SANS_P,VP_SANS_P
 
 ;These are superstar players (Or leftover art) that can be picked with name
 ;and pin # - allowing them to be 'traded' from team to team
