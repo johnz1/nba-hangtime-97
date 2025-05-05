@@ -504,7 +504,8 @@ whcqinit_t
 ;Shang attempt
 	.word	-6,Y,Z,ZOFF,F
 	.long	SHANG04
-	WL	4002,SHANGPAL
+	WL	4002,SHANGPAL		;pal to use
+	WL	4001,shang_ani		;ani routine
 
 ;bk_flr = 20px high but it prints over shang OBJ for some reason.
 
@@ -2935,6 +2936,95 @@ netc15_l
 	.long	CHAN1F_01,CHAN1B_01
 	.long	CHAN3F_10,CHAN3B_10
 	.long	CHAN1F_01,CHAN1B_01,0
+
+
+********************************
+* Make Shang's head turn as we pass him. (Process)
+* A8=*Object (left)?
+
+
+	.bss	shang_p	,32		;*pointer
+
+;	.asg	244-16,BOARD_ANI_MINX	;-16 to make hoop be off-screen also
+	.asg	18,SHANG_ANI_MINX	;-16 to make hoop be off-screen also
+; screen is 400x254
+
+ SUBRP	shang_ani
+
+	SLEEPK	30
+
+	movi	gndx+16,a11		;Init ptr to look at current court X
+shanglp
+	move	a8,a6			;Set for lft hoop
+	move	*a11,a0			;Chk current crt X
+	jrn	shanglft		;if neg
+;	move	a9,a6			;Set for rgt hoop
+shanglft
+	abs	a0
+	subi	SHANG_ANI_MINX,A0	;Too far away (hoop off screen)?
+	jrn	shangfixbb		;Yes if neg
+
+	srl	4,a0			;Shf X down for anim-step #
+	sll	5,a0			;Shf up for tbl offset
+	addi	shangani_t,a0		;table w/ animations
+shangbok
+	move	*a0,a0,L		;Deref for new backboard ptr
+	move	*a6(OIMG),a14,L		;Get old *bkbrd
+	cmp	a14,a0			;New image?
+	jrz	shangslp			; br=yes
+	move	*a14,a1			;Get old bkbrd ISIZEX:IANIOFFX
+	move	*a14(IANIOFFX),a2
+	sll	16,a1
+	movx	a2,a1
+
+	move	a0,*a6(OIMG),L		;Set new *bkbrd,OSAG,OSIZE
+	move	*a0(ISAG),*a6(OSAG),L
+	movb	*a0(ICTRL+7),a14	;Set 5 z comp & 3 bpp bits
+	movb	a14,*a6(OCTRL+7)
+	move	*a0(ISIZE),a14,L
+	move	a14,*a6(OSIZE),L
+	move	*a0(IANIOFFX),a2	;Get new bkbrd ISIZEX:IANIOFFX
+	sll	16,a14
+	movx	a2,a14
+
+	subxy	a14,a1			;Calc XY SIZE:ANI changes
+	cmp	a8,a6			;Doing lft or rgt hoop? Lft if =
+	jreq	shangnof
+	move	a1,a14			;Rgt hoop. Assume(!) it is the FLIPH
+	sra	16,a14			; of lft hoop & correct ani X with
+	sext	a1			; hoop SIZEX diff
+	neg	a1
+	add	a14,a1
+shangnof
+	move	*a6(OXPOS),a14		;Correct X for change in size/ani
+	addxy	a1,a14
+	move	a14,*a6(OXPOS)
+
+shangslp
+	SLEEPK	1
+	jruc	shanglp
+
+shangfixbb				
+	clr	a0			; off-screen. Make sure it won't
+	move	a0,*a10			; be shattered next time we see it
+	jruc	shangslp
+
+
+shangani_t
+;Shang Tsung
+	.long	SHANG07			;Fill for BOARD_ANI_MINX -16 (offscreen)
+
+	.long	SHANG07,SHANG06,SHANG05,SHANG04,SHANG03,SHANG02,SHANG01
+	.long	SHANG01,SHANG01,SHANG01,SHANG01,SHANG01,SHANG01,SHANG01
+	.long	SHANG01,SHANG01,SHANG01
+
+
+
+	DIE
+
+
+
+**
 
 *****************************************************************************
 *

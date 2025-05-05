@@ -21,9 +21,9 @@ TUNITDB	.equ	0	;TUNIT debugging
 TUNIT2	.equ	1	;TUNIT also on
 
 ;DJT Start
-DEBUG	.equ	0	;0 or 1
+DEBUG	.equ	1	;0 or 1
 IMGVIEW	.equ	0	;0 or 1
-HEADCK	.equ	0	;0 or 1
+HEADCK	.equ	1	;0 or 1
 DNKTST	.equ	0	;0 or 1 Similar to DEBUG but adds extra things.
 
 HOTSPOT	.equ	0	;0 or 1  Show hotspots    off/on
