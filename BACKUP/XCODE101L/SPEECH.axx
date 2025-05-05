@@ -1355,8 +1355,8 @@ special_name_speech
  .word	0100DH,45,0B50h ;Raiden
  .word	0100DH,45,0B52h ;Scorpion
  .word	0100DH,45,0B53h ;Subzero
- .word	0100DH,45,07BBh ;Reptile
- .word	0100DH,45,0B53h ;Smoke
+ .word	0100DH,45,0B51h ;Reptile
+ .word	0100DH,45,0B54h ;Smoke
 
 
 ***********

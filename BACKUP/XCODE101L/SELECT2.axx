@@ -2972,7 +2972,7 @@ zpsjteam_snds
  .word	0100DH,95,0b50h ;Raiden
  .word	0100DH,95,0b52h ;Scorpion
  .word	0100DH,95,0b53h ;Subzero
- .word	0100DH,95,07bbh ;Reptile
+ .word	0100DH,95,0b51h ;Reptile
  .word	0100DH,95,0b54h ;Smoke
 
 
