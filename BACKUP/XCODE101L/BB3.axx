@@ -52,6 +52,7 @@
 ;DJT Start
 	.def	HOTblu,HOTgrn,HOTyel,HOTred
 ;DJT End
+;	.def	animate_shang ;for mame debug
 
 
 	.ref	pup_court,pup_aba,HALT
@@ -148,6 +149,7 @@
 
 	.bss	moonobj,32	;outdoor crt moon obj
 	.bss	stormobj,32	;outdoor crt MK storm obj
+	.bss	shangobj,32	;Indoor crt MK Shang obj
 
 
 *******************************
@@ -163,11 +165,12 @@
 	move	a0,@chldr_ram_prgt,L
 
 	movi	whcqinit_t,a11		;>Setup crowd, hoops, side crowd
+	CREATE0	animate_shang		;>Setup Shang head turner.
 	move	@pup_court,a0
 	jrz	whcqnext
-	CREATE0	otd_scroller
+	CREATE0	otd_scroller		;>Outdoor court scroll initializer
 	move	a0,@otdscroll_p,L
-	movi	whcqinit_otd_t,a11		;>Setup outdoor court objs
+	movi	whcqinit_otd_t,a11	;>Setup outdoor court objs
 	jruc	whcqnext
 whcqlp
 	cmpi	4001,a0			;>Start process
@@ -504,8 +507,7 @@ whcqinit_t
 ;Shang attempt
 	.word	-6,Y,Z,ZOFF,F
 	.long	SHANG04
-	WL	4002,SHANGPAL		;pal to use
-	WL	4001,shang_ani		;ani routine
+	WL	4002,shangobj
 
 	.word	-6,Y+1,Z-1,ZOFF,F
 	.long	bk_flr
@@ -2940,22 +2942,59 @@ netc15_l
 	.long	CHAN1F_01,CHAN1B_01,0
 
 
+
+
+
+
+****************************
+* Shang head anim inits. (Process)
+* Checks joy inputs at start, spawns shang_ani2 if up+left was held.
+
+	.asg	18,SHANG_ANI_MINX	;-16 to make hoop be off-screen also
+
+; screen is 400x254
+
+ SUBRP	animate_shang
+
+	move	@P1CTRL,a0
+	cmpi	05h,a0			;UP + RIGHT. JOY_UP_LEFT was wrong!!
+	jrz	st1ok                   ;jump relative if result is zero.
+	move	@P2CTRL,a0		;We check all sticks for up+left
+	cmpi	05h,a0
+	jrz	st1ok
+	move	@P3CTRL,a0
+	cmpi	05h,a0
+	jrz	st1ok
+	move	@P3CTRL,a0
+	cmpi	05h,a0
+	jrz	st1ok
+
+;Turn off MK1 Shang image
+;	.ref	robo_1_snd
+;	SOUND1	robo_1_snd		;Debug, make a sound when Shang is off.
+	move	@shangobj,a0,L
+	.ref	OBJOFF
+	calla	OBJOFF			;Turn obj off. (but doesn't delete from objlist.)
+	jruc	st1ok2			;jump relative unconditional
+st1ok
+	.ref	mk1_snd
+	SOUND1	mk1_snd
+	CREATE0 shang_ani2
+					;Todo, make the mk1 title sound.
+st1ok2
+	SLEEPK	1
+	move	@HALT,a14
+	jrnz	st1ok2 			;Stays in loop when game halted (@halt = not zero)
+	DIE				;This proc dies.
+
 ********************************
 * Make Shang's head turn as we pass him. (Process)
 * A8=*Object (left)?
 
-
-	.bss	shang_p	,32		;*pointer
-
-;	.asg	244-16,BOARD_ANI_MINX	;-16 to make hoop be off-screen also
-	.asg	18,SHANG_ANI_MINX	;-16 to make hoop be off-screen also
-; screen is 400x254
-
- SUBRP	shang_ani
-
-	SLEEPK	30
+ SUBRP	shang_ani2
 
 	movi	gndx+16,a11		;Init ptr to look at current court X
+	move	@shangobj,a8,L		;get obj. ptr as a 
 shanglp
 	move	a8,a6			;Set for lft hoop
 	move	*a11,a0			;Chk current crt X
@@ -2963,8 +3002,8 @@ shanglp
 ;	move	a9,a6			;Set for rgt hoop
 shanglft
 	abs	a0
-	subi	SHANG_ANI_MINX,A0	;Too far away (hoop off screen)?
-	jrn	shangfixbb		;Yes if neg
+	subi	SHANG_ANI_MINX,A0	;Too far away (Shang off screen)?
+	jrn	shangfix		;Yes if neg
 
 	srl	4,a0			;Shf X down for anim-step #
 	sll	5,a0			;Shf up for tbl offset
@@ -2979,13 +3018,13 @@ shangbok
 	sll	16,a1
 	movx	a2,a1
 
-	move	a0,*a6(OIMG),L		;Set new *bkbrd,OSAG,OSIZE
+	move	a0,*a6(OIMG),L		;Set new *shang,OSAG,OSIZE
 	move	*a0(ISAG),*a6(OSAG),L
 	movb	*a0(ICTRL+7),a14	;Set 5 z comp & 3 bpp bits
 	movb	a14,*a6(OCTRL+7)
 	move	*a0(ISIZE),a14,L
 	move	a14,*a6(OSIZE),L
-	move	*a0(IANIOFFX),a2	;Get new bkbrd ISIZEX:IANIOFFX
+	move	*a0(IANIOFFX),a2	;Get new shang ISIZEX:IANIOFFX
 	sll	16,a14
 	movx	a2,a14
 
@@ -3006,9 +3045,9 @@ shangslp
 	SLEEPK	1
 	jruc	shanglp
 
-shangfixbb				
-	clr	a0			; off-screen. Make sure it won't
-	move	a0,*a10			; be shattered next time we see it
+shangfix				
+	clr	a0			; off-screen. 
+	move	a0,*a10			; 
 	jruc	shangslp
 
 

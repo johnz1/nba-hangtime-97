@@ -21,12 +21,19 @@ Stream Smoke "JAM_Smoke.wav";
 //; SX	max_hngtm_sp,0200DH,93, 0b8fH "maximum hangtime"
 //; SX	nba_hngtm_sp,0200DH,99, 0b02H "nba hangtime"
 Track $07be channel 5 {
-    SetMixingLevel(level 112);   	// always set the mixing level for a new track
+    SetMixingLevel(level 112);  // always set the mixing level for a new track
     Play("Super.wav");       	// start an audio clip
     Wait(Stream);          	// ...and wait for it to finish before exiting
     Play(stream $0A0682); 	// "Maximum Hangtime"  (recycled from original DCS rom)
     Wait(Stream);          	// ...and wait for it to finish before exiting
 //    Queue($0b8f);		// pretend that the WPC host just send command code $0004
+};
+
+// mk1 easter egg
+Track $0b55 channel 3 {
+    SetMixingLevel(level 100);   // always set the mixing level for a new track
+    Play("mk1.wav");       	// start an audio clip
+    Wait(Stream);          	// ...and wait for it to finish before exiting
 };
 
 

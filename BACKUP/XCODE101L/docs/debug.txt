@@ -74,3 +74,7 @@ We can
 DUNKTST
 =======
 Most of these also trigger with DEBUG = 1
+
+PLYR.AXX
+========
+Court dots feature commented near end, untested.

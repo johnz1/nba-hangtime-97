@@ -3,4 +3,5 @@
 *.LST
 *.OUT
 *.MAP
+std*.txt
 M*.LCK
