@@ -63,26 +63,26 @@ maximBLKS:
 	.word	0A44H,300,0,09H
 	.word	0A49H,300,123,08H
 	.word	0FFFFH	;End Marker
-hangtimeBLKS:
-	.word	0A40H	;flags
-	.word	0,0 ;x,y
-	.word	00H	;pal5,pal4,hdr13-0
-	.word	0A45H,0,123,01H
-	.word	0A47H,75,123,02H
-	.word	0A41H,75,0,03H
-	.word	0A46H,145,123,04H
-	.word	0A42H,150,0,05H
-	.word	0A48H,220,123,06H
-	.word	0A43H,225,0,07H
-	.word	0A49H,300,123,08H
-	.word	0A44H,300,0,09H
-	.word	0FFFFH	;End Marker
+;hangtimeBLKS:
+;	.word	0A40H	;flags
+;	.word	0,0 ;x,y
+;	.word	00H	;pal5,pal4,hdr13-0
+;	.word	0A45H,0,123,01H
+;	.word	0A47H,75,123,02H
+;	.word	0A41H,75,0,03H
+;	.word	0A46H,145,123,04H
+;	.word	0A42H,150,0,05H
+;	.word	0A48H,220,123,06H
+;	.word	0A43H,225,0,07H
+;	.word	0A49H,300,123,08H
+;	.word	0A44H,300,0,09H
+;	.word	0FFFFH	;End Marker
 maximBMOD:
 	.word	400,256,14	;x size, y size, #blocks
 	.long	maximBLKS, timeHDRS, timePALS
-hangtimeBMOD:
-	.word	400,256,10	;x size, y size, #blocks
-	.long	hangtimeBLKS, timeHDRS, timePALS
+;hangtimeBMOD:
+;	.word	400,256,10	;x size, y size, #blocks
+;	.long	hangtimeBLKS, timeHDRS, timePALS
 
 RHDRS:
 	.word	204,23	;x size, y size

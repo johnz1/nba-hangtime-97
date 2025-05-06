@@ -42,7 +42,10 @@ del c:\myht\backup\xcode1~3\names3.tbl
 del c:\myht\backup\xcode1~3\names3.glo
 copy c:\tmp\htextra\names3.tbl c:\myht\backup\xcode1~3\names3.tbl
 copy c:\tmp\htextra\names3.glo c:\myht\backup\xcode1~3\names3.glo
-
+rem VDA zipped images
+rem These used to be in the program rom, now in GFX rom.
+del c:\myht\backup\xcode1~3\bbvda.tbl
+copy c:\tmp\htextra\bbvda.tbl c:\myht\backup\xcode1~3\bbvda.tbl
 rem pals
 ren c:\tmp\htextra\imgpal.asm imgpal8.asm
 del c:\tmp\htextra\l2*.*

@@ -1,51 +1,51 @@
 	.DATA
 STORM02:
 	.word   190,72,-31,-7
-	.long   0915216bH
+	.long   091e573bH
 	.word   05f80H
 STORM03:
 	.word   190,73,-20,-6
-	.long   0915e79bH
+	.long   091f1d6bH
 	.word   05f80H
 STORM04:
 	.word   192,63,-24,-11
-	.long   0916b1d9H
+	.long   091fe7a9H
 	.word   05b80H
 STORM05:
 	.word   217,64,-12,-12
-	.long   091774b5H
+	.long   0920aa85H
 	.word   05f80H
 STORM06:
 	.word   227,61,0,-9
-	.long   09183b95H
+	.long   09217165H
 	.word   05f80H
 STORM07:
 	.word   204,61,-9,-11
-	.long   0918fee8H
+	.long   092234b8H
 	.word   05b80H
 STORM08:
 	.word   205,78,-11,0
-	.long   0919c628H
+	.long   0922fbf8H
 	.word   05f80H
 STORM09:
 	.word   195,77,-26,0
-	.long   091a9e26H
+	.long   0923d3f6H
 	.word   05f80H
 STORM10:
 	.word   192,64,-30,-9
-	.long   091b7199H
+	.long   0924a769H
 	.word   05a80H
 STORM11:
 	.word   222,66,-19,-7
-	.long   091c3d8dH
+	.long   0925735dH
 	.word   05f80H
 STORM12:
 	.word   226,60,-12,-14
-	.long   091d0711H
+	.long   09263ce1H
 	.word   05f80H
 fence:
 	.word   187,73,0,0
-	.long   091dc971H
+	.long   0926ff41H
 	.word   06180H
 	.long   fence_p
 	.TEXT
