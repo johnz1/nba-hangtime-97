@@ -103,5 +103,8 @@ Track $07bc channel 5 {
     Wait(15) Play(Smoke);
     Wait(Stream);         
 };
-
-
+Track $07bd channel 2 {
+    SetMixingLevel(level 100); 	// always set the mixing level for a new track
+    Play("Glass.wav");       	// start an audio clip
+    Wait(Stream);          	// ...and wait for it to finish before exiting
+};
