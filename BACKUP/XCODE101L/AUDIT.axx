@@ -3068,6 +3068,7 @@ FACTORY_TABLE
 	.WORD 	1	;SHATTER BB	39	;Shattering of backboard en/disabled.
 	.WORD   1	;HANGTIME FIG	40	;Rubberbanding type
 	.WORD	1	;ADJIDIOT	41	;Idiot boxes en/disabled.
+	.WORD	1	;ADJABA		42	;Basketball Type.
 	;LAST_ADJUST	equ	41
 
 

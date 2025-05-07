@@ -32,7 +32,10 @@ OPERMES	.equ	0	;0 or 1  Operator message off/on
 TRIVCON	.equ	0	;0 or 1  Trivia contest   off/on
 PLYRDEM	.equ	0	;0 or 1  Create-a-Player demo during attract   off/on
 TEAMPOP	.equ	0	;0 or 1  Team popularity  off/on
-ANIM_VS	.equ	1	;0 or 1  Versus scrn anim off/on
+ANIM_VS	.equ	1	;0 or 1  Versus scrn anim off/on	;saves ~304
+AAMA	.equ	1	;0 or 1  AAMA advisory screen off/on	;saves ~256
+ROBOG	.equ	0	;0 or 1  Robotron (broken atm) off/on	;Cost 20K
+
 ;DJT End
 
 PAL64	.equ	0	;1 if 64x64 pals
@@ -40,7 +43,7 @@ PAL64	.equ	0	;1 if 64x64 pals
 *FOLLOWING SYMBOLS DON'T ACTUALLY WORK, YET! (GNP - 1/15/92)
 *GERMAN	.equ	0	;IF 1 THEN GERMAN TEXT
 *PRINTER	.equ	0	;IF 1 THEN PRINTER IS INSTALLED
-ROBOG	.equ	0
+
 
 FULLPRICE .equ	1	;IF 1, INSTALL ALL COINAGE MODES
 

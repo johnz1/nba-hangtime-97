@@ -336,7 +336,9 @@ bguplp
 ;	calla	get_all_records
 
 	JSRP	new_page
-;	JSRP	amode_design
+	.if	PLYRDEM
+	JSRP	amode_design
+	.endif	;PLYRDEM
 	JSRP	show_nba_plyrs
 	JSRP	show_hiscore
 	.if	OPERMES
@@ -373,7 +375,9 @@ bguplp
 	move	a0,@amodeloop
 	srl	1,a0
 	jrnc	bgupno_aama
+	.if	AAMA
 	JSRP	show_aama
+	.endif
 bgupno_aama
 	move	@amodeloop,a0
 	andi	3,a0
@@ -1055,6 +1059,8 @@ legal_msg_str
 
 ****************************************************************
 
+
+	.if	AAMA
  SUBRP	show_aama
 
 	calla	display_blank
@@ -1162,6 +1168,8 @@ aama_rating_str
 	.string	"appropriate for players of",1
 	.string	"all ages.",0
 	.even
+	
+	.endif ;AAMA
 
 
 ****************************************************************

@@ -79,6 +79,10 @@
 
 	.ref	pal_set,pal_find,pal_clean
 
+	.ref	GET_ADJ
+
+
+
 
 ;DJT Start
 	.asg	0,MSG_ABABALL	;Flag bit# - ABA ball msg
@@ -3204,6 +3208,7 @@ dlgpspecial_moves
 	.long	sp_aba
 	.long	sp_court
 	.long	sp_special
+	.long	sp_cmos			;process for forced powerups set in CMOS
 	.long	0
 
 
@@ -3563,6 +3568,41 @@ lnizlp
 
 	jruc	pupmsg
 ;DJT End
+
+*******************************************************************************
+* a8=PnCTRL for this player
+* a9=plyr #
+* AMM: No switches here, just read ADJ and do things.
+
+;lnizTIMEOUT	.equ	40
+;CMOSTIMEOUT	.equ	60
+
+sp_cmos
+
+	SLEEPK	1
+sp_cmoslp
+	clr	a11
+
+	movi	ADJABA,a0		;Get value from CMOS
+	calla	GET_ADJ			;0-1
+	jrnz	sp_cmos_end		;Off? 
+
+	clr	A0
+	movk	1,a0
+	move	a0,@pup_aba
+
+;DJT Start
+	movk	1<<MSG_ABABALL,a3
+	movi	msg_ababall_setup,a2,L
+	movi	msg_ababall,a4,L
+	movi	pwrup_snds,a11
+
+	jruc	pupmsg
+sp_cmos_end
+	DIE 	;check of we can still select court!
+
+;DJT End
+
 
 *******************************************************************************
 * a8=PnCTRL for this player
