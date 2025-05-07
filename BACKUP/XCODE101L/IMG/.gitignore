@@ -3,7 +3,7 @@
 *.LST
 *.OUT
 *.MAP
-*.BIN
+MISC*.BIN
 *.OLD
 *.IRW
 *.~IMG
