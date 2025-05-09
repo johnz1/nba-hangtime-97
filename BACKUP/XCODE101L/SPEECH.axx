@@ -232,7 +232,7 @@
  SX	thr_tmwrk_sp,0100DH,61, 0a9dH
  SX	thr_smkn_sp, 0100DH,57, 0af5H
  SX	thr_zone_sp, 0100DH,65, 0b05H
- SX	whta_show_sp,0100DH,57, 0958H
+ SX	whta_show_sp,0100DH,57, 0958H		;AMM: Unused
 
  SX	dble_dnk_sp, 0120DH,55, 0b3aH
  SX	dble_dnk2_sp,0120DH,78, 0b38H
@@ -246,7 +246,7 @@
  SX	is_legal_sp ,00F0DH,65, 0b21H
 ;DJT End
 
- SX	tm_onfire_sp,0140DH,76, 0b3eH
+ SX	tm_onfire_sp,0140DH,76, 0b3eH		;AMM
 ;DJT Start
  SX	got_hspot_sp,0140DH,76, 0b40H
 ;DJT End
@@ -281,14 +281,14 @@
  SX	away_side_sp,0100DH,56, 09c7H
  SX	spins_out_sp,0100DH,45, 09cbH
  SX	side_rim_sp, 0100DH,61, 09c5H
- SX	off_heel_sp, 0100DH,54, 09c3H
+ SX	off_heel_sp, 0100DH,54, 09c3H		;AMM
  SX	no_sp,       0100DH,30, 09ccH
  SX	nicly_dne_sp,0100DH,69, 0a49H
  SX	got_skilz_sp,0100DH,67, 0a97H
 
  SX	misd_evry_sp,0100DH,66, 09e2H
  SX	way_shrt_sp, 0100DH,57, 09dfH
- SX	misd_mile_sp,0100DH,72, 09e3H
+ SX	misd_mile_sp,0100DH,72, 09e3H		;AMM
  SX	teribl_sh_sp,0100DH,57, 09baH
  SX	airball_sp,  0100DH,56, 09daH
 
@@ -304,15 +304,15 @@
  SX	goes_up_sp,  00905H,37, 0951H
  SX	goes_hoop_sp,0110DH,59, 095fH
  SX	tks2_hoop_sp,0110DH,51, 0a36H
- SX	fly_1hdnr_sp,0110DH,76, 096eH
+ SX	fly_1hdnr_sp,0110DH,76, 096eH		;AMM
  SX	didnt_knw_sp,0110DH,77, 097fH
- SX	haning_sp,   0110DH,34, 0a0fH
+ SX	haning_sp,   0110DH,34, 0a0fH		;AMM
  SX	ooooooh_sp,  0110DH,65, 0af7H
  SX	ooooooh2_sp, 0110DH,40, 0af7H
  SX	thrgh_air_sp,0110DH,50, 096bH
  SX	way_upair_sp,0110DH,75, 0974H
 ;DJT Start
- SX	lch_atbkt_sp,0110DH,100,0b03H
+ SX	lch_atbkt_sp,0110DH,100,0b03H		;serious hangtime
 ;DJT End
  SX	catapults_sp,0110DH,49, 09abH
  SX	tomahk_dk_sp,0110DH,66, 0965H
@@ -331,9 +331,9 @@
  SX	pull_jmpr_sp,0100DH,80, 0838H
  SX	bslne_lnr_sp,0100DH,45, 0b30H
  SX	luky_bnce_sp,0100DH,58, 092fH
- SX	per_luck_sp, 0100DH,64, 0946H
+ SX	per_luck_sp, 0100DH,64, 0946H		;AMM
 ;DJT Start
- SX	luky_bskt_sp,0100DH,82, 0948H
+ SX	luky_bskt_sp,0100DH,82, 0948H		;AMM
 ;DJT End
 	
 ;DJT Start
@@ -350,8 +350,8 @@
  SX	oh_man_sp,   0100DH,52, 0934H
  SX	no_stopng_sp,0100DH,75, 0942H
  SX	postr_jam_sp,0100DH,67, 0956H
- SX	jam_it_in_sp,0100DH,83, 095aH
- SX	thndr_dnk_sp,0100DH,60, 0960H
+ SX	jam_it_in_sp,0100DH,83, 095aH		;AMM
+ SX	thndr_dnk_sp,0100DH,60, 0960H		;AMM
 ;DJT Start
  SX	throws_it_sp,0100DH,66, 0963H
  SX	pounds_it_sp,0100DH,62, 0964H
@@ -359,7 +359,7 @@
  SX	incrd_sht_sp,0100DH,75, 090eH
 ; SX	supr_dnk_sp, 0100DH,61, 0971H	;**
 ; SX	mnstr_jam_sp,0100DH,70, 0971H
- SX	outstndng_sp,0100DH,67, 0aaaH
+ SX	outstndng_sp,0100DH,67, 0aaaH		;AMM
 ;DJT End
  SX	amazing_sp,  0100DH,57, 0912H
  SX	he_dnk_it_sp,0100DH,33, 0961H
@@ -481,7 +481,7 @@
  SX	needshot_sp, 0100DH,72, 0ab2H
  SX	run_out_sp,  0100DH,55, 0876H
 ;DJT Start
- SX	just_secs_sp,0100DH,84, 0ab3H
+ SX	just_secs_sp,0100DH,84, 0ab3H		;AMM
 ;DJT End
 
  SX	passes_sp,   0070DH,33, 09f4H
@@ -550,6 +550,9 @@
  SX	tookm_out_sp,0090DH,48, 0abeH
  SX	hamerd_hm_sp,0090DH,35, 0ad1H
  SX	into_stnd_sp,0050DH,96, 0ac4H
+;AMM unused sounds
+; 0ab1 tonights matchup (alt)
+; 0ae7 'a three sixty' 360
 
 
  SX	nick_nme1,   0100DH,23, 0760H

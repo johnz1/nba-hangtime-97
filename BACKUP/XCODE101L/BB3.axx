@@ -1749,7 +1749,17 @@ ooaplp
 
 
 ;--------------------
-; Bench/crowd ani seq lists
+; Shang/Bench/crowd ani seq lists
+SHANG_LST
+	LW	STCLAP1,9
+	LW	STCLAP2,9
+	LW	STCLAP3,9
+	LW	STCLAP2,9
+	LW	STCLAP3,9
+	LW	STCLAP2,9
+	LW	STCLAP1,9
+	LWL0	STCLAP1,3*60
+
 
 BNCHPL_LST
 	LW	BNCHPL02,9
@@ -1766,7 +1776,8 @@ BNCHPL_LST
 
 	LW	BNCHPL02,9
 	LWL0	BNCHPL01,3*60
-
+; Coach ani is disabled in production.
+; And list is never used?
 COACH_LST
 	LW	COACH02,9
 	LW	COACH03,9
