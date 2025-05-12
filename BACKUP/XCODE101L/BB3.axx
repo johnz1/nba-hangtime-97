@@ -36,9 +36,10 @@
 	.include	"outdoor.tbl"
 	.include	"outdoor.glo"
 	.include	"storm.tbl"
-
+	.if	SHANG
 	.include	"shang.tbl"
 	.include	"shang.pal"
+	.endif
 
 	.include	"imgtbl.glo"
 	.include	"hoop.glo"
@@ -153,7 +154,9 @@
 
 	.bss	moonobj,32	;outdoor crt moon obj
 	.bss	stormobj,32	;outdoor crt MK storm obj
+	.if	SHANG
 	.bss	shangobj,32	;Indoor crt MK Shang obj
+	.endif
 
 
 *******************************
@@ -169,7 +172,9 @@
 	move	a0,@chldr_ram_prgt,L
 
 	movi	whcqinit_t,a11		;>Setup crowd, hoops, side crowd
+	.if	SHANG
 	CREATE0	animate_shang		;>Setup Shang head turner.
+	.endif
 	move	@pup_court,a0
 	jrz	whcqnext
 	CREATE0	otd_scroller		;>Outdoor court scroll initializer
@@ -508,6 +513,7 @@ whcqinit_t
 	WL	4002,coachr_p
 	WL	4001,set_coach_colors
 
+	.if	SHANG
 ;Shang attempt
 	.word	-6,Y,Z,ZOFF,F
 	.long	SHANG04
@@ -516,6 +522,11 @@ whcqinit_t
 	.word	-6,Y+1,Z-1,ZOFF,F
 	.long	bk_flr
 	WL	4001,set_bkcrt_colors
+	.else
+	.word	-6,Y,Z,ZOFF,F
+	.long	bk_flr
+	WL	4001,set_bkcrt_colors
+	.endif
 
 ;bk_flr = 20px high but it prints over shang OBJ for some reason.
 
@@ -1750,6 +1761,7 @@ ooaplp
 
 ;--------------------
 ; Shang/Bench/crowd ani seq lists
+	.if	SHANG
 SHANG_LST
 	LW	STCLAP1,9
 	LW	STCLAP2,9
@@ -1759,6 +1771,7 @@ SHANG_LST
 	LW	STCLAP2,9
 	LW	STCLAP1,9
 	LWL0	STCLAP1,3*60
+	.endif
 
 
 BNCHPL_LST
@@ -2960,7 +2973,7 @@ netc15_l
 
 
 
-
+	.if	SHANG
 ****************************
 * Shang head anim inits. (Process)
 * Checks joy inputs at start, spawns shang_ani2 if up+left was held.
@@ -3077,6 +3090,8 @@ shangani_t
 
 
 	DIE
+	
+	.endif
 
 
 
