@@ -298,6 +298,7 @@
 	.ref	subzer_h
 	.ref	reptil_h
 	.ref	smok_h
+	.ref	jordan_h
 
 ;symbols refined in this file
 
@@ -738,6 +739,11 @@ CHAR_t
 ;Pri swipe pal, Alt swipe pal, Pri vertical panel pal, Alt vertical panel pal
 
 CHI_t
+; Jordan
+;	LWWWWWW	scale611_t,BV8,SHT6,DNK10,DEF7,SDEF7,DSKL5
+;	.long	Mutumbo_f, UN_CHIP_P,UN_CHIS_P, TR_CHIP_P,TR_CHIS_P,jordan_h
+;	.word	8,8,7,6
+;	.long	SW_CHIP_P,SW_CHIS_P,VP_CHIP_P,VP_CHIS_P
 	LWWWWWW	scale67_t,BV8,SHT8,DNK9,DEF8,SDEF9,DSKL5
 	.long	pippin_f, UN_CHIP_P,UN_CHIS_P, TR_CHIP_P,TR_CHIS_P,Pippen_h
 	.word	7,6,8,6
@@ -2440,6 +2446,12 @@ spechds_t
     .long    NFL55_p, UN_INDP_P,UN_INDP_P,TR_SANS_P,TR_SANS_P,smok_h
     .word    2,3,8,17
     .long    SW_SANS_P,SW_SANS_P,VP_SANS_P,VP_SANS_P
+
+; Jordan
+	LWWWWWW	scale611_t,BV8,SHT6,DNK10,DEF7,SDEF7,DSKL5
+	.long	Mutumbo_f, UN_CHIP_P,UN_CHIS_P, TR_CHIP_P,TR_CHIS_P,jordan_h
+	.word	8,8,7,6
+	.long	SW_CHIP_P,SW_CHIS_P,VP_CHIP_P,VP_CHIS_P
 
 ;These are superstar players (Or leftover art) that can be picked with name
 ;and pin # - allowing them to be 'traded' from team to team

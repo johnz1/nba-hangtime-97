@@ -43,3 +43,20 @@
 	.global	SMOKH04
 	.global	SMOKH05
 	.global	SMOKH16
+	.globl	JORDAN_P
+	.global	JORDAN1
+	.global	JORDAN2
+	.global	JORDAN3
+	.global	JORDAN4
+	.global	JORDAN5
+	.global	JORDAN6
+	.global	JORDAN7
+	.global	JORDAN8
+	.global	JORDAN9
+	.global	JORDAN10
+	.global	JORDAN11
+	.global	JORDAN12
+	.global	JORDAN13
+	.global	JORDAN14
+	.global	JORDAN15
+	.global	JORDAN16

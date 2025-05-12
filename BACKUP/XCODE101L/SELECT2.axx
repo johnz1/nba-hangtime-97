@@ -2867,6 +2867,9 @@ zpsjteam_data1
 	.word	S_,M_,O_,K_,E_,0
 	.word	ZER,ZER,ZER,ZER 	;smoke mk2
 	
+	.word	J_,O_,R_,D_,A_,N_
+	.word	ZER,TWO,ONE,SEV 	;Jordan
+	
 zpsjteam_data1_end
 
 
@@ -2974,6 +2977,7 @@ zpsjteam_snds
  .word	0100DH,95,0b53h ;Subzero
  .word	0100DH,95,0b51h ;Reptile
  .word	0100DH,95,0b54h ;Smoke
+ .word	0100DH,95,0b56h ;Jordan
 
 
 ;DJT End
@@ -5305,6 +5309,9 @@ player_attribs
 
 ;03 CHICAGO BULLS
 
+;	 .word	08,06,09,08
+;	 .word  08,07,07,07	;MICHAEL JORDAN		6'6"	225 thin
+
 	.word  08,06,08,09
 	.word  09,08,07,08	;SCOTTIE PIPPEN		6'7"	225 thin
 
@@ -5878,6 +5885,7 @@ name_sort
  .long	BROWN, HAMER ,BARROS,RADJA,FOX			;new	;01 CELTICS
  .long	RICE,MASON,DIVAC,ZIDEK,CURRY				;02 HORNETS
  .long	PIPPEN,RODMAN,KUKOC,LONGLEY,KERR			;03 BULLS
+;.long	JORDAN,PIPPEN,RODMAN,KUKOC,KERR			;03 BULLS
  .long	THILL,CMILLS,PHILLS,BRANDON,FERRY			;04 CAVALIERS
  .long	KIDD,HARPER_D,JACK,MONTROSS,MASH			;05 MAVERICKS
  .long	MCDYESS,MARCIULO,MJACKSON,DELLIS, DELLIS	;kill	;06 NUGGETS
@@ -6078,6 +6086,7 @@ our_names
 	.long	SUBZER
 	.long	REPTILE
 	.long	SM0K3
+	.long	JORDAN
 ;DJT End
 
 
@@ -6186,6 +6195,7 @@ our_heads
 	.long	SUB_MK2		; subzero mug
 	.long	REP_MK2		; reptile mug
 	.long	SMK_MUG		; smoke mug
+	.long	JOR_MUG		; jordan mug
 
 our_heads_end
 	.long	SAL_MUG		;0		;repeat 1st 2 for wrap around

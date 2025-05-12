@@ -223,6 +223,7 @@
 	.def	subzer_h
 	.def	reptil_h
 	.def	smok_h
+	.def	jordan_h
 	.text
 
 ;; MARKER
@@ -242,6 +243,9 @@ reptil_h
 
 smok_h
 	HDMAC2	SMOKH01
+	
+jordan_h	
+	HDMAC	JORDAN1
 
 heithb_h
 	HDMAC2	HEITH01

@@ -199,5 +199,85 @@ SMOKH16:
 	.long   09323181H
 	.word   06000H
 	.long   SMOK_P
+JORDAN1:
+	.word   24,28,10,25
+	.long   093251fdH
+	.word   00H
+	.long   JORDAN_P
+JORDAN2:
+	.word   25,29,13,26
+	.long   093266fdH
+	.word   00H
+	.long   JORDAN_P
+JORDAN3:
+	.word   28,31,6,26
+	.long   09327da5H
+	.word   00H
+	.long   JORDAN_P
+JORDAN4:
+	.word   25,31,8,27
+	.long   093298c5H
+	.word   00H
+	.long   JORDAN_P
+JORDAN5:
+	.word   24,31,12,28
+	.long   0932b0fdH
+	.word   00H
+	.long   JORDAN_P
+JORDAN6:
+	.word   29,31,19,22
+	.long   0932c83dH
+	.word   00H
+	.long   JORDAN_P
+JORDAN7:
+	.word   25,25,4,21
+	.long   0932e455H
+	.word   00H
+	.long   JORDAN_P
+JORDAN8:
+	.word   33,35,2,21
+	.long   0932f7ddH
+	.word   00H
+	.long   JORDAN_P
+JORDAN9:
+	.word   29,30,4,21
+	.long   09331bf5H
+	.word   00H
+	.long   JORDAN_P
+JORDAN10:
+	.word   24,29,9,23
+	.long   09333725H
+	.word   00H
+	.long   JORDAN_P
+JORDAN11:
+	.word   21,21,10,12
+	.long   09334ce5H
+	.word   00H
+	.long   JORDAN_P
+JORDAN12:
+	.word   33,30,18,27
+	.long   09335aadH
+	.word   00H
+	.long   JORDAN_P
+JORDAN13:
+	.word   35,30,23,26
+	.long   0933799dH
+	.word   00H
+	.long   JORDAN_P
+JORDAN14:
+	.word   29,30,15,25
+	.long   09339a6dH
+	.word   00H
+	.long   JORDAN_P
+JORDAN15:
+	.word   23,30,12,27
+	.long   0933b59dH
+	.word   00H
+	.long   JORDAN_P
+JORDAN16:
+	.word   33,30,29,18
+	.long   0933cb2dH
+	.word   00H
+	.long   JORDAN_P
 	.TEXT
 

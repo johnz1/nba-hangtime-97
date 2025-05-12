@@ -457,3 +457,5 @@
 	.global	REP_MK2
 	.globl	SUB_MK2P
 	.global	SUB_MK2
+	.globl	JOR_MUGP
+	.global	JOR_MUG

@@ -14,6 +14,7 @@ Stream Reptile "JAM_Reptile.wav";       //
 Stream Scorpion "JAM_Scorpion.wav";	//
 Stream Subzero "JAM_Sub-zero.wav";	//
 Stream Smoke "JAM_Smoke.wav";
+Stream Jordan "Jordan.wav";
 
 // last used call 07BF ?
 
@@ -110,9 +111,23 @@ Track $0b54 channel 5 {
     Play(Smoke);       // start an audio clip
     Wait(Stream);          // ...and wait for it to finish before exiting
 };
+// To Smoke
 Track $07bc channel 5 {
     SetMixingLevel(level 111);
     Play(stream $1CC03A);
     Wait(15) Play(Smoke);
+    Wait(Stream);         
+};
+// Jordan
+Track $0b56 channel 5 {
+    SetMixingLevel(level 111);   // always set the mixing level for a new track
+    Play(Jordan);       // start an audio clip
+    Wait(Stream);          // ...and wait for it to finish before exiting
+};
+//To Jordan
+Track $07bf channel 5 {
+    SetMixingLevel(level 111);
+    Play(stream $1CC03A);
+    Wait(15) Play(Jordan);
     Wait(Stream);         
 };

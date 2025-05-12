@@ -709,6 +709,7 @@ full_name_speech
  .word	0100DH,70,1352	;ZIDEK,       george
  .word	0100DH,58,1356	;CURRY,       del
 
+;.word	0100DH,45,0B56h ;Jordan
  .word	0100DH,72,1360	;PIPPEN,      scottie		( CHICAGO )
  .word	0100DH,60,1364	;RODMAN,      dennis
  .word	0100DH,70,1368	;KUKOC,       toni
@@ -899,6 +900,7 @@ pass_speech		;'TO player name'
  .word	0100DH,41,1355	;to ZIDEK,       george
  .word	0100DH,36,1359	;to CURRY,       del
 
+;.word	0100DH,45,07bfh ;to Jordan
  .word	0100DH,41,1363	;to PIPPEN,      scottie	( CHICAGO )
  .word	0100DH,38,1367	;to RODMAN,      dennis
  .word	0100DH,47,1371	;to KUKOC,       toni
@@ -1089,6 +1091,7 @@ name_speech 		;(last name only, excited)
  .word	0100DH,32,1353	;ZIDEK,       george
  .word	0100DH,27,1357	;CURRY,       del
 
+;.word	0100DH,45,0B56h ;Jordan
  .word	0100DH,31,1361	;PIPPEN,      scottie		( CHICAGO )
  .word	0100DH,28,1365	;RODMAN,      dennis
  .word	0100DH,38,1369	;KUKOC,       toni
@@ -1360,6 +1363,7 @@ special_name_speech
  .word	0100DH,45,0B53h ;Subzero
  .word	0100DH,45,0B51h ;Reptile
  .word	0100DH,45,0B54h ;Smoke
+ .word	0100DH,45,0B56h ;Jordan
 
 
 ***********
@@ -1461,7 +1465,8 @@ special_pass_speech
  .word	0100DH,45,07b9h ;to Scorpion
  .word	0100DH,45,07bah ;to Subzero
  .word	0100DH,45,07b8h ;to Reptile
- .word	0100DH,45,07bch ;to Smoke
+ .word	0100DH,45,07bch ;to Smoke 
+ .word	0100DH,45,07bfh ;to Jordan
  
 ******************************************************************************
 

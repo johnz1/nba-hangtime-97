@@ -93,6 +93,10 @@ ourhds2.img
 ---> REPTIL01,REPTIL02,REPTIL03,REPTIL04,REPTIL05,REPTIL16
 ninjas.img
 ---> SMOKH01,SMOKH02,SMOKH03,SMOKH04,SMOKH05,SMOKH16
+Jordan.img
+---> JORDAN1,JORDAN2,JORDAN3,JORDAN4,JORDAN5,JORDAN6
+---> JORDAN7,JORDAN8,JORDAN9,JORDAN10,JORDAN11,JORDAN12
+---> JORDAN13,JORDAN14,JORDAN15,JORDAN16
 ;
 ; New mugs here
 ; Mugs go into mugshot.glo / mugshot.tbl, so copypaste output there manualy
@@ -109,6 +113,8 @@ smoke.img
 ---> RAD_MK2,SMK_MUG,KOB_MUG
 nmugs.img
 ---> SCO_MK2,REP_MK2,SUB_MK2
+Jordan.img
+---> JOR_MUG
 ;
 ; New nameplates here. 
 ; Nameplates go into imgtbl.axx !AND! imgtbl.glo 
@@ -121,7 +127,7 @@ PON>
 CON>
 XON>
 ZOF>
----> RAIDEN,SCORPION,SUBZER,REPTILE,SM0K3
+---> RAIDEN,SCORPION,SUBZER,REPTILE,SM0K3,JORDAN
 ;
 ; 
 ;

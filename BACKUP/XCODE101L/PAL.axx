@@ -64,6 +64,7 @@
 	.def	REPTIL_P
 	.def	SUBZER_P
 	.def	SMOK_P
+	.def	JORDAN_P
 
 ;AMM end
 
