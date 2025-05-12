@@ -2329,8 +2329,8 @@ zdikdlp	move	*a1+,a14
 	jrz	zdiknoshat2		;Zero matches, we must be a drone?
 
 ;AMM Multi-shatter if you want. (tested: works in HT)
-;	move	@bbshatter,a0		;Already happened
-;	jrnz	zdiknoshat2
+	move	@bbshatter,a0		;Already happened
+	jrnz	zdiknoshat2
 
 ;AMM Which quarter are we in? (tested: works in HT)
 	.ref	gmqrtr
@@ -2371,10 +2371,6 @@ tm1
 zdikdoit
 
 ;Amm sounds later
-	.ref shatter_snd
-	SOUND1	ohmy			;Doing the sounds in plyr3.asm doesn't work or they
-	SOUND1	dunk_snd2		;this doesnt't sound (low prio?)
-	SOUND1	shatter_snd		;are too late, so we do them here.
 	CREATE0	board_shatter		;in plyr3.axx
 	movi	HOOP_PID,a0
 	calla	KIL1C

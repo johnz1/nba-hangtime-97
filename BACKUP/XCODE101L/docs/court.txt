@@ -28,3 +28,16 @@ To get the COURT.BIN so we can use it in FRM> for LOD files:
 
 The court PAL is RCRT_p and is loaded using BB.LOD? as part of a set of dummy images that have the
 PAL attached to them. (OUTDR*)
+
+Reference
+OUTDOOR	.set	0398e1f0h  (0598e1f0 /8 = loadr at B31C3E) works. 	Debugger shows 598f738h in NDSP1
+COURT	.set	02001470h  (00001470 /8 = loadr at 28e) works. 		Debugger shows 29B8h
+
+Indoor:
+sub 2000000
+div 8
+
+Outdoor:
+add 2000000
+div 8
+

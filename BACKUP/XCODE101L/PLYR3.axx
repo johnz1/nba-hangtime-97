@@ -3873,12 +3873,22 @@ yglxinpos
 ;refs we need here
 	.ref	ballpnum,ballpnumshot,bbshatter,rndrng0,got_hspot_sp,ohmy
 
+;	.ref shatter_snd
+;	SOUND1	ohmy			;Doing the sounds in plyr3.asm doesn't work or they
+;	SOUND1	dunk_snd2		;this doesnt't sound (low prio?)
+;	SOUND1	shatter_snd		;are too late, so we do them here.
+
 ;	.if 0
 ;	SOUND1	explode_snd
 ;	these don't play for some reason.
-;	SOUND1	ohmy
-;	CREATE0	board_glssnd		;fox the sound later.
+
+
 ;	.endif
+
+
+	SOUND1	ohmy
+
+	CREATE0	board_glssnd		;fix the sound later.
 
 	movk	10,a1
 	move	a1,*a0(PTIME)
@@ -3897,6 +3907,13 @@ wjfoshlp2	CREATE0	board_shard
 	SLEEPK	1
 	dsj	a8,wjfoshlp
 
+	DIE
+
+* AMM This one is from JAMTE
+board_glssnd
+;	SLEEPK	2         	;too long
+	.ref	shatter_snd
+	SOUND1	shatter_snd
 	DIE
 
 ;board_glssnd
