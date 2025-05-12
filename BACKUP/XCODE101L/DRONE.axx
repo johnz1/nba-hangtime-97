@@ -2268,35 +2268,13 @@ shqvmxdnok
 	clr	a14
 shqvdnok
 	sll	4,a14
-;add cmos case
-	PUSH	a0
-	movi	ADJRUBBEROLD,a0		;Get value from CMOS
-	calla	GET_ADJ			;0-1
-	jrnz	shqvold_adj_t		;Off? We should use the old table
-	PULL	a0
-	addi	shqvadj_t,a14		;On
-	jruc	shqvmax_adj_t
-shqvold_adj_t
-	PULL	a0
-	addi	old_shqvadj_t,a14
-shqvmax_adj_t
+	addi	shqvadj_t,a14
 	move	*a14,a14
 	add	a14,a2			;Modify skill
 
 	move	a5,a14			;0CHhk minute minimum
 	sll	3,a14
-; add cmos case
-	PUSH	a0
-	movi	ADJRUBBEROLD,a0		;Get value from CMOS
-	calla	GET_ADJ			;0-1
-	jrnz	shqvold_adj_t2		;Off? We should use the old table
-	PULL	a0
-	addi	shqvmin_t,a14		;On
-	jruc	shqvmax_adj_t2
-shqvold_adj_t2
-	PULL	a0
-	addi	old_shqvmin_t,a14
-shqvmax_adj_t2
+	addi	shqvmin_t,a14
 	movb	*a14,a14
 	add	a6,a14
 	cmp	a14,a2
@@ -2325,18 +2303,7 @@ shqvtnumok
 
 	add	a5,a1
 	sll	3,a1			;*8
-;add cmos case 
-	PUSH	a0
-	movi	ADJRUBBEROLD,a0		;Get value from CMOS
-	calla	GET_ADJ			;0-1
-	jrnz	shqvold_adj_t3		;Off? We should use the old table
-	PULL	a0
-	addi	shqvtdmin_t,a1		;On
-	jruc	shqvmax_adj_t3
-shqvold_adj_t3
-	PULL	a0
-	addi	old_shqvtdmin_t,a1
-shqvmax_adj_t3
+	addi	shqvtdmin_t,a1
 	movb	*a1,a14
 	add	a6,a14
 	cmp	a14,a2
