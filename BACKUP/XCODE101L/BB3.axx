@@ -518,7 +518,8 @@ whcqinit_t
 	.word	-6,Y,Z,ZOFF,F
 	.long	SHANG04
 	WL	4002,shangobj
-
+;bk_flr = 20px high but it prints over shang OBJ for some reason.
+;so we move it Z-1 (into the background 1px) and then down Y+1 1px so it sits behind Shang.
 	.word	-6,Y+1,Z-1,ZOFF,F
 	.long	bk_flr
 	WL	4001,set_bkcrt_colors
@@ -528,7 +529,7 @@ whcqinit_t
 	WL	4001,set_bkcrt_colors
 	.endif
 
-;bk_flr = 20px high but it prints over shang OBJ for some reason.
+;bk_flr = normal 20px at default y/z pos.
 
 
 	.word	346,Y,Z,ZOFF,F
@@ -1435,13 +1436,34 @@ storm_frame_table_end
 
 	move	@bnchl_p,a8,L
 	movi	BNCHPL_LST,a11
-	CREATE0	bnch_ani
+	CREATE0	crwd_ani
 	move	a0,*a9+,L
 
 	move	@bnchr_p,a8,L
 	movi	BNCHPL_LST,a11
-	CREATE0	bnch_ani
+	CREATE0	crwd_ani
 	move	a0,*a9+,L
+
+;	.if	0				;coach anims, todo add IMG.
+	move	@coachl_p,a8,L			;pointer to obj
+	movi	COACH_LST,a11
+	CREATE0	crwd_ani
+	move	a0,*a9+,L
+
+	move	@coachr_p,a8,L			;pointer to obj
+	movi	COACH_LST,a11
+	CREATE0	crwd_ani
+	move	a0,*a9+,L
+;	.endif
+
+;Shang Claps or watches, he can't do both at the same time.
+
+	.if	SHANG
+	move	@shangobj,a8,L			;pointer to OBJ
+	movi	SHANG_LST,a11			;Ani sequence
+	CREATE0	crwd_ani			;create process
+	move	a0,*a9+,L
+	.endif
 
 ;--------------------
 
@@ -1669,7 +1691,6 @@ dmbclp
 
 	jruc	bnch_ani
 
-
 *--------------------
 ; Do crowd ani seq proc
 
@@ -1769,8 +1790,10 @@ SHANG_LST
 	LW	STCLAP2,9
 	LW	STCLAP3,9
 	LW	STCLAP2,9
+	LW	STCLAP3,9
+	LW	STCLAP2,9
 	LW	STCLAP1,9
-	LWL0	STCLAP1,3*60
+	LWL0	SHANG04,3*60
 	.endif
 
 
