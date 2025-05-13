@@ -36,7 +36,7 @@ ANIM_VS	.equ	1	;0 or 1  Versus scrn anim off/on	;saves ~304
 AAMA	.equ	0	;0 or 1  AAMA advisory screen off/on	;saves ~256
 ROBOG	.equ	0	;0 or 1  Robotron (broken atm) off/on	;Cost 20K
 
-SHANG	.equ	1	;0 or 1  Shang in audience off/on	;Cost ?
+SHANG	.equ	0	;0 or 1  Shang in audience off/on	;Cost ~810
 
 ;DJT End
 

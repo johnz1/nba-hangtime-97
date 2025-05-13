@@ -156,6 +156,7 @@
 	.bss	stormobj,32	;outdoor crt MK storm obj
 	.if	SHANG
 	.bss	shangobj,32	;Indoor crt MK Shang obj
+	.bss	shanglook,32	;1 / 0 shang clap or look
 	.endif
 
 
@@ -170,6 +171,9 @@
 	clr	a0
 	move	a0,@chldr_ram_plft,L
 	move	a0,@chldr_ram_prgt,L
+	.if	SHANG
+	move	a0,@shanglook,L
+	.endif
 
 	movi	whcqinit_t,a11		;>Setup crowd, hoops, side crowd
 	.if	SHANG
@@ -1444,28 +1448,16 @@ storm_frame_table_end
 	CREATE0	crwd_ani
 	move	a0,*a9+,L
 
-;	.if	0				;coach anims, todo add IMG.
+
 	move	@coachl_p,a8,L			;pointer to obj
 	movi	COACH_LST,a11
-	CREATE0	crwd_ani
+	CREATE0	bnch_ani
 	move	a0,*a9+,L
 
 	move	@coachr_p,a8,L			;pointer to obj
 	movi	COACH_LST,a11
-	CREATE0	crwd_ani
+	CREATE0	bnch_ani
 	move	a0,*a9+,L
-;	.endif
-
-;Shang Claps or watches, he can't do both at the same time.
-
-	.if	SHANG
-	move	@shangobj,a8,L			;pointer to OBJ
-	movi	SHANG_LST,a11			;Ani sequence
-	CREATE0	crwd_ani			;create process
-	move	a0,*a9+,L
-	.endif
-
-;--------------------
 
 	move	@cr1st1_p,a8,L
 	movi	CR2FST_LST,a11
@@ -1594,10 +1586,27 @@ storm_frame_table_end
 	CREATE0	crwd_ani
 	move	a0,*a10+,L
 
+;Shang Claps or watches, he can't do both at the same time!
+
+	.if	SHANG
+	move	@shanglook,a0,L			;1 or 0 (1=looking, 0=clapping)
+	jrnz	shngskip
+
+	move	@shangobj,a8,L			;pointer to OBJ
+	movi	SHANG_LST,a11			;Ani sequence
+	CREATE0	crwd_ani			;create process (returns w/ A0)
+	move	a0,*a9+,L
+
+	.endif	;SHANG
+
+shngskip
+
 ytrvx
 	clr	a0
-;	move	a0,*a9+,L			;Set end of bench plist
+	move	a0,*a9+,L			;Set end of bench plist
 	move	a0,*a10+,L			;Set end of crowd plist
+
+
 
 	rets
 
@@ -1621,19 +1630,24 @@ jnwzlp
 *-------------------
 ; Turn on crowd animation, wait a bit, then die
 
- SUBR	start_animate
+; AMM: This one gets called from plyr.axx and score.axx on scoring.
 
-;	.ref	RNDPER
-;	movi	150,a0			;!!! ;Randomly knock down his %
-;	calla	RNDPER
-;	jrls	mphbskp
 ********************************
 * Random % routine
 * A0=Probability of event (0-1000) (0=0%, 1000=100%)
 * 0A0H=0-999 (CC) (jrls nope, jrhi happened)
 * Trashes scratch
 
-	CREATE0	bench_animate
+
+ SUBR	start_animate
+
+	.ref	RNDPER
+	movi	200,a0			;20% chance !!! ;Randomly knock down his %
+	calla	RNDPER
+	jrls	mphbskp
+
+	CREATE0	bench_animate		; Both coach and bench are in this playlist.
+
 mphbskp
 	movk	1,a1
 	move	@chldr_ram_plft,a0,L
@@ -1729,7 +1743,6 @@ fvbelp
 
 	jruc	crwd_ani
 
-
 *--------------------
 ; Do cheerleader ani seq proc
 
@@ -1785,6 +1798,8 @@ ooaplp
 	.if	SHANG
 SHANG_LST
 	LW	STCLAP1,9
+	LW	STCLAP2,9
+	LW	STCLAP3,9
 	LW	STCLAP2,9
 	LW	STCLAP3,9
 	LW	STCLAP2,9
@@ -3007,6 +3022,9 @@ netc15_l
 
  SUBRP	animate_shang
 
+;decide if shang watches or claps.
+;randomize
+
 	move	@P1CTRL,a0
 	cmpi	05h,a0			;UP + RIGHT. JOY_UP_LEFT was wrong!!
 	jrz	st1ok                   ;jump relative if result is zero.
@@ -3029,9 +3047,17 @@ netc15_l
 	jruc	st1ok2			;jump relative unconditional
 st1ok
 	.ref	mk1_snd
-	SOUND1	mk1_snd
-	CREATE0 shang_ani2
-					;Todo, make the mk1 title sound.
+	SOUND1	mk1_snd			;Make the mk1 title sound. Shang will be visible
+
+	.ref	RNDPER
+	movi	100,a0			;10% chance at creepy Shang!!!
+	calla	RNDPER
+	jrls	st1ok2			;no head turning today. (obj is visible, he can clap)
+
+	movk	1,a0			;If we get here we need to disable clapping!
+	move	a0,@shanglook,L		;Set this to 1 in RAM
+	CREATE0 shang_ani2		;Create head-turning-proc.
+			
 st1ok2
 	SLEEPK	1
 	move	@HALT,a14
