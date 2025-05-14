@@ -38,6 +38,8 @@ ROBOG	.equ	0	;0 or 1  Robotron (broken atm) off/on	;Cost 20K
 
 SHANG	.equ	0	;0 or 1  Shang in audience off/on	;Cost ~810
 
+CPUDEBUG .equ	1	;Cpu meter process (bb.axx calcs CPULEFT)
+
 ;DJT End
 
 PAL64	.equ	0	;1 if 64x64 pals

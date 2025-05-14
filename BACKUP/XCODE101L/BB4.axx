@@ -32,6 +32,101 @@
 	.include	"imgtbl1.glo"
 	.include	"imgpal1.asm"
 
-	.end
+	.if	CPUDEBUG
+	.include	"game.equ"
+	.include	"macros.hdr"
 
+	.include	"roboimg.tbl"
+
+	;from DISPLAY.ASM
+	.ref	pal_getf
+
+	;from BB.AXX if debug=1
+
+	.ref		CPULEFT
+
+	;def it so we can use it. (create0 this proc.)
+	.def		bog_o_meter
+
+	.text
+
+*****************************************
+* Some debug routines taken from robo.axx
+
+ SUBRP	bog_o_meter
+
+	movi	robo_p,a0
+	calla	pal_getf
+	move	a0,a9
+
+	;create the background
+	movi	[360,0],a0
+	movi	[192,0],a1
+	movi	man_d1,a2
+	clr	a3
+	movi	DMACAL|M_FLIPV,a4
+	movi	CLSDEAD,a5
+	clr	a6
+	clr	a7
+	calla	BEGINOBJ
+
+	move	a9,*a8(OPAL)
+	movi	0707h,a14
+	move	a14,*a8(OCONST)
+
+	movi	8,a0
+	move	a0,*a8(OSIZEX)
+	movi	128,a0
+	move	a0,*a8(OSIZEY)
+	move	a8,a10
+
+	;create the foreground
+	movi	[360,0],a0
+	movi	[65,0],a1
+	movi	man_d1,a2
+	movi	1,a3
+	movi	DMACAL,a4
+	movi	CLSDEAD,a5
+	clr	a6
+	clr	a7
+	calla	BEGINOBJ
+
+	move	a9,*a8(OPAL)
+	movi	0808h,a14
+	move	a14,*a8(OCONST)
+	
+	movi	8,a0
+	move	a0,*a8(OSIZEX)
+
+	movi	xfvrscale,a9
+
+xfvrloop
+	SLEEPK	2
+	move	@CPULEFT,a1
+	jrnz	xfvrnobog
+
+	;BOG!!
+	nop
+xfvrnobog
+	mpyu	a9,a1
+	srl	16,a1
+	move	a1,*a8(OSIZEY)
+	cmpi	10h,a1
+	jrle	xfvrred
+
+	movi	0707h,a0
+	move	a0,*a10(OCONST)
+	jruc	xfvrloop
+xfvrred
+	movi	0101h,a0
+	move	a0,*a10(OCONST)
+	jruc	xfvrloop
+
+	DIE
+
+xfvrscale	equ	800000h/03DCh
+
+
+	.endif	;CPUDEBUG
+	.end
 

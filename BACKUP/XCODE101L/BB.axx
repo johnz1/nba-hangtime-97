@@ -627,6 +627,9 @@ mjyeok7
 ;	LOCKUP
 ;wsr_1
 ;	move	a0,@last_snd_st
+	.endif
+
+	.if	CPUDEBUG
 	callr	cputime_calcfree
 	.endif
 
@@ -3278,6 +3281,14 @@ wakmnotcol4
 ;	move	a0,*a8(OPAL)
 ;
 	DIE
+
+	.endif
+
+	.if	CPUDEBUG
+
+**************************************
+* Makes CPU stats available in ram
+* See also bog_o_meter in BB4.AXX
 
 	.ref	dirqtimer
 
