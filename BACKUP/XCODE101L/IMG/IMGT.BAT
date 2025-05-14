@@ -23,7 +23,7 @@ del c:\myht\backup\xcode1~3\shang.tbl
 copy c:\tmp\htextra\shang.tbl c:\myht\backup\xcode1~3\shang.tbl
 rem raiden lightning
 del c:\myht\backup\xcode1~3\lighten.tbl
-copy c:\tmp\htextra\shang.tbl c:\myht\backup\xcode1~3\lighten.tbl
+copy c:\tmp\htextra\lighten.tbl c:\myht\backup\xcode1~3\lighten.tbl
 rem mugs
 del c:\myht\backup\xcode1~3\mugshot.tbl
 del c:\myht\backup\xcode1~3\mugshot.glo

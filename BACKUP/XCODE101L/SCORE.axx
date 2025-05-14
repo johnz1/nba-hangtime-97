@@ -36,6 +36,9 @@
 	.include	"credit.tbl"
 	.include	"hotspot.glo"
 
+	.include	"lighten.tbl"
+	.include	"lighten.glo"
+
 	.include	"powertxt.tbl"
 	.include	"powertxt.glo"
 
@@ -763,7 +766,7 @@ tlzwarwt_t	.long	arrown1t,arrown2t,arrown3t,arrown4t
 	move	*a11,a8,L		;A8=plyr *obj to stick to
 
 	movi	15*60,a11		;Time for cpu to be on
-rxgwmetop
+rxgwmetop1
 ;	calla	anipt_getsclxy		;co'ed 12/21/95 DJT
 ;	srl	16,a0
 	move	*a8(OXANI+16),a0
@@ -786,15 +789,16 @@ rxgwmetop
 	move	*a13(PDATA),a0,L	;Drone become human?
 	move	*a0(ply_time),a0
 	cmpi	25,a0
-	jrlt	rxgwmex			;br=no
+	jrlt	rxgwmexx			;br=no
 
 	move	a9,a8
 	jauc	DELOBJDIE
 
-rxgwmex	SLEEPK	1
+rxgwmexx
+	SLEEPK	1
 	move	@HALT,a0
-	jrnz	rxgwmex
-	dsj	a11,rxgwmetop
+	jrnz	rxgwmexx
+	dsj	a11,rxgwmetop1
 	move	a9,a0
 	calla	DELOBJ	
 	DIE
@@ -803,183 +807,184 @@ rxgwmex	SLEEPK	1
 ;*
 ;* a10=PxDATA ram
 ;
-; SUBR	stick_spark
-;
-;	movi	DMAWNZ|M_NOCOLL|M_3D|M_NOSCALE,a4
-;	move	*a13(PROCID),a5			;get pid for stick img oid
-;	movi	[-65,0],a1
-;	movi	lighten1,a2
-;	clr	a3
-;	clr	a6
-;	clr	a7
-;	calla	BEGINOBJ2
-;
-;	move	a8,a9
-;
-;	sll	5,a11
-;	addi	plyrobj_t,a11
-;
-;	move	*a11,a8,L			;player img to stick to
-;rxgwmetop0
-;	move	a9,a0
-;	movi	400h,a14
-;	move	a14,*a0(OYPOS)
-;	calla	OBJOFF
-;	movi	light_t,a10
-;	movi	4*60,a0			;4*60,a0
-;	calla	RNDRNG0
-;	addi	30,a0			;30
-;	calla	PRCSLP
-;	move	a9,a0
-;	calla	OBJON
-;	movk	1,a0
-;	move	a0,*a13(PDATA)
-;rxgwmetop
-;
-;	move	*a13(PDATA),a0
-;	dec	a0
-;	move	a0,*a13(PDATA)
-;	jrnz	rxgwcont
-;	movk	3,a0
-;	move	a0,*a13(PDATA)
-;
-;	move	*a10+,a0,L
-;	jrz	rxgwmetop0
-;	SWAP	a8,a9
-;	move	*a8(OFLAGS),a1
-;	calla	obj_aniq
-;	SWAP	a8,a9
-;	move	*a10+,a0
-;	move	a0,*a13(PDATA+16)
-;	move	*a10+,a0
-;	move	a0,*a13(PDATA+32)
-;
-;rxgwcont
-;
-;	calla	anipt_getsclxy			;GETANIXY
-;	srl	16,a0
-;
-;	move	*a8(OZPOS),a2
-;	addk	3,a2
-;	move	a2,*a9(OZPOS)
-;
-;	move	*a8(OXPOS),a2
-;	addk	3,a2
-;	add	a0,a2
-;	move	*a13(PDATA+16),a0
-;	sub	a0,a2
-;	move	a2,*a9(OXPOS)
-;
-;	move	*a8(OPLINK),a0,L
-;	move	*a0(plyr_headobj_p),a0,L
-;	move	*a0(OYPOS),a2
-;	addi	44h,a2
-;	move	*a13(PDATA+32),a0
-;	sub	a0,a2
-;	move	a2,*a9(OYPOS)
-;
-;
-;rxgwmex	SLEEPK	1
-;;	move	@HALT,a0
-;;	jrnz	rxgwmex
-;	jruc	rxgwmetop
-;
-;
-;light_t
-;	LWW	lighten1,1,10
-;	LWW	lighten2,-2,20
-;	LWW	lighten3,-5,37
-;	LWW	lighten4,2,44
-;	LWW	lighten5,4,56
-;	LWW	lighten6,4,65
-;	LWW	lighten7,1,69
-;	.long	0
-;
+ SUBR	stick_spark
+
+	movi	DMAWNZ|M_NOCOLL|M_3D|M_NOSCALE,a4
+	move	*a13(PROCID),a5			;get pid for stick img oid
+	movi	[-65,0],a1
+	movi	lighten1,a2
+	clr	a3
+	clr	a6
+	clr	a7
+	calla	BEGINOBJ2
+
+	move	a8,a9
+
+	sll	5,a11
+	addi	plyrobj_t,a11
+
+	move	*a11,a8,L			;player img to stick to
+arxgwmetop0
+	move	a9,a0
+	movi	400h,a14
+	move	a14,*a0(OYPOS)
+	calla	OBJOFF
+	movi	light_t,a10
+	movi	4*60,a0			;4*60,a0
+	calla	RNDRNG0
+	addi	30,a0			;30
+	calla	PRCSLP
+	move	a9,a0
+	calla	OBJON
+	movk	1,a0
+	move	a0,*a13(PDATA)
+arxgwmetop
+
+	move	*a13(PDATA),a0
+	dec	a0
+	move	a0,*a13(PDATA)
+	jrnz	arxgwcont
+	movk	3,a0
+	move	a0,*a13(PDATA)
+
+	move	*a10+,a0,L
+	jrz	arxgwmetop0
+	SWAP	a8,a9
+	move	*a8(OFLAGS),a1
+	calla	obj_aniq
+	SWAP	a8,a9
+	move	*a10+,a0
+	move	a0,*a13(PDATA+16)
+	move	*a10+,a0
+	move	a0,*a13(PDATA+32)
+
+arxgwcont
+
+	calla	anipt_getsclxy			;GETANIXY
+	srl	16,a0
+
+	move	*a8(OZPOS),a2
+	addk	3,a2
+	move	a2,*a9(OZPOS)
+
+	move	*a8(OXPOS),a2
+	addk	3,a2
+	add	a0,a2
+	move	*a13(PDATA+16),a0
+	sub	a0,a2
+	move	a2,*a9(OXPOS)
+
+	move	*a8(OPLINK),a0,L
+	move	*a0(plyr_headobj_p),a0,L
+	move	*a0(OYPOS),a2
+	addi	44h,a2
+	move	*a13(PDATA+32),a0
+	sub	a0,a2
+	move	a2,*a9(OYPOS)
+
+
+arxgwmex
+	SLEEPK	1
+;	move	@HALT,a0
+;	jrnz	arxgwmex
+	jruc	arxgwmetop
+
+
+light_t
+	LWW	lighten1,1,10
+	LWW	lighten2,-2,20
+	LWW	lighten3,-5,37
+	LWW	lighten4,2,44
+	LWW	lighten5,4,56
+	LWW	lighten6,4,65
+	LWW	lighten7,1,69
+	.long	0
+
 ;******************************************************************
 ;*
 ;* a10=PxDATA ram
 ;
-; SUBR	stick_spark2
-;
-;	movi	DMAWNZ|M_NOCOLL|M_3D|M_NOSCALE|M_FLIPH,a4
-;	move	*a13(PROCID),a5			;get pid for stick img oid
-;	movi	[-65,0],a1
-;	movi	lighten1,a2
-;	clr	a3
-;	clr	a6
-;	clr	a7
-;	calla	BEGINOBJ2
-;
-;	move	a8,a9
-;
-;	sll	5,a11
-;	addi	plyrobj_t,a11
-;
-;	move	*a11,a8,L			;player img to stick to
-;rxgwmetop0
-;	move	a9,a0
-;	movi	400h,a14
-;	move	a14,*a0(OYPOS)
-;	calla	OBJOFF
-;	movi	light_t,a10
-;	movi	4*60,a0			;4*60,a0
-;	calla	RNDRNG0
-;	addi	30,a0			;30
-;	calla	PRCSLP
-;	move	a9,a0
-;	calla	OBJON
-;	movk	1,a0
-;	move	a0,*a13(PDATA)
-;rxgwmetop
-;
-;	move	*a13(PDATA),a0
-;	dec	a0
-;	move	a0,*a13(PDATA)
-;	jrnz	rxgwcont
-;	movk	3,a0
-;	move	a0,*a13(PDATA)
-;
-;	move	*a10+,a0,L
-;	jrz	rxgwmetop0
-;	SWAP	a8,a9
-;	move	*a8(OFLAGS),a1
-;	calla	obj_aniq
-;	SWAP	a8,a9
-;	move	*a10+,a0
-;	move	a0,*a13(PDATA+16)
-;	move	*a10+,a0
-;	move	a0,*a13(PDATA+32)
-;
-;rxgwcont
-;
-;	calla	anipt_getsclxy			;GETANIXY
-;	srl	16,a0
-;
-;	move	*a8(OZPOS),a2
-;	addk	3,a2
-;	move	a2,*a9(OZPOS)
-;
-;	move	*a8(OXPOS),a2
-;	subk	7,a2
-;	add	a0,a2
-;	move	*a13(PDATA+16),a0
-;	add	a0,a2
-;	move	a2,*a9(OXPOS)
-;
-;	move	*a8(OPLINK),a0,L
-;	move	*a0(plyr_headobj_p),a0,L
-;	move	*a0(OYPOS),a2
-;	addi	44h,a2
-;	move	*a13(PDATA+32),a0
-;	sub	a0,a2
-;	addi	10,a2
-;	move	a2,*a9(OYPOS)
-;
-;
-;rxgwmex	SLEEPK	1
+ SUBR	stick_spark2
+
+	movi	DMAWNZ|M_NOCOLL|M_3D|M_NOSCALE|M_FLIPH,a4
+	move	*a13(PROCID),a5			;get pid for stick img oid
+	movi	[-65,0],a1
+	movi	lighten1,a2
+	clr	a3
+	clr	a6
+	clr	a7
+	calla	BEGINOBJ2
+
+	move	a8,a9
+
+	sll	5,a11
+	addi	plyrobj_t,a11
+
+	move	*a11,a8,L			;player img to stick to
+rxgwmetop0
+	move	a9,a0
+	movi	400h,a14
+	move	a14,*a0(OYPOS)
+	calla	OBJOFF
+	movi	light_t,a10
+	movi	4*60,a0			;4*60,a0
+	calla	RNDRNG0
+	addi	30,a0			;30
+	calla	PRCSLP
+	move	a9,a0
+	calla	OBJON
+	movk	1,a0
+	move	a0,*a13(PDATA)
+rxgwmetop
+
+	move	*a13(PDATA),a0
+	dec	a0
+	move	a0,*a13(PDATA)
+	jrnz	rxgwcont
+	movk	3,a0
+	move	a0,*a13(PDATA)
+
+	move	*a10+,a0,L
+	jrz	rxgwmetop0
+	SWAP	a8,a9
+	move	*a8(OFLAGS),a1
+	calla	obj_aniq
+	SWAP	a8,a9
+	move	*a10+,a0
+	move	a0,*a13(PDATA+16)
+	move	*a10+,a0
+	move	a0,*a13(PDATA+32)
+
+rxgwcont
+
+	calla	anipt_getsclxy			;GETANIXY
+	srl	16,a0
+
+	move	*a8(OZPOS),a2
+	addk	3,a2
+	move	a2,*a9(OZPOS)
+
+	move	*a8(OXPOS),a2
+	subk	7,a2
+	add	a0,a2
+	move	*a13(PDATA+16),a0
+	add	a0,a2
+	move	a2,*a9(OXPOS)
+
+	move	*a8(OPLINK),a0,L
+	move	*a0(plyr_headobj_p),a0,L
+	move	*a0(OYPOS),a2
+	addi	44h,a2
+	move	*a13(PDATA+32),a0
+	sub	a0,a2
+	addi	10,a2
+	move	a2,*a9(OYPOS)
+
+
+rxgwmex	SLEEPK	1
 ;;	move	@HALT,a0
 ;;	jrnz	rxgwmex
-;	jruc	rxgwmetop
+	jruc	rxgwmetop
 
 *********************************************************************
 * Called from main loop to update credit counters, etc.

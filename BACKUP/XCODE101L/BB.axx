@@ -64,7 +64,7 @@
 	.ref	DBV
 	.ref	VOLBTN_PRESS
 	.ref	pup_tournament
-;	.ref	RA_H
+	.ref	raiden_h			;heads here to liteningzz
 ;	.ref	EB_H,JTO_H			;RA_H
 ;DJT Start
 ;.ref removed
@@ -2166,99 +2166,99 @@ crt_pals_z
 	calla	GETPRC
 	.endif
 
-;	CREATE0	delay_sparks
+	CREATE0	delay_sparks
 	rets
 
 
-;delay_sparks
-;	.ref	stick_spark
-;	.ref	stick_spark2
-;	SLEEPK	10
-;	move	@plyrproc_t,a0,L
-;	move	*a0(plyr_attrib_p),a0,L
-;	move	*a0(PAT_HEADT_p),a0,L
-;	cmpi	RA_H,a0
-;	jrnz	offpck2
+delay_sparks
+	.ref	stick_spark
+	.ref	stick_spark2
+	SLEEPK	10
+	move	@plyrproc_t,a0,L
+	move	*a0(plyr_attrib_p),a0,L
+	move	*a0(PAT_HEADT_p),a0,L
+	cmpi	raiden_h,a0
+	jrnz	offpck2
 ;;	cmpi	EB_H,a0
 ;;	jrz	offpdoit1
 ;;	cmpi	JTO_H,a0
 ;;	jrnz	offpck2
-;
+
 ;;	move	@special_heads,a0
 ;;	cmpi	32,a0
 ;;	jrnz	offpck2
-;
-;offpdoit1	clr	a11
-;	movi	P1DATA,a10
-;	CREATE	ARWPID,stick_spark
-;	clr	a11
-;	movi	P1DATA,a10
-;	CREATE	ARWPID,stick_spark2
-;offpck2
-;	move	@plyrproc_t+32,a0,L
-;	move	*a0(plyr_attrib_p),a0,L
-;	move	*a0(PAT_HEADT_p),a0,L
-;	cmpi	RA_H,a0
-;	jrnz	offpck3
+
+offpdoit1	clr	a11
+	movi	P1DATA,a10
+	CREATE	ARWPID,stick_spark
+	clr	a11
+	movi	P1DATA,a10
+	CREATE	ARWPID,stick_spark2
+offpck2
+	move	@plyrproc_t+32,a0,L
+	move	*a0(plyr_attrib_p),a0,L
+	move	*a0(PAT_HEADT_p),a0,L
+	cmpi	raiden_h,a0
+	jrnz	offpck3
 ;;	cmpi	EB_H,a0
 ;;	jrz	offpdoit2
 ;;	cmpi	JTO_H,a0
 ;;	jrnz	offpck3
-;
+
 ;;	move	@special_heads+10h,a0
 ;;	cmpi	32,a0
 ;;	jrnz	offpck3
-;
-;offpdoit2	movk	1,a11
-;	movi	P2DATA,a10
-;	CREATE	ARWPID,stick_spark
-;	movk	1,a11
-;	movi	P2DATA,a10
-;	CREATE	ARWPID,stick_spark2
-;offpck3
-;	move	@plyrproc_t+64,a0,L
-;	move	*a0(plyr_attrib_p),a0,L
-;	move	*a0(PAT_HEADT_p),a0,L
-;	cmpi	RA_H,a0
-;	jrnz	offpck4
+
+offpdoit2	movk	1,a11
+	movi	P2DATA,a10
+	CREATE	ARWPID,stick_spark
+	movk	1,a11
+	movi	P2DATA,a10
+	CREATE	ARWPID,stick_spark2
+offpck3
+	move	@plyrproc_t+64,a0,L
+	move	*a0(plyr_attrib_p),a0,L
+	move	*a0(PAT_HEADT_p),a0,L
+	cmpi	raiden_h,a0
+	jrnz	offpck4
 ;;	cmpi	EB_H,a0
 ;;	jrz	offpdoit3
 ;;	cmpi	JTO_H,a0
 ;;	jrnz	offpck4
-;
+
 ;;	move	@special_heads+20h,a0
 ;;	cmpi	32,a0
 ;;	jrnz	offpck4
-;
-;offpdoit3	movk	2,a11
-;	movi	P3DATA,a10
-;	CREATE	ARWPID,stick_spark
-;	movk	2,a11
-;	movi	P3DATA,a10
-;	CREATE	ARWPID,stick_spark2
-;offpck4
-;	move	@plyrproc_t+96,a0,L
-;	move	*a0(plyr_attrib_p),a0,L
-;	move	*a0(PAT_HEADT_p),a0,L
-;	cmpi	RA_H,a0
+
+offpdoit3	movk	2,a11
+	movi	P3DATA,a10
+	CREATE	ARWPID,stick_spark
+	movk	2,a11
+	movi	P3DATA,a10
+	CREATE	ARWPID,stick_spark2
+offpck4
+	move	@plyrproc_t+96,a0,L
+	move	*a0(plyr_attrib_p),a0,L
+	move	*a0(PAT_HEADT_p),a0,L
+	cmpi	raiden_h,a0
+	jrnz	offpck5
+;	cmpi	EB_H,a0
+;	jrz	offpdoit4
+;	cmpi	JTO_H,a0
 ;	jrnz	offpck5
-;;	cmpi	EB_H,a0
-;;	jrz	offpdoit4
-;;	cmpi	JTO_H,a0
-;;	jrnz	offpck5
-;
-;;	move	@special_heads+30h,a0
-;;	cmpi	32,a0
-;;	jrnz	offpck5
-;
-;offpdoit4	movk	3,a11
-;	movi	P4DATA,a10
-;	CREATE	ARWPID,stick_spark
-;	movk	3,a11
-;	movi	P4DATA,a10
-;	CREATE	ARWPID,stick_spark2
-;offpck5
-;	DIE
+
+;	move	@special_heads+30h,a0
+;	cmpi	32,a0
+;	jrnz	offpck5
+
+offpdoit4	movk	3,a11
+	movi	P4DATA,a10
+	CREATE	ARWPID,stick_spark
+	movk	3,a11
+	movi	P4DATA,a10
+	CREATE	ARWPID,stick_spark2
+offpck5
+	DIE
 
 *******************************
 * Tell idiots to use turbo for running if they aren't (Process)
