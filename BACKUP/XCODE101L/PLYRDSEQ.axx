@@ -53,7 +53,11 @@
 	.ref	seq_high_dnk_spch
 	.ref	seq_low_dnk_spch
 	.ref	seq_jam_speech
-;	.ref	seq_shadow_trail
+
+	.if	SHADOWT
+	.ref	seq_shadow_trail
+	.endif
+
 ;	.ref	seq_alleyoop_speech
 	.ref	goes_up_sp
 	.ref	tks2_hoop_sp
@@ -686,7 +690,9 @@ uvgq2
 	WLLW	-1,seq_strtdunk,M1SPDU18,73	;Next frame begins elevation
 	WLW	-1,seq_jam_speech,JAM_EASY	;Anncr excitement level
 	WL	-1,seq_high_dnk_spch
-;	WLL	-1,seq_shadow_trail,[7,15]   	;rate,cnt til delete
+	.if	SHADOWT
+	WLL	-1,seq_shadow_trail,[7,15]   	;rate,cnt til delete
+	.endif
 	WLW	3,M1SPDU2,F
 	WLW	3,M1SPDU3,F
 	WLW	3,M1SPDU4,F
@@ -734,6 +740,9 @@ vhvj2
 	WLLW	-1,seq_strtdunk,M1SPDU17,36	;Next frame begins elevation
 vhvj1a	WLW	-1,seq_jam_speech,JAM_EASY	;Anncr excitement level
 	WL	-1,seq_low_dnk_spch
+	.if	SHADOWT
+	WLL	-1,seq_shadow_trail,[7,15]   	;rate,cnt til delete
+	.endif
 	WLW	3,M1SPDU2,F
 	WLW	3,M1SPDU3,F
 	WLW	3,M1SPDU4,F
@@ -780,6 +789,9 @@ ebta2
 	WLLW	-1,seq_strtdunk,M1SPDU17,25	;Next frame begins elevation
 ebta1a	WLW	-1,seq_jam_speech,JAM_EASY	;Anncr excitement level
 	WL	-1,seq_low_dnk_spch
+	.if	SHADOWT
+	WLL	-1,seq_shadow_trail,[7,15]   	;rate,cnt til delete
+	.endif
 	WLW	2,M1SPDU2,F
 	WLW	1,M1SPDU3,F
 	WLW	2,M1SPDU4,F
@@ -822,6 +834,9 @@ igbm3
 	WLLW	-1,seq_strtdunk,M3TUKDU14,70
 	WLW	-1,seq_jam_speech,JAM_EASY
 	WL	-1,seq_high_dnk_spch
+	.if	SHADOWT
+	WLL	-1,seq_shadow_trail,[7,15]   	;rate,cnt til delete
+	.endif
 	WLW	3,M3TUKDU2,F
 	WLW	3,M3TUKDU3,F
 	WLW	3,M3TUKDU4,F
@@ -860,6 +875,9 @@ sfau3
 	WLLW	-1,seq_strtdunk,M3TUKDU14,59
 	WLW	-1,seq_jam_speech,JAM_EASY
 	WL	-1,seq_low_dnk_spch
+	.if	SHADOWT
+	WLL	-1,seq_shadow_trail,[7,15]   	;rate,cnt til delete
+	.endif
 	WLW	3,M3TUKDU2,F
 	WLW	3,M3TUKDU3,F
 	WLW	3,M3TUKDU4,F
@@ -897,6 +915,9 @@ dvoi1
 	WLLW	-1,seq_strtdunk,M2DKDU7,85
 	WLW	-1,seq_jam_speech,JAM_MED
 	WL	-1,seq_high_dnk_spch
+	.if	SHADOWT
+	WLL	-1,seq_shadow_trail,[7,15]   	;rate,cnt til delete
+	.endif
 	WLW	3,M2DKDU2,F
 	WLW	3,M2DKDU3,F
 	WLW	3,M2DKDU4,F
@@ -922,6 +943,9 @@ dvoi2
 	WLLW	-1,seq_strtdunk,M2DKDU8,75
 	WLW	-1,seq_jam_speech,JAM_MED
 	WL	-1,seq_high_dnk_spch
+	.if	SHADOWT
+	WLL	-1,seq_shadow_trail,[7,15]   	;rate,cnt til delete
+	.endif
 	WLW	3,M2DKDU2,F
 	WLW	3,M2DKDU3,F
 	WLW	3,M2DKDU4,F
@@ -957,6 +981,9 @@ tcbs1
 	WLLW	-1,seq_strtdunk,M2DKDU7,42
 	WLW	-1,seq_jam_speech,JAM_MED
 	WL	-1,seq_low_dnk_spch
+	.if	SHADOWT
+	WLL	-1,seq_shadow_trail,[7,15]   	;rate,cnt til delete
+	.endif
 	WLW	3,M2DKDU2,F
 	WLW	3,M2DKDU3,F
 	WLW	3,M2DKDU4,F
@@ -1021,6 +1048,9 @@ ncju4
 	WLLW	-1,seq_strtdunk,M3SPRDU9,74
 	WLW	-1,seq_jam_speech,JAM_GOOD
 	WL	-1,seq_high_dnk_spch
+	.if	SHADOWT
+	WLL	-1,seq_shadow_trail,[7,15]   	;rate,cnt til delete
+	.endif
 	WLW	3,M3SPRDU2,F
 	WLW	3,M3SPRDU3,F
 	WLW	3,M3SPRDU4,F
@@ -1195,6 +1225,9 @@ titd4
 	WLLW	-1,seq_strtdunk,S3BKDU14,78
 	WLW	-1,seq_jam_speech,JAM_MED
 	WL	-1,seq_high_dnk_spch
+	.if	SHADOWT
+	WLL	-1,seq_shadow_trail,[7,15]   	;rate,cnt til delete
+	.endif
 	WLW	3,S3BKDU2,F
 	WLW	3,S3BKDU2,F
 	WLW	3,S3BKDU3,F
@@ -1233,6 +1266,9 @@ dhsk4
 	WLLW	-1,seq_strtdunk,S3BKDU14,89
 	WLW	-1,seq_jam_speech,JAM_GOOD
 	WL	-1,seq_high_dnk_spch
+	.if	SHADOWT
+	WLL	-1,seq_shadow_trail,[7,15]   	;rate,cnt til delete
+	.endif
 	WLW	3,S3BKDU2,F
 	WLW	3,S3BKDU2,F
 	WLW	3,S3BKDU3,F
@@ -1270,6 +1306,9 @@ qcdn4
 	WLLW	-1,seq_strtdunk,W3SPRDU14,87
 	WLW	-1,seq_jam_speech,JAM_GREAT
 	WL	-1,seq_high_dnk_spch
+	.if	SHADOWT
+	WLL	-1,seq_shadow_trail,[7,15]   	;rate,cnt til delete
+	.endif
 	WLW	3,W3SPRDU2,F
 	WLW	3,W3SPRDU3,F
 	WLW	3,W3SPRDU4,F
@@ -1307,6 +1346,9 @@ zgto4
 	WLLW	-1,seq_strtdunk,W3SPRDU14,67
 	WLW	-1,seq_jam_speech,JAM_GOOD
 	WL	-1,seq_low_dnk_spch
+	.if	SHADOWT
+	WLL	-1,seq_shadow_trail,[7,15]   	;rate,cnt til delete
+	.endif
 	WLW	3,W3SPRDU2,F
 	WLW	3,W3SPRDU3,F
 	WLW	3,W3SPRDU4,F
@@ -1349,6 +1391,9 @@ pqzn3
 	WLLW	-1,seq_strtdunk,W3SPNDU19,58
 	WLW	-1,seq_jam_speech,JAM_GREAT
 	WL	-1,seq_low_dnk_spch
+	.if	SHADOWT
+	WLL	-1,seq_shadow_trail,[7,15]   	;rate,cnt til delete
+	.endif
 	WLW	3,W3SPNDU2,F
 	WLW	3,W3SPNDU3,F
 	WLW	3,W3SPNDU4,F
@@ -1401,6 +1446,9 @@ myex4
 	WLLW	-1,seq_strtdunk,W3SPNDU19,84
 	WLW	-1,seq_jam_speech,JAM_GREAT
 	WL	-1,seq_high_dnk_spch
+	.if	SHADOWT
+	WLL	-1,seq_shadow_trail,[7,15]   	;rate,cnt til delete
+	.endif
 	WLW	3,W3SPNDU2,F
 	WLW	3,W3SPNDU3,F
 	WLW	3,W3SPNDU4,F
@@ -1443,6 +1491,9 @@ peyb3
 	WLLW	-1,seq_strtdunk,W3SMDU9,86
 	WLW	-1,seq_jam_speech,JAM_GOOD
 	WL	-1,seq_high_dnk_spch
+	.if	SHADOWT
+	WLL	-1,seq_shadow_trail,[7,15]   	;rate,cnt til delete
+	.endif
 	WLW	3,W3SMDU2,F
 	WLW	3,W3SMDU3,F
 	WLW	3,W3SMDU4,F
@@ -1617,6 +1668,9 @@ yxrn3
 	WLLW	-1,seq_strtdunk,W3FLDU12,90
 	WLW	-1,seq_jam_speech,JAM_GOOD
 	WL	-1,seq_high_dnk_spch
+	.if	SHADOWT
+	WLL	-1,seq_shadow_trail,[7,15]   	;rate,cnt til delete
+	.endif
 	WLW	3,W3FLDU1,F
 	WLW	61,W3FLDU2,F
 	WLW	3,W3FLDU3,F

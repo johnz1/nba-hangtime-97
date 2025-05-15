@@ -5447,8 +5447,13 @@ sloutstdnk
 ;	jreq	slousmk
 ;	cmpi	DUNKX3_SEQ,a2
 ;	jrne	slounosmk
-;slousmk	CREATE0	plyr_smoketrail
-;	move	a13,*a0(PA10),L
+
+	.if	SMOKET
+	.ref	plyr_smoketrail
+slousmk	CREATE0	plyr_smoketrail
+	move	a13,*a0(PA10),L
+	.endif
+
 slounosmk	move	a2,a0
 
 slouqucklay

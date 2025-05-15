@@ -1,0 +1,11 @@
+- Smoke and shadown trails were planned, and in debug stage.
+
+In plyrdseq.axx .ref seq_shadow_trail
+Commented in dunka_t (medium rng dunks)
+;	WLL	-1,seq_shadow_trail,[7,15]   	;rate,cnt til delete
+
+in plyr2.axx as a SUBR, it's not commented, so bytes are used.
+Proper def/ref and it is working. However, player PAL is wrong.
+I've added it to a bunch of dunks as test.
+
+SHADOWT .equ 0 or 1 in SYS.EQU to try it!

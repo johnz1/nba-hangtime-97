@@ -1,0 +1,29 @@
+- Smoke and shadown trails were planned, and in debug stage.
+
+In plyr.axx behind .if debug near 'start animate'
+
+;slousmk	CREATE0	plyr_smoketrail
+
+in plyr3, behind if 0 (disabled)
+
+plyr_smoketrail 	(15 puffs)
+plyr_smoketrail2 	(20 puffs?)
+
+plyr_smokepuff
+
+if enabled it needs CLDB1ORNG which is in imgtbl.asm and .glo so already in 
+the GFX assets, but unused. (We can compile now.)
+
+Testing shows a garbled bunch of gfx on all dunks now. :)
+
+These are loaded in misc.lod at irw image creation.
+CLDB1WHT,CLDB1ORNG,CLDB1LGRY,CLDB1GRN,CLDB1PURP
+They're old images from Jam.
+
+smoke_t was reused for the ball trails when on fire / team fire etc.
+so the puff routine starts with the wrong image/pal and it looks bad.
+
+Fixed it by starting with SMOK1_01 but it looks wierd, animation table
+might be wrong for the routine as it's from Jam.
+
+Can be toggled in SYS.EQU now.

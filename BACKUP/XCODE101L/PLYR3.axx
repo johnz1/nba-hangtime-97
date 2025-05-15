@@ -249,6 +249,10 @@
 	.def	plr_heads_small,plr_heads_small_end
 	.def	SM_HEADS_CNT
 
+	.if	SMOKET
+	.def	plyr_smoketrail
+	.endif
+
 
 ;uninitialized ram definitions
 
@@ -3564,7 +3568,7 @@ aiuymv_t
 
 ;--------------------
 
-	.if	0		;plyr smoketrail .if 0
+	.if	SMOKET		;plyr smoketrail .if 0
 
 *******************************
 * Smoke trail (Process)
@@ -3638,7 +3642,10 @@ yzjilp	CREATE0	plyr_smokepuff
 	add	a2,a1			;+YO
 	sll	16,a0			;X
 	sll	16,a1			;Y
-	movi	CLDB1ORNG,a2
+; CLDB1WHT,CLDB1ORNG,CLDB1LGRY,CLDB1GRN,CLDB1PURP are also available.
+;	.ref	CLDB1WHT		;AMM add .ref
+;	movi	CLDB1WHT,a2		;these are old from NBA Jam!
+	movi	SMOK1_01,a2
 	movi	DMAWNZ|M_3D|M_NOCOLL,a4	;No collisions
 	movi	CLSDEAD,a5
 	calla	BEGINOBJ2

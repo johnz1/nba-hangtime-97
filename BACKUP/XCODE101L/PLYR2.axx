@@ -126,6 +126,11 @@
 
 	.def	hoopl_t,hoopr_t
 
+	.if	SHADOWT
+	.def	seq_shadow_trail
+	.endif
+
+
 
 ;uninitialized ram definitions
 
@@ -4043,6 +4048,8 @@ ykhznsq2
 * A13=*PxCTRL
 * B4=*Next data in seq list
 
+	.if	SHADOWT
+
  SUBR	seq_shadow_trail
 
 	PUSH	a10,a11
@@ -4158,6 +4165,8 @@ pt_1
 	move	a9,a8
 	calla	DELOBJA8		;delete player head
 	DIE
+
+	.endif
 
 *****************************************
 * Sequence - adjust players X,Y, and/or Z
