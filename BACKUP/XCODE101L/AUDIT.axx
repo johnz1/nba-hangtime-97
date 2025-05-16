@@ -3056,8 +3056,8 @@ FACTORY_TABLE
 ;	.word	3	;ADJWINMODE	27	;(winner stays free)
 	.word	0	;ADJCOMPASS	28	;computer assistance (0=on)
 	.word	1	;ADJTOURNEY	29	;Tournament mode (0=on)
-	.word	30	;ADJVOLUME	30	;sound volume (4-255)
-	.word	30	;ADJAVOLUME	31	;sound volume (4-255)
+	.word	200	;ADJVOLUME	30	;sound volume (4-255)
+	.word	50	;ADJAVOLUME	31	;sound volume (4-255)
 	.word	0	;ADJTRIVIA	32
 	.WORD	0	;CUSTOM TOTALIZER  33
 	.WORD	1	;TOTALIZER CHUTE 1  34
@@ -3068,8 +3068,11 @@ FACTORY_TABLE
 	.WORD 	1	;SHATTER BB	39	;Shattering of backboard en/disabled.
 	.WORD   1	;HANGTIME FIG	40	;Rubberbanding type
 	.WORD	1	;ADJIDIOT	41	;Idiot boxes en/disabled.
-	.WORD	1	;ADJABA		42	;Basketball Type.
-	;LAST_ADJUST	equ	41
+	.WORD	1	;ADJABA		42	;Basketball Type
+	.WORD	1	;ADJBABY	43	;Baby sized players
+	.WORD	1	;ADJHUGE	44	;Huge Head Mode (Funko pop style)
+	.WORD	1	;ADJHSPOT	45	;Show Hotspot
+	;LAST_ADJUST	equ	44
 
 
 **

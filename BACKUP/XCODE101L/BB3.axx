@@ -3663,6 +3663,47 @@ sp_cmos
 sp_cmoslp
 	clr	a11
 
+;check baby
+sp_cmos_1
+	movi	ADJBABY,a0		;Get value from CMOS
+	calla	GET_ADJ			;0-1
+	jrnz	sp_cmos_2		;Off? 
+
+	movk	3,a0
+	.ref	pup_baby
+	move	a0,@pup_baby		;3 works.
+
+;check hugehead
+sp_cmos_2
+	movi	ADJHUGE,a0		;Get value from CMOS
+	calla	GET_ADJ			;0-1
+	jrnz	sp_cmos_3		;Off? 
+
+;a9=0-3 for player
+	move	@pup_hugehead,a0
+	movk	1,a1
+	sll	a9,a1
+	or	a1,a0
+	move	a0,@pup_hugehead
+	move	@pup_bighead,a0
+	andn	a1,a0
+	move	a0,@pup_bighead
+
+;check hotspots
+sp_cmos_3
+	movi	ADJHSPOT,a0		;Get value from CMOS
+	calla	GET_ADJ			;0-1
+	jrnz	sp_cmos_4		;Off? 
+
+	move	@pup_showhotspots,a0
+	movk	1,a1
+	sll	a9,a1
+	or	a1,a0
+	move	a0,@pup_showhotspots
+
+* Can't combine big and huge. (Huge wins.)
+;check ball type
+sp_cmos_4
 	movi	ADJABA,a0		;Get value from CMOS
 	calla	GET_ADJ			;0-1
 	jrnz	sp_cmos_end		;Off? 
