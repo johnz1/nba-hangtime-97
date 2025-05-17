@@ -48,5 +48,10 @@ fence:
 	.long   0926ff41H
 	.word   06180H
 	.long   fence_p
+FALL2_vda:
+	.word   89,96,0,0
+	.long   09283c1dH
+	.word   06a80H
+	.long   FALL2P
 	.TEXT
 

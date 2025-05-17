@@ -40,6 +40,9 @@ OUTDOOR.IMG
 ---> STORM02,STORM03,STORM04,STORM05,STORM06,STORM07,STORM08,STORM09,STORM10,STORM11,STORM12
 PON>
 ---> fence
+;MK3 temple to go along with the animated storm.
+MKSTREET.IMG
+---> FALL2_vda
 POF>
 PON>
 ;Let's get the glass shard shatter stuff from Jam TE
@@ -97,6 +100,8 @@ Jordan.img
 ---> JORDAN1,JORDAN2,JORDAN3,JORDAN4,JORDAN5,JORDAN6
 ---> JORDAN7,JORDAN8,JORDAN9,JORDAN10,JORDAN11,JORDAN12
 ---> JORDAN13,JORDAN14,JORDAN15,JORDAN16
+kobeai.img
+---> KOBE01,KOBE02,KOBE03,KOBE04,KOBE05,KOBE16
 ;
 ; New mugs here
 ; Mugs go into mugshot.glo / mugshot.tbl, so copypaste output there manualy

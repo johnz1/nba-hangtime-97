@@ -158,6 +158,7 @@
 	.bss	shangobj,32	;Indoor crt MK Shang obj
 	.bss	shanglook,32	;1 / 0 shang clap or look
 	.endif
+	.bss	templeobj,32	;outdoor crt MK temple obj
 
 
 *******************************
@@ -921,6 +922,11 @@ whcqinit_otd_t
 	.long	STORM01
 	WL	4002,stormobj
 
+	.word	SXO-28+360-74h+88,10,Z,0,0
+	.long	FALL2_vda
+	WL	4002,templeobj
+
+
 
 	.word	4000			;End
 
@@ -1125,6 +1131,7 @@ whcqbbp5	move	*a1+,*a2+
 	move	@city3obj,a11,L
 	move	@moonobj,a8,L
 	move	@stormobj,a0,L
+	move	@templeobj,a0,L
 	move	*a0(OXPOS),*a13(PDATA+96)
 
 	move	@P1CTRL,a0
@@ -1147,6 +1154,8 @@ whcqbbp5	move	*a1+,*a2+
 ;Turn off MK storm image
 	move	@stormobj,a0,L
 	.ref	OBJOFF
+	calla	OBJOFF
+	move	@templeobj,a0,L
 	calla	OBJOFF
 	jruc	icxlok2
 icxlok
@@ -1249,7 +1258,7 @@ anstrm_2
 ;
 storm_frame_table
 	.long	STORM01				;This one comes from OUTDOOR.TBL
-	.long	STORM02				;The res comes from STORM.TBL
+	.long	STORM02				;The rest comes from STORM.TBL
 	.long	STORM03
 	.long	STORM04
 	.long	STORM05
@@ -2233,6 +2242,18 @@ HOT_Y_P:
 	.word	 16
 	.word	00H,07E60H,07EC0H,07EE4H,07F29H,07F4DH,07F92H,07FB7H
 	.word	07FFFH,07FFFH,07FB7H,07F71H,07F4BH,07F05H,07EC0H,07E60H
+
+FALL2P:
+	.word	 63
+	.word	00H,0C62H,020C4H,024C4H,01483H,020A3H,0C42H,0C41H
+	.word	01062H,028C4H,01042H,028E4H,01462H,024E4H,01883H,01482H
+	.word	01041H,01882H,01CA3H,028E5H,02D06H,01C83H,020A4H,024E5H
+	.word	01C82H,0418BH,020C3H,02C00H,024C3H,0820H,03041H,01CA2H
+	.word	020A2H,028E3H,03124H,03523H,03126H,03D43H,03943H,02CE3H
+	.word	04163H,04583H,04983H,02D03H,04DA3H,059E3H,03103H,055C3H
+	.word	051C3H,05E03H,06623H,06A43H,07FE7H,07F45H,07FF1H,0772CH
+	.word	06EE5H,03923H,034E3H,03903H,048E3H,05EECH,07DA0H
+
 
 
 *******************************
