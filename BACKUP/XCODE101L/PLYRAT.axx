@@ -299,6 +299,7 @@
 	.ref	reptil_h
 	.ref	smok_h
 	.ref	jordan_h
+	.ref	kobe_h
 
 ;symbols refined in this file
 
@@ -1007,10 +1008,19 @@ LAL_t
 	.long	CEBALL_F, UN_LALP_P,UN_LALS_P, TR_LALP_P,TR_LALS_P,Ceballos_h
 	.word	2,3,8,0
 	.long	SW_LALP_P,SW_LALS_P,VP_LALP_P,VP_LALS_P
-	LWWWWWW	scale64f_t,BV7,SHT8,DNK1,DEF3,SDEF4,DSKL0
-	.long	Scott_f, UN_LALP_P,UN_LALS_P, TR_LALP_P,TR_LALS_P,Scott_h
-	.word	4,4,9,14
-	.long	SW_LALP_P,SW_LALS_P,VP_LALP_P,VP_LALS_P
+
+;Removed: Scott
+;	LWWWWWW	scale64f_t,BV7,SHT8,DNK1,DEF3,SDEF4,DSKL0
+;	.long	Scott_f, UN_LALP_P,UN_LALS_P, TR_LALP_P,TR_LALS_P,Scott_h
+;	.word	4,4,9,14
+;	.long	SW_LALP_P,SW_LALS_P,VP_LALP_P,VP_LALS_P
+
+;Added: Kobe Bryant (N64 stats)
+	LWWWWWW	scale610_t,BV7,SHT6,DNK6,DEF6,SDEF5,DSKL_4	;Can not shatter!!
+	.long	NFL55_p, UN_LALP_P,UN_LALS_P, TR_LALP_P,TR_LALS_P,kobe_h
+	.word	8,3,8,17
+	.long	SW_LALP_P,SW_LALS_P,VP_LALP_P,VP_LALS_P		
+
 	LWWWWWW	scale611_t,BV6,SHT5,DNK6,DEF9,SDEF8,DSKL5
 	.long	CAMP_F, UN_LALP_P,UN_LALS_P, TR_LALP_P,TR_LALS_P,Campbell_h
 	.word	1,5,3,7

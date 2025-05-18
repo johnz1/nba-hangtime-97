@@ -29,5 +29,10 @@ JORDAN:
 	.long   0936f75aH
 	.word   03000H
 	.long   BAST_Y_P
+BRYANT:
+	.word   43,9,21,0
+	.long   0936fbc8H
+	.word   03000H
+	.long   BAST_Y_P
 	.TEXT
 

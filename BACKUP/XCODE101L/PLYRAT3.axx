@@ -224,6 +224,7 @@
 	.def	reptil_h
 	.def	smok_h
 	.def	jordan_h
+	.def	kobe_h
 	.text
 
 ;; MARKER
@@ -246,6 +247,10 @@ smok_h
 	
 jordan_h	
 	HDMAC	JORDAN1
+
+kobe_h
+	HDMAC2	KOBE01  ; 5-head Kobe.	
+
 
 heithb_h
 	HDMAC2	HEITH01

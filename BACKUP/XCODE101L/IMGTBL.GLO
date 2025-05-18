@@ -8,6 +8,7 @@
 	.global SUBZER
 	.global SM0K3
 	.global JORDAN
+	.global BRYANT
 ;
 	.globl	DIAGP
 	.globl	crtwrk_p
