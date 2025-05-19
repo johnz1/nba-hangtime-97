@@ -742,7 +742,7 @@ CHAR_t
 
 CHI_t
 ;Addded: Jordan
-	LWWWWWW	scale611_t,BV8,SHT6,DNK10,DEF7,SDEF7,DSKL5
+	LWWWWWW	scale66_t,BV8,SHT6,DNK10,DEF7,SDEF7,DSKL5
 	.long	Mutumbo_f, UN_CHIP_P,UN_CHIS_P, TR_CHIP_P,TR_CHIS_P,jordan_h
 	.word	8,8,7,6
 	.long	SW_CHIP_P,SW_CHIS_P,VP_CHIP_P,VP_CHIS_P
@@ -1003,7 +1003,7 @@ LAC_t
 
 LAL_t
 ;Added: Kobe Bryant (N64 stats)
-	LWWWWWW	scale610_t,BV7,SHT6,DNK6,DEF6,SDEF5,DSKL_4	;Can not shatter!!
+	LWWWWWW	scale66_t,BV7,SHT6,DNK6,DEF6,SDEF5,DSKL_4	;Can not shatter!!
 	.long	NFL55_p, UN_LALP_P,UN_LALS_P, TR_LALP_P,TR_LALS_P,kobe_h
 	.word	8,3,8,17
 	.long	SW_LALP_P,SW_LALS_P,VP_LALP_P,VP_LALS_P	
