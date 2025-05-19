@@ -15,6 +15,8 @@ Stream Scorpion "JAM_Scorpion.wav";	//
 Stream Subzero "JAM_Sub-zero.wav";	//
 Stream Smoke "JAM_Smoke.wav";
 Stream Jordan "Jordan.wav";
+Stream Kobe "Kobe.wav";
+Stream Kobe_Bryant "Kobe_Bryant.wav";
 
 // last used call 07BF ?
 
@@ -129,5 +131,24 @@ Track $07bf channel 5 {
     SetMixingLevel(level 111);
     Play(stream $1CC03A);
     Wait(15) Play(Jordan);
+    Wait(Stream);         
+};
+// Kobe
+Track $0b57 channel 5 {
+    SetMixingLevel(level 111);   // always set the mixing level for a new track
+    Play(Kobe);       // start an audio clip
+    Wait(Stream);          // ...and wait for it to finish before exiting
+};
+// Kobe Bryant
+Track $0b58 channel 5 {
+    SetMixingLevel(level 111);   // always set the mixing level for a new track
+    Play(Kobe_Bryant);       // start an audio clip
+    Wait(Stream);          // ...and wait for it to finish before exiting
+};
+//To Kobe
+Track $07C0 channel 5 {
+    SetMixingLevel(level 111);
+    Play(stream $1CC03A);
+    Wait(15) Play(Kobe);
     Wait(Stream);         
 };

@@ -1000,10 +1000,17 @@ LAC_t
 ;Pri swipe pal, Alt swipe pal, Pri vertical panel pal, Alt vertical panel pal
 
 LAL_t
+;Added: Kobe Bryant (N64 stats)
+	LWWWWWW	scale610_t,BV7,SHT6,DNK6,DEF6,SDEF5,DSKL_4	;Can not shatter!!
+	.long	NFL55_p, UN_LALP_P,UN_LALS_P, TR_LALP_P,TR_LALS_P,kobe_h
+	.word	8,3,8,17
+	.long	SW_LALP_P,SW_LALS_P,VP_LALP_P,VP_LALS_P	
+	
 	LWWWWWW	scale61_t,BV10,SHT7,DNK1,DEF1,SDEF6,DSKL5
 	.long	EXEL_F, UN_LALP_P,UN_LALS_P, TR_LALP_P,TR_LALS_P,Vanexel_h
 	.word	8,2,9,3
 	.long	SW_LALP_P,SW_LALS_P,VP_LALP_P,VP_LALS_P
+	
 	LWWWWWW	scale67_t,BV8,SHT9,DNK7,DEF2,SDEF8,DSKL5
 	.long	CEBALL_F, UN_LALP_P,UN_LALS_P, TR_LALP_P,TR_LALS_P,Ceballos_h
 	.word	2,3,8,0
@@ -1014,17 +1021,12 @@ LAL_t
 ;	.long	Scott_f, UN_LALP_P,UN_LALS_P, TR_LALP_P,TR_LALS_P,Scott_h
 ;	.word	4,4,9,14
 ;	.long	SW_LALP_P,SW_LALS_P,VP_LALP_P,VP_LALS_P
-
-;Added: Kobe Bryant (N64 stats)
-	LWWWWWW	scale610_t,BV7,SHT6,DNK6,DEF6,SDEF5,DSKL_4	;Can not shatter!!
-	.long	NFL55_p, UN_LALP_P,UN_LALS_P, TR_LALP_P,TR_LALS_P,kobe_h
-	.word	8,3,8,17
-	.long	SW_LALP_P,SW_LALS_P,VP_LALP_P,VP_LALS_P		
-
+	
 	LWWWWWW	scale611_t,BV6,SHT5,DNK6,DEF9,SDEF8,DSKL5
 	.long	CAMP_F, UN_LALP_P,UN_LALS_P, TR_LALP_P,TR_LALS_P,Campbell_h
 	.word	1,5,3,7
 	.long	SW_LALP_P,SW_LALS_P,VP_LALP_P,VP_LALS_P
+	
 	LWWWWWW	scale66_t,BV8,SHT7,DNK5,DEF7,SDEF4,DSKL5
 	.long	EJONES_F, UN_LALP_P,UN_LALS_P, TR_LALP_P,TR_LALS_P,Ejones_h
 	.word	8,4,2,7
