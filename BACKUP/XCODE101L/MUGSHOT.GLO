@@ -459,3 +459,5 @@
 	.global	SUB_MK2
 	.globl	JOR_MUGP
 	.global	JOR_MUG
+	.globl	ONE_LALP
+	.global	ONE_LAL

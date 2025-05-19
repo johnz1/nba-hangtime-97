@@ -67,6 +67,7 @@
 	.def	SMOK_P
 	.def	JORDAN_P
 	.def	KOBE01P
+	.def	ONEAL_P
 
 ;AMM end
 

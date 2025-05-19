@@ -18,6 +18,8 @@ Stream Jordan "Jordan.wav";
 Stream Michael_Jordan "Michael_Jordan.wav";
 Stream Kobe "Kobe.wav";
 Stream Kobe_Bryant "Kobe_Bryant.wav";
+Stream Oneal "Oneal.wav";
+Stream Shaq_Oneal "Shaq_Oneal.wav";
 
 // last used call 07BF ?
 
@@ -133,7 +135,7 @@ Track $0b59 channel 5 {
     Play(Michael_Jordan);       // start an audio clip
     Wait(Stream);          // ...and wait for it to finish before exiting
 };
-//To Jordan
+// To Jordan
 Track $07bf channel 5 {
     SetMixingLevel(level 111);
     Play(stream $1CC03A);
@@ -152,10 +154,29 @@ Track $0b58 channel 5 {
     Play(Kobe_Bryant);       // start an audio clip
     Wait(Stream);          // ...and wait for it to finish before exiting
 };
-//To Kobe
+// To Kobe
 Track $07C0 channel 5 {
     SetMixingLevel(level 111);
     Play(stream $1CC03A);
     Wait(15) Play(Kobe);
+    Wait(Stream);         
+};
+// O'Neal
+Track $0b60 channel 5 {
+    SetMixingLevel(level 111);   // always set the mixing level for a new track
+    Play(Oneal);       // start an audio clip
+    Wait(Stream);          // ...and wait for it to finish before exiting
+};
+// Shaq O'Neal
+Track $0b61 channel 5 {
+    SetMixingLevel(level 111);   // always set the mixing level for a new track
+    Play(Shaq_Oneal);       // start an audio clip
+    Wait(Stream);          // ...and wait for it to finish before exiting
+};
+// To O'Neal
+Track $07C1 channel 5 {
+    SetMixingLevel(level 111);
+    Play(stream $1CC03A);
+    Wait(15) Play(Oneal);
     Wait(Stream);         
 };

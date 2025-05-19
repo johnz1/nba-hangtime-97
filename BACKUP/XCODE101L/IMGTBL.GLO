@@ -9,6 +9,7 @@
 	.global SM0K3
 	.global JORDAN
 	.global BRYANT
+	.global	ONEAL
 ;
 	.globl	DIAGP
 	.globl	crtwrk_p

@@ -309,5 +309,85 @@ KOBE16:
 	.long   0934d807H
 	.word   06000H
 	.long   KOBE01P
+ONEAL01:
+	.word   29,34,13,30
+	.long   0934f583H
+	.word   06000H
+	.long   ONEAL_P
+ONEAL02:
+	.word   28,32,11,29
+	.long   09350c9fH
+	.word   06000H
+	.long   ONEAL_P
+ONEAL03:
+	.word   31,37,8,33
+	.long   0935219fH
+	.word   06000H
+	.long   ONEAL_P
+ONEAL04:
+	.word   29,37,9,34
+	.long   09353c81H
+	.word   06000H
+	.long   ONEAL_P
+ONEAL05:
+	.word   27,36,13,32
+	.long   093555a7H
+	.word   06000H
+	.long   ONEAL_P
+ONEAL06:
+	.word   33,33,20,28
+	.long   09356c6fH
+	.word   06000H
+	.long   ONEAL_P
+ONEAL07:
+	.word   33,34,9,31
+	.long   093585f5H
+	.word   06000H
+	.long   ONEAL_P
+ONEAL08:
+	.word   34,41,8,32
+	.long   0935a041H
+	.word   06000H
+	.long   ONEAL_P
+ONEAL09:
+	.word   31,39,8,34
+	.long   0935c0edH
+	.word   06000H
+	.long   ONEAL_P
+ONEAL10:
+	.word   29,36,13,31
+	.long   0935dd43H
+	.word   06000H
+	.long   ONEAL_P
+ONEAL11:
+	.word   27,28,11,21
+	.long   0935f5bbH
+	.word   06000H
+	.long   ONEAL_P
+ONEAL12:
+	.word   35,34,20,30
+	.long   09360773H
+	.word   06000H
+	.long   ONEAL_P
+ONEAL13:
+	.word   38,34,19,29
+	.long   09362357H
+	.word   06000H
+	.long   ONEAL_P
+ONEAL14:
+	.word   30,35,14,31
+	.long   0936419fH
+	.word   06000H
+	.long   ONEAL_P
+ONEAL15:
+	.word   28,36,14,32
+	.long   09365a3bH
+	.word   06000H
+	.long   ONEAL_P
+ONEAL16:
+	.word   38,29,35,22
+	.long   093671dbH
+	.word   06000H
+	.long   ONEAL_P
 	.TEXT
 

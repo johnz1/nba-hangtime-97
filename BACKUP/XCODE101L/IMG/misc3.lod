@@ -102,6 +102,10 @@ Jordan.img
 ---> JORDAN13,JORDAN14,JORDAN15,JORDAN16
 kobeai.img
 ---> KOBE01,KOBE02,KOBE03,KOBE04,KOBE05,KOBE16
+Shaq.img
+---> ONEAL01,ONEAL02,ONEAL03,ONEAL04,ONEAL05,ONEAL06
+---> ONEAL07,ONEAL08,ONEAL09,ONEAL10,ONEAL11,ONEAL12
+---> ONEAL13,ONEAL14,ONEAL15,ONEAL16
 ;
 ; New mugs here
 ; Mugs go into mugshot.glo / mugshot.tbl, so copypaste output there manualy
@@ -120,6 +124,8 @@ nmugs.img
 ---> SCO_MK2,REP_MK2,SUB_MK2
 Jordan.img
 ---> JOR_MUG
+Shaq.img
+---> ONE_LAL
 ;
 ; New nameplates here. 
 ; Nameplates go into imgtbl.axx !AND! imgtbl.glo 
@@ -132,7 +138,7 @@ PON>
 CON>
 XON>
 ZOF>
----> RAIDEN,SCORPION,SUBZER,REPTILE,SM0K3,JORDAN,BRYANT
+---> RAIDEN,SCORPION,SUBZER,REPTILE,SM0K3,JORDAN,BRYANT,ONEAL
 ;
 ; 
 ;

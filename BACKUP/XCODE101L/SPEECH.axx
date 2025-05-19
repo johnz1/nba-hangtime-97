@@ -773,10 +773,12 @@ full_name_speech
 ;.word	0100DH,56,1958	;SCOTT,       byron
 ;Kobe Bryant - Full Name Speech
  .word	0100DH,56,0B58h	;BRYANT,      kobe
+;Shaquille O'Neal - Full Name Speech 
+ .word	0100DH,68,0B61h	;ONEAL,       shaquille
  .word	0100DH,76,1540	;VAN EXEL,    nick		( LAKERS )
  .word	0100DH,83,1548	;CEBALLOS,    cedric
  .word	0100DH,62,1552	;CAMPBELL,    elden
- .word	0100DH,68,1556	;JONES,       eddie
+;.word	0100DH,68,1556	;JONES,       eddie
 
  .word	0100DH,97,1560	;MOURNING,    alonzo		( MIAMI )
  .word	0100DH,80,1460	;HARDAWAY,    tim		
@@ -965,10 +967,11 @@ pass_speech		;'TO player name'
 
 ;.word	0100DH,40,1960	;to SCOTT,       byron
  .word	0100DH,40,07C0h	;to BRYANT,      kobe
+ .word	0100DH,49,07C1h	;to ONEAL,       shaquille
  .word	0100DH,54,1543	;to VAN EXEL,    nick		( LAKERS )
  .word	0100DH,54,1551	;to CEBALLOS,    cedric
  .word	0100DH,46,1555	;to CAMPBELL,    elden
- .word	0100DH,49,1559	;to JONES,       eddie
+;.word	0100DH,49,1559	;to JONES,       eddie
 
  .word	0100DH,44,1563	;to MOURNING,    alonzo		( MIAMI )
  .word	0100DH,56,1463	;to HARDAWAY,    tim		
@@ -1157,10 +1160,11 @@ name_speech 		;(last name only, excited)
 
 ;.word	0100DH,32,1959	;SCOTT,       byron
  .word	0100DH,32,0B57h	;BRYANT,      kobe
+ .word	0100DH,40,0B60h	;ONEAL,       shaquille
  .word	0100DH,44,1541	;VAN EXEL,    nick		( LAKERS )
  .word	0100DH,44,1549	;CEBALLOS,    cedric
  .word	0100DH,37,1553	;CAMPBELL,    elden
- .word	0100DH,40,1557	;JONES,       eddie
+;.word	0100DH,40,1557	;JONES,       eddie
 
  .word	0100DH,35,1561	;MOURNING,    alonzo		( MIAMI )
  .word	0100DH,47,1461	;HARDAWAY,    tim		

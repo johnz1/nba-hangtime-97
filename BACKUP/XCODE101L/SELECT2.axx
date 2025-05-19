@@ -5496,16 +5496,15 @@ player_attribs
 
 ;12 L.A. LAKERS
 
-	;Size, speed, shot%, dunks, block defense, steals, drone skill
-;Flesh pal, Pri uniform pal, Alt uniform pal, Pri trim pal, Alt trim pal, head
-;Pass ability, power, clutch, hotspot
-;Pri swipe pal, Alt swipe pal, Pri vertical panel pal, Alt vertical panel pal
-
 LAL_t
 ;Added: Kobe Bryant (N64 stats)	
 	.word  07,03,06,06
 	.word  05,05,08,08	;KOBE BRYANT
 
+;Added: Shaq (NBA Jam TE stats)	
+	.word  07,09,00,10 
+	.word  04,09,03,03 ;SHAQ
+	
 	.word  10,02,07,01
 	.word  06,01,08,09	;NICK VAN EXEL		6'1"	170 ex thin
 
@@ -5518,8 +5517,8 @@ LAL_t
 	.word  06,05,05,06
 	.word  08,09,01,03	;ELDON CAMPBELL		6'11"	230 ex thin
 
-	.word  08,04,07,05
-	.word  04,07,08,02	;EDDIE JONES		_______________
+;	.word  08,04,07,05
+;	.word  04,07,08,02	;EDDIE JONES		_______________
 
 ;Speed, Power, Shoot, Dunk
 ;Steal, Block, Pass ability, Clutch
@@ -5905,7 +5904,7 @@ name_sort
  .long	MILLER, DAMPIER ,ROSE,SMITS,DDAVIS		;new	;10 PACERS
  .long	VAUGHT,RROGERS,LMURRAY,PRICHARD,BBARRY			;11 CLIPPERS
 ; .long	VANEXEL,CEBALLOS,SCOTT,CAMPBELL,EJONES			;12 LAKERS
- .long	BRYANT,VANEXEL,CEBALLOS,CAMPBELL,EJONES			;12 LAKERS
+ .long	BRYANT,ONEAL,VANEXEL,CEBALLOS,CAMPBELL			;12 LAKERS
  .long	MOURN,THARDAWAY,DANILOVI, DANILOVI , DANILOVI	;kill,kill ;13 HEAT
  .long	BAKER, ALLEN ,LANG,GROBINSO,RESPERT		;new	;14 BUCKS
  .long	GUGLI2, MARBURY ,GARNETT, GARNETT , GARNETT	;new,kill,kill ;15 TIMBERWOLVES
