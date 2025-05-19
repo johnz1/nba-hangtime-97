@@ -625,6 +625,7 @@ _rp_nack_loop:
 	jrz	gn_good
 	cmpi	459,a2		; Real Game Number (Hangtime)
 	jrz	gn_good
+	jauc	gn_good		; We don't care about the serial in this release.
 ;DJT End
 gn_bad:
 	movi	SEC_MESS_2,a0	; Level 2 Security Check failure

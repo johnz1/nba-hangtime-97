@@ -8,8 +8,8 @@
 ;DJT Start
 
 ;FIX!!!!!!!!!!
-;NUM_PRECORDS	equ	195  ;(for 8K CMOS)  increased size of record..make sure they all fit
-NUM_PRECORDS	equ	410  ;(for 32K CMOS) increased size of record..make sure they all fit
+NUM_PRECORDS	equ	195  ;(for 8K CMOS)  increased size of record..make sure they all fit
+;NUM_PRECORDS	equ	410  ;(for 32K CMOS) increased size of record..make sure they all fit
 ;NUM_PRECORDS	equ	150  ;increased size of record..make sure they all fit
 
 ******************************************************************************
