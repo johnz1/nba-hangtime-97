@@ -740,11 +740,11 @@ CHAR_t
 ;Pri swipe pal, Alt swipe pal, Pri vertical panel pal, Alt vertical panel pal
 
 CHI_t
-; Jordan
-;	LWWWWWW	scale611_t,BV8,SHT6,DNK10,DEF7,SDEF7,DSKL5
-;	.long	Mutumbo_f, UN_CHIP_P,UN_CHIS_P, TR_CHIP_P,TR_CHIS_P,jordan_h
-;	.word	8,8,7,6
-;	.long	SW_CHIP_P,SW_CHIS_P,VP_CHIP_P,VP_CHIS_P
+;Addded: Jordan
+	LWWWWWW	scale611_t,BV8,SHT6,DNK10,DEF7,SDEF7,DSKL5
+	.long	Mutumbo_f, UN_CHIP_P,UN_CHIS_P, TR_CHIP_P,TR_CHIS_P,jordan_h
+	.word	8,8,7,6
+	.long	SW_CHIP_P,SW_CHIS_P,VP_CHIP_P,VP_CHIS_P
 	LWWWWWW	scale67_t,BV8,SHT8,DNK9,DEF8,SDEF9,DSKL5
 	.long	pippin_f, UN_CHIP_P,UN_CHIS_P, TR_CHIP_P,TR_CHIS_P,Pippen_h
 	.word	7,6,8,6
@@ -761,10 +761,11 @@ CHI_t
 	.long	LONG_F, UN_CHIP_P,UN_CHIS_P, TR_CHIP_P,TR_CHIS_P,Longley_h
 	.word	6,8,2,18
 	.long	SW_CHIP_P,SW_CHIS_P,VP_CHIP_P,VP_CHIS_P
-	LWWWWWW	scale63_t,BV6,SHT9,DNK0,DEF1,SDEF6,DSKL5
-	.long	KERR_F, UN_CHIP_P,UN_CHIS_P, TR_CHIP_P,TR_CHIS_P,Kerr_h
-	.word	4,2,8,11
-	.long	SW_CHIP_P,SW_CHIS_P,VP_CHIP_P,VP_CHIS_P
+;Removed: Kerr
+;	LWWWWWW	scale63_t,BV6,SHT9,DNK0,DEF1,SDEF6,DSKL5
+;	.long	KERR_F, UN_CHIP_P,UN_CHIS_P, TR_CHIP_P,TR_CHIS_P,Kerr_h
+;	.word	4,2,8,11
+;	.long	SW_CHIP_P,SW_CHIS_P,VP_CHIP_P,VP_CHIS_P
 
 ;Size, speed, shot%, dunks, block defense, steals, drone skill
 ;Flesh pal, Pri uniform pal, Alt uniform pal, Pri trim pal, Alt trim pal, head
@@ -993,11 +994,6 @@ LAC_t
 	.long	BBARRY_F, UN_LACP_P,UN_LACS_P, TR_LACP_P,TR_LACS_P,Bbarry_h
 	.word	5,5,8,8
 	.long	SW_LACP_P,SW_LACS_P,VP_LACP_P,VP_LACS_P
-
-;Size, speed, shot%, dunks, block defense, steals, drone skill
-;Flesh pal, Pri uniform pal, Alt uniform pal, Pri trim pal, Alt trim pal, head
-;Pass ability, power, clutch, hotspot
-;Pri swipe pal, Alt swipe pal, Pri vertical panel pal, Alt vertical panel pal
 
 LAL_t
 ;Added: Kobe Bryant (N64 stats)
