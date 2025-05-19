@@ -1,0 +1,87 @@
+From recon2015 Exide talk. See https://www.youtube.com/watch?v=K5N0GgDHlQU
+
+Samples 31000Hz
+
+ROM
+DSP Boot 0-0x1000
+Compression dict 0x3000 (U2)
+Look-up table entries 0x4000 (U4)
+sound headers - U2 0x13800
+- compressed audio
+
+Look up table points to sound header - sound header points to frame header
+U2 sound look up table 0x4000
+--- size varies
+U2 sound headers 0x13897
+--- size varies
+Frame headers & compressed audio
+-\/-
+END 0xFFFFF
+
+0x4040-0x4042 pointer to base TMS sound command (i.e. 0x004048)
+0x4046 holds max tms sound cmd i.e. 0x52c6-1
+"52C6 -1 = 52C5
+0x4048 + 3x 0x52c5 = 0x4048+0xF84F = 13897 max cmd
+
+0x004048 + "3x TMS sound cmd" = lookup table for that sound
+
+An Example:
+Sound command: $0429 expands to 0x4048 + (3x$0429) = 4CC3 (U2 bank4)
+Sound lookup table entry is at $4cc3 is 0x18183 (u2)
+U2, offset 0x18183 contains sound header
+01 01 00 00 07 01 69 00 00 01 01 *10 47 54* 01 *01 47* 00 00
+01 05 00 00 07 05 6F 00 00 01 05 *34 C7 78* 01 *00 AF* 00 01 05 00 00 
+Pointer to sound header: U3 0x4754 
+Number of frames: 0x0147
+Sound header points to frame header U3, 0x04754
+01 47 95 95 91 11 11 11 11 11 11 51 51
+
+For MK3 music this means:
+Music is Henry compressed using "HENRY[4.25] -vb95 -vi7 -vr79 "
+
+5        ($0005)  0            -        -   MK3: music: Train Tune (1st round)
+TRAIN1      0x10000E     33986       495    0:03.802  71.519   HENRY[4.25] -vb95 -vi7 -vr79 
+TRAIN2      0x1084D0     35916       497    0:03.817  75.277   HENRY[4.25] -vb95 -vi7 -vr79 
+TRAIN3A1    0x11111C      6878        91    0:00.699  78.732   HENRY[4.25] -vb95 -vi7 -vr79 
+TRAIN3B     0x112BFA      2532        33    0:00.253  79.924   HENRY[4.25] -vb95 -vi7 -vr79 
+TRAIN4      0x1135DE     72362       990    0:07.603  76.138   HENRY[4.25] -vb95 -vi7 -vr79 
+
+	0	setvol	0, 105		0x69
+	0	play	0, 'train1', 1
+	495	play	0, 'train2', 1  01ef - play - chan,sample ,1 time?
+	495	play	0, 'train2', 1
+	372	play	0, 'train3a1', 1
+	91	play	0, 'train3b', 1
+	33	loopstart	0
+	0	play	0, 'train2', 1
+	495	play	0, 'train2', 1
+	372	play	0, 'train3a1', 1
+	91	play	0, 'train4', 1
+	990	play	0, 'train3b', 1
+	33	loopend
+	65535	end
+	end
+
+$4048 + 3x $5 = 4057 is our tune. What do we have there?
+
+00 40 6D E3 65 01 00 00 00 02 01 00 00 02 02 00 00 02 03 00 01 00 01 00 00 00 07 00 69 
+00 00 01 00 10 00 0E 01  0   TRAIN1   1 - Intro, 4 counts
+01 EF 01 00 10 84 D0 01  495 TRAIN2   1 - loop, 8 counts
+01 EF 01 00 10 84 D0 01  495 TRAIN2   1 - loop, 8 counts
+01 74 01 00 11 11 1C 01  372 TRAIN3A1 1 - drum solo 2 counts but it starts before the first loop ends. 
+00 5B 01 00 11 2B FA 01  91  TRAIN3b  1 - drum solo add-on after 91 counts.
+00 21 0E 00 		 33 LOOPSTART 0 - start of loop
+00 00 01 00 10 84 D0 01  0   TRAIN2   1 - loop, 8 counts
+01 EF 01 00 10 84 D0 01  495 TRAIN2   1 - loop, 8 counts
+01 74 01 00 11 11 1C 01  372 TRAIN3A1 1 - drum solo 2 counts but it starts before the first loop ends. 
+00 5B 01 00 11 35 DE 01  91  TRAIN4   1 - loop roughly 16 counts
+03 DE 01 00 11 2B FA 01 990  TRAIN3B  1
+00 21 0F 		 33 LOOPEND
+FF FF 00	 	65535		END MARKER
+
+soundcall 6 = $4048 + 3x $6 = $405A
+
+CREATE      0x10000E    340522      6138    0:47.140  57.789   HENRY[4.25] -vb95 -vi7 -vr79 
+
+00 40 D0 5E E7 01 00 00 00 02 01 00 00 02 02 00 00 02 03 00 01 00 01 00 00 00 07 00 69 00 21 0E 00 00 00 01 00 10 00 0E 01 00 21 0F FF FF 00
+
