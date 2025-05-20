@@ -1141,34 +1141,34 @@ SMK_MUG:
 	.long   0936e6bdH
 	.word   0880H
 	.long   SMK_MUGP
-KOB_MUG:
-	.word   56,59,0,59
-	.long   09372d0dH
-	.word   0180H
-	.long   KOB_MUGP
 SCO_MK2:
 	.word   71,62,0,62
-	.long   0937742dH
+	.long   09372d0dH
 	.word   07880H
 	.long   SCO_MK2P
 REP_MK2:
 	.word   50,63,0,63
-	.long   0937b348H
+	.long   09376c28H
 	.word   07080H
 	.long   REP_MK2P
 SUB_MK2:
 	.word   46,63,0,63
-	.long   0937f153H
+	.long   0937aa33H
 	.word   07080H
 	.long   SUB_MK2P
 JOR_MUG:
 	.word   66,60,0,59
-	.long   09382cf6H
+	.long   0937e5d6H
 	.word   0480H
 	.long   JOR_MUGP
 ONE_LAL:
-	.word   67,62,0,62
-	.long   0938759eH
-	.word   0580H
+	.word   68,62,0,62
+	.long   09382e7eH
+	.word   0680H
 	.long   ONE_LALP
+KOB_MUG:
+	.word   63,62,0,62
+	.long   09387c7eH
+	.word   0480H
+	.long   KOB_MUGP
 	.TEXT

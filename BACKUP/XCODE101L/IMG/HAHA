@@ -40,16 +40,16 @@ Image JORDAN15 has 98 colors. Can't fit into 6 bits per pixel.
 Image JORDAN16 has 98 colors. Can't fit into 6 bits per pixel.
 
 Bytes Loaded...
-	IMAGE RAM               466088 dec	   71CA8 hex
+	IMAGE RAM               466294 dec	   71D76 hex
 
-	TOTAL LOAD              466088 dec	   71CA8 hex
+	TOTAL LOAD              466294 dec	   71D76 hex
 
 Bytes Written to Raw File...
-	In IMAGE RAM records       466088 dec	   71CA8 hex
+	In IMAGE RAM records       466294 dec	   71D76 hex
 
-	TOTAL bytes written        466088 dec	   71CA8 hex, in 2 records.
+	TOTAL bytes written        466294 dec	   71D76 hex, in 2 records.
 
-Bytes Represented in Tables ... 466087 dec 71CA7 hex
+Bytes Represented in Tables ... 466294 dec 71D76 hex
 
 5 images were NOT zero-compressed because they are
 	smaller than 10 pixels wide.

@@ -449,8 +449,6 @@
 	.global	RAD_MK2
 	.globl	SMK_MUGP
 	.global	SMK_MUG
-	.globl	KOB_MUGP
-	.global	KOB_MUG
 	.globl	SCO_MK2P
 	.global	SCO_MK2
 	.globl	REP_MK2P
@@ -461,3 +459,5 @@
 	.global	JOR_MUG
 	.globl	ONE_LALP
 	.global	ONE_LAL
+	.globl	KOB_MUGP
+	.global	KOB_MUG

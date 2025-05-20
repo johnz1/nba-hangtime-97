@@ -119,13 +119,15 @@ CON>
 ZON>
 PPP> 0
 smoke.img
----> RAD_MK2,SMK_MUG,KOB_MUG
+---> RAD_MK2,SMK_MUG
 nmugs.img
 ---> SCO_MK2,REP_MK2,SUB_MK2
 Jordan.img
 ---> JOR_MUG
 Shaq.img
 ---> ONE_LAL
+Kobe.img
+---> KOB_MUG
 ;
 ; New nameplates here. 
 ; Nameplates go into imgtbl.axx !AND! imgtbl.glo 
