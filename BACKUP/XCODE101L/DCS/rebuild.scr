@@ -130,7 +130,7 @@ Track $0b56 channel 5 {		// call free
     Wait(Stream);          // ...and wait for it to finish before exiting
 };
 // Michael Jordan
-Track $0b59 channel 5 {		// NEEDS REMAP
+Track $0bb8 channel 5 {		// call free
     SetMixingLevel(level 111);   // always set the mixing level for a new track
     Play(Michael_Jordan);       // start an audio clip
     Wait(Stream);          // ...and wait for it to finish before exiting
@@ -143,13 +143,13 @@ Track $07bf channel 5 {		// call free
     Wait(Stream);         
 };
 // Kobe
-Track $0b57 channel 5 {		// NEEDS REMAP
+Track $0bb9 channel 5 {		// call free
     SetMixingLevel(level 111);   // always set the mixing level for a new track
     Play(Kobe);       // start an audio clip
     Wait(Stream);          // ...and wait for it to finish before exiting
 };
 // Kobe Bryant
-Track $0b58 channel 5 {		// NEEDS REMAP
+Track $0bba channel 5 {		// call free
     SetMixingLevel(level 111);   // always set the mixing level for a new track
     Play(Kobe_Bryant);       // start an audio clip
     Wait(Stream);          // ...and wait for it to finish before exiting
@@ -162,19 +162,19 @@ Track $07C0 channel 5 {		// Call free
     Wait(Stream);         
 };
 // O'Neal
-Track $0b60 channel 5 {		// NEEDS REMAP
+Track $0bbb channel 5 {		// call free
     SetMixingLevel(level 111);   // always set the mixing level for a new track
     Play(Oneal);       // start an audio clip
     Wait(Stream);          // ...and wait for it to finish before exiting
 };
 // Shaq O'Neal
-Track $0b61 channel 5 {		// NEEDS REMAP
+Track $0bbc channel 5 {		// call free
     SetMixingLevel(level 111);   // always set the mixing level for a new track
     Play(Shaq_Oneal);       // start an audio clip
     Wait(Stream);          // ...and wait for it to finish before exiting
 };
 // To O'Neal
-Track $07C1 channel 5 {		// CALL FREE
+Track $07C1 channel 5 {		// call free
     SetMixingLevel(level 111);
     Play(stream $1CC03A);
     Wait(15) Play(Oneal);
