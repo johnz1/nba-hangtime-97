@@ -1167,8 +1167,8 @@ JOR_MUG:
 	.word   0480H
 	.long   JOR_MUGP
 ONE_LAL:
-	.word   76,61,0,61
+	.word   67,62,0,62
 	.long   0938759eH
-	.word   0880H
+	.word   0580H
 	.long   ONE_LALP
 	.TEXT

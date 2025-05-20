@@ -1,42 +1,42 @@
 	.DATA
 RAIDEN:
 	.word   39,9,17,0
-	.long   0938c496H
+	.long   0938bfdeH
 	.word   03000H
 	.long   BAST_Y_P
 SCORPION:
 	.word   53,10,26,0
-	.long   0938c8b3H
+	.long   0938c3fbH
 	.word   03000H
 	.long   BAST_Y_P
 SUBZER:
 	.word   47,9,23,0
-	.long   0938cee9H
+	.long   0938ca31H
 	.word   03000H
 	.long   BAST_Y_P
 REPTILE:
 	.word   43,10,21,0
-	.long   0938d3deH
+	.long   0938cf26H
 	.word   03000H
 	.long   BAST_Y_P
 SM0K3:
 	.word   34,9,17,0
-	.long   0938d8e8H
+	.long   0938d430H
 	.word   03000H
 	.long   BAST_Y_P
 JORDAN:
 	.word   42,9,21,0
-	.long   0938dc7eH
+	.long   0938d7c6H
 	.word   03000H
 	.long   BAST_Y_P
 BRYANT:
 	.word   43,9,21,0
-	.long   0938e0ecH
+	.long   0938dc34H
 	.word   03000H
 	.long   BAST_Y_P
 ONEAL:
 	.word   38,10,18,0
-	.long   0938e575H
+	.long   0938e0bdH
 	.word   03000H
 	.long   BAST_Y_P
 	.TEXT
